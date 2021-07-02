@@ -1,4 +1,4 @@
-Package: delphi_epidata
+Package: delphi.epidata
 Type: Package
 Title: Client for Delphi's Epidata API
 Version: 1.0.0
@@ -12,7 +12,7 @@ Authors@R: as.person(c(
   ))
 URL: https://github.com/cmu-delphi/delphi-epidata-r
 BugReports: https://github.com/cmu-delphi/delphi-epidata-r/issues
-Description: R tools surrounding Delphi's Epidata API
+Description: R tools surrounding Delphi's Epidata API. Support for fetching and plotting
 Depends: R (>= 3.5.0)
 License: MIT + file LICENSE
 Encoding: UTF-8

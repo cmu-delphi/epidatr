@@ -6,10 +6,10 @@
 ^shiny$
 ^docs$
 ^Meta$
-
-^.*\.map$
-
 ^_pkgdown\.yml$
 ^pkgdown$
 ^data-raw$
 ^cran-comments.md$
+^\.github$
+^\.bumpversion\.cfg$
+^\.editorconfig$

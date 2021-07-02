@@ -17,6 +17,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r libraries}
 # devtools::install_url("https://github.com/cmu-delphi/delphi-epidata-r/releases/latest/download/delphi-epidata.tar.gz")
-install.packages('delphi-epidata')
-library('delphi-epidata')
+# install.packages('delphi.epidata')
+library('delphi.epidata')
 ```

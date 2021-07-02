@@ -3,5 +3,5 @@
 #' TODO
 #'
 #' @docType package
-#' @name delphi_epidata
+#' @name delphi.epidata
 NULL
