@@ -58,4 +58,3 @@ jobs:
         run: |
           devtools::document()
           devtools::build()
-          file.copy(list.files(pattern=\"delphi_epidata_.*.tar.gz\"), "delphi_epidata.tar.gz")
