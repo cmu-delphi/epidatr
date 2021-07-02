@@ -4,22 +4,22 @@ on: [push]
 
 jobs:
   build_r:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-20.04
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      RSPM: https://demo.rstudiopm.com/all/__linux__/xenial/latest
+      RSPM: https://packagemanager.rstudio.com/cran/__linux__/focal/latest
     steps:
       - uses: actions/checkout@v2
-      - uses: r-lib/actions/setup-r@master
+      - uses: r-lib/actions/setup-r@v1
         with:
           r-version: 3.6
       - uses: r-lib/actions/setup-pandoc@v1
       - name: Cache R packages
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-v2-${{ hashFiles('r_package/DESCRIPTION')}}
-          restore-keys: ${{ runner.os }}-r-v2-
+          key: ${{ runner.os }}-r-v1-${{ hashFiles('DESCRIPTION')}}
+          restore-keys: ${{ runner.os }}-r-v1-
 
       # - name: Install system dependencies
       #   env:
@@ -42,8 +42,6 @@ jobs:
         run: devtools::check(args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
 
       - name: Test
-        env:
-          _R_CHECK_CRAN_INCOMING_REMOTE_: false
         shell: Rscript {0}
         run: devtools::test()
 

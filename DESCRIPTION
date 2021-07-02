@@ -1,7 +1,7 @@
-Package: delphi-epidata
+Package: delphi_epidata
 Type: Package
 Title: Client for Delphi's Epidata API
-Version: 0.3.0
+Version: 1.0.0
 Authors@R: as.person(c(
   "Jacob Bien <jbien@usc.edu> [aut]",
   "Logan Brooks <lcbrooks@andrew.cmu.edu> [aut]",
@@ -25,5 +25,6 @@ RoxygenNote: 7.1.1
 Suggests:
     knitr,
     rmarkdown,
-    gridExtra
+    testthat
 VignetteBuilder: knitr
+Language: en-US
