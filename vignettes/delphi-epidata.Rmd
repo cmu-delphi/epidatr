@@ -1,0 +1,22 @@
+---
+title: "Delphi Epidata R API Client"
+author: "Delphi Group"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Delphi Epidata R API Client}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Delphi Epidata R API Client
+
+```{r libraries}
+# devtools::install_url("https://github.com/cmu-delphi/delphi-epidata-r/releases/latest/download/delphi-epidata.tar.gz")
+install.packages('delphi-epidata')
+library('delphi-epidata')
+```
