@@ -2,9 +2,9 @@
 # Helper function to cast values and/or ranges to strings
 format_item <- function(value) {
     if(is.list(value) && 'from' %in% names(value) && 'to' %in% names(value)) {
-      return(paste0(toString(value$from), '-', toString(value$to)))
+      paste0(toString(value$from), '-', toString(value$to))
     } else {
-      return(toString(value))
+      toString(value)
     }
   }
 
@@ -13,6 +13,5 @@ format_list <- function(values) {
     if(!is.list(values) || ('from' %in% names(values) && 'to' %in% names(values))) {
       values <- list(values)
     }
-    return(paste(sapply(values, format_item), collapse=','))
+    paste(sapply(values, format_item), collapse=',')
 }
-
