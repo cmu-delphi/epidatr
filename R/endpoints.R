@@ -33,422 +33,383 @@ fluview_meta <- function() {
   create_epidata_call("fluview_meta/", list())
 }
 
-# # Fetch FluView virological data
-# fluview_clinical <- function(regions, epiweeks, issues, lag) {
-#   # Check parameters
-#   if(missing(regions) || missing(epiweeks)) {
-#     stop('`regions` and `epiweeks` are both required')
-#   }
-#   if(!missing(issues) && !missing(lag)) {
-#     stop('`issues` and `lag` are mutually exclusive')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'fluview_clinical',
-#     regions = .list(regions),
-#     epiweeks = .list(epiweeks)
-#   )
-#   if(!missing(issues)) {
-#     params$issues <- .list(issues)
-#   }
-#   if(!missing(lag)) {
-#     params$lag <- lag
-#   }
-#   # Make the API call
-#   return(.request(params))
-# }
+#'
+#' fetch FluView virological data
+#'
+#' @param regions regions to fetch
+#' @param epiweeks epiweeks to fetch
+#' @param issues optionally specify the exact issues to fetch
+#' @param lag optionally specify the issue lag
+#' @return an instance of EpiDataCall
+#'
+#' @export
+fluview_clinical <- function(regions, epiweeks, issues = NULL, lag = NULL) {
+  check_string_param('regions', regions)
+  check_epirange_param('epiweeks', epiweeks)
+  check_epirange_param('issues', issues, FALSE)
+  check_single_int_param('lag', lag, FALSE)
+  if(!missing(issues) && !missing(lag)) {
+    stop('`issues` and `lag` are mutually exclusive')
+  }
+  create_epidata_call("fluview_clinical/", list(regions=regions, epiweeks=epiweeks, issues=issues, lag=lag))
+}
 
-# # Fetch FluSurv data
-# flusurv <- function(locations, epiweeks, issues, lag) {
-#   # Check parameters
-#   if(missing(locations) || missing(epiweeks)) {
-#     stop('`locations` and `epiweeks` are both required')
-#   }
-#   if(!missing(issues) && !missing(lag)) {
-#     stop('`issues` and `lag` are mutually exclusive')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'flusurv',
-#     locations = .list(locations),
-#     epiweeks = .list(epiweeks)
-#   )
-#   if(!missing(issues)) {
-#     params$issues <- .list(issues)
-#   }
-#   if(!missing(lag)) {
-#     params$lag <- lag
-#   }
-#   # Make the API call
-#   return(.request(params))
-# }
-
-# # Fetch ECDC data
-# ecdc_ili <- function(regions, epiweeks, issues, lag) {
-#   # Check parameters
-#   if(missing(regions) || missing(epiweeks)) {
-#     stop('`regions` and `epiweeks` are both required')
-#   }
-#   if(!missing(issues) && !missing(lag)) {
-#     stop('`issues` and `lag` are mutually exclusive')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'ecdc_ili',
-#     regions = .list(regions),
-#     epiweeks = .list(epiweeks)
-#   )
-#   if(!missing(issues)) {
-#     params$issues <- .list(issues)
-#   }
-#   if(!missing(lag)) {
-#     params$lag <- lag
-#   }
-#   # Make the API call
-#   return(.request(params))
-# }
-
-# # Fetch KCDC data
-# kcdc_ili <- function(regions, epiweeks, issues, lag) {
-#   # Check parameters
-#   if(missing(regions) || missing(epiweeks)) {
-#     stop('`regions` and `epiweeks` are both required')
-#   }
-#   if(!missing(issues) && !missing(lag)) {
-#     stop('`issues` and `lag` are mutually exclusive')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'kcdc_ili',
-#     regions = .list(regions),
-#     epiweeks = .list(epiweeks)
-#   )
-#   if(!missing(issues)) {
-#     params$issues <- .list(issues)
-#   }
-#   if(!missing(lag)) {
-#     params$lag <- lag
-#   }
-#   # Make the API call
-#   return(.request(params))
-# }
+#'
+#' fetch FluSurv virological data
+#'
+#' @param locations locations to fetch
+#' @param epiweeks epiweeks to fetch
+#' @param issues optionally specify the exact issues to fetch
+#' @param lag optionally specify the issue lag
+#' @return an instance of EpiDataCall
+#'
+#' @export
+flusurv <- function(locations, epiweeks, issues=NULL, lag=NULL) {
+  check_string_param('locations', locations)
+  check_epirange_param('epiweeks', epiweeks)
+  check_epirange_param('issues', issues, FALSE)
+  check_single_int_param('lag', lag, FALSE)
+  if(!missing(issues) && !missing(lag)) {
+    stop('`issues` and `lag` are mutually exclusive')
+  }
+  create_epidata_call("flusurv/", list(locations=locations, epiweeks=epiweeks, issues=issues, lag=lag))
+}
 
 
-# # Fetch Google Flu Trends data
-# gft <- function(locations, epiweeks) {
-#   # Check parameters
-#   if(missing(locations) || missing(epiweeks)) {
-#     stop('`locations` and `epiweeks` are both required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'gft',
-#     locations = .list(locations),
-#     epiweeks = .list(epiweeks)
-#   )
-#   # Make the API call
-#   return(.request(params))
-# }
+#'
+#' fetch ECDC data
+#'
+#' @param regions regions to fetch
+#' @param epiweeks epiweeks to fetch
+#' @param issues optionally specify the exact issues to fetch
+#' @param lag optionally specify the issue lag
+#' @return an instance of EpiDataCall
+#'
+#' @export
+ecdc_ili <- function(regions, epiweeks, issues=NULL, lag=NULL) {
+  check_string_param('regions', regions)
+  check_epirange_param('epiweeks', epiweeks)
+  check_epirange_param('issues', issues, FALSE)
+  check_single_int_param('lag', lag, FALSE)
+  if(!missing(issues) && !missing(lag)) {
+    stop('`issues` and `lag` are mutually exclusive')
+  }
+  create_epidata_call("ecdc_ili/", list(regions=regions, epiweeks=epiweeks, issues=issues, lag=lag))
+}
 
-# # Fetch Google Health Trends data
-# ght <- function(auth, locations, epiweeks, query) {
-#   # Check parameters
-#   if(missing(auth) || missing(locations) || missing(epiweeks) || missing(query)) {
-#     stop('`auth`, `locations`, `epiweeks`, and `query` are all required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'ght',
-#     auth = auth,
-#     locations = .list(locations),
-#     epiweeks = .list(epiweeks),
-#     query = query
-#   )
-#   # Make the API call
-#   return(.request(params))
-# }
 
-# # Fetch HealthTweets data
-# twitter <- function(auth, locations, dates, epiweeks) {
-#   # Check parameters
-#   if(missing(auth) || missing(locations)) {
-#     stop('`auth` and `locations` are both required')
-#   }
-#   if(!xor(missing(dates), missing(epiweeks))) {
-#     stop('exactly one of `dates` and `epiweeks` is required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'twitter',
-#     auth = auth,
-#     locations = .list(locations)
-#   )
-#   if(!missing(dates)) {
-#     params$dates <- .list(dates)
-#   }
-#   if(!missing(epiweeks)) {
-#     params$epiweeks <- .list(epiweeks)
-#   }
-#   # Make the API call
-#   return(.request(params))
-# }
+#'
+#' fetch KCDC data
+#'
+#' @param regions regions to fetch
+#' @param epiweeks epiweeks to fetch
+#' @param issues optionally specify the exact issues to fetch
+#' @param lag optionally specify the issue lag
+#' @return an instance of EpiDataCall
+#'
+#' @export
+kcdc_ili <- function(regions, epiweeks, issues=NULL, lag=NULL) {
+  check_string_param('regions', regions)
+  check_epirange_param('epiweeks', epiweeks)
+  check_epirange_param('issues', issues, FALSE)
+  check_single_int_param('lag', lag, FALSE)
+  if(!missing(issues) && !missing(lag)) {
+    stop('`issues` and `lag` are mutually exclusive')
+  }
+  create_epidata_call("kcdc_ili/", list(regions=regions, epiweeks=epiweeks, issues=issues, lag=lag))
+}
 
-# # Fetch Wikipedia access data
-# wiki <- function(articles, dates, epiweeks, hours, language='en') {
-#   # Check parameters
-#   if(missing(articles)) {
-#     stop('`articles` is required')
-#   }
-#   if(!xor(missing(dates), missing(epiweeks))) {
-#     stop('exactly one of `dates` and `epiweeks` is required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'wiki',
-#     articles = .list(articles),
-#     language = language
-#   )
-#   if(!missing(dates)) {
-#     params$dates <- .list(dates)
-#   }
-#   if(!missing(epiweeks)) {
-#     params$epiweeks <- .list(epiweeks)
-#   }
-#   if(!missing(hours)) {
-#     params$hours <- .list(hours)
-#   }
-#   # Make the API call
-#   return(.request(params))
-# }
 
-# # Fetch CDC page hits
-# cdc <- function(auth, epiweeks, locations) {
-#   # Check parameters
-#   if(missing(auth) || missing(epiweeks) || missing(locations)) {
-#     stop('`auth`, `epiweeks`, and `locations` are all required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'cdc',
-#     auth = auth,
-#     epiweeks = .list(epiweeks),
-#     locations = .list(locations)
-#   )
-#   # Make the API call
-#   return(.request(params))
-# }
+#'
+#' fetch Google Flu Trends data
+#'
+#' @param locations locations to fetch
+#' @param epiweeks epiweeks to fetch
+#' @return an instance of EpiDataCall
+#'
+#' @export
+gft <- function(locations, epiweeks) {
+  check_string_param('locations', locations)
+  check_epirange_param('epiweeks', epiweeks)
+  create_epidata_call("gft/", list(locations=locations, epiweeks=epiweeks))
+}
 
-# # Fetch Quidel data
-# quidel <- function(auth, epiweeks, locations) {
-#   # Check parameters
-#   if(missing(auth) || missing(epiweeks) || missing(locations)) {
-#     stop('`auth`, `epiweeks`, and `locations` are all required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'quidel',
-#     auth = auth,
-#     epiweeks = .list(epiweeks),
-#     locations = .list(locations)
-#   )
-#   # Make the API call
-#   return(.request(params))
-# }
+#'
+#' fetch Google Health Trends data
+#'
+#' @param auth autentification
+#' @param locations locations to fetch
+#' @param epiweeks epiweeks to fetch
+#' @param query query
+#' @return an instance of EpiDataCall
+#'
+#' @export
+ght <- function(auth, locations, epiweeks, query) {
+  check_single_string_param('auth', auth)
+  check_string_param('locations', locations)
+  check_epirange_param('epiweeks', epiweeks)
+  check_single_string_param('query', query)
+  create_epidata_call("ght/", list(auth=auth, locations=locations, epiweeks=epiweeks, query=query))
+}
 
-# # Fetch NoroSTAT data (point data, no min/max)
-# norostat <- function(auth, location, epiweeks) {
-#   # Check parameters
-#   if(missing(auth) || missing(location) || missing(epiweeks)) {
-#     stop('`auth`, `location`, and `epiweeks` are all required')
-#   }
-#   # Set up request
-#   params <- list(
-#       endpoint = 'norostat',
-#       auth = auth,
-#       location = location,
-#       epiweeks = .list(epiweeks)
-#   )
-#   # Make the API call
-#   return(.request(params))
-# }
+#'
+#' fetch HealthTweets data
+#'
+#' @param auth autentification
+#' @param locations locations to fetch
+#' @param dates epiweeks to fetch
+#' @param epiweeks epiweeks to fetch
+#' @return an instance of EpiDataCall
+#'
+#' @export
+twitter <- function(auth, locations, dates = NULL, epiweeks = NULL) {
+  check_single_string_param('auth', auth)
+  check_string_param('locations', locations)
+  check_epirange_param('dates', dates, FALSE)
+  check_epirange_param('epiweeks', epiweeks, FALSE)
+  if(!xor(missing(dates), missing(epiweeks))) {
+    stop('exactly one of `dates` and `epiweeks` is required')
+  }
+  create_epidata_call("twitter/", list(auth=auth, locations=locations, dates=dates, epiweeks=epiweeks))
+}
 
-# # Fetch NoroSTAT metadata
-# meta_norostat <- function(auth) {
-#   # Check parameters
-#   if(missing(auth)) {
-#     stop('`auth` is required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'meta_norostat',
-#     auth = auth
-#   )
-#   # Make the API call
-#   return(.request(params))
-# }
+#'
+#' fetch Wikipedia access data
+#'
+#' @param articles
+#' @param dates dates to fetch
+#' @param epiweeks epiweeks to fetch
+#' @param hours hours to fetch
+#' @param language language
+#' @return an instance of EpiDataCall
+#'
+#' @export
+wiki <- function(articles, dates = NULL, epiweeks = NULL, hours = NULL, language='en') {
+  check_string_param('articles', articles)
+  check_epirange_param('dates', dates, FALSE)
+  check_epirange_param('epiweeks', epiweeks, FALSE)
+  check_int_param('hours', hours, FALSE)
+  check_single_string_param('language', language, FALSE)
+  if(!xor(missing(dates), missing(epiweeks))) {
+    stop('exactly one of `dates` and `epiweeks` is required')
+  }
+  create_epidata_call("wiki/", list(articles=articles, dates=dates, epiweeks=epiweeks, hours=hours, language=language))
+}
 
-# # Fetch AFHSB data (point data, no min/max)
-# afhsb <- function(auth, locations, epiweeks, flu_types) {
-#   # Check parameters
-#   if(missing(auth) || missing(locations) || missing(epiweeks) || missing(flu_types)) {
-#     stop('`auth`, `locations`, `epiweeks` and `flu_types` are all required')
-#   }
-#   # Set up request
-#   params <- list(
-#       endpoint = 'afhsb',
-#       auth = auth,
-#       locations = .list(locations),
-#       epiweeks = .list(epiweeks),
-#       flu_types = .list(flu_types)
-#   )
-#   # Make the API call
-#   return(.request(params))
-# }
+#'
+#' fetch CDC page hits
+#'
+#' @param auth
+#' @param epiweeks
+#' @param locations
+#' @return an instance of EpiDataCall
+#'
+#' @export
+cdc <- function(auth, epiweeks, locations) {
+  check_single_string_param('auth', auth)
+  check_epirange_param('epiweeks', epiweeks)
+  check_string_param('locations', locations)
 
-# # Fetch AFHSB metadata
-# meta_afhsb <- function(auth) {
-#   # Check parameters
-#   if(missing(auth)) {
-#     stop('`auth` is required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'meta_afhsb',
-#     auth = auth
-#   )
-#   # Make the API call
-#   return(.request(params))
-# }
+  create_epidata_call("cdc/", list(auth=auth, epiweeks=epiweeks, locations=locations))
+}
 
-# # Fetch NIDSS flu data
-# nidss.flu <- function(regions, epiweeks, issues, lag) {
-#   # Check parameters
-#   if(missing(regions) || missing(epiweeks)) {
-#     stop('`regions` and `epiweeks` are both required')
-#   }
-#   if(!missing(issues) && !missing(lag)) {
-#     stop('`issues` and `lag` are mutually exclusive')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'nidss_flu',
-#     regions = .list(regions),
-#     epiweeks = .list(epiweeks)
-#   )
-#   if(!missing(issues)) {
-#     params$issues <- .list(issues)
-#   }
-#   if(!missing(lag)) {
-#     params$lag <- lag
-#   }
-#   # Make the API call
-#   return(.request(params))
-# }
+#' fetch Quidel data
+#'
+#' @param auth
+#' @param epiweeks
+#' @param locations
+#' @return an instance of EpiDataCall
+#'
+#' @export
+quidel <- function(auth, epiweeks, locations) {
+  check_single_string_param('auth', auth)
+  check_epirange_param('epiweeks', epiweeks)
+  check_string_param('locations', locations)
 
-# # Fetch NIDSS dengue data
-# nidss.dengue <- function(locations, epiweeks) {
-#   # Check parameters
-#   if(missing(locations) || missing(epiweeks)) {
-#     stop('`locations` and `epiweeks` are both required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'nidss_dengue',
-#     locations = .list(locations),
-#     epiweeks = .list(epiweeks)
-#   )
-#   # Make the API call
-#   return(.request(params))
-# }
+  create_epidata_call("quidel/", list(auth=auth, epiweeks=epiweeks, locations=locations))
+}
 
-# # Fetch Delphi's forecast
-# delphi <- function(system, epiweek) {
-#   # Check parameters
-#   if(missing(system) || missing(epiweek)) {
-#     stop('`system` and `epiweek` are both required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'delphi',
-#     system = system,
-#     epiweek = epiweek
-#   )
-#   # Make the API call
-#   return(.request(params))
-# }
+#' fetch NoroSTAT data (point data, no min/max)
+#'
+#' @param auth
+#' @param epiweeks
+#' @param locations
+#' @return an instance of EpiDataCall
+#'
+#' @export
+norostat <- function(auth, location, epiweeks) {
+  check_single_string_param('auth', auth)
+  check_epirange_param('epiweeks', epiweeks)
+  check_string_param('locations', locations)
 
-# # Fetch Delphi's digital surveillance sensors
-# sensors <- function(auth, names, locations, epiweeks) {
-#   # Check parameters
-#   if(missing(auth) || missing(names) || missing(locations) || missing(epiweeks)) {
-#     stop('`auth`, `names`, `locations`, and `epiweeks` are all required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'sensors',
-#     auth = auth,
-#     names = .list(names),
-#     locations = .list(locations),
-#     epiweeks = .list(epiweeks)
-#   )
-#   # Make the API call
-#   return(.request(params))
-# }
+  create_epidata_call("norostat/", list(auth=auth, epiweeks=epiweeks, locations=locations))
+}
 
-# # Fetch Delphi's digital surveillance sensors
-# dengue_sensors <- function(auth, names, locations, epiweeks) {
-#   # Check parameters
-#   if(missing(auth) || missing(names) || missing(locations) || missing(epiweeks)) {
-#     stop('`auth`, `names`, `locations`, and `epiweeks` are all required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'dengue_sensors',
-#     auth = auth,
-#     names = .list(names),
-#     locations = .list(locations),
-#     epiweeks = .list(epiweeks)
-#   )
-#   # Make the API call
-#   return(.request(params))
-# }
+#' fetch NoroSTAT meta data
+#'
+#' @param auth
+#' @return an instance of EpiDataCall
+#'
+#' @export
+meta_norostat <- function(auth) {
+  check_single_string_param('auth', auth)
 
-# # Fetch Delphi's wILI nowcast
-# nowcast <- function(locations, epiweeks) {
-#   # Check parameters
-#   if(missing(locations) || missing(epiweeks)) {
-#     stop('`locations` and `epiweeks` are both required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'nowcast',
-#     locations = .list(locations),
-#     epiweeks = .list(epiweeks)
-#   )
-#   # Make the API call
-#   return(.request(params))
-# }
+  create_epidata_call("meta_norostat/", list(auth=auth))
+}
 
-# # Fetch Delphi's PAHO Dengue nowcast
-# dengue_nowcast <- function(locations, epiweeks) {
-#   # Check parameters
-#   if(missing(locations) || missing(epiweeks)) {
-#     stop('`locations` and `epiweeks` are both required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'dengue_nowcast',
-#     locations = .list(locations),
-#     epiweeks = .list(epiweeks)
-#   )
-#   # Make the API call
-#   return(.request(params))
-# }
+#' fetch AFHSB data (point data, no min/max)
+#'
+#' @param auth
+#' @param locations
+#' @param epiweeks
+#' @param flu_types
+#' @return an instance of EpiDataCall
+#'
+#' @export
+afhsb <- function(auth, locations, epiweeks, flu_types) {
+  check_single_string_param('auth', auth)
+  check_string_param('locations', locations)
+  check_epirange_param('epiweeks', epiweeks)
+  check_string_param('flu_types', flu_types)
 
-# # Fetch API metadata
-# meta <- function() {
-#   return(.request(list(endpoint='meta')))
-# }
+  create_epidata_call("afhsb/", list(auth=auth, locations=locations, epiweeks=epiweeks, flu_types=flu_types))
+}
+
+#' fetch AFHSB meta data
+#'
+#' @param auth
+#' @return an instance of EpiDataCall
+#'
+#' @export
+meta_afhsb <- function(auth) {
+  check_single_string_param('auth', auth)
+
+  create_epidata_call("meta_afhsb/", list(auth=auth))
+}
+
+#'
+#' fetch NIDSS dengue data
+#' @param regions
+#' @param epiweeks
+#' @param issues
+#' @param lag
+#' @return an instance of EpiDataCall
+#'
+#' @export
+nidss_flu <- function(regions, epiweeks, issues = NULL, lag = NULL) {
+  check_string_param('regions', regions)
+  check_epirange_param('epiweeks', epiweeks)
+  check_epirange_param('issues', issues, FALSE)
+  check_single_int_param('lag', lag, FALSE)
+
+  if(!is.null(issues) && !is.null(lag)) {
+    stop('`issues` and `lag` are mutually exclusive')
+  }
+
+  create_epidata_call("nidss_flu/", list(regions=regions, epiweeks=epiweeks, issues=issues, lag=lag))
+}
+
+#'
+#' fetch NIDSS dengue data
+#' @param locations
+#' @param epiweeks
+#' @return an instance of EpiDataCall
+#'
+#' @export
+nidss_dengue <- function(locations, epiweeks) {
+  check_string_param('locations', locations)
+  check_epirange_param('epiweeks', epiweeks)
+
+  create_epidata_call("nidss_dengue/", list(locations=locations, epiweeks=epiweeks))
+}
+
+#'
+#' fetch Delphi's forecast
+#' @param system
+#' @param epiweek
+#' @return an instance of EpiDataCall
+#'
+#' @export
+delphi <- function(system, epiweek) {
+  check_single_string_param('system', system)
+  check_single_epirange_param('epiweek', epiweek)
+
+  create_epidata_call("delphi/", list(system=system, epiweek=epiweek))
+}
+
+#'
+#' fetch Delphi's digital surveillance sensors
+#' @param auth
+#' @param names
+#' @param locations
+#' @param epiweeks
+#' @return an instance of EpiDataCall
+#'
+#' @export
+sensors <- function(auth, names, locations, epiweeks) {
+  check_single_string_param('auth', auth)
+  check_string_param('names', names)
+  check_string_param('locations', locations)
+  check_epirange_param('epiweeks', epiweeks)
+
+  create_epidata_call("sensors/", list(auth=auth, names=names, locations=locations, epiweeks=epiweeks))
+}
+
+#'
+#' fetch Delphi's digital surveillance sensors
+#' @param auth
+#' @param names
+#' @param locations
+#' @param epiweeks
+#' @return an instance of EpiDataCall
+#'
+#' @export
+dengue_sensors <- function(auth, names, locations, epiweeks) {
+  check_single_string_param('auth', auth)
+  check_string_param('names', names)
+  check_string_param('locations', locations)
+  check_epirange_param('epiweeks', epiweeks)
+
+  create_epidata_call("dengue_sensors/", list(auth=auth, names=names, locations=locations, epiweeks=epiweeks))
+}
+
+#'
+#' fetch Delphi's wILI nowcast
+#' @param locations
+#' @param epiweeks
+#' @return an instance of EpiDataCall
+#'
+#' @export
+nowcast <- function(locations, epiweeks) {
+  check_string_param('locations', locations)
+  check_epirange_param('epiweeks', epiweeks)
+
+  create_epidata_call("nowcast/", list(locations=locations, epiweeks=epiweeks))
+}
+
+#'
+#' fetch Delphi's PAHO Dengue nowcast
+#' @param locations
+#' @param epiweeks
+#' @return an instance of EpiDataCall
+#'
+#' @export
+dengue_nowcast <- function(locations, epiweeks) {
+  check_string_param('locations', locations)
+  check_epirange_param('epiweeks', epiweeks)
+
+  create_epidata_call("dengue_nowcast/", list(locations=locations, epiweeks=epiweeks))
+}
+
+#'
+#' fetch api meta data
+#'
+#' @return an instance of EpiDataCall
+#'
+#' @export
+meta <- function() {
+  create_epidata_call("meta/", list())
+}
 
 #'
 #' fetch covidcast data
@@ -485,66 +446,63 @@ covidcast <- function(data_source, signals, time_type, geo_type, time_values, ge
   create_epidata_call("covidcast/", list(data_source=data_source, signals=signals, time_type=time_type, geo_type=geo_type, time_values=time_values, geo_values=geo_values, as_of=as_of, issues=issues, lag=lag))
 }
 
-# # Fetch Delphi's COVID-19 Surveillance Streams metadata
+#'
+#' fetch covidcast meta data
+#'
+#' @return an instance of EpiDataCall
+#'
+#' @export
 covidcast_meta <- function() {
   create_epidata_call("covidcast_meta/", list())
 }
 
-# # Fetch COVID hospitalization data
-# covid_hosp <- function(states, dates, issues) {
-#   # Check parameters
-#   if(missing(states) || missing(dates)) {
-#     stop('`states` and `dates` are both required')
-#   }
-#   # Set up request
-#   params <- list(
-#     endpoint = 'covid_hosp',
-#     states = .list(states),
-#     dates = .list(dates)
-#   )
-#   if(!missing(issues)) {
-#     params$issues <- .list(issues)
-#   }
-#   # Make the API call
-#   return(.request(params))
-# }
+#'
+#' fetch COVID hospitalization data
+#'
+#' @param states
+#' @param dates
+#' @param issues
+#' @return an instance of EpiDataCall
+#'
+#' @export
+#
+covid_hosp <- function(states, dates, issues = NULL) {
+  check_string_param('states', states)
+  check_epirange_param('dates', dates)
+  check_epirange_param('issues', issues, FALSE)
 
-# # Fetch COVID hospitalization data for specific facilities
-# covid_hosp_facility <- function(hospital_pks, collection_weeks, publication_dates) {
-#   # Check parameters
-#   if(missing(hospital_pks) || missing(collection_weeks)) {
-#     stop('`hospital_pks` and `collection_weeks` are both required')
-#   }
-#   # Set up request
-#   params <- list(
-#     source = 'covid_hosp_facility',
-#     hospital_pks = .list(hospital_pks),
-#     collection_weeks = .list(collection_weeks)
-#   )
-#   if(!missing(publication_dates)) {
-#     params$publication_dates <- .list(publication_dates)
-#   }
-#   # Make the API call
-#   return(.request(params))
-# }
+  create_epidata_call("covid_hosp/", list(states=states, dates=dates, issues=issues))
+}
 
-# # Lookup COVID hospitalization facility identifiers
-# covid_hosp_facility_lookup <- function(state, ccn, city, zip, fips_code) {
-#   # Set up request
-#   params <- list(source = 'covid_hosp_facility_lookup')
-#   if(!missing(state)) {
-#     params$state <- state
-#   } else if(!missing(ccn)) {
-#     params$ccn <- ccn
-#   } else if(!missing(city)) {
-#     params$city <- city
-#   } else if(!missing(zip)) {
-#     params$zip <- zip
-#   } else if(!missing(fips_code)) {
-#     params$fips_code <- fips_code
-#   } else {
-#     stop('one of `state`, `ccn`, `city`, `zip`, or `fips_code` is required')
-#   }
-#   # Make the API call
-#   return(.request(params))
-# }
+#'
+#' fetch COVID hospitalization data for specific facilities
+#'
+#' @return an instance of EpiDataCall
+#'
+#' @export
+#
+covid_hosp_facility <- function(hospital_pks, collection_weeks, publication_dates = NULL) {
+  check_string_param('hospital_pks', hospital_pks)
+  check_epirange_param('collection_weeks', collection_weeks)
+  check_epirange_param('publication_dates', publication_dates)
+
+  create_epidata_call("covid_hosp_facility/", list(hospital_pks=hospital_pks, collection_weeks=collection_weeks, publication_dates=publication_dates))
+}
+
+#'
+#' fetch COVID hospitalization facility identifiers
+#'
+#' @return an instance of EpiDataCall
+#'
+#' @export
+covid_hosp_facility_lookup <- function(state = NULL, ccn = NULL, city = NULL, zip = NULL, fips_code = NULL) {
+  check_single_string_param('state', state, FALSE)
+  check_single_string_param('ccn', ccn, FALSE)
+  check_single_string_param('city', city, FALSE)
+  check_single_int_param('zip', zip, FALSE)
+  check_single_int_param('fips_code', fips_code, FALSE)
+  if(missing(state) && missing(ccn) && missing(city) && missing(zip) && missing(fips_code)) {
+    stop('one of `state`, `ccn`, `city`, `zip`, or `fips_code` is required')
+  }
+  create_epidata_call("covid_hosp_facility_lookup/", list(state=state,ccn=ccn,city=city,zip=zip,fips_code=fips_code))
+}

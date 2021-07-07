@@ -5,6 +5,13 @@ check_string_param <- function(name, value, required=TRUE) {
   }
 }
 
+check_int_param <- function(name, value, required=TRUE) {
+  # string or string[]
+  if ((required && !(!is.null(value) && is.numeric(value))) || (!required && !(is.null(value) || is.numeric(value)))) {
+    stop(paste0("argument ", name, " is not a number"))
+  }
+}
+
 is_epirange_like <- function(value) {
   is.character(value) || is.numeric(value) || inherits(value, 'EpiRange') || (is.list(value) && 'from' %in% names(value) && 'to' %in% names(value))
 }
