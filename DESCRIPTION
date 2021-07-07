@@ -20,7 +20,8 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 Imports:
   httr,
-  jsonlite
+  jsonlite,
+  readr
 RoxygenNote: 7.1.1
 Suggests:
     knitr,

@@ -7,7 +7,7 @@
 #' @param issues optionally specify the exact issues to fetch
 #' @param lag optionally specify the issue lag
 #' @param auth optional authentication
-#' @return an instance of epidatacall
+#' @return an instance of EpiDataCall
 #'
 #' @export
 fluview <- function(regions, epiweeks, issues = NULL, lag = NULL, auth = NULL) {
@@ -15,22 +15,22 @@ fluview <- function(regions, epiweeks, issues = NULL, lag = NULL, auth = NULL) {
   check_epirange_param('epiweeks', epiweeks)
   check_epirange_param('issues', issues, FALSE)
   check_single_int_param('lag', lag, FALSE)
-  check_single_string('auth', auth, FALSE)
+  check_single_string_param('auth', auth, FALSE)
   if(!is.null(issues) && !is.null(lag)) {
     stop('`issues` and `lag` are mutually exclusive')
   }
 
-  make_epidata_call("fluview/", list(regions=regions, epiweeks=epiweeks, issues=issues, lag=lag, auth=auth))
+  create_epidata_call("fluview/", list(regions=regions, epiweeks=epiweeks, issues=issues, lag=lag, auth=auth))
 }
 
 #'
 #' fetch fluview meta data
 #'
-#' @return an instance of epidatacall
+#' @return an instance of EpiDataCall
 #'
 #' @export
 fluview_meta <- function() {
-  make_epidata_call("fluview_meta/", list())
+  create_epidata_call("fluview_meta/", list())
 }
 
 # # Fetch FluView virological data
@@ -450,51 +450,45 @@ fluview_meta <- function() {
 #   return(.request(list(endpoint='meta')))
 # }
 
-# # Fetch Delphi's COVID-19 Surveillance Streams
-# covidcast <- function(data_source, signals, time_type, geo_type, time_values, geo_value, as_of, issues, lag, format=c("classic","tree"), signal) {
-#   # Check parameters
-#   if(missing(data_source) || (missing(signals) && missing(signal)) || missing(time_type) || missing(geo_type) || missing(time_values) || missing(geo_value)) {
-#     stop('`data_source`, `signals`, `time_type`, `geo_type`, `time_values`, and `geo_value` are all required')
-#   }
-#   if (missing(signals)) {
-#     signals <- signal
-#   }
-#   if(!missing(issues) && !missing(lag)) {
-#     stop('`issues` and `lag` are mutually exclusive')
-#   }
-#   format <- match.arg(format)
-#   # Set up request
-#   params <- list(
-#     endpoint = 'covidcast',
-#     data_source = data_source,
-#     signals = .list(signals),
-#     time_type = time_type,
-#     geo_type = geo_type,
-#     time_values = .list(time_values),
-#     format = format
-#   )
-#   if(is.list(geo_value)) {
-#     params$geo_values = paste(geo_value, collapse=',')
-#   } else {
-#     params$geo_value = geo_value
-#   }
-#   if(!missing(as_of)) {
-#     params$as_of <- as_of
-#   }
-#   if(!missing(issues)) {
-#     params$issues <- .list(issues)
-#   }
-#   if(!missing(lag)) {
-#     params$lag <- lag
-#   }
-#   # Make the API call
-#   return(.request(params))
-# }
+#'
+#' fetch covidcast data
+#'
+#' @param data_source data source to fetch
+#' @param signals data source to fetch
+#' @param time_type data source to fetch
+#' @param time_values data source to fetch
+#' @param geo_values data source to fetch
+#' @param as_of data source to fetch
+#' @param issues data source to fetch
+#' @param lag data source to fetch
+#' @return an instance of EpiDataCall
+#'
+#' @export
+covidcast <- function(data_source, signals, time_type, geo_type, time_values, geo_values, as_of = NULL, issues = NULL, lag = NULL) {
+  # Check parameters
+  if(missing(data_source) || (missing(signals) && missing(signal)) || missing(time_type) || missing(geo_type) || missing(time_values) || missing(geo_values)) {
+    stop('`data_source`, `signals`, `time_type`, `geo_type`, `time_values`, and `geo_value` are all required')
+  }
+  if(!missing(issues) && !missing(lag)) {
+    stop('`issues` and `lag` are mutually exclusive')
+  }
+  check_single_string_param('data_source', data_source)
+  check_string_param('signals', signals)
+  check_single_string_param('time_type', time_type)
+  check_single_string_param('geo_type', geo_type)
+  check_epirange_param('time_values', time_values)
+  check_string_param('geo_values', geo_values)
+  check_single_epirange_param('as_of', as_of, FALSE)
+  check_epirange_param('issues', issues, FALSE)
+  check_single_int_param('lag', lag, FALSE)
+
+  create_epidata_call("covidcast/", list(data_source=data_source, signals=signals, time_type=time_type, geo_type=geo_type, time_values=time_values, geo_values=geo_values, as_of=as_of, issues=issues, lag=lag))
+}
 
 # # Fetch Delphi's COVID-19 Surveillance Streams metadata
-# covidcast_meta <- function() {
-#   return(.request(list(endpoint='covidcast_meta', cached='true')))
-# }
+covidcast_meta <- function() {
+  create_epidata_call("covidcast_meta/", list())
+}
 
 # # Fetch COVID hospitalization data
 # covid_hosp <- function(states, dates, issues) {
