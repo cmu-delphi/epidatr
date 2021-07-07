@@ -63,10 +63,12 @@ request_impl <- function(epidatacall, format_type, base_url = BASE_URL, fields =
 #' @param epidatacall and instance of EpiDataCall
 #' @param base_url optional base url
 #' @param fields filter fields
+#' @importFrom httr GET POST
+#' @importFrom jsonlite fromJSON
 #' @return parsed json message
 #'
 #' @export
-as_classic <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
+fetch_classic <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
     r <- request_impl(epidatacall, 'classic', base_url, fields)
     jsonlite::fromJSON(r)
 }
@@ -77,10 +79,12 @@ as_classic <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
 #' @param epidatacall and instance of EpiDataCall
 #' @param base_url optional base url
 #' @param fields filter fields
+#' @importFrom httr GET POST
+#' @importFrom jsonlite fromJSON
 #' @return parsed json message
 #'
 #' @export
-as_json <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
+fetch_json <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
     r <- request_impl(epidatacall, 'json', base_url, fields)
     jsonlite::fromJSON(r)
 }
@@ -91,10 +95,11 @@ as_json <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
 #' @param epidatacall and instance of EpiDataCall
 #' @param base_url optional base url
 #' @param fields filter fields
+#' @importFrom httr GET POST
 #' @return CSV text
 #'
 #' @export
-as_csv <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
+fetch_csv <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
     request_impl(epidatacall, 'csv', base_url, fields)
 }
 
@@ -104,10 +109,12 @@ as_csv <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
 #' @param epidatacall and instance of EpiDataCall
 #' @param base_url optional base url
 #' @param fields filter fields
+#' @importFrom readr read_csv
+#' @importFrom httr GET POST
 #' @return data.frame
 #'
 #' @export
-as_df <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
-    r <- as_csv(epidatacall, base_url, fields)
+fetch_df <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
+    r <- fetch_csv(epidatacall, base_url, fields)
     readr::read_csv(r)
 }

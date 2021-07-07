@@ -19,10 +19,11 @@ knitr::opts_chunk$set(echo = TRUE)
 # devtools::install_url("https://github.com/cmu-delphi/delphi-epidata-r/releases/latest/download/delphi-epidata.tar.gz")
 # install.packages('delphi.epidata')
 library('delphi.epidata')
+library('magrittr')
 ```
 
 
 ```{r}
 epicall <- covidcast("fb-survey", "smoothed_cli", "day", "nation", epirange(20210405, 20210410), "us")
-epicall %>% as_classic()
+epicall %>% fetch_classic()
 ```
