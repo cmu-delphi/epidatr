@@ -32,7 +32,7 @@ check_epirange_param <- function(name, value, required=TRUE) {
   if (is_epirange_like(value)) {
     return()
   }
-  if (!is.list || !all(sapply(sapply(values, is_epirange_like)))) {
+  if (!is.list || !all(sapply(sapply(value, is_epirange_like)))) {
     stop(paste0("argument ", name, " is not a epirange"))
   }
 }

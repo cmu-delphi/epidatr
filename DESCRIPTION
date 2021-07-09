@@ -8,11 +8,12 @@ Authors@R: as.person(c(
   "David Farrow <dfarrow0@gmail.com> [aut]",
   "Pedrito Maynard-Zhang <pedritom@amazon.com> [aut]",
   "Alex Reinhart <areinhar@stat.cmu.edu> [aut,cre]",
-  "Ryan Tibshirani <ryantibs@stat.cmu.edu> [aut]"
+  "Ryan Tibshirani <ryantibs@stat.cmu.edu> [aut]",
+  "Samuel Gratzl <sam@sgratzl.com> [aut]"
   ))
 URL: https://github.com/cmu-delphi/delphi-epidata-r
 BugReports: https://github.com/cmu-delphi/delphi-epidata-r/issues
-Description: R tools surrounding Delphi's Epidata API. Support for fetching and plotting
+Description: R Client for Delphi's Epidata API. Tools for fetching data in various forms.
 Depends: R (>= 3.5.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -25,6 +26,7 @@ Imports:
 RoxygenNote: 7.1.1
 Suggests:
     knitr,
+    magrittr,
     rmarkdown,
     testthat
 VignetteBuilder: knitr

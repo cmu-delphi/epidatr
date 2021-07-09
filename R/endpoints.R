@@ -232,17 +232,17 @@ quidel <- function(auth, epiweeks, locations) {
 #' fetch NoroSTAT data (point data, no min/max)
 #'
 #' @param auth authenfication token
+#' @param location location to fetch
 #' @param epiweeks epiweeks to fetch
-#' @param locations locations to fetch
 #' @return an instance of EpiDataCall
 #'
 #' @export
 norostat <- function(auth, location, epiweeks) {
   check_single_string_param('auth', auth)
+  check_single_string_param('locations', location)
   check_epirange_param('epiweeks', epiweeks)
-  check_string_param('locations', locations)
 
-  create_epidata_call("norostat/", list(auth=auth, epiweeks=epiweeks, locations=locations))
+  create_epidata_call("norostat/", list(auth=auth, location=location, epiweeks=epiweeks))
 }
 
 #' fetch NoroSTAT meta data
@@ -428,7 +428,7 @@ meta <- function() {
 #' @export
 covidcast <- function(data_source, signals, time_type, geo_type, time_values, geo_values, as_of = NULL, issues = NULL, lag = NULL) {
   # Check parameters
-  if(missing(data_source) || (missing(signals) && missing(signal)) || missing(time_type) || missing(geo_type) || missing(time_values) || missing(geo_values)) {
+  if(missing(data_source) || missing(signals) || missing(time_type) || missing(geo_type) || missing(time_values) || missing(geo_values)) {
     stop('`data_source`, `signals`, `time_type`, `geo_type`, `time_values`, and `geo_value` are all required')
   }
   if(!missing(issues) && !missing(lag)) {
