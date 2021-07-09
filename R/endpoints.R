@@ -176,7 +176,7 @@ twitter <- function(auth, locations, dates = NULL, epiweeks = NULL) {
 #'
 #' fetch Wikipedia access data
 #'
-#' @param articles
+#' @param articles articles to fetch
 #' @param dates dates to fetch
 #' @param epiweeks epiweeks to fetch
 #' @param hours hours to fetch
@@ -199,9 +199,9 @@ wiki <- function(articles, dates = NULL, epiweeks = NULL, hours = NULL, language
 #'
 #' fetch CDC page hits
 #'
-#' @param auth
-#' @param epiweeks
-#' @param locations
+#' @param auth authenfication token
+#' @param epiweeks epiweeks to fetch
+#' @param locations locations to fetch
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -215,9 +215,9 @@ cdc <- function(auth, epiweeks, locations) {
 
 #' fetch Quidel data
 #'
-#' @param auth
-#' @param epiweeks
-#' @param locations
+#' @param auth authenfication token
+#' @param epiweeks epiweeks to fetch
+#' @param locations locations to fetch
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -231,9 +231,9 @@ quidel <- function(auth, epiweeks, locations) {
 
 #' fetch NoroSTAT data (point data, no min/max)
 #'
-#' @param auth
-#' @param epiweeks
-#' @param locations
+#' @param auth authenfication token
+#' @param epiweeks epiweeks to fetch
+#' @param locations locations to fetch
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -247,7 +247,7 @@ norostat <- function(auth, location, epiweeks) {
 
 #' fetch NoroSTAT meta data
 #'
-#' @param auth
+#' @param auth authenfication token
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -259,10 +259,10 @@ meta_norostat <- function(auth) {
 
 #' fetch AFHSB data (point data, no min/max)
 #'
-#' @param auth
-#' @param locations
-#' @param epiweeks
-#' @param flu_types
+#' @param auth authenfication token
+#' @param locations locations to fetch
+#' @param epiweeks epiweeks to fetch
+#' @param flu_types flu_types to fetch
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -277,7 +277,7 @@ afhsb <- function(auth, locations, epiweeks, flu_types) {
 
 #' fetch AFHSB meta data
 #'
-#' @param auth
+#' @param auth authenfication token
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -289,10 +289,10 @@ meta_afhsb <- function(auth) {
 
 #'
 #' fetch NIDSS dengue data
-#' @param regions
-#' @param epiweeks
-#' @param issues
-#' @param lag
+#' @param regions regions to fetch
+#' @param epiweeks epiweeks to fetch
+#' @param issues optional issues
+#' @param lag optional lag
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -311,8 +311,8 @@ nidss_flu <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 
 #'
 #' fetch NIDSS dengue data
-#' @param locations
-#' @param epiweeks
+#' @param locations locations to fech
+#' @param epiweeks epiweeks to fetch
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -325,8 +325,8 @@ nidss_dengue <- function(locations, epiweeks) {
 
 #'
 #' fetch Delphi's forecast
-#' @param system
-#' @param epiweek
+#' @param system system to fetch
+#' @param epiweek epiweek to fetch
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -339,10 +339,10 @@ delphi <- function(system, epiweek) {
 
 #'
 #' fetch Delphi's digital surveillance sensors
-#' @param auth
-#' @param names
-#' @param locations
-#' @param epiweeks
+#' @param auth authenfication token
+#' @param names names to fetch
+#' @param locations locations to fetch
+#' @param epiweeks epiweeks to fetch
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -357,10 +357,10 @@ sensors <- function(auth, names, locations, epiweeks) {
 
 #'
 #' fetch Delphi's digital surveillance sensors
-#' @param auth
-#' @param names
-#' @param locations
-#' @param epiweeks
+#' @param auth authenfication token
+#' @param names names to fetch
+#' @param locations locations to fetch
+#' @param epiweeks epiweeks to fetch
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -375,8 +375,8 @@ dengue_sensors <- function(auth, names, locations, epiweeks) {
 
 #'
 #' fetch Delphi's wILI nowcast
-#' @param locations
-#' @param epiweeks
+#' @param locations locations to fetch
+#' @param epiweeks epiweeks to fetch
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -389,8 +389,8 @@ nowcast <- function(locations, epiweeks) {
 
 #'
 #' fetch Delphi's PAHO Dengue nowcast
-#' @param locations
-#' @param epiweeks
+#' @param locations locations to fetch
+#' @param epiweeks epiweeks to fetch
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -418,6 +418,7 @@ meta <- function() {
 #' @param signals data source to fetch
 #' @param time_type data source to fetch
 #' @param time_values data source to fetch
+#' @param geo_type geo_type to fetch
 #' @param geo_values data source to fetch
 #' @param as_of data source to fetch
 #' @param issues data source to fetch
@@ -459,9 +460,9 @@ covidcast_meta <- function() {
 #'
 #' fetch COVID hospitalization data
 #'
-#' @param states
-#' @param dates
-#' @param issues
+#' @param states states to fetch
+#' @param dates dates to fetch
+#' @param issues issues to fetch
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -477,6 +478,9 @@ covid_hosp <- function(states, dates, issues = NULL) {
 #'
 #' fetch COVID hospitalization data for specific facilities
 #'
+#' @param hospital_pks hospitals to fetch
+#' @param collection_weeks weeks to fetch
+#' @param publication_dates publication dates to fetch
 #' @return an instance of EpiDataCall
 #'
 #' @export
@@ -492,6 +496,11 @@ covid_hosp_facility <- function(hospital_pks, collection_weeks, publication_date
 #'
 #' fetch COVID hospitalization facility identifiers
 #'
+#' @param state optional state
+#' @param ccn optional ccn
+#' @param city optional city
+#' @param zip optional zip code
+#' @param fips_code optional fips code
 #' @return an instance of EpiDataCall
 #'
 #' @export

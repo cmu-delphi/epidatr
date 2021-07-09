@@ -64,9 +64,9 @@ request_impl <- function(epidatacall, format_type, fields = NULL) {
     url = full_url(epidatacall)
     params = request_arguments(epidatacall, format_type, fields)
 
-    res <- httr::GET(url, query=params)
+    res <- httr::GET(url, query=params, HTTP_HEADERS)
     if (res$status_code == 414) {
-      res <- httr::POST(url, body=params, encode='form')
+      res <- httr::POST(url, body=params, encode='form', HTTP_HEADERS)
     }
     httr::content(res, 'text')
   }
