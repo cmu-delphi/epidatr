@@ -4,9 +4,24 @@ create_epidata_call <- function(endpoint, params) {
     stopifnot(is.list(params))
     structure(list(
         endpoint=endpoint,
-        params=params
+        params=params,
+        base_url=BASE_URL
     ),
     class="EpiDataCall")
+}
+
+#'
+#' use a different base url
+#'
+#' @param epidatacall and instance of EpiDataCall
+#' @param base_url basee url to use
+#'
+#' @export
+with_base_url <- function(epidatacall, base_url) {
+    stopifnot(inherits(epidatacall, 'EpiDataCall'))
+    stopifnot(is.character(base_url), length(base_url) == 1)
+    epidatacall$base_url = base_url
+    epidatacall
 }
 
 request_arguments <- function(epidatacall, format_type, fields = NULL) {
@@ -33,21 +48,20 @@ request_arguments <- function(epidatacall, format_type, fields = NULL) {
     formatted_params
 }
 
-full_url <- function(epidatacall, base_url = BASE_URL) {
+full_url <- function(epidatacall) {
     stopifnot(inherits(epidatacall, 'EpiDataCall'))
-    stopifnot(is.character(base_url), length(base_url) == 1)
-    url = base_url
+    url = epidatacall$base_url
     if(url[length(url)] != '/') {
         url = paste0(url, '/')
     }
     paste0(url, epidatacall$endpoint)
 }
 
-request_impl <- function(epidatacall, format_type, base_url = BASE_URL, fields = NULL) {
+request_impl <- function(epidatacall, format_type, fields = NULL) {
     stopifnot(inherits(epidatacall, 'EpiDataCall'))
     stopifnot(format_type %in% c('json', 'csv', 'classic'))
     # API call
-    url = full_url(epidatacall, base_url)
+    url = full_url(epidatacall)
     params = request_arguments(epidatacall, format_type, fields)
 
     res <- httr::GET(url, query=params)
@@ -61,15 +75,14 @@ request_impl <- function(epidatacall, format_type, base_url = BASE_URL, fields =
 #' fetches the data and returns the classic format
 #'
 #' @param epidatacall and instance of EpiDataCall
-#' @param base_url optional base url
 #' @param fields filter fields
 #' @importFrom httr GET POST
 #' @importFrom jsonlite fromJSON
 #' @return parsed json message
 #'
 #' @export
-fetch_classic <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
-    r <- request_impl(epidatacall, 'classic', base_url, fields)
+fetch_classic <- function(epidatacall, fields = NULL) {
+    r <- request_impl(epidatacall, 'classic', fields)
     jsonlite::fromJSON(r)
 }
 
@@ -77,15 +90,14 @@ fetch_classic <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
 #' fetches the data and returns the josn format
 #'
 #' @param epidatacall and instance of EpiDataCall
-#' @param base_url optional base url
 #' @param fields filter fields
 #' @importFrom httr GET POST
 #' @importFrom jsonlite fromJSON
 #' @return parsed json message
 #'
 #' @export
-fetch_json <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
-    r <- request_impl(epidatacall, 'json', base_url, fields)
+fetch_json <- function(epidatacall, fields = NULL) {
+    r <- request_impl(epidatacall, 'json', fields)
     jsonlite::fromJSON(r)
 }
 
@@ -93,28 +105,26 @@ fetch_json <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
 #' fetches the data and returns the CSV text
 #'
 #' @param epidatacall and instance of EpiDataCall
-#' @param base_url optional base url
 #' @param fields filter fields
 #' @importFrom httr GET POST
 #' @return CSV text
 #'
 #' @export
-fetch_csv <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
-    request_impl(epidatacall, 'csv', base_url, fields)
+fetch_csv <- function(epidatacall, fields = NULL) {
+    request_impl(epidatacall, 'csv', fields)
 }
 
 #'
 #' fetches the data and returns data frame
 #'
 #' @param epidatacall and instance of EpiDataCall
-#' @param base_url optional base url
 #' @param fields filter fields
 #' @importFrom readr read_csv
 #' @importFrom httr GET POST
 #' @return data.frame
 #'
 #' @export
-fetch_df <- function(epidatacall, base_url = BASE_URL, fields = NULL) {
-    r <- fetch_csv(epidatacall, base_url, fields)
+fetch_df <- function(epidatacall, fields = NULL) {
+    r <- fetch_csv(epidatacall, fields)
     readr::read_csv(r)
 }

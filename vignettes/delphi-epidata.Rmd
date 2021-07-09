@@ -41,3 +41,7 @@ epicall %>% fetch_csv()
 ```{r}
 epicall %>% fetch_df()
 ```
+
+```{r}
+epicall %>% with_base_url("https://staging.delphi.cmu.edu/epidata/") %>% fetch_df()
+```
