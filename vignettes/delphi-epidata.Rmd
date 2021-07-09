@@ -25,5 +25,19 @@ library('magrittr')
 
 ```{r}
 epicall <- covidcast("fb-survey", "smoothed_cli", "day", "nation", epirange(20210405, 20210410), "us")
+```
+```{r}
 epicall %>% fetch_classic()
+```
+
+```{r}
+epicall %>% fetch_json()
+```
+
+```{r}
+epicall %>% fetch_csv()
+```
+
+```{r}
+epicall %>% fetch_df()
 ```
