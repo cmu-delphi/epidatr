@@ -78,7 +78,7 @@ request_impl <- function(epidatacall, format_type, fields = NULL) {
   if (res$status_code == 414) {
     res <- httr::POST(url, body = params, encode = 'form', HTTP_HEADERS)
   }
-  httr::content(res, 'text')
+  httr::content(res, 'text', encoding='UTF-8')
 }
 
 #'
