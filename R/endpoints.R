@@ -393,7 +393,7 @@ covid_hosp_facility <-
         create_epidata_field_info(
           "total_patients_hosp_confirmed_influenza_and_covid_7d_avg",
           'float'
-        ),
+        )
       )
     )
   }
@@ -572,6 +572,7 @@ covidcast_meta <- function() {
 #'
 #' @param data_source data source to fetch
 #' @param signals data source to fetch
+#' @param sensor_names sensor names to fetch
 #' @param time_type data source to fetch
 #' @param time_values data source to fetch
 #' @param geo_type geo_type to fetch
@@ -1264,11 +1265,11 @@ nowcast <- function(locations, epiweeks) {
 #' @return an instance of EpiDataCall
 #'
 #' @export
-quidel <- function(regions,
+paho_dengue <- function(regions,
                    epiweeks,
                    issues = NULL,
                    lag = NULL) {
-  check_string_param('regions', egions)
+  check_string_param('regions', regions)
   check_epirange_param('epiweeks', epiweeks)
   check_epirange_param('issues', issues, FALSE)
   check_single_int_param('lag', lag, FALSE)
