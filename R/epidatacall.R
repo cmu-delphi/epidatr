@@ -4,12 +4,16 @@
 create_epidata_call <- function(endpoint, params, meta = NULL) {
   stopifnot(is.character(endpoint), length(endpoint) == 1)
   stopifnot(is.list(params))
+  stopifnot(is.null(meta) || is.list(meta))
+  if(is.null(meta)) {
+    meta <- list()
+  }
   structure(
     list(
       endpoint = endpoint,
       params = params,
       base_url = BASE_URL,
-      meta = meta || list()
+      meta = meta
     ),
     class = "EpiDataCall"
   )
@@ -84,12 +88,17 @@ request_impl <- function(epidatacall, format_type, fields = NULL) {
 #' @param fields filter fields
 #' @importFrom httr GET POST
 #' @importFrom jsonlite fromJSON
+#' @importFrom MMWRweek MMWRweek2Date
 #' @return parsed json message
 #'
 #' @export
 fetch_classic <- function(epidatacall, fields = NULL) {
   r <- request_impl(epidatacall, 'classic', fields)
-  jsonlite::fromJSON(r)
+  m <- jsonlite::fromJSON(r)
+  if('epidata' %in% names(m)) {
+      m$epidata = parse_data_frame(epidatacall, m$epidata)
+  }
+  m
 }
 
 #'
@@ -99,12 +108,13 @@ fetch_classic <- function(epidatacall, fields = NULL) {
 #' @param fields filter fields
 #' @importFrom httr GET POST
 #' @importFrom jsonlite fromJSON
+#' @importFrom MMWRweek MMWRweek2Date
 #' @return parsed json message
 #'
 #' @export
 fetch_json <- function(epidatacall, fields = NULL) {
   r <- request_impl(epidatacall, 'json', fields)
-  jsonlite::fromJSON(r)
+  parse_data_frame(epidatacall, jsonlite::fromJSON(r))
 }
 
 #'
@@ -127,10 +137,11 @@ fetch_csv <- function(epidatacall, fields = NULL) {
 #' @param fields filter fields
 #' @importFrom readr read_csv
 #' @importFrom httr GET POST
+#' @importFrom MMWRweek MMWRweek2Date
 #' @return data.frame
 #'
 #' @export
 fetch_df <- function(epidatacall, fields = NULL) {
   r <- fetch_csv(epidatacall, fields)
-  readr::read_csv(r)
+  parse_data_frame(epidatacall, readr::read_csv(r))
 }

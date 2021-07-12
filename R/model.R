@@ -40,7 +40,7 @@ create_epidata_field_info <-
           'bool'
         )
     )
-    stopifnot(is.character(description && length(description) == 1))
+    stopifnot(is.character(description) && length(description) == 1)
     structure(
       list(
         name = name,
@@ -51,3 +51,37 @@ create_epidata_field_info <-
       class = "EpidataFieldInfo"
     )
   }
+
+parse_value <- function(info, value) {
+    stopifnot(inherits(info, 'EpidataFieldInfo'))
+    if(is.null(value)) {
+        return(value)
+    }
+    if(info$type == 'date') {
+        return(parse_api_date(value))
+    }
+    if(info$type == 'epiweek') {
+        return(parse_api_week(value))
+    }
+    if(info$type == 'bool') {
+        return(as.logical(value))
+    }
+    value
+}
+
+parse_data_frame <- function(epidatacall, df) {
+  stopifnot(inherits(epidatacall, 'EpiDataCall'))
+  meta <- epidatacall$meta
+  df <- as.data.frame(df)
+  if(length(meta) == 0) {
+      return(df)
+  }
+  columns = colnames(df)
+  for(i in 1:length(meta)) {
+      info = meta[[i]]
+      if(info$name %in% columns) {
+          df[[info$name]] = parse_value(info, df[[info$name]])
+      }
+  }
+  df
+}
