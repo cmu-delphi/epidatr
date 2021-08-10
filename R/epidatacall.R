@@ -97,9 +97,10 @@ request_impl <- function(epidatacall, format_type, fields = NULL) {
   url = full_url(epidatacall)
   params = request_arguments(epidatacall, format_type, fields)
 
-  res <- httr::GET(url, query = params, HTTP_HEADERS)
+  # don't retry in case of certain status codes
+  res <- httr::RETRY('GET', url, query = params, HTTP_HEADERS, terminate_on=c(400, 401, 403, 405, 414, 500))
   if (res$status_code == 414) {
-    res <- httr::POST(url, body = params, encode = 'form', HTTP_HEADERS)
+    res <- httr::RETRY('POST', url, body = params, encode = 'form', HTTP_HEADERS, terminate_on=c(400, 401, 403, 405, 414, 500))
   }
   res
 }
@@ -109,7 +110,7 @@ request_impl <- function(epidatacall, format_type, fields = NULL) {
 #'
 #' @param epidatacall and instance of EpiDataCall
 #' @param fields filter fields
-#' @importFrom httr GET POST stop_for_status content
+#' @importFrom httr RETRY stop_for_status content http_error
 #' @importFrom jsonlite fromJSON
 #' @importFrom MMWRweek MMWRweek2Date
 #' @return parsed json message
@@ -117,8 +118,12 @@ request_impl <- function(epidatacall, format_type, fields = NULL) {
 #' @export
 fetch_classic <- function(epidatacall, fields = NULL) {
   res <- request_impl(epidatacall, 'classic', fields)
-  # TODO handle status messages as messages
   r <- httr::content(res, 'text', encoding='UTF-8')
+  if (httr::http_error(res)) {
+    # return message in case of error
+    return(list(result=0, message=paste0("error: ", r), epidata=data.frame()))
+  }
+
   m <- jsonlite::fromJSON(r)
   if('epidata' %in% names(m)) {
       m$epidata = parse_data_frame(epidatacall, m$epidata)
@@ -131,7 +136,7 @@ fetch_classic <- function(epidatacall, fields = NULL) {
 #'
 #' @param epidatacall and instance of EpiDataCall
 #' @param fields filter fields
-#' @importFrom httr GET POST stop_for_status content
+#' @importFrom httr RETRY stop_for_status content
 #' @importFrom jsonlite fromJSON
 #' @importFrom MMWRweek MMWRweek2Date
 #' @return parsed json message
@@ -149,7 +154,7 @@ fetch_json <- function(epidatacall, fields = NULL) {
 #'
 #' @param epidatacall and instance of EpiDataCall
 #' @param fields filter fields
-#' @importFrom httr GET POST stop_for_status content
+#' @importFrom httr RETRY stop_for_status content
 #' @return CSV text
 #'
 #' @export
@@ -165,7 +170,7 @@ fetch_csv <- function(epidatacall, fields = NULL) {
 #' @param epidatacall and instance of EpiDataCall
 #' @param fields filter fields
 #' @importFrom readr read_csv
-#' @importFrom httr GET POST stop_for_status content
+#' @importFrom httr RETRY stop_for_status content
 #' @importFrom MMWRweek MMWRweek2Date
 #' @return data.frame
 #'
