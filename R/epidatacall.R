@@ -67,6 +67,29 @@ full_url <- function(epidatacall) {
   paste0(url, epidatacall$endpoint)
 }
 
+#'
+#' returns the full request url for the given epidatacall
+#'
+#' @param epidatacall and instance of EpiDataCall
+#' @param format_type format to return one of classic,json,csv
+#' @param fields filter fields
+#' @importFrom httr modify_url
+#' @return full url
+#'
+#' @export
+request_url <- function(epidatacall, format_type = 'classic', fields = NULL) {
+  stopifnot(inherits(epidatacall, 'EpiDataCall'))
+  url = full_url(epidatacall)
+  params = request_arguments(epidatacall, format_type, fields)
+  httr::modify_url(url, query=params)
+}
+
+print.EpiDataCall <- function(epidatacall) {
+  stopifnot(inherits(epidatacall, 'EpiDataCall'))
+  print('EpiDataCall instance, use fetch_classic, fetch_json, fetch_df, fetch_csv to fetch the data')
+  print(request_url(epidatacall))
+}
+
 request_impl <- function(epidatacall, format_type, fields = NULL) {
   stopifnot(inherits(epidatacall, 'EpiDataCall'))
   stopifnot(format_type %in% c('json', 'csv', 'classic'))
@@ -78,7 +101,7 @@ request_impl <- function(epidatacall, format_type, fields = NULL) {
   if (res$status_code == 414) {
     res <- httr::POST(url, body = params, encode = 'form', HTTP_HEADERS)
   }
-  httr::content(res, 'text', encoding='UTF-8')
+  res
 }
 
 #'
@@ -86,14 +109,16 @@ request_impl <- function(epidatacall, format_type, fields = NULL) {
 #'
 #' @param epidatacall and instance of EpiDataCall
 #' @param fields filter fields
-#' @importFrom httr GET POST
+#' @importFrom httr GET POST stop_for_status content
 #' @importFrom jsonlite fromJSON
 #' @importFrom MMWRweek MMWRweek2Date
 #' @return parsed json message
 #'
 #' @export
 fetch_classic <- function(epidatacall, fields = NULL) {
-  r <- request_impl(epidatacall, 'classic', fields)
+  res <- request_impl(epidatacall, 'classic', fields)
+  # TODO handle status messages as messages
+  r <- httr::content(res, 'text', encoding='UTF-8')
   m <- jsonlite::fromJSON(r)
   if('epidata' %in% names(m)) {
       m$epidata = parse_data_frame(epidatacall, m$epidata)
@@ -106,14 +131,16 @@ fetch_classic <- function(epidatacall, fields = NULL) {
 #'
 #' @param epidatacall and instance of EpiDataCall
 #' @param fields filter fields
-#' @importFrom httr GET POST
+#' @importFrom httr GET POST stop_for_status content
 #' @importFrom jsonlite fromJSON
 #' @importFrom MMWRweek MMWRweek2Date
 #' @return parsed json message
 #'
 #' @export
 fetch_json <- function(epidatacall, fields = NULL) {
-  r <- request_impl(epidatacall, 'json', fields)
+  res <- request_impl(epidatacall, 'json', fields)
+  httr::stop_for_status(res)
+  r <- httr::content(res, 'text', encoding='UTF-8')
   parse_data_frame(epidatacall, jsonlite::fromJSON(r))
 }
 
@@ -122,12 +149,14 @@ fetch_json <- function(epidatacall, fields = NULL) {
 #'
 #' @param epidatacall and instance of EpiDataCall
 #' @param fields filter fields
-#' @importFrom httr GET POST
+#' @importFrom httr GET POST stop_for_status content
 #' @return CSV text
 #'
 #' @export
 fetch_csv <- function(epidatacall, fields = NULL) {
-  request_impl(epidatacall, 'csv', fields)
+  res <- request_impl(epidatacall, 'csv', fields)
+  httr::stop_for_status(res)
+  httr::content(res, 'text', encoding='UTF-8')
 }
 
 #'
@@ -136,12 +165,13 @@ fetch_csv <- function(epidatacall, fields = NULL) {
 #' @param epidatacall and instance of EpiDataCall
 #' @param fields filter fields
 #' @importFrom readr read_csv
-#' @importFrom httr GET POST
+#' @importFrom httr GET POST stop_for_status content
 #' @importFrom MMWRweek MMWRweek2Date
 #' @return data.frame
 #'
 #' @export
 fetch_df <- function(epidatacall, fields = NULL) {
   r <- fetch_csv(epidatacall, fields)
+  # TODO define column types
   parse_data_frame(epidatacall, readr::read_csv(r))
 }
