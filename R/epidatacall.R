@@ -161,7 +161,20 @@ fetch_json <- function(epidatacall, fields = NULL) {
 fetch_csv <- function(epidatacall, fields = NULL) {
   res <- request_impl(epidatacall, 'csv', fields)
   httr::stop_for_status(res)
-  httr::content(res, 'text', encoding='UTF-8')
+  data <- httr::content(res, 'text', encoding='UTF-8')
+  class(data) <- c("EpiDataCSV", class(data))
+  data
+}
+
+print.EpiDataCSV <- function(x, ...) {
+  char.limit = getOption("csv__char_limit", default = 300L)
+  cat('# A EpiDataCSV object with', nchar(x), 'characters; showing up to', char.limit, 'characters below. To print the entire string, use `print(as.character(x))`:\n')
+  cat(substr(x, 1L, char.limit))
+  if (nchar(x) > char.limit) {
+    cat("[...]")
+  }
+  cat("\n")
+  invisible(x)
 }
 
 #'
