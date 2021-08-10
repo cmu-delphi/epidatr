@@ -1,8 +1,3 @@
-
-
-
-
-
 #' fetch AFHSB data (point data, no min/max)
 #'
 #' @param auth authenfication token
@@ -12,7 +7,7 @@
 #' @return an instance of EpiDataCall
 #'
 #' @export
-afhsb <- function(auth, locations, epiweeks, flu_types) {
+pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
   check_single_string_param('auth', auth)
   check_string_param('locations', locations)
   check_epirange_param('epiweeks', epiweeks)
@@ -44,7 +39,7 @@ afhsb <- function(auth, locations, epiweeks, flu_types) {
 #' @return an instance of EpiDataCall
 #'
 #' @export
-cdc <- function(auth, epiweeks, locations) {
+pvt_cdc <- function(auth, epiweeks, locations) {
   check_single_string_param('auth', auth)
   check_epirange_param('epiweeks', epiweeks)
   check_string_param('locations', locations)
@@ -783,7 +778,7 @@ dengue_nowcast <- function(locations, epiweeks) {
 #' @return an instance of EpiDataCall
 #'
 #' @export
-dengue_sensors <- function(auth, names, locations, epiweeks) {
+pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
   check_single_string_param('auth', auth)
   check_string_param('names', names)
   check_string_param('locations', locations)
@@ -1043,7 +1038,7 @@ gft <- function(locations, epiweeks) {
 #' @return an instance of EpiDataCall
 #'
 #' @export
-ght <- function(auth, locations, epiweeks, query) {
+pvt_ght <- function(auth, locations, epiweeks, query) {
   check_single_string_param('auth', auth)
   check_string_param('locations', locations)
   check_epirange_param('epiweeks', epiweeks)
@@ -1111,7 +1106,7 @@ kcdc_ili <- function(regions,
 #' @return an instance of EpiDataCall
 #'
 #' @export
-meta_afhsb <- function(auth) {
+pvt_meta_afhsb <- function(auth) {
   check_single_string_param('auth', auth)
 
   create_epidata_call("meta_afhsb/", list(auth = auth))
@@ -1123,7 +1118,7 @@ meta_afhsb <- function(auth) {
 #' @return an instance of EpiDataCall
 #'
 #' @export
-meta_norostat <- function(auth) {
+pvt_meta_norostat <- function(auth) {
   check_single_string_param('auth', auth)
 
   create_epidata_call("meta_norostat/", list(auth = auth))
@@ -1213,7 +1208,7 @@ nidss_flu <-
 #' @return an instance of EpiDataCall
 #'
 #' @export
-norostat <- function(auth, location, epiweeks) {
+pvt_norostat <- function(auth, location, epiweeks) {
   check_single_string_param('auth', auth)
   check_single_string_param('locations', location)
   check_epirange_param('epiweeks', epiweeks)
@@ -1307,7 +1302,7 @@ paho_dengue <- function(regions,
 #' @return an instance of EpiDataCall
 #'
 #' @export
-quidel <- function(auth, epiweeks, locations) {
+pvt_quidel <- function(auth, epiweeks, locations) {
   check_single_string_param('auth', auth)
   check_epirange_param('epiweeks', epiweeks)
   check_string_param('locations', locations)
@@ -1336,7 +1331,7 @@ quidel <- function(auth, epiweeks, locations) {
 #' @return an instance of EpiDataCall
 #'
 #' @export
-sensors <- function(auth, names, locations, epiweeks) {
+pvt_sensors <- function(auth, names, locations, epiweeks) {
   check_single_string_param('auth', auth)
   check_string_param('names', names)
   check_string_param('locations', locations)
@@ -1369,7 +1364,7 @@ sensors <- function(auth, names, locations, epiweeks) {
 #' @return an instance of EpiDataCall
 #'
 #' @export
-twitter <-
+pvt_twitter <-
   function(auth,
            locations,
            dates = NULL,
