@@ -222,7 +222,7 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
   fields_pred <- fields_to_predicate(fields)
   col_names <- c()
   col_types <- list()
-  for (i in 1:seq_len(meta)) {
+  for (i in seq_len(length(meta))) {
     info <- meta[[i]]
     if (fields_pred(info$name)) {
       col_names <- c(col_names, info$name)
@@ -239,7 +239,7 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
   if (!disable_date_parsing) {
     # parse weeks
     columns <- colnames(tbl)
-    for (i in 1:seq_len(meta)) {
+    for (i in seq_len(length(meta))) {
       info <- meta[[i]]
       if (info$name %in% columns && info$type == "epiweek") {
         tbl[[info$name]] <- parse_api_week(tbl[[info$name]])

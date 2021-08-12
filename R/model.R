@@ -77,7 +77,7 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
     return(df)
   }
   columns <- colnames(df)
-  for (i in 1:seq_len(meta)) {
+  for (i in seq_len(length(meta))) {
     info <- meta[[i]]
     if (info$name %in% columns) {
       df[[info$name]] <- parse_value(info, df[[info$name]], disable_date_parsing = disable_date_parsing)
