@@ -4,7 +4,26 @@ parse_api_date <- function(value) {
 }
 
 parse_api_week <- function(value) {
-    years <- as.numeric(substr(value, 1, 4))
-    weeks <- as.numeric(substr(value, 5, 6))
+    v <- as.integer(value)
+    years <- idivide(v, 100)
+    weeks <- rem(v, 100)
     MMWRweek::MMWRweek2Date(years, weeks)
+}
+
+fields_to_predicate <- function(fields = NULL) {
+    if(is.null(fields)) {
+        return(function(x) { TRUE })
+    }
+    to_include = c()
+    to_exclude = c()
+    for(f in fields) {
+        if(substr(f, 1, 2) == '-') {
+            to_exclude = c(to_exclude, substr(f, 2, length(f)))
+        } else {
+            to_include = c(to_include, f)
+        }
+    }
+    function(x) {
+        !(x %in% to_exclude) && (length(to_include) == 0 || x %in% to_include)
+    }
 }

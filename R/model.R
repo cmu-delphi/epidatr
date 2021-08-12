@@ -52,15 +52,15 @@ create_epidata_field_info <-
     )
   }
 
-parse_value <- function(info, value) {
+parse_value <- function(info, value, disable_date_parsing = FALSE) {
     stopifnot(inherits(info, 'EpidataFieldInfo'))
     if(is.null(value)) {
         return(value)
     }
-    if(info$type == 'date') {
+    if(info$type == 'date' && !disable_date_parsing) {
         return(parse_api_date(value))
     }
-    if(info$type == 'epiweek') {
+    if(info$type == 'epiweek' && !disable_date_parsing) {
         return(parse_api_week(value))
     }
     if(info$type == 'bool') {
@@ -69,7 +69,7 @@ parse_value <- function(info, value) {
     value
 }
 
-parse_data_frame <- function(epidatacall, df) {
+parse_data_frame <- function(epidatacall, df, disable_date_parsing = FALSE) {
   stopifnot(inherits(epidatacall, 'EpiDataCall'))
   meta <- epidatacall$meta
   df <- as.data.frame(df)
@@ -78,10 +78,10 @@ parse_data_frame <- function(epidatacall, df) {
   }
   columns = colnames(df)
   for(i in 1:length(meta)) {
-      info = meta[[i]]
-      if(info$name %in% columns) {
-          df[[info$name]] = parse_value(info, df[[info$name]])
-      }
+    info = meta[[i]]
+    if(info$name %in% columns) {
+      df[[info$name]] = parse_value(info, df[[info$name]], disable_date_parsing=disable_date_parsing)
+    }
   }
   df
 }

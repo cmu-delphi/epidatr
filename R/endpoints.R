@@ -715,7 +715,7 @@ covidcast <-
         create_epidata_field_info("lag", 'int'),
         create_epidata_field_info("value", 'float'),
         create_epidata_field_info("stderr", 'float'),
-        create_epidata_field_info("sample_size", 'int'),
+        create_epidata_field_info("sample_size", 'float'),
         create_epidata_field_info("direction", 'float'),
         create_epidata_field_info("missing_value", 'int'),
         create_epidata_field_info("missing_stderr", 'int'),

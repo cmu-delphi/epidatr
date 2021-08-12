@@ -116,7 +116,7 @@ request_impl <- function(epidatacall, format_type, fields = NULL) {
 #' @return parsed json message
 #'
 #' @export
-fetch_classic <- function(epidatacall, fields = NULL) {
+fetch_classic <- function(epidatacall, fields = NULL, disable_date_parsing = FALSE) {
   res <- request_impl(epidatacall, 'classic', fields)
   r <- httr::content(res, 'text', encoding='UTF-8')
   if (httr::http_error(res)) {
@@ -126,7 +126,7 @@ fetch_classic <- function(epidatacall, fields = NULL) {
 
   m <- jsonlite::fromJSON(r)
   if('epidata' %in% names(m)) {
-      m$epidata = parse_data_frame(epidatacall, m$epidata)
+      m$epidata = parse_data_frame(epidatacall, m$epidata, disable_date_parsing = disable_date_parsing)
   }
   m
 }
@@ -142,11 +142,11 @@ fetch_classic <- function(epidatacall, fields = NULL) {
 #' @return parsed json message
 #'
 #' @export
-fetch_json <- function(epidatacall, fields = NULL) {
+fetch_json <- function(epidatacall, fields = NULL, disable_date_parsing = FALSE) {
   res <- request_impl(epidatacall, 'json', fields)
   httr::stop_for_status(res)
   r <- httr::content(res, 'text', encoding='UTF-8')
-  parse_data_frame(epidatacall, jsonlite::fromJSON(r))
+  parse_data_frame(epidatacall, jsonlite::fromJSON(r), disable_date_parsing = disable_date_parsing)
 }
 
 #'
@@ -177,6 +177,66 @@ print.EpiDataCSV <- function(x, ...) {
   invisible(x)
 }
 
+info_to_type <- function(info, disable_date_parsing = FALSE) {
+  types = list(
+    date=if (disable_date_parsing) { readr::col_integer() } else { readr::col_date(format="%Y%m%d") },
+    epiweek=readr::col_integer(),
+    bool=readr::col_logical(),
+    text=readr::col_character(),
+    int=readr::col_integer(),
+    float=readr::col_double(),
+    categorical=readr::col_factor(info$categories, TRUE)
+  )
+  r <- types[info$type]
+  stopifnot(!is.null(r))
+  r
+}
+
+#'
+#' fetches the data and returns data frame
+#'
+#' @param epidatacall and instance of EpiDataCall
+#' @param fields filter fields
+#' @importFrom readr read_csv
+#' @importFrom httr RETRY stop_for_status content
+#' @importFrom MMWRweek MMWRweek2Date
+#' @return tibble
+#'
+#' @export
+fetch_tbl <- function(epidatacall, fields = NULL, disable_date_parsing = FALSE) {
+  r <- fetch_csv(epidatacall, fields)
+  meta <- epidatacall$meta
+  fields_pred = fields_to_predicate(fields)
+  col_names = c()
+  col_types = list()
+  for(i in 1:length(meta)) {
+    info = meta[[i]]
+    if(fields_pred(info$name)) {
+      col_names = c(col_names, info$name)
+      col_types[info$name] = info_to_type(info, disable_date_parsing)
+    }
+  }
+  tbl <- if(length(col_names) > 0) {
+    readr::read_csv(r, col_types = col_types)
+  } else {
+    readr::read_csv(r)
+  }
+
+
+  if(!disable_date_parsing) {
+    # parse weeks
+    columns = colnames(tbl)
+    for(i in 1:length(meta)) {
+      info = meta[[i]]
+      if(info$name %in% columns && info$type == 'epiweek') {
+        tbl[[info$name]] = parse_api_week(tbl[[info$name]])
+      }
+    }
+  }
+  tbl
+}
+
+
 #'
 #' fetches the data and returns data frame
 #'
@@ -188,8 +248,6 @@ print.EpiDataCSV <- function(x, ...) {
 #' @return data.frame
 #'
 #' @export
-fetch_df <- function(epidatacall, fields = NULL) {
-  r <- fetch_csv(epidatacall, fields)
-  # TODO define column types
-  parse_data_frame(epidatacall, readr::read_csv(r))
+fetch_df <- function(epidatacall, fields = NULL, disable_date_parsing = FALSE) {
+  as.data.frame(fetch_tbl(epidatacall, fields, disable_date_parsing))
 }
