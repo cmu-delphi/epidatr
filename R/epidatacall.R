@@ -137,7 +137,7 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_date_parsing = FA
   }
 
   m <- jsonlite::fromJSON(r)
-  if ("epidata" %in% names(m)) {
+  if ("epidata" %in% names(m) && !(epidata_call$only_supports_classic)) {
     m$epidata <- parse_data_frame(epidata_call, m$epidata, disable_date_parsing = disable_date_parsing)
   }
   m
