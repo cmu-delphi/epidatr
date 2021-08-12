@@ -127,6 +127,8 @@ request_impl <- function(epidata_call, format_type, fields = NULL) {
 #' @export
 fetch_classic <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
+  stopifnot(is.null(fields) || is.character(fields))
+  stopifnot(is.logical(disable_date_parsing), length(disable_date_parsing) == 1)
   res <- request_impl(epidata_call, "classic", fields)
   r <- httr::content(res, "text", encoding = "UTF-8")
   if (httr::http_error(res)) {
@@ -150,13 +152,19 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_date_parsing = FA
 #' @importFrom httr RETRY stop_for_status content
 #' @importFrom jsonlite fromJSON
 #' @importFrom MMWRweek MMWRweek2Date
+#' @importFrom rlang abort
 #' @return parsed json message
 #'
 #' @export
 fetch_json <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
-  if(epidata_call$only_supports_classic) {
-    abort('the endpoint only supports the classic message format, due to an non-standard behavior', epidata_call=epidata_call)
+  stopifnot(is.null(fields) || is.character(fields))
+  stopifnot(is.logical(disable_date_parsing), length(disable_date_parsing) == 1)
+  if (epidata_call$only_supports_classic) {
+    rlang::abort("the endpoint only supports the classic message format, due to an non-standard behavior",
+      epidata_call = epidata_call,
+      class = "only_supports_classic_format"
+    )
   }
   res <- request_impl(epidata_call, "json", fields)
   httr::stop_for_status(res)
@@ -170,13 +178,18 @@ fetch_json <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE
 #' @param epidata_call and instance of epidata_call
 #' @param fields filter fields
 #' @importFrom httr RETRY stop_for_status content
+#' @importFrom rlang abort
 #' @return CSV text
 #'
 #' @export
 fetch_csv <- function(epidata_call, fields = NULL) {
   stopifnot(inherits(epidata_call, "epidata_call"))
-  if(epidata_call$only_supports_classic) {
-    abort('the endpoint only supports the classic message format, due to an non-standard behavior', epidata_call=epidata_call)
+  stopifnot(is.null(fields) || is.character(fields))
+  if (epidata_call$only_supports_classic) {
+    rlang::abort("the endpoint only supports the classic message format, due to an non-standard behavior",
+      epidata_call = epidata_call,
+      class = "only_supports_classic_format"
+    )
   }
   res <- request_impl(epidata_call, "csv", fields)
   httr::stop_for_status(res)
@@ -227,10 +240,20 @@ info_to_type <- function(info, disable_date_parsing = FALSE) {
 #' @importFrom readr read_csv
 #' @importFrom httr RETRY stop_for_status content
 #' @importFrom MMWRweek MMWRweek2Date
+#' @importFrom rlang abort
 #' @return tibble
 #'
 #' @export
 fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
+  stopifnot(inherits(epidata_call, "epidata_call"))
+  stopifnot(is.null(fields) || is.character(fields))
+  stopifnot(is.logical(disable_date_parsing), length(disable_date_parsing) == 1)
+  if (epidata_call$only_supports_classic) {
+    rlang::abort("the endpoint only supports the classic message format, due to an non-standard behavior",
+      epidata_call = epidata_call,
+      class = "only_supports_classic_format"
+    )
+  }
   r <- fetch_csv(epidata_call, fields)
   meta <- epidata_call$meta
   fields_pred <- fields_to_predicate(fields)
@@ -273,6 +296,7 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 #' @importFrom readr read_csv
 #' @importFrom httr RETRY stop_for_status content
 #' @importFrom MMWRweek MMWRweek2Date
+#' @importFrom rlang abort
 #' @return data.frame
 #'
 #' @export
