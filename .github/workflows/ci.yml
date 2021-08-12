@@ -35,23 +35,28 @@ jobs:
           install.packages(c('devtools', 'pkgdown', 'webshot', 'textshaping', 'styler', 'lintr'))
           devtools::install_deps(dependencies = TRUE)
 
+      - name: Style / Format
+        shell: Rscript {0}
+        run: styler::style_pkg(dry="fail")
+
+      - name: Build Package
+
+        shell: Rscript {0}
+        run: |
+          devtools::document()
+          devtools::build()
+
+      - name: Lint
+        shell: Rscript {0}
+        run: |
+          devtools::load_all()
+          lintr::lint_package('.')
+
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         shell: Rscript {0}
         run: devtools::check(args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
-
-      - name: Style / Format
-        shell: Rscript {0}
-        run: styler::style_package(dry="fail")
-
-      - name: Lint
-        shell: Rscript {0}
-        run: lintr::lint_package()
-
-      - name: Test
-        shell: Rscript {0}
-        run: devtools::test()
 
       - name: Upload check results
         if: failure()
@@ -60,9 +65,6 @@ jobs:
           name: ${{ runner.os }}-results
           path: r_package/check
 
-      - name: Build Package
-
+      - name: Test
         shell: Rscript {0}
-        run: |
-          devtools::document()
-          devtools::build()
+        run: devtools::test()
