@@ -749,7 +749,8 @@ delphi <- function(system, epiweek) {
       create_epidata_field_info("system", "text"),
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("json", "text")
-    )
+    ),
+    only_supports_classic = TRUE
   )
 }
 
@@ -1116,7 +1117,7 @@ kcdc_ili <- function(regions,
 pvt_meta_afhsb <- function(auth) {
   check_single_string_param("auth", auth)
 
-  create_epidata_call("meta_afhsb/", list(auth = auth))
+  create_epidata_call("meta_afhsb/", list(auth = auth), only_supports_classic = TRUE)
 }
 
 #' fetch NoroSTAT meta data
@@ -1128,7 +1129,7 @@ pvt_meta_afhsb <- function(auth) {
 pvt_meta_norostat <- function(auth) {
   check_single_string_param("auth", auth)
 
-  create_epidata_call("meta_norostat/", list(auth = auth))
+  create_epidata_call("meta_norostat/", list(auth = auth), only_supports_classic = TRUE)
 }
 
 #'
@@ -1138,7 +1139,7 @@ pvt_meta_norostat <- function(auth) {
 #'
 #' @export
 meta <- function() {
-  create_epidata_call("meta/", list())
+  create_epidata_call("meta/", list(), only_supports_classic = TRUE)
 }
 
 #'

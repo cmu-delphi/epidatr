@@ -1,10 +1,11 @@
 
 
 
-create_epidata_call <- function(endpoint, params, meta = NULL) {
+create_epidata_call <- function(endpoint, params, meta = NULL, only_supports_classic = FALSE) {
   stopifnot(is.character(endpoint), length(endpoint) == 1)
   stopifnot(is.list(params))
   stopifnot(is.null(meta) || is.list(meta))
+  stopifnot(is.logical(only_supports_classic), length(only_supports_classic) == 1)
   if (is.null(meta)) {
     meta <- list()
   }
@@ -13,7 +14,8 @@ create_epidata_call <- function(endpoint, params, meta = NULL) {
       endpoint = endpoint,
       params = params,
       base_url = base_url,
-      meta = meta
+      meta = meta,
+      only_supports_classic = only_supports_classic
     ),
     class = "epidata_call"
   )
@@ -124,6 +126,7 @@ request_impl <- function(epidata_call, format_type, fields = NULL) {
 #'
 #' @export
 fetch_classic <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
+  stopifnot(inherits(epidata_call, "epidata_call"))
   res <- request_impl(epidata_call, "classic", fields)
   r <- httr::content(res, "text", encoding = "UTF-8")
   if (httr::http_error(res)) {
@@ -151,6 +154,10 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_date_parsing = FA
 #'
 #' @export
 fetch_json <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
+  stopifnot(inherits(epidata_call, "epidata_call"))
+  if(epidata_call$only_supports_classic) {
+    abort('the endpoint only supports the classic message format, due to an non-standard behavior', epidata_call=epidata_call)
+  }
   res <- request_impl(epidata_call, "json", fields)
   httr::stop_for_status(res)
   r <- httr::content(res, "text", encoding = "UTF-8")
@@ -167,6 +174,10 @@ fetch_json <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE
 #'
 #' @export
 fetch_csv <- function(epidata_call, fields = NULL) {
+  stopifnot(inherits(epidata_call, "epidata_call"))
+  if(epidata_call$only_supports_classic) {
+    abort('the endpoint only supports the classic message format, due to an non-standard behavior', epidata_call=epidata_call)
+  }
   res <- request_impl(epidata_call, "csv", fields)
   httr::stop_for_status(res)
   data <- httr::content(res, "text", encoding = "UTF-8")
