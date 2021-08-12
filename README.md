@@ -23,7 +23,17 @@ TODO
 
 ## Development Environment
 
-TODO
+Relevant R commands
+```r
+install.packages(c('devtools', 'pkgdown', 'styler', 'lintr')) # install dev dependencies
+devtools::install_deps(dependencies = TRUE) # install package dependencies
+devtools::document() # generate package meta data and man files
+devtools::build() # build package
+styler::style_pkg() # format code
+lintr::lint_package() # lint package
+devtools::test() # test package
+devtools::check() # check package for errors
+```
 
 ## Release Process
 
@@ -37,6 +47,8 @@ The release consists of multiple steps which can be all done via the GitHub webs
    1. create another [Pull Request](https://github.com/cmu-delphi/delphi-epidata-r/pulls) to merge the changes back to the `dev` branch
    1. create a [GitHub release](https://github.com/cmu-delphi/delphi-epidata-r/releases) with automatically derived release notes
 1. Done
+
+TODO release to CRAN
 
 [mit-image]: https://img.shields.io/badge/License-MIT-yellow.svg
 [mit-url]: https://opensource.org/licenses/MIT
