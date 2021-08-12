@@ -162,7 +162,6 @@ fetch_json <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE
 #'
 #' @param epidata_call and instance of epidata_call
 #' @param fields filter fields
-#' @param disable_date_parsing disable automatic date parsing
 #' @importFrom httr RETRY stop_for_status content
 #' @return CSV text
 #'
