@@ -4,7 +4,7 @@
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
 #' @param flu_types flu_types to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
@@ -36,7 +36,7 @@ pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
 #' @param auth authenfication token
 #' @param epiweeks epiweeks to fetch
 #' @param locations locations to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 pvt_cdc <- function(auth, epiweeks, locations) {
@@ -76,7 +76,7 @@ pvt_cdc <- function(auth, epiweeks, locations) {
 #' @param city optional city
 #' @param zip optional zip code
 #' @param fips_code optional fips code
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 covid_hosp_facility_lookup <-
@@ -125,7 +125,7 @@ covid_hosp_facility_lookup <-
 #' @param hospital_pks hospitals to fetch
 #' @param collection_weeks weeks to fetch
 #' @param publication_dates publication dates to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 #
@@ -399,7 +399,7 @@ covid_hosp_facility <-
 #' @param states states to fetch
 #' @param dates dates to fetch
 #' @param issues issues to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 #
@@ -534,7 +534,7 @@ covid_hosp_state_timeseries <-
 #'
 #' fetch covidcast meta data
 #'
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 covidcast_meta <- function() {
@@ -577,7 +577,7 @@ covidcast_meta <- function() {
 #' @param as_of data source to fetch
 #' @param issues data source to fetch
 #' @param lag data source to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 covidcast_nowcast <-
@@ -599,7 +599,10 @@ covidcast_nowcast <-
       missing(geo_type) ||
       missing(time_values) || missing(geo_values)) {
       stop(
-        "`data_source`, `signals`, `sensor_names`, `time_type`, `geo_type`, `time_values`, and `geo_value` are all required"
+        paste0(
+          "`data_source`, `signals`, `sensor_names`, `time_type`, `geo_type`, `time_values`, ",
+          "and `geo_value` are all required"
+        )
       )
     }
     if (!missing(issues) && !missing(lag)) {
@@ -652,7 +655,7 @@ covidcast_nowcast <-
 #' @param as_of data source to fetch
 #' @param issues data source to fetch
 #' @param lag data source to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 covidcast <-
@@ -732,7 +735,7 @@ covidcast <-
 #' fetch Delphi's forecast
 #' @param system system to fetch
 #' @param epiweek epiweek to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 delphi <- function(system, epiweek) {
@@ -754,7 +757,7 @@ delphi <- function(system, epiweek) {
 #' fetch Delphi's PAHO Dengue nowcast
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 dengue_nowcast <- function(locations, epiweeks) {
@@ -779,7 +782,7 @@ dengue_nowcast <- function(locations, epiweeks) {
 #' @param names names to fetch
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
@@ -813,7 +816,7 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
 #' @param epiweeks epiweeks to fetch
 #' @param issues optionally specify the exact issues to fetch
 #' @param lag optionally specify the issue lag
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 ecdc_ili <- function(regions,
@@ -853,7 +856,7 @@ ecdc_ili <- function(regions,
 #' @param epiweeks epiweeks to fetch
 #' @param issues optionally specify the exact issues to fetch
 #' @param lag optionally specify the issue lag
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 flusurv <- function(locations,
@@ -898,7 +901,7 @@ flusurv <- function(locations,
 #' @param epiweeks epiweeks to fetch
 #' @param issues optionally specify the exact issues to fetch
 #' @param lag optionally specify the issue lag
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 fluview_clinical <-
@@ -940,7 +943,7 @@ fluview_clinical <-
 #'
 #' fetch fluview meta data
 #'
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 fluview_meta <- function() {
@@ -963,7 +966,7 @@ fluview_meta <- function() {
 #' @param issues optionally specify the exact issues to fetch
 #' @param lag optionally specify the issue lag
 #' @param auth optional authentication
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 fluview <-
@@ -1015,7 +1018,7 @@ fluview <-
 #'
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 gft <- function(locations, epiweeks) {
@@ -1039,7 +1042,7 @@ gft <- function(locations, epiweeks) {
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
 #' @param query query
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 pvt_ght <- function(auth, locations, epiweeks, query) {
@@ -1070,7 +1073,7 @@ pvt_ght <- function(auth, locations, epiweeks, query) {
 #' @param epiweeks epiweeks to fetch
 #' @param issues optionally specify the exact issues to fetch
 #' @param lag optionally specify the issue lag
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 kcdc_ili <- function(regions,
@@ -1107,7 +1110,7 @@ kcdc_ili <- function(regions,
 #' fetch AFHSB meta data
 #'
 #' @param auth authenfication token
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 pvt_meta_afhsb <- function(auth) {
@@ -1119,7 +1122,7 @@ pvt_meta_afhsb <- function(auth) {
 #' fetch NoroSTAT meta data
 #'
 #' @param auth authenfication token
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 pvt_meta_norostat <- function(auth) {
@@ -1131,7 +1134,7 @@ pvt_meta_norostat <- function(auth) {
 #'
 #' fetch api meta data
 #'
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 meta <- function() {
@@ -1142,7 +1145,7 @@ meta <- function() {
 #' fetch NIDSS dengue data
 #' @param locations locations to fech
 #' @param epiweeks epiweeks to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 nidss_dengue <- function(locations, epiweeks) {
@@ -1166,7 +1169,7 @@ nidss_dengue <- function(locations, epiweeks) {
 #' @param epiweeks epiweeks to fetch
 #' @param issues optional issues
 #' @param lag optional lag
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 nidss_flu <-
@@ -1209,7 +1212,7 @@ nidss_flu <-
 #' @param auth authenfication token
 #' @param location location to fetch
 #' @param epiweeks epiweeks to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 pvt_norostat <- function(auth, location, epiweeks) {
@@ -1236,7 +1239,7 @@ pvt_norostat <- function(auth, location, epiweeks) {
 #' fetch Delphi's wILI nowcast
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 nowcast <- function(locations, epiweeks) {
@@ -1261,7 +1264,7 @@ nowcast <- function(locations, epiweeks) {
 #' @param epiweeks epiweeks to fetch
 #' @param issues issues to fetch
 #' @param lag lag to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 paho_dengue <- function(regions,
@@ -1303,7 +1306,7 @@ paho_dengue <- function(regions,
 #' @param auth authenfication token
 #' @param epiweeks epiweeks to fetch
 #' @param locations locations to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 pvt_quidel <- function(auth, epiweeks, locations) {
@@ -1332,7 +1335,7 @@ pvt_quidel <- function(auth, epiweeks, locations) {
 #' @param names names to fetch
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 pvt_sensors <- function(auth, names, locations, epiweeks) {
@@ -1365,7 +1368,7 @@ pvt_sensors <- function(auth, names, locations, epiweeks) {
 #' @param locations locations to fetch
 #' @param dates epiweeks to fetch
 #' @param epiweeks epiweeks to fetch
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 pvt_twitter <-
@@ -1410,7 +1413,7 @@ pvt_twitter <-
 #' @param epiweeks epiweeks to fetch
 #' @param hours hours to fetch
 #' @param language language
-#' @return an instance of EpiDataCall
+#' @return an instance of epidata_call
 #'
 #' @export
 wiki <-

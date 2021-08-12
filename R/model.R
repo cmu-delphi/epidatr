@@ -69,15 +69,15 @@ parse_value <- function(info, value, disable_date_parsing = FALSE) {
   value
 }
 
-parse_data_frame <- function(epidatacall, df, disable_date_parsing = FALSE) {
-  stopifnot(inherits(epidatacall, "EpiDataCall"))
-  meta <- epidatacall$meta
+parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
+  stopifnot(inherits(epidata_call, "epidata_call"))
+  meta <- epidata_call$meta
   df <- as.data.frame(df)
   if (length(meta) == 0) {
     return(df)
   }
   columns <- colnames(df)
-  for (i in 1:length(meta)) {
+  for (i in 1:seq_len(meta)) {
     info <- meta[[i]]
     if (info$name %in% columns) {
       df[[info$name]] <- parse_value(info, df[[info$name]], disable_date_parsing = disable_date_parsing)

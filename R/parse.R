@@ -5,8 +5,8 @@ parse_api_date <- function(value) {
 
 parse_api_week <- function(value) {
   v <- as.integer(value)
-  years <- idivide(v, 100)
-  weeks <- rem(v, 100)
+  years <- floor(v / 100)
+  weeks <- v - (years * 100)
   MMWRweek::MMWRweek2Date(years, weeks)
 }
 
