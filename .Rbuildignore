@@ -13,3 +13,6 @@
 ^\.github$
 ^\.bumpversion\.cfg$
 ^\.editorconfig$
+^\.lintr$
+^\Makefile$
+

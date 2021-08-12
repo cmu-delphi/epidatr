@@ -4,7 +4,9 @@ check_string_param <- function(name, value, required = TRUE) {
     !(!is.null(value) &&
       is.character(value))) ||
     (!required && !(is.null(value) || is.character(value)))) {
-    stop(paste0("argument ", name, " is not a string"))
+    rlang::abort(paste0("argument ", name, " is not a string"),
+      name = name, value = value, class = "invalid_argument"
+    )
   }
 }
 
@@ -14,7 +16,9 @@ check_int_param <- function(name, value, required = TRUE) {
     !(!is.null(value) &&
       is.numeric(value))) ||
     (!required && !(is.null(value) || is.numeric(value)))) {
-    stop(paste0("argument ", name, " is not a number"))
+    rlang::abort(paste0("argument ", name, " is not a number"),
+      name = name, value = value, class = "invalid_argument"
+    )
   }
 }
 
@@ -32,14 +36,18 @@ check_single_epirange_param <-
       !(!is.null(value) &&
         is_epirange_like(value))) ||
       (!required && !(is.null(value) || is_epirange_like(value)))) {
-      stop(paste0("argument ", name, " is not a epirange"))
+      rlang::abort(paste0("argument ", name, " is not a epirange"),
+        name = name, value = value, class = "invalid_argument"
+      )
     }
   }
 
 check_epirange_param <- function(name, value, required = TRUE) {
   if (is.null(value)) {
     if (required) {
-      stop(paste0("argument ", name, " is not a epirange"))
+      rlang::abort(paste0("argument ", name, " is not a epirange"),
+        name = name, value = value, class = "invalid_argument"
+      )
     }
     return()
   }
@@ -47,7 +55,9 @@ check_epirange_param <- function(name, value, required = TRUE) {
     return()
   }
   if (!is.list || !all(sapply(sapply(value, is_epirange_like)))) {
-    stop(paste0("argument ", name, " is not a epirange"))
+    rlang::abort(paste0("argument ", name, " is not a epirange"),
+      name = name, value = value, class = "invalid_argument"
+    )
   }
 }
 
@@ -61,7 +71,9 @@ check_single_string_param <- function(name, value, required = TRUE) {
         (
           is.character(value) && length(value) == 1
         )))) {
-    stop(paste0("argument ", name, " is not a single string"))
+    rlang::abort(paste0("argument ", name, " is not a single string"),
+      name = name, value = value, class = "invalid_argument"
+    )
   }
 }
 
@@ -72,6 +84,8 @@ check_single_int_param <- function(name, value, required = TRUE) {
       length(value) == 1)) ||
     (!required &&
       !(is.null(value) || (is.numeric(value) && length(value) == 1)))) {
-    stop(paste0("argument ", name, " is not a single integer"))
+    rlang::abort(paste0("argument ", name, " is not a single integer"),
+      name = name, value = value, class = "invalid_argument"
+    )
   }
 }
