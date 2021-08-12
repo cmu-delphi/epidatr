@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         shell: Rscript {0}
         run: |
-          install.packages(c('devtools', 'pkgdown', 'webshot', 'textshaping'))
+          install.packages(c('devtools', 'pkgdown', 'webshot', 'textshaping', 'styler', 'lintr'))
           devtools::install_deps(dependencies = TRUE)
 
       - name: Check
@@ -40,6 +40,14 @@ jobs:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         shell: Rscript {0}
         run: devtools::check(args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
+
+      - name: Style / Format
+        shell: Rscript {0}
+        run: styler::style_package(dry="fail")
+
+      - name: Lint
+        shell: Rscript {0}
+        run: lintr::lint_package()
 
       - name: Test
         shell: Rscript {0}

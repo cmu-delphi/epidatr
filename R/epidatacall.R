@@ -5,7 +5,7 @@ create_epidata_call <- function(endpoint, params, meta = NULL) {
   stopifnot(is.character(endpoint), length(endpoint) == 1)
   stopifnot(is.list(params))
   stopifnot(is.null(meta) || is.list(meta))
-  if(is.null(meta)) {
+  if (is.null(meta)) {
     meta <- list()
   }
   structure(
@@ -27,42 +27,42 @@ create_epidata_call <- function(endpoint, params, meta = NULL) {
 #'
 #' @export
 with_base_url <- function(epidatacall, base_url) {
-  stopifnot(inherits(epidatacall, 'EpiDataCall'))
+  stopifnot(inherits(epidatacall, "EpiDataCall"))
   stopifnot(is.character(base_url), length(base_url) == 1)
-  epidatacall$base_url = base_url
+  epidatacall$base_url <- base_url
   epidatacall
 }
 
 request_arguments <-
   function(epidatacall, format_type, fields = NULL) {
-    stopifnot(inherits(epidatacall, 'EpiDataCall'))
-    stopifnot(format_type %in% c('json', 'csv', 'classic'))
+    stopifnot(inherits(epidatacall, "EpiDataCall"))
+    stopifnot(format_type %in% c("json", "csv", "classic"))
     stopifnot(is.null(fields) || is.character(fields))
 
-    extra_params = list()
-    if (format_type != 'classic') {
-      extra_params[['format']] = format_type
+    extra_params <- list()
+    if (format_type != "classic") {
+      extra_params[["format"]] <- format_type
     }
     if (!is.null(fields)) {
-      extra_params[['fields']] = fields
+      extra_params[["fields"]] <- fields
     }
-    all_params = c(epidatacall$params, extra_params)
+    all_params <- c(epidatacall$params, extra_params)
 
-    formatted_params = list()
+    formatted_params <- list()
     for (name in names(all_params)) {
-      v = all_params[[name]]
+      v <- all_params[[name]]
       if (!is.null(v)) {
-        formatted_params[[name]] = format_list(v)
+        formatted_params[[name]] <- format_list(v)
       }
     }
     formatted_params
   }
 
 full_url <- function(epidatacall) {
-  stopifnot(inherits(epidatacall, 'EpiDataCall'))
-  url = epidatacall$base_url
-  if (url[length(url)] != '/') {
-    url = paste0(url, '/')
+  stopifnot(inherits(epidatacall, "EpiDataCall"))
+  url <- epidatacall$base_url
+  if (url[length(url)] != "/") {
+    url <- paste0(url, "/")
   }
   paste0(url, epidatacall$endpoint)
 }
@@ -77,30 +77,30 @@ full_url <- function(epidatacall) {
 #' @return full url
 #'
 #' @export
-request_url <- function(epidatacall, format_type = 'classic', fields = NULL) {
-  stopifnot(inherits(epidatacall, 'EpiDataCall'))
-  url = full_url(epidatacall)
-  params = request_arguments(epidatacall, format_type, fields)
-  httr::modify_url(url, query=params)
+request_url <- function(epidatacall, format_type = "classic", fields = NULL) {
+  stopifnot(inherits(epidatacall, "EpiDataCall"))
+  url <- full_url(epidatacall)
+  params <- request_arguments(epidatacall, format_type, fields)
+  httr::modify_url(url, query = params)
 }
 
 print.EpiDataCall <- function(epidatacall) {
-  stopifnot(inherits(epidatacall, 'EpiDataCall'))
-  print('EpiDataCall instance, use fetch_classic, fetch_json, fetch_df, fetch_csv to fetch the data')
+  stopifnot(inherits(epidatacall, "EpiDataCall"))
+  print("EpiDataCall instance, use fetch_classic, fetch_json, fetch_df, fetch_csv to fetch the data")
   print(request_url(epidatacall))
 }
 
 request_impl <- function(epidatacall, format_type, fields = NULL) {
-  stopifnot(inherits(epidatacall, 'EpiDataCall'))
-  stopifnot(format_type %in% c('json', 'csv', 'classic'))
+  stopifnot(inherits(epidatacall, "EpiDataCall"))
+  stopifnot(format_type %in% c("json", "csv", "classic"))
   # API call
-  url = full_url(epidatacall)
-  params = request_arguments(epidatacall, format_type, fields)
+  url <- full_url(epidatacall)
+  params <- request_arguments(epidatacall, format_type, fields)
 
   # don't retry in case of certain status codes
-  res <- httr::RETRY('GET', url, query = params, HTTP_HEADERS, terminate_on=c(400, 401, 403, 405, 414, 500))
+  res <- httr::RETRY("GET", url, query = params, HTTP_HEADERS, terminate_on = c(400, 401, 403, 405, 414, 500))
   if (res$status_code == 414) {
-    res <- httr::RETRY('POST', url, body = params, encode = 'form', HTTP_HEADERS, terminate_on=c(400, 401, 403, 405, 414, 500))
+    res <- httr::RETRY("POST", url, body = params, encode = "form", HTTP_HEADERS, terminate_on = c(400, 401, 403, 405, 414, 500))
   }
   res
 }
@@ -117,16 +117,16 @@ request_impl <- function(epidatacall, format_type, fields = NULL) {
 #'
 #' @export
 fetch_classic <- function(epidatacall, fields = NULL, disable_date_parsing = FALSE) {
-  res <- request_impl(epidatacall, 'classic', fields)
-  r <- httr::content(res, 'text', encoding='UTF-8')
+  res <- request_impl(epidatacall, "classic", fields)
+  r <- httr::content(res, "text", encoding = "UTF-8")
   if (httr::http_error(res)) {
     # return message in case of error
-    return(list(result=0, message=paste0("error: ", r), epidata=data.frame()))
+    return(list(result = 0, message = paste0("error: ", r), epidata = data.frame()))
   }
 
   m <- jsonlite::fromJSON(r)
-  if('epidata' %in% names(m)) {
-      m$epidata = parse_data_frame(epidatacall, m$epidata, disable_date_parsing = disable_date_parsing)
+  if ("epidata" %in% names(m)) {
+    m$epidata <- parse_data_frame(epidatacall, m$epidata, disable_date_parsing = disable_date_parsing)
   }
   m
 }
@@ -143,9 +143,9 @@ fetch_classic <- function(epidatacall, fields = NULL, disable_date_parsing = FAL
 #'
 #' @export
 fetch_json <- function(epidatacall, fields = NULL, disable_date_parsing = FALSE) {
-  res <- request_impl(epidatacall, 'json', fields)
+  res <- request_impl(epidatacall, "json", fields)
   httr::stop_for_status(res)
-  r <- httr::content(res, 'text', encoding='UTF-8')
+  r <- httr::content(res, "text", encoding = "UTF-8")
   parse_data_frame(epidatacall, jsonlite::fromJSON(r), disable_date_parsing = disable_date_parsing)
 }
 
@@ -159,16 +159,16 @@ fetch_json <- function(epidatacall, fields = NULL, disable_date_parsing = FALSE)
 #'
 #' @export
 fetch_csv <- function(epidatacall, fields = NULL) {
-  res <- request_impl(epidatacall, 'csv', fields)
+  res <- request_impl(epidatacall, "csv", fields)
   httr::stop_for_status(res)
-  data <- httr::content(res, 'text', encoding='UTF-8')
+  data <- httr::content(res, "text", encoding = "UTF-8")
   class(data) <- c("EpiDataCSV", class(data))
   data
 }
 
 print.EpiDataCSV <- function(x, ...) {
-  char.limit = getOption("csv__char_limit", default = 300L)
-  cat('# A EpiDataCSV object with', nchar(x), 'characters; showing up to', char.limit, 'characters below. To print the entire string, use `print(as.character(x))`:\n')
+  char.limit <- getOption("csv__char_limit", default = 300L)
+  cat("# A EpiDataCSV object with", nchar(x), "characters; showing up to", char.limit, "characters below. To print the entire string, use `print(as.character(x))`:\n")
   cat(substr(x, 1L, char.limit))
   if (nchar(x) > char.limit) {
     cat("[...]")
@@ -178,14 +178,18 @@ print.EpiDataCSV <- function(x, ...) {
 }
 
 info_to_type <- function(info, disable_date_parsing = FALSE) {
-  types = list(
-    date=if (disable_date_parsing) { readr::col_integer() } else { readr::col_date(format="%Y%m%d") },
-    epiweek=readr::col_integer(),
-    bool=readr::col_logical(),
-    text=readr::col_character(),
-    int=readr::col_integer(),
-    float=readr::col_double(),
-    categorical=readr::col_factor(info$categories, TRUE)
+  types <- list(
+    date = if (disable_date_parsing) {
+      readr::col_integer()
+    } else {
+      readr::col_date(format = "%Y%m%d")
+    },
+    epiweek = readr::col_integer(),
+    bool = readr::col_logical(),
+    text = readr::col_character(),
+    int = readr::col_integer(),
+    float = readr::col_double(),
+    categorical = readr::col_factor(info$categories, TRUE)
   )
   r <- types[info$type]
   stopifnot(!is.null(r))
@@ -206,30 +210,30 @@ info_to_type <- function(info, disable_date_parsing = FALSE) {
 fetch_tbl <- function(epidatacall, fields = NULL, disable_date_parsing = FALSE) {
   r <- fetch_csv(epidatacall, fields)
   meta <- epidatacall$meta
-  fields_pred = fields_to_predicate(fields)
-  col_names = c()
-  col_types = list()
-  for(i in 1:length(meta)) {
-    info = meta[[i]]
-    if(fields_pred(info$name)) {
-      col_names = c(col_names, info$name)
-      col_types[info$name] = info_to_type(info, disable_date_parsing)
+  fields_pred <- fields_to_predicate(fields)
+  col_names <- c()
+  col_types <- list()
+  for (i in 1:length(meta)) {
+    info <- meta[[i]]
+    if (fields_pred(info$name)) {
+      col_names <- c(col_names, info$name)
+      col_types[info$name] <- info_to_type(info, disable_date_parsing)
     }
   }
-  tbl <- if(length(col_names) > 0) {
+  tbl <- if (length(col_names) > 0) {
     readr::read_csv(r, col_types = col_types)
   } else {
     readr::read_csv(r)
   }
 
 
-  if(!disable_date_parsing) {
+  if (!disable_date_parsing) {
     # parse weeks
-    columns = colnames(tbl)
-    for(i in 1:length(meta)) {
-      info = meta[[i]]
-      if(info$name %in% columns && info$type == 'epiweek') {
-        tbl[[info$name]] = parse_api_week(tbl[[info$name]])
+    columns <- colnames(tbl)
+    for (i in 1:length(meta)) {
+      info <- meta[[i]]
+      if (info$name %in% columns && info$type == "epiweek") {
+        tbl[[info$name]] <- parse_api_week(tbl[[info$name]])
       }
     }
   }
