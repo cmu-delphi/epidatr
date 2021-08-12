@@ -12,7 +12,7 @@ create_epidata_call <- function(endpoint, params, meta = NULL) {
     list(
       endpoint = endpoint,
       params = params,
-      base_url = BASE_URL,
+      base_url = base_url,
       meta = meta
     ),
     class = "epidata_call"
