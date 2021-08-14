@@ -13,7 +13,7 @@ create_epidata_call <- function(endpoint, params, meta = NULL, only_supports_cla
     list(
       endpoint = endpoint,
       params = params,
-      base_url = base_url,
+      base_url = global_base_url,
       meta = meta,
       only_supports_classic = only_supports_classic
     ),
@@ -62,11 +62,7 @@ request_arguments <-
 
 full_url <- function(epidata_call) {
   stopifnot(inherits(epidata_call, "epidata_call"))
-  url <- epidata_call$base_url
-  if (url[length(url)] != "/") {
-    url <- paste0(url, "/")
-  }
-  paste0(url, epidata_call$endpoint)
+  join_url(epidata_call$base_url, epidata_call$endpoint)
 }
 
 #'
@@ -99,18 +95,7 @@ request_impl <- function(epidata_call, format_type, fields = NULL) {
   url <- full_url(epidata_call)
   params <- request_arguments(epidata_call, format_type, fields)
 
-  # don't retry in case of certain status codes
-  res <- httr::RETRY("GET", url,
-    query = params, http_headers,
-    terminate_on = c(400, 401, 403, 405, 414, 500)
-  )
-  if (res$status_code == 414) {
-    res <- httr::RETRY("POST", url,
-      body = params, encode = "form", http_headers,
-      terminate_on = c(400, 401, 403, 405, 414, 500)
-    )
-  }
-  res
+  do_request(url, params)
 }
 
 #'
