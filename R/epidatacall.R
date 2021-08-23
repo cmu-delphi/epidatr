@@ -1,7 +1,8 @@
 
 
 
-create_epidata_call <- function(endpoint, params, meta = NULL, only_supports_classic = FALSE) {
+create_epidata_call <- function(endpoint, params, meta = NULL,
+                                only_supports_classic = FALSE) {
   stopifnot(is.character(endpoint), length(endpoint) == 1)
   stopifnot(is.list(params))
   stopifnot(is.null(meta) || is.list(meta))

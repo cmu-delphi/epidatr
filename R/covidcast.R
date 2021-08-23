@@ -1,6 +1,7 @@
 
-parse_signal <- function(signal) {
-  class(signal) <- c(class(signal), "covidcast_data_signal")
+parse_signal <- function(signal, base_url) {
+  class(signal) <- c("covidcast_data_signal", class(signal))
+  signal$key <- paste(signal$source, signal$signal, sep = ":")
 
   #'
   #' fetch covidcast data
@@ -19,21 +20,37 @@ parse_signal <- function(signal) {
                           geo_values,
                           time_values,
                           ...) {
-    covidcast(
+    epicall <- covidcast(
       signal$source, signal$signal, signal$time_type, geo_type,
       time_values, geo_values, ...
     )
+    epicall$base_url <- base_url
+    epicall
   }
   r <- list()
   r[[signal$signal]] <- signal
   r
 }
 
-parse_source <- function(source) {
-  class(source) <- c(class(source), "covidcast_data_source")
-  signals <- do.call(c, lapply(source$signals, parse_signal))
+print.covidcast_data_signal <- function(signal, ...) {
+  print(signal$name)
+  print(signal$key)
+  print(signal$short_description)
+}
+
+parse_source <- function(source, base_url) {
+  class(source) <- c("covidcast_data_source", class(source))
+  signals <- do.call(c, lapply(source$signals, parse_signal, base_url = base_url))
+  class(signals) <- c("covidcast_data_signal_list", class(signals))
   source$signals <- signals
-  signals_df <- as.data.frame(do.call(rbind, lapply(signals, function(x) {
+  r <- list()
+  r[[source$source]] <- source
+  r
+}
+
+
+as.data.frame.covidcast_data_signal_list <- function(signals, ...) {
+  as.data.frame(do.call(rbind, lapply(signals, function(x) {
     sub <- x[c(
       "source",
       "signal",
@@ -55,14 +72,19 @@ parse_source <- function(source) {
     )]
     sub$geo_types <- paste0(names(x$geo_types), collapse = ",")
     sub
-  })))
-  rownames(signals_df) <- paste(signals_df$source, signals_df$signal, sep = ":")
-  source$signals_df <- signals_df
-  r <- list()
-  r[[source$source]] <- source
-  r
+  })), row.names = sapply(signals, function(x) {
+    x$key
+  }), ...)
 }
 
+
+print.covidcast_data_source <- function(source, ...) {
+  print(source$name, ...)
+  print(source$source, ...)
+  print(source$description, ...)
+  signals <- as.data.frame(source$signals)
+  print(signals[, c("signal", "name", "short_description")], ...)
+}
 
 #'
 #' creates the covidcast epidata helper
@@ -71,7 +93,7 @@ parse_source <- function(source) {
 #' @importFrom httr RETRY stop_for_status content
 #' @importFrom jsonlite fromJSON
 #' @importFrom rlang abort
-#' @return TODO
+#' @return an instance of covidcast_epidata
 #'
 #' @export
 covidcast_epidata <- function(base_url = global_base_url) {
@@ -82,25 +104,51 @@ covidcast_epidata <- function(base_url = global_base_url) {
   r <- httr::content(res, "text", encoding = "UTF-8")
   meta <- jsonlite::fromJSON(r, simplifyVector = FALSE)
 
-  sources <- do.call(c, lapply(meta, parse_source))
-  sources_df <- as.data.frame(do.call(rbind, lapply(sources, function(x) {
-    sub <- x[c(
-      "source", "name", "description", "reference_signal", "license"
-    )]
-    sub$signals <- paste0(x$signals_df$signal, collapse = ",")
-    sub
-  })))
-  rownames(sources_df) <- sources_df$source
+  sources <- do.call(c, lapply(meta, parse_source, base_url = base_url))
+  class(sources) <- c("covidcast_data_source_list", class(sources))
 
+  all_signals <- do.call(c, lapply(sources, function(x) {
+    l <- c(x$signals)
+    names(l) <- paste(x$source, names(l), sep = ":")
+    l
+  }))
+  class(all_signals) <- c("covidcast_data_signal_list", class(all_signals))
   structure(
     list(
-      base_url = base_url,
       sources = sources,
-      sources_df = sources_df,
-      signals_df = as.data.frame(do.call(rbind, lapply(sources, function(x) {
-        x$signals_df
-      })))
+      signals = all_signals
     ),
     class = "covidcast_epidata"
   )
+}
+
+
+as.data.frame.covidcast_data_source_list <- function(sources, ...) {
+  as.data.frame(do.call(rbind, lapply(sources, function(x) {
+    sub <- x[c(
+      "source", "name", "description", "reference_signal", "license"
+    )]
+    sub$signals <- paste0(sapply(x$signals, function(y) {
+      y$signal
+    }), collapse = ",")
+    sub
+  })), row.names = sapply(sources, function(x) {
+    x$source
+  }), ...)
+}
+
+print.covidcast_epidata <- function(epidata, ...) {
+  print("COVIDcast Epidata Fetcher")
+  print("Sources:")
+  sources <- as.data.frame(epidata$sources)
+  print(sources[1:5, c("source", "name")], ...)
+  if (nrow(sources) > 5) {
+    print(paste0((nrow(sources) - 5), " more..."))
+  }
+  print("Signals")
+  signals <- as.data.frame(epidata$signals)
+  print(signals[1:5, c("source", "signal", "name")], ...)
+  if (nrow(signals) > 5) {
+    print(paste0((nrow(signals) - 5), " more..."))
+  }
 }
