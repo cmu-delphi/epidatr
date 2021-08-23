@@ -1,5 +1,5 @@
 ---
-title:"COVIDcast API Client"
+title: "COVIDcast API Client"
 author: "Delphi Group"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
