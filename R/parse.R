@@ -3,6 +3,12 @@ parse_api_date <- function(value) {
   as.Date(as.character(value), format = "%Y%m%d")
 }
 
+
+
+#'
+#' parses a week
+#' @importFrom MMWRweek MMWRweek2Date
+#' @return a date
 parse_api_week <- function(value) {
   v <- as.integer(value)
   years <- floor(v / 100)

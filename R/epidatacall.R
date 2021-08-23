@@ -105,9 +105,8 @@ request_impl <- function(epidata_call, format_type, fields = NULL) {
 #' @param epidata_call and instance of epidata_call
 #' @param fields filter fields
 #' @param disable_date_parsing disable automatic date parsing
-#' @importFrom httr RETRY stop_for_status content http_error
+#' @importFrom httr stop_for_status content http_error
 #' @importFrom jsonlite fromJSON
-#' @importFrom MMWRweek MMWRweek2Date
 #' @return parsed json message
 #'
 #' @export
@@ -135,9 +134,8 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_date_parsing = FA
 #' @param epidata_call and instance of epidata_call
 #' @param fields filter fields
 #' @param disable_date_parsing disable automatic date parsing
-#' @importFrom httr RETRY stop_for_status content
+#' @importFrom httr stop_for_status content
 #' @importFrom jsonlite fromJSON
-#' @importFrom MMWRweek MMWRweek2Date
 #' @importFrom rlang abort
 #' @return parsed json message
 #'
@@ -163,7 +161,7 @@ fetch_json <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE
 #'
 #' @param epidata_call and instance of epidata_call
 #' @param fields filter fields
-#' @importFrom httr RETRY stop_for_status content
+#' @importFrom httr stop_for_status content
 #' @importFrom rlang abort
 #' @return CSV text
 #'
@@ -224,8 +222,7 @@ info_to_type <- function(info, disable_date_parsing = FALSE) {
 #' @param fields filter fields
 #' @param disable_date_parsing disable automatic date parsing
 #' @importFrom readr read_csv
-#' @importFrom httr RETRY stop_for_status content
-#' @importFrom MMWRweek MMWRweek2Date
+#' @importFrom httr stop_for_status content
 #' @importFrom rlang abort
 #' @return tibble
 #'
@@ -279,10 +276,6 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 #' @param epidata_call and instance of epidata_call
 #' @param fields filter fields
 #' @param disable_date_parsing disable automatic date parsing
-#' @importFrom readr read_csv
-#' @importFrom httr RETRY stop_for_status content
-#' @importFrom MMWRweek MMWRweek2Date
-#' @importFrom rlang abort
 #' @return data.frame
 #'
 #' @export

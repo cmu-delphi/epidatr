@@ -5,6 +5,9 @@ join_url <- function(url, endpoint) {
   paste0(url, endpoint)
 }
 
+#'
+#' performs the request
+#' @importFrom httr RETRY
 do_request <- function(url, params) {
   # don't retry in case of certain status codes
   res <- httr::RETRY("GET", url,
