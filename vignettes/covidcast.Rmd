@@ -1,10 +1,10 @@
 ---
-title: "Delphi Epidata R API Client"
+title:"COVIDcast API Client"
 author: "Delphi Group"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Delphi Epidata R API Client}
+  %\VignetteIndexEntry{COVIDcast API Client}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
