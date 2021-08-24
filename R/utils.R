@@ -5,7 +5,7 @@ format_item <- function(value) {
   if (inherits(value, "EpiRange")) {
     paste0(toString(value$from), "-", toString(value$to))
   } else if (is.list(value) &&
-    "from" %in% names(value) && "to" %in% names(value)) {
+    "from" %in% names(value) && "to" %in% names(value) && length(names(value)) == 2) {
     paste0(toString(value$from), "-", toString(value$to))
   } else {
     toString(value)

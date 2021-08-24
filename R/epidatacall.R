@@ -1,7 +1,8 @@
 
 
 
-create_epidata_call <- function(endpoint, params, meta = NULL, only_supports_classic = FALSE) {
+create_epidata_call <- function(endpoint, params, meta = NULL,
+                                only_supports_classic = FALSE) {
   stopifnot(is.character(endpoint), length(endpoint) == 1)
   stopifnot(is.list(params))
   stopifnot(is.null(meta) || is.list(meta))
@@ -13,7 +14,7 @@ create_epidata_call <- function(endpoint, params, meta = NULL, only_supports_cla
     list(
       endpoint = endpoint,
       params = params,
-      base_url = base_url,
+      base_url = global_base_url,
       meta = meta,
       only_supports_classic = only_supports_classic
     ),
@@ -62,11 +63,7 @@ request_arguments <-
 
 full_url <- function(epidata_call) {
   stopifnot(inherits(epidata_call, "epidata_call"))
-  url <- epidata_call$base_url
-  if (url[length(url)] != "/") {
-    url <- paste0(url, "/")
-  }
-  paste0(url, epidata_call$endpoint)
+  join_url(epidata_call$base_url, epidata_call$endpoint)
 }
 
 #'
@@ -99,18 +96,7 @@ request_impl <- function(epidata_call, format_type, fields = NULL) {
   url <- full_url(epidata_call)
   params <- request_arguments(epidata_call, format_type, fields)
 
-  # don't retry in case of certain status codes
-  res <- httr::RETRY("GET", url,
-    query = params, http_headers,
-    terminate_on = c(400, 401, 403, 405, 414, 500)
-  )
-  if (res$status_code == 414) {
-    res <- httr::RETRY("POST", url,
-      body = params, encode = "form", http_headers,
-      terminate_on = c(400, 401, 403, 405, 414, 500)
-    )
-  }
-  res
+  do_request(url, params)
 }
 
 #'
@@ -119,9 +105,8 @@ request_impl <- function(epidata_call, format_type, fields = NULL) {
 #' @param epidata_call and instance of epidata_call
 #' @param fields filter fields
 #' @param disable_date_parsing disable automatic date parsing
-#' @importFrom httr RETRY stop_for_status content http_error
+#' @importFrom httr stop_for_status content http_error
 #' @importFrom jsonlite fromJSON
-#' @importFrom MMWRweek MMWRweek2Date
 #' @return parsed json message
 #'
 #' @export
@@ -149,9 +134,8 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_date_parsing = FA
 #' @param epidata_call and instance of epidata_call
 #' @param fields filter fields
 #' @param disable_date_parsing disable automatic date parsing
-#' @importFrom httr RETRY stop_for_status content
+#' @importFrom httr stop_for_status content
 #' @importFrom jsonlite fromJSON
-#' @importFrom MMWRweek MMWRweek2Date
 #' @importFrom rlang abort
 #' @return parsed json message
 #'
@@ -177,7 +161,7 @@ fetch_json <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE
 #'
 #' @param epidata_call and instance of epidata_call
 #' @param fields filter fields
-#' @importFrom httr RETRY stop_for_status content
+#' @importFrom httr stop_for_status content
 #' @importFrom rlang abort
 #' @return CSV text
 #'
@@ -238,8 +222,7 @@ info_to_type <- function(info, disable_date_parsing = FALSE) {
 #' @param fields filter fields
 #' @param disable_date_parsing disable automatic date parsing
 #' @importFrom readr read_csv
-#' @importFrom httr RETRY stop_for_status content
-#' @importFrom MMWRweek MMWRweek2Date
+#' @importFrom httr stop_for_status content
 #' @importFrom rlang abort
 #' @return tibble
 #'
@@ -293,10 +276,6 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 #' @param epidata_call and instance of epidata_call
 #' @param fields filter fields
 #' @param disable_date_parsing disable automatic date parsing
-#' @importFrom readr read_csv
-#' @importFrom httr RETRY stop_for_status content
-#' @importFrom MMWRweek MMWRweek2Date
-#' @importFrom rlang abort
 #' @return data.frame
 #'
 #' @export
