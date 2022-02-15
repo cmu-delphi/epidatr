@@ -14,5 +14,5 @@
 ^\.bumpversion\.cfg$
 ^\.editorconfig$
 ^\.lintr$
-^\Makefile$
+^Makefile$
 
