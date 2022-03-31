@@ -1,11 +1,16 @@
 #' fetch AFHSB data (point data, no min/max)
 #'
-#' @param auth authenfication token
-#' @param locations locations to fetch
-#' @param epiweeks epiweeks to fetch
-#' @param flu_types flu_types to fetch
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/afhsb.html
+#'
+#' @param auth character authentication token
+#' @param locations character locations to fetch
+#' @param epiweeks epirange epiweeks to fetch
+#' @param flu_types character flu_types to fetch
 #' @return an instance of epidata_call
 #'
+#' @examples
+#' call <- pvt_afhsb(auth = "yourkey", "fl,ca", epirange(202001, 202110), "flu1,flu2-flu1")
+#' # fetch_csv(call)
 #' @export
 pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
   check_single_string_param("auth", auth)
@@ -30,12 +35,16 @@ pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
   )
 }
 
-#'
 #' fetch CDC page hits
 #'
-#' @param auth authenfication token
-#' @param epiweeks epiweeks to fetch
-#' @param locations locations to fetch
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/cdc.html
+#'
+#' @examples
+#' call <- pvt_cdc(auth = "yourkey", epirange(20210101, 20210201), "fl,ca")
+#' # fetch_csv(call)
+#' @param auth character authentication token
+#' @param epiweeks epirange epiweeks to fetch
+#' @param locations character locations to fetch
 #' @return an instance of epidata_call
 #'
 #' @export
@@ -68,14 +77,18 @@ pvt_cdc <- function(auth, epiweeks, locations) {
   )
 }
 
-#'
 #' fetch COVID hospitalization facility identifiers
 #'
-#' @param state optional state
-#' @param ccn optional ccn
-#' @param city optional city
-#' @param zip optional zip code
-#' @param fips_code optional fips code
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html
+#'
+#' @examples
+#' call <- covid_hosp_facility_lookup(state = "fl")
+#' fetch_csv(call)
+#' @param state optional character state
+#' @param ccn optional character ccn
+#' @param city optional character city
+#' @param zip optional numeric zip code
+#' @param fips_code optional numeric fips code
 #' @return an instance of epidata_call
 #'
 #' @export
@@ -119,12 +132,16 @@ covid_hosp_facility_lookup <-
     )
   }
 
-#'
 #' fetch COVID hospitalization data for specific facilities
 #'
-#' @param hospital_pks hospitals to fetch
-#' @param collection_weeks weeks to fetch
-#' @param publication_dates publication dates to fetch
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html
+#'
+#' @examples
+#' call <- covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(202001, 202005))
+#' fetch_csv(call)
+#' @param hospital_pks character hospitals to fetch
+#' @param collection_weeks epirange weeks to fetch
+#' @param publication_dates optional epirange publication dates to fetch
 #' @return an instance of epidata_call
 #'
 #' @export
@@ -393,9 +410,13 @@ covid_hosp_facility <-
     )
   }
 
-#'
 #' fetch COVID hospitalization data
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html
+#'
+#' @examples
+#' call <- covid_hosp_state_timeseries(states = "fl", dates = epirange(20200101, 20200501))
+#' fetch_csv(call)
 #' @param states states to fetch
 #' @param dates dates to fetch
 #' @param issues issues to fetch
@@ -531,8 +552,9 @@ covid_hosp_state_timeseries <-
     )
   }
 
-#'
 #' fetch covidcast meta data
+#'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html
 #'
 #' @return an instance of epidata_call
 #'
@@ -564,8 +586,9 @@ covidcast_meta <- function() {
 }
 
 
-#'
 #' fetch covidcast_nowcast data
+#'
+#' Not an active endpoint yet.
 #'
 #' @param data_source data source to fetch
 #' @param signals data source to fetch
@@ -643,9 +666,21 @@ covidcast_nowcast <-
       )
     )
   }
-#'
+
 #' fetch covidcast data
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html
+#'
+#' @examples
+#' call <- covidcast(
+#'   data_source = "jhu-csse",
+#'   signals = "confirmed_7dav_incidence_prop",
+#'   time_type = "day",
+#'   geo_type = "state",
+#'   time_values = epirange(20200601, 20200801),
+#'   geo_values = "ca,fl"
+#' )
+#' fetch_csv(call)
 #' @param data_source data source to fetch
 #' @param signals data source to fetch
 #' @param time_type data source to fetch
@@ -731,8 +766,13 @@ covidcast <-
     )
   }
 
-#'
 #' fetch Delphi's forecast
+#'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/delphi.html
+#'
+#' @examples
+#' call <- delphi(system = "ec", epiweek = 202006)
+#' fetch_classic(call)
 #' @param system system to fetch
 #' @param epiweek epiweek to fetch
 #' @return an instance of epidata_call
@@ -754,8 +794,14 @@ delphi <- function(system, epiweek) {
   )
 }
 
-#'
 #' fetch Delphi's PAHO Dengue nowcast
+#'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html
+#'
+#' TODO: what are valid locations?
+#' @examples
+#' call <- dengue_nowcast(locations = "?", epiweeks = epirange(201501, 202001))
+#' fetch_classic(call)
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
 #' @return an instance of epidata_call
@@ -777,8 +823,14 @@ dengue_nowcast <- function(locations, epiweeks) {
   )
 }
 
-#'
 #' fetch Delphi's digital surveillance sensors
+#'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html
+#'
+#' TODO: what are valid locations and names?
+#' @examples
+#' call <- pvt_dengue_sensors(auth = "yourkey", names = "?", locations = "?", epiweeks = epirange(201501, 202001))
+#' # fetch_classic(call)
 #' @param auth authenfication token
 #' @param names names to fetch
 #' @param locations locations to fetch
@@ -809,10 +861,14 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
   )
 }
 
-
-#'
 #' fetch ECDC data
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html
+#'
+#' TODO: find a region that has non-trivial output
+#' @examples
+#' call <- ecdc_ili(regions = "?", epiweeks = epirange(201201, 202001))
+#' fetch_classic(call)
 #' @param regions regions to fetch
 #' @param epiweeks epiweeks to fetch
 #' @param issues optionally specify the exact issues to fetch
@@ -850,9 +906,13 @@ ecdc_ili <- function(regions,
   )
 }
 
-#'
 #' fetch FluSurv virological data
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html
+#'
+#' @examples
+#' call <- flusurv(locations = "CA", epiweeks = epirange(201201, 202001))
+#' fetch_classic(call)
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
 #' @param issues optionally specify the exact issues to fetch
@@ -895,9 +955,13 @@ flusurv <- function(locations,
   )
 }
 
-#'
 #' fetch FluView virological data
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html
+#'
+#' @examples
+#' call <- fluview_clinical(regions = "nat", epiweeks = epirange(201201, 202001))
+#' fetch_classic(call)
 #' @param regions regions to fetch
 #' @param epiweeks epiweeks to fetch
 #' @param issues optionally specify the exact issues to fetch
@@ -941,8 +1005,9 @@ fluview_clinical <-
     )
   }
 
-#'
 #' fetch fluview meta data
+#'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html
 #'
 #' @return an instance of epidata_call
 #'
@@ -959,9 +1024,13 @@ fluview_meta <- function() {
   )
 }
 
-#'
 #' fetch fluview data
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview.html
+#'
+#' @examples
+#' call <- fluview(regions = "nat", epiweeks = epirange(201201, 202001))
+#' fetch_classic(call)
 #' @param regions regions to fetch
 #' @param epiweeks epiweeks to fetch
 #' @param issues optionally specify the exact issues to fetch
@@ -1014,9 +1083,13 @@ fluview <-
     )
   }
 
-#'
 #' fetch Google Flu Trends data
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/gft.html
+#'
+#' @examples
+#' call <- gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
+#' fetch_classic(call)
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
 #' @return an instance of epidata_call
@@ -1036,9 +1109,14 @@ gft <- function(locations, epiweeks) {
   )
 }
 
-#'
 #' fetch Google Health Trends data
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/ght.html
+#'
+#' TODO: find a non-trivial query
+#' @examples
+#' call <- pvt_ght(auth = "yourkey", locations = "ca", epiweeks = epirange(201201, 202001), query = "?")
+#' # fetch_classic(call)
 #' @param auth autentification
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
@@ -1067,9 +1145,14 @@ pvt_ght <- function(auth, locations, epiweeks, query) {
   )
 }
 
-#'
 #' fetch KCDC data
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html
+#'
+#' TODO: find a non-trivial region
+#' @examples
+#' call <- kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001))
+#' fetch_csv(call)
 #' @param regions regions to fetch
 #' @param epiweeks epiweeks to fetch
 #' @param issues optionally specify the exact issues to fetch
@@ -1107,8 +1190,9 @@ kcdc_ili <- function(regions,
   )
 }
 
-
 #' fetch AFHSB meta data
+#'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_afhsb.html
 #'
 #' @param auth authenfication token
 #' @return an instance of epidata_call
@@ -1122,6 +1206,8 @@ pvt_meta_afhsb <- function(auth) {
 
 #' fetch NoroSTAT meta data
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html
+#'
 #' @param auth authenfication token
 #' @return an instance of epidata_call
 #'
@@ -1132,8 +1218,9 @@ pvt_meta_norostat <- function(auth) {
   create_epidata_call("meta_norostat/", list(auth = auth), only_supports_classic = TRUE)
 }
 
-#'
 #' fetch api meta data
+#'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta.html
 #'
 #' @return an instance of epidata_call
 #'
@@ -1142,8 +1229,13 @@ meta <- function() {
   create_epidata_call("meta/", list(), only_supports_classic = TRUE)
 }
 
-#'
 #' fetch NIDSS dengue data
+#'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html
+#'
+#' @examples
+#' call <- nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 202001))
+#' fetch_classic(call)
 #' @param locations locations to fech
 #' @param epiweeks epiweeks to fetch
 #' @return an instance of epidata_call
@@ -1164,8 +1256,13 @@ nidss_dengue <- function(locations, epiweeks) {
   )
 }
 
+#' fetch NIDSS flu data
 #'
-#' fetch NIDSS dengue data
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html
+#'
+#' @examples
+#' call <- nidss_flu(regions = "taipei", epiweeks = epirange(201201, 202001))
+#' fetch_classic(call)
 #' @param regions regions to fetch
 #' @param epiweeks epiweeks to fetch
 #' @param issues optional issues
@@ -1210,6 +1307,15 @@ nidss_flu <-
 
 #' fetch NoroSTAT data (point data, no min/max)
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/norostat.html
+#'
+#' @examples
+#' call <- pvt_norostat(
+#'   auth = "yourkey",
+#'   location = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
+#'   epiweeks = epirange(201201, 202001)
+#' )
+#' # fetch_classic(call)
 #' @param auth authenfication token
 #' @param location location to fetch
 #' @param epiweeks epiweeks to fetch
@@ -1236,8 +1342,13 @@ pvt_norostat <- function(auth, location, epiweeks) {
   )
 }
 
-#'
 #' fetch Delphi's wILI nowcast
+#'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html
+#'
+#' @examples
+#' call <- nowcast(location = "ca", epiweeks = epirange(201201, 202001))
+#' fetch_classic(call)
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
 #' @return an instance of epidata_call
@@ -1261,6 +1372,11 @@ nowcast <- function(locations, epiweeks) {
 
 #' fetch Paho Dengue
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html
+#'
+#' @examples
+#' call <- paho_dengue(regions = "ca", epiweeks = epirange(201201, 202001))
+#' fetch_classic(call)
 #' @param regions regions to fetch
 #' @param epiweeks epiweeks to fetch
 #' @param issues issues to fetch
@@ -1301,9 +1417,13 @@ paho_dengue <- function(regions,
   )
 }
 
-
 #' fetch Quidel data
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/quidel.html
+#'
+#' @examples
+#' call <- pvt_quidel(auth = "yourkey", epiweeks = epirange(201201, 202001), locations = "hhs1")
+#' # fetch_classic(call)
 #' @param auth authenfication token
 #' @param epiweeks epiweeks to fetch
 #' @param locations locations to fetch
@@ -1330,8 +1450,13 @@ pvt_quidel <- function(auth, epiweeks, locations) {
   )
 }
 
-#'
 #' fetch Delphi's digital surveillance sensors
+#'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/sensors.html
+#'
+#' @examples
+#' call <- pvt_sensors(auth = "yourkey", names = "sar3", locations = "nat", epiweeks = epirange(201501, 202001))
+#' # fetch_classic(call)
 #' @param auth authenfication token
 #' @param names names to fetch
 #' @param locations locations to fetch
@@ -1362,9 +1487,13 @@ pvt_sensors <- function(auth, names, locations, epiweeks) {
   )
 }
 
-#'
 #' fetch HealthTweets data
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/twitter.html
+#'
+#' @examples
+#' call <- pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001))
+#' # fetch_csv(call)
 #' @param auth autentification
 #' @param locations locations to fetch
 #' @param dates epiweeks to fetch
@@ -1407,9 +1536,13 @@ pvt_twitter <-
     )
   }
 
-#'
 #' fetch Wikipedia access data
 #'
+#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/wiki.html
+#'
+#' @examples
+#' call <- wiki(articles = "avian_influenza", epiweeks = epirange(201501, 202001))
+#' fetch_csv(call)
 #' @param articles articles to fetch
 #' @param dates dates to fetch
 #' @param epiweeks epiweeks to fetch
