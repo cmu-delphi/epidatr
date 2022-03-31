@@ -19,8 +19,8 @@ parse_signal <- function(signal, base_url) {
                           time_values,
                           ...) {
     epicall <- covidcast(
-      signal$source, signal$signal, signal$time_type, geo_type,
-      time_values, geo_values, ...
+      signal$source, signal$signal, geo_type, signal$time_type,
+      geo_values, time_values, ...
     )
     epicall$base_url <- base_url
     epicall

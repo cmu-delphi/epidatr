@@ -23,7 +23,7 @@ library("magrittr")
 
 
 ```{r}
-epicall <- covidcast("fb-survey", "smoothed_cli", "day", "nation", epirange(20210405, 20210410), "us")
+epicall <- covidcast("fb-survey", "smoothed_cli", "nation", "day", "us", epirange(20210405, 20210410))
 ```
 
 

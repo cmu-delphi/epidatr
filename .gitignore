@@ -13,3 +13,5 @@ env
 .env
 .Rdata
 .httr-oauth
+/doc/
+/Meta/
