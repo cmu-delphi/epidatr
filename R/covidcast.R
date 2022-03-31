@@ -1,9 +1,7 @@
-
 parse_signal <- function(signal, base_url) {
   class(signal) <- c("covidcast_data_signal", class(signal))
   signal$key <- paste(signal$source, signal$signal, sep = ":")
 
-  #'
   #' fetch covidcast data
   #'
   #' @param data_source data source to fetch
@@ -48,7 +46,6 @@ parse_source <- function(source, base_url) {
   r
 }
 
-
 as.data.frame.covidcast_data_signal_list <- function(signals, ...) {
   as.data.frame(do.call(rbind, lapply(signals, function(x) {
     sub <- x[c(
@@ -77,7 +74,6 @@ as.data.frame.covidcast_data_signal_list <- function(signals, ...) {
   }), ...)
 }
 
-
 print.covidcast_data_source <- function(source, ...) {
   print(source$name, ...)
   print(source$source, ...)
@@ -86,13 +82,11 @@ print.covidcast_data_source <- function(source, ...) {
   print(signals[, c("signal", "name", "short_description")], ...)
 }
 
-#'
 #' creates the covidcast epidata helper
 #'
 #' @param base_url optional alternative base url
 #' @importFrom httr RETRY stop_for_status content
 #' @importFrom jsonlite fromJSON
-#' @importFrom rlang abort
 #' @return an instance of covidcast_epidata
 #'
 #' @export
@@ -121,7 +115,6 @@ covidcast_epidata <- function(base_url = global_base_url) {
     class = "covidcast_epidata"
   )
 }
-
 
 as.data.frame.covidcast_data_source_list <- function(sources, ...) {
   as.data.frame(do.call(rbind, lapply(sources, function(x) {

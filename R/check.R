@@ -11,7 +11,7 @@ check_string_param <- function(name, value, required = TRUE) {
 }
 
 check_int_param <- function(name, value, required = TRUE) {
-  # string or string[]
+  # numeric or numeric[]
   if ((required &&
     !(!is.null(value) &&
       is.numeric(value))) ||
@@ -23,6 +23,7 @@ check_int_param <- function(name, value, required = TRUE) {
 }
 
 is_epirange_like <- function(value) {
+  # character or numeric or EpiRange or list(from=..., to=...)
   is.character(value) ||
     is.numeric(value) ||
     inherits(value, "EpiRange") ||
@@ -30,17 +31,16 @@ is_epirange_like <- function(value) {
       "from" %in% names(value) && "to" %in% names(value))
 }
 
-check_single_epirange_param <-
-  function(name, value, required = TRUE) {
-    if ((required &&
-      !(!is.null(value) &&
-        is_epirange_like(value))) ||
-      (!required && !(is.null(value) || is_epirange_like(value)))) {
-      rlang::abort(paste0("argument ", name, " is not a epirange"),
-        name = name, value = value, class = "invalid_argument"
-      )
-    }
+check_single_epirange_param <- function(name, value, required = TRUE) {
+  if ((required &&
+    !(!is.null(value) &&
+      is_epirange_like(value))) ||
+    (!required && !(is.null(value) || is_epirange_like(value)))) {
+    rlang::abort(paste0("argument ", name, " is not a epirange"),
+      name = name, value = value, class = "invalid_argument"
+    )
   }
+}
 
 check_epirange_param <- function(name, value, required = TRUE) {
   if (is.null(value)) {

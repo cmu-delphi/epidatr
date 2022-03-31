@@ -1,5 +1,3 @@
-
-
 # Helper function to cast values and/or ranges to strings
 format_item <- function(value) {
   if (inherits(value, "EpiRange")) {
