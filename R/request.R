@@ -5,7 +5,6 @@ join_url <- function(url, endpoint) {
   paste0(url, endpoint)
 }
 
-#'
 #' performs the request
 #' @importFrom httr RETRY
 do_request <- function(url, params) {

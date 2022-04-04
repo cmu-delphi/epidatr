@@ -1,6 +1,3 @@
-
-
-
 create_epidata_call <- function(endpoint, params, meta = NULL,
                                 only_supports_classic = FALSE) {
   stopifnot(is.character(endpoint), length(endpoint) == 1)
@@ -22,7 +19,6 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
   )
 }
 
-#'
 #' use a different base url
 #'
 #' @param epidata_call and instance of epidata_call
@@ -66,7 +62,6 @@ full_url <- function(epidata_call) {
   join_url(epidata_call$base_url, epidata_call$endpoint)
 }
 
-#'
 #' returns the full request url for the given epidata_call
 #'
 #' @param epidata_call and instance of epidata_call
@@ -99,7 +94,6 @@ request_impl <- function(epidata_call, format_type, fields = NULL) {
   do_request(url, params)
 }
 
-#'
 #' fetches the data and returns the classic format
 #'
 #' @param epidata_call and instance of epidata_call
@@ -128,7 +122,6 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_date_parsing = FA
   m
 }
 
-#'
 #' fetches the data and returns the josn format
 #'
 #' @param epidata_call and instance of epidata_call
@@ -156,7 +149,6 @@ fetch_json <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE
   parse_data_frame(epidata_call, jsonlite::fromJSON(r), disable_date_parsing = disable_date_parsing)
 }
 
-#'
 #' fetches the data and returns the CSV text
 #'
 #' @param epidata_call and instance of epidata_call
@@ -215,7 +207,6 @@ info_to_type <- function(info, disable_date_parsing = FALSE) {
   r
 }
 
-#'
 #' fetches the data and returns data frame
 #'
 #' @param epidata_call and instance of epidata_call
@@ -269,8 +260,6 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
   tbl
 }
 
-
-#'
 #' fetches the data and returns data frame
 #'
 #' @param epidata_call and instance of epidata_call
