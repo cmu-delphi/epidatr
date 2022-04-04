@@ -1384,6 +1384,11 @@ pvt_twitter <-
     if (!xor(missing(dates), missing(epiweeks))) {
       stop("exactly one of `dates` and `epiweeks` is required")
     }
+    time_field <- if (!is.null(dates)) {
+      create_epidata_field_info("date", "date")
+    } else {
+      create_epidata_field_info("epiweek", "epiweek")
+    }
     create_epidata_call(
       "twitter/",
       list(
@@ -1394,11 +1399,7 @@ pvt_twitter <-
       ),
       list(
         create_epidata_field_info("location", "text"),
-        ifelse(
-          !is.null(dates),
-          create_epidata_field_info("date", "date"),
-          create_epidata_field_info("epiweek", "epiweek")
-        ),
+        time_field,
         create_epidata_field_info("num", "int"),
         create_epidata_field_info("total", "int"),
         create_epidata_field_info("percent", "float")
@@ -1431,6 +1432,11 @@ wiki <-
     if (!xor(missing(dates), missing(epiweeks))) {
       stop("exactly one of `dates` and `epiweeks` is required")
     }
+    time_field <- if (!is.null(dates)) {
+      create_epidata_field_info("date", "date")
+    } else {
+      create_epidata_field_info("epiweek", "epiweek")
+    }
     create_epidata_call(
       "wiki/",
       list(
@@ -1442,11 +1448,7 @@ wiki <-
       ),
       list(
         create_epidata_field_info("article", "text"),
-        ifelse(
-          !is.null(dates),
-          create_epidata_field_info("date", "date"),
-          create_epidata_field_info("epiweek", "epiweek")
-        ),
+        time_field,
         create_epidata_field_info("count", "int"),
         create_epidata_field_info("total", "int"),
         create_epidata_field_info("hour", "int"),
