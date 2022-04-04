@@ -1384,8 +1384,11 @@ pvt_twitter <-
     if (!xor(missing(dates), missing(epiweeks))) {
       stop("exactly one of `dates` and `epiweeks` is required")
     }
-    time_field <- if (!is.null(dates)) create_epidata_field_info("date", "date")
-                  else create_epidata_field_info("epiweek", "epiweek")
+    time_field <- if (!is.null(dates)) {
+      create_epidata_field_info("date", "date")
+    } else {
+      create_epidata_field_info("epiweek", "epiweek")
+    }
     create_epidata_call(
       "twitter/",
       list(
@@ -1429,8 +1432,11 @@ wiki <-
     if (!xor(missing(dates), missing(epiweeks))) {
       stop("exactly one of `dates` and `epiweeks` is required")
     }
-    time_field <- if (!is.null(dates)) create_epidata_field_info("date", "date")
-                  else create_epidata_field_info("epiweek", "epiweek")
+    time_field <- if (!is.null(dates)) {
+      create_epidata_field_info("date", "date")
+    } else {
+      create_epidata_field_info("epiweek", "epiweek")
+    }
     create_epidata_call(
       "wiki/",
       list(
