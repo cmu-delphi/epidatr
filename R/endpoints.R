@@ -135,7 +135,7 @@ covid_hosp_facility <-
            publication_dates = NULL) {
     check_string_param("hospital_pks", hospital_pks)
     check_epirange_param("collection_weeks", collection_weeks)
-    check_epirange_param("publication_dates", publication_dates)
+    check_epirange_param("publication_dates", publication_dates, required = FALSE)
 
     create_epidata_call(
       "covid_hosp_facility/",
