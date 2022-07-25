@@ -241,9 +241,9 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
     }
   }
   tbl <- if (length(col_names) > 0) {
-    readr::read_csv(r, col_types = col_types)
+    readr::read_csv(I(r), col_types = col_types)
   } else {
-    readr::read_csv(r)
+    readr::read_csv(I(r))
   }
 
 
