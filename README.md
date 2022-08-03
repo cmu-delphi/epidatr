@@ -2,20 +2,18 @@
 
 [![License: MIT][mit-image]][mit-url] [![Github Actions][github-actions-image]][github-actions-url]
 
-
 ## Install
 
-Install from CRAN:
-
-```R
-install_packages("delphi_epidata")
-```
-
-latest version using [`devtools`](https://cran.r-project.org/package=devtools) package
+Install latest version using [`devtools`](https://cran.r-project.org/package=devtools) package
 
 ```R
 devtools::install_github("cmu-delphi/delphi-epidata-r")
 ```
+
+Note (2022-08-02): the package that this installs is being renamed from
+`delphi.epidata` to `epidatr`. Please adjust all references to the package name
+accordingly. For a short-term fix, the package can be used with the old name by
+installing with `ref="delphi.epidata-before-rename"`.
 
 ## Usage
 
