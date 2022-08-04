@@ -1,4 +1,4 @@
-Package: delphi.epidata
+Package: epidatr
 Type: Package
 Title: Client for Delphi's Epidata API
 Version: 1.0.0
@@ -25,7 +25,7 @@ Imports:
   readr,
   MMWRweek,
   rlang
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
 Suggests:
     knitr,
     magrittr,

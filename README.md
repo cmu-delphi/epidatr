@@ -7,13 +7,15 @@
 Install latest version using [`devtools`](https://cran.r-project.org/package=devtools) package
 
 ```R
-devtools::install_github("cmu-delphi/delphi-epidata-r")
+devtools::install_github("cmu-delphi/epidatr")
 ```
 
 Note (2022-08-02): the package that this installs is being renamed from
-`delphi.epidata` to `epidatr`. Please adjust all references to the package name
-accordingly. For a short-term fix, the package can be used with the old name by
-installing with `ref="delphi.epidata-before-rename"`.
+`delphi.epidata` to `epidatr`. To migrate, run the installation command above,
+followed by `remove.packages("delphi.epidata")`, and adjust all references to
+the package name accordingly. For a short-term patch, a snapshot of the package
+can be still be installed with the old name by specifying
+`ref="delphi.epidata-before-rename"`.
 
 ## Usage
 
