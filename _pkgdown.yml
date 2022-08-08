@@ -1,7 +1,7 @@
 home:
   links:
     - text: Get the Python client
-      href: https://github.com/cmu-delphi/delphi-epidata-py/
+      href: https://github.com/cmu-delphi/epidatpy/
 
     - text: View the Delphi Website
       href: https://delphi.cmu.edu/
