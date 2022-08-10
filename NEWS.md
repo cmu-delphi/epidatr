@@ -1,1 +1,1 @@
-# delphi-epidata 1.0.0
+# epidatr 1.0.0
