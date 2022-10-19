@@ -13,5 +13,5 @@ pvt_meta_afhsb(auth)
 an instance of epidata_call
 }
 \description{
-fetch AFHSB meta data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_afhsb.html
 }

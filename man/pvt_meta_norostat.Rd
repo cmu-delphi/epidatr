@@ -13,5 +13,5 @@ pvt_meta_norostat(auth)
 an instance of epidata_call
 }
 \description{
-fetch NoroSTAT meta data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html
 }

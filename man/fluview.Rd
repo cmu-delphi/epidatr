@@ -21,5 +21,9 @@ fluview(regions, epiweeks, issues = NULL, lag = NULL, auth = NULL)
 an instance of epidata_call
 }
 \description{
-fetch fluview data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview.html
+}
+\examples{
+call <- fluview(regions = "nat", epiweeks = epirange(201201, 202001))
+fetch_classic(call)
 }

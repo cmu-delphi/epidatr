@@ -42,5 +42,5 @@ covidcast_nowcast(
 an instance of epidata_call
 }
 \description{
-fetch covidcast_nowcast data
+Not an active endpoint yet.
 }

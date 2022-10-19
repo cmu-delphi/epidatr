@@ -19,5 +19,9 @@ flusurv(locations, epiweeks, issues = NULL, lag = NULL)
 an instance of epidata_call
 }
 \description{
-fetch FluSurv virological data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html
+}
+\examples{
+call <- flusurv(locations = "CA", epiweeks = epirange(201201, 202001))
+fetch_classic(call)
 }

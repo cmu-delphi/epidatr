@@ -15,5 +15,9 @@ nidss_dengue(locations, epiweeks)
 an instance of epidata_call
 }
 \description{
-fetch NIDSS dengue data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html
+}
+\examples{
+call <- nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 202001))
+fetch_classic(call)
 }

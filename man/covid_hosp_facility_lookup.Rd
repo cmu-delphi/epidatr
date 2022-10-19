@@ -13,19 +13,23 @@ covid_hosp_facility_lookup(
 )
 }
 \arguments{
-\item{state}{optional state}
+\item{state}{optional character state}
 
-\item{ccn}{optional ccn}
+\item{ccn}{optional character ccn}
 
-\item{city}{optional city}
+\item{city}{optional character city}
 
-\item{zip}{optional zip code}
+\item{zip}{optional numeric zip code}
 
-\item{fips_code}{optional fips code}
+\item{fips_code}{optional numeric fips code}
 }
 \value{
 an instance of epidata_call
 }
 \description{
-fetch COVID hospitalization facility identifiers
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html
+}
+\examples{
+call <- covid_hosp_facility_lookup(state = "fl")
+fetch_csv(call)
 }

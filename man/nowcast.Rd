@@ -15,5 +15,9 @@ nowcast(locations, epiweeks)
 an instance of epidata_call
 }
 \description{
-fetch Delphi's wILI nowcast
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html
+}
+\examples{
+call <- nowcast(location = "ca", epiweeks = epirange(201201, 202001))
+fetch_classic(call)
 }

@@ -7,15 +7,19 @@
 covid_hosp_facility(hospital_pks, collection_weeks, publication_dates = NULL)
 }
 \arguments{
-\item{hospital_pks}{hospitals to fetch}
+\item{hospital_pks}{character hospitals to fetch}
 
-\item{collection_weeks}{weeks to fetch}
+\item{collection_weeks}{epirange weeks to fetch}
 
-\item{publication_dates}{publication dates to fetch}
+\item{publication_dates}{optional epirange publication dates to fetch}
 }
 \value{
 an instance of epidata_call
 }
 \description{
-fetch COVID hospitalization data for specific facilities
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html
+}
+\examples{
+call <- covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(202001, 202005))
+fetch_csv(call)
 }

@@ -19,5 +19,9 @@ pvt_twitter(auth, locations, dates = NULL, epiweeks = NULL)
 an instance of epidata_call
 }
 \description{
-fetch HealthTweets data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/twitter.html
+}
+\examples{
+call <- pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001))
+# fetch_csv(call)
 }

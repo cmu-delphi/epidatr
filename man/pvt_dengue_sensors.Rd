@@ -19,5 +19,12 @@ pvt_dengue_sensors(auth, names, locations, epiweeks)
 an instance of epidata_call
 }
 \description{
-fetch Delphi's digital surveillance sensors
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html
+}
+\details{
+TODO: what are valid locations and names?
+}
+\examples{
+call <- pvt_dengue_sensors(auth = "yourkey", names = "?", locations = "?", epiweeks = epirange(201501, 202001))
+# fetch_classic(call)
 }

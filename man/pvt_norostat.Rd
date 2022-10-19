@@ -17,5 +17,13 @@ pvt_norostat(auth, location, epiweeks)
 an instance of epidata_call
 }
 \description{
-fetch NoroSTAT data (point data, no min/max)
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/norostat.html
+}
+\examples{
+call <- pvt_norostat(
+  auth = "yourkey",
+  location = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
+  epiweeks = epirange(201201, 202001)
+)
+# fetch_classic(call)
 }

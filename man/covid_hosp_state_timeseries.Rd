@@ -17,5 +17,9 @@ covid_hosp_state_timeseries(states, dates, issues = NULL)
 an instance of epidata_call
 }
 \description{
-fetch COVID hospitalization data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html
+}
+\examples{
+call <- covid_hosp_state_timeseries(states = "fl", dates = epirange(20200101, 20200501))
+fetch_csv(call)
 }

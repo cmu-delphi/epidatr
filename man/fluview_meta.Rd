@@ -10,5 +10,5 @@ fluview_meta()
 an instance of epidata_call
 }
 \description{
-fetch fluview meta data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html
 }
