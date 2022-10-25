@@ -1,4 +1,4 @@
 library(testthat)
-library(delphi.epidata)
+library(epidatr)
 
-test_check("delphi.epidata")
+test_check("epidatr")

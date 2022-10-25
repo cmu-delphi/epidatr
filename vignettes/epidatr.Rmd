@@ -16,9 +16,8 @@ knitr::opts_chunk$set(echo = TRUE)
 # Delphi Epidata R API Client
 
 ```{r libraries}
-# devtools::install_url("https://github.com/cmu-delphi/delphi-epidata-r/releases/latest/download/delphi-epidata.tar.gz")
-# install.packages('delphi.epidata')
-library("delphi.epidata")
+# devtools::install_github("cmu-delphi/epidatr")
+library("epidatr")
 library("magrittr")
 ```
 
