@@ -84,7 +84,18 @@ print.covidcast_data_source <- function(source, ...) {
 
 #' creates the covidcast epidata helper
 #'
-#' @param base_url optional alternative base url
+#' Creates a helper object that can use auto-complete to help find covidcast
+#' sources and signals.
+#'
+#' @examples
+#' covidcast_api <- covidcast_epidata()
+#' print(covidcast_api) # print available sources and signals
+#' fb_survey <- covidcast_api$sources$`fb-survey` # tab completion for sources
+#' print(fb_survey) # print a verbose list of available signals
+#' smoothed_cli <- fb_survey$signals$smoothed_cli # tab completion for signals
+#' print(smoothed_cli)
+#' df <- smoothed_cli$call("nation", "us", epirange(20210405, 20210410))
+#' @param base_url optional alternative API base url
 #' @importFrom httr RETRY stop_for_status content
 #' @importFrom jsonlite fromJSON
 #' @return an instance of covidcast_epidata

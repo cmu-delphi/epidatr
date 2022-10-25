@@ -19,5 +19,12 @@ kcdc_ili(regions, epiweeks, issues = NULL, lag = NULL)
 an instance of epidata_call
 }
 \description{
-fetch KCDC data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html
+}
+\details{
+TODO: find a non-trivial region
+}
+\examples{
+call <- kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001))
+fetch_csv(call)
 }

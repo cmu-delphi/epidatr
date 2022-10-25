@@ -19,5 +19,9 @@ pvt_sensors(auth, names, locations, epiweeks)
 an instance of epidata_call
 }
 \description{
-fetch Delphi's digital surveillance sensors
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/sensors.html
+}
+\examples{
+call <- pvt_sensors(auth = "yourkey", names = "sar3", locations = "nat", epiweeks = epirange(201501, 202001))
+# fetch_classic(call)
 }

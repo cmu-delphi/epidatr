@@ -7,17 +7,21 @@
 pvt_afhsb(auth, locations, epiweeks, flu_types)
 }
 \arguments{
-\item{auth}{authenfication token}
+\item{auth}{character authentication token}
 
-\item{locations}{locations to fetch}
+\item{locations}{character locations to fetch}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{epirange epiweeks to fetch}
 
-\item{flu_types}{flu_types to fetch}
+\item{flu_types}{character flu_types to fetch}
 }
 \value{
 an instance of epidata_call
 }
 \description{
-fetch AFHSB data (point data, no min/max)
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/afhsb.html
+}
+\examples{
+call <- pvt_afhsb(auth = "yourkey", "fl,ca", epirange(202001, 202110), "flu1,flu2-flu1")
+# fetch_csv(call)
 }

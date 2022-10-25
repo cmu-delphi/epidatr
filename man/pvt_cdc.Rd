@@ -7,15 +7,19 @@
 pvt_cdc(auth, epiweeks, locations)
 }
 \arguments{
-\item{auth}{authenfication token}
+\item{auth}{character authentication token}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{epirange epiweeks to fetch}
 
-\item{locations}{locations to fetch}
+\item{locations}{character locations to fetch}
 }
 \value{
 an instance of epidata_call
 }
 \description{
-fetch CDC page hits
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/cdc.html
+}
+\examples{
+call <- pvt_cdc(auth = "yourkey", epirange(20210101, 20210201), "fl,ca")
+# fetch_csv(call)
 }

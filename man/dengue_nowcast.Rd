@@ -15,5 +15,12 @@ dengue_nowcast(locations, epiweeks)
 an instance of epidata_call
 }
 \description{
-fetch Delphi's PAHO Dengue nowcast
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html
+}
+\details{
+TODO: what are valid locations?
+}
+\examples{
+call <- dengue_nowcast(locations = "?", epiweeks = epirange(201501, 202001))
+fetch_classic(call)
 }

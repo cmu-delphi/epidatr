@@ -21,5 +21,9 @@ wiki(articles, dates = NULL, epiweeks = NULL, hours = NULL, language = "en")
 an instance of epidata_call
 }
 \description{
-fetch Wikipedia access data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/wiki.html
+}
+\examples{
+call <- wiki(articles = "avian_influenza", epiweeks = epirange(201501, 202001))
+fetch_csv(call)
 }

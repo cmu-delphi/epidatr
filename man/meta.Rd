@@ -10,5 +10,5 @@ meta()
 an instance of epidata_call
 }
 \description{
-fetch api meta data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta.html
 }

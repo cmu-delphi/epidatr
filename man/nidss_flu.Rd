@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{nidss_flu}
 \alias{nidss_flu}
-\title{fetch NIDSS dengue data}
+\title{fetch NIDSS flu data}
 \usage{
 nidss_flu(regions, epiweeks, issues = NULL, lag = NULL)
 }
@@ -19,5 +19,9 @@ nidss_flu(regions, epiweeks, issues = NULL, lag = NULL)
 an instance of epidata_call
 }
 \description{
-fetch NIDSS dengue data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html
+}
+\examples{
+call <- nidss_flu(regions = "taipei", epiweeks = epirange(201201, 202001))
+fetch_classic(call)
 }

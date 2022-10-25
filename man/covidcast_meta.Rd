@@ -10,5 +10,5 @@ covidcast_meta()
 an instance of epidata_call
 }
 \description{
-fetch covidcast meta data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html
 }

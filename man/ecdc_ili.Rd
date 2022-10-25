@@ -19,5 +19,12 @@ ecdc_ili(regions, epiweeks, issues = NULL, lag = NULL)
 an instance of epidata_call
 }
 \description{
-fetch ECDC data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html
+}
+\details{
+TODO: find a region that has non-trivial output
+}
+\examples{
+call <- ecdc_ili(regions = "?", epiweeks = epirange(201201, 202001))
+fetch_classic(call)
 }

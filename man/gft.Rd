@@ -15,5 +15,9 @@ gft(locations, epiweeks)
 an instance of epidata_call
 }
 \description{
-fetch Google Flu Trends data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/gft.html
+}
+\examples{
+call <- gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
+fetch_classic(call)
 }

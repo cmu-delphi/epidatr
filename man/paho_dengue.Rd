@@ -19,5 +19,9 @@ paho_dengue(regions, epiweeks, issues = NULL, lag = NULL)
 an instance of epidata_call
 }
 \description{
-fetch Paho Dengue
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html
+}
+\examples{
+call <- paho_dengue(regions = "ca", epiweeks = epirange(201201, 202001))
+fetch_classic(call)
 }

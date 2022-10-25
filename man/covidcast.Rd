@@ -39,5 +39,16 @@ covidcast(
 an instance of epidata_call
 }
 \description{
-fetch covidcast data
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html
+}
+\examples{
+call <- covidcast(
+  data_source = "jhu-csse",
+  signals = "confirmed_7dav_incidence_prop",
+  time_type = "day",
+  geo_type = "state",
+  time_values = epirange(20200601, 20200801),
+  geo_values = "ca,fl"
+)
+fetch_csv(call)
 }

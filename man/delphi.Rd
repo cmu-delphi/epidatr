@@ -15,5 +15,9 @@ delphi(system, epiweek)
 an instance of epidata_call
 }
 \description{
-fetch Delphi's forecast
+API docs: https://cmu-delphi.github.io/delphi-epidata/api/delphi.html
+}
+\examples{
+call <- delphi(system = "ec", epiweek = 202006)
+fetch_classic(call)
 }
