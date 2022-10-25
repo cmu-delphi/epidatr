@@ -82,7 +82,8 @@ pvt_cdc <- function(auth, epiweeks, locations) {
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html
 #'
 #' @examples
-#' \donttest{ # can take a few minutes; donttesting while backend performance is being improved
+#' \donttest{
+#' # can take a few minutes; donttesting while backend performance is being improved
 #' call <- covid_hosp_facility_lookup(state = "fl")
 #' fetch_csv(call)
 #' }
@@ -962,7 +963,8 @@ flusurv <- function(locations,
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html
 #'
 #' @examples
-#' \donttest{ # can take a couple minutes; donttesting while cmu-delphi/delphi-epidata#48 is unresolved
+#' \donttest{
+#' # can take a couple minutes; donttesting while cmu-delphi/delphi-epidata#48 is unresolved
 #' call <- fluview_clinical(regions = "nat", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
 #' }
