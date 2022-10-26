@@ -22,7 +22,8 @@ an instance of epidata_call
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html
 }
 \examples{
-\donttest{ # can take a couple minutes; donttesting while cmu-delphi/delphi-epidata#48 is unresolved
+\donttest{
+# can take a couple minutes; donttesting while cmu-delphi/delphi-epidata#48 is unresolved
 call <- fluview_clinical(regions = "nat", epiweeks = epirange(201201, 202001))
 fetch_classic(call)
 }

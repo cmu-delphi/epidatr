@@ -30,7 +30,8 @@ an instance of epidata_call
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html
 }
 \examples{
-\donttest{ # can take a few minutes; donttesting while backend performance is being improved
+\donttest{
+# can take a few minutes; donttesting while backend performance is being improved
 call <- covid_hosp_facility_lookup(state = "fl")
 fetch_csv(call)
 }
