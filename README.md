@@ -4,10 +4,10 @@
 
 ## Install
 
-Install latest version using [`devtools`](https://cran.r-project.org/package=devtools) package
+Install latest version using [`remotes`](https://cran.r-project.org/package=remotes) package
 
 ```R
-devtools::install_github("cmu-delphi/epidatr")
+remotes::install_github("cmu-delphi/epidatr")
 ```
 
 Note (2022-08-02): the package that this installs is being renamed from
