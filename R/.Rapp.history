@@ -1,0 +1,21 @@
+library("devtools")
+devtools:document()
+devtools::document()
+devtools::document()
+devtools::check()
+.Last.error.trace
+install.packages("markdown")
+library(markdown)
+devtools::document()
+devtools::check()
+install.packages("Pandoc")
+2
+install.packages("pandoc")
+devtools::document()
+devtools::check()
+library(Pandoc)
+library(pandoc)
+devtools::document()
+devtools::check()
+Sys.getenv("RSTUDIO_PANDOC")
+export RSTUDIO_PANDOC=/Applications/RStudio.app/Contents/MacOS/pandoc
