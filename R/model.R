@@ -1,7 +1,7 @@
 #' builds a new EpiRange instances
 #'
-#' @param from start
-#' @param to end
+#' @param from A string or numeric that takes the form YYYYMMDD.
+#' @param to A string or numeric that takes the form YYYYMMDD.
 #' @return EpiRange instance
 #'
 #' @export
