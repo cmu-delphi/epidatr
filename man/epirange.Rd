@@ -7,9 +7,9 @@
 epirange(from, to)
 }
 \arguments{
-\item{from}{start}
+\item{from}{A string or numeric that takes the form YYYYMMDD.}
 
-\item{to}{end}
+\item{to}{A string or numeric that takes the form YYYYMMDD.}
 }
 \value{
 EpiRange instance

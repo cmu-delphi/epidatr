@@ -557,10 +557,15 @@ covid_hosp_state_timeseries <-
 
 #' fetch covidcast meta data
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html
+#' Fetch a summary of metadata for all sources and signals that are available in the API, along with basic summary statistics such as the dates they are available, the geographic levels at which they are reported, and etc.  For more details, see documentation at <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html>.
 #'
 #' @return an instance of epidata_call
 #'
+#' @examples
+#' call_meta <- covidcast_meta()
+#' fetch_classic(call_meta)
+#'
+#' @seealso [covidcast()]
 #' @export
 covidcast_meta <- function() {
   create_epidata_call(
@@ -588,88 +593,6 @@ covidcast_meta <- function() {
   )
 }
 
-
-#' fetch covidcast_nowcast data
-#'
-#' Not an active endpoint yet.
-#'
-#' @param data_source data source to fetch
-#' @param signals data source to fetch
-#' @param sensor_names sensor names to fetch
-#' @param time_type data source to fetch
-#' @param time_values data source to fetch
-#' @param geo_type geo_type to fetch
-#' @param geo_values data source to fetch
-#' @param as_of data source to fetch
-#' @param issues data source to fetch
-#' @param lag data source to fetch
-#' @return an instance of epidata_call
-#'
-#' @export
-covidcast_nowcast <-
-  function(data_source,
-           signals,
-           sensor_names,
-           time_type,
-           geo_type,
-           time_values,
-           geo_values,
-           as_of = NULL,
-           issues = NULL,
-           lag = NULL) {
-    # Check parameters
-    if (missing(data_source) ||
-      missing(signals) ||
-      missing(sensor_names) ||
-      missing(time_type) ||
-      missing(geo_type) ||
-      missing(time_values) || missing(geo_values)) {
-      stop(
-        paste0(
-          "`data_source`, `signals`, `sensor_names`, `time_type`, `geo_type`, `time_values`, ",
-          "and `geo_value` are all required"
-        )
-      )
-    }
-    if (!missing(issues) && !missing(lag)) {
-      stop("`issues` and `lag` are mutually exclusive")
-    }
-    check_single_string_param("data_source", data_source)
-    check_string_param("signals", signals)
-    check_string_param("sensor_names", sensor_names)
-    check_single_string_param("time_type", time_type)
-    check_single_string_param("geo_type", geo_type)
-    check_epirange_param("time_values", time_values)
-    check_string_param("geo_values", geo_values)
-    check_single_epirange_param("as_of", as_of, FALSE)
-    check_epirange_param("issues", issues, FALSE)
-    check_single_int_param("lag", lag, FALSE)
-
-    create_epidata_call(
-      "covidcast/",
-      list(
-        data_source = data_source,
-        signals = signals,
-        sensor_names = sensor_names,
-        time_type = time_type,
-        geo_type = geo_type,
-        time_values = time_values,
-        geo_values = geo_values,
-        as_of = as_of,
-        issues = issues,
-        lag = lag
-      ),
-      list(
-        create_epidata_field_info("geo_value", "text"),
-        create_epidata_field_info("signal", "text"),
-        create_epidata_field_info("time_value", "date"),
-        create_epidata_field_info("issue", "date"),
-        create_epidata_field_info("lag", "int"),
-        create_epidata_field_info("value", "float")
-      )
-    )
-  }
-
 #' fetch covidcast data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html
@@ -684,16 +607,24 @@ covidcast_nowcast <-
 #'   geo_values = "ca,fl"
 #' )
 #' fetch_csv(call)
-#' @param data_source data source to fetch
-#' @param signals data source to fetch
-#' @param time_type data source to fetch
-#' @param time_values data source to fetch
-#' @param geo_type geo_type to fetch
-#' @param geo_values data source to fetch
+#' @param data_source A character string representing a data source to query: (1) fb-survey; (2) jhu-csse; (3) google-symptoms; (4) doctor-visits; (5) quidel; (6) hhs.    For more information about each data source, see <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>. 
+#' @param signals A character string representing signals from a specific source to query.    A list of available signals for each data source can be found in <https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals>. Each data source may have different signals.
+#' @param time_type Temporal resolution of the data.  Most signals are available at time_type = "day" resolution.  Some signals are only available at the time_type = "week" resolution.   
+#' @param geo_type Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).  
+#' @param time_values A character string that specifies geographic location: (1) county; (2) hrr, hospital referral region; (3) hhs;  (4) msa, metropolitan statistical area; (5) dma, designated market areas; (6) state; (7) nation.  See <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html> for details on which types are available for each data source.
+#' @param geo_values A character string that specified which geographies to return. "*" fetches all geographies.  To fetch specific geographies, specify their IDs as a vector or a list of strings.    More information can be found in <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.
 #' @param as_of data source to fetch
 #' @param issues data source to fetch
 #' @param lag data source to fetch
-#' @return an instance of epidata_call
+#' @return an instance of `epidata_call`
+#' 
+#' @references COVIDcast API documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html> 
+#' 
+#' Documentation for all COVIDcast sources and signals: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals>
+#'
+#' COVIDcast public dashboard: <https://delphi.cmu.edu/covidcast/>
+#'
+#' @seealso [covidcast_meta()], [epirange()] 
 #'
 #' @export
 covidcast <-

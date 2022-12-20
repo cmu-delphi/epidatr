@@ -10,5 +10,13 @@ covidcast_meta()
 an instance of epidata_call
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html
+Fetch a summary of metadata for all sources and signals that are available in the API, along with basic summary statistics such as the dates they are available, the geographic levels at which they are reported, and etc.  For more details, see documentation at \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html}.
+}
+\examples{
+call_meta <- covidcast_meta()
+fetch_classic(call_meta)
+
+}
+\seealso{
+\code{\link[=covidcast]{covidcast()}}
 }
