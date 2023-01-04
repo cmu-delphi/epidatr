@@ -1,0 +1,736 @@
+#How many overall downloads#
+mls <- cran_downloads(packages="conquer", from = "2019-12-01", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="conquer", from = "2019-12-21", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="conquer", from = "2020-01-01", to = Sys.Date()-1)#
+sum(mls[,2])
+mls
+plot(mls[,2])
+plot(mls[,1],mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="conquer", from = "2022-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+plot(mls[,1],mls[,2])
+plot(mls[,1],mls[,2],type="l")
+#How many overall downloads#
+mls <- cran_downloads(packages="conquer", from = "2012-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="sparseBC", from = "2012-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="hglasso", from = "2012-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="rifle", from = "2012-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="latentgraph", from = "2012-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="covidcast", from = "2009-11-09", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="epidatr", from = "2009-11-09", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="quantreg", from = "2019-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="quantreg", from = "2015-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="quantreg", from = "2012-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="quantreg", from = "2015-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="quantreg", from = "2019-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls <- cran_downloads(packages="quantreg", from = "2022-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+#How many overall downloads#
+mls2 <- cran_downloads(packages="conquer", from = "2022-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+library(cranlogs)
+#How many overall downloads#
+mls2 <- cran_downloads(packages="conquer", from = "2022-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+mls[,2]
+mls[,2]-mls2[,2]
+mls2
+#How many overall downloads#
+mls <- cran_downloads(packages="quantreg", from = "2022-06-01", to = Sys.Date()-1)#
+sum(mls[,2])
+mls[,2]-mls2[,2]
+mls2[,2]-mls[,2]
+mls2[,2]
+mls[,2]
+mls
+mls2
+mls
+library(conquer)
+install.packages("conquer")
+259+1383+1424.70
+1434.57+21.95
+50.36+57.52
+27.50*2+21.93+44.93+25
+27.50*2+21.93+44.93+25+18.07
+27.50*2+21.93+44.93+25+18.07+29.5
+14.39+11.23 +8.85+7.95+10.75+7.23
+3066.70+194.43+60.4
+1467+1456.52+107.88+88.90
+library(epidatr)
+covidcast
+library(glmnet)
+?glmnet
+28.42/25
+25/28.42
+call <- covidcast(#
+  data_source = "jhu-csse",#
+  signals = "confirmed_7dav_incidence_prop",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values = epirange(20200601, 20200801),#
+  geo_values = "ca,fl"#
+)
+call
+call$meta
+call$meta[[1]]
+fetch_csv(call)
+data =fetch_csv(call)
+names(data)
+data
+call <- covidcast(#
+  data_source = "jhu-csse",#
+  signals = "confirmed_7dav_incidence_prop",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values = "*",#
+  geo_values = "ca,fl"#
+)
+data =fetch_csv(call)
+deaths <- covidcast_signal("jhu-csse", "deaths_incidence_num",#
+                           "2020-04-15", "2021-04-15",#
+                           geo_type = "nation")
+covidcast
+epirange
+call <- covidcast(#
+  data_source = "jhu-csse",#
+  signals = "confirmed_7dav_incidence_prop",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values =,#
+  geo_values = "ca,fl"#
+)
+call <- covidcast(#
+  data_source = "jhu-csse",#
+  signals = "confirmed_7dav_incidence_prop",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values =epirange(),#
+  geo_values = "ca,fl"#
+)
+call <- covidcast(#
+  data_source = "jhu-csse",#
+  signals = "confirmed_7dav_incidence_prop",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values =epirange(*),#
+  geo_values = "ca,fl"#
+)
+call <- covidcast(#
+  data_source = "jhu-csse",#
+  signals = "confirmed_7dav_incidence_prop",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values =epirange("*"),#
+  geo_values = "ca,fl"#
+)
+epirange(20220601,20220801)
+epirange("20220601","20220801")
+call <- covidcast(#
+  data_source = "jhu-csse",#
+  signals = "confirmed_7dav_incidence_prop",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values =epirange("20220601","20220801"),#
+  geo_values = "ca,fl"#
+)
+data =fetch_csv(call)
+data
+library(covidcast)
+install.packages("covidcast")
+call <- covidcast(#
+  data_source = "jhu-csse",#
+  signals = "confirmed_7dav_incidence_prop",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values =epirange(,"20220801"),#
+  geo_values = "ca,fl"#
+)
+epirange(20200601,20200801)
+class(epirange(20200601,20200801))
+class(epirange(20200601,*))
+class(epirange(20200601,))
+epirange
+call <- covidcast(#
+  data_source = "jhu-csse",#
+  signals = "confirmed_7dav_incidence_prop",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values =epirange(,"20220801"),#
+  geo_values = "*"#
+)
+call <- covidcast(#
+  data_source = "jhu-csse",#
+  signals = "confirmed_7dav_incidence_prop",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values =epirange("20220601","20220801"),#
+  geo_values = "*"#
+)
+data =fetch_csv(call)
+dim(data)
+data
+read.csv(data)
+read_csv(data)
+library(ggplot)
+library(ggplot2)
+read_csv(data)
+dim(data)
+call <- covidcast(#
+  data_source = "jhu-csse",#
+  signals = "confirmed_7dav_incidence_prop",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values =epirange("20220601","20220801"),#
+  geo_values = #
+)
+call <- covidcast(#
+  data_source = "jhu-csse",#
+  signals = "confirmed_7dav_incidence_prop",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values =epirange("20220601","20220801")#
+)
+?fetch_csv
+fetch_df(data)
+data
+fetch_df(call)
+data=fetch_df(call)
+dim(data)
+head(data)
+?fetch_csv
+covidcast_meta
+covidcast_meta(call)
+covidcast_meta(data)
+covidcast_meta(data)covidcast_meta()
+covidcast_meta()
+covidcast_meta()[[1]]
+covidcast_meta()[[2]]
+covidcast_meta()[[3]]
+covidcast_meta()
+covidcast_meta
+create_epidata_field_info
+summary.covidcast_meta  summary.covidcast_metacall <- covidcast(#
+  data_source = "jhu-csse",#
+  signals = "*",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values = epirange(20200601, 20200801),#
+  geo_values = "ca,fl"#
+)
+call = covidcast(#
+  data_source = "jhu-csse",#
+  signals = "*",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values = epirange(20200601, 20200801),#
+  geo_values = "ca,fl"#
+)
+fetch_df(call)
+call = covidcast(#
+  data_source = "jhu-csse",#
+  signals = "smoothed_cli",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values = epirange(20200601, 20200801),#
+  geo_values = "ca,fl"#
+)
+fetch_df(call)
+library(epidatr)
+fetch_df(call)
+call = covidcast(#
+  data_source = "fb_survey",#
+  signals = "smoothed_cli",#
+  time_type = "day",#
+  geo_type = "state",#
+  time_values = epirange(20200601, 20200801),#
+  geo_values = "ca,fl"#
+)
+fetch_df(call)
+library(epidatr)
+covidcast_api <- covidcast_epidata()#
+print(covidcast_api) # print available sources and signals
+fb_survey <- covidcast_api$sources$`fb-survey` # tab completion for sources
+fb_survey
+fb_survey[[1]]
+fb_survey[[2]]
+fb_survey[[3]]
+fb_survey$short
+print(fb_survey'')
+print(fb_survey)
+smoothed_cli <- fb_survey$signals$smoothed_cli # tab completion for signals
+smoothed_cli
+call = covidcast(#
+  data_source = "fb_survey",#
+  signals = "smoothed_cli",#
+  time_type = "day",#
+  geo_type = "state",#
+  geo_values = "ca,fl",#
+)
+call = covidcast(#
+  data_source = "fb_survey",#
+  signals = "smoothed_cli",#
+  time_type = "day",#
+  geo_type = "state",#
+  geo_values = "ca,fl",as_of="2022-06-01"#
+)
+vignette("multi-signals")
+covidcast_meta()
+summary_covidcast_meta()
+?covidcast
+?covidcast.epidata
+?covidcast_meta
+library(covidcast)
+?covidcast.signal
+covidcast.signals
+?covidcast
+summary.covidcast_meta(covidcast_meta())
+covidcast_meta
+covidcast_meta()
+covidcast_meta
+covidcast_meta()
+library(epidatr)
+covidcast_meta()
+3455.25+6298+5049.1+7909.65+1571.61+1000
+3455.25+6298+5049.1+7909.65+1571.61+1000-6500
+3455.25+6298+5049.1+7909.65+1571.61+1000-6500-827.05
+17956.56/2
+3455.25+6298+5049.1+7909.65+1571.61+1000
+2327.05+13978.28+8978.28
+library(cranlogs)#
+conquerres = cran_downloads(packages="conquer",from="2020-04-15",to="2022-10-28")#
+glmnetres = cran_downloads(packages="glmnet",from ="2020-04-15",to="2022-10-28")#
+conquercount = conquerres[,2]#
+tmpconquer = conquerres[1,2]#
+tmpglmnet = glmnetres[1,2]#
+for(k in 2:length(conquercount)){#
+	tmpconquer = c(tmpconquer,tmpconquer[k-1]+conquerres[k,2])#
+}#
+for(k in 2:length(glmnetres[,2])){#
+	tmpglmnet = c(tmpglmnet, tmpglmnet[k-1]+glmnetres[k,2])#
+}
+conquercount
+conquerres = cran_downloads(packages="conquer",from="2020-04-15",to="2022-11-12")
+conquerres
+glmnetres = cran_downloads(packages="quantreg",from ="2020-04-15",to="2022-11-12")
+glmnetres
+0.625*2*286
+3.5*64
+16.98+12.98+13.97+16.95
+16.98+12.98+13.97+16.95+224+357.5+868.38+31
+library(epidatr)
+covidcast_meta()
+load(dplyr)
+library(dplyr)
+covidcast_meta()
+library(epidatr)
+library(dplyr)
+covidcast_meta()
+head(covidcast_meta())
+######################################
+# Expected Shortfall Functions#
+# 10/10/22#
+######################################
+rm(list=ls())#
+library(conquer)#
+library(CVXR)#
+library(quadprog)#
+library(adaHuber)#
+library(quantreg)#
+library(esreg)#
+library(MASS)#
+#
+integraternorm = function(x) {qnorm(x)}#
+integratert = function(x) {qt(x, df = 2.5)}#
+#
+essim <- function(p,alpha,seed,noise){#
+	set.seed(seed)#
+	n = round(50*p/alpha)#
+	X = matrix(runif(n*p, 0, 1.5), nrow = n, ncol = p)#
+	df = 2.5#
+	if(noise == "normal"){#
+		qr_norm = qnorm(alpha)	#
+		inte = integrate(integraternorm, lower = 0, upper = alpha)#
+		es_norm = inte$value / alpha#
+		qr = qr_norm#
+		es = es_norm#
+		err = rnorm(n, 0, 1)#
+	}#
+	else{#
+		qr_t = qt(alpha, df = 2.5)#
+		intet = integrate(integratert, lower = 0, upper = alpha)#
+		es_t = intet$value / alpha#
+		qr = qr_t#
+		es = es_t#
+		err= rt(n, df = 2.5)#
+	}#
+	gamma = 2 * rbinom(p, 1, 1/2) - 1#
+	eta = 0.5 * rbinom(p, 1, 1/2) #
+	Y =  X%*%gamma + X%*%eta * err	#
+	beta_qr = gamma + eta * qr#
+	beta_es = gamma + eta * es#
+	res_robust = twostep(X, Y, alpha=alpha)#
+	res_regular = twostep(X, Y, alpha=alpha, robust=FALSE)#
+	res_noncross_robust = nc_twostep(X, Y, alpha=alpha, robust=TRUE)#
+	res_noncross_regular = nc_twostep(X, Y, alpha=alpha, robust=FALSE)#
+# Joint Regression Approach#
+	jointres = esreg(Y ~ X, alpha = alpha)#
+# Oracle Estimator#
+	tmp = Y-cbind(1,X)%*%c(0,beta_qr)#
+	newYoracle = tmp*(tmp <=0 )+ alpha*cbind(1,X)%*%c(0,beta_qr)#
+	newX = alpha*X#
+	oracleres = lm(newYoracle~newX)#
+	oracleres = oracleres$coefficient#
+	e1 = sqrt(sum((res_robust$coef_e[-1]-beta_es)^2))/sqrt(sum(beta_es^2))#
+	e2 = sqrt(sum((res_noncross_robust$coef_e[-1]-beta_es)^2))/sqrt(sum(beta_es^2))#
+	e3 = sqrt(sum((res_regular$coef_e[-1]-beta_es)^2))/sqrt(sum(beta_es^2))#
+	e4 = sqrt(sum((res_noncross_regular$coef_e[-1]-beta_es)^2))/sqrt(sum(beta_es^2))	#
+	e5 = sqrt(sum((jointres$coefficients_e[-1]-beta_es)^2))/sqrt(sum(beta_es^2))#
+	e6 = sqrt(sum((oracleres[-1]-beta_es)^2))/sqrt(sum(beta_es^2))#
+#
+	return(list(robust=e1, noncrossrobust=e2, regular=e3, noncrossregular=e4,joint=e5,oracle=e6))#
+#
+	}#
+twostep <- function(X, Y, alpha=0.5,#
+                    smoothing=FALSE, h=0,#
+                    robust=TRUE, method='adaptive', tau=10){#
+#####################################################################
+########## Joint Quantile & Expected Shortfall Regression ########## #
+#####################################################################
+## Input #
+# X : n by p design matrix#
+# Y : response vector of length n#
+# alpha : quantile level between 0 and 1#
+# smoothing : logical flag for fitting smoothed QR in the first step.#
+# h : bandwdith; if h=0, it will be automatically set by the conquer function.#
+# robust : logical flag for returning a robust ES estimator#
+# method : tuning methods for choosing the robustification parameter#
+#          'adaptive': adaptive Huber#
+#          'rot': rule of thumb#
+#          'user': user-specified#
+# tau : robustification parameter in the Huber loss#
+## Output#
+# coef_q : vector of estimated quantile regression coefficients #
+# coef_e : vector of estimated ES regression coefficients#
+  if (smoothing == TRUE){#
+    qr_fit  = conquer(X, Y, tau=alpha, h=h)#
+    nres_q = qr_fit$res * (qr_fit$res <= 0)#
+    Ynew    = nres_q/alpha + (Y - qr_fit$res)#
+  }#
+  else {#
+    qr_fit  = rq(Y~X, tau=alpha)#
+    nres_q = qr_fit$residuals * (qr_fit$residuals <= 0)#
+    Ynew    = nres_q/alpha + qr_fit$fitted.values#
+  }#
+  if (robust == FALSE){#
+    es_coef = lm(Ynew~X)$coef#
+    tau = 1/robust#
+    } else {#
+       if (method == 'adaptive'){#
+         es_fit = adaHuber.reg(alpha*X, alpha*Ynew, method='adaptive')#
+         es_coef = es_fit$coef#
+         es_coef[1] = es_coef[1] / alpha#
+         tau = es_fit$tau #
+         } #
+        else if (method == 'rot') {#
+         n <- nrow(X)#
+         p <- ncol(X)#
+         tau = sd(nres_q) * sqrt(n / (p + log(n)))#
+         es_coef = hub_reg(alpha*X, alpha*Ynew, c=tau)$coef#
+         es_coef[1] = es_coef[1]/alpha#
+       }#
+       else if (method == 'user'){#
+         es_coef = hub_reg(alpha*X, alpha*Ynew, c=tau)$coef#
+         es_coef[1] = es_coef[1]/alpha#
+       }#
+     }#
+  outlist<-list(coef_q = as.vector(qr_fit$coef),#
+                res_q = as.vector(qr_fit$res),                 # fitted QR residuals#
+                fitted_q = as.vector(Y - qr_fit$res),          # fitted quantiles #
+                coef_e = as.vector(es_coef),        #
+                fitted_e = as.vector(cbind(1, X) %*% es_coef), # fitted expected shortfall values#
+                tau = tau)#
+  return(outlist)#
+}#
+nc_twostep <- function(X, Y, alpha=0.5, #
+                       smoothing=FALSE, h=0,#
+                       robust=FALSE, tau=0, method='IRLS-QP',#
+                       tol=1e-5, niter=200){#
+######################################################################
+######### Non-crossing Quantle/Expected Shortfall Regression #########
+######################################################################
+  ## Input #
+  # X : n by p design matrix#
+  # Y : response vector of length n#
+  # alpha : quantile level between 0 and 1#
+  # smoothing : logical flag for fitting smoothed QR in the first step.#
+  # h : bandwdith; if h=0, it will be automatically set by the conquer function.#
+  # robust : logical flag for returning a robust ES estimator#
+  # method : optimization method for solving linearly constrained Huber loss minimization#
+  #          'IRLS-QP': iteratively reweighted least squares + quadratic programming#
+  #          'CVXR': solve constrained Huber loss minimization using the CVXR library#
+  ## Output#
+  # coef_q : vector of estimated quantile regression coefficients #
+  # coef_e : vector of estimated ES regression coefficients#
+  # tau : self-tuned robustification parameter#
+  if (smoothing == TRUE){#
+    qr_fit  = conquer(X, Y, tau=alpha, h=h)#
+    nres_q = qr_fit$res * (qr_fit$res <= 0)#
+    Y_q = Y - qr_fit$res#
+    Ynew = nres_q/alpha + Y_q#
+  }#
+  else {#
+    qr_fit  = rq(Y~X, tau=alpha)#
+    nres_q = qr_fit$res * (qr_fit$res <= 0)#
+    Y_q = qr_fit$fitted.values#
+    Ynew = nres_q/alpha + Y_q#
+  }#
+  n = dim(X)[1]#
+  X1 = cbind(1, X)#
+  C = t(X1) %*% X1 / n#
+  d = -as.numeric(t(X1) %*% Ynew) / n#
+  if (robust == FALSE){#
+    es_fit = solve.QP(C, -d, -t(X1), -Y_q)#
+    outlist<-list(coef_q = as.vector(qr_fit$coef), #
+                  coef_e = as.vector(es_fit$solution),#
+                  tau = 1/tau)#
+    return(outlist)#
+    } else {#
+     c = (dim(X)[2] + log(n))/n#
+     sig = sd(nres_q)#
+     es_fit = twostep(X, Y, alpha=alpha, smoothing=smoothing, h=h)#
+     beta = es_fit$coef_e#
+     res = abs(Ynew - X1 %*% beta)#
+     if (tau == 0){#
+       f <- function(x) mean( (res*(res<x))^2/x^2 + (res>=x) ) - c#
+       tau = find_root(f, max(min(res), sig), sqrt(sum(res^2)))#
+       }#
+     opt_err = 1#
+     iter = 0#
+     while ( opt_err > tol & iter < niter) {#
+       if (method == 'IRLS-QP'){#
+         wt = as.vector((res/tau - 1) * (res>tau))#
+         C = t(X1) %*% diag(c(1/(1 + wt))) %*% X1 / n#
+         d = -as.numeric(t(X1) %*% (Ynew/(1+wt))) / n#
+         es_fit = solve.QP(C, -d, -t(X1), -Y_q)#
+         opt_err = sum((es_fit$solution - beta)^2)#
+         beta = es_fit$solution#
+       } else if (method == 'CVXR'){#
+         b <- Variable(dim(X1)[2])#
+         obj <- sum(huber(Ynew - X1 %*% b, M=tau))#
+         constraints <- list(X1 %*% b <= Y_q)#
+         prob <- Problem(Minimize(obj), constraints)#
+         es_fit <- solve(prob)#
+         opt_err = max(abs(es_fit$getValue(b) - beta))#
+         beta = es_fit$getValue(b)#
+       }#
+         res = abs(Ynew - X1 %*% beta)#
+         f <- function(x) mean( (res*(res<x))^2/x^2 + (res>=x) ) - c#
+         tau = find_root(f, max(min(res), sig), sqrt(sum(res^2)))#
+         wt = (res/tau - 1) * (res>tau)#
+         iter = iter + 1#
+     }#
+     outlist<-list(coef_q = as.vector(qr_fit$coef),#
+                   res_q = as.vector(qr_fit$res),#
+                   fitted_q = as.vector(Y - qr_fit$res),#
+                   coef_e = as.vector(beta),#
+                   fitted_e = as.vector(X1 %*% beta),#
+                   tau = tau,#
+                   niter = iter)#
+     return(outlist)#
+    }#
+}#
+hub_reg <- function(X, Y, c, intercept=TRUE,#
+                    max_step=FALSE, tol=1e-5, niter=500){#
+  ##############################################
+  ############# Huber regression ###############
+  ##############################################
+  ## Input #
+  # X : n by p design matrix#
+  # Y : response vector of length n#
+  # c : positive tuning parameter in the Huber loss x -> min(x^2/2, c|x|-c^2/2)#
+  # intercept : logical flag for adding an intercept to the model; default is TRUE.#
+  ## Output#
+  # coefficients : vector of estimated regression coefficients #
+  # residuals : vector of fitted residuals#
+  grad.huber <- function(u,c) {#
+    w = as.numeric((u*(u<=c & u>=0) + c*(u>c)) + (u*(u>=-c & u<0) - c*(u < -c)))#
+    return(w/length(u))#
+  }#
+  n = nrow(X)#
+  p = ncol(X)#
+  mX = colMeans(X)#
+  sdX = apply(X, 2, sd)#
+  if (intercept){#
+    X = cbind(matrix(1, n, 1), (X - matrix(mX, nr=n, nc=p, byrow=TRUE)) / sdX)#
+  } else {#
+    X = X / sdX#
+  }#
+  ols = lm(Y~X-1)#
+  beta = ols$coef#
+  res  = ols$residuals#
+  grad0 <- -t(X) %*% grad.huber(res, c)#
+  diff_beta = -grad0#
+  beta = beta + diff_beta#
+  res = Y - X %*% beta#
+  iter = 0#
+  repeat{#
+    if( max(abs(diff_beta)) < tol | iter > niter) break#
+    grad1 <- -t(X) %*% grad.huber(res, c)#
+    diff_grad = grad1 - grad0#
+    r0 = sum(diff_beta*diff_beta)#
+    r1 = sum(diff_grad*diff_grad)#
+    if (r1 == 0){#
+      lr = 1#
+    } else {#
+      r01 = sum(diff_beta*diff_grad)#
+      lr1 = r01/r1#
+      lr2 = r0/r01#
+      if (max_step == FALSE){ lr = min(c(lr1,lr2)) } #
+      else {lr = min(c(lr1,lr2,max_step))}#
+    }#
+    grad0 = grad1#
+    diff_beta = -lr*grad1#
+    beta = beta + diff_beta#
+    res = Y - X %*% beta#
+    iter = iter + 1#
+  }#
+  if (intercept){#
+    beta[-1] = beta[-1] / sdX#
+    beta[1]  = beta[1] - mX %*% beta[-1]#
+  } else {#
+    beta = beta / sdX#
+  }#
+  outlist = list(coefficients = as.vector(beta), #
+                 residuals = as.vector(res))#
+  return(outlist)#
+}#
+find_root <- function(f, tmin, tmax, tol=1e-5){#
+  while (tmax - tmin > tol)  {#
+    tau = (tmin + tmax) / 2#
+    if (f(tau) > 0){#
+      tmin = tau#
+    } else{#
+      tmax = tau#
+    }#
+  }#
+  return (tau)#
+}#
+es_norm <- function(alpha=0.5, loc=0, sd=1){#
+  ### Compute (left) alpha-level es of normal distribution ####
+  return(loc - sd * dnorm(qnorm(alpha)) / alpha)#
+}#
+es_t <- function(alpha=0.5, df=2){#
+  ### Compute (left) alpha-level es of t distribution ####
+  quan_t = qt(alpha, df) #
+  return( (df + quan_t^2) * dt(quan_t, df) / ((1-df) * pt(quan_t, df)) )#
+}
+p
+p = 10
+seed=1
+alpha= 0.1
+noise="normal"
+set.seed(seed)#
+	n = round(50*p/alpha)#
+	X = matrix(runif(n*p, 0, 1.5), nrow = n, ncol = p)#
+	df = 2.5
+qr_norm = qnorm(alpha)	#
+		inte = integrate(integraternorm, lower = 0, upper = alpha)#
+		es_norm = inte$value / alpha#
+		qr = qr_norm#
+		es = es_norm#
+		err = rnorm(n, 0, 1)
+gamma = 2 * rbinom(p, 1, 1/2) - 1#
+	eta = 0.5 * rbinom(p, 1, 1/2) #
+	Y =  X%*%gamma + X%*%eta * err	#
+	beta_qr = gamma + eta * qr#
+	beta_es = gamma + eta * es
+beta_qr
+beta_es
+rq(y~X,tau=0.1)
+rq(Y~X,tau=0.1)
+rq(Y~X,tau=0.2)
+rq(Y~X,tau=0.5)
+rq(Y~X,tau=0.5)n
+n
+Y =  X%*%gamma +error #+ X%*%eta * err
+Y =  X%*%gamma +err
+rq(Y~X,tau=0.5)n
+rq(Y~X,tau=0.5)
+rq(Y~X,tau=0.1)
+mean(Y)
+mean(err)
+rq(Y~X,tau=0.025)
+library(glmnet)
+?glmnet
+X<- matrix(rnorm(100),10,10)
+X[,1]
+X=scale(X,T,T)
+Z12 = X[,1]*X[,2]
+Z34 = X[,3]*X[,4]
+sum(Z12*Z34)
+Z13 = X[,1]*X[,3]
+Z24 = X[,1]*X[,3]
+Z24 = X[,2]*X[,4]
+sum(Z13*Z24)
+X
+apply(X,2,mean)
+apply(X,2,var)
+X<- matrix(rnorm(100),1,10)
+x
+X
+Z12
+sd(Z12)
+sd(Z34)
+2*283*0.625
+180/12
+15*9
+132/9*11.5
+library(devtools)
+dev.tools::check()
+devtools::check()
+devtools::check()
+devtools::documents()
+devtools::document()
+styler::style()
+install.packages("styler")
+styler::style()
+styler::style_pkg()
+library(epidatr)
+covid_hosp_facility(390119,epirange(20201201,20221201))
+covid_hosp_facility("390119",epirange(20201201,20221201))
+a=covid_hosp_facility("390119",epirange(20201201,20221201))
+fetch.table(a)
+fetch.classic(a)
+fetch_classic(a)
+fetch(a)
+fetch_tibble(a)
+fetch_csv(a)

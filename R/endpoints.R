@@ -79,20 +79,25 @@ pvt_cdc <- function(auth, epiweeks, locations) {
 
 #' fetch COVID hospitalization facility identifiers
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html
+#' Obtains unique identifiers and other metadata for COVID hospitalization  facilities of interest.   This is a companinon endpoint to the [covid_hosp_facility()] endpoint.
+#'
+#' @details Only one argument needs to be specified.  Combinations of the arguments are not currently supported.  For instance, specifying both city and state are not supported.
 #'
 #' @examples
 #' \donttest{
-#' # can take a few minutes; donttesting while backend performance is being improved
 #' call <- covid_hosp_facility_lookup(state = "fl")
 #' fetch_csv(call)
 #' }
-#' @param state optional character state
-#' @param ccn optional character ccn
-#' @param city optional character city
-#' @param zip optional numeric zip code
-#' @param fips_code optional numeric fips code
-#' @return an instance of epidata_call
+#' @param state A two-letter character string state abbreviation.
+#' @param ccn A character string for facility CMS certification number.
+#' @param city A characater string for city name.
+#' @param zip A numeric 5-digit zip code.
+#' @param fips_code A numeric 5-digit fips county code.
+#' @return an instance of epidata_call.
+#'
+#' @references  API documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html>
+#'
+#' @seealso [covid_hosp_facility()]
 #'
 #' @export
 covid_hosp_facility_lookup <-
@@ -137,16 +142,23 @@ covid_hosp_facility_lookup <-
 
 #' fetch COVID hospitalization data for specific facilities
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html
+#' Obtains the COVID-19 reported patient impact and hospital capacity data by facility. This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
+#'
+#' @details Starting October 1, 2022, some facilities are only required to report annually.  The companion function [covid_hosp_facility_lookup()] can be used to look up facility identifiers in a variety of ways.
 #'
 #' @examples
-#' call <- covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(202001, 202005))
+#' call <- covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(20200101, 20200501))
 #' fetch_csv(call)
-#' @param hospital_pks character hospitals to fetch
-#' @param collection_weeks epirange weeks to fetch
-#' @param publication_dates optional epirange publication dates to fetch
+#' @param hospital_pks A character string of facility unique identifiers
+#' @param collection_weeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
+#' @param publication_dates An optional epirange publication dates to fetch, using epirange(startdate,enddate).
 #' @return an instance of epidata_call
 #'
+#' @references API documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
+#'
+#' See also the official description and data dictionary at <healthdata.gov> for more information.
+#'
+#' @seealso [covid_hosp_facility_lookup()], [epirange()]
 #' @export
 #
 covid_hosp_facility <-
@@ -610,8 +622,8 @@ covidcast_meta <- function() {
 #' @param data_source A character string representing a data source to query: (1) fb-survey; (2) jhu-csse; (3) google-symptoms; (4) doctor-visits; (5) quidel; (6) hhs.    For more information about each data source, see <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>.
 #' @param signals A character string representing signals from a specific source to query.    A list of available signals for each data source can be found in <https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals>. Each data source may have different signals.
 #' @param time_type Temporal resolution of the data.  Most signals are available at time_type = "day" resolution.  Some signals are only available at the time_type = "week" resolution.
-#' @param geo_type Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
-#' @param time_values A character string that specifies geographic location: (1) county; (2) hrr, hospital referral region; (3) hhs;  (4) msa, metropolitan statistical area; (5) dma, designated market areas; (6) state; (7) nation.  See <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html> for details on which types are available for each data source.
+#' @param geo_type A character string that specifies geographic types: (1) county; (2) hrr, hospital referral region; (3) hhs;  (4) msa, metropolitan statistical area; (5) dma, designated market areas; (6) state; (7) nation.  See <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html> for details on which types are available for each data source.
+#' @param time_values Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
 #' @param geo_values A character string that specified which geographies to return. "*" fetches all geographies.  To fetch specific geographies, specify their IDs as a vector or a list of strings.    More information can be found in <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.
 #' @param as_of data source to fetch
 #' @param issues data source to fetch

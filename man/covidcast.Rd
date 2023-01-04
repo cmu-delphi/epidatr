@@ -23,9 +23,9 @@ covidcast(
 
 \item{time_type}{Temporal resolution of the data.  Most signals are available at time_type = "day" resolution.  Some signals are only available at the time_type = "week" resolution.}
 
-\item{geo_type}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
+\item{geo_type}{A character string that specifies geographic types: (1) county; (2) hrr, hospital referral region; (3) hhs;  (4) msa, metropolitan statistical area; (5) dma, designated market areas; (6) state; (7) nation.  See \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html} for details on which types are available for each data source.}
 
-\item{time_values}{A character string that specifies geographic location: (1) county; (2) hrr, hospital referral region; (3) hhs;  (4) msa, metropolitan statistical area; (5) dma, designated market areas; (6) state; (7) nation.  See \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html} for details on which types are available for each data source.}
+\item{time_values}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
 
 \item{geo_values}{A character string that specified which geographies to return. "*" fetches all geographies.  To fetch specific geographies, specify their IDs as a vector or a list of strings.    More information can be found in \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.}
 
