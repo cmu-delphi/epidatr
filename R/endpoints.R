@@ -129,7 +129,7 @@ covid_hosp_facility_lookup <-
         create_epidata_field_info("city", "text"),
         create_epidata_field_info("zip", "text"),
         create_epidata_field_info("hospital_subtype", "text"),
-        create_epidata_field_info("fip_code", "text"),
+        create_epidata_field_info("fips_code", "text"),
         create_epidata_field_info("is_metro_micro", "int")
       )
     )
