@@ -175,7 +175,7 @@ covid_hosp_facility <-
         create_epidata_field_info("hospital_subtype", "text"),
         create_epidata_field_info("fips_code", "text"),
         create_epidata_field_info("publication_date", "date"),
-        create_epidata_field_info("collection_week", "epiweek"),
+        create_epidata_field_info("collection_week", "date"),
         create_epidata_field_info("is_metro_micro", "bool"),
         create_epidata_field_info("total_beds_7_day_sum", "int"),
         create_epidata_field_info("all_adult_hospital_beds_7_day_sum", "int"),
