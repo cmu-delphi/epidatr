@@ -104,8 +104,8 @@ covid_hosp_facility_lookup <-
     check_single_string_param("state", state, FALSE)
     check_single_string_param("ccn", ccn, FALSE)
     check_single_string_param("city", city, FALSE)
-    check_single_int_param("zip", zip, FALSE)
-    check_single_int_param("fips_code", fips_code, FALSE)
+    check_single_string_param("zip", zip, FALSE)
+    check_single_string_param("fips_code", fips_code, FALSE)
     if (missing(state) &&
       missing(ccn) &&
       missing(city) && missing(zip) && missing(fips_code)) {
