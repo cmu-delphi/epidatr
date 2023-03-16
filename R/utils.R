@@ -12,7 +12,9 @@ format_item <- function(value) {
 
 # Helper function to build a list of values and/or ranges
 format_list <- function(values) {
-  if (!is.list(values) ||
+  if (is.vector(values)) {
+    values <- as.list(values)
+  } else if (!is.list(values) ||
     ("from" %in% names(values) && "to" %in% names(values))) {
     values <- list(values)
   }
