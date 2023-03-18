@@ -104,8 +104,8 @@ covid_hosp_facility_lookup <-
     check_single_string_param("state", state, FALSE)
     check_single_string_param("ccn", ccn, FALSE)
     check_single_string_param("city", city, FALSE)
-    check_single_int_param("zip", zip, FALSE)
-    check_single_int_param("fips_code", fips_code, FALSE)
+    check_single_string_param("zip", zip, FALSE)
+    check_single_string_param("fips_code", fips_code, FALSE)
     if (missing(state) &&
       missing(ccn) &&
       missing(city) && missing(zip) && missing(fips_code)) {
@@ -129,7 +129,7 @@ covid_hosp_facility_lookup <-
         create_epidata_field_info("city", "text"),
         create_epidata_field_info("zip", "text"),
         create_epidata_field_info("hospital_subtype", "text"),
-        create_epidata_field_info("fip_code", "text"),
+        create_epidata_field_info("fips_code", "text"),
         create_epidata_field_info("is_metro_micro", "int")
       )
     )
@@ -175,7 +175,7 @@ covid_hosp_facility <-
         create_epidata_field_info("hospital_subtype", "text"),
         create_epidata_field_info("fips_code", "text"),
         create_epidata_field_info("publication_date", "date"),
-        create_epidata_field_info("collection_week", "epiweek"),
+        create_epidata_field_info("collection_week", "date"),
         create_epidata_field_info("is_metro_micro", "bool"),
         create_epidata_field_info("total_beds_7_day_sum", "int"),
         create_epidata_field_info("all_adult_hospital_beds_7_day_sum", "int"),

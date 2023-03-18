@@ -5,3 +5,7 @@
 docs
 inst/doc
 /check
+venv
+env
+.venv
+.env
