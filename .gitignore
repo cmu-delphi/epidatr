@@ -1,7 +1,11 @@
 .Rproj.user
 .Rhistory
+.Rapp.history
 .RData
 .Ruserdata
 docs
 inst/doc
 /check
+.Rdata
+.httr-oauth
+.DS_Store
