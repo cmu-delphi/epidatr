@@ -2,22 +2,28 @@
 % Please edit documentation in R/endpoints.R
 \name{nowcast}
 \alias{nowcast}
-\title{fetch Delphi's wILI nowcast}
+\title{fetch Delphi's ILI nowcast}
 \usage{
 nowcast(locations, epiweeks)
 }
 \arguments{
-\item{locations}{locations to fetch}
+\item{locations}{a character string that indicates a location such as national, HHS region, census division, most states and territories, and etc.}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{Takes}{in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
 }
 \value{
 an instance of epidata_call
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html
+Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data
+}
+\details{
+The full list of location inputs can be accsssed at \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
 }
 \examples{
 call <- nowcast(location = "ca", epiweeks = epirange(201201, 202001))
 fetch_classic(call)
+}
+\references{
+API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html}.
 }

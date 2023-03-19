@@ -2,28 +2,49 @@
 % Please edit documentation in R/endpoints.R
 \name{fluview}
 \alias{fluview}
-\title{fetch fluview data}
+\title{Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data}
 \usage{
 fluview(regions, epiweeks, issues = NULL, lag = NULL, auth = NULL)
 }
 \arguments{
-\item{regions}{regions to fetch}
+\item{regions}{a character string that indicates a location such as national, HHS region, census division, most states and territories, and etc.}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
 
-\item{issues}{optionally specify the exact issues to fetch}
+\item{issues}{an optional parameter that takes the form YYYYMMDD specifying the exact issues to fetch.}
 
 \item{lag}{optionally specify the issue lag}
 
 \item{auth}{optional authentication}
+
+\item{locations}{a character string that indicates a location such as national, HHS region, census division, most states and territories, and etc.}
+
+\item{Takes}{in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
 }
 \value{
 an instance of epidata_call
+
+an instance of epidata_call
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview.html
+Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data
+}
+\details{
+The full list of location inputs can be accsssed at \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
+
+The full list of location inputs can be accsssed at \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
 }
 \examples{
+call <- nowcast(location = "ca", epiweeks = epirange(201201, 202001))
+fetch_classic(call)
 call <- fluview(regions = "nat", epiweeks = epirange(201201, 202001))
 fetch_classic(call)
+}
+\references{
+API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html}.
+fetch fluview data
+
+Obtains information on outpatient inluenza-like-illness (ILI) from U.S. Outpatient Influenza-like Illness Surveillance Network (ILINet).
+
+API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview.html}.  For more information on ILINet, see \url{https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html}.
 }

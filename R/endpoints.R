@@ -425,17 +425,25 @@ covid_hosp_facility <-
     )
   }
 
-#' fetch COVID hospitalization data
+#' Fetch COVID Hospitalization Data by State
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html
+#' Obtains the COVID-19 reported patient impact and hospital capacity data by state. This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
+#'
+#' @details Starting October 1, 2022, some facilities are only required to report annually.
 #'
 #' @examples
+#' \donttest{
 #' call <- covid_hosp_state_timeseries(states = "fl", dates = epirange(20200101, 20200501))
 #' fetch_csv(call)
-#' @param states states to fetch
-#' @param dates dates to fetch
-#' @param issues issues to fetch
+#' }
+#' @param states A two letter character string state abbreviation.
+#' @param dates Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
+#' @param issues An optional parameter that takes the form YYYYMMDD.  If issues is not specified, then the most recent issue is used by default.
 #' @return an instance of epidata_call
+#'
+#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>.
+#'
+#' See also the official description and data dictionary at <healthdata.gov> for more information.
 #'
 #' @export
 #
@@ -569,7 +577,9 @@ covid_hosp_state_timeseries <-
 
 #' fetch covidcast meta data
 #'
-#' Fetch a summary of metadata for all sources and signals that are available in the API, along with basic summary statistics such as the dates they are available, the geographic levels at which they are reported, and etc.  For more details, see documentation at <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html>.
+#' Fetch a summary of metadata for all sources and signals that are available in the API, along with basic summary statistics such as the dates they are available, the geographic levels at which they are reported, and etc.
+#'
+#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html>.
 #'
 #' @return an instance of epidata_call
 #'
@@ -606,8 +616,6 @@ covidcast_meta <- function() {
 }
 
 #' fetch covidcast data
-#'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html
 #'
 #' @examples
 #' call <- covidcast(
@@ -809,17 +817,20 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
 
 #' fetch ECDC data
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html
+#' Obtain information on influenza-like-illness from the European Center of Disease Control.
 #'
-#' TODO: find a region that has non-trivial output
+#' @details The list of location argument can be found in <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/ecdc_regions.txt>.
+#'
 #' @examples
-#' call <- ecdc_ili(regions = "?", epiweeks = epirange(201201, 202001))
+#' call <- ecdc_ili(regions = "austria", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
 #' @param regions regions to fetch
-#' @param epiweeks epiweeks to fetch
+#' @param epiweeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
 #' @param issues optionally specify the exact issues to fetch
 #' @param lag optionally specify the issue lag
 #' @return an instance of epidata_call
+#'
+#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>.
 #'
 #' @export
 ecdc_ili <- function(regions,
@@ -854,16 +865,20 @@ ecdc_ili <- function(regions,
 
 #' fetch FluSurv virological data
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html
+#' Obtain information on flu hospitalization rates from the Center of Disease Control.
+#'
+#' @details The list of location argument can be found in <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt>.
 #'
 #' @examples
 #' call <- flusurv(locations = "CA", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
-#' @param locations locations to fetch
-#' @param epiweeks epiweeks to fetch
+#' @param locations A character string indicating location.
+#' @param epiweeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
 #' @param issues optionally specify the exact issues to fetch
 #' @param lag optionally specify the issue lag
 #' @return an instance of epidata_call
+#'
+#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>.   See also <https://gis.cdc.gov/GRASP/Fluview/FluHospRates.html>.
 #'
 #' @export
 flusurv <- function(locations,
@@ -973,19 +988,37 @@ fluview_meta <- function() {
   )
 }
 
+#' Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data
+#'
+#' @details The full list of location inputs can be accsssed at <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
+#'
+#' @examples
+#' call <- nowcast(location = "ca", epiweeks = epirange(201201, 202001))
+#' fetch_classic(call)
+#' @param locations a character string that indicates a location such as national, HHS region, census division, most states and territories, and etc.
+#' @param Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
+#' @return an instance of epidata_call
+#'
+#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>.
+
+
 #' fetch fluview data
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview.html
+#' Obtains information on outpatient inluenza-like-illness (ILI) from U.S. Outpatient Influenza-like Illness Surveillance Network (ILINet).
+#'
+#' @details The full list of location inputs can be accsssed at <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
 #' @examples
 #' call <- fluview(regions = "nat", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
-#' @param regions regions to fetch
-#' @param epiweeks epiweeks to fetch
-#' @param issues optionally specify the exact issues to fetch
+#' @param regions a character string that indicates a location such as national, HHS region, census division, most states and territories, and etc.
+#' @param epiweeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
+#' @param issues an optional parameter that takes the form YYYYMMDD specifying the exact issues to fetch.
 #' @param lag optionally specify the issue lag
 #' @param auth optional authentication
 #' @return an instance of epidata_call
+#'
+#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>.  For more information on ILINet, see <https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html>.
 #'
 #' @export
 fluview <-
@@ -1034,13 +1067,18 @@ fluview <-
 
 #' fetch Google Flu Trends data
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/gft.html
+#' Obtains estimates of inluenza activity based on volume of certain search queries from Google.
+#'
+#' @details Google has discontinues Flu Trends, and this is now a static endpoint. Possibile input for locations can be found in <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt>, <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/states.txt>, and <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt>.
 #'
 #' @examples
 #' call <- gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
-#' @param locations locations to fetch
-#' @param epiweeks epiweeks to fetch
+#' @param locations A character string that specifies a location to be fetched.
+#' @param epiweeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
+#'
+#' @references  API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/gft.html>
+#'
 #' @return an instance of epidata_call
 #'
 #' @export
@@ -1180,14 +1218,19 @@ meta <- function() {
 
 #' fetch NIDSS dengue data
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html
+#' Obtains counts of confirmed dengue cases in Taiwan from Taiwan National Infectious Disease Statistical System.
+#'
+#' @details Possible location inputs can be found in <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_regions.txt> and <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt>.
 #'
 #' @examples
 #' call <- nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
-#' @param locations locations to fech
-#' @param epiweeks epiweeks to fetch
+#' @param locations A character string that indicates region of interest or location of interest. Possible inputs include but are not limited to (1)  nationwide, (2) central, (3) eastern, (4) kaoping, (5) northern, (6) southern, and (7) taipei.
+#' @param epiweeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
+#'
 #' @return an instance of epidata_call
+#'
+#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html>
 #'
 #' @export
 nidss_dengue <- function(locations, epiweeks) {
@@ -1207,16 +1250,18 @@ nidss_dengue <- function(locations, epiweeks) {
 
 #' fetch NIDSS flu data
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html
+#' Obtains information on outpatient inluenza-like-illness from Taiwan National Infectious Disease Statistical System.
 #'
 #' @examples
 #' call <- nidss_flu(regions = "taipei", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
 #' @param regions regions to fetch
-#' @param epiweeks epiweeks to fetch
+#' @param epiweeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
 #' @param issues optional issues
 #' @param lag optional lag
 #' @return an instance of epidata_call
+#'
+#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
 #'
 #' @export
 nidss_flu <-
@@ -1291,16 +1336,20 @@ pvt_norostat <- function(auth, location, epiweeks) {
   )
 }
 
-#' fetch Delphi's wILI nowcast
+#' fetch Delphi's ILI nowcast
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html
+#' Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data
+#'
+#' @details The full list of location inputs can be accsssed at <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
 #' @examples
 #' call <- nowcast(location = "ca", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
-#' @param locations locations to fetch
-#' @param epiweeks epiweeks to fetch
+#' @param locations a character string that indicates a location such as national, HHS region, census division, most states and territories, and etc.
+#' @param Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
 #' @return an instance of epidata_call
+#'
+#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>.
 #'
 #' @export
 nowcast <- function(locations, epiweeks) {

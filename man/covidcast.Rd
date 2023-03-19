@@ -39,7 +39,7 @@ covidcast(
 an instance of \code{epidata_call}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html
+fetch covidcast data
 }
 \examples{
 call <- covidcast(
