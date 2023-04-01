@@ -6,7 +6,7 @@ format_item <- function(value) {
     "from" %in% names(value) && "to" %in% names(value) && length(names(value)) == 2) {
     paste0(toString(value$from), "-", toString(value$to))
   } else {
-    toString(value)
+    paste(value, collapse = ",")
   }
 }
 
@@ -16,5 +16,5 @@ format_list <- function(values) {
     ("from" %in% names(values) && "to" %in% names(values))) {
     values <- list(values)
   }
-  paste(sapply(values, format_item), collapse = ",")
+  paste(vapply(values, format_item, character(1L)), collapse = ",")
 }
