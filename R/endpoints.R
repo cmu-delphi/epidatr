@@ -668,8 +668,9 @@ covidcast_meta <- function() {
 #' @param issues Epirange. Fetch the data as of a specific issue date. If not specified, the most recent data
 #'   will be returned. Specified in the form epirange(startdate,enddate), where startdate and enddate are of
 #'   the form YYYYMMDD (string or numeric). Cannot be used in conjunction with `as_of` or `lag`.
-#' @param lag Integer. Fetch the data as of a specific lag. If not specified, the most recent data will be
-#'   returned. An alternative to specifying `as_of` or `issues`.
+#' @param lag Integer. Fetch the issues with a specific lag. If not specified, the most recent data will be
+#'   returned. An alternative to and mutually exclusive with `issues`. Cannot be used in conjunction with `as_of`
+#'   or `issues`.
 #' @return an instance of `epidata_call`
 #'
 #' @references COVIDcast API documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html>
@@ -864,8 +865,10 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
 #' @param regions Character vector. The regions to fetch.
 #' @param epiweeks Epirange. The epiweeks to fetch in the form epirange(startdate,enddate), where
 #'   startdate and enddate are of the form YYYYWW (string or numeric).
-#' @param issues optionally specify the exact issues to fetch
-#' @param lag optionally specify the issue lag
+#' @param issues Epirange. Optionally, the issues to fetch in the form epirange(startdate,enddate), where
+#'   startdate and enddate are of the form YYYYWW (string or numeric). Mutually exclusive with `lag`.
+#' @param lag Integer. Optionally, the lag of the issues to fetch. An alternative to and mutually exclusive
+#'   with `issues`.
 #' @return An instance of epidata_call
 #'
 #' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>.
@@ -915,7 +918,7 @@ ecdc_ili <- function(regions,
 #'   and endweek are of the form YYYYWW (string or numeric).
 #' @param issues Epirange. Optionally, specify the issues to fetch in the form epirange(startweek,endweek), where
 #'   startweek and endweek are of the form YYYYWW (string or numeric). Mutually exclusive with `lag`.
-#' @param lag Integer. Optionally, specify the lag for the issues to fetch. An alternative to `issues`. Mutually exclusive
+#' @param lag Integer. Optionally, specify the lag for the issues to fetch. An alternative to and mutually exclusive
 #'   with `issues`.
 #' @return An instance of epidata_call
 #'
@@ -971,7 +974,7 @@ flusurv <- function(locations,
 #'   and endweek are of the form YYYYWW (string or numeric).
 #' @param issues Epirange. Optionally, specify the issues to fetch in the form epirange(startweek,endweek), where startweek
 #'   and endweek are of the form YYYYWW (string or numeric). Mutually exclusive with `lag`.
-#' @param lag Integer. Optionally, specify the lag for the issues to fetch. An alternative to `issues`. Mutually exclusive
+#' @param lag Integer. Optionally, specify the lag for the issues to fetch. An alternative to and mutually exclusive
 #'   with `issues`.
 #' @return An instance of epidata_call
 #'
@@ -1051,7 +1054,7 @@ fluview_meta <- function() {
 #'   and endweek are of the form YYYYWW (string or numeric).
 #' @param issues Epirange. Optionally, specify the issues to fetch in the form epirange(startweek,endweek), where startweek
 #'   and endweek are of the form YYYYWW (string or numeric). Mutually exclusive with `lag`.
-#' @param lag Integer. Optionally, specify the lag for the issues to fetch. An alternative to `issues`. Mutually exclusive
+#' @param lag Integer. Optionally, specify the lag for the issues to fetch. An alternative to and mutually exclusive
 #'   with `issues`.
 #' @param auth Character. Optionally, specify your authentication token.
 #' @return An instance of epidata_call
@@ -1187,7 +1190,8 @@ pvt_ght <- function(auth, locations, epiweeks, query) {
 #'   startweek and endweek are of the form YYYYWW (string or numeric).
 #' @param issues Epirange. Optionally, specifies the issue range to be fetched in the form
 #'   epirange(startweek,endweek), where startweek and endweek are of the form YYYYWW (string or numeric).
-#' @param lag optionally specify the issue lag
+#' @param lag Integer. Optionally, specifies the lag of the issues. An alternative to and mutually exclusive
+#'   with `issues`.
 #' @return an instance of epidata_call
 #'
 #' @references API docs: https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html
@@ -1310,8 +1314,8 @@ nidss_dengue <- function(locations, epiweeks) {
 #'   startweek and endweek are of the form YYYYWW (string or numeric).
 #' @param issues Epirange. Optionally, the issues to fetch in the form epirange(startweek,endweek), where
 #'   startweek and endweek are of the form YYYYWW (string or numeric). Mutually exclusive with `lag`.
-#' @param lag Epirange. Optionally, the lag to fetch in the form epirange(startweek,endweek), where
-#'   startweek and endweek are of the form YYYYWW (string or numeric). Mutually exclusive with `issues`.
+#' @param lag Integer. Optionally, specifies the lag of the issues. An alternative to and mutually exclusive
+#'   with `issues`.
 #' @return An instance of epidata_call
 #'
 #' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
@@ -1427,8 +1431,6 @@ nowcast <- function(locations, epiweeks) {
 
 #' Fetch Paho Dengue
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html
-#'
 #' @examples
 #' call <- paho_dengue(regions = "ca", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
@@ -1437,9 +1439,11 @@ nowcast <- function(locations, epiweeks) {
 #'   startweek and endweek are of the form YYYYWW (string or numeric).
 #' @param issues Epirange. Optionally, the issues to fetch in the form epirange(startweek,endweek), where
 #'   startweek and endweek are of the form YYYYWW (string or numeric). Mutually exclusive with `lag`.
-#' @param lag Epirange. Optionally, the lag of the issues to fetch, an alternative to and mutually exclusive
-#'   with `issues`.
-#' @return an instance of epidata_call
+#' @param lag Integer. Optionally, the lag to fetch in the form epirange(startweek,endweek), where
+#'   startweek and endweek are of the form YYYYWW (string or numeric). Mutually exclusive with `issues`.
+#' @return An instance of epidata_call
+#'
+#' @references API docs: https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html
 #'
 #' @export
 paho_dengue <- function(regions,
