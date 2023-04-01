@@ -11,8 +11,10 @@
 #' @references API docs: https://cmu-delphi.github.io/delphi-epidata/api/afhsb.html
 #'
 #' @examples
+#' \donttest{
 #' call <- pvt_afhsb(auth = "yourkey", "fl,ca", epirange(202001, 202110), "flu1,flu2-flu1")
-#' # fetch_tbl(call)
+#' fetch_tbl(call)
+#' }
 #' @export
 pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
   check_single_string_param("auth", auth)
@@ -40,8 +42,10 @@ pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
 #' Fetch CDC page hits
 #'
 #' @examples
+#' \donttest{
 #' call <- pvt_cdc(auth = "yourkey", epirange(20210101, 20210201), "fl,ca")
-#' # fetch_tbl(call)
+#' fetch_tbl(call)
+#' }
 #' @param auth Character. Authentication token.
 #' @param epiweeks Epirange. Epiweeks to fetch in the form epirange(startweek, endweek), where
 #'   startweek and endweek are in the form YYYYWW.
@@ -156,8 +160,10 @@ covid_hosp_facility_lookup <-
 #' in a variety of ways.
 #'
 #' @examples
+#' \donttest{
 #' call <- covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(20200101, 20200501))
 #' fetch_tbl(call)
+#' }
 #' @param hospital_pks Character. A character string of facility unique identifiers.
 #' @param collection_weeks Epirange. Epiweeks to fetch, in the form epirange(startdate,enddate), where
 #'   startdate and enddate are YYYYMMDD (string or numeric).
@@ -601,8 +607,10 @@ covid_hosp_state_timeseries <-
 #' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html>.
 #'
 #' @examples
+#' \donttest{
 #' call_meta <- covidcast_meta()
 #' fetch_classic(call_meta)
+#' }
 #'
 #' @seealso [covidcast()]
 #' @export
@@ -635,6 +643,7 @@ covidcast_meta <- function() {
 #' Fetch covidcast data
 #'
 #' @examples
+#' \donttest{
 #' call <- covidcast(
 #'   data_source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
@@ -644,6 +653,7 @@ covidcast_meta <- function() {
 #'   geo_values = "ca,fl"
 #' )
 #' fetch_tbl(call)
+#' }
 #' @param data_source Character. A data source to query: (1) fb-survey; (2) jhu-csse; (3) google-symptoms;
 #'   (4) doctor-visits; (5) quidel; (6) hhs. For more information about each data source,
 #'   see <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>.
@@ -675,7 +685,8 @@ covidcast_meta <- function() {
 #'
 #' @references COVIDcast API documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html>
 #'
-#' Documentation for all COVIDcast sources and signals: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals>
+#' Documentation for all COVIDcast sources and signals:
+#' <https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals>
 #'
 #' COVIDcast public dashboard: <https://delphi.cmu.edu/covidcast/>
 #'
@@ -757,15 +768,17 @@ covidcast <-
 
 #' Fetch Delphi's forecast
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/delphi.html
-#'
 #' @examples
+#' \donttest{
 #' call <- delphi(system = "ec", epiweek = 202006)
 #' fetch_classic(call)
+#' }
 #' @param system Character. The system name to fetch.
 #' @param epiweek Epirange. The epiweek to fetch, in the form epirange(startdate,enddate), where startdate
 #'   and enddate are of the form YYYYMMDD (string or numeric).
 #' @return An instance of epidata_call
+#'
+#' @references API docs: https://cmu-delphi.github.io/delphi-epidata/api/delphi.html
 #'
 #' @export
 delphi <- function(system, epiweek) {
@@ -786,16 +799,18 @@ delphi <- function(system, epiweek) {
 
 #' Fetch Delphi's PAHO Dengue nowcast
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html
-#'
 #' TODO: what are valid locations here?
 #' @examples
+#' \donttest{
 #' call <- dengue_nowcast(locations = "?", epiweeks = epirange(201501, 202001))
 #' fetch_classic(call)
+#' }
 #' @param locations Character vector. The locations to fetch.
 #' @param epiweeks Epirange. The epiweeks to fetch, specified in the form epirange(startdate,enddate), where startdate
 #'   and enddate are of the form YYYYMMDD (string or numeric).
-#' @return an instance of epidata_call
+#' @return An instance of epidata_call
+#'
+#' @references API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html
 #'
 #' @export
 dengue_nowcast <- function(locations, epiweeks) {
@@ -816,18 +831,20 @@ dengue_nowcast <- function(locations, epiweeks) {
 
 #' Fetch Delphi's digital surveillance sensors
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html
-#'
 #' TODO: what are valid locations and names?
 #' @examples
+#' \donttest{
 #' call <- pvt_dengue_sensors(auth = "yourkey", names = "?", locations = "?", epiweeks = epirange(201501, 202001))
-#' # fetch_classic(call)
+#' fetch_classic(call)
+#' }
 #' @param auth Character. Authentication token.
 #' @param names Character vector. The list of names to fetch.
 #' @param locations Character vector. The locations to fetch.
 #' @param epiweeks Epirange. The epiweeks to fetch in the form epirange(startweek,endweek), where startweek
 #'   and endweek are of the form YYYYWW (string or numeric).
-#' @return an instance of epidata_call
+#' @return An instance of epidata_call
+#'
+#' @references API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html
 #'
 #' @export
 pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
@@ -857,11 +874,14 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
 #'
 #' Obtain information on influenza-like-illness from the European Center of Disease Control.
 #'
-#' @details The list of location argument can be found in <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/ecdc_regions.txt>.
+#' @details The list of location argument can be found in
+#' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/ecdc_regions.txt>.
 #'
 #' @examples
+#' \donttest{
 #' call <- ecdc_ili(regions = "austria", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
+#' }
 #' @param regions Character vector. The regions to fetch.
 #' @param epiweeks Epirange. The epiweeks to fetch in the form epirange(startdate,enddate), where
 #'   startdate and enddate are of the form YYYYWW (string or numeric).
@@ -908,11 +928,14 @@ ecdc_ili <- function(regions,
 #'
 #' Obtain information on flu hospitalization rates from the Center of Disease Control.
 #'
-#' @details The list of location argument can be found in <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt>.
+#' @details The list of location argument can be found in
+#' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt>.
 #'
 #' @examples
+#' \donttest{
 #' call <- flusurv(locations = "CA", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
+#' }
 #' @param locations Character vector. Character strings indicating location.
 #' @param epiweeks Epirange. The epiweeks to fetch the form epirange(startweek,endweek), where startweek
 #'   and endweek are of the form YYYYWW (string or numeric).
@@ -1019,9 +1042,9 @@ fluview_clinical <-
 
 #' Fetch fluview meta data
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html
-#'
 #' @return An instance of epidata_call
+#'
+#' @references API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html
 #'
 #' @export
 fluview_meta <- function() {
@@ -1146,8 +1169,10 @@ gft <- function(locations, epiweeks) {
 #'
 #' TODO: find a non-trivial query
 #' @examples
+#' \donttest{
 #' call <- pvt_ght(auth = "yourkey", locations = "ca", epiweeks = epirange(201201, 202001), query = "?")
-#' # fetch_classic(call)
+#' fetch_classic(call)
+#' }
 #' @param auth Character. Specifies your authentication token.
 #' @param locations Character vector. Specifies the locations to be fetched.
 #' @param epiweeks Epirange. Specifies the epiweeks to be fetched in the form epirange(startweek,endweek), where startweek
@@ -1183,8 +1208,10 @@ pvt_ght <- function(auth, locations, epiweeks, query) {
 #'
 #' TODO: find a non-trivial region
 #' @examples
+#' \donttest{
 #' call <- kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001))
 #' fetch_tbl(call)
+#' }
 #' @param regions Character vector. Specifies the regions to be fetched.
 #' @param epiweeks Epirange. Specifies the epiweeks to be fetched in the form epirange(startweek,endweek), where
 #'   startweek and endweek are of the form YYYYWW (string or numeric).
@@ -1275,8 +1302,10 @@ meta <- function() {
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt>.
 #'
 #' @examples
+#' \donttest{
 #' call <- nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
+#' }
 #' @param locations Character vector. Specifies the locations of interest. Possible inputs include but are not limited
 #'   to (1) nationwide, (2) central, (3) eastern, (4) kaoping, (5) northern, (6) southern, and (7) taipei.
 #' @param epiweeks Eppirange. Specifies the epiweeks to be fetched in the form epirange(startweek,endweek), where
@@ -1307,8 +1336,10 @@ nidss_dengue <- function(locations, epiweeks) {
 #' Obtains information on outpatient inluenza-like-illness from Taiwan National Infectious Disease Statistical System.
 #'
 #' @examples
+#' \donttest{
 #' call <- nidss_flu(regions = "taipei", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
+#' }
 #' @param regions Character vector. The regions to fetch.
 #' @param epiweeks Epirange. The epiweeks to fetch in the form epirange(startweek,endweek), where
 #'   startweek and endweek are of the form YYYYWW (string or numeric).
@@ -1359,12 +1390,14 @@ nidss_flu <-
 #' Fetch NoroSTAT data (point data, no min/max)
 #'
 #' @examples
+#' \donttest{
 #' call <- pvt_norostat(
 #'   auth = "yourkey",
 #'   location = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
 #'   epiweeks = epirange(201201, 202001)
 #' )
-#' # fetch_classic(call)
+#' fetch_classic(call)
+#' }
 #' @param auth Character. Specifies the authentication key.
 #' @param location Character vector. Specifies the locations of interest.
 #' @param epiweeks Eppirange. Specifies the epiweeks to be fetched in the form epirange(startweek,endweek), where
@@ -1402,8 +1435,10 @@ pvt_norostat <- function(auth, location, epiweeks) {
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
 #' @examples
+#' \donttest{
 #' call <- nowcast(location = "ca", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
+#' }
 #' @param locations Character vector. The locations to be fetched, which can take ID codes in the following
 #'  geo types: national, HHS region, census division, most states and territories, and so on.
 #' @param epiweeks Epirange. The epiweeks to fetch in the form epirange(startweek,endweek), where
@@ -1432,8 +1467,10 @@ nowcast <- function(locations, epiweeks) {
 #' Fetch Paho Dengue
 #'
 #' @examples
+#' \donttest{
 #' call <- paho_dengue(regions = "ca", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
+#' }
 #' @param regions Character vector. The regions to fetch.
 #' @param epiweeks Epirange. The epiweeks to fetch in the form epirange(startweek,endweek), where
 #'   startweek and endweek are of the form YYYYWW (string or numeric).
@@ -1482,8 +1519,10 @@ paho_dengue <- function(regions,
 #' Fetch Quidel data
 #'
 #' @examples
+#' \donttest{
 #' call <- pvt_quidel(auth = "yourkey", epiweeks = epirange(201201, 202001), locations = "hhs1")
-#' # fetch_classic(call)
+#' fetch_classic(call)
+#' }
 #' @param auth Character. The authentication key.
 #' @param epiweeks Epirange. The epiweeks to fetch in the form epirange(startweek,endweek), where
 #'   startweek and endweek are of the form YYYYWW (string or numeric).
@@ -1516,8 +1555,10 @@ pvt_quidel <- function(auth, epiweeks, locations) {
 #' Fetch Delphi's digital surveillance sensors
 #'
 #' @examples
+#' \donttest{
 #' call <- pvt_sensors(auth = "yourkey", names = "sar3", locations = "nat", epiweeks = epirange(201501, 202001))
-#' # fetch_classic(call)
+#' fetch_classic(call)
+#' }
 #' @param auth Character. The authentication key.
 #' @param names Character vector. The names of the sensors to fetch.
 #' @param locations Character vector. The locations to fetch.
@@ -1554,8 +1595,10 @@ pvt_sensors <- function(auth, names, locations, epiweeks) {
 #' Fetch HealthTweets data
 #'
 #' @examples
+#' \donttest{
 #' call <- pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001))
-#' # fetch_tbl(call)
+#' fetch_tbl(call)
+#' }
 #' @param auth Character. The authentication key.
 #' @param locations Character vector. The locations to fetch.
 #' @param dates Epirange. The dates to fetch in the form epirange(startdate,enddate), where
@@ -1605,8 +1648,10 @@ pvt_twitter <-
 #' Fetch Wikipedia access data
 #'
 #' @examples
+#' \donttest{
 #' call <- wiki(articles = "avian_influenza", epiweeks = epirange(201501, 202001))
 #' fetch_tbl(call)
+#' }
 #' @param articles Character vector. The articles to fetch.
 #' @param dates Epirange. The dates to fetch in the form epirange(startdate,enddate), where
 #'   startdate and enddate are of the form YYYYMMDD (string or numeric). Mutually exclusive with `epiweeks`.
