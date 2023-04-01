@@ -1,12 +1,12 @@
-#' fetch AFHSB data (point data, no min/max)
+#' Fetch AFHSB data (point data, no min/max)
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/afhsb.html
 #'
-#' @param auth character authentication token
-#' @param locations character locations to fetch
-#' @param epiweeks epirange epiweeks to fetch
-#' @param flu_types character flu_types to fetch
-#' @return an instance of epidata_call
+#' @param auth Character. Authentication token.
+#' @param locations Character vector. Locations to fetch.
+#' @param epiweeks Epirange. Epiweeks to fetch.
+#' @param flu_types Character. Flu types to fetch.
+#' @return An instance of epidata_call.
 #'
 #' @examples
 #' call <- pvt_afhsb(auth = "yourkey", "fl,ca", epirange(202001, 202110), "flu1,flu2-flu1")
@@ -35,16 +35,16 @@ pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
   )
 }
 
-#' fetch CDC page hits
+#' Fetch CDC page hits
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/cdc.html
 #'
 #' @examples
 #' call <- pvt_cdc(auth = "yourkey", epirange(20210101, 20210201), "fl,ca")
 #' # fetch_csv(call)
-#' @param auth character authentication token
-#' @param epiweeks epirange epiweeks to fetch
-#' @param locations character locations to fetch
+#' @param auth Character. Authentication token.
+#' @param epiweeks Epirange. Epiweeks to fetch.
+#' @param locations Character vector. Locations to fetch.
 #' @return an instance of epidata_call
 #'
 #' @export
@@ -79,18 +79,21 @@ pvt_cdc <- function(auth, epiweeks, locations) {
 
 #' fetch COVID hospitalization facility identifiers
 #'
-#' Obtains unique identifiers and other metadata for COVID hospitalization  facilities of interest.   This is a companinon endpoint to the [covid_hosp_facility()] endpoint.
+#' Obtains unique identifiers and other metadata for COVID hospitalization facilities of interest.
+#' This is a companinon endpoint to the [covid_hosp_facility()] endpoint.
 #'
-#' @details Only one argument needs to be specified.  Combinations of the arguments are not currently supported.  For instance, specifying both city and state are not supported.
+#' @details Only one argument needs to be specified.
+#' Combinations of the arguments are not currently supported.
+#' For instance, specifying both city and state are not supported.
 #'
 #' @examples
 #' \donttest{
 #' call <- covid_hosp_facility_lookup(state = "fl")
 #' fetch_csv(call)
 #' }
-#' @param state A two-letter character string state abbreviation.
-#' @param ccn A character string for facility CMS certification number.
-#' @param city A characater string for city name.
+#' @param state Character. A two-letter character string state abbreviation.
+#' @param ccn Character. A character string for facility CMS certification number.
+#' @param city Character. A characater string for city name.
 #' @param zip A numeric 5-digit zip code.
 #' @param fips_code A numeric 5-digit fips county code.
 #' @return an instance of epidata_call.
@@ -140,18 +143,22 @@ covid_hosp_facility_lookup <-
     )
   }
 
-#' fetch COVID hospitalization data for specific facilities
+#' Fetch COVID hospitalization data for specific facilities
 #'
-#' Obtains the COVID-19 reported patient impact and hospital capacity data by facility. This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
+#' Obtains the COVID-19 reported patient impact and hospital capacity data by facility.
+#' This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
 #'
-#' @details Starting October 1, 2022, some facilities are only required to report annually.  The companion function [covid_hosp_facility_lookup()] can be used to look up facility identifiers in a variety of ways.
+#' @details Starting October 1, 2022, some facilities are only required to report annually.
+#' The companion function [covid_hosp_facility_lookup()] can be used to look up facility identifiers
+#' in a variety of ways.
 #'
 #' @examples
 #' call <- covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(20200101, 20200501))
 #' fetch_csv(call)
-#' @param hospital_pks A character string of facility unique identifiers
-#' @param collection_weeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
-#' @param publication_dates An optional epirange publication dates to fetch, using epirange(startdate,enddate).
+#' @param hospital_pks Character. A character string of facility unique identifiers.
+#' @param collection_weeks Epirange. Takes in the form epirange(startdate,enddate), where startdate and enddate
+#'                         are of the form YYYYMMDD (can be passed as string or numeric).
+#' @param publication_dates Epirange. An optional epirange publication dates to fetch, using epirange(startdate,enddate).
 #' @return an instance of epidata_call
 #'
 #' @references API documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
@@ -427,7 +434,8 @@ covid_hosp_facility <-
 
 #' Fetch COVID Hospitalization Data by State
 #'
-#' Obtains the COVID-19 reported patient impact and hospital capacity data by state. This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
+#' Obtains the COVID-19 reported patient impact and hospital capacity data by state.
+#' This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
 #'
 #' @details Starting October 1, 2022, some facilities are only required to report annually.
 #'
@@ -436,8 +444,8 @@ covid_hosp_facility <-
 #' call <- covid_hosp_state_timeseries(states = "fl", dates = epirange(20200101, 20200501))
 #' fetch_csv(call)
 #' }
-#' @param states A two letter character string state abbreviation.
-#' @param dates Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
+#' @param states character vector. A two letter state abbreviation.
+#' @param dates epirange. Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
 #' @param issues An optional parameter that takes the form YYYYMMDD.  If issues is not specified, then the most recent issue is used by default.
 #' @return an instance of epidata_call
 #'
@@ -575,7 +583,7 @@ covid_hosp_state_timeseries <-
     )
   }
 
-#' fetch covidcast meta data
+#' Fetch covidcast meta data
 #'
 #' Fetch a summary of metadata for all sources and signals that are available in the API, along with basic summary statistics such as the dates they are available, the geographic levels at which they are reported, and etc.
 #'
@@ -615,7 +623,7 @@ covidcast_meta <- function() {
   )
 }
 
-#' fetch covidcast data
+#' Fetch covidcast data
 #'
 #' @examples
 #' call <- covidcast(
@@ -720,7 +728,7 @@ covidcast <-
     )
   }
 
-#' fetch Delphi's forecast
+#' Fetch Delphi's forecast
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/delphi.html
 #'
@@ -748,7 +756,7 @@ delphi <- function(system, epiweek) {
   )
 }
 
-#' fetch Delphi's PAHO Dengue nowcast
+#' Fetch Delphi's PAHO Dengue nowcast
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html
 #'
@@ -777,7 +785,7 @@ dengue_nowcast <- function(locations, epiweeks) {
   )
 }
 
-#' fetch Delphi's digital surveillance sensors
+#' Fetch Delphi's digital surveillance sensors
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html
 #'
@@ -815,7 +823,7 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
   )
 }
 
-#' fetch ECDC data
+#' Fetch ECDC data
 #'
 #' Obtain information on influenza-like-illness from the European Center of Disease Control.
 #'
@@ -863,7 +871,7 @@ ecdc_ili <- function(regions,
   )
 }
 
-#' fetch FluSurv virological data
+#' Fetch FluSurv virological data
 #'
 #' Obtain information on flu hospitalization rates from the Center of Disease Control.
 #'
@@ -916,7 +924,7 @@ flusurv <- function(locations,
   )
 }
 
-#' fetch FluView virological data
+#' Fetch FluView virological data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html
 #'
@@ -969,7 +977,7 @@ fluview_clinical <-
     )
   }
 
-#' fetch fluview meta data
+#' Fetch fluview meta data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html
 #'
@@ -1002,7 +1010,7 @@ fluview_meta <- function() {
 #' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>.
 
 
-#' fetch fluview data
+#' Fetch fluview data
 #'
 #' Obtains information on outpatient inluenza-like-illness (ILI) from U.S. Outpatient Influenza-like Illness Surveillance Network (ILINet).
 #'
@@ -1065,7 +1073,7 @@ fluview <-
     )
   }
 
-#' fetch Google Flu Trends data
+#' Fetch Google Flu Trends data
 #'
 #' Obtains estimates of inluenza activity based on volume of certain search queries from Google.
 #'
@@ -1096,7 +1104,7 @@ gft <- function(locations, epiweeks) {
   )
 }
 
-#' fetch Google Health Trends data
+#' Fetch Google Health Trends data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/ght.html
 #'
@@ -1132,7 +1140,7 @@ pvt_ght <- function(auth, locations, epiweeks, query) {
   )
 }
 
-#' fetch KCDC data
+#' Fetch KCDC data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html
 #'
@@ -1177,7 +1185,7 @@ kcdc_ili <- function(regions,
   )
 }
 
-#' fetch AFHSB meta data
+#' Fetch AFHSB meta data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_afhsb.html
 #'
@@ -1191,7 +1199,7 @@ pvt_meta_afhsb <- function(auth) {
   create_epidata_call("meta_afhsb/", list(auth = auth), only_supports_classic = TRUE)
 }
 
-#' fetch NoroSTAT meta data
+#' Fetch NoroSTAT meta data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html
 #'
@@ -1205,7 +1213,7 @@ pvt_meta_norostat <- function(auth) {
   create_epidata_call("meta_norostat/", list(auth = auth), only_supports_classic = TRUE)
 }
 
-#' fetch api meta data
+#' Fetch api meta data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta.html
 #'
@@ -1216,7 +1224,7 @@ meta <- function() {
   create_epidata_call("meta/", list(), only_supports_classic = TRUE)
 }
 
-#' fetch NIDSS dengue data
+#' Fetch NIDSS dengue data
 #'
 #' Obtains counts of confirmed dengue cases in Taiwan from Taiwan National Infectious Disease Statistical System.
 #'
@@ -1248,7 +1256,7 @@ nidss_dengue <- function(locations, epiweeks) {
   )
 }
 
-#' fetch NIDSS flu data
+#' Fetch NIDSS flu data
 #'
 #' Obtains information on outpatient inluenza-like-illness from Taiwan National Infectious Disease Statistical System.
 #'
@@ -1299,7 +1307,7 @@ nidss_flu <-
   }
 
 
-#' fetch NoroSTAT data (point data, no min/max)
+#' Fetch NoroSTAT data (point data, no min/max)
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/norostat.html
 #'
@@ -1336,7 +1344,7 @@ pvt_norostat <- function(auth, location, epiweeks) {
   )
 }
 
-#' fetch Delphi's ILI nowcast
+#' Fetch Delphi's ILI nowcast
 #'
 #' Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data
 #'
@@ -1368,7 +1376,7 @@ nowcast <- function(locations, epiweeks) {
   )
 }
 
-#' fetch Paho Dengue
+#' Fetch Paho Dengue
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html
 #'
@@ -1415,7 +1423,7 @@ paho_dengue <- function(regions,
   )
 }
 
-#' fetch Quidel data
+#' Fetch Quidel data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/quidel.html
 #'
@@ -1448,7 +1456,7 @@ pvt_quidel <- function(auth, epiweeks, locations) {
   )
 }
 
-#' fetch Delphi's digital surveillance sensors
+#' Fetch Delphi's digital surveillance sensors
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/sensors.html
 #'
@@ -1485,7 +1493,7 @@ pvt_sensors <- function(auth, names, locations, epiweeks) {
   )
 }
 
-#' fetch HealthTweets data
+#' Fetch HealthTweets data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/twitter.html
 #'
@@ -1534,7 +1542,7 @@ pvt_twitter <-
     )
   }
 
-#' fetch Wikipedia access data
+#' Fetch Wikipedia access data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/wiki.html
 #'
