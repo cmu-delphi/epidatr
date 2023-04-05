@@ -13,10 +13,8 @@ get_auth_key <- function() {
             warning("No key found. Please set one with set_auth_key() to avoid rate limits.")
             return("")
         }
-        return(Sys.getenv("DELPHI_API_KEY"))
-    } else {
-        return(Sys.getenv("DELPHI_API_KEY"))
     }
+    return(Sys.getenv("DELPHI_API_KEY"))
 }
 
 #' @title Set the API key
