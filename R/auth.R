@@ -14,6 +14,8 @@ get_auth_key <- function() {
             return("")
         }
         return(Sys.getenv("DELPHI_API_KEY"))
+    } else {
+        return(Sys.getenv("DELPHI_API_KEY"))
     }
 }
 
