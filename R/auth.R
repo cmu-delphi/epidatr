@@ -1,24 +1,34 @@
 #' @title Get the API key
-#' @description Get the API key from the environment variable DELPHI_API_KEY or from ~/.config/delphi_epidata/key
+#' @description Get the API key from getOption("delphi.epidata.key"), the environment variable DELPHI_EPIDATA_KEY, or from ~/.config/delphi_epidata/key
 #' @return The API key
 #' @export
-get_auth_key <- function() {
-    if (nchar(Sys.getenv("DELPHI_API_KEY")) == 0) {
-        if (file.exists("~/.config/delphi_epidata/key")) {
-            print("Using key from ~/.config/delphi_epidata/key")
-            key <- readLines("~/.config/delphi_epidata/key")
-            Sys.setenv(DELPHI_API_KEY = key)
+get_auth_key <- function(verbose = FALSE) {
+    key <- getOption("delphi.epidata.key")
+    if (key != "") {
+        if (verbose) print("Key found in delphi.epidata.key option")
+        return(key)
+    }
+
+    key <- Sys.getenv("DELPHI_EPIDATA_KEY")
+    if (key != "") {
+        if (verbose) print("Key found in DELPHI_EPIDATA_KEY environment variable")
+        return(key)
+    }
+
+    if (file.exists("~/.config/delphi_epidata/key")) {
+        key <- readLines("~/.config/delphi_epidata/key")
+        if (key != "") {
+            if (verbose) print("Key found in ~/.config/delphi_epidata/key")
             return(key)
-        } else {
-            warning("No key found. Please set one with set_auth_key() to avoid rate limits.")
-            return("")
         }
     }
-    return(Sys.getenv("DELPHI_API_KEY"))
+
+    warning("No key found. Please set one with set_auth_key() to avoid rate limits.")
+    return("")
 }
 
 #' @title Set the API key
-#' @description Set the API key in the environment variable DELPHI_API_KEY and (optionally) in
+#' @description Set the API key in the environment variable DELPHI_EPIDATA_KEY and (optionally) in
 #'   ~/.config/delphi_epidata/key
 #' @export
 set_auth_key <- function() {
@@ -31,5 +41,5 @@ set_auth_key <- function() {
         print("Key saved to ~/.config/delphi_epidata/key")
         writeLines(key, "~/.config/delphi_epidata/key")
     }
-    Sys.setenv(DELPHI_API_KEY = key)
+    options(delphi.epidata.key = key)
 }
