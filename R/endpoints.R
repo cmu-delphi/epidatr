@@ -741,7 +741,8 @@ covidcast <-
         geo_values = geo_values,
         as_of = as_of,
         issues = issues,
-        lag = lag
+        lag = lag,
+        auth = get_auth_key()
       ),
       list(
         create_epidata_field_info("source", "text"),
