@@ -2,22 +2,24 @@
 % Please edit documentation in R/endpoints.R
 \name{delphi}
 \alias{delphi}
-\title{fetch Delphi's forecast}
+\title{Fetch Delphi's ILINet forecasts}
 \usage{
 delphi(system, epiweek)
 }
 \arguments{
-\item{system}{system to fetch}
+\item{system}{string. The system name to fetch.}
 
-\item{epiweek}{epiweek to fetch}
+\item{epiweek}{\code{\link{epirange}}. The epiweeks to fetch.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/delphi.html
 }
 \examples{
+\donttest{
 call <- delphi(system = "ec", epiweek = 202006)
 fetch_classic(call)
+}
 }

@@ -2,29 +2,33 @@
 % Please edit documentation in R/endpoints.R
 \name{nidss_flu}
 \alias{nidss_flu}
-\title{fetch NIDSS flu data}
+\title{Fetch NIDSS flu data}
 \usage{
 nidss_flu(regions, epiweeks, issues = NULL, lag = NULL)
 }
 \arguments{
-\item{regions}{regions to fetch}
+\item{regions}{character vector. The regions to fetch.}
 
-\item{epiweeks}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
 
-\item{issues}{optional issues}
+\item{issues}{\code{\link{epirange}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+Mutually exclusive with \code{lag}.}
 
-\item{lag}{optional lag}
+\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+Mutually exclusive with \code{issues}.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 Obtains information on outpatient inluenza-like-illness from Taiwan National Infectious Disease Statistical System.
 }
+\details{
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html}
+}
 \examples{
+\donttest{
 call <- nidss_flu(regions = "taipei", epiweeks = epirange(201201, 202001))
 fetch_classic(call)
 }
-\references{
-API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html}
 }

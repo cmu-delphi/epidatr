@@ -2,21 +2,21 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_dengue_sensors}
 \alias{pvt_dengue_sensors}
-\title{fetch Delphi's digital surveillance sensors}
+\title{Fetch Delphi's digital surveillance sensors for dengue in PAHO member countries}
 \usage{
 pvt_dengue_sensors(auth, names, locations, epiweeks)
 }
 \arguments{
-\item{auth}{authenfication token}
+\item{auth}{string. Your authentication token.}
 
-\item{names}{names to fetch}
+\item{names}{character vector. The list of names to fetch.}
 
-\item{locations}{locations to fetch}
+\item{locations}{character vector. The locations to fetch.}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html
@@ -25,6 +25,8 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html
 TODO: what are valid locations and names?
 }
 \examples{
+\donttest{
 call <- pvt_dengue_sensors(auth = "yourkey", names = "?", locations = "?", epiweeks = epirange(201501, 202001))
-# fetch_classic(call)
+fetch_classic(call)
+}
 }

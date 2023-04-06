@@ -2,21 +2,24 @@
 % Please edit documentation in R/endpoints.R
 \name{fluview_clinical}
 \alias{fluview_clinical}
-\title{fetch FluView virological data}
+\title{Fetch FluView virological data from clinical labs}
 \usage{
 fluview_clinical(regions, epiweeks, issues = NULL, lag = NULL)
 }
 \arguments{
-\item{regions}{regions to fetch}
+\item{regions}{character vector. The regions to fetch.}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch in the form epirange(startweek,endweek), where startweek
+and endweek are of the form YYYYWW (string or numeric).}
 
-\item{issues}{optionally specify the exact issues to fetch}
+\item{issues}{\code{\link{epirange}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+Mutually exclusive with \code{lag}.}
 
-\item{lag}{optionally specify the issue lag}
+\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+Mutually exclusive with \code{issues}.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html

@@ -2,24 +2,26 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_cdc}
 \alias{pvt_cdc}
-\title{fetch CDC page hits}
+\title{Fetch CDC page hits}
 \usage{
 pvt_cdc(auth, epiweeks, locations)
 }
 \arguments{
-\item{auth}{character authentication token}
+\item{auth}{string. Authentication token.}
 
-\item{epiweeks}{epirange epiweeks to fetch}
+\item{epiweeks}{\code{\link{epirange}}. Epiweeks to fetch.}
 
-\item{locations}{character locations to fetch}
+\item{locations}{character vector. Locations to fetch (see docs).}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/cdc.html
 }
 \examples{
+\donttest{
 call <- pvt_cdc(auth = "yourkey", epirange(20210101, 20210201), "fl,ca")
-# fetch_csv(call)
+fetch_tbl(call)
+}
 }

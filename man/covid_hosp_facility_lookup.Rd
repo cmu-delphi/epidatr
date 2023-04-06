@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{covid_hosp_facility_lookup}
 \alias{covid_hosp_facility_lookup}
-\title{fetch COVID hospitalization facility identifiers}
+\title{Fetch COVID hospitalization facility identifiers}
 \usage{
 covid_hosp_facility_lookup(
   state = NULL,
@@ -13,33 +13,35 @@ covid_hosp_facility_lookup(
 )
 }
 \arguments{
-\item{state}{A two-letter character string state abbreviation.}
+\item{state}{string. A two-letter character string state abbreviation.}
 
-\item{ccn}{A character string for facility CMS certification number.}
+\item{ccn}{string. A character string for facility CMS certification number.}
 
-\item{city}{A characater string for city name.}
+\item{city}{string. A characater string for city name.}
 
-\item{zip}{A numeric 5-digit zip code.}
+\item{zip}{string. A 5-digit zip code.}
 
-\item{fips_code}{A numeric 5-digit fips county code.}
+\item{fips_code}{string. A 5-digit fips county code, zero-padded.}
 }
 \value{
-an instance of epidata_call.
+\code{\link{epidata_call}}
 }
 \description{
-Obtains unique identifiers and other metadata for COVID hospitalization  facilities of interest.   This is a companinon endpoint to the \code{\link[=covid_hosp_facility]{covid_hosp_facility()}} endpoint.
+Obtains unique identifiers and other metadata for COVID hospitalization facilities of interest.
+This is a companinon endpoint to the \code{\link[=covid_hosp_facility]{covid_hosp_facility()}} endpoint.
 }
 \details{
-Only one argument needs to be specified.  Combinations of the arguments are not currently supported.  For instance, specifying both city and state are not supported.
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html}
+
+Only one argument needs to be specified.
+Combinations of the arguments are not currently supported.
+For instance, specifying both city and state are not supported.
 }
 \examples{
 \donttest{
 call <- covid_hosp_facility_lookup(state = "fl")
-fetch_csv(call)
+fetch_tbl(call)
 }
-}
-\references{
-API documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html}
 }
 \seealso{
 \code{\link[=covid_hosp_facility]{covid_hosp_facility()}}

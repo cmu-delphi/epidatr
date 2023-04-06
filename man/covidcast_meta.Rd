@@ -2,23 +2,27 @@
 % Please edit documentation in R/endpoints.R
 \name{covidcast_meta}
 \alias{covidcast_meta}
-\title{fetch covidcast meta data}
+\title{Fetch covidcast metadata}
 \usage{
 covidcast_meta()
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
-Fetch a summary of metadata for all sources and signals that are available in the API, along with basic summary statistics such as the dates they are available, the geographic levels at which they are reported, and etc.
+Fetch a summary of metadata for all sources and signals that are available in the API, along with
+basic summary statistics such as the dates they are available, the geographic levels at which they
+are reported, and etc.
+}
+\details{
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html}.
 }
 \examples{
+\donttest{
 call_meta <- covidcast_meta()
 fetch_classic(call_meta)
-
 }
-\references{
-API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html}.
+
 }
 \seealso{
 \code{\link[=covidcast]{covidcast()}}

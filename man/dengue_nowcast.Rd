@@ -2,25 +2,27 @@
 % Please edit documentation in R/endpoints.R
 \name{dengue_nowcast}
 \alias{dengue_nowcast}
-\title{fetch Delphi's PAHO Dengue nowcast}
+\title{Fetch Delphi's PAHO Dengue nowcast}
 \usage{
 dengue_nowcast(locations, epiweeks)
 }
 \arguments{
-\item{locations}{locations to fetch}
+\item{locations}{character vector. The locations to fetch.}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html
 }
 \details{
-TODO: what are valid locations?
+TODO: what are valid locations here?
 }
 \examples{
+\donttest{
 call <- dengue_nowcast(locations = "?", epiweeks = epirange(201501, 202001))
 fetch_classic(call)
+}
 }
