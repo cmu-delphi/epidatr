@@ -7,6 +7,6 @@
 set_auth_key()
 }
 \description{
-Set the API key in the environment variable DELPHI_API_KEY and (optionally) in
+Set the API key in the environment variable DELPHI_EPIDATA_KEY and (optionally) in
 ~/.config/delphi_epidata/key
 }
