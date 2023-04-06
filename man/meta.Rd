@@ -2,12 +2,12 @@
 % Please edit documentation in R/endpoints.R
 \name{meta}
 \alias{meta}
-\title{fetch api meta data}
+\title{Fetch api metadata}
 \usage{
 meta()
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta.html

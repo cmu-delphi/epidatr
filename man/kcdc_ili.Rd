@@ -2,21 +2,23 @@
 % Please edit documentation in R/endpoints.R
 \name{kcdc_ili}
 \alias{kcdc_ili}
-\title{fetch KCDC data}
+\title{Fetch KCDC data}
 \usage{
 kcdc_ili(regions, epiweeks, issues = NULL, lag = NULL)
 }
 \arguments{
-\item{regions}{regions to fetch}
+\item{regions}{character vector. The regions to be fetched.}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to be fetched.}
 
-\item{issues}{optionally specify the exact issues to fetch}
+\item{issues}{\code{\link{epirange}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+Mutually exclusive with \code{lag}.}
 
-\item{lag}{optionally specify the issue lag}
+\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+Mutually exclusive with \code{issues}.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html
@@ -25,6 +27,8 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html
 TODO: find a non-trivial region
 }
 \examples{
+\donttest{
 call <- kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001))
-fetch_csv(call)
+fetch_tbl(call)
+}
 }

@@ -2,28 +2,31 @@
 % Please edit documentation in R/endpoints.R
 \name{nidss_dengue}
 \alias{nidss_dengue}
-\title{fetch NIDSS dengue data}
+\title{Fetch NIDSS dengue data}
 \usage{
 nidss_dengue(locations, epiweeks)
 }
 \arguments{
-\item{locations}{A character string that indicates region of interest or location of interest. Possible inputs include but are not limited to (1)  nationwide, (2) central, (3) eastern, (4) kaoping, (5) northern, (6) southern, and (7) taipei.}
+\item{locations}{character vector. The locations to fetch.}
 
-\item{epiweeks}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetched.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 Obtains counts of confirmed dengue cases in Taiwan from Taiwan National Infectious Disease Statistical System.
 }
 \details{
-Possible location inputs can be found in \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_regions.txt} and \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt}.
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html}
+
+Possible location inputs can be found in
+\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_regions.txt} and
+\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt}.
 }
 \examples{
+\donttest{
 call <- nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 202001))
 fetch_classic(call)
 }
-\references{
-API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html}
 }

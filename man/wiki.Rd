@@ -2,28 +2,30 @@
 % Please edit documentation in R/endpoints.R
 \name{wiki}
 \alias{wiki}
-\title{fetch Wikipedia access data}
+\title{Fetch Wikipedia access data}
 \usage{
 wiki(articles, dates = NULL, epiweeks = NULL, hours = NULL, language = "en")
 }
 \arguments{
-\item{articles}{articles to fetch}
+\item{articles}{character vector. The articles to fetch.}
 
-\item{dates}{dates to fetch}
+\item{dates}{\code{\link{epirange}}. The dates to fetch. Mutually exclusive with \code{epiweeks}.}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch. Mutually exclusive with \code{dates}.}
 
-\item{hours}{hours to fetch}
+\item{hours}{integer. Optionally, the hours to fetch.}
 
-\item{language}{language}
+\item{language}{string. The language to fetch.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/wiki.html
 }
 \examples{
+\donttest{
 call <- wiki(articles = "avian_influenza", epiweeks = epirange(201501, 202001))
-fetch_csv(call)
+fetch_tbl(call)
+}
 }

@@ -2,12 +2,12 @@
 % Please edit documentation in R/endpoints.R
 \name{fluview_meta}
 \alias{fluview_meta}
-\title{fetch fluview meta data}
+\title{Fetch FluView metadata}
 \usage{
 fluview_meta()
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html

@@ -2,28 +2,30 @@
 % Please edit documentation in R/endpoints.R
 \name{gft}
 \alias{gft}
-\title{fetch Google Flu Trends data}
+\title{Fetch Google Flu Trends data}
 \usage{
 gft(locations, epiweeks)
 }
 \arguments{
-\item{locations}{A character string that specifies a location to be fetched.}
+\item{locations}{character vector. The locations to be fetched.}
 
-\item{epiweeks}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
+\item{epiweeks}{\code{\link{epirange}} The epiweeks to be fetched.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 Obtains estimates of inluenza activity based on volume of certain search queries from Google.
 }
 \details{
-Google has discontinues Flu Trends, and this is now a static endpoint. Possibile input for locations can be found in \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt}, \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/states.txt}, and \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt}.
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/gft.html}
+
+Google has discontinued Flu Trends and this is now a static endpoint. Possibile input for locations
+can be found in \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt},
+\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/states.txt}, and
+\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt}.
 }
 \examples{
 call <- gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
 fetch_classic(call)
-}
-\references{
-API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/gft.html}
 }
