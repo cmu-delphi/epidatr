@@ -11,3 +11,5 @@ venv
 env
 .venv
 .env
+.Rdata
+.httr-oauth
