@@ -6,6 +6,10 @@
 docs
 inst/doc
 /check
+.DS_Store
+venv
+env
+.venv
+.env
 .Rdata
 .httr-oauth
-.DS_Store

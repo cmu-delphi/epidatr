@@ -15,4 +15,7 @@
 ^\.editorconfig$
 ^\.lintr$
 ^Makefile$
-
+^venv$
+^.venv$
+^env$
+^.env$

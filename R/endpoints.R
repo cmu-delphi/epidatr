@@ -1,16 +1,18 @@
-#' fetch AFHSB data (point data, no min/max)
+#' Fetch AFHSB data (point data, no min/max)
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/afhsb.html
 #'
-#' @param auth character authentication token
-#' @param locations character locations to fetch
-#' @param epiweeks epirange epiweeks to fetch
-#' @param flu_types character flu_types to fetch
-#' @return an instance of epidata_call
+#' @param auth string. Authentication token.
+#' @param locations character vector. Locations to fetch (see docs).
+#' @param epiweeks [`epirange`]. Epiweeks to fetch.
+#' @param flu_types string. Flu types to fetch (see docs).
+#' @return [`epidata_call`]
 #'
 #' @examples
+#' \donttest{
 #' call <- pvt_afhsb(auth = "yourkey", "fl,ca", epirange(202001, 202110), "flu1,flu2-flu1")
-#' # fetch_csv(call)
+#' fetch_tbl(call)
+#' }
 #' @export
 pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
   check_single_string_param("auth", auth)
@@ -35,17 +37,19 @@ pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
   )
 }
 
-#' fetch CDC page hits
+#' Fetch CDC page hits
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/cdc.html
 #'
 #' @examples
+#' \donttest{
 #' call <- pvt_cdc(auth = "yourkey", epirange(20210101, 20210201), "fl,ca")
-#' # fetch_csv(call)
-#' @param auth character authentication token
-#' @param epiweeks epirange epiweeks to fetch
-#' @param locations character locations to fetch
-#' @return an instance of epidata_call
+#' fetch_tbl(call)
+#' }
+#' @param auth string. Authentication token.
+#' @param epiweeks [`epirange`]. Epiweeks to fetch.
+#' @param locations character vector. Locations to fetch (see docs).
+#' @return [`epidata_call`]
 #'
 #' @export
 pvt_cdc <- function(auth, epiweeks, locations) {
@@ -77,25 +81,28 @@ pvt_cdc <- function(auth, epiweeks, locations) {
   )
 }
 
-#' fetch COVID hospitalization facility identifiers
+#' Fetch COVID hospitalization facility identifiers
 #'
-#' Obtains unique identifiers and other metadata for COVID hospitalization  facilities of interest.   This is a companinon endpoint to the [covid_hosp_facility()] endpoint.
+#' Obtains unique identifiers and other metadata for COVID hospitalization facilities of interest.
+#' This is a companinon endpoint to the [covid_hosp_facility()] endpoint.
 #'
-#' @details Only one argument needs to be specified.  Combinations of the arguments are not currently supported.  For instance, specifying both city and state are not supported.
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html>
+#'
+#' @details Only one argument needs to be specified.
+#' Combinations of the arguments are not currently supported.
+#' For instance, specifying both city and state are not supported.
 #'
 #' @examples
 #' \donttest{
 #' call <- covid_hosp_facility_lookup(state = "fl")
-#' fetch_csv(call)
+#' fetch_tbl(call)
 #' }
-#' @param state A two-letter character string state abbreviation.
-#' @param ccn A character string for facility CMS certification number.
-#' @param city A characater string for city name.
-#' @param zip A numeric 5-digit zip code.
-#' @param fips_code A numeric 5-digit fips county code.
-#' @return an instance of epidata_call.
-#'
-#' @references  API documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html>
+#' @param state string. A two-letter character string state abbreviation.
+#' @param ccn string. A character string for facility CMS certification number.
+#' @param city string. A characater string for city name.
+#' @param zip string. A 5-digit zip code.
+#' @param fips_code string. A 5-digit fips county code, zero-padded.
+#' @return [`epidata_call`]
 #'
 #' @seealso [covid_hosp_facility()]
 #'
@@ -109,8 +116,8 @@ covid_hosp_facility_lookup <-
     check_single_string_param("state", state, FALSE)
     check_single_string_param("ccn", ccn, FALSE)
     check_single_string_param("city", city, FALSE)
-    check_single_int_param("zip", zip, FALSE)
-    check_single_int_param("fips_code", fips_code, FALSE)
+    check_single_string_param("zip", zip, FALSE)
+    check_single_string_param("fips_code", fips_code, FALSE)
     if (missing(state) &&
       missing(ccn) &&
       missing(city) && missing(zip) && missing(fips_code)) {
@@ -134,27 +141,32 @@ covid_hosp_facility_lookup <-
         create_epidata_field_info("city", "text"),
         create_epidata_field_info("zip", "text"),
         create_epidata_field_info("hospital_subtype", "text"),
-        create_epidata_field_info("fip_code", "text"),
+        create_epidata_field_info("fips_code", "text"),
         create_epidata_field_info("is_metro_micro", "int")
       )
     )
   }
 
-#' fetch COVID hospitalization data for specific facilities
+#' Fetch COVID hospitalization data for specific facilities
 #'
-#' Obtains the COVID-19 reported patient impact and hospital capacity data by facility. This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
+#' Obtains the COVID-19 reported patient impact and hospital capacity data by facility.
+#' This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
 #'
-#' @details Starting October 1, 2022, some facilities are only required to report annually.  The companion function [covid_hosp_facility_lookup()] can be used to look up facility identifiers in a variety of ways.
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
+#'
+#' @details Starting October 1, 2022, some facilities are only required to report annually.
+#' The companion function [covid_hosp_facility_lookup()] can be used to look up facility identifiers
+#' in a variety of ways.
 #'
 #' @examples
+#' \donttest{
 #' call <- covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(20200101, 20200501))
-#' fetch_csv(call)
-#' @param hospital_pks A character string of facility unique identifiers
-#' @param collection_weeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
-#' @param publication_dates An optional epirange publication dates to fetch, using epirange(startdate,enddate).
-#' @return an instance of epidata_call
-#'
-#' @references API documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
+#' fetch_tbl(call)
+#' }
+#' @param hospital_pks string. A character string of facility unique identifiers.
+#' @param collection_weeks [`epirange`]. Epiweeks to fetch.
+#' @param publication_dates [`epirange`]. Publication dates to fetch.
+#' @return [`epidata_call`]
 #'
 #' See also the official description and data dictionary at <healthdata.gov> for more information.
 #'
@@ -187,7 +199,7 @@ covid_hosp_facility <-
         create_epidata_field_info("hospital_subtype", "text"),
         create_epidata_field_info("fips_code", "text"),
         create_epidata_field_info("publication_date", "date"),
-        create_epidata_field_info("collection_week", "epiweek"),
+        create_epidata_field_info("collection_week", "date"),
         create_epidata_field_info("is_metro_micro", "bool"),
         create_epidata_field_info("total_beds_7_day_sum", "int"),
         create_epidata_field_info("all_adult_hospital_beds_7_day_sum", "int"),
@@ -427,21 +439,22 @@ covid_hosp_facility <-
 
 #' Fetch COVID Hospitalization Data by State
 #'
-#' Obtains the COVID-19 reported patient impact and hospital capacity data by state. This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
+#' Obtains the COVID-19 reported patient impact and hospital capacity data by state.
+#' This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
+#'
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>.
 #'
 #' @details Starting October 1, 2022, some facilities are only required to report annually.
 #'
 #' @examples
 #' \donttest{
 #' call <- covid_hosp_state_timeseries(states = "fl", dates = epirange(20200101, 20200501))
-#' fetch_csv(call)
+#' fetch_tbl(call)
 #' }
-#' @param states A two letter character string state abbreviation.
-#' @param dates Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
-#' @param issues An optional parameter that takes the form YYYYMMDD.  If issues is not specified, then the most recent issue is used by default.
-#' @return an instance of epidata_call
-#'
-#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>.
+#' @param states character vector. Two letter state abbreviations.
+#' @param dates [`epirange`]. Dates to fetch.
+#' @param issues [`epirange`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+#' @return [`epidata_call`]
 #'
 #' See also the official description and data dictionary at <healthdata.gov> for more information.
 #'
@@ -575,17 +588,21 @@ covid_hosp_state_timeseries <-
     )
   }
 
-#' fetch covidcast meta data
+#' Fetch covidcast metadata
 #'
-#' Fetch a summary of metadata for all sources and signals that are available in the API, along with basic summary statistics such as the dates they are available, the geographic levels at which they are reported, and etc.
+#' Fetch a summary of metadata for all sources and signals that are available in the API, along with
+#' basic summary statistics such as the dates they are available, the geographic levels at which they
+#' are reported, and etc.
 #'
-#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html>.
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html>.
 #'
-#' @return an instance of epidata_call
+#' @return [`epidata_call`]
 #'
 #' @examples
+#' \donttest{
 #' call_meta <- covidcast_meta()
 #' fetch_classic(call_meta)
+#' }
 #'
 #' @seealso [covidcast()]
 #' @export
@@ -615,9 +632,13 @@ covidcast_meta <- function() {
   )
 }
 
-#' fetch covidcast data
+#' Fetch covidcast data
+#'
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html>
+#' COVIDcast public dashboard: <https://delphi.cmu.edu/covidcast/>
 #'
 #' @examples
+#' \donttest{
 #' call <- covidcast(
 #'   data_source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
@@ -626,23 +647,25 @@ covidcast_meta <- function() {
 #'   time_values = epirange(20200601, 20200801),
 #'   geo_values = "ca,fl"
 #' )
-#' fetch_csv(call)
-#' @param data_source A character string representing a data source to query: (1) fb-survey; (2) jhu-csse; (3) google-symptoms; (4) doctor-visits; (5) quidel; (6) hhs.    For more information about each data source, see <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>.
-#' @param signals A character string representing signals from a specific source to query.    A list of available signals for each data source can be found in <https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals>. Each data source may have different signals.
-#' @param time_type Temporal resolution of the data.  Most signals are available at time_type = "day" resolution.  Some signals are only available at the time_type = "week" resolution.
-#' @param geo_type A character string that specifies geographic types: (1) county; (2) hrr, hospital referral region; (3) hhs;  (4) msa, metropolitan statistical area; (5) dma, designated market areas; (6) state; (7) nation.  See <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html> for details on which types are available for each data source.
-#' @param time_values Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
-#' @param geo_values A character string that specified which geographies to return. "*" fetches all geographies.  To fetch specific geographies, specify their IDs as a vector or a list of strings.    More information can be found in <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.
-#' @param as_of data source to fetch
-#' @param issues data source to fetch
-#' @param lag data source to fetch
-#' @return an instance of `epidata_call`
-#'
-#' @references COVIDcast API documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html>
-#'
-#' Documentation for all COVIDcast sources and signals: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals>
-#'
-#' COVIDcast public dashboard: <https://delphi.cmu.edu/covidcast/>
+#' fetch_tbl(call)
+#' }
+#' @param data_source string. The data source to query (see:
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>).
+#' @param signals string. The signals to query from a specific source (see:
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals>).
+#' @param time_type string. The temporal resolution of the data (either "day" or "week", depending on signal).
+#' @param geo_type string. The geographic resolution of the data (see:
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>).
+#' @param time_values [`epirange`]. The dates to fetch.
+#' @param geo_values character vector. The geographies to return. "*" fetches all. (See:
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.)
+#' @param as_of [`epirange`]. Optionally, the as of date for the issues to fetech. If not specified, the most recent
+#'   data is returned. Mutually exclusive with `issues` or `lag`.
+#' @param issues [`epirange`]. Optionally, the issue of the data to fetch. If not specified, the most recent issue
+#'   is returned. Mutually exclusive with `as_of` or `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `as_of` or `issues`.
+#' @return [`epidata_call`]
 #'
 #' @seealso [covidcast_meta()], [epirange()]
 #'
@@ -720,16 +743,18 @@ covidcast <-
     )
   }
 
-#' fetch Delphi's forecast
+#' Fetch Delphi's ILINet forecasts
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/delphi.html
 #'
 #' @examples
+#' \donttest{
 #' call <- delphi(system = "ec", epiweek = 202006)
 #' fetch_classic(call)
-#' @param system system to fetch
-#' @param epiweek epiweek to fetch
-#' @return an instance of epidata_call
+#' }
+#' @param system string. The system name to fetch.
+#' @param epiweek [`epirange`]. The epiweeks to fetch.
+#' @return [`epidata_call`]
 #'
 #' @export
 delphi <- function(system, epiweek) {
@@ -748,17 +773,19 @@ delphi <- function(system, epiweek) {
   )
 }
 
-#' fetch Delphi's PAHO Dengue nowcast
+#' Fetch Delphi's PAHO Dengue nowcast
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html
 #'
-#' TODO: what are valid locations?
+#' TODO: what are valid locations here?
 #' @examples
+#' \donttest{
 #' call <- dengue_nowcast(locations = "?", epiweeks = epirange(201501, 202001))
 #' fetch_classic(call)
-#' @param locations locations to fetch
-#' @param epiweeks epiweeks to fetch
-#' @return an instance of epidata_call
+#' }
+#' @param locations character vector. The locations to fetch.
+#' @param epiweeks [`epirange`]. The epiweeks to fetch.
+#' @return [`epidata_call`]
 #'
 #' @export
 dengue_nowcast <- function(locations, epiweeks) {
@@ -777,19 +804,21 @@ dengue_nowcast <- function(locations, epiweeks) {
   )
 }
 
-#' fetch Delphi's digital surveillance sensors
+#' Fetch Delphi's digital surveillance sensors for dengue in PAHO member countries
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html
 #'
 #' TODO: what are valid locations and names?
 #' @examples
+#' \donttest{
 #' call <- pvt_dengue_sensors(auth = "yourkey", names = "?", locations = "?", epiweeks = epirange(201501, 202001))
-#' # fetch_classic(call)
-#' @param auth authenfication token
-#' @param names names to fetch
-#' @param locations locations to fetch
-#' @param epiweeks epiweeks to fetch
-#' @return an instance of epidata_call
+#' fetch_classic(call)
+#' }
+#' @param auth string. Your authentication token.
+#' @param names character vector. The list of names to fetch.
+#' @param locations character vector. The locations to fetch.
+#' @param epiweeks [`epirange`]. The epiweeks to fetch.
+#' @return [`epidata_call`]
 #'
 #' @export
 pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
@@ -815,22 +844,27 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
   )
 }
 
-#' fetch ECDC data
+#' Fetch ECDC data
 #'
-#' Obtain information on influenza-like-illness from the European Center of Disease Control.
+#' Obtain information on influenza-like-illness from the European Centre for Disease Prevention and Control.
 #'
-#' @details The list of location argument can be found in <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/ecdc_regions.txt>.
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>.
+#'
+#' @details The list of location argument can be found in
+#' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/ecdc_regions.txt>.
 #'
 #' @examples
+#' \donttest{
 #' call <- ecdc_ili(regions = "austria", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
-#' @param regions regions to fetch
-#' @param epiweeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
-#' @param issues optionally specify the exact issues to fetch
-#' @param lag optionally specify the issue lag
-#' @return an instance of epidata_call
-#'
-#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>.
+#' }
+#' @param regions character vector. The regions to fetch.
+#' @param epiweeks [`epirange`]. The epiweeks to fetch.
+#' @param issues [`epirange`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `issues`.
+#' @return [`epidata_call`]
 #'
 #' @export
 ecdc_ili <- function(regions,
@@ -863,22 +897,28 @@ ecdc_ili <- function(regions,
   )
 }
 
-#' fetch FluSurv virological data
+#' Fetch FluSurv hospitalization data
 #'
 #' Obtain information on flu hospitalization rates from the Center of Disease Control.
 #'
-#' @details The list of location argument can be found in <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt>.
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>.
+#' See also <https://gis.cdc.gov/GRASP/Fluview/FluHospRates.html>.
+#'
+#' @details The list of location argument can be found in
+#' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt>.
 #'
 #' @examples
+#' \donttest{
 #' call <- flusurv(locations = "CA", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
-#' @param locations A character string indicating location.
-#' @param epiweeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
-#' @param issues optionally specify the exact issues to fetch
-#' @param lag optionally specify the issue lag
-#' @return an instance of epidata_call
-#'
-#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>.   See also <https://gis.cdc.gov/GRASP/Fluview/FluHospRates.html>.
+#' }
+#' @param locations character vector. Character strings indicating location.
+#' @param epiweeks [`epirange`]. The epiweeks to fetch.
+#' @param issues [`epirange`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `issues`.
+#' @return [`epidata_call`]
 #'
 #' @export
 flusurv <- function(locations,
@@ -916,7 +956,7 @@ flusurv <- function(locations,
   )
 }
 
-#' fetch FluView virological data
+#' Fetch FluView virological data from clinical labs
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html
 #'
@@ -926,11 +966,14 @@ flusurv <- function(locations,
 #' call <- fluview_clinical(regions = "nat", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
 #' }
-#' @param regions regions to fetch
-#' @param epiweeks epiweeks to fetch
-#' @param issues optionally specify the exact issues to fetch
-#' @param lag optionally specify the issue lag
-#' @return an instance of epidata_call
+#' @param regions character vector. The regions to fetch.
+#' @param epiweeks [`epirange`]. The epiweeks to fetch in the form epirange(startweek,endweek), where startweek
+#'   and endweek are of the form YYYYWW (string or numeric).
+#' @param issues [`epirange`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `issues`.
+#' @return [`epidata_call`]
 #'
 #' @export
 fluview_clinical <-
@@ -969,11 +1012,11 @@ fluview_clinical <-
     )
   }
 
-#' fetch fluview meta data
+#' Fetch FluView metadata
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html
 #'
-#' @return an instance of epidata_call
+#' @return [`epidata_call`]
 #'
 #' @export
 fluview_meta <- function() {
@@ -988,37 +1031,31 @@ fluview_meta <- function() {
   )
 }
 
-#' Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data
-#'
-#' @details The full list of location inputs can be accsssed at <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
-#'
-#' @examples
-#' call <- nowcast(location = "ca", epiweeks = epirange(201201, 202001))
-#' fetch_classic(call)
-#' @param locations a character string that indicates a location such as national, HHS region, census division, most states and territories, and etc.
-#' @param Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
-#' @return an instance of epidata_call
-#'
-#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>.
 
-
-#' fetch fluview data
+#' Fetch FluView data
 #'
-#' Obtains information on outpatient inluenza-like-illness (ILI) from U.S. Outpatient Influenza-like Illness Surveillance Network (ILINet).
+#' Obtains information on outpatient inluenza-like-illness (ILI) from U.S. Outpatient Influenza-like Illness Surveillance
+#'   Network (ILINet).
 #'
-#' @details The full list of location inputs can be accsssed at <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>.
+#' For more information on ILINet, see <https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html>.
+#'
+#' @details The full list of location inputs can be accsssed at
+#'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
 #' @examples
 #' call <- fluview(regions = "nat", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
-#' @param regions a character string that indicates a location such as national, HHS region, census division, most states and territories, and etc.
-#' @param epiweeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
-#' @param issues an optional parameter that takes the form YYYYMMDD specifying the exact issues to fetch.
-#' @param lag optionally specify the issue lag
-#' @param auth optional authentication
-#' @return an instance of epidata_call
-#'
-#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>.  For more information on ILINet, see <https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html>.
+#' @param regions character vector. The locations to fetch. Can we any string IDs in national, HHS region,
+#'   census division, most states and territories, and so on. Full list link below.
+#' @param epiweeks [`epirange`]. The epiweeks to fetch in the form epirange(startweek,endweek), where startweek
+#'   and endweek are of the form YYYYWW (string or numeric).
+#' @param issues [`epirange`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `issues`.
+#' @param auth string. Optionally, your authentication token.
+#' @return [`epidata_call`]
 #'
 #' @export
 fluview <-
@@ -1065,21 +1102,24 @@ fluview <-
     )
   }
 
-#' fetch Google Flu Trends data
+#' Fetch Google Flu Trends data
 #'
 #' Obtains estimates of inluenza activity based on volume of certain search queries from Google.
 #'
-#' @details Google has discontinues Flu Trends, and this is now a static endpoint. Possibile input for locations can be found in <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt>, <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/states.txt>, and <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt>.
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/gft.html>
+#'
+#' @details Google has discontinued Flu Trends and this is now a static endpoint. Possibile input for locations
+#'   can be found in <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt>,
+#'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/states.txt>, and
+#'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt>.
 #'
 #' @examples
 #' call <- gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
-#' @param locations A character string that specifies a location to be fetched.
-#' @param epiweeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
+#' @param locations character vector. The locations to be fetched.
+#' @param epiweeks [`epirange`] The epiweeks to be fetched.
 #'
-#' @references  API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/gft.html>
-#'
-#' @return an instance of epidata_call
+#' @return [`epidata_call`]
 #'
 #' @export
 gft <- function(locations, epiweeks) {
@@ -1096,19 +1136,21 @@ gft <- function(locations, epiweeks) {
   )
 }
 
-#' fetch Google Health Trends data
+#' Fetch Google Health Trends data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/ght.html
 #'
 #' TODO: find a non-trivial query
 #' @examples
+#' \donttest{
 #' call <- pvt_ght(auth = "yourkey", locations = "ca", epiweeks = epirange(201201, 202001), query = "?")
-#' # fetch_classic(call)
-#' @param auth autentification
-#' @param locations locations to fetch
-#' @param epiweeks epiweeks to fetch
-#' @param query query
-#' @return an instance of epidata_call
+#' fetch_classic(call)
+#' }
+#' @param auth string. Your authentication token.
+#' @param locations character vector. The locations to be fetched.
+#' @param epiweeks [`epirange`]. The epiweeks to be fetched.
+#' @param query string. The query to be fetched.
+#' @return [`epidata_call`]
 #'
 #' @export
 pvt_ght <- function(auth, locations, epiweeks, query) {
@@ -1132,19 +1174,23 @@ pvt_ght <- function(auth, locations, epiweeks, query) {
   )
 }
 
-#' fetch KCDC data
+#' Fetch KCDC data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html
 #'
 #' TODO: find a non-trivial region
 #' @examples
+#' \donttest{
 #' call <- kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001))
-#' fetch_csv(call)
-#' @param regions regions to fetch
-#' @param epiweeks epiweeks to fetch
-#' @param issues optionally specify the exact issues to fetch
-#' @param lag optionally specify the issue lag
-#' @return an instance of epidata_call
+#' fetch_tbl(call)
+#' }
+#' @param regions character vector. The regions to be fetched.
+#' @param epiweeks [`epirange`]. The epiweeks to be fetched.
+#' @param issues [`epirange`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `issues`.
+#' @return [`epidata_call`]
 #'
 #' @export
 kcdc_ili <- function(regions,
@@ -1177,12 +1223,12 @@ kcdc_ili <- function(regions,
   )
 }
 
-#' fetch AFHSB meta data
+#' Fetch AFHSB metadata
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_afhsb.html
 #'
-#' @param auth authenfication token
-#' @return an instance of epidata_call
+#' @param auth string. Your authentication token.
+#' @return [`epidata_call`]
 #'
 #' @export
 pvt_meta_afhsb <- function(auth) {
@@ -1191,12 +1237,12 @@ pvt_meta_afhsb <- function(auth) {
   create_epidata_call("meta_afhsb/", list(auth = auth), only_supports_classic = TRUE)
 }
 
-#' fetch NoroSTAT meta data
+#' Fetch NoroSTAT metadata
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html
 #'
-#' @param auth authenfication token
-#' @return an instance of epidata_call
+#' @param auth string. Your authentication token.
+#' @return [`epidata_call`]
 #'
 #' @export
 pvt_meta_norostat <- function(auth) {
@@ -1205,32 +1251,36 @@ pvt_meta_norostat <- function(auth) {
   create_epidata_call("meta_norostat/", list(auth = auth), only_supports_classic = TRUE)
 }
 
-#' fetch api meta data
+#' Fetch api metadata
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta.html
 #'
-#' @return an instance of epidata_call
+#' @return [`epidata_call`]
 #'
 #' @export
 meta <- function() {
   create_epidata_call("meta/", list(), only_supports_classic = TRUE)
 }
 
-#' fetch NIDSS dengue data
+#' Fetch NIDSS dengue data
 #'
 #' Obtains counts of confirmed dengue cases in Taiwan from Taiwan National Infectious Disease Statistical System.
 #'
-#' @details Possible location inputs can be found in <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_regions.txt> and <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt>.
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html>
+#'
+#' @details Possible location inputs can be found in
+#' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_regions.txt> and
+#' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt>.
 #'
 #' @examples
+#' \donttest{
 #' call <- nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
-#' @param locations A character string that indicates region of interest or location of interest. Possible inputs include but are not limited to (1)  nationwide, (2) central, (3) eastern, (4) kaoping, (5) northern, (6) southern, and (7) taipei.
-#' @param epiweeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
+#' }
+#' @param locations character vector. The locations to fetch.
+#' @param epiweeks [`epirange`]. The epiweeks to fetched.
 #'
-#' @return an instance of epidata_call
-#'
-#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html>
+#' @return [`epidata_call`]
 #'
 #' @export
 nidss_dengue <- function(locations, epiweeks) {
@@ -1248,20 +1298,24 @@ nidss_dengue <- function(locations, epiweeks) {
   )
 }
 
-#' fetch NIDSS flu data
+#' Fetch NIDSS flu data
 #'
 #' Obtains information on outpatient inluenza-like-illness from Taiwan National Infectious Disease Statistical System.
 #'
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
+#'
 #' @examples
+#' \donttest{
 #' call <- nidss_flu(regions = "taipei", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
-#' @param regions regions to fetch
-#' @param epiweeks Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
-#' @param issues optional issues
-#' @param lag optional lag
-#' @return an instance of epidata_call
-#'
-#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
+#' }
+#' @param regions character vector. The regions to fetch.
+#' @param epiweeks [`epirange`]. The epiweeks to fetch.
+#' @param issues [`epirange`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `issues`.
+#' @return [`epidata_call`]
 #'
 #' @export
 nidss_flu <-
@@ -1299,21 +1353,23 @@ nidss_flu <-
   }
 
 
-#' fetch NoroSTAT data (point data, no min/max)
+#' Fetch NoroSTAT data (point data, no min/max)
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/norostat.html
 #'
 #' @examples
+#' \donttest{
 #' call <- pvt_norostat(
 #'   auth = "yourkey",
 #'   location = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
 #'   epiweeks = epirange(201201, 202001)
 #' )
-#' # fetch_classic(call)
-#' @param auth authenfication token
-#' @param location location to fetch
-#' @param epiweeks epiweeks to fetch
-#' @return an instance of epidata_call
+#' fetch_classic(call)
+#' }
+#' @param auth string. Your authentication key.
+#' @param location character vector. The locations to fetch.
+#' @param epiweeks [`epirange`]. The epiweeks to fetch.
+#' @return [`epidata_call`]
 #'
 #' @export
 pvt_norostat <- function(auth, location, epiweeks) {
@@ -1336,20 +1392,23 @@ pvt_norostat <- function(auth, location, epiweeks) {
   )
 }
 
-#' fetch Delphi's ILI nowcast
+#' Fetch Delphi's ILI nowcast
+#'
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>.
 #'
 #' Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data
 #'
-#' @details The full list of location inputs can be accsssed at <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
+#' @details The full list of location inputs can be accsssed at
+#' <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
 #' @examples
+#' \donttest{
 #' call <- nowcast(location = "ca", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
-#' @param locations a character string that indicates a location such as national, HHS region, census division, most states and territories, and etc.
-#' @param Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).
-#' @return an instance of epidata_call
-#'
-#' @references API Documentation: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>.
+#' }
+#' @param locations character vector. The locations to fetch.
+#' @param epiweeks [`epirange`]. The epiweeks to fetch.
+#' @return [`epidata_call`]
 #'
 #' @export
 nowcast <- function(locations, epiweeks) {
@@ -1368,18 +1427,22 @@ nowcast <- function(locations, epiweeks) {
   )
 }
 
-#' fetch Paho Dengue
+#' Fetch PAHO Dengue
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html
 #'
 #' @examples
+#' \donttest{
 #' call <- paho_dengue(regions = "ca", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
-#' @param regions regions to fetch
-#' @param epiweeks epiweeks to fetch
-#' @param issues issues to fetch
-#' @param lag lag to fetch
-#' @return an instance of epidata_call
+#' }
+#' @param regions character vector. The regions to fetch.
+#' @param epiweeks [`epirange`]. The epiweeks to fetch.
+#' @param issues [`epirange`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+#'   Mutually exclusive with `issues`.
+#' @return [`epidata_call`]
 #'
 #' @export
 paho_dengue <- function(regions,
@@ -1415,17 +1478,19 @@ paho_dengue <- function(regions,
   )
 }
 
-#' fetch Quidel data
+#' Fetch Quidel COVID-19 and influenza testing data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/quidel.html
 #'
 #' @examples
+#' \donttest{
 #' call <- pvt_quidel(auth = "yourkey", epiweeks = epirange(201201, 202001), locations = "hhs1")
-#' # fetch_classic(call)
-#' @param auth authenfication token
-#' @param epiweeks epiweeks to fetch
-#' @param locations locations to fetch
-#' @return an instance of epidata_call
+#' fetch_classic(call)
+#' }
+#' @param auth string. Your authentication key.
+#' @param epiweeks [`epirange`]. The epiweeks to fetch.
+#' @param locations character vector. The locations to fetch.
+#' @return [`epidata_call`]
 #'
 #' @export
 pvt_quidel <- function(auth, epiweeks, locations) {
@@ -1448,18 +1513,20 @@ pvt_quidel <- function(auth, epiweeks, locations) {
   )
 }
 
-#' fetch Delphi's digital surveillance sensors
+#' Fetch Delphi's digital surveillance sensors
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/sensors.html
 #'
 #' @examples
+#' \donttest{
 #' call <- pvt_sensors(auth = "yourkey", names = "sar3", locations = "nat", epiweeks = epirange(201501, 202001))
-#' # fetch_classic(call)
-#' @param auth authenfication token
-#' @param names names to fetch
-#' @param locations locations to fetch
-#' @param epiweeks epiweeks to fetch
-#' @return an instance of epidata_call
+#' fetch_classic(call)
+#' }
+#' @param auth string. Your authentication key.
+#' @param names character vector. The names of the sensors to fetch.
+#' @param locations character vector. The locations to fetch.
+#' @param epiweeks [`epirange`]. The epiweeks to fetch.
+#' @return [`epidata_call`]
 #'
 #' @export
 pvt_sensors <- function(auth, names, locations, epiweeks) {
@@ -1485,18 +1552,20 @@ pvt_sensors <- function(auth, names, locations, epiweeks) {
   )
 }
 
-#' fetch HealthTweets data
+#' Fetch HealthTweets data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/twitter.html
 #'
 #' @examples
+#' \donttest{
 #' call <- pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001))
-#' # fetch_csv(call)
-#' @param auth autentification
-#' @param locations locations to fetch
-#' @param dates epiweeks to fetch
-#' @param epiweeks epiweeks to fetch
-#' @return an instance of epidata_call
+#' fetch_tbl(call)
+#' }
+#' @param auth string. Your authentication key.
+#' @param locations character vector. The locations to fetch.
+#' @param dates [`epirange`]. The dates to fetch. Mutually exclusive with `epiweeks`.
+#' @param epiweeks [`epirange`]. The epiweeks to fetch. Mutually exclusive with `dates`.
+#' @return [`epidata_call`]
 #'
 #' @export
 pvt_twitter <-
@@ -1534,19 +1603,21 @@ pvt_twitter <-
     )
   }
 
-#' fetch Wikipedia access data
+#' Fetch Wikipedia access data
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/wiki.html
 #'
 #' @examples
+#' \donttest{
 #' call <- wiki(articles = "avian_influenza", epiweeks = epirange(201501, 202001))
-#' fetch_csv(call)
-#' @param articles articles to fetch
-#' @param dates dates to fetch
-#' @param epiweeks epiweeks to fetch
-#' @param hours hours to fetch
-#' @param language language
-#' @return an instance of epidata_call
+#' fetch_tbl(call)
+#' }
+#' @param articles character vector. The articles to fetch.
+#' @param dates [`epirange`]. The dates to fetch. Mutually exclusive with `epiweeks`.
+#' @param epiweeks [`epirange`]. The epiweeks to fetch. Mutually exclusive with `dates`.
+#' @param language string. The language to fetch.
+#' @param hours integer. Optionally, the hours to fetch.
+#' @return [`epidata_call`]
 #'
 #' @export
 wiki <-
