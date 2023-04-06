@@ -1,3 +1,12 @@
+#' an abstraction that holds the information needed to make an epidata call
+#'
+#' @param endpoint the epidata endpoint to call
+#' @param params the parameters to pass to the epidata endpoint
+#' @param meta meta data to attach to the epidata call
+#' @param only_supports_classic if true only classic format is supported
+#'
+#' @return an epidata_call instance
+#'
 create_epidata_call <- function(endpoint, params, meta = NULL,
                                 only_supports_classic = FALSE) {
   stopifnot(is.character(endpoint), length(endpoint) == 1)

@@ -7,9 +7,9 @@
 flusurv(locations, epiweeks, issues = NULL, lag = NULL)
 }
 \arguments{
-\item{locations}{locations to fetch}
+\item{locations}{A character string indicating location.}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
 
 \item{issues}{optionally specify the exact issues to fetch}
 
@@ -19,9 +19,15 @@ flusurv(locations, epiweeks, issues = NULL, lag = NULL)
 an instance of epidata_call
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html
+Obtain information on flu hospitalization rates from the Center of Disease Control.
+}
+\details{
+The list of location argument can be found in \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt}.
 }
 \examples{
 call <- flusurv(locations = "CA", epiweeks = epirange(201201, 202001))
 fetch_classic(call)
+}
+\references{
+API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html}.   See also \url{https://gis.cdc.gov/GRASP/Fluview/FluHospRates.html}.
 }

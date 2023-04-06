@@ -1,11 +1,15 @@
 .Rproj.user
 .Rhistory
+.Rapp.history
 .RData
 .Ruserdata
 docs
 inst/doc
 /check
+.DS_Store
 venv
 env
 .venv
 .env
+.Rdata
+.httr-oauth

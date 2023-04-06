@@ -7,17 +7,23 @@
 nidss_dengue(locations, epiweeks)
 }
 \arguments{
-\item{locations}{locations to fech}
+\item{locations}{A character string that indicates region of interest or location of interest. Possible inputs include but are not limited to (1)  nationwide, (2) central, (3) eastern, (4) kaoping, (5) northern, (6) southern, and (7) taipei.}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
 }
 \value{
 an instance of epidata_call
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html
+Obtains counts of confirmed dengue cases in Taiwan from Taiwan National Infectious Disease Statistical System.
+}
+\details{
+Possible location inputs can be found in \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_regions.txt} and \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt}.
 }
 \examples{
 call <- nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 202001))
 fetch_classic(call)
+}
+\references{
+API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html}
 }
