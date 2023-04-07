@@ -21,7 +21,7 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html
 TODO: what are valid locations here?
 }
 \examples{
-\donttest{
+\dontrun{
 call <- dengue_nowcast(locations = "?", epiweeks = epirange(201501, 202001))
 fetch_classic(call)
 }

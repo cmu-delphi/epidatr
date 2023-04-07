@@ -2,7 +2,7 @@
 % Please edit documentation in R/epidatacall.R
 \name{fetch_json}
 \alias{fetch_json}
-\title{fetches the data and returns the josn format}
+\title{fetches the data and returns the JSON format}
 \usage{
 fetch_json(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 }
@@ -17,5 +17,5 @@ fetch_json(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 parsed json message
 }
 \description{
-fetches the data and returns the josn format
+fetches the data and returns the JSON format
 }

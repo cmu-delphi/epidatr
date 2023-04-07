@@ -26,6 +26,11 @@ library("magrittr")
 epicall <- covidcast("fb-survey", "smoothed_cli", "day", "nation", epirange(20210405, 20210410), "us")
 ```
 
+
+```{r}
+epicall %>% fetch_tbl()
+```
+
 ```{r}
 epicall %>% fetch_classic()
 ```
@@ -39,9 +44,5 @@ epicall %>% fetch_csv()
 ```
 
 ```{r}
-epicall %>% fetch_df()
-```
-
-```{r}
-# epicall %>% with_base_url("https://staging.delphi.cmu.edu/epidata/") %>% fetch_df()
+# epicall %>% with_base_url("https://staging.delphi.cmu.edu/epidata/") %>% fetch_tbl()
 ```

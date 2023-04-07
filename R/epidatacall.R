@@ -1,11 +1,34 @@
 #' an abstraction that holds the information needed to make an epidata call
 #'
+#' This function creates an epidata call and pipe than into the fetch_* functions to get the data:
+#' - [`fetch_tbl`]
+#' - [`fetch_json`]
+#' - [`fetch_csv`]
+#' - [`fetch_classic`]
+#'
+#' Typically, you need not call this function directly, but instead use an endpoint function, e.g. [`covidcast`].
+#'
+#' @examples
+#' \dontrun{
+#' call <- covidcast(
+#'   data_source = "jhu-csse",
+#'   signals = "confirmed_7dav_incidence_prop",
+#'   time_type = "day",
+#'   geo_type = "state",
+#'   time_values = epirange(20200601, 20200801),
+#'   geo_values = "ca,fl"
+#' )
+#' fetch_tbl(call)
+#' }
+#'
 #' @param endpoint the epidata endpoint to call
 #' @param params the parameters to pass to the epidata endpoint
 #' @param meta meta data to attach to the epidata call
 #' @param only_supports_classic if true only classic format is supported
 #'
 #' @return an epidata_call instance
+#'
+#' @aliases epidata_call
 #'
 create_epidata_call <- function(endpoint, params, meta = NULL,
                                 only_supports_classic = FALSE) {
@@ -131,7 +154,7 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_date_parsing = FA
   m
 }
 
-#' fetches the data and returns the josn format
+#' fetches the data and returns the JSON format
 #'
 #' @param epidata_call and instance of epidata_call
 #' @param fields filter fields
@@ -267,16 +290,4 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
     }
   }
   tbl
-}
-
-#' fetches the data and returns data frame
-#'
-#' @param epidata_call and instance of epidata_call
-#' @param fields filter fields
-#' @param disable_date_parsing disable automatic date parsing
-#' @return data.frame
-#'
-#' @export
-fetch_df <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
-  as.data.frame(fetch_tbl(epidata_call, fields, disable_date_parsing))
 }

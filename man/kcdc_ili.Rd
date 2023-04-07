@@ -27,7 +27,7 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html
 TODO: find a non-trivial region
 }
 \examples{
-\donttest{
+\dontrun{
 call <- kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001))
 fetch_tbl(call)
 }

@@ -9,7 +9,7 @@
 #' @return [`epidata_call`]
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' call <- pvt_afhsb(auth = "yourkey", "fl,ca", epirange(202001, 202110), "flu1,flu2-flu1")
 #' fetch_tbl(call)
 #' }
@@ -42,7 +42,7 @@ pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/cdc.html
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' call <- pvt_cdc(auth = "yourkey", epirange(20210101, 20210201), "fl,ca")
 #' fetch_tbl(call)
 #' }
@@ -779,7 +779,7 @@ delphi <- function(system, epiweek) {
 #'
 #' TODO: what are valid locations here?
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' call <- dengue_nowcast(locations = "?", epiweeks = epirange(201501, 202001))
 #' fetch_classic(call)
 #' }
@@ -810,7 +810,7 @@ dengue_nowcast <- function(locations, epiweeks) {
 #'
 #' TODO: what are valid locations and names?
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' call <- pvt_dengue_sensors(auth = "yourkey", names = "?", locations = "?", epiweeks = epirange(201501, 202001))
 #' fetch_classic(call)
 #' }
@@ -962,7 +962,6 @@ flusurv <- function(locations,
 #'
 #' @examples
 #' \donttest{
-#' # can take a couple minutes; donttesting while cmu-delphi/delphi-epidata#48 is unresolved
 #' call <- fluview_clinical(regions = "nat", epiweeks = epirange(201201, 202001))
 #' fetch_classic(call)
 #' }
@@ -1142,7 +1141,7 @@ gft <- function(locations, epiweeks) {
 #'
 #' TODO: find a non-trivial query
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' call <- pvt_ght(auth = "yourkey", locations = "ca", epiweeks = epirange(201201, 202001), query = "?")
 #' fetch_classic(call)
 #' }
@@ -1180,7 +1179,7 @@ pvt_ght <- function(auth, locations, epiweeks, query) {
 #'
 #' TODO: find a non-trivial region
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' call <- kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001))
 #' fetch_tbl(call)
 #' }
@@ -1358,7 +1357,7 @@ nidss_flu <-
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/norostat.html
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' call <- pvt_norostat(
 #'   auth = "yourkey",
 #'   location = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
@@ -1483,7 +1482,7 @@ paho_dengue <- function(regions,
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/quidel.html
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' call <- pvt_quidel(auth = "yourkey", epiweeks = epirange(201201, 202001), locations = "hhs1")
 #' fetch_classic(call)
 #' }
@@ -1518,7 +1517,7 @@ pvt_quidel <- function(auth, epiweeks, locations) {
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/sensors.html
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' call <- pvt_sensors(auth = "yourkey", names = "sar3", locations = "nat", epiweeks = epirange(201501, 202001))
 #' fetch_classic(call)
 #' }
@@ -1557,7 +1556,7 @@ pvt_sensors <- function(auth, names, locations, epiweeks) {
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/twitter.html
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' call <- pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001))
 #' fetch_tbl(call)
 #' }

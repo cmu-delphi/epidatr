@@ -20,7 +20,7 @@ pvt_norostat(auth, location, epiweeks)
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/norostat.html
 }
 \examples{
-\donttest{
+\dontrun{
 call <- pvt_norostat(
   auth = "yourkey",
   location = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",

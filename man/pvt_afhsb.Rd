@@ -22,7 +22,7 @@ pvt_afhsb(auth, locations, epiweeks, flu_types)
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/afhsb.html
 }
 \examples{
-\donttest{
+\dontrun{
 call <- pvt_afhsb(auth = "yourkey", "fl,ca", epirange(202001, 202110), "flu1,flu2-flu1")
 fetch_tbl(call)
 }

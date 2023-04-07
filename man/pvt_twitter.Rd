@@ -22,7 +22,7 @@ pvt_twitter(auth, locations, dates = NULL, epiweeks = NULL)
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/twitter.html
 }
 \examples{
-\donttest{
+\dontrun{
 call <- pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001))
 fetch_tbl(call)
 }

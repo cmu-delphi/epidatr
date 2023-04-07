@@ -2,6 +2,7 @@
 % Please edit documentation in R/epidatacall.R
 \name{create_epidata_call}
 \alias{create_epidata_call}
+\alias{epidata_call}
 \title{an abstraction that holds the information needed to make an epidata call}
 \usage{
 create_epidata_call(
@@ -24,5 +25,28 @@ create_epidata_call(
 an epidata_call instance
 }
 \description{
-an abstraction that holds the information needed to make an epidata call
+This function creates an epidata call and pipe than into the fetch_* functions to get the data:
+\itemize{
+\item \code{\link{fetch_tbl}}
+\item \code{\link{fetch_json}}
+\item \code{\link{fetch_csv}}
+\item \code{\link{fetch_classic}}
+}
+}
+\details{
+Typically, you need not call this function directly, but instead use an endpoint function, e.g. \code{\link{covidcast}}.
+}
+\examples{
+\dontrun{
+call <- covidcast(
+  data_source = "jhu-csse",
+  signals = "confirmed_7dav_incidence_prop",
+  time_type = "day",
+  geo_type = "state",
+  time_values = epirange(20200601, 20200801),
+  geo_values = "ca,fl"
+)
+fetch_tbl(call)
+}
+
 }
