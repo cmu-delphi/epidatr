@@ -56,6 +56,8 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
 #' @param epidata_call and instance of epidata_call
 #' @param base_url basee url to use
 #'
+#' @describeIn epidata_call use a different base url
+#'
 #' @export
 with_base_url <- function(epidata_call, base_url) {
   stopifnot(inherits(epidata_call, "epidata_call"))
@@ -102,6 +104,8 @@ full_url <- function(epidata_call) {
 #' @importFrom httr modify_url
 #' @return full url
 #'
+#' @describeIn epidata_call returns the full request url for the given epidata_call
+#'
 #' @export
 request_url <- function(epidata_call, format_type = "classic", fields = NULL) {
   stopifnot(inherits(epidata_call, "epidata_call"))
@@ -135,6 +139,8 @@ request_impl <- function(epidata_call, format_type, fields = NULL) {
 #' @importFrom jsonlite fromJSON
 #' @return parsed json message
 #'
+#' @describeIn epidata_call fetch the data in the classic format
+#'
 #' @export
 fetch_classic <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
@@ -164,6 +170,8 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_date_parsing = FA
 #' @importFrom rlang abort
 #' @return parsed json message
 #'
+#' @describeIn epidata_call fetch the data in the JSON format
+#'
 #' @export
 fetch_json <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
@@ -188,6 +196,8 @@ fetch_json <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE
 #' @importFrom httr stop_for_status content
 #' @importFrom rlang abort
 #' @return CSV text
+#'
+#' @describeIn epidata_call fetch the data in the CSV format
 #'
 #' @export
 fetch_csv <- function(epidata_call, fields = NULL) {
@@ -239,7 +249,7 @@ info_to_type <- function(info, disable_date_parsing = FALSE) {
   r
 }
 
-#' fetches the data and returns data frame
+#' fetches the data and returns a tibble
 #'
 #' @param epidata_call and instance of epidata_call
 #' @param fields filter fields
@@ -248,6 +258,8 @@ info_to_type <- function(info, disable_date_parsing = FALSE) {
 #' @importFrom httr stop_for_status content
 #' @importFrom rlang abort
 #' @return tibble
+#'
+#' @describeIn epidata_call fetch the data in the tibble format
 #'
 #' @export
 fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
