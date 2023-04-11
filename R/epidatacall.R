@@ -34,7 +34,7 @@
 #'   time_type = "day",
 #'   geo_type = "state",
 #'   time_values = epirange(20200601, 20200801),
-#'   geo_values = c("ca","fl")
+#'   geo_values = c("ca", "fl")
 #' )
 #' print(call) # only for debugging purposes
 #' fetch_tbl(call)
@@ -47,7 +47,7 @@
 #'   time_type = "day",
 #'   geo_type = "state",
 #'   time_values = epirange(20200601, 20200801),
-#'   geo_values = c("ca","fl")
+#'   geo_values = c("ca", "fl")
 #' ) %>%
 #'   fetch_tbl()
 #' data
@@ -111,9 +111,9 @@ print.epidata_call <- function(epidata_call) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   cat("<epidata_call> object:\n")
   cli::cli_bullets(c(
-           "*" = "Use fetch_classic, fetch_json, or fetch_csv to actually fetch the data",
-           "*" = "For debugging purposes, use request_url with appropriate parameters to see the URLs being used by these fetch functions."
-       ))
+    "*" = "Use fetch_classic, fetch_json, or fetch_csv to actually fetch the data",
+    "*" = "For debugging purposes, use request_url with appropriate parameters to see the URLs being used by these fetch functions."
+  ))
 }
 
 #' Fetches the data and returns a tibble
@@ -213,19 +213,19 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_date_parsing = FA
 #'
 #' @export
 fetch_csv <- function(epidata_call, fields = NULL) {
-    stopifnot(inherits(epidata_call, "epidata_call"))
-    stopifnot(is.null(fields) || is.character(fields))
-    if (epidata_call$only_supports_classic) {
-        rlang::abort("the endpoint only supports the classic message format, due to a non-standard behavior",
-                     epidata_call = epidata_call,
-                     class = "only_supports_classic_format"
-                     )
-    }
-    res <- request_impl(epidata_call, "csv", fields)
-    httr::stop_for_status(res)
-    data <- httr::content(res, "text", encoding = "UTF-8")
-    class(data) <- c("epidata_csv", class(data))
-    data
+  stopifnot(inherits(epidata_call, "epidata_call"))
+  stopifnot(is.null(fields) || is.character(fields))
+  if (epidata_call$only_supports_classic) {
+    rlang::abort("the endpoint only supports the classic message format, due to a non-standard behavior",
+      epidata_call = epidata_call,
+      class = "only_supports_classic_format"
+    )
+  }
+  res <- request_impl(epidata_call, "csv", fields)
+  httr::stop_for_status(res)
+  data <- httr::content(res, "text", encoding = "UTF-8")
+  class(data) <- c("epidata_csv", class(data))
+  data
 }
 
 #' Fetches the data in JSON format, then converts into an R object
@@ -259,8 +259,8 @@ fetch_json <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE
 }
 
 full_url <- function(epidata_call) {
-    stopifnot(inherits(epidata_call, "epidata_call"))
-    join_url(epidata_call$base_url, epidata_call$endpoint)
+  stopifnot(inherits(epidata_call, "epidata_call"))
+  join_url(epidata_call$base_url, epidata_call$endpoint)
 }
 
 #' Returns the full request url for the given epidata_call
@@ -275,10 +275,10 @@ full_url <- function(epidata_call) {
 #'
 #' @export
 request_url <- function(epidata_call, format_type = "classic", fields = NULL) {
-    stopifnot(inherits(epidata_call, "epidata_call"))
-    url <- full_url(epidata_call)
-    params <- request_arguments(epidata_call, format_type, fields)
-    httr::modify_url(url, query = params)
+  stopifnot(inherits(epidata_call, "epidata_call"))
+  url <- full_url(epidata_call)
+  params <- request_arguments(epidata_call, format_type, fields)
+  httr::modify_url(url, query = params)
 }
 
 #' `epidata_call` object using a different base URL
@@ -291,20 +291,20 @@ request_url <- function(epidata_call, format_type = "classic", fields = NULL) {
 #'
 #' @export
 with_base_url <- function(epidata_call, base_url) {
-    stopifnot(inherits(epidata_call, "epidata_call"))
-    stopifnot(is.character(base_url), length(base_url) == 1)
-    epidata_call$base_url <- base_url
-    epidata_call
+  stopifnot(inherits(epidata_call, "epidata_call"))
+  stopifnot(is.character(base_url), length(base_url) == 1)
+  epidata_call$base_url <- base_url
+  epidata_call
 }
 
 request_impl <- function(epidata_call, format_type, fields = NULL) {
-    stopifnot(inherits(epidata_call, "epidata_call"))
-    stopifnot(format_type %in% c("json", "csv", "classic"))
-                                        # API call
-    url <- full_url(epidata_call)
-    params <- request_arguments(epidata_call, format_type, fields)
+  stopifnot(inherits(epidata_call, "epidata_call"))
+  stopifnot(format_type %in% c("json", "csv", "classic"))
+  # API call
+  url <- full_url(epidata_call)
+  params <- request_arguments(epidata_call, format_type, fields)
 
-    do_request(url, params)
+  do_request(url, params)
 }
 
 #' @export
