@@ -119,7 +119,6 @@ call <- covidcast(
   time_values = epirange(20200601, 20200801),
   geo_values = c("ca", "fl")
 )
-print(call) # only for debugging purposes
 fetch_tbl(call)
 
 # Using a pipe operator is convenient here:
