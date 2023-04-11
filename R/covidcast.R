@@ -30,6 +30,7 @@ parse_signal <- function(signal, base_url) {
   r
 }
 
+#' @export
 print.covidcast_data_signal <- function(signal, ...) {
   print(signal$name)
   print(signal$key)
@@ -46,6 +47,8 @@ parse_source <- function(source, base_url) {
   r
 }
 
+#' @method as.data.frame covidcast_data_signal_list
+#' @export
 as.data.frame.covidcast_data_signal_list <- function(signals, ...) {
   as.data.frame(do.call(rbind, lapply(signals, function(x) {
     sub <- x[c(
@@ -74,6 +77,7 @@ as.data.frame.covidcast_data_signal_list <- function(signals, ...) {
   }), ...)
 }
 
+#' @export
 print.covidcast_data_source <- function(source, ...) {
   print(source$name, ...)
   print(source$source, ...)
@@ -127,6 +131,8 @@ covidcast_epidata <- function(base_url = global_base_url) {
   )
 }
 
+#' @method as.data.frame covidcast_data_source_list
+#' @export
 as.data.frame.covidcast_data_source_list <- function(sources, ...) {
   as.data.frame(do.call(rbind, lapply(sources, function(x) {
     sub <- x[c(
@@ -141,6 +147,7 @@ as.data.frame.covidcast_data_source_list <- function(sources, ...) {
   }), ...)
 }
 
+#' @export
 print.covidcast_epidata <- function(epidata, ...) {
   print("COVIDcast Epidata Fetcher")
   print("Sources:")
