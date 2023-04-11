@@ -117,7 +117,7 @@ call <- covidcast(
   time_type = "day",
   geo_type = "state",
   time_values = epirange(20200601, 20200801),
-  geo_values = c("ca","fl")
+  geo_values = c("ca", "fl")
 )
 print(call) # only for debugging purposes
 fetch_tbl(call)
@@ -130,7 +130,7 @@ data <- covidcast(
   time_type = "day",
   geo_type = "state",
   time_values = epirange(20200601, 20200801),
-  geo_values = c("ca","fl")
+  geo_values = c("ca", "fl")
 ) \%>\%
   fetch_tbl()
 data
