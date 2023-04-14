@@ -1,46 +1,24 @@
 #' @title Get the API key
-#' @description Get the API key from getOption("delphi.epidata.key"), the environment variable DELPHI_EPIDATA_KEY, or from ~/.config/delphi_epidata/key
+#' @description Get the API key from the environment variable DELPHI_EPIDATA_KEY or getOption("delphi.epidata.key")
 #' @param verbose Will print the source of the key if TRUE (e.g. options, environment, or config file)
 #' @return The API key
 #' @export
-get_auth_key <- function(verbose = FALSE) {
-  key <- getOption("delphi.epidata.key", default = "")
-  if (key != "") {
-    if (verbose) print("Key found in delphi.epidata.key option")
-    return(key)
-  }
-
+get_auth_key <- function() {
   key <- Sys.getenv("DELPHI_EPIDATA_KEY", unset = "")
-  if (key != "") {
-    if (verbose) print("Key found in DELPHI_EPIDATA_KEY environment variable")
-    return(key)
-  }
+  if (key != "") return(key)
 
-  if (file.exists("~/.config/delphi_epidata/key")) {
-    key <- readLines("~/.config/delphi_epidata/key")
-    if (key != "") {
-      if (verbose) print("Key found in ~/.config/delphi_epidata/key")
-      return(key)
-    }
-  }
+  key <- getOption("delphi.epidata.key", default = "")
+  if (key != "") return(key)
 
-  warning("No key found. Please set one with set_auth_key() to avoid rate limits.")
+  warning(
+    paste0(
+      "No API key found. To avoid being rate limited, you can:\n",
+      " - set the environment variable DELPHI_EPIDATA_KEY.\n",
+      " - set the option 'delphi.epidata.key' or\n",
+      "\n",
+      "To save your key for later sessions (and hide it from your code), you can edit your .Renviron file with:\n",
+      "  usewith::edit_r_environ()"
+    )
+  )
   return("")
-}
-
-#' @title Set the API key
-#' @description Set the API key in the environment variable DELPHI_EPIDATA_KEY and (optionally) in
-#'   ~/.config/delphi_epidata/key
-#' @export
-set_auth_key <- function() {
-  key <- readline("Enter your key: ")
-  confirmation <- readline("Do you want to store the key in ~/.config/delphi_epidata/key? [y/n] ")
-  if (confirmation != "y") {
-    stop("Key not saved.")
-  } else {
-    dir.create("~/.config/delphi_epidata", showWarnings = FALSE, recursive = TRUE)
-    print("Key saved to ~/.config/delphi_epidata/key")
-    writeLines(key, "~/.config/delphi_epidata/key")
-  }
-  options(delphi.epidata.key = key)
 }

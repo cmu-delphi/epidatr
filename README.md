@@ -21,6 +21,18 @@ can be still be installed with the old name by specifying
 
 TODO
 
+## API Keys
+
+The Delphi API will soon require a registered API key for unthrottled queries.
+The `epidatr` client will automatically look for this key in the R option `delphi.epidata.key`
+and then from the environment variable `DELPHI_EPIDATA_KEY`.
+We recommend storing your key in `.Renviron` file, which R will read by default.
+You can do this with `usethis::edit_r_environ()` and there enter `DELPHI_EPIDATA_KEY=<your-key>`.
+An alternative is [the dotenv package](https://github.com/gaborcsardi/dotenv/).
+
+Note that for the time being, the private endpoints (i.e. those prefixed with `pvt`) will require
+a separate key that needs to be passed as an argument.
+
 ## Development Environment
 
 Relevant R commands
