@@ -7,7 +7,7 @@
 pvt_quidel(auth, epiweeks, locations)
 }
 \arguments{
-\item{auth}{string. Your authentication key.}
+\item{auth}{string. Restricted access key (not the same as API key).}
 
 \item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
 

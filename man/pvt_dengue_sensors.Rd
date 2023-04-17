@@ -7,7 +7,7 @@
 pvt_dengue_sensors(auth, names, locations, epiweeks)
 }
 \arguments{
-\item{auth}{string. Your authentication token.}
+\item{auth}{string. Restricted access key (not the same as API key).}
 
 \item{names}{character vector. The list of names to fetch.}
 

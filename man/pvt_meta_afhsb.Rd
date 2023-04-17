@@ -7,7 +7,7 @@
 pvt_meta_afhsb(auth)
 }
 \arguments{
-\item{auth}{string. Your authentication token.}
+\item{auth}{string. Restricted access key (not the same as API key).}
 }
 \value{
 \code{\link{epidata_call}}

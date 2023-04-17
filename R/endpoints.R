@@ -2,7 +2,7 @@
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/afhsb.html
 #'
-#' @param auth string. Authentication token.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param locations character vector. Locations to fetch (see docs).
 #' @param epiweeks [`epirange`]. Epiweeks to fetch.
 #' @param flu_types string. Flu types to fetch (see docs).
@@ -46,7 +46,7 @@ pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
 #' call <- pvt_cdc(auth = "yourkey", epirange(20210101, 20210201), "fl,ca")
 #' fetch_tbl(call)
 #' }
-#' @param auth string. Authentication token.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param epiweeks [`epirange`]. Epiweeks to fetch.
 #' @param locations character vector. Locations to fetch (see docs).
 #' @return [`epidata_call`]
@@ -814,7 +814,7 @@ dengue_nowcast <- function(locations, epiweeks) {
 #' call <- pvt_dengue_sensors(auth = "yourkey", names = "?", locations = "?", epiweeks = epirange(201501, 202001))
 #' fetch_classic(call)
 #' }
-#' @param auth string. Your authentication token.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param names character vector. The list of names to fetch.
 #' @param locations character vector. The locations to fetch.
 #' @param epiweeks [`epirange`]. The epiweeks to fetch.
@@ -1054,7 +1054,7 @@ fluview_meta <- function() {
 #'   Mutually exclusive with `lag`.
 #' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
 #'   Mutually exclusive with `issues`.
-#' @param auth string. Optionally, your authentication token.
+#' @param auth string. Optionally, restricted access key (not the same as API key).
 #' @return [`epidata_call`]
 #'
 #' @export
@@ -1146,7 +1146,7 @@ gft <- function(locations, epiweeks) {
 #' call <- pvt_ght(auth = "yourkey", locations = "ca", epiweeks = epirange(201201, 202001), query = "?")
 #' fetch_classic(call)
 #' }
-#' @param auth string. Your authentication token.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param locations character vector. The locations to be fetched.
 #' @param epiweeks [`epirange`]. The epiweeks to be fetched.
 #' @param query string. The query to be fetched.
@@ -1227,7 +1227,7 @@ kcdc_ili <- function(regions,
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_afhsb.html
 #'
-#' @param auth string. Your authentication token.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @return [`epidata_call`]
 #'
 #' @export
@@ -1241,7 +1241,7 @@ pvt_meta_afhsb <- function(auth) {
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html
 #'
-#' @param auth string. Your authentication token.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @return [`epidata_call`]
 #'
 #' @export
@@ -1366,7 +1366,7 @@ nidss_flu <-
 #' )
 #' fetch_classic(call)
 #' }
-#' @param auth string. Your authentication key.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param location character vector. The locations to fetch.
 #' @param epiweeks [`epirange`]. The epiweeks to fetch.
 #' @return [`epidata_call`]
@@ -1487,7 +1487,7 @@ paho_dengue <- function(regions,
 #' call <- pvt_quidel(auth = "yourkey", epiweeks = epirange(201201, 202001), locations = "hhs1")
 #' fetch_classic(call)
 #' }
-#' @param auth string. Your authentication key.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param epiweeks [`epirange`]. The epiweeks to fetch.
 #' @param locations character vector. The locations to fetch.
 #' @return [`epidata_call`]
@@ -1522,7 +1522,7 @@ pvt_quidel <- function(auth, epiweeks, locations) {
 #' call <- pvt_sensors(auth = "yourkey", names = "sar3", locations = "nat", epiweeks = epirange(201501, 202001))
 #' fetch_classic(call)
 #' }
-#' @param auth string. Your authentication key.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param names character vector. The names of the sensors to fetch.
 #' @param locations character vector. The locations to fetch.
 #' @param epiweeks [`epirange`]. The epiweeks to fetch.
@@ -1561,7 +1561,7 @@ pvt_sensors <- function(auth, names, locations, epiweeks) {
 #' call <- pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001))
 #' fetch_tbl(call)
 #' }
-#' @param auth string. Your authentication key.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param locations character vector. The locations to fetch.
 #' @param dates [`epirange`]. The dates to fetch. Mutually exclusive with `epiweeks`.
 #' @param epiweeks [`epirange`]. The epiweeks to fetch. Mutually exclusive with `dates`.

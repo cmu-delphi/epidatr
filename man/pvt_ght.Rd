@@ -7,7 +7,7 @@
 pvt_ght(auth, locations, epiweeks, query)
 }
 \arguments{
-\item{auth}{string. Your authentication token.}
+\item{auth}{string. Restricted access key (not the same as API key).}
 
 \item{locations}{character vector. The locations to be fetched.}
 

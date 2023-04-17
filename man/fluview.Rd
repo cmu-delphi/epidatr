@@ -19,7 +19,7 @@ Mutually exclusive with \code{lag}.}
 \item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
 Mutually exclusive with \code{issues}.}
 
-\item{auth}{string. Optionally, your authentication token.}
+\item{auth}{string. Optionally, restricted access key (not the same as API key).}
 }
 \value{
 \code{\link{epidata_call}}
