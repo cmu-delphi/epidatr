@@ -23,7 +23,7 @@ TODO
 
 ## API Keys
 
-The Delphi API will soon require a registered API key for unthrottled queries.
+The Delphi API will soon require a (free) API key for full functionality.
 The `epidatr` client will automatically look for this key in the R option `delphi.epidata.key`
 and then from the environment variable `DELPHI_EPIDATA_KEY`.
 We recommend storing your key in `.Renviron` file, which R will read by default.
