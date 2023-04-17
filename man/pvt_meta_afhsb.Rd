@@ -2,15 +2,15 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_meta_afhsb}
 \alias{pvt_meta_afhsb}
-\title{fetch AFHSB meta data}
+\title{Fetch AFHSB metadata}
 \usage{
 pvt_meta_afhsb(auth)
 }
 \arguments{
-\item{auth}{authenfication token}
+\item{auth}{string. Restricted access key (not the same as API key).}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_afhsb.html

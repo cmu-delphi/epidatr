@@ -2,32 +2,37 @@
 % Please edit documentation in R/endpoints.R
 \name{flusurv}
 \alias{flusurv}
-\title{fetch FluSurv virological data}
+\title{Fetch FluSurv hospitalization data}
 \usage{
 flusurv(locations, epiweeks, issues = NULL, lag = NULL)
 }
 \arguments{
-\item{locations}{A character string indicating location.}
+\item{locations}{character vector. Character strings indicating location.}
 
-\item{epiweeks}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
 
-\item{issues}{optionally specify the exact issues to fetch}
+\item{issues}{\code{\link{epirange}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+Mutually exclusive with \code{lag}.}
 
-\item{lag}{optionally specify the issue lag}
+\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+Mutually exclusive with \code{issues}.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 Obtain information on flu hospitalization rates from the Center of Disease Control.
 }
 \details{
-The list of location argument can be found in \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt}.
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html}.
+See also \url{https://gis.cdc.gov/GRASP/Fluview/FluHospRates.html}.
+
+The list of location argument can be found in
+\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt}.
 }
 \examples{
+\donttest{
 call <- flusurv(locations = "CA", epiweeks = epirange(201201, 202001))
 fetch_classic(call)
 }
-\references{
-API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html}.   See also \url{https://gis.cdc.gov/GRASP/Fluview/FluHospRates.html}.
 }

@@ -2,28 +2,30 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_norostat}
 \alias{pvt_norostat}
-\title{fetch NoroSTAT data (point data, no min/max)}
+\title{Fetch NoroSTAT data (point data, no min/max)}
 \usage{
 pvt_norostat(auth, location, epiweeks)
 }
 \arguments{
-\item{auth}{authenfication token}
+\item{auth}{string. Restricted access key (not the same as API key).}
 
-\item{location}{location to fetch}
+\item{location}{character vector. The locations to fetch.}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/norostat.html
 }
 \examples{
+\donttest{
 call <- pvt_norostat(
   auth = "yourkey",
   location = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
   epiweeks = epirange(201201, 202001)
 )
-# fetch_classic(call)
+fetch_classic(call)
+}
 }

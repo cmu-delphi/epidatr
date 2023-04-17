@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{covidcast}
 \alias{covidcast}
-\title{fetch covidcast data}
+\title{Fetch covidcast data}
 \usage{
 covidcast(
   data_source,
@@ -17,31 +17,40 @@ covidcast(
 )
 }
 \arguments{
-\item{data_source}{A character string representing a data source to query: (1) fb-survey; (2) jhu-csse; (3) google-symptoms; (4) doctor-visits; (5) quidel; (6) hhs.    For more information about each data source, see \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html}.}
+\item{data_source}{string. The data source to query (see:
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html}).}
 
-\item{signals}{A character string representing signals from a specific source to query.    A list of available signals for each data source can be found in \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals}. Each data source may have different signals.}
+\item{signals}{string. The signals to query from a specific source (see:
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals}).}
 
-\item{time_type}{Temporal resolution of the data.  Most signals are available at time_type = "day" resolution.  Some signals are only available at the time_type = "week" resolution.}
+\item{time_type}{string. The temporal resolution of the data (either "day" or "week", depending on signal).}
 
-\item{geo_type}{A character string that specifies geographic types: (1) county; (2) hrr, hospital referral region; (3) hhs;  (4) msa, metropolitan statistical area; (5) dma, designated market areas; (6) state; (7) nation.  See \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html} for details on which types are available for each data source.}
+\item{geo_type}{string. The geographic resolution of the data (see:
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}).}
 
-\item{time_values}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
+\item{time_values}{\code{\link{epirange}}. The dates to fetch.}
 
-\item{geo_values}{A character string that specified which geographies to return. "*" fetches all geographies.  To fetch specific geographies, specify their IDs as a vector or a list of strings.    More information can be found in \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.}
+\item{geo_values}{character vector. The geographies to return. "*" fetches all. (See:
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.)}
 
-\item{as_of}{data source to fetch}
+\item{as_of}{\code{\link{epirange}}. Optionally, the as of date for the issues to fetech. If not specified, the most recent
+data is returned. Mutually exclusive with \code{issues} or \code{lag}.}
 
-\item{issues}{data source to fetch}
+\item{issues}{\code{\link{epirange}}. Optionally, the issue of the data to fetch. If not specified, the most recent issue
+is returned. Mutually exclusive with \code{as_of} or \code{lag}.}
 
-\item{lag}{data source to fetch}
+\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+Mutually exclusive with \code{as_of} or \code{issues}.}
 }
 \value{
-an instance of \code{epidata_call}
+\code{\link{epidata_call}}
 }
 \description{
-fetch covidcast data
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html}
+COVIDcast public dashboard: \url{https://delphi.cmu.edu/covidcast/}
 }
 \examples{
+\donttest{
 call <- covidcast(
   data_source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
@@ -50,14 +59,8 @@ call <- covidcast(
   time_values = epirange(20200601, 20200801),
   geo_values = "ca,fl"
 )
-fetch_csv(call)
+fetch_tbl(call)
 }
-\references{
-COVIDcast API documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html}
-
-Documentation for all COVIDcast sources and signals: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals}
-
-COVIDcast public dashboard: \url{https://delphi.cmu.edu/covidcast/}
 }
 \seealso{
 \code{\link[=covidcast_meta]{covidcast_meta()}}, \code{\link[=epirange]{epirange()}}

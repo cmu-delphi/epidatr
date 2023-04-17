@@ -2,21 +2,21 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_ght}
 \alias{pvt_ght}
-\title{fetch Google Health Trends data}
+\title{Fetch Google Health Trends data}
 \usage{
 pvt_ght(auth, locations, epiweeks, query)
 }
 \arguments{
-\item{auth}{autentification}
+\item{auth}{string. Restricted access key (not the same as API key).}
 
-\item{locations}{locations to fetch}
+\item{locations}{character vector. The locations to be fetched.}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to be fetched.}
 
-\item{query}{query}
+\item{query}{string. The query to be fetched.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/ght.html
@@ -25,6 +25,8 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/ght.html
 TODO: find a non-trivial query
 }
 \examples{
+\donttest{
 call <- pvt_ght(auth = "yourkey", locations = "ca", epiweeks = epirange(201201, 202001), query = "?")
-# fetch_classic(call)
+fetch_classic(call)
+}
 }

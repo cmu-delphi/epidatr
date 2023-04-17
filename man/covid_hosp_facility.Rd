@@ -2,34 +2,38 @@
 % Please edit documentation in R/endpoints.R
 \name{covid_hosp_facility}
 \alias{covid_hosp_facility}
-\title{fetch COVID hospitalization data for specific facilities}
+\title{Fetch COVID hospitalization data for specific facilities}
 \usage{
 covid_hosp_facility(hospital_pks, collection_weeks, publication_dates = NULL)
 }
 \arguments{
-\item{hospital_pks}{A character string of facility unique identifiers}
+\item{hospital_pks}{string. A character string of facility unique identifiers.}
 
-\item{collection_weeks}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
+\item{collection_weeks}{\code{\link{epirange}}. Epiweeks to fetch.}
 
-\item{publication_dates}{An optional epirange publication dates to fetch, using epirange(startdate,enddate).}
+\item{publication_dates}{\code{\link{epirange}}. Publication dates to fetch.}
 }
 \value{
-an instance of epidata_call
-}
-\description{
-Obtains the COVID-19 reported patient impact and hospital capacity data by facility. This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
-}
-\details{
-Starting October 1, 2022, some facilities are only required to report annually.  The companion function \code{\link[=covid_hosp_facility_lookup]{covid_hosp_facility_lookup()}} can be used to look up facility identifiers in a variety of ways.
-}
-\examples{
-call <- covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(20200101, 20200501))
-fetch_csv(call)
-}
-\references{
-API documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html}
+\code{\link{epidata_call}}
 
 See also the official description and data dictionary at <healthdata.gov> for more information.
+}
+\description{
+Obtains the COVID-19 reported patient impact and hospital capacity data by facility.
+This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
+}
+\details{
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html}
+
+Starting October 1, 2022, some facilities are only required to report annually.
+The companion function \code{\link[=covid_hosp_facility_lookup]{covid_hosp_facility_lookup()}} can be used to look up facility identifiers
+in a variety of ways.
+}
+\examples{
+\donttest{
+call <- covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(20200101, 20200501))
+fetch_tbl(call)
+}
 }
 \seealso{
 \code{\link[=covid_hosp_facility_lookup]{covid_hosp_facility_lookup()}}, \code{\link[=epirange]{epirange()}}

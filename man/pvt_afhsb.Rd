@@ -2,26 +2,28 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_afhsb}
 \alias{pvt_afhsb}
-\title{fetch AFHSB data (point data, no min/max)}
+\title{Fetch AFHSB data (point data, no min/max)}
 \usage{
 pvt_afhsb(auth, locations, epiweeks, flu_types)
 }
 \arguments{
-\item{auth}{character authentication token}
+\item{auth}{string. Restricted access key (not the same as API key).}
 
-\item{locations}{character locations to fetch}
+\item{locations}{character vector. Locations to fetch (see docs).}
 
-\item{epiweeks}{epirange epiweeks to fetch}
+\item{epiweeks}{\code{\link{epirange}}. Epiweeks to fetch.}
 
-\item{flu_types}{character flu_types to fetch}
+\item{flu_types}{string. Flu types to fetch (see docs).}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/afhsb.html
 }
 \examples{
+\donttest{
 call <- pvt_afhsb(auth = "yourkey", "fl,ca", epirange(202001, 202110), "flu1,flu2-flu1")
-# fetch_csv(call)
+fetch_tbl(call)
+}
 }

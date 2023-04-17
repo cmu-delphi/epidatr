@@ -2,26 +2,28 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_sensors}
 \alias{pvt_sensors}
-\title{fetch Delphi's digital surveillance sensors}
+\title{Fetch Delphi's digital surveillance sensors}
 \usage{
 pvt_sensors(auth, names, locations, epiweeks)
 }
 \arguments{
-\item{auth}{authenfication token}
+\item{auth}{string. Restricted access key (not the same as API key).}
 
-\item{names}{names to fetch}
+\item{names}{character vector. The names of the sensors to fetch.}
 
-\item{locations}{locations to fetch}
+\item{locations}{character vector. The locations to fetch.}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/sensors.html
 }
 \examples{
+\donttest{
 call <- pvt_sensors(auth = "yourkey", names = "sar3", locations = "nat", epiweeks = epirange(201501, 202001))
-# fetch_classic(call)
+fetch_classic(call)
+}
 }

@@ -2,24 +2,26 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_quidel}
 \alias{pvt_quidel}
-\title{fetch Quidel data}
+\title{Fetch Quidel COVID-19 and influenza testing data}
 \usage{
 pvt_quidel(auth, epiweeks, locations)
 }
 \arguments{
-\item{auth}{authenfication token}
+\item{auth}{string. Restricted access key (not the same as API key).}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
 
-\item{locations}{locations to fetch}
+\item{locations}{character vector. The locations to fetch.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/quidel.html
 }
 \examples{
+\donttest{
 call <- pvt_quidel(auth = "yourkey", epiweeks = epirange(201201, 202001), locations = "hhs1")
-# fetch_classic(call)
+fetch_classic(call)
+}
 }

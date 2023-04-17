@@ -2,28 +2,30 @@
 % Please edit documentation in R/endpoints.R
 \name{nowcast}
 \alias{nowcast}
-\title{fetch Delphi's ILI nowcast}
+\title{Fetch Delphi's ILI nowcast}
 \usage{
 nowcast(locations, epiweeks)
 }
 \arguments{
-\item{locations}{a character string that indicates a location such as national, HHS region, census division, most states and territories, and etc.}
+\item{locations}{character vector. The locations to fetch.}
 
-\item{Takes}{in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
-Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html}.
 }
 \details{
-The full list of location inputs can be accsssed at \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
+Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data
+
+The full list of location inputs can be accsssed at
+\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
 }
 \examples{
+\donttest{
 call <- nowcast(location = "ca", epiweeks = epirange(201201, 202001))
 fetch_classic(call)
 }
-\references{
-API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html}.
 }

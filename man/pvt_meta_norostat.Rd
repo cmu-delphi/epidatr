@@ -2,15 +2,15 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_meta_norostat}
 \alias{pvt_meta_norostat}
-\title{fetch NoroSTAT meta data}
+\title{Fetch NoroSTAT metadata}
 \usage{
 pvt_meta_norostat(auth)
 }
 \arguments{
-\item{auth}{authenfication token}
+\item{auth}{string. Restricted access key (not the same as API key).}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html

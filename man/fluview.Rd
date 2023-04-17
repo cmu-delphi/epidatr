@@ -2,49 +2,40 @@
 % Please edit documentation in R/endpoints.R
 \name{fluview}
 \alias{fluview}
-\title{Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data}
+\title{Fetch FluView data}
 \usage{
 fluview(regions, epiweeks, issues = NULL, lag = NULL, auth = NULL)
 }
 \arguments{
-\item{regions}{a character string that indicates a location such as national, HHS region, census division, most states and territories, and etc.}
+\item{regions}{character vector. The locations to fetch. Can we any string IDs in national, HHS region,
+census division, most states and territories, and so on. Full list link below.}
 
-\item{epiweeks}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch in the form epirange(startweek,endweek), where startweek
+and endweek are of the form YYYYWW (string or numeric).}
 
-\item{issues}{an optional parameter that takes the form YYYYMMDD specifying the exact issues to fetch.}
+\item{issues}{\code{\link{epirange}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+Mutually exclusive with \code{lag}.}
 
-\item{lag}{optionally specify the issue lag}
+\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+Mutually exclusive with \code{issues}.}
 
-\item{auth}{optional authentication}
-
-\item{locations}{a character string that indicates a location such as national, HHS region, census division, most states and territories, and etc.}
-
-\item{Takes}{in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
+\item{auth}{string. Optionally, restricted access key (not the same as API key).}
 }
 \value{
-an instance of epidata_call
-
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
-Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data
+Obtains information on outpatient inluenza-like-illness (ILI) from U.S. Outpatient Influenza-like Illness Surveillance
+Network (ILINet).
 }
 \details{
-The full list of location inputs can be accsssed at \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview.html}.
+For more information on ILINet, see \url{https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html}.
 
-The full list of location inputs can be accsssed at \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
+The full list of location inputs can be accsssed at
+\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
 }
 \examples{
-call <- nowcast(location = "ca", epiweeks = epirange(201201, 202001))
-fetch_classic(call)
 call <- fluview(regions = "nat", epiweeks = epirange(201201, 202001))
 fetch_classic(call)
-}
-\references{
-API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html}.
-fetch fluview data
-
-Obtains information on outpatient inluenza-like-illness (ILI) from U.S. Outpatient Influenza-like Illness Surveillance Network (ILINet).
-
-API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview.html}.  For more information on ILINet, see \url{https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html}.
 }

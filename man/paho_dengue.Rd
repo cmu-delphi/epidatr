@@ -2,26 +2,30 @@
 % Please edit documentation in R/endpoints.R
 \name{paho_dengue}
 \alias{paho_dengue}
-\title{fetch Paho Dengue}
+\title{Fetch PAHO Dengue}
 \usage{
 paho_dengue(regions, epiweeks, issues = NULL, lag = NULL)
 }
 \arguments{
-\item{regions}{regions to fetch}
+\item{regions}{character vector. The regions to fetch.}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
 
-\item{issues}{issues to fetch}
+\item{issues}{\code{\link{epirange}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+Mutually exclusive with \code{lag}.}
 
-\item{lag}{lag to fetch}
+\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
+Mutually exclusive with \code{issues}.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html
 }
 \examples{
+\donttest{
 call <- paho_dengue(regions = "ca", epiweeks = epirange(201201, 202001))
 fetch_classic(call)
+}
 }

@@ -2,26 +2,28 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_twitter}
 \alias{pvt_twitter}
-\title{fetch HealthTweets data}
+\title{Fetch HealthTweets data}
 \usage{
 pvt_twitter(auth, locations, dates = NULL, epiweeks = NULL)
 }
 \arguments{
-\item{auth}{autentification}
+\item{auth}{string. Restricted access key (not the same as API key).}
 
-\item{locations}{locations to fetch}
+\item{locations}{character vector. The locations to fetch.}
 
-\item{dates}{epiweeks to fetch}
+\item{dates}{\code{\link{epirange}}. The dates to fetch. Mutually exclusive with \code{epiweeks}.}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch. Mutually exclusive with \code{dates}.}
 }
 \value{
-an instance of epidata_call
+\code{\link{epidata_call}}
 }
 \description{
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/twitter.html
 }
 \examples{
+\donttest{
 call <- pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001))
-# fetch_csv(call)
+fetch_tbl(call)
+}
 }
