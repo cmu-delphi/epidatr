@@ -13,15 +13,19 @@ get_auth_key <- function() {
   key <- getOption("delphi.epidata.key", default = "")
   if (key != "") return(key)
 
-  warning(
-    paste0(
-      "No API key found. To avoid being rate limited, you can:\n",
-      " - set the environment variable DELPHI_EPIDATA_KEY.\n",
-      " - set the option 'delphi.epidata.key' or\n",
-      "\n",
-      "To save your key for later sessions (and hide it from your code), you can edit your .Renviron file with:\n",
-      "  usewith::edit_r_environ()"
-    )
+  rlang::warn(
+    c(
+      "No API key found. You will be limited to non-complex queries and encounter rate limits if you proceed.",
+      "To avoid this, you can get your key [here] and then:",
+      "i" = "set the environment variable DELPHI_EPIDATA_KEY",
+      "i" = "set the option 'delphi.epidata.key'",
+      "",
+      "To save your key for later sessions (and hide it from your code), you can edit your .Renviron file with:",
+      "i" = "usethis::edit_r_environ()"
+    ),
+    use_cli_format = TRUE,
+    .frequency = "regular",
+    .frequency_id = "delphi.epidata.key"
   )
   return("")
 }
