@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Delphi
 Group</h4>
             
-            <h4 data-toc-skip class="date">2023-04-06</h4>
+            <h4 data-toc-skip class="date">2023-04-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/cmu-delphi/epidatr/blob/HEAD/vignettes/epidatr.Rmd" class="external-link"><code>vignettes/epidatr.Rmd</code></a></small>
       <div class="hidden name"><code>epidatr.Rmd</code></div>
@@ -105,6 +105,16 @@ Group</h4>
 <code class="sourceCode R"><span><span class="va">epicall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covidcast.html">covidcast</a></span><span class="op">(</span><span class="st">"fb-survey"</span>, <span class="st">"smoothed_cli"</span>, <span class="st">"day"</span>, <span class="st">"nation"</span>, <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span>, <span class="st">"us"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/fetch_classic.html">fetch_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: No API key found. You will be limited to non-complex queries and encounter rate</span></span>
+<span><span class="co">## limits if you proceed.</span></span>
+<span><span class="co">## To avoid this, you can get your key [here] and then:</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> set the environment variable DELPHI_EPIDATA_KEY</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> set the option 'delphi.epidata.key'</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## To save your key for later sessions (and hide it from your code), you can edit</span></span>
+<span><span class="co">## your .Renviron file with:</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> usethis::edit_r_environ()</span></span>
+<span><span class="co">## <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span></code></pre>
 <pre><code><span><span class="co">## $epidata</span></span>
 <span><span class="co">##   geo_value       signal    source geo_type time_type time_value direction</span></span>
 <span><span class="co">## 1        us smoothed_cli fb-survey   nation       day 2021-04-05        NA</span></span>
@@ -133,7 +143,7 @@ Group</h4>
 <span><span class="co">## </span></span>
 <span><span class="co">## $message</span></span>
 <span><span class="co">## [1] "success"</span></span></code></pre>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/fetch_json.html">fetch_json</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   geo_value       signal    source geo_type time_type time_value direction</span></span>
 <span><span class="co">## 1        us smoothed_cli fb-survey   nation       day 2021-04-05        NA</span></span>
@@ -156,12 +166,12 @@ Group</h4>
 <span><span class="co">## 4 0.0152358      241380</span></span>
 <span><span class="co">## 5 0.0154660      240256</span></span>
 <span><span class="co">## 6 0.0154417      239818</span></span></code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/fetch_csv.html">fetch_csv</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "geo_value,signal,source,geo_type,time_type,time_value,direction,issue,lag,missing_value,missing_stderr,missing_sample_size,value,stderr,sample_size\nus,smoothed_cli,fb-survey,nation,day,20210405,,20210410,5,0,0,0,0.6758323,0.0148258,244046.0\nus,smoothed_cli,fb-survey,nation,day,20210406,,20210411,5,0,0,0,0.6906869,0.014998,242979.0\nus,smoothed_cli,fb-survey,nation,day,20210407,,20210412,5,0,0,0,0.6906637,0.0150228,242153.0\nus,smoothed_cli,fb-survey,nation,day,20210408,,20210413,5,0,0,0,0.7065026,0.0152358,241380.0\nus,smoothed_cli,fb-survey,nation,day,20210409,,20210414,5,0,0,0,0.7243055,0.015466,240256.0\nus,smoothed_cli,fb-survey,nation,day,20210410,,20210415,5,0,0,0,0.7227126,0.0154417,239818.0\n"</span></span>
 <span><span class="co">## attr(,"class")</span></span>
 <span><span class="co">## [1] "epidata_csv" "character"</span></span></code></pre>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/fetch_df.html">fetch_df</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   geo_value       signal    source geo_type time_type time_value direction</span></span>
 <span><span class="co">## 1        us smoothed_cli fb-survey   nation       day 2021-04-05        NA</span></span>
@@ -184,7 +194,7 @@ Group</h4>
 <span><span class="co">## 4 0.0152358      241380</span></span>
 <span><span class="co">## 5 0.0154660      240256</span></span>
 <span><span class="co">## 6 0.0154417      239818</span></span></code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># epicall %&gt;% with_base_url("https://staging.delphi.cmu.edu/epidata/") %&gt;% fetch_df()</span></span></code></pre></div>
 </div>
   </div>

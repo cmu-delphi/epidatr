@@ -105,6 +105,12 @@
 <p>TODO</p>
 </div>
 <div class="section level2">
+<h2 id="api-keys">API Keys<a class="anchor" aria-label="anchor" href="#api-keys"></a>
+</h2>
+<p>The Delphi API will soon require a (free) API key for full functionality. The <code>epidatr</code> client will automatically look for this key in the R option <code>delphi.epidata.key</code> and then from the environment variable <code>DELPHI_EPIDATA_KEY</code>. We recommend storing your key in <code>.Renviron</code> file, which R will read by default. You can do this with <code>usethis::edit_r_environ()</code> and there enter <code>DELPHI_EPIDATA_KEY=&lt;your-key&gt;</code>. An alternative is <a href="https://github.com/gaborcsardi/dotenv/" class="external-link">the dotenv package</a>.</p>
+<p>Note that for the time being, the private endpoints (i.e. those prefixed with <code>pvt</code>) will require a separate key that needs to be passed as an argument.</p>
+</div>
+<div class="section level2">
 <h2 id="development-environment">Development Environment<a class="anchor" aria-label="anchor" href="#development-environment"></a>
 </h2>
 <p>Relevant R commands</p>
