@@ -2,7 +2,7 @@
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/afhsb.html
 #'
-#' @param auth character authentication token
+#' @param auth character authentication token (note that this is not the same as the API key)
 #' @param locations character locations to fetch
 #' @param epiweeks epirange epiweeks to fetch
 #' @param flu_types character flu_types to fetch
@@ -42,7 +42,7 @@ pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
 #' @examples
 #' call <- pvt_cdc(auth = "yourkey", epirange(20210101, 20210201), "fl,ca")
 #' # fetch_csv(call)
-#' @param auth character authentication token
+#' @param auth character authentication token (note that this is not the same as the API key)
 #' @param epiweeks epirange epiweeks to fetch
 #' @param locations character locations to fetch
 #' @return an instance of epidata_call
@@ -834,7 +834,7 @@ dengue_nowcast <- function(locations, epiweeks) {
 #' @examples
 #' call <- pvt_dengue_sensors(auth = "yourkey", names = "?", locations = "?", epiweeks = epirange(201501, 202001))
 #' # fetch_classic(call)
-#' @param auth authenfication token
+#' @param auth authenfication token (note that this is not the same as the API key)
 #' @param names names to fetch
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
@@ -1041,7 +1041,7 @@ fluview_meta <- function() {
 #' @param epiweeks epiweeks to fetch
 #' @param issues optionally specify the exact issues to fetch
 #' @param lag optionally specify the issue lag
-#' @param auth optional authentication
+#' @param auth optional authentication token (note that this is not the same as the API key)
 #' @return an instance of epidata_call
 #'
 #' @export
@@ -1123,7 +1123,7 @@ gft <- function(locations, epiweeks) {
 #' @examples
 #' call <- pvt_ght(auth = "yourkey", locations = "ca", epiweeks = epirange(201201, 202001), query = "?")
 #' # fetch_classic(call)
-#' @param auth autentification
+#' @param auth authentication token (note that this is not the same as the API key)
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
 #' @param query query
@@ -1200,7 +1200,7 @@ kcdc_ili <- function(regions,
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_afhsb.html
 #'
-#' @param auth authenfication token
+#' @param auth authentication token (note that this is not the same as the API key)
 #' @return an instance of epidata_call
 #'
 #' @export
@@ -1214,7 +1214,7 @@ pvt_meta_afhsb <- function(auth) {
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html
 #'
-#' @param auth authenfication token
+#' @param auth authentication token (note that this is not the same as the API key)
 #' @return an instance of epidata_call
 #'
 #' @export
@@ -1322,7 +1322,7 @@ nidss_flu <-
 #'   epiweeks = epirange(201201, 202001)
 #' )
 #' # fetch_classic(call)
-#' @param auth authenfication token
+#' @param auth authentication token (note that this is not the same as the API key)
 #' @param location location to fetch
 #' @param epiweeks epiweeks to fetch
 #' @return an instance of epidata_call
@@ -1430,7 +1430,7 @@ paho_dengue <- function(regions,
 #' @examples
 #' call <- pvt_quidel(auth = "yourkey", epiweeks = epirange(201201, 202001), locations = "hhs1")
 #' # fetch_classic(call)
-#' @param auth authenfication token
+#' @param auth authentication token (note that this is not the same as the API key)
 #' @param epiweeks epiweeks to fetch
 #' @param locations locations to fetch
 #' @return an instance of epidata_call
@@ -1463,7 +1463,7 @@ pvt_quidel <- function(auth, epiweeks, locations) {
 #' @examples
 #' call <- pvt_sensors(auth = "yourkey", names = "sar3", locations = "nat", epiweeks = epirange(201501, 202001))
 #' # fetch_classic(call)
-#' @param auth authenfication token
+#' @param auth authentication token (note that this is not the same as the API key)
 #' @param names names to fetch
 #' @param locations locations to fetch
 #' @param epiweeks epiweeks to fetch
@@ -1500,7 +1500,7 @@ pvt_sensors <- function(auth, names, locations, epiweeks) {
 #' @examples
 #' call <- pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001))
 #' # fetch_csv(call)
-#' @param auth autentification
+#' @param auth authentication token (note that this is not the same as the API key)
 #' @param locations locations to fetch
 #' @param dates epiweeks to fetch
 #' @param epiweeks epiweeks to fetch
