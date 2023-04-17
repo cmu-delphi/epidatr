@@ -1,17 +1,21 @@
 #' Get the API key
-#' 
+#'
 #' Get the API key from the environment variable DELPHI_EPIDATA_KEY or getOption("delphi.epidata.key")
-#' 
+#'
 #' @param verbose Will print the source of the key if TRUE (e.g. options, environment, or config file)
 #' @return The API key
-#' 
+#'
 #' @export
 get_auth_key <- function() {
   key <- Sys.getenv("DELPHI_EPIDATA_KEY", unset = "")
-  if (key != "") return(key)
+  if (key != "") {
+    return(key)
+  }
 
   key <- getOption("delphi.epidata.key", default = "")
-  if (key != "") return(key)
+  if (key != "") {
+    return(key)
+  }
 
   rlang::warn(
     c(
