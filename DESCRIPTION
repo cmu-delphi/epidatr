@@ -20,16 +20,16 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 Imports:
-  cli,
-  httr,
-  jsonlite,
-  readr,
-  MMWRweek,
-  rlang
+    cli,
+    httr,
+    jsonlite,
+    readr,
+    MMWRweek,
+    rlang,
+    magrittr
 RoxygenNote: 7.2.3
 Suggests:
     knitr,
-    magrittr,
     rmarkdown,
     testthat
 VignetteBuilder: knitr
