@@ -7,19 +7,30 @@
 covid_hosp_facility(hospital_pks, collection_weeks, publication_dates = NULL)
 }
 \arguments{
-\item{hospital_pks}{character hospitals to fetch}
+\item{hospital_pks}{A character string of facility unique identifiers}
 
-\item{collection_weeks}{epirange weeks to fetch}
+\item{collection_weeks}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
 
-\item{publication_dates}{optional epirange publication dates to fetch}
+\item{publication_dates}{An optional epirange publication dates to fetch, using epirange(startdate,enddate).}
 }
 \value{
 an instance of epidata_call
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html
+Obtains the COVID-19 reported patient impact and hospital capacity data by facility. This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
+}
+\details{
+Starting October 1, 2022, some facilities are only required to report annually.  The companion function \code{\link[=covid_hosp_facility_lookup]{covid_hosp_facility_lookup()}} can be used to look up facility identifiers in a variety of ways.
 }
 \examples{
-call <- covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(202001, 202005))
+call <- covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(20200101, 20200501))
 fetch_csv(call)
+}
+\references{
+API documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html}
+
+See also the official description and data dictionary at <healthdata.gov> for more information.
+}
+\seealso{
+\code{\link[=covid_hosp_facility_lookup]{covid_hosp_facility_lookup()}}, \code{\link[=epirange]{epirange()}}
 }

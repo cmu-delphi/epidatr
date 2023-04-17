@@ -13,26 +13,34 @@ covid_hosp_facility_lookup(
 )
 }
 \arguments{
-\item{state}{optional character state}
+\item{state}{A two-letter character string state abbreviation.}
 
-\item{ccn}{optional character ccn}
+\item{ccn}{A character string for facility CMS certification number.}
 
-\item{city}{optional character city}
+\item{city}{A characater string for city name.}
 
-\item{zip}{optional numeric zip code}
+\item{zip}{A numeric 5-digit zip code.}
 
-\item{fips_code}{optional numeric fips code}
+\item{fips_code}{A numeric 5-digit fips county code.}
 }
 \value{
-an instance of epidata_call
+an instance of epidata_call.
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html
+Obtains unique identifiers and other metadata for COVID hospitalization  facilities of interest.   This is a companinon endpoint to the \code{\link[=covid_hosp_facility]{covid_hosp_facility()}} endpoint.
+}
+\details{
+Only one argument needs to be specified.  Combinations of the arguments are not currently supported.  For instance, specifying both city and state are not supported.
 }
 \examples{
 \donttest{
-# can take a few minutes; donttesting while backend performance is being improved
 call <- covid_hosp_facility_lookup(state = "fl")
 fetch_csv(call)
 }
+}
+\references{
+API documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html}
+}
+\seealso{
+\code{\link[=covid_hosp_facility]{covid_hosp_facility()}}
 }

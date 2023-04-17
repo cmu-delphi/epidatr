@@ -9,7 +9,7 @@ nidss_flu(regions, epiweeks, issues = NULL, lag = NULL)
 \arguments{
 \item{regions}{regions to fetch}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
 
 \item{issues}{optional issues}
 
@@ -19,9 +19,12 @@ nidss_flu(regions, epiweeks, issues = NULL, lag = NULL)
 an instance of epidata_call
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html
+Obtains information on outpatient inluenza-like-illness from Taiwan National Infectious Disease Statistical System.
 }
 \examples{
 call <- nidss_flu(regions = "taipei", epiweeks = epirange(201201, 202001))
 fetch_classic(call)
+}
+\references{
+API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html}
 }

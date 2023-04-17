@@ -9,7 +9,7 @@ ecdc_ili(regions, epiweeks, issues = NULL, lag = NULL)
 \arguments{
 \item{regions}{regions to fetch}
 
-\item{epiweeks}{epiweeks to fetch}
+\item{epiweeks}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
 
 \item{issues}{optionally specify the exact issues to fetch}
 
@@ -19,12 +19,15 @@ ecdc_ili(regions, epiweeks, issues = NULL, lag = NULL)
 an instance of epidata_call
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html
+Obtain information on influenza-like-illness from the European Center of Disease Control.
 }
 \details{
-TODO: find a region that has non-trivial output
+The list of location argument can be found in \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/ecdc_regions.txt}.
 }
 \examples{
-call <- ecdc_ili(regions = "?", epiweeks = epirange(201201, 202001))
+call <- ecdc_ili(regions = "austria", epiweeks = epirange(201201, 202001))
 fetch_classic(call)
+}
+\references{
+API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html}.
 }

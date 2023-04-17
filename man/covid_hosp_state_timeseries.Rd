@@ -2,24 +2,34 @@
 % Please edit documentation in R/endpoints.R
 \name{covid_hosp_state_timeseries}
 \alias{covid_hosp_state_timeseries}
-\title{fetch COVID hospitalization data}
+\title{Fetch COVID Hospitalization Data by State}
 \usage{
 covid_hosp_state_timeseries(states, dates, issues = NULL)
 }
 \arguments{
-\item{states}{states to fetch}
+\item{states}{A two letter character string state abbreviation.}
 
-\item{dates}{dates to fetch}
+\item{dates}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
 
-\item{issues}{issues to fetch}
+\item{issues}{An optional parameter that takes the form YYYYMMDD.  If issues is not specified, then the most recent issue is used by default.}
 }
 \value{
 an instance of epidata_call
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html
+Obtains the COVID-19 reported patient impact and hospital capacity data by state. This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
+}
+\details{
+Starting October 1, 2022, some facilities are only required to report annually.
 }
 \examples{
+\donttest{
 call <- covid_hosp_state_timeseries(states = "fl", dates = epirange(20200101, 20200501))
 fetch_csv(call)
+}
+}
+\references{
+API Documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html}.
+
+See also the official description and data dictionary at <healthdata.gov> for more information.
 }

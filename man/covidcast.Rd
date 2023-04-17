@@ -17,17 +17,17 @@ covidcast(
 )
 }
 \arguments{
-\item{data_source}{data source to fetch}
+\item{data_source}{A character string representing a data source to query: (1) fb-survey; (2) jhu-csse; (3) google-symptoms; (4) doctor-visits; (5) quidel; (6) hhs.    For more information about each data source, see \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html}.}
 
-\item{signals}{data source to fetch}
+\item{signals}{A character string representing signals from a specific source to query.    A list of available signals for each data source can be found in \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals}. Each data source may have different signals.}
 
-\item{time_type}{data source to fetch}
+\item{time_type}{Temporal resolution of the data.  Most signals are available at time_type = "day" resolution.  Some signals are only available at the time_type = "week" resolution.}
 
-\item{geo_type}{geo_type to fetch}
+\item{geo_type}{A character string that specifies geographic types: (1) county; (2) hrr, hospital referral region; (3) hhs;  (4) msa, metropolitan statistical area; (5) dma, designated market areas; (6) state; (7) nation.  See \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html} for details on which types are available for each data source.}
 
-\item{time_values}{data source to fetch}
+\item{time_values}{Takes in the form epirange(startdate,enddate), where startdate and enddate are of the form YYYYMMDD (can be passed as string or numeric).}
 
-\item{geo_values}{data source to fetch}
+\item{geo_values}{A character string that specified which geographies to return. "*" fetches all geographies.  To fetch specific geographies, specify their IDs as a vector or a list of strings.    More information can be found in \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.}
 
 \item{as_of}{data source to fetch}
 
@@ -36,10 +36,10 @@ covidcast(
 \item{lag}{data source to fetch}
 }
 \value{
-an instance of epidata_call
+an instance of \code{epidata_call}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html
+fetch covidcast data
 }
 \examples{
 call <- covidcast(
@@ -51,4 +51,14 @@ call <- covidcast(
   geo_values = "ca,fl"
 )
 fetch_csv(call)
+}
+\references{
+COVIDcast API documentation: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html}
+
+Documentation for all COVIDcast sources and signals: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals}
+
+COVIDcast public dashboard: \url{https://delphi.cmu.edu/covidcast/}
+}
+\seealso{
+\code{\link[=covidcast_meta]{covidcast_meta()}}, \code{\link[=epirange]{epirange()}}
 }

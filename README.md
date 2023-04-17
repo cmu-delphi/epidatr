@@ -2,6 +2,10 @@
 
 [![License: MIT][mit-image]][mit-url] [![Github Actions][github-actions-image]][github-actions-url]
 
+## Documentation
+
+- [Package website](https://cmu-delphi.github.io/epidatr/)
+
 ## Install
 
 Install latest version using [`remotes`](https://cran.r-project.org/package=remotes) package
