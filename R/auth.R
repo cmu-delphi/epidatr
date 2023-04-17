@@ -24,7 +24,7 @@ get_auth_key <- function() {
       "i" = "usethis::edit_r_environ()"
     ),
     use_cli_format = TRUE,
-    .frequency = "regular",
+    .frequency = "regularly",
     .frequency_id = "delphi.epidata.key"
   )
   return("")
