@@ -28,28 +28,14 @@
 #'    from a different Epidata server
 #'
 #' @examples
-#' call <- covidcast(
+#' covidcast(
 #'   data_source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
 #'   time_type = "day",
 #'   geo_type = "state",
 #'   time_values = epirange(20200601, 20200801),
 #'   geo_values = c("ca", "fl")
-#' )
-#' fetch_tbl(call)
-#'
-#' # Using a pipe operator is convenient here:
-#' library(magrittr)
-#' data <- covidcast(
-#'   data_source = "jhu-csse",
-#'   signals = "confirmed_7dav_incidence_prop",
-#'   time_type = "day",
-#'   geo_type = "state",
-#'   time_values = epirange(20200601, 20200801),
-#'   geo_values = c("ca", "fl")
-#' ) %>%
-#'   fetch_tbl()
-#' data
+#' ) %>% fetch_tbl
 #'
 #' @param endpoint the epidata endpoint to call
 #' @param params the parameters to pass to the epidata endpoint
