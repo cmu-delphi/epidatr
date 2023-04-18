@@ -94,10 +94,10 @@ request_arguments <-
 #' @export
 print.epidata_call <- function(epidata_call) {
   stopifnot(inherits(epidata_call, "epidata_call"))
-  cat("<epidata_call> object:\n")
+  cli::cli_h1("<epidata_call> object:")
   cli::cli_bullets(c(
     "*" = "Use fetch_classic, fetch_json, or fetch_csv to actually fetch the data",
-    "*" = "For debugging purposes, use request_url with appropriate parameters to see the URLs being used by these fetch functions."
+    "*" = paste0("Request URL: ", request_url(epidata_call))
   ))
 }
 
