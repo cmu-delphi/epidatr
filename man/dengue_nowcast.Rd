@@ -22,7 +22,9 @@ TODO: what are valid locations here?
 }
 \examples{
 \dontrun{
-call <- dengue_nowcast(locations = "?", epiweeks = epirange(201501, 202001))
-fetch_classic(call)
+dengue_nowcast(
+  locations = "?",
+  epiweeks = epirange(201501, 202001)
+) \%>\% fetch_classic
 }
 }

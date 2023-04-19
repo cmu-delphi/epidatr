@@ -25,7 +25,6 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html
 }
 \examples{
 \donttest{
-call <- paho_dengue(regions = "ca", epiweeks = epirange(201201, 202001))
-fetch_classic(call)
+paho_dengue(regions = "ca", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic
 }
 }

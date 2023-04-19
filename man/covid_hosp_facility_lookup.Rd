@@ -39,8 +39,7 @@ For instance, specifying both city and state are not supported.
 }
 \examples{
 \donttest{
-call <- covid_hosp_facility_lookup(state = "fl")
-fetch_tbl(call)
+covid_hosp_facility_lookup(state = "fl") \%>\% fetch_tbl
 }
 }
 \seealso{

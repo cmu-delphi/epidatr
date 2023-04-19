@@ -21,7 +21,10 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/cdc.html
 }
 \examples{
 \dontrun{
-call <- pvt_cdc(auth = "yourkey", epirange(20210101, 20210201), "fl,ca")
-fetch_tbl(call)
+pvt_cdc(
+  auth = "yourkey",
+  epirange(20210101, 20210201),
+  "fl,ca"
+) \%>\% fetch_tbl
 }
 }

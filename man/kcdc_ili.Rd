@@ -28,7 +28,6 @@ TODO: find a non-trivial region
 }
 \examples{
 \dontrun{
-call <- kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001))
-fetch_tbl(call)
+kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001)) \%>\% fetch_tbl
 }
 }

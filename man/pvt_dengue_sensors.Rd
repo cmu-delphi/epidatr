@@ -26,7 +26,11 @@ TODO: what are valid locations and names?
 }
 \examples{
 \dontrun{
-call <- pvt_dengue_sensors(auth = "yourkey", names = "?", locations = "?", epiweeks = epirange(201501, 202001))
-fetch_classic(call)
+pvt_dengue_sensors(
+  auth = "yourkey",
+  names = "?",
+  locations = "?",
+  epiweeks = epirange(201501, 202001)
+) \%>\% fetch_classic
 }
 }

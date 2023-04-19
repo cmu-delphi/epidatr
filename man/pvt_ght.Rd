@@ -26,7 +26,11 @@ TODO: find a non-trivial query
 }
 \examples{
 \dontrun{
-call <- pvt_ght(auth = "yourkey", locations = "ca", epiweeks = epirange(201201, 202001), query = "?")
-fetch_classic(call)
+pvt_ght(
+  auth = "yourkey",
+  locations = "ca",
+  epiweeks = epirange(201201, 202001),
+  query = "?"
+) \%>\% fetch_classic
 }
 }
