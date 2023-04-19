@@ -6,6 +6,9 @@
 \usage{
 parse_api_week(value)
 }
+\arguments{
+\item{value}{value to be converted to an epiweek}
+}
 \value{
 a date
 }

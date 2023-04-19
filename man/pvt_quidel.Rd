@@ -21,6 +21,10 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/quidel.html
 }
 \examples{
 \dontrun{
-pvt_quidel(auth = "yourkey", epiweeks = epirange(201201, 202001), locations = "hhs1") \%>\% fetch_classic
+pvt_quidel(
+  auth = "yourkey",
+  epiweeks = epirange(201201, 202001),
+  locations = "hhs1"
+) \%>\% fetch_classic
 }
 }
