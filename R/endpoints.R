@@ -1489,7 +1489,11 @@ paho_dengue <- function(regions,
 #'
 #' @examples
 #' \dontrun{
-#' pvt_quidel(auth = "yourkey", epiweeks = epirange(201201, 202001), locations = "hhs1") %>% fetch_classic
+#' pvt_quidel(
+#'   auth = "yourkey",
+#'   epiweeks = epirange(201201, 202001),
+#'   locations = "hhs1"
+#' ) %>% fetch_classic
 #' }
 #' @param auth string. Your authentication key.
 #' @param epiweeks [`epirange`]. The epiweeks to fetch.
