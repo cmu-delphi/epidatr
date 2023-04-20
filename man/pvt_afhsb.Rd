@@ -28,6 +28,6 @@ pvt_afhsb(
   "fl,ca",
   epirange(202001, 202110),
   "flu1,flu2-flu1"
-) \%>\% fetch_tbl
+) \%>\% fetch_tbl()
 }
 }

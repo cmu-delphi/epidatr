@@ -34,7 +34,7 @@ in a variety of ways.
 covid_hosp_facility(
   hospital_pks = "100075",
   collection_weeks = epirange(20200101, 20200501)
-) \%>\% fetch_tbl
+) \%>\% fetch_tbl()
 }
 }
 \seealso{

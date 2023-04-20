@@ -23,6 +23,6 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/twitter.html
 }
 \examples{
 \dontrun{
-pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001)) \%>\% fetch_tbl
+pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001)) \%>\% fetch_tbl()
 }
 }

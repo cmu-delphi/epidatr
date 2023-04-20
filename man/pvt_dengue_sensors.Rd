@@ -31,6 +31,6 @@ pvt_dengue_sensors(
   names = "?",
   locations = "?",
   epiweeks = epirange(201501, 202001)
-) \%>\% fetch_classic
+) \%>\% fetch_classic()
 }
 }

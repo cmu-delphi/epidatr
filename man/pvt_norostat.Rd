@@ -25,6 +25,6 @@ pvt_norostat(
   auth = "yourkey",
   location = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
   epiweeks = epirange(201201, 202001)
-) \%>\% fetch_classic
+) \%>\% fetch_classic()
 }
 }

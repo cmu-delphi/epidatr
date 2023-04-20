@@ -32,6 +32,6 @@ The list of location argument can be found in
 }
 \examples{
 \donttest{
-flusurv(locations = "CA", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic
+flusurv(locations = "CA", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic()
 }
 }

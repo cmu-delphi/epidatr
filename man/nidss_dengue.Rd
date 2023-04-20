@@ -26,6 +26,6 @@ Possible location inputs can be found in
 }
 \examples{
 \donttest{
-nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic
+nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic()
 }
 }
