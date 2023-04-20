@@ -36,7 +36,7 @@
 #'   geo_type = "state",
 #'   time_values = epirange(20200601, 20200801),
 #'   geo_values = c("ca", "fl")
-#' ) %>% fetch_tbl
+#' ) %>% fetch_tbl()
 #'
 #' @param endpoint the epidata endpoint to call
 #' @param params the parameters to pass to the epidata endpoint
