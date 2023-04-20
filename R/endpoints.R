@@ -957,12 +957,12 @@ flusurv <- function(locations,
       create_epidata_field_info("issue", "date"),
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("lag", "int"),
-      create_epidata_field_info("rage_age_0", "float"),
-      create_epidata_field_info("rage_age_1", "float"),
-      create_epidata_field_info("rage_age_2", "float"),
-      create_epidata_field_info("rage_age_3", "float"),
-      create_epidata_field_info("rage_age_4", "float"),
-      create_epidata_field_info("rage_overall", "float")
+      create_epidata_field_info("rate_age_0", "float"),
+      create_epidata_field_info("rate_age_1", "float"),
+      create_epidata_field_info("rate_age_2", "float"),
+      create_epidata_field_info("rate_age_3", "float"),
+      create_epidata_field_info("rate_age_4", "float"),
+      create_epidata_field_info("rate_overall", "float")
     )
   )
 }
