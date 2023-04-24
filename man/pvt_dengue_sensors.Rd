@@ -25,8 +25,12 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html
 TODO: what are valid locations and names?
 }
 \examples{
-\donttest{
-call <- pvt_dengue_sensors(auth = "yourkey", names = "?", locations = "?", epiweeks = epirange(201501, 202001))
-fetch_classic(call)
+\dontrun{
+pvt_dengue_sensors(
+  auth = "yourkey",
+  names = "?",
+  locations = "?",
+  epiweeks = epirange(201501, 202001)
+) \%>\% fetch_classic()
 }
 }

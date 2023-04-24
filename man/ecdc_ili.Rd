@@ -31,7 +31,6 @@ The list of location argument can be found in
 }
 \examples{
 \donttest{
-call <- ecdc_ili(regions = "austria", epiweeks = epirange(201201, 202001))
-fetch_classic(call)
+ecdc_ili(regions = "austria", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic()
 }
 }

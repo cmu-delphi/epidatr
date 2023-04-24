@@ -3,6 +3,7 @@ parse_api_date <- function(value) {
 }
 
 #' parses a week
+#' @param value value to be converted to an epiweek
 #' @importFrom MMWRweek MMWRweek2Date
 #' @return a date
 parse_api_week <- function(value) {

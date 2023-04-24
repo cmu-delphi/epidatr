@@ -51,15 +51,14 @@ COVIDcast public dashboard: \url{https://delphi.cmu.edu/covidcast/}
 }
 \examples{
 \donttest{
-call <- covidcast(
+covidcast(
   data_source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
   time_type = "day",
   geo_type = "state",
   time_values = epirange(20200601, 20200801),
   geo_values = "ca,fl"
-)
-fetch_tbl(call)
+) \%>\% fetch_tbl()
 }
 }
 \seealso{

@@ -25,8 +25,12 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/ght.html
 TODO: find a non-trivial query
 }
 \examples{
-\donttest{
-call <- pvt_ght(auth = "yourkey", locations = "ca", epiweeks = epirange(201201, 202001), query = "?")
-fetch_classic(call)
+\dontrun{
+pvt_ght(
+  auth = "yourkey",
+  locations = "ca",
+  epiweeks = epirange(201201, 202001),
+  query = "?"
+) \%>\% fetch_classic()
 }
 }

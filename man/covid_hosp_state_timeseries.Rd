@@ -29,7 +29,9 @@ Starting October 1, 2022, some facilities are only required to report annually.
 }
 \examples{
 \donttest{
-call <- covid_hosp_state_timeseries(states = "fl", dates = epirange(20200101, 20200501))
-fetch_tbl(call)
+covid_hosp_state_timeseries(
+  states = "fl",
+  dates = epirange(20200101, 20200501)
+) \%>\% fetch_tbl()
 }
 }

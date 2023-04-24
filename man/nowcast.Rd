@@ -25,7 +25,6 @@ The full list of location inputs can be accsssed at
 }
 \examples{
 \donttest{
-call <- nowcast(location = "ca", epiweeks = epirange(201201, 202001))
-fetch_classic(call)
+nowcast(location = "ca", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic()
 }
 }

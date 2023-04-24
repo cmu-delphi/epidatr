@@ -20,8 +20,11 @@ pvt_cdc(auth, epiweeks, locations)
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/cdc.html
 }
 \examples{
-\donttest{
-call <- pvt_cdc(auth = "yourkey", epirange(20210101, 20210201), "fl,ca")
-fetch_tbl(call)
+\dontrun{
+pvt_cdc(
+  auth = "yourkey",
+  epirange(20210101, 20210201),
+  "fl,ca"
+) \%>\% fetch_tbl()
 }
 }

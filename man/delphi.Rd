@@ -19,7 +19,6 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/delphi.html
 }
 \examples{
 \donttest{
-call <- delphi(system = "ec", epiweek = 202006)
-fetch_classic(call)
+delphi(system = "ec", epiweek = 202006) \%>\% fetch_classic()
 }
 }

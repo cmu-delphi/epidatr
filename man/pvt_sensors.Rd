@@ -22,8 +22,12 @@ pvt_sensors(auth, names, locations, epiweeks)
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/sensors.html
 }
 \examples{
-\donttest{
-call <- pvt_sensors(auth = "yourkey", names = "sar3", locations = "nat", epiweeks = epirange(201501, 202001))
-fetch_classic(call)
+\dontrun{
+pvt_sensors(
+  auth = "yourkey",
+  names = "sar3",
+  locations = "nat",
+  epiweeks = epirange(201501, 202001)
+) \%>\% fetch_classic()
 }
 }

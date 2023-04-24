@@ -28,7 +28,6 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html}
 }
 \examples{
 \donttest{
-call <- nidss_flu(regions = "taipei", epiweeks = epirange(201201, 202001))
-fetch_classic(call)
+nidss_flu(regions = "taipei", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic()
 }
 }
