@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@
     <h2>Value</h2>
     
 
-<p><code>epidata_call</code></p>
+<p><code><a href="epidata_call.html">epidata_call</a></code></p>
 
 
     </div>
@@ -98,8 +98,7 @@ can be found in <a href="https://github.com/cmu-delphi/delphi-epidata/blob/main/
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">call</span> <span class="op">&lt;-</span> <span class="fu">gft</span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"hhs1"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201201</span>, <span class="fl">202001</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="fetch_classic.html">fetch_classic</a></span><span class="op">(</span><span class="va">call</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">gft</span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"hhs1"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201201</span>, <span class="fl">202001</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch_classic</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $epidata</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     location    epiweek   num</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1       hhs1 2012-01-01  1567</span>

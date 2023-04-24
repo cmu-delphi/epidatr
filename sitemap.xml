@@ -43,9 +43,6 @@
     <loc>/reference/covidcast_meta.html</loc>
   </url>
   <url>
-    <loc>/reference/create_epidata_call.html</loc>
-  </url>
-  <url>
     <loc>/reference/delphi.html</loc>
   </url>
   <url>
@@ -58,25 +55,13 @@
     <loc>/reference/ecdc_ili.html</loc>
   </url>
   <url>
+    <loc>/reference/epidata_call.html</loc>
+  </url>
+  <url>
     <loc>/reference/epidatr.html</loc>
   </url>
   <url>
     <loc>/reference/epirange.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fetch_classic.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fetch_csv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fetch_df.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fetch_json.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fetch_tbl.html</loc>
   </url>
   <url>
     <loc>/reference/flusurv.html</loc>
@@ -124,6 +109,9 @@
     <loc>/reference/parse_signal.html</loc>
   </url>
   <url>
+    <loc>/reference/pipe.html</loc>
+  </url>
+  <url>
     <loc>/reference/pvt_afhsb.html</loc>
   </url>
   <url>
@@ -154,12 +142,6 @@
     <loc>/reference/pvt_twitter.html</loc>
   </url>
   <url>
-    <loc>/reference/request_url.html</loc>
-  </url>
-  <url>
     <loc>/reference/wiki.html</loc>
-  </url>
-  <url>
-    <loc>/reference/with_base_url.html</loc>
   </url>
 </urlset>

@@ -18,7 +18,7 @@ This is a companinon endpoint to the covid_hosp_facility() endpoint."><!-- mathj
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
       </span>
     </div>
 
@@ -103,7 +103,7 @@ This is a companinon endpoint to the <code><a href="covid_hosp_facility.html">co
     <h2>Value</h2>
     
 
-<p><code>epidata_call</code></p>
+<p><code><a href="epidata_call.html">epidata_call</a></code></p>
 
 
     </div>
@@ -122,8 +122,7 @@ For instance, specifying both city and state are not supported.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="va">call</span> <span class="op">&lt;-</span> <span class="fu">covid_hosp_facility_lookup</span><span class="op">(</span>state <span class="op">=</span> <span class="st">"fl"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="fetch_tbl.html">fetch_tbl</a></span><span class="op">(</span><span class="va">call</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">covid_hosp_facility_lookup</span><span class="op">(</span>state <span class="op">=</span> <span class="st">"fl"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch_tbl</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 232 × 10</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    hospital_pk state ccn    hospital_name   address city  zip   hospital_subtype</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span>

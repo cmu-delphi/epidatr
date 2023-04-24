@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
       </span>
     </div>
 
@@ -88,10 +88,6 @@
         </td>
         <td><p>Fetch covidcast metadata</p></td>
       </tr><tr><td>
-          <p><code><a href="create_epidata_call.html">create_epidata_call()</a></code> </p>
-        </td>
-        <td><p>an abstraction that holds the information needed to make an epidata call</p></td>
-      </tr><tr><td>
           <p><code><a href="delphi.html">delphi()</a></code> </p>
         </td>
         <td><p>Fetch Delphi's ILINet forecasts</p></td>
@@ -108,6 +104,10 @@
         </td>
         <td><p>Fetch ECDC data</p></td>
       </tr><tr><td>
+          <p><code><a href="epidata_call.html">create_epidata_call()</a></code> <code><a href="epidata_call.html">fetch_tbl()</a></code> <code><a href="epidata_call.html">fetch_classic()</a></code> <code><a href="epidata_call.html">fetch_csv()</a></code> <code><a href="epidata_call.html">fetch_json()</a></code> <code><a href="epidata_call.html">request_url()</a></code> <code><a href="epidata_call.html">with_base_url()</a></code> </p>
+        </td>
+        <td><p>An abstraction that holds information needed to make an epidata request</p></td>
+      </tr><tr><td>
           <p><code><a href="epidatr.html">epidatr</a></code> </p>
         </td>
         <td><p>Delphi Epidata</p></td>
@@ -115,26 +115,6 @@
           <p><code><a href="epirange.html">epirange()</a></code> </p>
         </td>
         <td><p>builds a new EpiRange instances</p></td>
-      </tr><tr><td>
-          <p><code><a href="fetch_classic.html">fetch_classic()</a></code> </p>
-        </td>
-        <td><p>fetches the data and returns the classic format</p></td>
-      </tr><tr><td>
-          <p><code><a href="fetch_csv.html">fetch_csv()</a></code> </p>
-        </td>
-        <td><p>fetches the data and returns the CSV text</p></td>
-      </tr><tr><td>
-          <p><code><a href="fetch_df.html">fetch_df()</a></code> </p>
-        </td>
-        <td><p>fetches the data and returns data frame</p></td>
-      </tr><tr><td>
-          <p><code><a href="fetch_json.html">fetch_json()</a></code> </p>
-        </td>
-        <td><p>fetches the data and returns the josn format</p></td>
-      </tr><tr><td>
-          <p><code><a href="fetch_tbl.html">fetch_tbl()</a></code> </p>
-        </td>
-        <td><p>fetches the data and returns data frame</p></td>
       </tr><tr><td>
           <p><code><a href="flusurv.html">flusurv()</a></code> </p>
         </td>
@@ -232,17 +212,9 @@
         </td>
         <td><p>Fetch HealthTweets data</p></td>
       </tr><tr><td>
-          <p><code><a href="request_url.html">request_url()</a></code> </p>
-        </td>
-        <td><p>returns the full request url for the given epidata_call</p></td>
-      </tr><tr><td>
           <p><code><a href="wiki.html">wiki()</a></code> </p>
         </td>
         <td><p>Fetch Wikipedia access data</p></td>
-      </tr><tr><td>
-          <p><code><a href="with_base_url.html">with_base_url()</a></code> </p>
-        </td>
-        <td><p>use a different base url</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

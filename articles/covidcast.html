@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Delphi
 Group</h4>
             
-            <h4 data-toc-skip class="date">2023-04-17</h4>
+            <h4 data-toc-skip class="date">2023-04-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/cmu-delphi/epidatr/blob/HEAD/vignettes/covidcast.Rmd" class="external-link"><code>vignettes/covidcast.Rmd</code></a></small>
       <div class="hidden name"><code>covidcast.Rmd</code></div>
@@ -116,7 +116,20 @@ Group</h4>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epicall</span> <span class="op">&lt;-</span> <span class="va">covidcast_api</span><span class="op">$</span><span class="va">sources</span><span class="op">$</span><span class="va">`fb-survey`</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">smoothed_cli</span><span class="op">$</span><span class="fu">call</span><span class="op">(</span><span class="st">"nation"</span>, <span class="st">"us"</span>, <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/fetch_classic.html">fetch_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch_tbl</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 15</span></span></span>
+<span><span class="co">##   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> us        smoothed_… fb-su… nation   day       2021-04-05        <span style="color: #BB0000;">NA</span> 2021-04-10</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> us        smoothed_… fb-su… nation   day       2021-04-06        <span style="color: #BB0000;">NA</span> 2021-04-11</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> us        smoothed_… fb-su… nation   day       2021-04-07        <span style="color: #BB0000;">NA</span> 2021-04-12</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> us        smoothed_… fb-su… nation   day       2021-04-08        <span style="color: #BB0000;">NA</span> 2021-04-13</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> us        smoothed_… fb-su… nation   day       2021-04-09        <span style="color: #BB0000;">NA</span> 2021-04-14</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">6</span> us        smoothed_… fb-su… nation   day       2021-04-10        <span style="color: #BB0000;">NA</span> 2021-04-15</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 7 more variables: lag &lt;int&gt;, missing_value &lt;int&gt;, missing_stderr &lt;int&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   missing_sample_size &lt;int&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></span></code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $epidata</span></span>
 <span><span class="co">##   geo_value       signal    source geo_type time_type time_value direction</span></span>
 <span><span class="co">## 1        us smoothed_cli fb-survey   nation       day 2021-04-05        NA</span></span>
@@ -145,36 +158,8 @@ Group</h4>
 <span><span class="co">## </span></span>
 <span><span class="co">## $message</span></span>
 <span><span class="co">## [1] "success"</span></span></code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/fetch_json.html">fetch_json</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   geo_value       signal    source geo_type time_type time_value direction</span></span>
-<span><span class="co">## 1        us smoothed_cli fb-survey   nation       day 2021-04-05        NA</span></span>
-<span><span class="co">## 2        us smoothed_cli fb-survey   nation       day 2021-04-06        NA</span></span>
-<span><span class="co">## 3        us smoothed_cli fb-survey   nation       day 2021-04-07        NA</span></span>
-<span><span class="co">## 4        us smoothed_cli fb-survey   nation       day 2021-04-08        NA</span></span>
-<span><span class="co">## 5        us smoothed_cli fb-survey   nation       day 2021-04-09        NA</span></span>
-<span><span class="co">## 6        us smoothed_cli fb-survey   nation       day 2021-04-10        NA</span></span>
-<span><span class="co">##        issue lag missing_value missing_stderr missing_sample_size     value</span></span>
-<span><span class="co">## 1 2021-04-10   5             0              0                   0 0.6758323</span></span>
-<span><span class="co">## 2 2021-04-11   5             0              0                   0 0.6906869</span></span>
-<span><span class="co">## 3 2021-04-12   5             0              0                   0 0.6906637</span></span>
-<span><span class="co">## 4 2021-04-13   5             0              0                   0 0.7065026</span></span>
-<span><span class="co">## 5 2021-04-14   5             0              0                   0 0.7243055</span></span>
-<span><span class="co">## 6 2021-04-15   5             0              0                   0 0.7227126</span></span>
-<span><span class="co">##      stderr sample_size</span></span>
-<span><span class="co">## 1 0.0148258      244046</span></span>
-<span><span class="co">## 2 0.0149980      242979</span></span>
-<span><span class="co">## 3 0.0150228      242153</span></span>
-<span><span class="co">## 4 0.0152358      241380</span></span>
-<span><span class="co">## 5 0.0154660      240256</span></span>
-<span><span class="co">## 6 0.0154417      239818</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/fetch_csv.html">fetch_csv</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "geo_value,signal,source,geo_type,time_type,time_value,direction,issue,lag,missing_value,missing_stderr,missing_sample_size,value,stderr,sample_size\nus,smoothed_cli,fb-survey,nation,day,20210405,,20210410,5,0,0,0,0.6758323,0.0148258,244046.0\nus,smoothed_cli,fb-survey,nation,day,20210406,,20210411,5,0,0,0,0.6906869,0.014998,242979.0\nus,smoothed_cli,fb-survey,nation,day,20210407,,20210412,5,0,0,0,0.6906637,0.0150228,242153.0\nus,smoothed_cli,fb-survey,nation,day,20210408,,20210413,5,0,0,0,0.7065026,0.0152358,241380.0\nus,smoothed_cli,fb-survey,nation,day,20210409,,20210414,5,0,0,0,0.7243055,0.015466,240256.0\nus,smoothed_cli,fb-survey,nation,day,20210410,,20210415,5,0,0,0,0.7227126,0.0154417,239818.0\n"</span></span>
-<span><span class="co">## attr(,"class")</span></span>
-<span><span class="co">## [1] "epidata_csv" "character"</span></span></code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="../reference/fetch_df.html">fetch_df</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch_json</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   geo_value       signal    source geo_type time_type time_value direction</span></span>
 <span><span class="co">## 1        us smoothed_cli fb-survey   nation       day 2021-04-05        NA</span></span>
 <span><span class="co">## 2        us smoothed_cli fb-survey   nation       day 2021-04-06        NA</span></span>
@@ -196,8 +181,14 @@ Group</h4>
 <span><span class="co">## 4 0.0152358      241380</span></span>
 <span><span class="co">## 5 0.0154660      240256</span></span>
 <span><span class="co">## 6 0.0154417      239818</span></span></code></pre>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch_csv</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## # A epidata_csv object with 704 characters; showing up to 300 characters below. To print the entire string, use `print(as.character(x))`:</span></span>
+<span><span class="co">## geo_value,signal,source,geo_type,time_type,time_value,direction,issue,lag,missing_value,missing_stderr,missing_sample_size,value,stderr,sample_size</span></span>
+<span><span class="co">## us,smoothed_cli,fb-survey,nation,day,20210405,,20210410,5,0,0,0,0.6758323,0.0148258,244046.0</span></span>
+<span><span class="co">## us,smoothed_cli,fb-survey,nation,day,20210406,,20210411,5,0[...]</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># epicall %&gt;% with_base_url("https://staging.delphi.cmu.edu/epidata/") %&gt;% fetch_df()</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># epicall %&gt;% with_base_url("https://staging.delphi.cmu.edu/epidata/") %&gt;% fetch_tbl()</span></span></code></pre></div>
 </div>
   </div>
 
