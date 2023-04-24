@@ -707,7 +707,7 @@ covidcast <-
     check_single_string_param("geo_type", geo_type)
     check_epirange_param("time_values", time_values)
     check_string_param("geo_values", geo_values)
-    check_single_epirange_param("as_of", as_of, FALSE)
+    check_single_date_param("as_of", as_of, FALSE)
     check_epirange_param("issues", issues, FALSE)
     check_single_int_param("lag", lag, FALSE)
 
