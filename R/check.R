@@ -171,7 +171,7 @@ check_epirange_param <- function(name, value, required = TRUE) {
     return()
   } else if (is_epirange_like(value)) {
     return()
-  } else if (all(map(value, typeof) == "list") && length(value) > 0) {
+  } else if (all(vapply(value, is.list, logical(1L))) && length(value) > 0) {
     for (i in seq_along(value)) {
       check_single_epirange_param(paste0(name, "[", i, "]"), value[[i]], required = TRUE)
     }
