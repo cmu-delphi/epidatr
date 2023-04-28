@@ -2,10 +2,10 @@
 % Please edit documentation in R/check.R
 \name{check_string_param}
 \alias{check_string_param}
-\title{Allows string vectors of length > 1 and lists of string vectors of length 1}
+\title{Allows string vectors of length 1}
 \usage{
 check_string_param(name, value, required = TRUE)
 }
 \description{
-Allows string vectors of length > 1 and lists of string vectors of length 1
+Allows string vectors of length 1
 }

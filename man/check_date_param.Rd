@@ -2,10 +2,10 @@
 % Please edit documentation in R/check.R
 \name{check_date_param}
 \alias{check_date_param}
-\title{Check if param is datelike or vector of datelike}
+\title{Allows a vector of date_like params: dates, characters, or integerishes}
 \usage{
 check_date_param(name, value, required = TRUE)
 }
 \description{
-Check if param is datelike or vector of datelike
+Allows a vector of date_like params: dates, characters, or integerishes
 }

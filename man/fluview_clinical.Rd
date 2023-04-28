@@ -26,6 +26,6 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html
 }
 \examples{
 \donttest{
-fluview_clinical(regions = "nat", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic()
+fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701)) \%>\% fetch_classic()
 }
 }
