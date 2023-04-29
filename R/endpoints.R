@@ -876,7 +876,7 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
 #'
 #' @examples
 #' \donttest{
-#' ecdc_ili(regions = "austria", epiweeks = epirange(201201, 202001)) %>% fetch_classic()
+#' ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001)) %>% fetch_classic()
 #' }
 #' @param regions character vector. The regions to fetch.
 #' @param epiweeks [`epirange`]. The epiweeks to fetch.
@@ -930,7 +930,7 @@ ecdc_ili <- function(regions,
 #'
 #' @examples
 #' \donttest{
-#' flusurv(locations = "CA", epiweeks = epirange(201201, 202001)) %>% fetch_classic()
+#' flusurv(locations = "CA", epiweeks = epirange(201701, 201801)) %>% fetch_classic()
 #' }
 #' @param locations character vector. Character strings indicating location.
 #' @param epiweeks [`epirange`]. The epiweeks to fetch.
@@ -1301,7 +1301,7 @@ meta <- function() {
 #'
 #' @examples
 #' \donttest{
-#' nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 202001)) %>% fetch_classic()
+#' nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301)) %>% fetch_classic()
 #' }
 #' @param locations character vector. The locations to fetch.
 #' @param epiweeks [`epirange`]. The epiweeks to fetched.
@@ -1332,7 +1332,7 @@ nidss_dengue <- function(locations, epiweeks) {
 #'
 #' @examples
 #' \donttest{
-#' nidss_flu(regions = "taipei", epiweeks = epirange(201201, 202001)) %>% fetch_classic()
+#' nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601)) %>% fetch_classic()
 #' }
 #' @param regions character vector. The regions to fetch.
 #' @param epiweeks [`epirange`]. The epiweeks to fetch.
@@ -1387,7 +1387,7 @@ nidss_flu <-
 #' pvt_norostat(
 #'   auth = "yourkey",
 #'   location = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
-#'   epiweeks = epirange(201201, 202001)
+#'   epiweeks = epirange(201401, 201501)
 #' ) %>% fetch_classic()
 #' }
 #' @param auth string. Your authentication key.
@@ -1427,7 +1427,7 @@ pvt_norostat <- function(auth, locations, epiweeks) {
 #'
 #' @examples
 #' \donttest{
-#' nowcast(location = "ca", epiweeks = epirange(201201, 202001)) %>% fetch_classic()
+#' nowcast(locations = "ca", epiweeks = epirange(201201, 201301)) %>% fetch_classic()
 #' }
 #' @param locations character vector. The locations to fetch.
 #' @param epiweeks [`epirange`]. The epiweeks to fetch.
@@ -1638,7 +1638,7 @@ pvt_twitter <-
 #'
 #' @examples
 #' \donttest{
-#' wiki(articles = "avian_influenza", epiweeks = epirange(201501, 202001)) %>% fetch_tbl()
+#' wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601)) %>% fetch_tbl()
 #' }
 #' @param articles character vector. The articles to fetch.
 #' @param dates [`epirange`]. The dates to fetch. Mutually exclusive with `epiweeks`.
