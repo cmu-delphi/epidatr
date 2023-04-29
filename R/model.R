@@ -1,7 +1,9 @@
 #' builds a new EpiRange instances
 #'
-#' @param from A string or numeric that takes the form YYYYMMDD for dates or YYYYMM for epiweeks.
-#' @param to A string or numeric that takes the form YYYYMMDD for dates or YYYYMM for epiweeks.
+#' @param from A Date, integer-like value, or integer-like string that takes the form YYYYMMDD for dates
+#'   or YYYYMM for epiweeks.
+#' @param to A Date, integer-like value, or integer-like string that takes the form YYYYMMDD for dates
+#'  or YYYYMM for epiweeks.
 #' @return EpiRange instance
 #' @importFrom checkmate check_integerish check_character check_date assert
 #' @importFrom lubridate is.Date
