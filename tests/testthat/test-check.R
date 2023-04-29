@@ -28,6 +28,7 @@ test_that("assert_date_param", {
   expect_no_error(assert_date_param("name", NULL, required = FALSE))
   expect_error(assert_date_param("name", list(20200101, 20200101)))
   expect_no_error(assert_date_param("name", c(as.Date("2020-01-01"), 20200102, "20200103")))
+  expect_no_error(assert_date_param("name", "*"))
 })
 
 test_that("assert_timeset_param", {
@@ -41,4 +42,5 @@ test_that("assert_timeset_param", {
   expect_error(assert_timeset_param("name", NULL))
   expect_no_error(assert_timeset_param("name", NULL, required = FALSE))
   expect_no_error(assert_timeset_param("name", list(epirange(20200101, 20200102), epirange(20200101, 20200102))))
+  expect_no_error(assert_date_param("name", "*"))
 })
