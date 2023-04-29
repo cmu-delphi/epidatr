@@ -1456,7 +1456,7 @@ nowcast <- function(locations, epiweeks) {
 #'
 #' @examples
 #' \donttest{
-#' paho_dengue(regions = "ca", epiweeks = epirange(201201, 202001)) %>% fetch_classic()
+#' paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501)) %>% fetch_classic()
 #' }
 #' @param regions character vector. The regions to fetch.
 #' @param epiweeks [`epirange`]. The epiweeks to fetch.
