@@ -7,7 +7,7 @@
 pvt_afhsb(auth, locations, epiweeks, flu_types)
 }
 \arguments{
-\item{auth}{string. Authentication token.}
+\item{auth}{string. Restricted access key (not the same as API key).}
 
 \item{locations}{character vector. Locations to fetch (see docs).}
 

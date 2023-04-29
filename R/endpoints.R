@@ -2,7 +2,7 @@
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/afhsb.html
 #'
-#' @param auth string. Authentication token.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param locations character vector. Locations to fetch (see docs).
 #' @param epiweeks [`epirange`]. Epiweeks to fetch.
 #' @param flu_types string. Flu types to fetch (see docs).
@@ -53,7 +53,7 @@ pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
 #'   "fl,ca"
 #' ) %>% fetch_tbl()
 #' }
-#' @param auth string. Authentication token.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param epiweeks [`epirange`]. Epiweeks to fetch.
 #' @param locations character vector. Locations to fetch (see docs).
 #' @return [`epidata_call`]
@@ -835,7 +835,7 @@ dengue_nowcast <- function(locations, epiweeks) {
 #'   epiweeks = epirange(201501, 202001)
 #' ) %>% fetch_classic()
 #' }
-#' @param auth string. Your authentication token.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param names character vector. The list of names to fetch.
 #' @param locations character vector. The locations to fetch.
 #' @param epiweeks [`epirange`]. The epiweeks to fetch.
@@ -1073,7 +1073,7 @@ fluview_meta <- function() {
 #'   Mutually exclusive with `lag`.
 #' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
 #'   Mutually exclusive with `issues`.
-#' @param auth string. Optionally, your authentication token.
+#' @param auth string. Optionally, restricted access key (not the same as API key).
 #' @return [`epidata_call`]
 #'
 #' @export
@@ -1172,7 +1172,7 @@ gft <- function(locations, epiweeks) {
 #'   query = "?"
 #' ) %>% fetch_classic()
 #' }
-#' @param auth string. Your authentication token.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param locations character vector. The locations to be fetched.
 #' @param epiweeks [`epirange`]. The epiweeks to be fetched.
 #' @param query string. The query to be fetched.
@@ -1254,7 +1254,7 @@ kcdc_ili <- function(regions,
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_afhsb.html
 #'
-#' @param auth string. Your authentication token.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @return [`epidata_call`]
 #'
 #' @export
@@ -1268,7 +1268,7 @@ pvt_meta_afhsb <- function(auth) {
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html
 #'
-#' @param auth string. Your authentication token.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @return [`epidata_call`]
 #'
 #' @export
@@ -1512,7 +1512,7 @@ paho_dengue <- function(regions,
 #'   locations = "hhs1"
 #' ) %>% fetch_classic()
 #' }
-#' @param auth string. Your authentication key.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param epiweeks [`epirange`]. The epiweeks to fetch.
 #' @param locations character vector. The locations to fetch.
 #' @return [`epidata_call`]
@@ -1551,7 +1551,7 @@ pvt_quidel <- function(auth, epiweeks, locations) {
 #'   epiweeks = epirange(201501, 202001)
 #' ) %>% fetch_classic()
 #' }
-#' @param auth string. Your authentication key.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param names character vector. The names of the sensors to fetch.
 #' @param locations character vector. The locations to fetch.
 #' @param epiweeks [`epirange`]. The epiweeks to fetch.
@@ -1589,7 +1589,7 @@ pvt_sensors <- function(auth, names, locations, epiweeks) {
 #' \dontrun{
 #' pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001)) %>% fetch_tbl()
 #' }
-#' @param auth string. Your authentication key.
+#' @param auth string. Restricted access key (not the same as API key).
 #' @param locations character vector. The locations to fetch.
 #' @param dates [`epirange`]. The dates to fetch. Mutually exclusive with `epiweeks`.
 #' @param epiweeks [`epirange`]. The epiweeks to fetch. Mutually exclusive with `dates`.

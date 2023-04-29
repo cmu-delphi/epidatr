@@ -7,7 +7,7 @@
 pvt_twitter(auth, locations, dates = NULL, epiweeks = NULL)
 }
 \arguments{
-\item{auth}{string. Your authentication key.}
+\item{auth}{string. Restricted access key (not the same as API key).}
 
 \item{locations}{character vector. The locations to fetch.}
 

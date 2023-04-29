@@ -7,7 +7,7 @@
 pvt_cdc(auth, epiweeks, locations)
 }
 \arguments{
-\item{auth}{string. Authentication token.}
+\item{auth}{string. Restricted access key (not the same as API key).}
 
 \item{epiweeks}{\code{\link{epirange}}. Epiweeks to fetch.}
 
