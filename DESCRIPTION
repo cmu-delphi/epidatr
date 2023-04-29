@@ -24,6 +24,7 @@ Imports:
     cli,
     httr,
     jsonlite,
+    lubridate,
     readr,
     MMWRweek,
     rlang,
