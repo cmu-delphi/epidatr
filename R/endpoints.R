@@ -1405,7 +1405,7 @@ pvt_norostat <- function(auth, locations, epiweeks) {
     "norostat/",
     list(
       auth = auth,
-      location = location,
+      location = locations,
       epiweeks = epiweeks
     ),
     list(
