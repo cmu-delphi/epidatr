@@ -86,7 +86,13 @@ request_arguments <-
     for (name in names(all_params)) {
       v <- all_params[[name]]
       if (!is.null(v)) {
-        formatted_params[[name]] <- format_list(v)
+        if (inherits(v, "EpiRange")) {
+          formatted_params[[name]] <- format_item(v)
+        } else if (is.list(v)) {
+          formatted_params[[name]] <- format_list(v)
+        } else {
+          formatted_params[[name]] <- format_item(v)
+        }
       }
     }
     formatted_params
