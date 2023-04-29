@@ -24,7 +24,7 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/norostat.html
 pvt_norostat(
   auth = "yourkey",
   location = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
-  epiweeks = epirange(201201, 202001)
+  epiweeks = epirange(201401, 201501)
 ) \%>\% fetch_classic()
 }
 }
