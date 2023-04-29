@@ -1477,7 +1477,7 @@ paho_dengue <- function(regions,
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
 
   create_epidata_call(
-    "quidel/",
+    "paho_dengue/",
     list(
       regions = regions,
       epiweeks = epiweeks,
