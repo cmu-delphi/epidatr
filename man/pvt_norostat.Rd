@@ -4,12 +4,12 @@
 \alias{pvt_norostat}
 \title{Fetch NoroSTAT data (point data, no min/max)}
 \usage{
-pvt_norostat(auth, location, epiweeks)
+pvt_norostat(auth, locations, epiweeks)
 }
 \arguments{
 \item{auth}{string. Your authentication key.}
 
-\item{location}{character vector. The locations to fetch.}
+\item{locations}{character vector. The locations to fetch.}
 
 \item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
 }
