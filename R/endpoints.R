@@ -19,10 +19,10 @@
 #' }
 #' @export
 pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
-  check_character_param("auth", auth)
-  check_character_param("locations", locations)
-  check_timeset_param("epiweeks", epiweeks)
-  check_character_param("flu_types", flu_types)
+  assert_character_param("auth", auth, len = 1)
+  assert_character_param("locations", locations)
+  assert_timeset_param("epiweeks", epiweeks)
+  assert_character_param("flu_types", flu_types)
 
   create_epidata_call(
     "afhsb/",
@@ -60,9 +60,9 @@ pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
 #'
 #' @export
 pvt_cdc <- function(auth, epiweeks, locations) {
-  check_character_param("auth", auth)
-  check_timeset_param("epiweeks", epiweeks)
-  check_character_param("locations", locations)
+  assert_character_param("auth", auth, len = 1)
+  assert_timeset_param("epiweeks", epiweeks)
+  assert_character_param("locations", locations)
 
   create_epidata_call(
     "cdc/",
@@ -119,16 +119,22 @@ covid_hosp_facility_lookup <-
            city = NULL,
            zip = NULL,
            fips_code = NULL) {
-    check_character_param("state", state, FALSE)
-    check_character_param("ccn", ccn, FALSE)
-    check_character_param("city", city, FALSE)
-    check_character_param("zip", zip, FALSE)
-    check_character_param("fips_code", fips_code, FALSE)
-    if (missing(state) &&
-      missing(ccn) &&
-      missing(city) && missing(zip) && missing(fips_code)) {
+    assert_character_param("state", state, len = 1, required = FALSE)
+    assert_character_param("ccn", ccn, len = 1, required = FALSE)
+    assert_character_param("city", city, len = 1, required = FALSE)
+    assert_character_param("zip", zip, len = 1, required = FALSE)
+    assert_character_param("fips_code", fips_code, len = 1, required = FALSE)
+
+    if (
+      missing(state) &&
+        missing(ccn) &&
+        missing(city) &&
+        missing(zip) &&
+        missing(fips_code)
+    ) {
       stop("one of `state`, `ccn`, `city`, `zip`, or `fips_code` is required")
     }
+
     create_epidata_call(
       "covid_hosp_facility_lookup/",
       list(
@@ -185,9 +191,9 @@ covid_hosp_facility <-
   function(hospital_pks,
            collection_weeks,
            publication_dates = NULL) {
-    check_character_param("hospital_pks", hospital_pks)
-    check_timeset_param("collection_weeks", collection_weeks)
-    check_timeset_param("publication_dates", publication_dates, required = FALSE)
+    assert_character_param("hospital_pks", hospital_pks)
+    assert_timeset_param("collection_weeks", collection_weeks)
+    assert_timeset_param("publication_dates", publication_dates, required = FALSE)
 
     create_epidata_call(
       "covid_hosp_facility/",
@@ -472,9 +478,9 @@ covid_hosp_facility <-
 #
 covid_hosp_state_timeseries <-
   function(states, dates, issues = NULL) {
-    check_character_param("states", states)
-    check_timeset_param("dates", dates)
-    check_timeset_param("issues", issues, FALSE)
+    assert_character_param("states", states)
+    assert_timeset_param("dates", dates)
+    assert_timeset_param("issues", issues, required = FALSE)
 
     create_epidata_call(
       "covid_hosp_state_timeseries/",
@@ -689,11 +695,13 @@ covidcast <-
            issues = NULL,
            lag = NULL) {
     # Check parameters
-    if (missing(data_source) ||
-      missing(signals) ||
-      missing(time_type) ||
-      missing(geo_type) ||
-      missing(time_values) || missing(geo_values)) {
+    if (
+      missing(data_source) ||
+        missing(signals) ||
+        missing(time_type) ||
+        missing(geo_type) ||
+        missing(time_values) || missing(geo_values)
+    ) {
       stop(
         "`data_source`, `signals`, `time_type`, `geo_type`, `time_values`, and `geo_value` are all required"
       )
@@ -701,15 +709,15 @@ covidcast <-
     if (!missing(issues) && !missing(lag)) {
       stop("`issues` and `lag` are mutually exclusive")
     }
-    check_character_param("data_source", data_source)
-    check_character_param("signals", signals)
-    check_character_param("time_type", time_type)
-    check_character_param("geo_type", geo_type)
-    check_timeset_param("time_values", time_values)
-    check_character_param("geo_values", geo_values)
-    check_scalar_date_param("as_of", as_of, FALSE)
-    check_timeset_param("issues", issues, FALSE)
-    check_scalar_integerish_param("lag", lag, FALSE)
+    assert_character_param("data_source", data_source, len = 1)
+    assert_character_param("signals", signals)
+    assert_character_param("time_type", time_type, len = 1)
+    assert_character_param("geo_type", geo_type, len = 1)
+    assert_timeset_param("time_values", time_values)
+    assert_character_param("geo_values", geo_values)
+    assert_date_param("as_of", as_of, len = 1, required = FALSE)
+    assert_timeset_param("issues", issues, required = FALSE)
+    assert_integerish_param("lag", lag, len = 1, required = FALSE)
 
     create_epidata_call(
       "covidcast/",
@@ -765,8 +773,8 @@ covidcast <-
 #'
 #' @export
 delphi <- function(system, epiweek) {
-  check_character_param("system", system)
-  check_scalar_timeset_param("epiweek", epiweek)
+  assert_character_param("system", system)
+  assert_timeset_param("epiweek", epiweek, len = 1)
 
   create_epidata_call(
     "delphi/",
@@ -798,8 +806,8 @@ delphi <- function(system, epiweek) {
 #'
 #' @export
 dengue_nowcast <- function(locations, epiweeks) {
-  check_character_param("locations", locations)
-  check_timeset_param("epiweeks", epiweeks)
+  assert_character_param("locations", locations)
+  assert_timeset_param("epiweeks", epiweeks)
 
   create_epidata_call(
     "dengue_nowcast/",
@@ -835,10 +843,10 @@ dengue_nowcast <- function(locations, epiweeks) {
 #'
 #' @export
 pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
-  check_character_param("auth", auth)
-  check_character_param("names", names)
-  check_character_param("locations", locations)
-  check_timeset_param("epiweeks", epiweeks)
+  assert_character_param("auth", auth, len = 1)
+  assert_character_param("names", names)
+  assert_character_param("locations", locations)
+  assert_timeset_param("epiweeks", epiweeks)
 
   create_epidata_call(
     "dengue_sensors/",
@@ -883,10 +891,11 @@ ecdc_ili <- function(regions,
                      epiweeks,
                      issues = NULL,
                      lag = NULL) {
-  check_character_param("regions", regions)
-  check_timeset_param("epiweeks", epiweeks)
-  check_timeset_param("issues", issues, FALSE)
-  check_scalar_integerish_param("lag", lag, FALSE)
+  assert_character_param("regions", regions)
+  assert_timeset_param("epiweeks", epiweeks)
+  assert_timeset_param("issues", issues, required = FALSE)
+  assert_integerish_param("lag", lag, len = 1, required = FALSE)
+
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
   }
@@ -936,10 +945,11 @@ flusurv <- function(locations,
                     epiweeks,
                     issues = NULL,
                     lag = NULL) {
-  check_character_param("locations", locations)
-  check_timeset_param("epiweeks", epiweeks)
-  check_timeset_param("issues", issues, FALSE)
-  check_scalar_integerish_param("lag", lag, FALSE)
+  assert_character_param("locations", locations)
+  assert_timeset_param("epiweeks", epiweeks)
+  assert_timeset_param("issues", issues, required = FALSE)
+  assert_integerish_param("lag", lag, len = 1, required = FALSE)
+
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
   }
@@ -990,10 +1000,11 @@ fluview_clinical <-
            epiweeks,
            issues = NULL,
            lag = NULL) {
-    check_character_param("regions", regions)
-    check_timeset_param("epiweeks", epiweeks)
-    check_timeset_param("issues", issues, FALSE)
-    check_scalar_integerish_param("lag", lag, FALSE)
+    assert_character_param("regions", regions)
+    assert_timeset_param("epiweeks", epiweeks)
+    assert_timeset_param("issues", issues, required = FALSE)
+    assert_integerish_param("lag", lag, len = 1, required = FALSE)
+
     if (!missing(issues) && !missing(lag)) {
       stop("`issues` and `lag` are mutually exclusive")
     }
@@ -1072,11 +1083,12 @@ fluview <-
            issues = NULL,
            lag = NULL,
            auth = NULL) {
-    check_character_param("regions", regions)
-    check_timeset_param("epiweeks", epiweeks)
-    check_timeset_param("issues", issues, FALSE)
-    check_scalar_integerish_param("lag", lag, FALSE)
-    check_character_param("auth", auth, FALSE)
+    assert_character_param("regions", regions)
+    assert_timeset_param("epiweeks", epiweeks)
+    assert_timeset_param("issues", issues, required = FALSE)
+    assert_integerish_param("lag", lag, len = 1, required = FALSE)
+    assert_character_param("auth", auth, len = 1, required = FALSE)
+
     if (!is.null(issues) && !is.null(lag)) {
       stop("`issues` and `lag` are mutually exclusive")
     }
@@ -1122,7 +1134,9 @@ fluview <-
 #'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt>.
 #'
 #' @examples
+#' \dontrun{
 #' gft(locations = "hhs1", epiweeks = epirange(201201, 202001)) %>% fetch_classic()
+#' }
 #' @param locations character vector. The locations to be fetched.
 #' @param epiweeks [`epirange`] The epiweeks to be fetched.
 #'
@@ -1130,8 +1144,9 @@ fluview <-
 #'
 #' @export
 gft <- function(locations, epiweeks) {
-  check_character_param("locations", locations)
-  check_timeset_param("epiweeks", epiweeks)
+  assert_character_param("locations", locations)
+  assert_timeset_param("epiweeks", epiweeks)
+
   create_epidata_call(
     "gft/",
     list(locations = locations, epiweeks = epiweeks),
@@ -1165,10 +1180,11 @@ gft <- function(locations, epiweeks) {
 #'
 #' @export
 pvt_ght <- function(auth, locations, epiweeks, query) {
-  check_character_param("auth", auth)
-  check_character_param("locations", locations)
-  check_timeset_param("epiweeks", epiweeks)
-  check_character_param("query", query)
+  assert_character_param("auth", auth, len = 1)
+  assert_character_param("locations", locations)
+  assert_timeset_param("epiweeks", epiweeks)
+  assert_character_param("query", query, len = 1)
+
   create_epidata_call(
     "ght/",
     list(
@@ -1207,10 +1223,11 @@ kcdc_ili <- function(regions,
                      epiweeks,
                      issues = NULL,
                      lag = NULL) {
-  check_character_param("regions", regions)
-  check_timeset_param("epiweeks", epiweeks)
-  check_timeset_param("issues", issues, FALSE)
-  check_scalar_integerish_param("lag", lag, FALSE)
+  assert_character_param("regions", regions)
+  assert_timeset_param("epiweeks", epiweeks)
+  assert_timeset_param("issues", issues, required = FALSE)
+  assert_integerish_param("lag", lag, len = 1, required = FALSE)
+
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
   }
@@ -1242,7 +1259,7 @@ kcdc_ili <- function(regions,
 #'
 #' @export
 pvt_meta_afhsb <- function(auth) {
-  check_character_param("auth", auth)
+  assert_character_param("auth", auth, len = 1)
 
   create_epidata_call("meta_afhsb/", list(auth = auth), only_supports_classic = TRUE)
 }
@@ -1256,7 +1273,7 @@ pvt_meta_afhsb <- function(auth) {
 #'
 #' @export
 pvt_meta_norostat <- function(auth) {
-  check_character_param("auth", auth)
+  assert_character_param("auth", auth, len = 1)
 
   create_epidata_call("meta_norostat/", list(auth = auth), only_supports_classic = TRUE)
 }
@@ -1293,8 +1310,8 @@ meta <- function() {
 #'
 #' @export
 nidss_dengue <- function(locations, epiweeks) {
-  check_character_param("locations", locations)
-  check_timeset_param("epiweeks", epiweeks)
+  assert_character_param("locations", locations)
+  assert_timeset_param("epiweeks", epiweeks)
 
   create_epidata_call(
     "nidss_dengue/",
@@ -1331,10 +1348,10 @@ nidss_flu <-
            epiweeks,
            issues = NULL,
            lag = NULL) {
-    check_character_param("regions", regions)
-    check_timeset_param("epiweeks", epiweeks)
-    check_timeset_param("issues", issues, FALSE)
-    check_scalar_integerish_param("lag", lag, FALSE)
+    assert_character_param("regions", regions)
+    assert_timeset_param("epiweeks", epiweeks)
+    assert_timeset_param("issues", issues, required = FALSE)
+    assert_integerish_param("lag", lag, len = 1, required = FALSE)
 
     if (!is.null(issues) && !is.null(lag)) {
       stop("`issues` and `lag` are mutually exclusive")
@@ -1374,15 +1391,15 @@ nidss_flu <-
 #' ) %>% fetch_classic()
 #' }
 #' @param auth string. Your authentication key.
-#' @param location character vector. The locations to fetch.
+#' @param locations character vector. The locations to fetch.
 #' @param epiweeks [`epirange`]. The epiweeks to fetch.
 #' @return [`epidata_call`]
 #'
 #' @export
-pvt_norostat <- function(auth, location, epiweeks) {
-  check_character_param("auth", auth)
-  check_character_param("locations", location)
-  check_timeset_param("epiweeks", epiweeks)
+pvt_norostat <- function(auth, locations, epiweeks) {
+  assert_character_param("auth", auth, len = 1)
+  assert_character_param("locations", locations, len = 1)
+  assert_timeset_param("epiweeks", epiweeks)
 
   create_epidata_call(
     "norostat/",
@@ -1418,8 +1435,8 @@ pvt_norostat <- function(auth, location, epiweeks) {
 #'
 #' @export
 nowcast <- function(locations, epiweeks) {
-  check_character_param("locations", locations)
-  check_timeset_param("epiweeks", epiweeks)
+  assert_character_param("locations", locations)
+  assert_timeset_param("epiweeks", epiweeks)
 
   create_epidata_call(
     "nowcast/",
@@ -1454,10 +1471,10 @@ paho_dengue <- function(regions,
                         epiweeks,
                         issues = NULL,
                         lag = NULL) {
-  check_character_param("regions", regions)
-  check_timeset_param("epiweeks", epiweeks)
-  check_timeset_param("issues", issues, FALSE)
-  check_scalar_integerish_param("lag", lag, FALSE)
+  assert_character_param("regions", regions)
+  assert_timeset_param("epiweeks", epiweeks)
+  assert_timeset_param("issues", issues, required = FALSE)
+  assert_integerish_param("lag", lag, len = 1, required = FALSE)
 
   create_epidata_call(
     "quidel/",
@@ -1502,9 +1519,9 @@ paho_dengue <- function(regions,
 #'
 #' @export
 pvt_quidel <- function(auth, epiweeks, locations) {
-  check_character_param("auth", auth)
-  check_timeset_param("epiweeks", epiweeks)
-  check_character_param("locations", locations)
+  assert_character_param("auth", auth, len = 1)
+  assert_timeset_param("epiweeks", epiweeks)
+  assert_character_param("locations", locations)
 
   create_epidata_call(
     "quidel/",
@@ -1542,10 +1559,10 @@ pvt_quidel <- function(auth, epiweeks, locations) {
 #'
 #' @export
 pvt_sensors <- function(auth, names, locations, epiweeks) {
-  check_character_param("auth", auth)
-  check_character_param("names", names)
-  check_character_param("locations", locations)
-  check_timeset_param("epiweeks", epiweeks)
+  assert_character_param("auth", auth, len = 1)
+  assert_character_param("names", names)
+  assert_character_param("locations", locations)
+  assert_timeset_param("epiweeks", epiweeks)
 
   create_epidata_call(
     "sensors/",
@@ -1584,10 +1601,11 @@ pvt_twitter <-
            locations,
            dates = NULL,
            epiweeks = NULL) {
-    check_character_param("auth", auth)
-    check_character_param("locations", locations)
-    check_timeset_param("dates", dates, FALSE)
-    check_timeset_param("epiweeks", epiweeks, FALSE)
+    assert_character_param("auth", auth, len = 1)
+    assert_character_param("locations", locations)
+    assert_timeset_param("dates", dates, required = FALSE)
+    assert_timeset_param("epiweeks", epiweeks, required = FALSE)
+
     if (!xor(missing(dates), missing(epiweeks))) {
       stop("exactly one of `dates` and `epiweeks` is required")
     }
@@ -1636,11 +1654,12 @@ wiki <-
            epiweeks = NULL,
            hours = NULL,
            language = "en") {
-    check_character_param("articles", articles)
-    check_timeset_param("dates", dates, FALSE)
-    check_timeset_param("epiweeks", epiweeks, FALSE)
-    check_integerish_param("hours", hours, FALSE)
-    check_character_param("language", language, FALSE)
+    assert_character_param("articles", articles)
+    assert_timeset_param("dates", dates, required = FALSE)
+    assert_timeset_param("epiweeks", epiweeks, required = FALSE)
+    assert_integerish_param("hours", hours, required = FALSE)
+    assert_character_param("language", language, len = 1, required = FALSE)
+
     if (!xor(missing(dates), missing(epiweeks))) {
       stop("exactly one of `dates` and `epiweeks` is required")
     }

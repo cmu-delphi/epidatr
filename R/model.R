@@ -3,18 +3,37 @@
 #' @param from A string or numeric that takes the form YYYYMMDD for dates or YYYYMM for epiweeks.
 #' @param to A string or numeric that takes the form YYYYMMDD for dates or YYYYMM for epiweeks.
 #' @return EpiRange instance
+#' @importFrom checkmate check_integerish check_character check_date assert
+#' @importFrom lubridate is.Date
 #'
 #' @export
 epirange <- function(from, to) {
-  stopifnot((is.numeric(from) ||
-    is.character(from)) && length(from) == 1)
-  stopifnot((is.numeric(to) ||
-    is.character(to)) && length(to) == 1)
+  assert(
+    check_integerish(from, len = 1),
+    check_character(from, len = 1),
+    check_date(from, len = 1),
+    .var.name = "from"
+  )
+  assert(
+    check_integerish(to, len = 1),
+    check_character(to, len = 1),
+    check_date(to, len = 1),
+    .var.name = "to"
+  )
+
+  if (is.Date(from)) {
+    from <- as.numeric(format(from, "%Y%m%d"))
+  }
+  if (is.Date(to)) {
+    to <- as.numeric(format(to, "%Y%m%d"))
+  }
+
   if (to < from) {
     t <- from
     from <- to
     to <- t
   }
+
   structure(list(from = from, to = to), class = "EpiRange")
 }
 
