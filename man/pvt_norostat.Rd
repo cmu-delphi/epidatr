@@ -7,7 +7,7 @@
 pvt_norostat(auth, locations, epiweeks)
 }
 \arguments{
-\item{auth}{string. Restricted access key (not the same as API key).}
+\item{auth}{string. Your authentication key.}
 
 \item{locations}{character vector. The locations to fetch.}
 

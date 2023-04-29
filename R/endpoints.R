@@ -1386,7 +1386,7 @@ nidss_flu <-
 #' \dontrun{
 #' pvt_norostat(
 #'   auth = "yourkey",
-#'   location = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
+#'   locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
 #'   epiweeks = epirange(201401, 201501)
 #' ) %>% fetch_classic()
 #' }
