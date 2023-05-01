@@ -9,8 +9,8 @@ join_url <- function(url, endpoint) {
 #'
 #' You can test the authentication headers like so:
 #' \dontrun{
-#' response <- httr::RETRY("GET", "https://httpbin.org/headers", httr::authenticate("epidata", get_auth_key()))
-#' content(response)$headers$Authorization == paste0("Basic ", base64enc::base64encode(charToRaw("epidata:")))
+#' response <- httr::RETRY("GET", "https://httpbin.org/headers", httr::authenticate("epidata", "fake_key"))
+#' content(response)$headers$Authorization == paste0("Basic ", base64enc::base64encode(charToRaw("epidata:fake_key")))
 #' }
 #'
 #' @importFrom httr RETRY
