@@ -1,9 +1,8 @@
 #' Helper function to cast values and/or ranges to strings
-#' @importFrom lubridate is.Date
 format_item <- function(value) {
   if (inherits(value, "EpiRange")) {
     paste0(toString(value$from), "-", toString(value$to))
-  } else if (is.Date(value)) {
+  } else if (inherits(value, "Date")) {
     format(value, "%Y%m%d")
   } else {
     paste(value, collapse = ",")

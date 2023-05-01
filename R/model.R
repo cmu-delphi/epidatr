@@ -6,7 +6,6 @@
 #'  or YYYYMM for epiweeks.
 #' @return EpiRange instance
 #' @importFrom checkmate check_integerish check_character check_date assert
-#' @importFrom lubridate is.Date
 #'
 #' @export
 epirange <- function(from, to) {
@@ -23,10 +22,10 @@ epirange <- function(from, to) {
     .var.name = "to"
   )
 
-  if (is.Date(from)) {
+  if (inherits(from, "Date")) {
     from <- as.numeric(format(from, "%Y%m%d"))
   }
-  if (is.Date(to)) {
+  if (inherits(to, "Date")) {
     to <- as.numeric(format(to, "%Y%m%d"))
   }
 
