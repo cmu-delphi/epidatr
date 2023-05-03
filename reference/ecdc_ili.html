@@ -76,11 +76,11 @@
 
 
 <dt>epiweeks</dt>
-<dd><p><code><a href="epirange.html">epirange</a></code>. The epiweeks to fetch.</p></dd>
+<dd><p><code><a href="timeset.html">timeset</a></code>. The epiweeks to fetch.</p></dd>
 
 
 <dt>issues</dt>
-<dd><p><code><a href="epirange.html">epirange</a></code>. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+<dd><p><code><a href="timeset.html">timeset</a></code>. Optionally, the issues to fetch. If not set, the most recent issue is returned.
 Mutually exclusive with <code>lag</code>.</p></dd>
 
 
@@ -107,49 +107,37 @@ Mutually exclusive with <code>issues</code>.</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="fu">ecdc_ili</span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"austria"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201201</span>, <span class="fl">202001</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch_classic</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ecdc_ili</span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"austria"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201901</span>, <span class="fl">202001</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch_classic</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $epidata</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    release_date  region issue    epiweek lag incidence_rate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          &lt;NA&gt; Austria  &lt;NA&gt; 2018-09-30  76       439.5328</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          &lt;NA&gt; Austria  &lt;NA&gt; 2018-10-07  75       439.4062</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          &lt;NA&gt; Austria  &lt;NA&gt; 2018-10-14  74       602.6987</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          &lt;NA&gt; Austria  &lt;NA&gt; 2018-10-21  73       459.8340</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          &lt;NA&gt; Austria  &lt;NA&gt; 2018-10-28  72       490.6953</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          &lt;NA&gt; Austria  &lt;NA&gt; 2018-11-04  71       654.2370</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7          &lt;NA&gt; Austria  &lt;NA&gt; 2018-11-11  70       697.1184</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8          &lt;NA&gt; Austria  &lt;NA&gt; 2018-11-18  69       763.7961</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9          &lt;NA&gt; Austria  &lt;NA&gt; 2018-11-25  68       707.1851</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10         &lt;NA&gt; Austria  &lt;NA&gt; 2018-12-02  67       654.4775</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11         &lt;NA&gt; Austria  &lt;NA&gt; 2018-12-09  66       686.2745</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12         &lt;NA&gt; Austria  &lt;NA&gt; 2018-12-16  65       772.0588</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13         &lt;NA&gt; Austria  &lt;NA&gt; 2019-01-06  62       786.8775</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14         &lt;NA&gt; Austria  &lt;NA&gt; 2019-01-13  61       855.3868</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15         &lt;NA&gt; Austria  &lt;NA&gt; 2019-01-20  60      1022.3642</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16         &lt;NA&gt; Austria  &lt;NA&gt; 2019-01-27  59      1264.8444</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17         &lt;NA&gt; Austria  &lt;NA&gt; 2019-02-03  58      1367.0933</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18         &lt;NA&gt; Austria  &lt;NA&gt; 2019-02-10  57      1209.1503</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19         &lt;NA&gt; Austria  &lt;NA&gt; 2019-02-17  56      1156.0458</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20         &lt;NA&gt; Austria  &lt;NA&gt; 2019-02-24  55      1122.2999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21         &lt;NA&gt; Austria  &lt;NA&gt; 2019-03-03  54       947.8168</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22         &lt;NA&gt; Austria  &lt;NA&gt; 2019-03-10  53       702.8754</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23         &lt;NA&gt; Austria  &lt;NA&gt; 2019-03-17  52       618.2950</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24         &lt;NA&gt; Austria  &lt;NA&gt; 2019-03-24  51       560.7015</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25         &lt;NA&gt; Austria  &lt;NA&gt; 2019-03-31  50       352.5394</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26         &lt;NA&gt; Austria  &lt;NA&gt; 2019-04-07  49         0.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27         &lt;NA&gt; Austria  &lt;NA&gt; 2019-09-29  24       603.4575</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28         &lt;NA&gt; Austria  &lt;NA&gt; 2019-10-06  23       667.9469</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29         &lt;NA&gt; Austria  &lt;NA&gt; 2019-10-13  22       742.0457</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30         &lt;NA&gt; Austria  &lt;NA&gt; 2019-10-20  21       673.1721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31         &lt;NA&gt; Austria  &lt;NA&gt; 2019-10-27  20       560.8205</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32         &lt;NA&gt; Austria  &lt;NA&gt; 2019-11-03  19       466.8708</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33         &lt;NA&gt; Austria  &lt;NA&gt; 2019-11-10  18       755.2870</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34         &lt;NA&gt; Austria  &lt;NA&gt; 2019-11-17  17       777.2590</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35         &lt;NA&gt; Austria  &lt;NA&gt; 2019-11-24  16       837.2336</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36         &lt;NA&gt; Austria  &lt;NA&gt; 2019-12-01  15       930.4386</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37         &lt;NA&gt; Austria  &lt;NA&gt; 2019-12-08  14       967.4829</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38         &lt;NA&gt; Austria  &lt;NA&gt; 2019-12-15  13      1157.3962</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39         &lt;NA&gt; Austria  &lt;NA&gt; 2019-12-22  12       504.0990</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40         &lt;NA&gt; Austria  &lt;NA&gt; 2019-12-29  11       406.6063</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    release_date  region      issue    epiweek lag incidence_rate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          &lt;NA&gt; Austria 2020-03-15 2019-01-06  62       786.8775</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          &lt;NA&gt; Austria 2020-03-15 2019-01-13  61       855.3868</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          &lt;NA&gt; Austria 2020-03-15 2019-01-20  60      1022.3642</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          &lt;NA&gt; Austria 2020-03-15 2019-01-27  59      1264.8444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          &lt;NA&gt; Austria 2020-03-15 2019-02-03  58      1367.0933</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          &lt;NA&gt; Austria 2020-03-15 2019-02-10  57      1209.1503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          &lt;NA&gt; Austria 2020-03-15 2019-02-17  56      1156.0458</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          &lt;NA&gt; Austria 2020-03-15 2019-02-24  55      1122.2999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9          &lt;NA&gt; Austria 2020-03-15 2019-03-03  54       947.8168</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10         &lt;NA&gt; Austria 2020-03-15 2019-03-10  53       702.8754</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11         &lt;NA&gt; Austria 2020-03-15 2019-03-17  52       618.2950</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12         &lt;NA&gt; Austria 2020-03-15 2019-03-24  51       560.7015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13         &lt;NA&gt; Austria 2020-03-15 2019-03-31  50       352.5394</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14         &lt;NA&gt; Austria 2020-03-15 2019-04-07  49         0.0000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15         &lt;NA&gt; Austria 2020-03-15 2019-09-29  24       603.4575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16         &lt;NA&gt; Austria 2020-03-15 2019-10-06  23       667.9469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17         &lt;NA&gt; Austria 2020-03-15 2019-10-13  22       742.0457</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18         &lt;NA&gt; Austria 2020-03-15 2019-10-20  21       673.1721</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19         &lt;NA&gt; Austria 2020-03-15 2019-10-27  20       560.8205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20         &lt;NA&gt; Austria 2020-03-15 2019-11-03  19       466.8708</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21         &lt;NA&gt; Austria 2020-03-15 2019-11-10  18       755.2870</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22         &lt;NA&gt; Austria 2020-03-15 2019-11-17  17       777.2590</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23         &lt;NA&gt; Austria 2020-03-15 2019-11-24  16       837.2336</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24         &lt;NA&gt; Austria 2020-03-15 2019-12-01  15       930.4386</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25         &lt;NA&gt; Austria 2020-03-15 2019-12-08  14       967.4829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26         &lt;NA&gt; Austria 2020-03-15 2019-12-15  13      1157.3962</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27         &lt;NA&gt; Austria 2020-03-15 2019-12-22  12       504.0990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28         &lt;NA&gt; Austria 2020-03-15 2019-12-29  11       406.6063</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $result</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>

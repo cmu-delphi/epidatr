@@ -25,6 +25,18 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/assert_character_param.html</loc>
+  </url>
+  <url>
+    <loc>/reference/assert_date_param.html</loc>
+  </url>
+  <url>
+    <loc>/reference/assert_integerish_param.html</loc>
+  </url>
+  <url>
+    <loc>/reference/assert_timeset_param.html</loc>
+  </url>
+  <url>
     <loc>/reference/covid_hosp_facility.html</loc>
   </url>
   <url>
@@ -140,6 +152,9 @@
   </url>
   <url>
     <loc>/reference/pvt_twitter.html</loc>
+  </url>
+  <url>
+    <loc>/reference/timeset.html</loc>
   </url>
   <url>
     <loc>/reference/wiki.html</loc>
