@@ -184,7 +184,7 @@ parse_timeset_input <- function(value) {
     } else {
       stop(paste0("Invalid timeset input: ", value))
     }
-  } else if (test_class(value, "EpiRange") || test_list(value, types = "EpiRange")) {
+  } else if (test_class(value, "EpiRange")) {
     return(value)
   } else {
     stop(paste0("Invalid timeset input: ", value))
