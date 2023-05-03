@@ -4,14 +4,14 @@
 \alias{pvt_norostat}
 \title{Fetch NoroSTAT data (point data, no min/max)}
 \usage{
-pvt_norostat(auth, location, epiweeks)
+pvt_norostat(auth, locations, epiweeks)
 }
 \arguments{
-\item{auth}{string. Restricted access key (not the same as API key).}
+\item{auth}{string. Your authentication key.}
 
-\item{location}{character vector. The locations to fetch.}
+\item{locations}{character vector. The locations to fetch.}
 
-\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -23,8 +23,8 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/norostat.html
 \dontrun{
 pvt_norostat(
   auth = "yourkey",
-  location = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
-  epiweeks = epirange(201201, 202001)
+  locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
+  epiweeks = epirange(201401, 201501)
 ) \%>\% fetch_classic()
 }
 }

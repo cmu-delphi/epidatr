@@ -7,9 +7,11 @@
 epirange(from, to)
 }
 \arguments{
-\item{from}{A string or numeric that takes the form YYYYMMDD for dates or YYYYMM for epiweeks.}
+\item{from}{A Date, integer-like value, or integer-like string that takes the form YYYYMMDD for dates
+or YYYYMM for epiweeks.}
 
-\item{to}{A string or numeric that takes the form YYYYMMDD for dates or YYYYMM for epiweeks.}
+\item{to}{A Date, integer-like value, or integer-like string that takes the form YYYYMMDD for dates
+or YYYYMM for epiweeks.}
 }
 \value{
 EpiRange instance

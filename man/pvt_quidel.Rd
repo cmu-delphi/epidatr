@@ -9,7 +9,7 @@ pvt_quidel(auth, epiweeks, locations)
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
 
-\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch.}
 
 \item{locations}{character vector. The locations to fetch.}
 }

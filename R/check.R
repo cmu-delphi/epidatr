@@ -1,91 +1,50 @@
-check_string_param <- function(name, value, required = TRUE) {
-  # string or string[]
-  if ((required &&
-    !(!is.null(value) &&
-      is.character(value))) ||
-    (!required && !(is.null(value) || is.character(value)))) {
-    rlang::abort(paste0("argument ", name, " is not a string"),
-      name = name, value = value, class = "invalid_argument"
-    )
-  }
+#' Allows character vectors
+#' @importFrom checkmate assert_character assert_integerish
+assert_character_param <- function(name, value, len = NULL, required = TRUE) {
+  null.ok <- !required
+  assert_integerish(len, null.ok = TRUE, .var.name = "len")
+  assert_character(value, null.ok = null.ok, len = len, any.missing = FALSE, .var.name = name)
 }
 
-check_int_param <- function(name, value, required = TRUE) {
-  # numeric or numeric[]
-  if ((required &&
-    !(!is.null(value) &&
-      is.numeric(value))) ||
-    (!required && !(is.null(value) || is.numeric(value)))) {
-    rlang::abort(paste0("argument ", name, " is not a number"),
-      name = name, value = value, class = "invalid_argument"
-    )
-  }
+#' Allows integer-like vectors
+#' @importFrom checkmate assert_integerish
+assert_integerish_param <- function(name, value, len = NULL, required = TRUE) {
+  null.ok <- !required
+  assert_integerish(len, null.ok = TRUE, .var.name = "len")
+  assert_integerish(value, null.ok = null.ok, len = len, any.missing = FALSE, .var.name = name)
 }
 
-is_epirange_like <- function(value) {
-  # character or numeric or EpiRange or list(from=..., to=...)
-  is.character(value) ||
-    is.numeric(value) ||
-    inherits(value, "EpiRange") ||
-    (is.list(value) &&
-      "from" %in% names(value) && "to" %in% names(value))
+#' Allows a vector of date_like params: date, character, or integer-like
+#' @importFrom checkmate check_date check_character check_integerish
+assert_date_param <- function(name, value, len = NULL, required = TRUE) {
+  null.ok <- !required
+  assert_integerish(len, null.ok = TRUE, .var.name = "len")
+  assert(
+    check_date(value, len = len, any.missing = FALSE, null.ok = null.ok),
+    check_character(value, len = len, any.missing = FALSE, null.ok = null.ok),
+    check_integerish(value, len = len, any.missing = FALSE, null.ok = null.ok),
+    combine = "or",
+    .var.name = name
+  )
 }
 
-check_single_epirange_param <- function(name, value, required = TRUE) {
-  if ((required &&
-    !(!is.null(value) &&
-      is_epirange_like(value))) ||
-    (!required && !(is.null(value) || is_epirange_like(value)))) {
-    rlang::abort(paste0("argument ", name, " is not a epirange"),
-      name = name, value = value, class = "invalid_argument"
-    )
-  }
-}
-
-check_epirange_param <- function(name, value, required = TRUE) {
-  if (is.null(value)) {
-    if (required) {
-      rlang::abort(paste0("argument ", name, " is not a epirange"),
-        name = name, value = value, class = "invalid_argument"
-      )
-    }
-    return()
-  }
-  if (is_epirange_like(value)) {
-    return()
-  }
-  if (!is.list || !all(sapply(sapply(value, is_epirange_like)))) {
-    rlang::abort(paste0("argument ", name, " is not a epirange"),
-      name = name, value = value, class = "invalid_argument"
-    )
-  }
-}
-
-check_single_string_param <- function(name, value, required = TRUE) {
-  if ((required &&
-    !(!is.null(value) &&
-      is.character(value) &&
-      length(value) == 1)) ||
-    (!required &&
-      !(is.null(value) ||
-        (
-          is.character(value) && length(value) == 1
-        )))) {
-    rlang::abort(paste0("argument ", name, " is not a single string"),
-      name = name, value = value, class = "invalid_argument"
-    )
-  }
-}
-
-check_single_int_param <- function(name, value, required = TRUE) {
-  if ((required &&
-    !(!is.null(value) &&
-      is.numeric(value) &&
-      length(value) == 1)) ||
-    (!required &&
-      !(is.null(value) || (is.numeric(value) && length(value) == 1)))) {
-    rlang::abort(paste0("argument ", name, " is not a single integer"),
-      name = name, value = value, class = "invalid_argument"
-    )
-  }
+#' Allows a timeset param: a date vector, a character vector, an integer-like vector, or a single EpiRange
+#' @importFrom checkmate assert check_character check_date check_integerish check_class check_list check_names
+assert_timeset_param <- function(name, value, len = NULL, required = TRUE) {
+  null.ok <- !required
+  assert_integerish(len, len = 1L, null.ok = TRUE, .var.name = "len")
+  assert(
+    check_class(value, "EpiRange", null.ok = null.ok),
+    check_names(names(value), type = "unnamed"),
+    combine = "or",
+    .var.name = name
+  )
+  assert(
+    check_date(value, len = len, any.missing = FALSE, null.ok = null.ok),
+    check_character(value, len = len, any.missing = FALSE, null.ok = null.ok),
+    check_integerish(value, len = len, any.missing = FALSE, null.ok = null.ok),
+    check_class(value, "EpiRange", null.ok = null.ok),
+    combine = "or",
+    .var.name = name
+  )
 }

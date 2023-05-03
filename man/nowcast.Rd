@@ -9,7 +9,7 @@ nowcast(locations, epiweeks)
 \arguments{
 \item{locations}{character vector. The locations to fetch.}
 
-\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -25,6 +25,6 @@ The full list of location inputs can be accsssed at
 }
 \examples{
 \donttest{
-nowcast(location = "ca", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic()
+nowcast(locations = "ca", epiweeks = epirange(201201, 201301)) \%>\% fetch_classic()
 }
 }

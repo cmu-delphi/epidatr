@@ -9,9 +9,9 @@ flusurv(locations, epiweeks, issues = NULL, lag = NULL)
 \arguments{
 \item{locations}{character vector. Character strings indicating location.}
 
-\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch.}
 
-\item{issues}{\code{\link{epirange}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
 Mutually exclusive with \code{lag}.}
 
 \item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
@@ -32,6 +32,6 @@ The list of location argument can be found in
 }
 \examples{
 \donttest{
-flusurv(locations = "CA", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic()
+flusurv(locations = "CA", epiweeks = epirange(201701, 201801)) \%>\% fetch_classic()
 }
 }

@@ -9,7 +9,7 @@ gft(locations, epiweeks)
 \arguments{
 \item{locations}{character vector. The locations to be fetched.}
 
-\item{epiweeks}{\code{\link{epirange}} The epiweeks to be fetched.}
+\item{epiweeks}{\code{\link{timeset}} The epiweeks to be fetched.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -26,5 +26,7 @@ can be found in \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labe
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt}.
 }
 \examples{
+\dontrun{
 gft(locations = "hhs1", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic()
+}
 }

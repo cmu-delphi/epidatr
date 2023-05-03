@@ -9,9 +9,9 @@ paho_dengue(regions, epiweeks, issues = NULL, lag = NULL)
 \arguments{
 \item{regions}{character vector. The regions to fetch.}
 
-\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch.}
 
-\item{issues}{\code{\link{epirange}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
 Mutually exclusive with \code{lag}.}
 
 \item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
@@ -25,6 +25,6 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html
 }
 \examples{
 \donttest{
-paho_dengue(regions = "ca", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic()
+paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501)) \%>\% fetch_classic()
 }
 }

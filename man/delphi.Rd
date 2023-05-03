@@ -9,7 +9,7 @@ delphi(system, epiweek)
 \arguments{
 \item{system}{string. The system name to fetch.}
 
-\item{epiweek}{\code{\link{epirange}}. The epiweeks to fetch.}
+\item{epiweek}{\code{\link{timeset}}. The epiweeks to fetch.}
 }
 \value{
 \code{\link{epidata_call}}

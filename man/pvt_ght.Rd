@@ -11,7 +11,7 @@ pvt_ght(auth, locations, epiweeks, query)
 
 \item{locations}{character vector. The locations to be fetched.}
 
-\item{epiweeks}{\code{\link{epirange}}. The epiweeks to be fetched.}
+\item{epiweeks}{\code{\link{timeset}}. The epiweeks to be fetched.}
 
 \item{query}{string. The query to be fetched.}
 }
