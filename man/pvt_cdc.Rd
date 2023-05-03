@@ -9,7 +9,7 @@ pvt_cdc(auth, epiweeks, locations)
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
 
-\item{epiweeks}{\code{\link{epirange}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
 
 \item{locations}{character vector. Locations to fetch (see docs).}
 }
@@ -23,7 +23,7 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/cdc.html
 \dontrun{
 pvt_cdc(
   auth = "yourkey",
-  epirange(20210101, 20210201),
+  epirange(201501, 201601),
   "fl,ca"
 ) \%>\% fetch_tbl()
 }

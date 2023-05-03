@@ -10,10 +10,10 @@ fluview(regions, epiweeks, issues = NULL, lag = NULL, auth = NULL)
 \item{regions}{character vector. The locations to fetch. Can we any string IDs in national, HHS region,
 census division, most states and territories, and so on. Full list link below.}
 
-\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch in the form epirange(startweek,endweek), where startweek
+\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch in the form epirange(startweek,endweek), where startweek
 and endweek are of the form YYYYWW (string or numeric).}
 
-\item{issues}{\code{\link{epirange}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
 Mutually exclusive with \code{lag}.}
 
 \item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.

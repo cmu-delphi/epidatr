@@ -9,9 +9,9 @@ covid_hosp_facility(hospital_pks, collection_weeks, publication_dates = NULL)
 \arguments{
 \item{hospital_pks}{string. A character string of facility unique identifiers.}
 
-\item{collection_weeks}{\code{\link{epirange}}. Epiweeks to fetch.}
+\item{collection_weeks}{\code{\link{timeset}}. Epiweeks to fetch.}
 
-\item{publication_dates}{\code{\link{epirange}}. Publication dates to fetch.}
+\item{publication_dates}{\code{\link{timeset}}. Publication dates to fetch.}
 }
 \value{
 \code{\link{epidata_call}}

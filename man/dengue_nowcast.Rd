@@ -9,7 +9,7 @@ dengue_nowcast(locations, epiweeks)
 \arguments{
 \item{locations}{character vector. The locations to fetch.}
 
-\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch.}
 }
 \value{
 \code{\link{epidata_call}}

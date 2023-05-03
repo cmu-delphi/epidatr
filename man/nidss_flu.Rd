@@ -9,9 +9,9 @@ nidss_flu(regions, epiweeks, issues = NULL, lag = NULL)
 \arguments{
 \item{regions}{character vector. The regions to fetch.}
 
-\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch.}
 
-\item{issues}{\code{\link{epirange}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
 Mutually exclusive with \code{lag}.}
 
 \item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.

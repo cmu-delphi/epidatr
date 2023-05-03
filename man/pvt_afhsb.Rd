@@ -11,7 +11,7 @@ pvt_afhsb(auth, locations, epiweeks, flu_types)
 
 \item{locations}{character vector. Locations to fetch (see docs).}
 
-\item{epiweeks}{\code{\link{epirange}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
 
 \item{flu_types}{string. Flu types to fetch (see docs).}
 }

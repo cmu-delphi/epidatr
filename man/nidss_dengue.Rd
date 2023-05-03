@@ -9,7 +9,7 @@ nidss_dengue(locations, epiweeks)
 \arguments{
 \item{locations}{character vector. The locations to fetch.}
 
-\item{epiweeks}{\code{\link{epirange}}. The epiweeks to fetched.}
+\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetched.}
 }
 \value{
 \code{\link{epidata_call}}

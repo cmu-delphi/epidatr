@@ -9,9 +9,9 @@ covid_hosp_state_timeseries(states, dates, issues = NULL)
 \arguments{
 \item{states}{character vector. Two letter state abbreviations.}
 
-\item{dates}{\code{\link{epirange}}. Dates to fetch.}
+\item{dates}{\code{\link{timeset}}. Dates to fetch.}
 
-\item{issues}{\code{\link{epirange}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.}
+\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.}
 }
 \value{
 \code{\link{epidata_call}}
