@@ -2,10 +2,10 @@
 % Please edit documentation in R/check.R
 \name{assert_timeset_param}
 \alias{assert_timeset_param}
-\title{Allows a vector of timeset params: date, character, integer-like, or EpiRange}
+\title{Allows a timeset param: a date vector, a character vector, an integer-like vector, or a single EpiRange}
 \usage{
 assert_timeset_param(name, value, len = NULL, required = TRUE)
 }
 \description{
-Allows a vector of timeset params: date, character, integer-like, or EpiRange
+Allows a timeset param: a date vector, a character vector, an integer-like vector, or a single EpiRange
 }
