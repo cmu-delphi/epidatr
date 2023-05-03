@@ -67,6 +67,7 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
   )
 }
 
+#' @importFrom checkmate test_class test_list test_vector
 request_arguments <-
   function(epidata_call, format_type, fields = NULL) {
     stopifnot(inherits(epidata_call, "epidata_call"))
@@ -86,9 +87,9 @@ request_arguments <-
     for (name in names(all_params)) {
       v <- all_params[[name]]
       if (!is.null(v)) {
-        if (inherits(v, "EpiRange")) {
+        if (test_class(v, "EpiRange")) {
           formatted_params[[name]] <- format_item(v)
-        } else if (is.list(v)) {
+        } else if (test_list(v) || test_vector(v)) {
           formatted_params[[name]] <- format_list(v)
         } else {
           formatted_params[[name]] <- format_item(v)

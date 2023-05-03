@@ -2,10 +2,8 @@ test_that("format_item", {
   expect_equal(format_item(5), "5")
   expect_equal(format_item("5"), "5")
   expect_equal(format_item("*"), "*")
-  expect_equal(format_item(epirange(201501, 201601)), "201501-201601")
   expect_equal(format_item(as.Date("2020-01-01")), "20200101")
-  expect_equal(format_item(c(2, 9)), "2,9")
-  expect_equal(format_item(list(2, 9)), "2,9")
+  expect_equal(format_item(epirange(201501, 201601)), "201501-201601")
 })
 
 test_that("format_list", {
