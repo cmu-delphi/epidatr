@@ -173,7 +173,7 @@ parse_timeset_input <- function(value) {
     if (all(nchar(value) %in% c(6, 8))) {
       return(value)
     } else {
-      stop(paste0("Invalid date input: ", value))
+      stop(paste0("Invalid timeset input: ", value))
     }
   } else if (test_character(value)) {
     if (all(nchar(value) %in% c(6, 8))) {
@@ -182,11 +182,11 @@ parse_timeset_input <- function(value) {
       value <- as.Date(value, format = "%Y-%m-%d")
       return(format(value, format = "%Y%m%d"))
     } else {
-      stop(paste0("Invalid date input: ", value))
+      stop(paste0("Invalid timeset input: ", value))
     }
   } else if (test_class(value, "EpiRange") || test_list(value, types = "EpiRange")) {
     return(value)
   } else {
-    stop(paste0("Invalid date input: ", value))
+    stop(paste0("Invalid timeset input: ", value))
   }
 }
