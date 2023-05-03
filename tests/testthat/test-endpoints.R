@@ -1,6 +1,6 @@
 test_that("basic_epidata_call", {
   expect_no_error(pvt_afhsb(auth = "yourkey", "fl,ca", epirange(202001, 202110), "flu1,flu2-flu1"))
-  expect_no_error(pvt_cdc(auth = "yourkey", epirange(20210101, 20210201), "fl,ca"))
+  expect_no_error(pvt_cdc(auth = "yourkey", epirange(201501, 201601), "fl,ca"))
   expect_no_error(covid_hosp_facility_lookup(state = "fl"))
   expect_no_error(covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(20200101, 20200501)))
   expect_no_error(covid_hosp_state_timeseries(states = "fl", dates = epirange(20200101, 20200501)))
@@ -31,7 +31,7 @@ test_that("basic_epidata_call", {
   expect_no_error(wiki(articles = "avian_influenza", epiweeks = epirange(201501, 202001)))
 
   expect_no_error(pvt_afhsb(auth = "yourkey", "fl,ca", epirange(202001, 202110), "flu1,flu2-flu1") %>% request_url())
-  expect_no_error(pvt_cdc(auth = "yourkey", epirange(20210101, 20210201), "fl,ca") %>% request_url())
+  expect_no_error(pvt_cdc(auth = "yourkey", epirange(201501, 201601), "fl,ca") %>% request_url())
   expect_no_error(covid_hosp_facility_lookup(state = "fl") %>% request_url())
   expect_no_error(covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(20200101, 20200501)) %>% request_url())
   expect_no_error(covid_hosp_state_timeseries(states = "fl", dates = epirange(20200101, 20200501)) %>% request_url())
