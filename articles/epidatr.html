@@ -85,7 +85,7 @@
                         <h4 data-toc-skip class="author">Delphi
 Group</h4>
             
-            <h4 data-toc-skip class="date">2023-05-03</h4>
+            <h4 data-toc-skip class="date">2023-05-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/cmu-delphi/epidatr/blob/HEAD/vignettes/epidatr.Rmd" class="external-link"><code>vignettes/epidatr.Rmd</code></a></small>
       <div class="hidden name"><code>epidatr.Rmd</code></div>
@@ -102,7 +102,7 @@ Group</h4>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/cmu-delphi/epidatr" class="external-link">"epidatr"</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://magrittr.tidyverse.org" class="external-link">"magrittr"</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covidcast.html">covidcast</a></span><span class="op">(</span><span class="st">"fb-survey"</span>, <span class="st">"smoothed_cli"</span>, <span class="st">"day"</span>, <span class="st">"nation"</span>, <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span>, <span class="st">"us"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covidcast.html">covidcast</a></span><span class="op">(</span><span class="st">"fb-survey"</span>, <span class="st">"smoothed_cli"</span>, <span class="st">"nation"</span>, <span class="st">"day"</span>, <span class="st">"us"</span>, <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch_tbl</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: No API key found. You will be limited to non-complex queries and encounter rate</span></span>
