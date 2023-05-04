@@ -4,14 +4,14 @@
 \alias{pvt_cdc}
 \title{Fetch CDC page hits}
 \usage{
-pvt_cdc(auth, epiweeks, locations)
+pvt_cdc(auth, locations, epiweeks)
 }
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
-
 \item{locations}{character vector. Locations to fetch (see docs).}
+
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -23,8 +23,8 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/cdc.html
 \dontrun{
 pvt_cdc(
   auth = "yourkey",
-  epirange(201501, 201601),
-  "fl,ca"
+  "fl,ca",
+  epirange(201501, 201601)
 ) \%>\% fetch_tbl()
 }
 }
