@@ -7,10 +7,10 @@
 covidcast(
   data_source,
   signals,
-  time_type,
   geo_type,
-  time_values,
+  time_type,
   geo_values,
+  time_values,
   as_of = NULL,
   issues = NULL,
   lag = NULL
@@ -23,15 +23,15 @@ covidcast(
 \item{signals}{string. The signals to query from a specific source (see:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals}).}
 
-\item{time_type}{string. The temporal resolution of the data (either "day" or "week", depending on signal).}
-
 \item{geo_type}{string. The geographic resolution of the data (see:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}).}
 
-\item{time_values}{\code{\link{timeset}}. The dates to fetch.}
+\item{time_type}{string. The temporal resolution of the data (either "day" or "week", depending on signal).}
 
 \item{geo_values}{character vector. The geographies to return. "*" fetches all. (See:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.)}
+
+\item{time_values}{\code{\link{timeset}}. The dates to fetch.}
 
 \item{as_of}{Date. Optionally, the as of date for the issues to fetech. If not specified, the most recent
 data is returned. Mutually exclusive with \code{issues} or \code{lag}.}
@@ -54,10 +54,10 @@ COVIDcast public dashboard: \url{https://delphi.cmu.edu/covidcast/}
 covidcast(
   data_source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
-  time_type = "day",
   geo_type = "state",
-  time_values = epirange(20200601, 20200801),
-  geo_values = "ca,fl"
+  time_type = "day",
+  geo_values = "ca,fl",
+  time_values = epirange(20200601, 20200801)
 ) \%>\% fetch_tbl()
 }
 }
