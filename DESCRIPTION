@@ -35,6 +35,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.1.5),
     mockery,
-    mockr
+    mockr,
+    dplyr
 VignetteBuilder: knitr
 Language: en-US
