@@ -37,7 +37,11 @@ test_that("fetch_tbl", {
     time_values = epirange("2020-06-01", "2020-08-01"),
     geo_values = "ca,fl"
   ) %>%
-    fetch_tbl(method = "data.frame")
+    fetch_tbl(method = "data.frame") %>%
+    mutate(
+      geo_type = as.character(geo_type),
+      time_type = as.character(time_type)
+    )
   csv_out <- covidcast(
     data_source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
@@ -46,9 +50,13 @@ test_that("fetch_tbl", {
     time_values = epirange("2020-06-01", "2020-08-01"),
     geo_values = "ca,fl"
   ) %>%
-    fetch_tbl(method = "csv")
+    fetch_tbl(method = "csv") %>%
+    mutate(
+      geo_type = as.character(geo_type),
+      time_type = as.character(time_type)
+    )
 
-  expect_equal(dplyr::all_equal(t1, t2), TRUE)
+  expect_equal(dplyr::all_equal(classic_out, csv_out), TRUE)
 
   out <- covidcast(
     data_source = "jhu-csse",
@@ -58,7 +66,11 @@ test_that("fetch_tbl", {
     time_values = epirange("2020-06-01", "2020-08-01"),
     geo_values = "ca,fl"
   ) %>%
-    fetch()
+    fetch()  %>%
+    mutate(
+      geo_type = as.character(geo_type),
+      time_type = as.character(time_type)
+    )
 
   expect_equal(dplyr::all_equal(out, classic_out), TRUE)
 })
