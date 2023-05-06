@@ -66,7 +66,7 @@ test_that("fetch_tbl", {
     time_values = epirange("2020-06-01", "2020-08-01"),
     geo_values = "ca,fl"
   ) %>%
-    fetch()  %>%
+    fetch() %>%
     mutate(
       geo_type = as.character(geo_type),
       time_type = as.character(time_type)
