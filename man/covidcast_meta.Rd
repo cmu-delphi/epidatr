@@ -19,7 +19,7 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.ht
 }
 \examples{
 \donttest{
-covidcast_meta() \%>\% fetch_classic()
+covidcast_meta() \%>\% fetch()
 }
 
 }

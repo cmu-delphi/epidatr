@@ -58,7 +58,7 @@ covidcast(
   time_type = "day",
   geo_values = "ca,fl",
   time_values = epirange(20200601, 20200801)
-) \%>\% fetch_tbl()
+) \%>\% fetch()
 }
 }
 \seealso{

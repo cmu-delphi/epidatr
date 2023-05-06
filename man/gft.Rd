@@ -27,6 +27,6 @@ can be found in \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labe
 }
 \examples{
 \dontrun{
-gft(locations = "hhs1", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic()
+gft(locations = "hhs1", epiweeks = epirange(201201, 202001)) \%>\% fetch()
 }
 }

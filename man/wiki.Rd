@@ -25,6 +25,6 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/wiki.html
 }
 \examples{
 \donttest{
-wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601)) \%>\% fetch_tbl()
+wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601)) \%>\% fetch()
 }
 }

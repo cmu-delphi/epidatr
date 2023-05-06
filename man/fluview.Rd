@@ -36,5 +36,5 @@ The full list of location inputs can be accsssed at
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
 }
 \examples{
-fluview(regions = "nat", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic()
+fluview(regions = "nat", epiweeks = epirange(201201, 202001)) \%>\% fetch()
 }

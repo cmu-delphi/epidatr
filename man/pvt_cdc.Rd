@@ -25,6 +25,6 @@ pvt_cdc(
   auth = "yourkey",
   "fl,ca",
   epirange(201501, 201601)
-) \%>\% fetch_tbl()
+) \%>\% fetch()
 }
 }

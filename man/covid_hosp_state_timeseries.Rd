@@ -32,6 +32,6 @@ Starting October 1, 2022, some facilities are only required to report annually.
 covid_hosp_state_timeseries(
   states = "fl",
   dates = epirange(20200101, 20200501)
-) \%>\% fetch_tbl()
+) \%>\% fetch()
 }
 }
