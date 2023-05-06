@@ -27,11 +27,14 @@ Imports:
     readr,
     MMWRweek,
     rlang,
-    magrittr
+    magrittr,
+    tibble
 RoxygenNote: 7.2.3
 Suggests:
     knitr,
     rmarkdown,
-    testthat (>= 3.1.5)
+    testthat (>= 3.1.5),
+    mockery,
+    mockr
 VignetteBuilder: knitr
 Language: en-US

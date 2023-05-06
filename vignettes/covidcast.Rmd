@@ -28,19 +28,11 @@ epicall <- covidcast_api$sources$`fb-survey`$signals$smoothed_cli$call("nation",
 ```
 
 ```{r}
-epicall %>% fetch_tbl()
+epicall %>% fetch()
 ```
 
 ```{r}
 epicall %>% fetch_classic()
-```
-
-```{r}
-epicall %>% fetch_json()
-```
-
-```{r}
-epicall %>% fetch_csv()
 ```
 
 ```{r}

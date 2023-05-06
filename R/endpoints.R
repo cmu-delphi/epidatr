@@ -15,7 +15,7 @@
 #'   "fl,ca",
 #'   epirange(202001, 202110),
 #'   "flu1,flu2-flu1"
-#' ) %>% fetch_tbl()
+#' ) %>% fetch()
 #' }
 #' @export
 pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
@@ -52,7 +52,7 @@ pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
 #'   auth = "yourkey",
 #'   "fl,ca",
 #'   epirange(201501, 201601)
-#' ) %>% fetch_tbl()
+#' ) %>% fetch()
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
@@ -103,7 +103,7 @@ pvt_cdc <- function(auth, locations, epiweeks) {
 #'
 #' @examples
 #' \donttest{
-#' covid_hosp_facility_lookup(state = "fl") %>% fetch_tbl()
+#' covid_hosp_facility_lookup(state = "fl") %>% fetch()
 #' }
 #' @param state string. A two-letter character string state abbreviation.
 #' @param ccn string. A character string for facility CMS certification number.
@@ -172,7 +172,7 @@ covid_hosp_facility_lookup <- function(state = NULL, ccn = NULL, city = NULL, zi
 #' covid_hosp_facility(
 #'   hospital_pks = "100075",
 #'   collection_weeks = epirange(20200101, 20200501)
-#' ) %>% fetch_tbl()
+#' ) %>% fetch()
 #' }
 #' @param hospital_pks string. A character string of facility unique identifiers.
 #' @param collection_weeks [`timeset`]. Epiweeks to fetch.
@@ -461,7 +461,7 @@ covid_hosp_facility <- function(hospital_pks, collection_weeks, publication_date
 #' covid_hosp_state_timeseries(
 #'   states = "fl",
 #'   dates = epirange(20200101, 20200501)
-#' ) %>% fetch_tbl()
+#' ) %>% fetch()
 #' }
 #' @param states character vector. Two letter state abbreviations.
 #' @param dates [`timeset`]. Dates to fetch.
@@ -613,7 +613,7 @@ covid_hosp_state_timeseries <- function(states, dates, issues = NULL) {
 #'
 #' @examples
 #' \donttest{
-#' covidcast_meta() %>% fetch_classic()
+#' covidcast_meta() %>% fetch()
 #' }
 #'
 #' @seealso [covidcast()]
@@ -658,7 +658,7 @@ covidcast_meta <- function() {
 #'   time_type = "day",
 #'   geo_values = "ca,fl",
 #'   time_values = epirange(20200601, 20200801)
-#' ) %>% fetch_tbl()
+#' ) %>% fetch()
 #' }
 #' @param data_source string. The data source to query (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>).
@@ -766,7 +766,7 @@ covidcast <- function(
 #'
 #' @examples
 #' \donttest{
-#' delphi(system = "ec", epiweek = 202006) %>% fetch_classic()
+#' delphi(system = "ec", epiweek = 202006) %>% fetch()
 #' }
 #' @param system string. The system name to fetch.
 #' @param epiweek [`timeset`]. The epiweeks to fetch.
@@ -800,7 +800,7 @@ delphi <- function(system, epiweek) {
 #' dengue_nowcast(
 #'   locations = "?",
 #'   epiweeks = epirange(201501, 202001)
-#' ) %>% fetch_classic()
+#' ) %>% fetch()
 #' }
 #' @param locations character vector. The locations to fetch.
 #' @param epiweeks [`timeset`]. The epiweeks to fetch.
@@ -836,7 +836,7 @@ dengue_nowcast <- function(locations, epiweeks) {
 #'   names = "?",
 #'   locations = "?",
 #'   epiweeks = epirange(201501, 202001)
-#' ) %>% fetch_classic()
+#' ) %>% fetch()
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param names character vector. The list of names to fetch.
@@ -880,7 +880,7 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
 #'
 #' @examples
 #' \donttest{
-#' ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001)) %>% fetch_classic()
+#' ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001)) %>% fetch()
 #' }
 #' @param regions character vector. The regions to fetch.
 #' @param epiweeks [`timeset`]. The epiweeks to fetch.
@@ -933,7 +933,7 @@ ecdc_ili <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 #'
 #' @examples
 #' \donttest{
-#' flusurv(locations = "CA", epiweeks = epirange(201701, 201801)) %>% fetch_classic()
+#' flusurv(locations = "CA", epiweeks = epirange(201701, 201801)) %>% fetch()
 #' }
 #' @param locations character vector. Character strings indicating location.
 #' @param epiweeks [`timeset`]. The epiweeks to fetch.
@@ -985,7 +985,7 @@ flusurv <- function(locations, epiweeks, issues = NULL, lag = NULL) {
 #'
 #' @examples
 #' \donttest{
-#' fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701)) %>% fetch_classic()
+#' fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701)) %>% fetch()
 #' }
 #' @param regions character vector. The regions to fetch.
 #' @param epiweeks [`timeset`]. The epiweeks to fetch in the form epirange(startweek,endweek), where startweek
@@ -1064,7 +1064,7 @@ fluview_meta <- function() {
 #'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
 #' @examples
-#' fluview(regions = "nat", epiweeks = epirange(201201, 202001)) %>% fetch_classic()
+#' fluview(regions = "nat", epiweeks = epirange(201201, 202001)) %>% fetch()
 #' @param regions character vector. The locations to fetch. Can we any string IDs in national, HHS region,
 #'   census division, most states and territories, and so on. Full list link below.
 #' @param epiweeks [`timeset`]. The epiweeks to fetch in the form epirange(startweek,endweek), where startweek
@@ -1132,7 +1132,7 @@ fluview <- function(regions, epiweeks, issues = NULL, lag = NULL, auth = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' gft(locations = "hhs1", epiweeks = epirange(201201, 202001)) %>% fetch_classic()
+#' gft(locations = "hhs1", epiweeks = epirange(201201, 202001)) %>% fetch()
 #' }
 #' @param locations character vector. The locations to be fetched.
 #' @param epiweeks [`timeset`] The epiweeks to be fetched.
@@ -1168,7 +1168,7 @@ gft <- function(locations, epiweeks) {
 #'   locations = "ca",
 #'   epiweeks = epirange(201201, 202001),
 #'   query = "?"
-#' ) %>% fetch_classic()
+#' ) %>% fetch()
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param locations character vector. The locations to be fetched.
@@ -1207,7 +1207,7 @@ pvt_ght <- function(auth, locations, epiweeks, query) {
 #' TODO: find a non-trivial region
 #' @examples
 #' \dontrun{
-#' kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001)) %>% fetch_tbl()
+#' kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001)) %>% fetch()
 #' }
 #' @param regions character vector. The regions to be fetched.
 #' @param epiweeks [`timeset`]. The epiweeks to be fetched.
@@ -1299,7 +1299,7 @@ meta <- function() {
 #'
 #' @examples
 #' \donttest{
-#' nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301)) %>% fetch_classic()
+#' nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301)) %>% fetch()
 #' }
 #' @param locations character vector. The locations to fetch.
 #' @param epiweeks [`timeset`]. The epiweeks to fetched.
@@ -1331,7 +1331,7 @@ nidss_dengue <- function(locations, epiweeks) {
 #'
 #' @examples
 #' \donttest{
-#' nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601)) %>% fetch_classic()
+#' nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601)) %>% fetch()
 #' }
 #' @param regions character vector. The regions to fetch.
 #' @param epiweeks [`timeset`]. The epiweeks to fetch.
@@ -1385,7 +1385,7 @@ nidss_flu <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 #'   auth = "yourkey",
 #'   locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
 #'   epiweeks = epirange(201401, 201501)
-#' ) %>% fetch_classic()
+#' ) %>% fetch()
 #' }
 #' @param auth string. Your authentication key.
 #' @param locations character vector. The locations to fetch.
@@ -1425,7 +1425,7 @@ pvt_norostat <- function(auth, locations, epiweeks) {
 #'
 #' @examples
 #' \donttest{
-#' nowcast(locations = "ca", epiweeks = epirange(201201, 201301)) %>% fetch_classic()
+#' nowcast(locations = "ca", epiweeks = epirange(201201, 201301)) %>% fetch()
 #' }
 #' @param locations character vector. The locations to fetch.
 #' @param epiweeks [`timeset`]. The epiweeks to fetch.
@@ -1455,7 +1455,7 @@ nowcast <- function(locations, epiweeks) {
 #'
 #' @examples
 #' \donttest{
-#' paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501)) %>% fetch_classic()
+#' paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501)) %>% fetch()
 #' }
 #' @param regions character vector. The regions to fetch.
 #' @param epiweeks [`timeset`]. The epiweeks to fetch.
@@ -1508,7 +1508,7 @@ paho_dengue <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 #'   auth = "yourkey",
 #'   epiweeks = epirange(201201, 202001),
 #'   locations = "hhs1"
-#' ) %>% fetch_classic()
+#' ) %>% fetch()
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param locations character vector. The locations to fetch.
@@ -1548,7 +1548,7 @@ pvt_quidel <- function(auth, locations, epiweeks) {
 #'   names = "sar3",
 #'   locations = "nat",
 #'   epiweeks = epirange(201501, 202001)
-#' ) %>% fetch_classic()
+#' ) %>% fetch()
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param names character vector. The names of the sensors to fetch.
@@ -1587,7 +1587,7 @@ pvt_sensors <- function(auth, names, locations, epiweeks) {
 #'
 #' @examples
 #' \dontrun{
-#' pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001)) %>% fetch_tbl()
+#' pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001)) %>% fetch()
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param locations character vector. The locations to fetch.
@@ -1636,7 +1636,7 @@ pvt_twitter <- function(auth, locations, dates = NULL, epiweeks = NULL) {
 #'
 #' @examples
 #' \donttest{
-#' wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601)) %>% fetch_tbl()
+#' wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601)) %>% fetch()
 #' }
 #' @param articles character vector. The articles to fetch.
 #' @param dates [`timeset`]. The dates to fetch. Mutually exclusive with `epiweeks`.

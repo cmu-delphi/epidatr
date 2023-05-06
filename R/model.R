@@ -95,17 +95,21 @@ create_epidata_field_info <- function(name,
 
 parse_value <- function(info, value, disable_date_parsing = FALSE) {
   stopifnot(inherits(info, "EpidataFieldInfo"))
+
   if (is.null(value)) {
     return(value)
-  }
-  if (info$type == "date" && !disable_date_parsing) {
+  } else if (info$type == "date" && !disable_date_parsing) {
     return(parse_api_date(value))
-  }
-  if (info$type == "epiweek" && !disable_date_parsing) {
+  } else if (info$type == "epiweek" && !disable_date_parsing) {
     return(parse_api_week(value))
-  }
-  if (info$type == "bool") {
+  } else if (info$type == "bool") {
     return(as.logical(value))
+  } else if (info$type == "int") {
+    return(as.integer(value))
+  } else if (info$type == "float") {
+    return(as.double(value))
+  } else if (info$type == "categorical") {
+    return(as.ordered(value))
   }
   value
 }

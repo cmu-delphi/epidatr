@@ -28,19 +28,11 @@ epicall <- covidcast("fb-survey", "smoothed_cli", "nation", "day", "us", epirang
 
 
 ```{r}
-epicall %>% fetch_tbl()
+epicall %>% fetch()
 ```
 
 ```{r}
-epicall %>% fetch_classic()
-```
-
-```{r}
-epicall %>% fetch_json()
-```
-
-```{r}
-epicall %>% fetch_csv()
+delphi(system = "ec", epiweek = 202006) %>% fetch()
 ```
 
 ```{r}
