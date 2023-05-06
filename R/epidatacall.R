@@ -122,44 +122,6 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
   }
 }
 
-fetch_debug <- function(epidata_call, format = c("classic", "csv", "json"), fields = NULL) {
-  res <- request_impl(epidata_call, format, fields)
-  r <- httr::content(res, "text", encoding = "UTF-8")
-  r
-}
-
-#' Fetches the data and returns a JSON object in the classic format
-#'
-#' The classic format is a 3-element list with the following elements:
-#'   - `result`: a status code (1 for success, non-zero for failure)
-#'   - `message`: a string describing the status of the request
-#'   - `epidata`: a list of JSON rows containing the data
-#'
-#' @rdname epidata_call
-#'
-#' @param epidata_call an instance of `epidata_call`
-#' @param fields filter fields
-#' @param disable_data_frame_parsing do not automatically cast the epidata output to a data frame
-#'   (some endpoints return a list of lists, which is not a data frame)
-#' @importFrom httr stop_for_status content http_error
-#' @importFrom jsonlite fromJSON
-#' @return a JSON-like list
-#'
-#' @export
-fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsing = TRUE) {
-  stopifnot(inherits(epidata_call, "epidata_call"))
-  stopifnot(is.null(fields) || is.character(fields))
-
-  res <- request_impl(epidata_call, "classic", fields)
-  r <- httr::content(res, "text", encoding = "UTF-8")
-
-  if (httr::http_error(res)) {
-    rlang::abort("epidata error: ", r = r, class = "epidata_error")
-  }
-
-  jsonlite::fromJSON(r, simplifyDataFrame = !disable_data_frame_parsing)
-}
-
 #' Fetches the data and returns a tibble
 #' @rdname epidata_call
 #'
@@ -231,6 +193,39 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE,
   }
 }
 
+#' Fetches the data and returns a JSON object in the classic format
+#'
+#' The classic format is a 3-element list with the following elements:
+#'   - `result`: a status code (1 for success, non-zero for failure)
+#'   - `message`: a string describing the status of the request
+#'   - `epidata`: a list of JSON rows containing the data
+#'
+#' @rdname epidata_call
+#'
+#' @param epidata_call an instance of `epidata_call`
+#' @param fields filter fields
+#' @param disable_data_frame_parsing do not automatically cast the epidata output to a data frame
+#'   (some endpoints return a list of lists, which is not a data frame)
+#' @importFrom httr stop_for_status content http_error
+#' @importFrom jsonlite fromJSON
+#' @return a JSON-like list
+#'
+#' @export
+fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsing = TRUE) {
+  stopifnot(inherits(epidata_call, "epidata_call"))
+  stopifnot(is.null(fields) || is.character(fields))
+
+  res <- request_impl(epidata_call, "classic", fields)
+  httr::stop_for_status(res)
+  r <- httr::content(res, "text", encoding = "UTF-8")
+  r <- jsonlite::fromJSON(r, simplifyDataFrame = !disable_data_frame_parsing)
+  if (r$result != 1 && r$result != 2) {
+    rlang::abort(paste0("epidata error: ", r$message), "epidata_error")
+  } else {
+    r
+  }
+}
+
 #' Fetches the data and returns the CSV text
 #'
 #' TODO: Deprecate and remove
@@ -244,17 +239,26 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE,
 fetch_csv <- function(epidata_call, fields = NULL) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
+
   if (epidata_call$only_supports_classic) {
     rlang::abort("the endpoint only supports the classic message format, due to a non-standard behavior",
       epidata_call = epidata_call,
       class = "only_supports_classic_format"
     )
   }
+
   res <- request_impl(epidata_call, "csv", fields)
   httr::stop_for_status(res)
   data <- httr::content(res, "text", encoding = "UTF-8")
   class(data) <- c("epidata_csv", class(data))
   data
+}
+
+fetch_debug <- function(epidata_call, format = c("classic", "csv", "json"), fields = NULL) {
+  res <- request_impl(epidata_call, format, fields)
+  httr::stop_for_status(res)
+  r <- httr::content(res, "text", encoding = "UTF-8")
+  r
 }
 
 full_url <- function(epidata_call) {
