@@ -4,8 +4,8 @@
 \alias{create_epidata_call}
 \alias{epidata_call}
 \alias{fetch}
-\alias{fetch_classic}
 \alias{fetch_tbl}
+\alias{fetch_classic}
 \alias{request_url}
 \alias{with_base_url}
 \title{An abstraction that holds information needed to make an epidata request}
@@ -19,14 +19,14 @@ create_epidata_call(
 
 fetch(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 
-fetch_classic(epidata_call, fields = NULL, disable_data_frame_parsing = TRUE)
-
 fetch_tbl(
   epidata_call,
   fields = NULL,
   disable_date_parsing = FALSE,
   method = c("data.frame", "csv")
 )
+
+fetch_classic(epidata_call, fields = NULL, disable_data_frame_parsing = TRUE)
 
 request_url(epidata_call, format_type = "classic", fields = NULL)
 
@@ -47,10 +47,10 @@ with_base_url(epidata_call, base_url)
 
 \item{disable_date_parsing}{disable automatic date parsing}
 
+\item{method}{the method to use to fetch the data}
+
 \item{disable_data_frame_parsing}{do not automatically cast the epidata output to a data frame
 (some endpoints return a list of lists, which is not a data frame)}
-
-\item{method}{the method to use to fetch the data}
 
 \item{format_type}{format to return one of classic,json,csv}
 
@@ -63,9 +63,9 @@ with_base_url(epidata_call, base_url)
 
 a tibble or a JSON-like list
 
-a JSON-like list
-
 \code{\link[tibble:tibble]{tibble::tibble}}
+
+a JSON-like list
 
 string containing the URL
 
