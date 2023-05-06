@@ -38,7 +38,7 @@ test_that("fetch_tbl", {
     geo_values = "ca,fl"
   ) %>%
     fetch_tbl(method = "data.frame") %>%
-    mutate(
+    dplyr::mutate(
       geo_type = as.character(geo_type),
       time_type = as.character(time_type)
     )
