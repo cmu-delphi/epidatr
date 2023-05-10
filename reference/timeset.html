@@ -77,8 +77,11 @@ allowed values are:</p>
 YYYYMMDD,</p></li>
 <li><p>Epiweeks: integer-like values or integer-like strings that take the form YYYYMM,</p></li>
 <li><p>EpiRanges: a list of <code><a href="epirange.html">epirange</a></code> instances.</p></li>
-</ul><p>Please refer to the specific endpoint documentation for guidance on using dates vs weeks. Most
-endpoints support only one or the other.</p>
+<li><p>Wildcard: "*" (requests all available values for this dimension)</p></li>
+</ul><p>Please refer to the specific endpoint documentation for guidance on using
+dates vs weeks. Most endpoints support only one or the other. Some (less
+commonly used) endpoints may not accept the <code>"*"</code> wildcard, but this can be
+simulated with a large <code><a href="epirange.html">epirange</a></code>.</p>
     </div>
 
   </div>
