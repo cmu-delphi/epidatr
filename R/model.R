@@ -55,9 +55,12 @@ epirange <- function(from, to) {
 #'   YYYYMMDD,
 #' - Epiweeks: integer-like values or integer-like strings that take the form YYYYMM,
 #' - EpiRanges: a list of [`epirange`] instances.
+#' - Wildcard: "*" (requests all available values for this dimension)
 #'
-#' Please refer to the specific endpoint documentation for guidance on using dates vs weeks. Most
-#' endpoints support only one or the other.
+#' Please refer to the specific endpoint documentation for guidance on using
+#' dates vs weeks. Most endpoints support only one or the other. Some (less
+#' commonly used) endpoints may not accept the `"*"` wildcard, but this can be
+#' simulated with a large [`epirange`].
 #'
 #' @name timeset
 NULL
@@ -176,7 +179,9 @@ parse_timeset_input <- function(value) {
       stop(paste0("Invalid timeset input: ", value))
     }
   } else if (test_character(value)) {
-    if (all(nchar(value) %in% c(6, 8))) {
+    if (identical(value, "*")) {
+      return(value)
+    } else if (all(nchar(value) %in% c(6, 8))) {
       return(value)
     } else if (all(nchar(value) == 10)) {
       value <- as.Date(value, format = "%Y-%m-%d")
