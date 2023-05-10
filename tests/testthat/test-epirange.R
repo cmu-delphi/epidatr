@@ -8,4 +8,5 @@ test_that("epirange", {
   expect_error(epirange(1, 2))
   expect_error(epirange("1", "2"))
   expect_error(epirange(201501, 20160101))
+  expect_error(epirange(epirange(201501, 201502), epirange(201601, 201602)))
 })
