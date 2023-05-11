@@ -614,6 +614,7 @@ covidcast_meta <- function() {
 #' Fetch covidcast data
 #'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html>
+#'
 #' COVIDcast public dashboard: <https://delphi.cmu.edu/covidcast/>
 #'
 #' @examples
@@ -630,7 +631,7 @@ covidcast_meta <- function() {
 #' @param data_source string. The data source to query (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>).
 #' @param signals string. The signals to query from a specific source (see:
-#'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals>).
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals.html>).
 #' @param geo_type string. The geographic resolution of the data (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>).
 #' @param time_type string. The temporal resolution of the data (either "day" or
