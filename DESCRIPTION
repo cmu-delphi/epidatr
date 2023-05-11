@@ -39,3 +39,4 @@ Suggests:
     dplyr
 VignetteBuilder: knitr
 Language: en-US
+Config/testthat/edition: 3
