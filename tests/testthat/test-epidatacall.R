@@ -56,7 +56,7 @@ test_that("fetch_tbl", {
       time_type = as.character(time_type)
     )
 
-  expect_equal(dplyr::all_equal(classic_out, csv_out), TRUE)
+  expect_identical(classic_out, csv_out)
 
   out <- covidcast(
     data_source = "jhu-csse",
@@ -72,5 +72,5 @@ test_that("fetch_tbl", {
       time_type = as.character(time_type)
     )
 
-  expect_equal(dplyr::all_equal(out, classic_out), TRUE)
+  expect_identical(out, classic_out)
 })

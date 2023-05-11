@@ -3,7 +3,7 @@ test_that("epirange", {
   expect_no_error(epirange("2020-01-01", "2020-01-02"))
   expect_no_error(epirange("20200101", "20200102"))
   expect_no_error(epirange(20200101, 20200102))
-  expect_equal(epirange(20200101, 20150101), epirange(20150101, 20200101))
+  expect_identical(epirange(20200101, 20150101), epirange(20150101, 20200101))
   expect_error(epirange(1, 2, 3), "unused argument")
   expect_error(epirange(1, 2))
   expect_error(epirange("1", "2"))
