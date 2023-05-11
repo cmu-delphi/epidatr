@@ -1,0 +1,387 @@
+---
+title: "COVIDcast API Client"
+author: "Delphi Group"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{COVIDcast API Client}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries}
+# remotes::install_github("cmu-delphi/epidatr")
+#library(devtools)
+#load_all("epidatr")
+library("epidatr")
+library("magrittr")
+library("dplyr")
+```
+
+The API endpoints, organized by data sources.
+
+## COVIDcast Main Endpoint
+
+All of these signals use the command `covidcast`, with variation in which source and signal are used. 
+
+Data Sources and Signals documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/covidcast.html>
+
+To understand the available sources better, use `covidcast_epidata()` and `covidcast_meta()`. 
+```{r}
+covidcast_epidata()
+```
+For example, let's see what kind of smoothed signals come out of the [facebook survey](https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/fb-survey.html) source:
+```{r}
+cm <- covidcast_meta() %>%
+  fetch_tbl() %>%
+  dplyr::filter(grepl("smoothed", signal), data_source == "fb-survey")
+```
+grabbing the first smoothed signal as an example:
+```{r}
+cm[1, ] %>% print(width = 100)
+cm[1, "signal"]
+```
+and actually fetching some data from this source
+```{r}
+covidcast(
+  data_source = "fb-survey",
+  signals = "smoothed_accept_covid_vaccine",
+  geo_type = "county",
+  time_type = "day",
+  time_values = epirange(20201221, 20201225),
+  geo_values = "06059"
+) %>% fetch_tbl()
+```
+County geo_values are [FIPS codes](https://en.wikipedia.org/wiki/List_of_United_States_FIPS_codes_by_county) and are discussed more here: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>. The example above is for Orange County, California.
+
+## Other Covid Endpoints
+
+### COVID-19 Hospitalization: Facility Lookup
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/covid_hosp_facility_lookup.html>
+
+Example calls:
+```{r}
+covid_hosp_facility_lookup(city = "southlake") %>% fetch_tbl()
+```
+
+```{r}
+covid_hosp_facility_lookup(state = "WY") %>% fetch_tbl()
+```
+
+A non-example (there is no city called New York in Wyoming);
+
+```{r}
+covid_hosp_facility_lookup(state = "WY", city = "New York") %>% fetch_tbl()
+```
+
+### COVID-19 Hospitalization by Facility
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/covid_hosp_facility.html>
+
+Example call:
+
+```{r}
+covid_hosp_facility(
+  hospital_pks = "100075",
+  collection_weeks = epirange(20200101, 20200501)
+) %>% fetch_tbl()
+```
+
+### COVID-19 Hospitalization by State
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/covid_hosp.html>
+
+Example call:
+
+```{r}
+covid_hosp_state_timeseries(states = "MA", dates = "20200510") %>% fetch_tbl()
+```
+
+## Flu Endpoints 
+
+### Delphi's ILINet forecasts
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/delphi.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/delphi.html>
+
+Example call:
+
+```{r}
+delphi(system = "ec", epiweek = 201501) %>% fetch_classic()
+```
+
+
+### FluSurv hospitalization data
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/flusurv.html>
+
+Example call:
+
+```{r}
+flusurv(locations = "ca", epiweeks = 202001) %>% fetch_tbl()
+```
+
+### Fluview data
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/fluview.html>
+
+Example call:
+
+```{r}
+fluview(regions = "nat", epiweeks = epirange(201201, 202001)) %>% fetch_tbl()
+```
+
+### Fluview virological data from clinical labs
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/fluview_clinical.html>
+
+Example call:
+
+```{r}
+fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701)) %>% fetch_tbl()
+```
+### Fluview metadata
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/fluview_metadata.html>
+
+Example call:
+
+```{r}
+fluview_meta() %>% fetch_tbl()
+```
+
+TODO broken?
+
+### Google Flu Trends data
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/gft.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/gft.html>
+
+```{r}
+gft(locations = "hhs1", epiweeks = epirange(201201, 202001)) %>% fetch_tbl()
+```
+
+### KCDC ILI
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/kcdc_ili.html>
+
+kcdc_ili(regions = "01", epiweeks = epirange(199001, 202301)) %>% fetch_tbl()
+TODO example is broken
+
+### NIDSS Flu
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/nidss_flu.html>
+
+```{r}
+nidss_flu(regions = "taipei", epiweeks = epirange(200901, 201301)) %>% fetch_tbl()
+```
+
+### ILI Nearby Nowcast 
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/nowcast.html>
+
+```{r}
+nowcast(locations = "ca", epiweeks = epirange(202201, 202319)) %>% fetch_tbl()
+```
+
+## Dengue Endpoints
+
+### Delphi's Dengue Nowcast
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/dengue_nowcast.html>
+
+Example call:
+
+```{r}
+dengue_nowcast(locations = "pr", epiweeks = epirange(201401, 202301)) %>% fetch_tbl()
+```
+
+### NIDSS dengue
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/nidss_dengue.html>
+
+```{r}
+nidss_dengue(locations = "taipei", epiweeks = epirange(200301, 201301)) %>% fetch_tbl()
+```
+
+## PAHO Dengue
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/paho_dengue.html>
+
+```{r}
+paho_dengue(regions = "1", epiweeks = epirange(200201, 202319)) %>% fetch_tbl()
+```
+TODO this is disallowed (http 401)
+
+## Other Endpoints
+### Wikipedia Access
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/wiki.html>
+
+```{r}
+wiki(language = "en", articles = "influenza", epiweeks = epirange(202001, 202319)) %>% fetch_tbl()
+```
+# Private methods
+
+These require private access keys to use. To actually run these locally, if you have stored these secrets in `secrets.R`, first run
+```{r}
+source("secrets.R")
+```
+Each source has it's own auth that it needs, which is the first argument.
+
+### AFHSB metadata
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_ght.html>
+
+Example call:
+```{r, eval=false}
+pvt_afhsb_meta(auth = SECRET_API_AUTH_AFHSB) %>% fetch_classic()
+```
+TODO internal server error
+
+### AFHSB data
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/afhsb.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_afhsb.html>
+
+Example call:
+
+```{r, eval=false}
+pvt_afhsb(auth = SECRET_API_AUTH_AFHSB, locations = "mn", epiweeks = epirange(202002, 202110), flu_types = "flu1") %>% fetch_tbl()
+```
+
+TODO 500 internal server error
+
+### CDC
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/cdc.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_cdc.html>
+
+Example call:
+```{r, eval=false}
+pvt_cdc(auth = SECRET_API_AUTH_CDC, epiweeks = epirange(202003, 20234), locations = "ma") %>% fetch_tbl()
+```
+
+### Dengue Digital Surveillance Sensors
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/dengue_sensors.html>
+
+Example call:
+
+```{r, eval=false}
+pvt_dengue_sensors(auth = SECRET_API_SENSORS, names = ) %>% fetch_tbl()
+```
+TODO not in the reference docs either...
+
+### Google Health Trends
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_ght.html>
+
+Example call:
+```{r, eval=false}
+pvt_ght(auth = SECRET_API_AUTH_CDC, epiweeks = epirange(202003, 20234), locations = "ma") %>% fetch_tbl()
+```
+
+### Google Health Trends
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_ght.html>
+
+Example call:
+```{r, eval=false}
+pvt_ght(auth = SECRET_API_AUTH_CDC, epiweeks = epirange(202003, 20234), locations = "ma") %>% fetch_tbl()
+```
+
+### NoroSTAT metadata
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_meta_norostat.html>
+
+Example call:
+```{r, eval=false}
+pvt_meta_norostat(auth = SECRET_API_AUTH_NOROSTAT) %>% fetch_classic()
+```
+
+### NoroSTAT NoroSTAT data
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_norostat.html>
+
+Example call:
+```{r, eval=false}
+pvt_norostat(auth = SECRET_API_AUTH_NOROSTAT, locations = "mn", epiweeks = epirange(201301, 202105)) %>% fetch_tbl()
+```
+TODO can't seem to get a relevant sample, the example in the reference section is borked.
+
+### Quidel Covid and Influenza testing
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/quidel.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_quidel.html>
+
+Example call:
+```{r, eval=false}
+pvt_quidel(auth = SECRET_API_AUTH_QUIDEL, locations = "hhs1", epiweeks = epirange(200301, 202105)) %>% fetch_tbl()
+```
+
+### Sensors
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_sensors.html>
+
+Example call:
+```{r, eval=false}
+pvt_sensors(auth = SECRET_API_AUTH_SENSORS, names = "sar3", locations = "nat", epiweeks = epirange(200301, 202105)) %>% fetch_tbl()
+```
+
+### Twitter
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_sensors.html>
+
+Example call:
+```{r, eval=false}
+pvt_twitter(auth = SECRET_API_AUTH_TWITTER, locations = "nat", epiweeks = epirange(200301, 202105)) %>% fetch_tbl()
+```
