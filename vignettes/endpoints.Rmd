@@ -236,7 +236,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html>
 
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/paho_dengue.html>
 
-```{r}
+```{r, eval=FALSE}
 paho_dengue(regions = "1", epiweeks = epirange(200201, 202319)) %>% fetch_tbl()
 ```
 TODO this is disallowed (http 401)
@@ -252,9 +252,9 @@ wiki(language = "en", articles = "influenza", epiweeks = epirange(202001, 202319
 ```
 # Private methods
 
-These require private access keys to use. To actually run these locally, if you have stored these secrets in `secrets.R`, first run
-```{r}
-source("secrets.R")
+These require private access keys to use. To actually run these locally, if you have stored these secrets in `secrets.R` in the root directory of this project, first run
+```{r, eval=FALSE}
+source("../secrets.R")
 ```
 Each source has it's own auth that it needs, which is the first argument.
 
@@ -265,7 +265,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_ght.html>
 
 Example call:
-```{r, eval=false}
+```{r, eval=FALSE}
 pvt_afhsb_meta(auth = SECRET_API_AUTH_AFHSB) %>% fetch_classic()
 ```
 TODO internal server error
@@ -278,7 +278,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_afhsb.ht
 
 Example call:
 
-```{r, eval=false}
+```{r, eval=FALSE}
 pvt_afhsb(auth = SECRET_API_AUTH_AFHSB, locations = "mn", epiweeks = epirange(202002, 202110), flu_types = "flu1") %>% fetch_tbl()
 ```
 
@@ -291,7 +291,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/cdc.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_cdc.html>
 
 Example call:
-```{r, eval=false}
+```{r, eval=FALSE}
 pvt_cdc(auth = SECRET_API_AUTH_CDC, epiweeks = epirange(202003, 20234), locations = "ma") %>% fetch_tbl()
 ```
 
@@ -303,7 +303,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/dengue_senso
 
 Example call:
 
-```{r, eval=false}
+```{r, eval=FALSE}
 pvt_dengue_sensors(auth = SECRET_API_SENSORS, names = ) %>% fetch_tbl()
 ```
 TODO not in the reference docs either...
@@ -315,7 +315,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_ght.html>
 
 Example call:
-```{r, eval=false}
+```{r, eval=FALSE}
 pvt_ght(auth = SECRET_API_AUTH_CDC, epiweeks = epirange(202003, 20234), locations = "ma") %>% fetch_tbl()
 ```
 
@@ -326,7 +326,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_ght.html>
 
 Example call:
-```{r, eval=false}
+```{r, eval=FALSE}
 pvt_ght(auth = SECRET_API_AUTH_CDC, epiweeks = epirange(202003, 20234), locations = "ma") %>% fetch_tbl()
 ```
 
@@ -337,7 +337,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_meta_norostat.html>
 
 Example call:
-```{r, eval=false}
+```{r, eval=FALSE}
 pvt_meta_norostat(auth = SECRET_API_AUTH_NOROSTAT) %>% fetch_classic()
 ```
 
@@ -348,7 +348,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_norostat.html>
 
 Example call:
-```{r, eval=false}
+```{r, eval=FALSE}
 pvt_norostat(auth = SECRET_API_AUTH_NOROSTAT, locations = "mn", epiweeks = epirange(201301, 202105)) %>% fetch_tbl()
 ```
 TODO can't seem to get a relevant sample, the example in the reference section is borked.
@@ -360,7 +360,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/quidel.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_quidel.html>
 
 Example call:
-```{r, eval=false}
+```{r, eval=FALSE}
 pvt_quidel(auth = SECRET_API_AUTH_QUIDEL, locations = "hhs1", epiweeks = epirange(200301, 202105)) %>% fetch_tbl()
 ```
 
@@ -371,7 +371,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_sensors.html>
 
 Example call:
-```{r, eval=false}
+```{r, eval=FALSE}
 pvt_sensors(auth = SECRET_API_AUTH_SENSORS, names = "sar3", locations = "nat", epiweeks = epirange(200301, 202105)) %>% fetch_tbl()
 ```
 
@@ -382,6 +382,6 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_sensors.html>
 
 Example call:
-```{r, eval=false}
+```{r, eval=FALSE}
 pvt_twitter(auth = SECRET_API_AUTH_TWITTER, locations = "nat", epiweeks = epirange(200301, 202105)) %>% fetch_tbl()
 ```
