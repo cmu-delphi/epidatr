@@ -12,7 +12,10 @@ fetch_csv(epidata_call, fields = NULL)
 \item{fields}{filter fields}
 }
 \value{
-a string containing CSV text, with the \code{"epidata_csv"} class added
+\itemize{
+\item For \code{fetch_csv}: a string containing CSV text, with the
+\code{"epidata_csv"} class added
+}
 }
 \description{
 TODO: Deprecate and remove
