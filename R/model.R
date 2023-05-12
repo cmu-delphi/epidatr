@@ -109,7 +109,7 @@ parse_value <- function(info, value, disable_date_parsing = FALSE) {
   } else if (info$type == "float") {
     return(as.double(value))
   } else if (info$type == "categorical") {
-    return(as.ordered(value))
+    return(factor(value, levels = info$categories, ordered = TRUE))
   }
   value
 }
