@@ -149,7 +149,6 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE,
       class = "only_supports_classic_format"
     )
   }
-  meta <- epidata_call$meta
 
   if (missing(method) || is.null(method)) {
     method <- "data.frame"
