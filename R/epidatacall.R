@@ -223,7 +223,8 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
   httr::stop_for_status(res)
   r <- httr::content(res, "text", encoding = "UTF-8")
   r <- jsonlite::fromJSON(r, simplifyDataFrame = !disable_data_frame_parsing)
-  if (r$result != 1 && r$result != 2) {
+  # success is 1, no results is -2
+  if (r$result != 1 && r$result != -2) {
     rlang::abort(paste0("epidata error: ", r$message), "epidata_error")
   } else {
     r
