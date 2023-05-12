@@ -93,7 +93,7 @@ print.epidata_call <- function(epidata_call) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   cli::cli_h1("<epidata_call> object:")
   cli::cli_bullets(c(
-    "*" = "Use fetch to actually fetch the data",
+    "*" = "Pipe this object into `fetch()` to actually fetch the data",
     "*" = paste0("Request URL: ", request_url(epidata_call))
   ))
 }
