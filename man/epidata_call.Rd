@@ -99,14 +99,16 @@ would be fetched (note additional parameters below)
 from a different Epidata server
 }
 
-Usually returns a tibble of the data, but a few the endpoints only supports the JSON classic format.
-In that case a JSON-like list is returned.
+\code{fetch} usually returns the data in tibble format, but a few the endpoints
+only support the JSON classic format. In that case a JSON-like nested list
+structure is returned instead.
 
 The classic format is a 3-element list with the following elements:
 \itemize{
 \item \code{result}: a status code (1 for success, non-zero for failure)
 \item \code{message}: a string describing the status of the request
-\item \code{epidata}: a list of JSON rows containing the data
+\item \code{epidata}: a list of named lists representing rows of a table, or, for a
+few endpoints, a more complex nested list structure
 }
 }
 \examples{

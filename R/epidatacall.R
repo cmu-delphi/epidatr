@@ -100,8 +100,9 @@ print.epidata_call <- function(epidata_call) {
 
 #' Fetches the data
 #'
-#' Usually returns a tibble of the data, but a few the endpoints only supports the JSON classic format.
-#' In that case a JSON-like list is returned.
+#' `fetch` usually returns the data in tibble format, but a few the endpoints
+#' only support the JSON classic format. In that case a JSON-like nested list
+#' structure is returned instead.
 #'
 #' @rdname epidata_call
 #' @param epidata_call an instance of `epidata_call`
@@ -199,7 +200,8 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE,
 #' The classic format is a 3-element list with the following elements:
 #'   - `result`: a status code (1 for success, non-zero for failure)
 #'   - `message`: a string describing the status of the request
-#'   - `epidata`: a list of JSON rows containing the data
+#'   - `epidata`: a list of named lists representing rows of a table, or, for a
+#'                few endpoints, a more complex nested list structure
 #'
 #' @rdname epidata_call
 #'
