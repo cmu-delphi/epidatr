@@ -198,7 +198,7 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE,
 #' Fetches the data and returns a JSON object in the classic format
 #'
 #' The classic format is a 3-element list with the following elements:
-#'   - `result`: a status code (1 for success, non-zero for failure)
+#'   - `result`: a status code (1 for success, -2 for no-results, all else for failure)
 #'   - `message`: a string describing the status of the request
 #'   - `epidata`: a list of named lists representing rows of a table, or, for a
 #'                few endpoints, a more complex nested list structure
