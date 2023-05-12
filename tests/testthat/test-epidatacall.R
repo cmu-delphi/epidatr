@@ -25,11 +25,11 @@ test_that("fetch_tbl", {
   mockery::stub(fetch_csv, "httr::content", readRDS(testthat::test_path("fixtures/test-csv.rds")))
 
   # This test compares the output of fetch_tbl via classic and csv formats.
-  # fetch_classic uses jsonlite::fromJSON, which converts the underlying data to a data.frame.
-  # fetch_classic uses parse_data_frame to enforce data types.
+  # fetch_tbl uses jsonlite::fromJSON, which converts the underlying data to a data.frame.
+  # fetch_tbl uses parse_data_frame to enforce data types.
   # fetch_csv uses readr::read_csv, which converts the underlying data to a tibble.
   # fetch_csv uses its own approach based on readr to enforce data types.
-  classic_out <- covidcast(
+  tbl_out <- covidcast(
     data_source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
     time_type = "day",
@@ -56,7 +56,7 @@ test_that("fetch_tbl", {
       time_type = as.character(time_type)
     )
 
-  expect_identical(classic_out, csv_out)
+  expect_identical(tbl_out, csv_out)
 
   out <- covidcast(
     data_source = "jhu-csse",
@@ -72,5 +72,5 @@ test_that("fetch_tbl", {
       time_type = as.character(time_type)
     )
 
-  expect_identical(out, classic_out)
+  expect_identical(out, tbl_out)
 })
