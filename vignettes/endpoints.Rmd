@@ -203,6 +203,16 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/gft.html>
 gft(locations = "hhs1", epiweeks = epirange(201201, 202001)) %>% fetch_tbl()
 ```
 
+### ECDC ILI
+
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>
+
+Function reference: <https://cmu-delphi.github.io/epidatr/reference/ecdc_ili.html>
+
+```{r}
+ecdc_ili(regions = "Armenia", epiweeks = 201840) %>% fetch_tbl()
+```
+
 ### KCDC ILI
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html>
