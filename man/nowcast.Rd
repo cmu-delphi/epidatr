@@ -18,7 +18,8 @@ nowcast(locations, epiweeks)
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html}.
 }
 \details{
-Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data
+Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's
+epidemiological data
 
 The full list of location inputs can be accsssed at
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.

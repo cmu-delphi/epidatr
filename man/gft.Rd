@@ -15,14 +15,17 @@ gft(locations, epiweeks)
 \code{\link{epidata_call}}
 }
 \description{
-Obtains estimates of inluenza activity based on volume of certain search queries from Google.
+Obtains estimates of inluenza activity based on volume of certain search
+queries from Google.
 }
 \details{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/gft.html}
 
-Google has discontinued Flu Trends and this is now a static endpoint. Possibile input for locations
-can be found in \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt},
-\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/states.txt}, and
+Google has discontinued Flu Trends and this is now a static
+endpoint. Possibile input for locations can be found in
+\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt},
+\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/states.txt},
+and
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt}.
 }
 \examples{

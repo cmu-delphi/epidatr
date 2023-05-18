@@ -10,12 +10,13 @@ covidcast_meta()
 \code{\link{epidata_call}}
 }
 \description{
-Fetch a summary of metadata for all sources and signals that are available in the API, along with
-basic summary statistics such as the dates they are available, the geographic levels at which they
-are reported, and etc.
+Fetch a summary of metadata for all sources and signals that are available in
+the API, along with basic summary statistics such as the dates they are
+available, the geographic levels at which they are reported, and etc.
 }
 \details{
-API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html}.
+API docs:
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html}.
 }
 \examples{
 \donttest{

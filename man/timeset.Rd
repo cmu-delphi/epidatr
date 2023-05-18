@@ -4,18 +4,19 @@
 \alias{timeset}
 \title{timeset}
 \description{
-A collection of date-like values, including dates, epiweeks, and ranges of dates or epiweeks
-(\code{\link{epirange}}). This is often used to specify the time dimension for an epidata query. The
-allowed values are:
+A collection of date-like values, including dates, epiweeks, and ranges of
+dates or epiweeks (\code{\link{epirange}}). This is often used to specify the time
+dimension for an epidata query. The allowed values are:
 }
 \details{
 \itemize{
-\item Dates: \code{Date} instances, integer-like values, or integer-like strings that take the form
-YYYYMMDD,
-\item Epiweeks: integer-like values or integer-like strings that take the form YYYYMM,
+\item Dates: \code{Date} instances, integer-like values, or integer-like strings that
+take the form YYYYMMDD,
+\item Epiweeks: integer-like values or integer-like strings that take the form
+YYYYMM,
 \item EpiRanges: a list of \code{\link{epirange}} instances.
 }
 
-Please refer to the specific endpoint documentation for guidance on using dates vs weeks. Most
-endpoints support only one or the other.
+Please refer to the specific endpoint documentation for guidance on using
+dates vs weeks. Most endpoints support only one or the other.
 }

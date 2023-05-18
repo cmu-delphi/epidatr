@@ -2,7 +2,8 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_dengue_sensors}
 \alias{pvt_dengue_sensors}
-\title{Fetch Delphi's digital surveillance sensors for dengue in PAHO member countries}
+\title{Fetch Delphi's digital surveillance sensors for dengue in PAHO member
+countries}
 \usage{
 pvt_dengue_sensors(auth, names, locations, epiweeks)
 }

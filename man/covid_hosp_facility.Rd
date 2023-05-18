@@ -7,7 +7,8 @@
 covid_hosp_facility(hospital_pks, collection_weeks, publication_dates = NULL)
 }
 \arguments{
-\item{hospital_pks}{string. A character string of facility unique identifiers.}
+\item{hospital_pks}{string. A character string of facility unique
+identifiers.}
 
 \item{collection_weeks}{\code{\link{timeset}}. Epiweeks to fetch.}
 
@@ -16,18 +17,21 @@ covid_hosp_facility(hospital_pks, collection_weeks, publication_dates = NULL)
 \value{
 \code{\link{epidata_call}}
 
-See also the official description and data dictionary at <healthdata.gov> for more information.
+See also the official description and data dictionary at <healthdata.gov> for
+more information.
 }
 \description{
-Obtains the COVID-19 reported patient impact and hospital capacity data by facility.
-This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
+Obtains the COVID-19 reported patient impact and hospital capacity data by
+facility. This dataset is provided by the US Department of Health & Human
+Services via healthdata.gov.
 }
 \details{
-API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html}
+API docs:
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html}
 
-Starting October 1, 2022, some facilities are only required to report annually.
-The companion function \code{\link[=covid_hosp_facility_lookup]{covid_hosp_facility_lookup()}} can be used to look up facility identifiers
-in a variety of ways.
+Starting October 1, 2022, some facilities are only required to
+report annually. The companion function \code{\link[=covid_hosp_facility_lookup]{covid_hosp_facility_lookup()}} can be
+used to look up facility identifiers in a variety of ways.
 }
 \examples{
 \donttest{

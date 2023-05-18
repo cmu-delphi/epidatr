@@ -11,17 +11,18 @@ nidss_flu(regions, epiweeks, issues = NULL, lag = NULL)
 
 \item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch.}
 
-\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
-Mutually exclusive with \code{lag}.}
+\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
+most recent issue is returned. Mutually exclusive with \code{lag}.}
 
-\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-Mutually exclusive with \code{issues}.}
+\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
+the most recent issue is returned. Mutually exclusive with \code{issues}.}
 }
 \value{
 \code{\link{epidata_call}}
 }
 \description{
-Obtains information on outpatient inluenza-like-illness from Taiwan National Infectious Disease Statistical System.
+Obtains information on outpatient inluenza-like-illness from Taiwan National
+Infectious Disease Statistical System.
 }
 \details{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html}

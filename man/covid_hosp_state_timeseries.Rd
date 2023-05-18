@@ -11,21 +11,25 @@ covid_hosp_state_timeseries(states, dates, issues = NULL)
 
 \item{dates}{\code{\link{timeset}}. Dates to fetch.}
 
-\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.}
+\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
+most recent issue is returned.}
 }
 \value{
 \code{\link{epidata_call}}
 
-See also the official description and data dictionary at <healthdata.gov> for more information.
+See also the official description and data dictionary at <healthdata.gov> for
+more information.
 }
 \description{
-Obtains the COVID-19 reported patient impact and hospital capacity data by state.
-This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
+Obtains the COVID-19 reported patient impact and hospital capacity data by
+state. This dataset is provided by the US Department of Health & Human
+Services via healthdata.gov.
 }
 \details{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html}.
 
-Starting October 1, 2022, some facilities are only required to report annually.
+Starting October 1, 2022, some facilities are only required to
+report annually.
 }
 \examples{
 \donttest{

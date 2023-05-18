@@ -26,21 +26,24 @@ covidcast(
 \item{geo_type}{string. The geographic resolution of the data (see:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}).}
 
-\item{time_type}{string. The temporal resolution of the data (either "day" or "week", depending on signal).}
+\item{time_type}{string. The temporal resolution of the data (either "day" or
+"week", depending on signal).}
 
-\item{geo_values}{character vector. The geographies to return. "*" fetches all. (See:
+\item{geo_values}{character vector. The geographies to return. "*" fetches
+all. (See:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.)}
 
-\item{time_values}{\code{\link{timeset}}. The dates to fetch.}
+\item{time_values}{\code{\link{timeset}}. The dates to fetch. @param as_of Date.
+Optionally, the as of date for the issues to fetech. If not specified, the
+most recent data is returned. Mutually exclusive with \code{issues} or \code{lag}.}
 
-\item{as_of}{Date. Optionally, the as of date for the issues to fetech. If not specified, the most recent
-data is returned. Mutually exclusive with \code{issues} or \code{lag}.}
+\item{issues}{\code{\link{timeset}}. Optionally, the issue of the data to fetch. If not
+specified, the most recent issue is returned. Mutually exclusive with
+\code{as_of} or \code{lag}.}
 
-\item{issues}{\code{\link{timeset}}. Optionally, the issue of the data to fetch. If not specified, the most recent issue
-is returned. Mutually exclusive with \code{as_of} or \code{lag}.}
-
-\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-Mutually exclusive with \code{as_of} or \code{issues}.}
+\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
+the most recent issue is returned. Mutually exclusive with \code{as_of} or
+\code{issues}.}
 }
 \value{
 \code{\link{epidata_call}}
