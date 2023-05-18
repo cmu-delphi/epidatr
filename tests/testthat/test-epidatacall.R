@@ -11,12 +11,12 @@ test_that("fetch_tbl", {
   # epidata_call %>%
   # fetch_debug(format="classic") %>%
   # write_rds(testthat::test_path("data/test-classic.rds"))
-  mockery::stub(fetch_classic, "httr::content", readRDS(testthat::test_path("fixtures/test-classic.rds")))
+  mockery::stub(fetch_classic, "httr::content", readRDS(testthat::test_path("data/test-classic.rds")))
   # Generated with
   # epidata_call %>%
   # fetch_debug(format="csv") %>%
   # write_rds(testthat::test_path("data/test-csv.rds"))
-  mockery::stub(fetch_csv, "httr::content", readRDS(testthat::test_path("fixtures/test-csv.rds")))
+  mockery::stub(fetch_csv, "httr::content", readRDS(testthat::test_path("data/test-csv.rds")))
 
   # This test compares the output of a tibble using fetch_tbl and fetch_csv.
   #
