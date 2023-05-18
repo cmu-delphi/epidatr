@@ -1,9 +1,9 @@
 #' builds a new EpiRange instances
 #'
-#' @param from A Date, integer-like value, or integer-like string that takes the form YYYYMMDD for dates
-#'   or YYYYMM for epiweeks.
-#' @param to A Date, integer-like value, or integer-like string that takes the form YYYYMMDD for dates
-#'  or YYYYMM for epiweeks.
+#' @param from A Date, integer-like value, or integer-like string that takes the
+#'   form YYYYMMDD for dates or YYYYMM for epiweeks.
+#' @param to A Date, integer-like value, or integer-like string that takes the
+#'  form YYYYMMDD for dates or YYYYMM for epiweeks.
 #' @return EpiRange instance
 #' @importFrom checkmate check_integerish check_character check_date assert
 #'
@@ -47,17 +47,18 @@ epirange <- function(from, to) {
 
 #' timeset
 #'
-#' A collection of date-like values, including dates, epiweeks, and ranges of dates or epiweeks
-#' ([`epirange`]). This is often used to specify the time dimension for an epidata query. The
-#' allowed values are:
+#' A collection of date-like values, including dates, epiweeks, and ranges of
+#' dates or epiweeks ([`epirange`]). This is often used to specify the time
+#' dimension for an epidata query. The allowed values are:
 #'
-#' - Dates: `Date` instances, integer-like values, or integer-like strings that take the form
-#'   YYYYMMDD,
-#' - Epiweeks: integer-like values or integer-like strings that take the form YYYYMM,
+#' - Dates: `Date` instances, integer-like values, or integer-like strings that
+#'   take the form YYYYMMDD,
+#' - Epiweeks: integer-like values or integer-like strings that take the form
+#'   YYYYMM,
 #' - EpiRanges: a list of [`epirange`] instances.
 #'
-#' Please refer to the specific endpoint documentation for guidance on using dates vs weeks. Most
-#' endpoints support only one or the other.
+#' Please refer to the specific endpoint documentation for guidance on using
+#' dates vs weeks. Most endpoints support only one or the other.
 #'
 #' @name timeset
 NULL

@@ -92,10 +92,12 @@ pvt_cdc <- function(auth, locations, epiweeks) {
 
 #' Fetch COVID hospitalization facility identifiers
 #'
-#' Obtains unique identifiers and other metadata for COVID hospitalization facilities of interest.
+#' Obtains unique identifiers and other metadata for COVID hospitalization
+#' facilities of interest.
 #' This is a companinon endpoint to the [covid_hosp_facility()] endpoint.
 #'
-#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html>
+#' API docs:
+#' <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html>
 #'
 #' @details Only one argument needs to be specified.
 #' Combinations of the arguments are not currently supported.
@@ -158,14 +160,16 @@ covid_hosp_facility_lookup <- function(state = NULL, ccn = NULL, city = NULL, zi
 
 #' Fetch COVID hospitalization data for specific facilities
 #'
-#' Obtains the COVID-19 reported patient impact and hospital capacity data by facility.
-#' This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
+#' Obtains the COVID-19 reported patient impact and hospital capacity data by
+#' facility. This dataset is provided by the US Department of Health & Human
+#' Services via healthdata.gov.
 #'
-#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
+#' API docs:
+#' <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
 #'
-#' @details Starting October 1, 2022, some facilities are only required to report annually.
-#' The companion function [covid_hosp_facility_lookup()] can be used to look up facility identifiers
-#' in a variety of ways.
+#' @details Starting October 1, 2022, some facilities are only required to
+#' report annually. The companion function [covid_hosp_facility_lookup()] can be
+#' used to look up facility identifiers in a variety of ways.
 #'
 #' @examples
 #' \donttest{
@@ -174,12 +178,14 @@ covid_hosp_facility_lookup <- function(state = NULL, ccn = NULL, city = NULL, zi
 #'   collection_weeks = epirange(20200101, 20200501)
 #' ) %>% fetch()
 #' }
-#' @param hospital_pks string. A character string of facility unique identifiers.
+#' @param hospital_pks string. A character string of facility unique
+#' identifiers.
 #' @param collection_weeks [`timeset`]. Epiweeks to fetch.
 #' @param publication_dates [`timeset`]. Publication dates to fetch.
 #' @return [`epidata_call`]
 #'
-#' See also the official description and data dictionary at <healthdata.gov> for more information.
+#' See also the official description and data dictionary at <healthdata.gov> for
+#' more information.
 #'
 #' @seealso [covid_hosp_facility_lookup()], [epirange()]
 #' @export
@@ -449,12 +455,14 @@ covid_hosp_facility <- function(hospital_pks, collection_weeks, publication_date
 
 #' Fetch COVID Hospitalization Data by State
 #'
-#' Obtains the COVID-19 reported patient impact and hospital capacity data by state.
-#' This dataset is provided by the US Department of Health & Human Services via healthdata.gov.
+#' Obtains the COVID-19 reported patient impact and hospital capacity data by
+#' state. This dataset is provided by the US Department of Health & Human
+#' Services via healthdata.gov.
 #'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>.
 #'
-#' @details Starting October 1, 2022, some facilities are only required to report annually.
+#' @details Starting October 1, 2022, some facilities are only required to
+#' report annually.
 #'
 #' @examples
 #' \donttest{
@@ -465,10 +473,12 @@ covid_hosp_facility <- function(hospital_pks, collection_weeks, publication_date
 #' }
 #' @param states character vector. Two letter state abbreviations.
 #' @param dates [`timeset`]. Dates to fetch.
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
+#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
+#' most recent issue is returned.
 #' @return [`epidata_call`]
 #'
-#' See also the official description and data dictionary at <healthdata.gov> for more information.
+#' See also the official description and data dictionary at <healthdata.gov> for
+#' more information.
 #'
 #' @export
 #
@@ -603,11 +613,12 @@ covid_hosp_state_timeseries <- function(states, dates, issues = NULL) {
 
 #' Fetch covidcast metadata
 #'
-#' Fetch a summary of metadata for all sources and signals that are available in the API, along with
-#' basic summary statistics such as the dates they are available, the geographic levels at which they
-#' are reported, and etc.
+#' Fetch a summary of metadata for all sources and signals that are available in
+#' the API, along with basic summary statistics such as the dates they are
+#' available, the geographic levels at which they are reported, and etc.
 #'
-#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html>.
+#' API docs:
+#' <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html>.
 #'
 #' @return [`epidata_call`]
 #'
@@ -666,16 +677,20 @@ covidcast_meta <- function() {
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals>).
 #' @param geo_type string. The geographic resolution of the data (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>).
-#' @param time_type string. The temporal resolution of the data (either "day" or "week", depending on signal).
-#' @param geo_values character vector. The geographies to return. "*" fetches all. (See:
+#' @param time_type string. The temporal resolution of the data (either "day" or
+#' "week", depending on signal).
+#' @param geo_values character vector. The geographies to return. "*" fetches
+#'   all. (See:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.)
-#' @param time_values [`timeset`]. The dates to fetch.
-#' @param as_of Date. Optionally, the as of date for the issues to fetech. If not specified, the most recent
-#'   data is returned. Mutually exclusive with `issues` or `lag`.
-#' @param issues [`timeset`]. Optionally, the issue of the data to fetch. If not specified, the most recent issue
-#'   is returned. Mutually exclusive with `as_of` or `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `as_of` or `issues`.
+#' @param time_values [`timeset`]. The dates to fetch. @param as_of Date.
+#' Optionally, the as of date for the issues to fetech. If not specified, the
+#' most recent data is returned. Mutually exclusive with `issues` or `lag`.
+#' @param issues [`timeset`]. Optionally, the issue of the data to fetch. If not
+#'   specified, the most recent issue is returned. Mutually exclusive with
+#'   `as_of` or `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
+#'   the most recent issue is returned. Mutually exclusive with `as_of` or
+#'   `issues`.
 #' @return [`epidata_call`]
 #'
 #' @seealso [covidcast_meta()], [epirange()]
@@ -824,7 +839,8 @@ dengue_nowcast <- function(locations, epiweeks) {
   )
 }
 
-#' Fetch Delphi's digital surveillance sensors for dengue in PAHO member countries
+#' Fetch Delphi's digital surveillance sensors for dengue in PAHO member
+#' countries
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html
 #'
@@ -871,7 +887,8 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
 
 #' Fetch ECDC data
 #'
-#' Obtain information on influenza-like-illness from the European Centre for Disease Prevention and Control.
+#' Obtain information on influenza-like-illness from the European Centre for
+#' Disease Prevention and Control.
 #'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>.
 #'
@@ -884,10 +901,10 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
 #' }
 #' @param regions character vector. The regions to fetch.
 #' @param epiweeks [`timeset`]. The epiweeks to fetch.
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `issues`.
+#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
+#'   most recent issue is returned. Mutually exclusive with `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
+#'   the most recent issue is returned. Mutually exclusive with `issues`.
 #' @return [`epidata_call`]
 #'
 #' @export
@@ -923,7 +940,8 @@ ecdc_ili <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 
 #' Fetch FluSurv hospitalization data
 #'
-#' Obtain information on flu hospitalization rates from the Center of Disease Control.
+#' Obtain information on flu hospitalization rates from the Center of Disease
+#' Control.
 #'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>.
 #' See also <https://gis.cdc.gov/GRASP/Fluview/FluHospRates.html>.
@@ -937,10 +955,10 @@ ecdc_ili <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 #' }
 #' @param locations character vector. Character strings indicating location.
 #' @param epiweeks [`timeset`]. The epiweeks to fetch.
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `issues`.
+#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
+#'   most recent issue is returned. Mutually exclusive with `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
+#'   the most recent issue is returned. Mutually exclusive with `issues`.
 #' @return [`epidata_call`]
 #'
 #' @export
@@ -988,12 +1006,13 @@ flusurv <- function(locations, epiweeks, issues = NULL, lag = NULL) {
 #' fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701)) %>% fetch()
 #' }
 #' @param regions character vector. The regions to fetch.
-#' @param epiweeks [`timeset`]. The epiweeks to fetch in the form epirange(startweek,endweek), where startweek
-#'   and endweek are of the form YYYYWW (string or numeric).
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `issues`.
+#' @param epiweeks [`timeset`]. The epiweeks to fetch in the form
+#'   epirange(startweek,endweek), where startweek and endweek are of the form
+#'   YYYYWW (string or numeric).
+#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
+#'   most recent issue is returned. Mutually exclusive with `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
+#'   the most recent issue is returned. Mutually exclusive with `issues`.
 #' @return [`epidata_call`]
 #'
 #' @export
@@ -1054,26 +1073,30 @@ fluview_meta <- function() {
 
 #' Fetch FluView data
 #'
-#' Obtains information on outpatient inluenza-like-illness (ILI) from U.S. Outpatient Influenza-like Illness Surveillance
-#'   Network (ILINet).
+#' Obtains information on outpatient inluenza-like-illness (ILI) from U.S.
+#'   Outpatient Influenza-like Illness Surveillance Network (ILINet).
 #'
-#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>.
-#' For more information on ILINet, see <https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html>.
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>. For
+#' more information on ILINet, see
+#' <https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html>.
 #'
 #' @details The full list of location inputs can be accsssed at
 #'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
 #' @examples
 #' fluview(regions = "nat", epiweeks = epirange(201201, 202001)) %>% fetch()
-#' @param regions character vector. The locations to fetch. Can we any string IDs in national, HHS region,
-#'   census division, most states and territories, and so on. Full list link below.
-#' @param epiweeks [`timeset`]. The epiweeks to fetch in the form epirange(startweek,endweek), where startweek
-#'   and endweek are of the form YYYYWW (string or numeric).
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `issues`.
-#' @param auth string. Optionally, restricted access key (not the same as API key).
+#' @param regions character vector. The locations to fetch. Can we any string
+#'   IDs in national, HHS region, census division, most states and territories,
+#'   and so on. Full list link below.
+#' @param epiweeks [`timeset`]. The epiweeks to fetch in the form
+#'   epirange(startweek,endweek), where startweek and endweek are of the form
+#'   YYYYWW (string or numeric).
+#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
+#'   most recent issue is returned. Mutually exclusive with `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
+#'   the most recent issue is returned. Mutually exclusive with `issues`.
+#' @param auth string. Optionally, restricted access key (not the same as API
+#' key).
 #' @return [`epidata_call`]
 #'
 #' @export
@@ -1121,13 +1144,16 @@ fluview <- function(regions, epiweeks, issues = NULL, lag = NULL, auth = NULL) {
 
 #' Fetch Google Flu Trends data
 #'
-#' Obtains estimates of inluenza activity based on volume of certain search queries from Google.
+#' Obtains estimates of inluenza activity based on volume of certain search
+#' queries from Google.
 #'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/gft.html>
 #'
-#' @details Google has discontinued Flu Trends and this is now a static endpoint. Possibile input for locations
-#'   can be found in <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt>,
-#'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/states.txt>, and
+#' @details Google has discontinued Flu Trends and this is now a static
+#'   endpoint. Possibile input for locations can be found in
+#'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt>,
+#'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/states.txt>,
+#'   and
 #'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt>.
 #'
 #' @examples
@@ -1211,10 +1237,10 @@ pvt_ght <- function(auth, locations, epiweeks, query) {
 #' }
 #' @param regions character vector. The regions to be fetched.
 #' @param epiweeks [`timeset`]. The epiweeks to be fetched.
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `issues`.
+#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
+#'   most recent issue is returned. Mutually exclusive with `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
+#'   the most recent issue is returned. Mutually exclusive with `issues`.
 #' @return [`epidata_call`]
 #'
 #' @export
@@ -1289,12 +1315,14 @@ meta <- function() {
 
 #' Fetch NIDSS dengue data
 #'
-#' Obtains counts of confirmed dengue cases in Taiwan from Taiwan National Infectious Disease Statistical System.
+#' Obtains counts of confirmed dengue cases in Taiwan from Taiwan National
+#' Infectious Disease Statistical System.
 #'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html>
 #'
 #' @details Possible location inputs can be found in
-#' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_regions.txt> and
+#' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_regions.txt>
+#' and
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt>.
 #'
 #' @examples
@@ -1325,7 +1353,8 @@ nidss_dengue <- function(locations, epiweeks) {
 
 #' Fetch NIDSS flu data
 #'
-#' Obtains information on outpatient inluenza-like-illness from Taiwan National Infectious Disease Statistical System.
+#' Obtains information on outpatient inluenza-like-illness from Taiwan National
+#' Infectious Disease Statistical System.
 #'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
 #'
@@ -1335,10 +1364,10 @@ nidss_dengue <- function(locations, epiweeks) {
 #' }
 #' @param regions character vector. The regions to fetch.
 #' @param epiweeks [`timeset`]. The epiweeks to fetch.
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `issues`.
+#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
+#'   most recent issue is returned. Mutually exclusive with `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
+#'   the most recent issue is returned. Mutually exclusive with `issues`.
 #' @return [`epidata_call`]
 #'
 #' @export
@@ -1418,7 +1447,8 @@ pvt_norostat <- function(auth, locations, epiweeks) {
 #'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>.
 #'
-#' Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data
+#' Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's
+#' epidemiological data
 #'
 #' @details The full list of location inputs can be accsssed at
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
@@ -1459,10 +1489,10 @@ nowcast <- function(locations, epiweeks) {
 #' }
 #' @param regions character vector. The regions to fetch.
 #' @param epiweeks [`timeset`]. The epiweeks to fetch.
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-#'   Mutually exclusive with `issues`.
+#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
+#'   most recent issue is returned. Mutually exclusive with `lag`.
+#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
+#'   the most recent issue is returned. Mutually exclusive with `issues`.
 #' @return [`epidata_call`]
 #'
 #' @export
@@ -1591,8 +1621,10 @@ pvt_sensors <- function(auth, names, locations, epiweeks) {
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param locations character vector. The locations to fetch.
-#' @param dates [`timeset`]. The dates to fetch. Mutually exclusive with `epiweeks`.
-#' @param epiweeks [`timeset`]. The epiweeks to fetch. Mutually exclusive with `dates`.
+#' @param dates [`timeset`]. The dates to fetch. Mutually exclusive with
+#' `epiweeks`.
+#' @param epiweeks [`timeset`]. The epiweeks to fetch. Mutually exclusive with
+#' `dates`.
 #' @return [`epidata_call`]
 #'
 #' @export
@@ -1639,8 +1671,10 @@ pvt_twitter <- function(auth, locations, dates = NULL, epiweeks = NULL) {
 #' wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601)) %>% fetch()
 #' }
 #' @param articles character vector. The articles to fetch.
-#' @param dates [`timeset`]. The dates to fetch. Mutually exclusive with `epiweeks`.
-#' @param epiweeks [`timeset`]. The epiweeks to fetch. Mutually exclusive with `dates`.
+#' @param dates [`timeset`]. The dates to fetch. Mutually exclusive with
+#' `epiweeks`.
+#' @param epiweeks [`timeset`]. The epiweeks to fetch. Mutually exclusive with
+#' `dates`.
 #' @param language string. The language to fetch.
 #' @param hours integer. Optionally, the hours to fetch.
 #' @return [`epidata_call`]
