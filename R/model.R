@@ -168,7 +168,6 @@ fields_to_predicate <- function(fields = NULL) {
 }
 
 #' @importFrom checkmate test_character test_class test_date test_integerish test_list
-#' @export
 parse_timeset_input <- function(value) {
   if (is.null(value)) {
     return(NULL)
