@@ -144,7 +144,6 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
 #' - For `fetch_tbl`: a [`tibble::tibble`]
 #' @importFrom tibble as_tibble
 #'
-#' @export
 fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
@@ -157,8 +156,8 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
     )
   }
 
-  df <- fetch_classic(epidata_call, fields, disable_data_frame_parsing = FALSE)$epidata
-  return(parse_data_frame(epidata_call, df, disable_date_parsing) %>% as_tibble())
+  content <- fetch_classic(epidata_call, fields, disable_data_frame_parsing = FALSE)
+  return(parse_data_frame(epidata_call, content, disable_date_parsing) %>% as_tibble())
 }
 
 #' Fetches the data, raises on epidata errors, and returns the results as a
@@ -179,33 +178,19 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 #' @return
 #' - For `fetch_classic`: a JSON-like list
 #'
-#' @export
 fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsing = TRUE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
 
-  res <- request_impl(epidata_call, "classic", fields)
-  if (res$status_code != 200) {
-    # 500, 429, 401 are possible
-    msg <- "fetch data from API"
-    if (http_type(res) == "text/html") {
-      # grab the error information out of the returned HTML document
-      msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
-        xml2::read_html(content(res, "text")),
-        "//p"
-      )))
-    }
-    httr::stop_for_status(res, task = msg)
-  }
-  r <- httr::content(res, "text", encoding = "UTF-8")
+  result <- request_impl(epidata_call, "classic", fields)
+  content <- httr::content(result, as = "text", encoding = "UTF-8")
 
-  r <- jsonlite::fromJSON(r, simplifyDataFrame = !disable_data_frame_parsing)
-  # success is 1, no results is -2
-  if (r$result != 1 && r$result != -2) {
-    rlang::abort(paste0("epidata error: ", r$message), "epidata_error")
-  } else {
-    r
+  content <- jsonlite::fromJSON(content, simplifyDataFrame = !disable_data_frame_parsing)
+  # success is 1, no results is -2, truncated is 2, -1 is generic error
+  if (content$result != 1) {
+    rlang::abort(paste0("epidata error: ", content$message), "epidata_error")
   }
+  return(content$epidata)
 }
 
 #' Fetches the data and returns the CSV text
@@ -229,13 +214,12 @@ fetch_csv <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE,
     )
   }
 
-  res <- request_impl(epidata_call, "csv", fields)
-  httr::stop_for_status(res)
-  data <- httr::content(res, "text", encoding = "UTF-8")
-  class(data) <- c("epidata_csv", class(data))
+  result <- request_impl(epidata_call, "csv", fields)
+  content <- httr::content(result, "text", encoding = "UTF-8")
+  class(content) <- c("epidata_csv", class(content))
 
   if (disable_tibble_output) {
-    return(data)
+    return(content)
   }
 
   meta <- epidata_call$meta
@@ -251,9 +235,9 @@ fetch_csv <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE,
   }
 
   tbl <- if (length(col_names) > 0) {
-    readr::read_csv(data, col_types = col_types)
+    readr::read_csv(content, col_types = col_types)
   } else {
-    readr::read_csv(data)
+    readr::read_csv(content)
   }
 
   if (!disable_date_parsing) {
@@ -269,11 +253,10 @@ fetch_csv <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE,
   tbl
 }
 
-fetch_debug <- function(epidata_call, format = c("classic", "csv", "json"), fields = NULL) {
-  res <- request_impl(epidata_call, format, fields)
-  httr::stop_for_status(res)
-  r <- httr::content(res, "text", encoding = "UTF-8")
-  r
+fetch_debug <- function(epidata_call, format_type = "classic", fields = NULL) {
+  result <- request_impl(epidata_call, format_type, fields)
+  content <- httr::content(result, "text", encoding = "UTF-8")
+  content
 }
 
 full_url <- function(epidata_call) {
@@ -326,8 +309,22 @@ request_impl <- function(epidata_call, format_type, fields = NULL) {
 
   url <- full_url(epidata_call)
   params <- request_arguments(epidata_call, format_type, fields)
+  result <- do_request(url, params)
 
-  do_request(url, params)
+  if (result$status_code != 200) {
+    # 500, 429, 401 are possible
+    msg <- "fetch data from API"
+    if (httr::http_type(result) == "text/html") {
+      # grab the error information out of the returned HTML document
+      msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
+        xml2::read_html(content(result, "text")),
+        "//p"
+      )))
+    }
+    httr::stop_for_status(result, task = msg)
+  }
+
+  result
 }
 
 #' @export
