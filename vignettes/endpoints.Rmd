@@ -15,8 +15,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r libraries}
 # remotes::install_github("cmu-delphi/epidatr")
-#library(devtools)
-#load_all("epidatr")
 library("epidatr")
 library("magrittr")
 library("dplyr")
@@ -350,10 +348,9 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_norostat
 Example call:
 
 ```{r, eval=FALSE}
-pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "ma", epiweeks = epirange(199001, 202105)) %>% fetch_classic()
-```
+pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "1", epiweeks = 201233) %>% fetch_classic()
 
-TODO can't seem to get a relevant sample, the example in the reference section is borked.
+```
 
 ### Quidel Covid and Influenza testing
 
