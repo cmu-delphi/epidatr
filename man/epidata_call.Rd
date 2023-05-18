@@ -19,12 +19,7 @@ create_epidata_call(
 
 fetch(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 
-fetch_tbl(
-  epidata_call,
-  fields = NULL,
-  disable_date_parsing = FALSE,
-  method = c("data.frame", "csv")
-)
+fetch_tbl(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 
 fetch_classic(epidata_call, fields = NULL, disable_data_frame_parsing = TRUE)
 
@@ -47,14 +42,14 @@ with_base_url(epidata_call, base_url)
 
 \item{disable_date_parsing}{disable automatic date parsing}
 
-\item{method}{the method to use to fetch the data}
-
 \item{disable_data_frame_parsing}{do not automatically cast the epidata output to a data frame
 (some endpoints return a list of lists, which is not a data frame)}
 
 \item{format_type}{format to return one of classic,json,csv}
 
 \item{base_url}{base URL to use}
+
+\item{method}{the method to use to fetch the data}
 }
 \value{
 \itemize{
@@ -105,7 +100,7 @@ structure is returned instead.
 
 The classic format is a 3-element list with the following elements:
 \itemize{
-\item \code{result}: a status code (1 for success, non-zero for failure)
+\item \code{result}: a status code (1 for success, -2 for no-results, all else for failure)
 \item \code{message}: a string describing the status of the request
 \item \code{epidata}: a list of named lists representing rows of a table, or, for a
 few endpoints, a more complex nested list structure

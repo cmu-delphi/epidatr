@@ -4,7 +4,12 @@
 \alias{fetch_csv}
 \title{Fetches the data and returns the CSV text}
 \usage{
-fetch_csv(epidata_call, fields = NULL)
+fetch_csv(
+  epidata_call,
+  fields = NULL,
+  disable_date_parsing = FALSE,
+  disable_tibble_output = FALSE
+)
 }
 \arguments{
 \item{epidata_call}{an instance of \code{epidata_call}}
@@ -18,5 +23,5 @@ fetch_csv(epidata_call, fields = NULL)
 }
 }
 \description{
-TODO: Deprecate and remove
+Fetches the data and returns the CSV text
 }
