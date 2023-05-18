@@ -100,20 +100,33 @@ print.covidcast_data_source <- function(source, ...) {
 #' print(smoothed_cli)
 #' df <- smoothed_cli$call("nation", "us", epirange(20210405, 20210410))
 #' @param base_url optional alternative API base url
-#' @importFrom httr RETRY stop_for_status content
+#' @importFrom httr stop_for_status content http_type
 #' @importFrom jsonlite fromJSON
+#' @importFrom xml2 read_html xml_find_all xml_text
 #' @return an instance of covidcast_epidata
 #'
 #' @export
 covidcast_epidata <- function(base_url = global_base_url) {
   url <- join_url(base_url, "covidcast/meta")
-  res <- do_request(url, list())
+  result <- do_request(url, list())
 
-  httr::stop_for_status(res)
-  r <- httr::content(res, "text", encoding = "UTF-8")
-  meta <- jsonlite::fromJSON(r, simplifyVector = FALSE)
+  if (result$status_code != 200) {
+    # 500, 429, 401 are possible
+    msg <- "fetch data from API"
+    if (httr::http_type(result) == "text/html") {
+      # grab the error information out of the returned HTML document
+      msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
+        xml2::read_html(content(result, "text")),
+        "//p"
+      )))
+    }
+    httr::stop_for_status(result, task = msg)
+  }
 
-  sources <- do.call(c, lapply(meta, parse_source, base_url = base_url))
+  content <- httr::content(result, "text", encoding = "UTF-8")
+  content_json <- jsonlite::fromJSON(content, simplifyVector = FALSE)
+
+  sources <- do.call(c, lapply(content_json, parse_source, base_url = base_url))
   class(sources) <- c("covidcast_data_source_list", class(sources))
 
   all_signals <- do.call(c, lapply(sources, function(x) {
