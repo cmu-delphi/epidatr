@@ -188,7 +188,7 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
     if (http_type(res) == "text/html") {
       # grab the error information out of the returned HTML document
       msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
-        xml2::read_html(content(res, 'text')),
+        xml2::read_html(content(res, "text")),
         "//p"
       )))
     }
