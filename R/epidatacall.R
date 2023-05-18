@@ -139,61 +139,23 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
 #' @importFrom tibble as_tibble
 #'
 #' @export
-fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE, method = c("data.frame", "csv")) {
+fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
   stopifnot(is.logical(disable_date_parsing), length(disable_date_parsing) == 1)
 
   if (epidata_call$only_supports_classic) {
-    rlang::abort("the endpoint only supports the classic message format, due to a non-standard behavior",
+    rlang::abort("This endpoint only supports the classic message format, due to a non-standard behavior. Use fetch_classic instead.",
       epidata_call = epidata_call,
       class = "only_supports_classic_format"
     )
   }
 
-  if (missing(method) || is.null(method)) {
-    method <- "data.frame"
-  }
-
-  if (method == "data.frame") {
-    df <- fetch_classic(epidata_call, fields, disable_data_frame_parsing = FALSE)$epidata
-    return(parse_data_frame(epidata_call, df, disable_date_parsing) %>% as_tibble())
-  } else if (method == "csv") {
-    r <- fetch_csv(epidata_call, fields)
-
-    meta <- epidata_call$meta
-    fields_pred <- fields_to_predicate(fields)
-    col_names <- c()
-    col_types <- list()
-    for (i in seq_len(length(meta))) {
-      info <- meta[[i]]
-      if (fields_pred(info$name)) {
-        col_names <- c(col_names, info$name)
-        col_types[info$name] <- info_to_type(info, disable_date_parsing)
-      }
-    }
-
-    tbl <- if (length(col_names) > 0) {
-      readr::read_csv(r, col_types = col_types)
-    } else {
-      readr::read_csv(r)
-    }
-
-    if (!disable_date_parsing) {
-      # parse weeks
-      columns <- colnames(tbl)
-      for (i in seq_len(length(meta))) {
-        info <- meta[[i]]
-        if (info$name %in% columns && info$type == "epiweek") {
-          tbl[[info$name]] <- parse_api_week(tbl[[info$name]])
-        }
-      }
-    }
-    tbl
-  } else {
-    rlang::abort("invalid method: ", method)
-  }
+  df <- fetch_classic(epidata_call, fields, disable_data_frame_parsing = FALSE)$epidata
+  return(parse_data_frame(epidata_call, df, disable_date_parsing) %>% as_tibble())
 }
+
+
 
 #' Fetches the data and returns a JSON object in the classic format
 #'
@@ -220,8 +182,20 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
   stopifnot(is.null(fields) || is.character(fields))
 
   res <- request_impl(epidata_call, "classic", fields)
-  httr::stop_for_status(res)
+  if (res$status_code != 200) {
+    # 500, 429, 401 are possible
+    msg <- "fetch data from API"
+    if (http_type(res) == "text/html") {
+      # grab the error information out of the returned HTML document
+      msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
+        xml2::read_html(content(res, 'text')),
+        "//p"
+      )))
+    }
+    httr::stop_for_status(res, task = msg)
+  }
   r <- httr::content(res, "text", encoding = "UTF-8")
+
   r <- jsonlite::fromJSON(r, simplifyDataFrame = !disable_data_frame_parsing)
   # success is 1, no results is -2
   if (r$result != 1 && r$result != -2) {
@@ -233,8 +207,6 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
 
 #' Fetches the data and returns the CSV text
 #'
-#' TODO: Deprecate and remove
-#'
 #' @param epidata_call an instance of `epidata_call`
 #' @param fields filter fields
 #' @importFrom httr stop_for_status content
@@ -243,12 +215,12 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
 #' - For `fetch_csv`: a string containing CSV text, with the
 #'   `"epidata_csv"` class added
 #'
-fetch_csv <- function(epidata_call, fields = NULL) {
+fetch_csv <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE, disable_tibble_output = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
 
   if (epidata_call$only_supports_classic) {
-    rlang::abort("the endpoint only supports the classic message format, due to a non-standard behavior",
+    rlang::abort("This endpoint only supports the classic message format, due to a non-standard behavior. Use fetch_classic instead.",
       epidata_call = epidata_call,
       class = "only_supports_classic_format"
     )
@@ -258,7 +230,40 @@ fetch_csv <- function(epidata_call, fields = NULL) {
   httr::stop_for_status(res)
   data <- httr::content(res, "text", encoding = "UTF-8")
   class(data) <- c("epidata_csv", class(data))
-  data
+
+  if (disable_tibble_output) {
+    return(data)
+  }
+
+  meta <- epidata_call$meta
+  fields_pred <- fields_to_predicate(fields)
+  col_names <- c()
+  col_types <- list()
+  for (i in seq_len(length(meta))) {
+    info <- meta[[i]]
+    if (fields_pred(info$name)) {
+      col_names <- c(col_names, info$name)
+      col_types[info$name] <- info_to_type(info, disable_date_parsing)
+    }
+  }
+
+  tbl <- if (length(col_names) > 0) {
+    readr::read_csv(data, col_types = col_types)
+  } else {
+    readr::read_csv(data)
+  }
+
+  if (!disable_date_parsing) {
+    # parse weeks
+    columns <- colnames(tbl)
+    for (i in seq_len(length(meta))) {
+      info <- meta[[i]]
+      if (info$name %in% columns && info$type == "epiweek") {
+        tbl[[info$name]] <- parse_api_week(tbl[[info$name]])
+      }
+    }
+  }
+  tbl
 }
 
 fetch_debug <- function(epidata_call, format = c("classic", "csv", "json"), fields = NULL) {
