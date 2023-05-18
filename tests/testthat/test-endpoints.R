@@ -1,5 +1,4 @@
 test_that("basic_epidata_call", {
-  expect_no_error(pvt_afhsb(auth = "yourkey", "fl,ca", epirange(202001, 202110), "flu1,flu2-flu1"))
   expect_no_error(pvt_cdc(auth = "yourkey", "fl,ca", epirange(201501, 201601)))
   expect_no_error(covid_hosp_facility_lookup(state = "fl"))
   expect_no_error(covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(20200101, 20200501)))
@@ -17,7 +16,6 @@ test_that("basic_epidata_call", {
   expect_no_error(gft(locations = "hhs1", epiweeks = epirange(201201, 202001)))
   expect_no_error(pvt_ght(auth = "yourkey", locations = "ca", epiweeks = epirange(201201, 202001), query = "?"))
   expect_no_error(kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001)))
-  expect_no_error(pvt_meta_afhsb(auth = "yourkey"))
   expect_no_error(pvt_meta_norostat(auth = "yourkey"))
   expect_no_error(meta())
   expect_no_error(nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 202001)))
@@ -30,7 +28,6 @@ test_that("basic_epidata_call", {
   expect_no_error(pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001)))
   expect_no_error(wiki(articles = "avian_influenza", epiweeks = epirange(201501, 202001)))
 
-  expect_no_error(pvt_afhsb(auth = "yourkey", "fl,ca", epirange(202001, 202110), "flu1,flu2-flu1") %>% request_url())
   expect_no_error(pvt_cdc(auth = "yourkey", "fl,ca", epirange(201501, 201601)) %>% request_url())
   expect_no_error(covid_hosp_facility_lookup(state = "fl") %>% request_url())
   expect_no_error(covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(20200101, 20200501)) %>% request_url())
@@ -48,7 +45,6 @@ test_that("basic_epidata_call", {
   expect_no_error(gft(locations = "hhs1", epiweeks = epirange(201201, 202001)) %>% request_url())
   expect_no_error(pvt_ght(auth = "yourkey", locations = "ca", epiweeks = epirange(201201, 202001), query = "?") %>% request_url())
   expect_no_error(kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001)) %>% request_url())
-  expect_no_error(pvt_meta_afhsb(auth = "yourkey") %>% request_url())
   expect_no_error(pvt_meta_norostat(auth = "yourkey") %>% request_url())
   expect_no_error(meta() %>% request_url())
   expect_no_error(nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 202001)) %>% request_url())

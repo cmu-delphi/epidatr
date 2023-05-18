@@ -32,6 +32,7 @@ test_that("assert_date_param", {
 })
 
 test_that("assert_timeset_param", {
+  # Make sure to keep in sync with test-model.R parse_timeset_input checks
   expect_no_error(assert_timeset_param("name", "*"))
   expect_no_error(assert_timeset_param("name", "2020-01-01", len = 1))
   expect_error(assert_timeset_param("name", c("2020-01-01", "2021-01-02"), len = 1))
@@ -43,4 +44,7 @@ test_that("assert_timeset_param", {
   expect_error(assert_timeset_param("name", NULL))
   expect_no_error(assert_timeset_param("name", NULL, required = FALSE))
   expect_error(assert_timeset_param("name", list(epirange(20200101, 20200102), epirange(20200101, 20200102))))
+  # Non-EpiRange-class epiranges are no longer allowed:
+  expect_error(assert_timeset_param("name", list(from = "2020-01-01", to = "2021-01-02")))
+  expect_error(assert_timeset_param("name", c(from = "2020-01-01", to = "2021-01-02")))
 })

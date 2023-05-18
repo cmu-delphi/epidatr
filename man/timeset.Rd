@@ -15,8 +15,11 @@ take the form YYYYMMDD,
 \item Epiweeks: integer-like values or integer-like strings that take the form
 YYYYMM,
 \item EpiRanges: a list of \code{\link{epirange}} instances.
+\item Wildcard: "*" (requests all available values for this dimension)
 }
 
 Please refer to the specific endpoint documentation for guidance on using
-dates vs weeks. Most endpoints support only one or the other.
+dates vs weeks. Most endpoints support only one or the other. Some (less
+commonly used) endpoints may not accept the \code{"*"} wildcard, but this can be
+simulated with a large \code{\link{epirange}}.
 }
