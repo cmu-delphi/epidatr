@@ -1,47 +1,3 @@
-#' Fetch AFHSB data (point data, no min/max)
-#'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/afhsb.html
-#'
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param locations character vector. Locations to fetch (see docs).
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
-#' @param flu_types string. Flu types to fetch (see docs).
-#' @return [`epidata_call`]
-#'
-#' @examples
-#' \dontrun{
-#' pvt_afhsb(
-#'   auth = "yourkey",
-#'   "fl,ca",
-#'   epirange(202001, 202110),
-#'   "flu1,flu2-flu1"
-#' ) %>% fetch_tbl()
-#' }
-#' @export
-pvt_afhsb <- function(auth, locations, epiweeks, flu_types) {
-  assert_character_param("auth", auth, len = 1)
-  assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_character_param("flu_types", flu_types)
-  epiweeks <- parse_timeset_input(epiweeks)
-
-  create_epidata_call(
-    "afhsb/",
-    list(
-      auth = auth,
-      locations = locations,
-      epiweeks = epiweeks,
-      flu_types = flu_types
-    ),
-    list(
-      create_epidata_field_info("location", "text"),
-      create_epidata_field_info("flu_type", "text"),
-      create_epidata_field_info("epiweek", "epiweek"),
-      create_epidata_field_info("visit_num", "int")
-    )
-  )
-}
-
 #' Fetch CDC page hits
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/cdc.html
@@ -1246,20 +1202,6 @@ kcdc_ili <- function(regions, epiweeks, issues = NULL, lag = NULL) {
       create_epidata_field_info("ili", "float")
     )
   )
-}
-
-#' Fetch AFHSB metadata
-#'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_afhsb.html
-#'
-#' @param auth string. Restricted access key (not the same as API key).
-#' @return [`epidata_call`]
-#'
-#' @export
-pvt_meta_afhsb <- function(auth) {
-  assert_character_param("auth", auth, len = 1)
-
-  create_epidata_call("meta_afhsb/", list(auth = auth), only_supports_classic = TRUE)
 }
 
 #' Fetch NoroSTAT metadata
