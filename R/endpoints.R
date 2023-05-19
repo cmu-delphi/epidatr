@@ -6,7 +6,7 @@
 #' \dontrun{
 #' pvt_cdc(
 #'   auth = "yourkey",
-#'   "fl,ca",
+#'   locations = "fl,ca",
 #'   epirange(201501, 201601)
 #' ) %>% fetch()
 #' }
@@ -62,6 +62,7 @@ pvt_cdc <- function(auth, locations, epiweeks) {
 #' @examples
 #' \donttest{
 #' covid_hosp_facility_lookup(state = "fl") %>% fetch()
+#' covid_hosp_facility_lookup(city = "southlake") %>% fetch()
 #' }
 #' @param state string. A two-letter character string state abbreviation.
 #' @param ccn string. A character string for facility CMS certification number.
@@ -778,7 +779,7 @@ delphi <- function(system, epiweek) {
 #' @examples
 #' \dontrun{
 #' dengue_nowcast(
-#'   locations = "?",
+#'   locations = "pr",
 #'   epiweeks = epirange(201501, 202001)
 #' ) %>% fetch()
 #' }
@@ -814,8 +815,8 @@ dengue_nowcast <- function(locations, epiweeks) {
 #' \dontrun{
 #' pvt_dengue_sensors(
 #'   auth = "yourkey",
-#'   names = "?",
-#'   locations = "?",
+#'   names = "ght",
+#'   locations = "ag",
 #'   epiweeks = epirange(201501, 202001)
 #' ) %>% fetch()
 #' }
@@ -1019,6 +1020,10 @@ fluview_clinical <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 #' Fetch FluView metadata
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html
+#' @examples
+#' \donttest{
+#' fluview_meta() %>% fetch()
+#' }
 #'
 #' @return [`epidata_call`]
 #'
@@ -1158,7 +1163,7 @@ gft <- function(locations, epiweeks) {
 #'   auth = "yourkey",
 #'   locations = "ca",
 #'   epiweeks = epirange(201201, 202001),
-#'   query = "?"
+#'   query = "how to get over the flu"
 #' ) %>% fetch()
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
@@ -1198,7 +1203,7 @@ pvt_ght <- function(auth, locations, epiweeks, query) {
 #' TODO: find a non-trivial region
 #' @examples
 #' \dontrun{
-#' kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001)) %>% fetch()
+#' kcdc_ili(regions = "ROC", epiweeks = 200436) %>% fetch()
 #' }
 #' @param regions character vector. The regions to be fetched.
 #' @param epiweeks [`timeset`]. The epiweeks to be fetched.
@@ -1243,6 +1248,10 @@ kcdc_ili <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html
 #'
+#' @examples
+#' \donttest{
+#' pvt_meta_norostat(auth = "yourkey") %>% fetch()
+#' }
 #' @param auth string. Restricted access key (not the same as API key).
 #' @return [`epidata_call`]
 #'
@@ -1363,8 +1372,8 @@ nidss_flu <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 #' \dontrun{
 #' pvt_norostat(
 #'   auth = "yourkey",
-#'   locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
-#'   epiweeks = epirange(201401, 201501)
+#'   locations = "1",
+#'   epiweeks = 201233
 #' ) %>% fetch()
 #' }
 #' @param auth string. Your authentication key.
