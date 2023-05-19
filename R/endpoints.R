@@ -747,7 +747,7 @@ covidcast <- function(
 #'
 #' @examples
 #' \donttest{
-#' delphi(system = "ec", epiweek = 201501) %>% fetch()
+#' delphi(system = "ec", epiweek = 202006) %>% fetch()
 #' }
 #' @param system string. The system name to fetch.
 #' @param epiweek [`timeset`]. The epiweeks to fetch.
