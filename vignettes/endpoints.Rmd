@@ -41,7 +41,7 @@ For example, let's see what kind of smoothed signals come out of the [facebook s
 
 ```{r}
 cm <- covidcast_meta() %>%
-  fetch_tbl() %>%
+  fetch() %>%
   dplyr::filter(grepl("smoothed", signal), data_source == "fb-survey")
 ```
 
@@ -62,7 +62,7 @@ covidcast(
   time_type = "day",
   time_values = epirange(20201221, 20201225),
   geo_values = "06059"
-) %>% fetch_tbl()
+) %>% fetch()
 ```
 
 County geo_values are [FIPS codes](https://en.wikipedia.org/wiki/List_of_United_States_FIPS_codes_by_county) and are discussed more here: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>. The example above is for Orange County, California.
@@ -76,7 +76,7 @@ covidcast(
   time_type = "day",
   time_values = epirange(20201221, 20201225),
   geo_values = "*"
-) %>% fetch_tbl()
+) %>% fetch()
 ```
 
 ## Other Covid Endpoints
@@ -90,17 +90,17 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/covid_hosp_f
 Example calls:
 
 ```{r}
-covid_hosp_facility_lookup(city = "southlake") %>% fetch_tbl()
+covid_hosp_facility_lookup(city = "southlake") %>% fetch()
 ```
 
 ```{r}
-covid_hosp_facility_lookup(state = "WY") %>% fetch_tbl()
+covid_hosp_facility_lookup(state = "WY") %>% fetch()
 ```
 
 A non-example (there is no city called New York in Wyoming);
 
 ```{r}
-covid_hosp_facility_lookup(state = "WY", city = "New York") %>% fetch_tbl()
+covid_hosp_facility_lookup(state = "WY", city = "New York") %>% fetch()
 ```
 
 ### COVID-19 Hospitalization by Facility
@@ -115,7 +115,7 @@ Example call:
 covid_hosp_facility(
   hospital_pks = "100075",
   collection_weeks = epirange(20200101, 20200501)
-) %>% fetch_tbl()
+) %>% fetch()
 ```
 
 ### COVID-19 Hospitalization by State
@@ -127,7 +127,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/covid_hosp.h
 Example call:
 
 ```{r}
-covid_hosp_state_timeseries(states = "MA", dates = "20200510") %>% fetch_tbl()
+covid_hosp_state_timeseries(states = "MA", dates = "20200510") %>% fetch()
 ```
 
 ## Flu Endpoints
@@ -141,7 +141,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/delphi.html>
 Example call:
 
 ```{r}
-del <- delphi(system = "ec", epiweek = 201501) %>% fetch_classic()
+del <- delphi(system = "ec", epiweek = 201501) %>% fetch()
 names(del$epidata$forecast)
 ```
 
@@ -154,7 +154,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/flusurv.html
 Example call:
 
 ```{r}
-flusurv(locations = "ca", epiweeks = 202001) %>% fetch_tbl()
+flusurv(locations = "ca", epiweeks = 202001) %>% fetch()
 ```
 
 ### Fluview data
@@ -166,7 +166,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/fluview.html
 Example call:
 
 ```{r}
-fluview(regions = "nat", epiweeks = epirange(201201, 202001)) %>% fetch_tbl()
+fluview(regions = "nat", epiweeks = epirange(201201, 202001)) %>% fetch()
 ```
 
 ### Fluview virological data from clinical labs
@@ -178,7 +178,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/fluview_clin
 Example call:
 
 ```{r}
-fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701)) %>% fetch_tbl()
+fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701)) %>% fetch()
 ```
 
 ### Fluview metadata
@@ -188,7 +188,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/fluview_meta
 Example call:
 
 ```{r}
-fluview_meta() %>% fetch_tbl()
+fluview_meta() %>% fetch()
 ```
 
 ### Google Flu Trends data
@@ -198,7 +198,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/gft.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/gft.html>
 
 ```{r}
-gft(locations = "hhs1", epiweeks = epirange(201201, 202001)) %>% fetch_tbl()
+gft(locations = "hhs1", epiweeks = epirange(201201, 202001)) %>% fetch()
 ```
 
 ### ECDC ILI
@@ -208,7 +208,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/ecdc_ili.html>
 
 ```{r}
-ecdc_ili(regions = "Armenia", epiweeks = 201840) %>% fetch_tbl()
+ecdc_ili(regions = "Armenia", epiweeks = 201840) %>% fetch()
 ```
 
 ### KCDC ILI
@@ -218,7 +218,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/kcdc_ili.html>
 
 ```{r}
-kcdc_ili(regions = "ROK", epiweeks = 200436) %>% fetch_tbl()
+kcdc_ili(regions = "ROK", epiweeks = 200436) %>% fetch()
 ```
 
 ### NIDSS Flu
@@ -228,7 +228,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/nidss_flu.html>
 
 ```{r}
-nidss_flu(regions = "taipei", epiweeks = epirange(200901, 201301)) %>% fetch_tbl()
+nidss_flu(regions = "taipei", epiweeks = epirange(200901, 201301)) %>% fetch()
 ```
 
 ### ILI Nearby Nowcast
@@ -238,7 +238,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/nowcast.html>
 
 ```{r}
-nowcast(locations = "ca", epiweeks = epirange(202201, 202319)) %>% fetch_tbl()
+nowcast(locations = "ca", epiweeks = epirange(202201, 202319)) %>% fetch()
 ```
 
 ## Dengue Endpoints
@@ -252,7 +252,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/dengue_nowca
 Example call:
 
 ```{r}
-dengue_nowcast(locations = "pr", epiweeks = epirange(201401, 202301)) %>% fetch_tbl()
+dengue_nowcast(locations = "pr", epiweeks = epirange(201401, 202301)) %>% fetch()
 ```
 
 ### NIDSS dengue
@@ -262,7 +262,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/nidss_dengue.html>
 
 ```{r}
-nidss_dengue(locations = "taipei", epiweeks = epirange(200301, 201301)) %>% fetch_tbl()
+nidss_dengue(locations = "taipei", epiweeks = epirange(200301, 201301)) %>% fetch()
 ```
 
 ## PAHO Dengue
@@ -272,7 +272,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/paho_dengue.html>
 
 ```{r, eval=FALSE}
-paho_dengue(regions = "ca", epiweeks = epirange(200201, 202319)) %>% fetch_tbl()
+paho_dengue(regions = "ca", epiweeks = epirange(200201, 202319)) %>% fetch()
 ```
 
 ## Other Endpoints
@@ -284,7 +284,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
 Function reference: <https://cmu-delphi.github.io/epidatr/reference/wiki.html>
 
 ```{r}
-wiki(language = "en", articles = "influenza", epiweeks = epirange(202001, 202319)) %>% fetch_tbl()
+wiki(language = "en", articles = "influenza", epiweeks = epirange(202001, 202319)) %>% fetch()
 ```
 
 # Private methods
@@ -300,7 +300,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_cdc.html
 Example call:
 
 ```{r, eval=FALSE}
-pvt_cdc(auth = Sys.getenv("SECRET_API_AUTH_CDC"), epiweeks = epirange(202003, 202304), locations = "ma") %>% fetch_tbl()
+pvt_cdc(auth = Sys.getenv("SECRET_API_AUTH_CDC"), epiweeks = epirange(202003, 202304), locations = "ma") %>% fetch()
 ```
 
 ### Dengue Digital Surveillance Sensors
@@ -312,7 +312,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/dengue_senso
 Example call:
 
 ```{r, eval=FALSE}
-pvt_dengue_sensors(auth = Sys.getenv("SECRET_API_AUTH_SENSORS"), names = "ght", locations = "ag", epiweeks = epirange(201404, 202004)) %>% fetch_tbl()
+pvt_dengue_sensors(auth = Sys.getenv("SECRET_API_AUTH_SENSORS"), names = "ght", locations = "ag", epiweeks = epirange(201404, 202004)) %>% fetch()
 ```
 
 ### Google Health Trends
@@ -324,7 +324,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_ght.html
 Example call:
 
 ```{r, eval=FALSE}
-pvt_ght(auth = Sys.getenv("SECRET_API_AUTH_GHT"), epiweeks = epirange(199301, 202304), locations = "ma", query = "how to get over the flu") %>% fetch_tbl()
+pvt_ght(auth = Sys.getenv("SECRET_API_AUTH_GHT"), epiweeks = epirange(199301, 202304), locations = "ma", query = "how to get over the flu") %>% fetch()
 ```
 
 ### NoroSTAT metadata
@@ -336,7 +336,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_meta_nor
 Example call:
 
 ```{r, eval=FALSE}
-pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT")) %>% fetch_classic()
+pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT")) %>% fetch()
 ```
 
 ### NoroSTAT data
@@ -348,7 +348,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_norostat
 Example call:
 
 ```{r, eval=FALSE}
-pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "1", epiweeks = 201233) %>% fetch_classic()
+pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "1", epiweeks = 201233) %>% fetch()
 
 ```
 
@@ -361,7 +361,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_quidel.h
 Example call:
 
 ```{r, eval=FALSE}
-pvt_quidel(auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"), locations = "hhs1", epiweeks = epirange(200301, 202105)) %>% fetch_tbl()
+pvt_quidel(auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"), locations = "hhs1", epiweeks = epirange(200301, 202105)) %>% fetch()
 ```
 
 ### Sensors
@@ -373,7 +373,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_sensors.
 Example call:
 
 ```{r, eval=FALSE}
-pvt_sensors(auth = Sys.getenv("SECRET_API_AUTH_SENSORS"), names = "sar3", locations = "nat", epiweeks = epirange(200301, 202105)) %>% fetch_tbl()
+pvt_sensors(auth = Sys.getenv("SECRET_API_AUTH_SENSORS"), names = "sar3", locations = "nat", epiweeks = epirange(200301, 202105)) %>% fetch()
 ```
 
 ### Twitter
@@ -385,5 +385,5 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_twitter.
 Example call:
 
 ```{r, eval=FALSE}
-pvt_twitter(auth = Sys.getenv("SECRET_API_AUTH_TWITTER"), locations = "nat", epiweeks = epirange(200301, 202105)) %>% fetch_tbl()
+pvt_twitter(auth = Sys.getenv("SECRET_API_AUTH_TWITTER"), locations = "nat", epiweeks = epirange(200301, 202105)) %>% fetch()
 ```
