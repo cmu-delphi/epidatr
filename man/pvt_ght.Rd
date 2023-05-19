@@ -30,7 +30,7 @@ pvt_ght(
   auth = "yourkey",
   locations = "ca",
   epiweeks = epirange(201201, 202001),
-  query = "?"
+  query = "how to get over the flu"
 ) \%>\% fetch()
 }
 }

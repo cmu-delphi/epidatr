@@ -29,8 +29,8 @@ TODO: what are valid locations and names?
 \dontrun{
 pvt_dengue_sensors(
   auth = "yourkey",
-  names = "?",
-  locations = "?",
+  names = "ght",
+  locations = "ag",
   epiweeks = epirange(201501, 202001)
 ) \%>\% fetch()
 }
