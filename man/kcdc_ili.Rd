@@ -28,6 +28,6 @@ TODO: find a non-trivial region
 }
 \examples{
 \dontrun{
-kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001)) \%>\% fetch()
+kcdc_ili(regions = "ROC", epiweeks = 200436) \%>\% fetch()
 }
 }
