@@ -21,7 +21,7 @@ covidcast(
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html}).}
 
 \item{signals}{string. The signals to query from a specific source (see:
-\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals}).}
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals.html}).}
 
 \item{geo_type}{string. The geographic resolution of the data (see:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}).}
@@ -52,6 +52,8 @@ the most recent issue is returned. Mutually exclusive with \code{as_of} or
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html}
+}
+\details{
 COVIDcast public dashboard: \url{https://delphi.cmu.edu/covidcast/}
 }
 \examples{
@@ -64,8 +66,16 @@ covidcast(
   geo_values = "ca,fl",
   time_values = epirange(20200601, 20200801)
 ) \%>\% fetch()
+covidcast(
+  data_source = "jhu-csse",
+  signals = "confirmed_7dav_incidence_prop",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = "*",
+  time_values = epirange(20200601, 20200801)
+) \%>\% fetch()
 }
 }
 \seealso{
-\code{\link[=covidcast_meta]{covidcast_meta()}}, \code{\link[=epirange]{epirange()}}
+\code{\link[=covidcast_meta]{covidcast_meta()}}, \code{\link[=covidcast_epidata]{covidcast_epidata()}}, \code{\link[=epirange]{epirange()}}
 }

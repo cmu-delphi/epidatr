@@ -583,7 +583,7 @@ covid_hosp_state_timeseries <- function(states, dates, issues = NULL) {
 #' covidcast_meta() %>% fetch()
 #' }
 #'
-#' @seealso [covidcast()]
+#' @seealso [covidcast()],[covidcast_epidata()]
 #' @export
 covidcast_meta <- function() {
   create_epidata_call(
@@ -627,6 +627,14 @@ covidcast_meta <- function() {
 #'   geo_values = "ca,fl",
 #'   time_values = epirange(20200601, 20200801)
 #' ) %>% fetch()
+#' covidcast(
+#'   data_source = "jhu-csse",
+#'   signals = "confirmed_7dav_incidence_prop",
+#'   geo_type = "state",
+#'   time_type = "day",
+#'   geo_values = "*",
+#'   time_values = epirange(20200601, 20200801)
+#' ) %>% fetch()
 #' }
 #' @param data_source string. The data source to query (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>).
@@ -651,7 +659,7 @@ covidcast_meta <- function() {
 #'   `issues`.
 #' @return [`epidata_call`]
 #'
-#' @seealso [covidcast_meta()], [epirange()]
+#' @seealso [covidcast_meta()], [covidcast_epidata()], [epirange()]
 #'
 #' @export
 covidcast <- function(
