@@ -108,25 +108,25 @@ print.covidcast_data_source <- function(source, ...) {
 #' @export
 covidcast_epidata <- function(base_url = global_base_url) {
   url <- join_url(base_url, "covidcast/meta")
-  result <- do_request(url, list())
+  response <- do_request(url, list())
 
-  if (result$status_code != 200) {
+  if (response$status_code != 200) {
     # 500, 429, 401 are possible
     msg <- "fetch data from API"
-    if (httr::http_type(result) == "text/html") {
+    if (httr::http_type(response) == "text/html") {
       # grab the error information out of the returned HTML document
       msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
-        xml2::read_html(content(result, "text")),
+        xml2::read_html(content(response, "text")),
         "//p"
       )))
     }
-    httr::stop_for_status(result, task = msg)
+    httr::stop_for_status(response, task = msg)
   }
 
-  content <- httr::content(result, "text", encoding = "UTF-8")
-  content_json <- jsonlite::fromJSON(content, simplifyVector = FALSE)
+  response_content <- httr::content(response, "text", encoding = "UTF-8")
+  response_content <- jsonlite::fromJSON(response_content, simplifyVector = FALSE)
 
-  sources <- do.call(c, lapply(content_json, parse_source, base_url = base_url))
+  sources <- do.call(c, lapply(response_content, parse_source, base_url = base_url))
   class(sources) <- c("covidcast_data_source_list", class(sources))
 
   all_signals <- do.call(c, lapply(sources, function(x) {

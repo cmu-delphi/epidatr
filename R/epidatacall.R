@@ -156,8 +156,8 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
     )
   }
 
-  content <- fetch_classic(epidata_call, fields, disable_data_frame_parsing = FALSE)
-  return(parse_data_frame(epidata_call, content, disable_date_parsing) %>% as_tibble())
+  response_content <- fetch_classic(epidata_call, fields, disable_data_frame_parsing = FALSE)
+  return(parse_data_frame(epidata_call, response_content, disable_date_parsing) %>% as_tibble())
 }
 
 #' Fetches the data, raises on epidata errors, and returns the results as a
@@ -182,15 +182,15 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
 
-  result <- request_impl(epidata_call, "classic", fields)
-  content <- httr::content(result, as = "text", encoding = "UTF-8")
+  response <- request_impl(epidata_call, "classic", fields)
+  response_content <- httr::content(response, as = "text", encoding = "UTF-8")
+  response_content <- jsonlite::fromJSON(response_content, simplifyDataFrame = !disable_data_frame_parsing)
 
-  content <- jsonlite::fromJSON(content, simplifyDataFrame = !disable_data_frame_parsing)
   # success is 1, no results is -2, truncated is 2, -1 is generic error
-  if (content$result != 1) {
-    rlang::abort(paste0("epidata error: ", content$message), "epidata_error")
+  if (response_content$result != 1) {
+    rlang::abort(paste0("epidata error: ", response_content$message), "epidata_error")
   }
-  return(content$epidata)
+  return(response_content$epidata)
 }
 
 #' Fetches the data and returns the CSV text
@@ -214,12 +214,12 @@ fetch_csv <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE,
     )
   }
 
-  result <- request_impl(epidata_call, "csv", fields)
-  content <- httr::content(result, "text", encoding = "UTF-8")
-  class(content) <- c("epidata_csv", class(content))
+  response <- request_impl(epidata_call, "csv", fields)
+  response_content <- httr::content(response, "text", encoding = "UTF-8")
+  class(response_content) <- c("epidata_csv", class(response_content))
 
   if (disable_tibble_output) {
-    return(content)
+    return(response_content)
   }
 
   meta <- epidata_call$meta
@@ -234,28 +234,28 @@ fetch_csv <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE,
     }
   }
 
-  tbl <- if (length(col_names) > 0) {
-    readr::read_csv(content, col_types = col_types)
+  csv_tibble <- if (length(col_names) > 0) {
+    readr::read_csv(response_content, col_types = col_types)
   } else {
-    readr::read_csv(content)
+    readr::read_csv(response_content)
   }
 
   if (!disable_date_parsing) {
     # parse weeks
-    columns <- colnames(tbl)
+    columns <- colnames(csv_tibble)
     for (i in seq_len(length(meta))) {
       info <- meta[[i]]
       if (info$name %in% columns && info$type == "epiweek") {
-        tbl[[info$name]] <- parse_api_week(tbl[[info$name]])
+        csv_tibble[[info$name]] <- parse_api_week(csv_tibble[[info$name]])
       }
     }
   }
-  tbl
+  csv_tibble
 }
 
 fetch_debug <- function(epidata_call, format_type = "classic", fields = NULL) {
-  result <- request_impl(epidata_call, format_type, fields)
-  content <- httr::content(result, "text", encoding = "UTF-8")
+  response <- request_impl(epidata_call, format_type, fields)
+  content <- httr::content(response, "text", encoding = "UTF-8")
   content
 }
 
@@ -309,22 +309,22 @@ request_impl <- function(epidata_call, format_type, fields = NULL) {
 
   url <- full_url(epidata_call)
   params <- request_arguments(epidata_call, format_type, fields)
-  result <- do_request(url, params)
+  response <- do_request(url, params)
 
-  if (result$status_code != 200) {
+  if (response$status_code != 200) {
     # 500, 429, 401 are possible
     msg <- "fetch data from API"
-    if (httr::http_type(result) == "text/html") {
+    if (httr::http_type(response) == "text/html") {
       # grab the error information out of the returned HTML document
       msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
-        xml2::read_html(content(result, "text")),
+        xml2::read_html(content(response, "text")),
         "//p"
       )))
     }
-    httr::stop_for_status(result, task = msg)
+    httr::stop_for_status(response, task = msg)
   }
 
-  result
+  response
 }
 
 #' @export
