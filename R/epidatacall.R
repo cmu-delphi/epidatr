@@ -136,7 +136,6 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
 #'   time_value and value fields or c("-direction") to return everything except
 #'   the direction field
 #' @param disable_date_parsing disable automatic date parsing
-#' @param method the method to use to fetch the data
 #' @importFrom readr read_csv
 #' @importFrom httr stop_for_status content
 #' @importFrom rlang abort

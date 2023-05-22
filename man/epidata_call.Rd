@@ -52,8 +52,6 @@ a data frame)}
 \item{format_type}{format to return one of classic,json,csv}
 
 \item{base_url}{base URL to use}
-
-\item{method}{the method to use to fetch the data}
 }
 \value{
 \itemize{
