@@ -193,16 +193,22 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
   return(response_content$epidata)
 }
 
-#' Fetches the data and returns the CSV text
+#' Fetches the data and returns a tibble or an `epidata_csv`
 #'
 #' @param epidata_call an instance of `epidata_call`
 #' @param fields filter fields
+#' @param disable_date_parsing Boolean. Optionally, `TRUE` to disable parsing of
+#'   columns we expect to be dates, keeping them as character columns instead.
+#'   `FALSE` (the default) to parse these columns into `Date` vectors.
+#' @param disable_tibble_output Boolean. Optionally, `TRUE` to output a
+#'   character vector with the `epidata_csv` class (which provides a custom
+#'   `print` method). `FALSE` (the default) to output a tibble.
+#' @return
+#' - For `fetch_csv`: a tibble, or `epidata_csv` if requested with
+#'   `disable_tibble_output = TRUE`
+#'
 #' @importFrom httr stop_for_status content
 #' @importFrom rlang abort
-#' @return
-#' - For `fetch_csv`: a string containing CSV text, with the
-#'   `"epidata_csv"` class added
-#'
 fetch_csv <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE, disable_tibble_output = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
