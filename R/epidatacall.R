@@ -354,7 +354,7 @@ info_to_type <- function(info, disable_date_parsing = FALSE) {
     text = readr::col_character(),
     int = readr::col_integer(),
     float = readr::col_double(),
-    categorical = readr::col_factor(info$categories, TRUE)
+    categorical = readr::col_factor(info$categories)
   )
   r <- types[info$type]
   stopifnot(!is.null(r))
