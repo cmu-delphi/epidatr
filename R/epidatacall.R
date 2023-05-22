@@ -190,6 +190,9 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
   if (response_content$result != 1) {
     rlang::abort(paste0("epidata error: ", response_content$message), "epidata_error")
   }
+  if (response_content$message != "success") {
+    rlang::warn(paste0("epidata warning: ", response_content$message), "epidata_warning")
+  }
   return(response_content$epidata)
 }
 
