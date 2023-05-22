@@ -639,8 +639,8 @@ covidcast_meta <- function() {
 #'   all. (See:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.)
 #' @param time_values [`timeset`]. The dates to fetch.
-#' @param as_of Date. Optionally, the as of date for the issues to fetech. If
-#'   not specified, the most recent data is returned. Mutually exclusive with
+#' @param as_of Date. Optionally, the as of date for the issues to fetch. If not
+#'   specified, the most recent data is returned. Mutually exclusive with
 #'   `issues` or `lag`.
 #' @param issues [`timeset`]. Optionally, the issue of the data to fetch. If not
 #'   specified, the most recent issue is returned. Mutually exclusive with

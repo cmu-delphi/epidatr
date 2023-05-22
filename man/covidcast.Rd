@@ -35,8 +35,8 @@ all. (See:
 
 \item{time_values}{\code{\link{timeset}}. The dates to fetch.}
 
-\item{as_of}{Date. Optionally, the as of date for the issues to fetech. If
-not specified, the most recent data is returned. Mutually exclusive with
+\item{as_of}{Date. Optionally, the as of date for the issues to fetch. If not
+specified, the most recent data is returned. Mutually exclusive with
 \code{issues} or \code{lag}.}
 
 \item{issues}{\code{\link{timeset}}. Optionally, the issue of the data to fetch. If not
