@@ -311,11 +311,12 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/dengue_senso
 Example call:
 
 ```{r, eval=FALSE}
-pvt_dengue_sensors(auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
-                   names = "ght",
-                   locations = "ag",
-                   epiweeks = epirange(201404, 202004)
-                   ) %>% fetch()
+pvt_dengue_sensors(
+  auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
+  names = "ght",
+  locations = "ag",
+  epiweeks = epirange(201404, 202004)
+) %>% fetch()
 ```
 
 ### Google Health Trends
@@ -327,11 +328,12 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_ght.html
 Example call:
 
 ```{r, eval=FALSE}
-pvt_ght(auth = Sys.getenv("SECRET_API_AUTH_GHT"),
-        epiweeks = epirange(199301, 202304),
-        locations = "ma",
-        query = "how to get over the flu"
-        ) %>% fetch()
+pvt_ght(
+  auth = Sys.getenv("SECRET_API_AUTH_GHT"),
+  epiweeks = epirange(199301, 202304),
+  locations = "ma",
+  query = "how to get over the flu"
+) %>% fetch()
 ```
 
 ### NoroSTAT metadata
@@ -379,11 +381,12 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_sensors.
 Example call:
 
 ```{r, eval=FALSE}
-pvt_sensors(auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
-            names = "sar3",
-            locations = "nat",
-            epiweeks = epirange(200301, 202105)
-            ) %>% fetch()
+pvt_sensors(
+  auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
+  names = "sar3",
+  locations = "nat",
+  epiweeks = epirange(200301, 202105)
+) %>% fetch()
 ```
 
 ### Twitter
@@ -395,8 +398,9 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_twitter.
 Example call:
 
 ```{r, eval=FALSE}
-pvt_twitter(auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
-            locations = "nat",
-            epiweeks = epirange(200301, 202105)
-            ) %>% fetch()
+pvt_twitter(
+  auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
+  locations = "nat",
+  epiweeks = epirange(200301, 202105)
+) %>% fetch()
 ```
