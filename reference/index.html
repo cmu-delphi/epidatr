@@ -78,7 +78,8 @@
       </tr><tr><td>
           <p><code><a href="assert_timeset_param.html">assert_timeset_param()</a></code> </p>
         </td>
-        <td><p>Allows a timeset param: a date vector, a character vector, an integer-like vector, or a single EpiRange</p></td>
+        <td><p>Allows a timeset param: a date vector, a character vector, an integer-like
+vector, or a single EpiRange</p></td>
       </tr><tr><td>
           <p><code><a href="covid_hosp_facility.html">covid_hosp_facility()</a></code> </p>
         </td>
@@ -120,7 +121,7 @@
         </td>
         <td><p>Fetch ECDC data</p></td>
       </tr><tr><td>
-          <p><code><a href="epidata_call.html">create_epidata_call()</a></code> <code><a href="epidata_call.html">fetch_tbl()</a></code> <code><a href="epidata_call.html">fetch_classic()</a></code> <code><a href="epidata_call.html">fetch_csv()</a></code> <code><a href="epidata_call.html">fetch_json()</a></code> <code><a href="epidata_call.html">request_url()</a></code> <code><a href="epidata_call.html">with_base_url()</a></code> </p>
+          <p><code><a href="epidata_call.html">create_epidata_call()</a></code> <code><a href="epidata_call.html">fetch()</a></code> <code><a href="epidata_call.html">fetch_tbl()</a></code> <code><a href="epidata_call.html">fetch_classic()</a></code> <code><a href="epidata_call.html">request_url()</a></code> <code><a href="epidata_call.html">with_base_url()</a></code> </p>
         </td>
         <td><p>An abstraction that holds information needed to make an epidata request</p></td>
       </tr><tr><td>
@@ -131,6 +132,10 @@
           <p><code><a href="epirange.html">epirange()</a></code> </p>
         </td>
         <td><p>builds a new EpiRange instances</p></td>
+      </tr><tr><td>
+          <p><code><a href="fetch_csv.html">fetch_csv()</a></code> </p>
+        </td>
+        <td><p>Fetches the data and returns a tibble or an <code>epidata_csv</code></p></td>
       </tr><tr><td>
           <p><code><a href="flusurv.html">flusurv()</a></code> </p>
         </td>
@@ -194,7 +199,8 @@
       </tr><tr><td>
           <p><code><a href="pvt_dengue_sensors.html">pvt_dengue_sensors()</a></code> </p>
         </td>
-        <td><p>Fetch Delphi's digital surveillance sensors for dengue in PAHO member countries</p></td>
+        <td><p>Fetch Delphi's digital surveillance sensors for dengue in PAHO member
+countries</p></td>
       </tr><tr><td>
           <p><code><a href="pvt_ght.html">pvt_ght()</a></code> </p>
         </td>
@@ -219,6 +225,11 @@
           <p><code><a href="pvt_twitter.html">pvt_twitter()</a></code> </p>
         </td>
         <td><p>Fetch HealthTweets data</p></td>
+      </tr><tr><td>
+          <p><code><a href="request_impl.html">request_impl()</a></code> </p>
+        </td>
+        <td><p>Makes a request to the API and returns the response, catching
+HTTP errors and forwarding the HTTP body in R errors</p></td>
       </tr><tr><td>
           <p><code><a href="timeset.html">timeset</a></code> </p>
         </td>

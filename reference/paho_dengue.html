@@ -80,13 +80,13 @@
 
 
 <dt>issues</dt>
-<dd><p><code><a href="timeset.html">timeset</a></code>. Optionally, the issues to fetch. If not set, the most recent issue is returned.
-Mutually exclusive with <code>lag</code>.</p></dd>
+<dd><p><code><a href="timeset.html">timeset</a></code>. Optionally, the issues to fetch. If not set, the
+most recent issue is returned. Mutually exclusive with <code>lag</code>.</p></dd>
 
 
 <dt>lag</dt>
-<dd><p>integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-Mutually exclusive with <code>issues</code>.</p></dd>
+<dd><p>integer. Optionally, the lag of the issues to fetch. If not set,
+the most recent issue is returned. Mutually exclusive with <code>issues</code>.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -101,125 +101,22 @@ Mutually exclusive with <code>issues</code>.</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="fu">paho_dengue</span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201401</span>, <span class="fl">201501</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch_classic</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $epidata</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    release_date region serotype      issue    epiweek lag total_pop num_dengue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    2020-08-07     CA          2020-08-02 2013-12-29 344         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    2020-08-07     CA          2020-08-02 2014-01-05 343         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    2020-08-07     CA          2020-08-02 2014-01-12 342         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    2020-08-07     CA          2020-08-02 2014-01-19 341         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    2020-08-07     CA          2020-08-02 2014-01-26 340         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6    2020-08-07     CA          2020-08-02 2014-02-02 339         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7    2020-08-07     CA          2020-08-02 2014-02-09 338         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8    2020-08-07     CA          2020-08-02 2014-02-16 337         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9    2020-08-07     CA          2020-08-02 2014-02-23 336         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10   2020-08-07     CA          2020-08-02 2014-03-02 335         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11   2020-08-07     CA          2020-08-02 2014-03-09 334         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12   2020-08-07     CA          2020-08-02 2014-03-16 333         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13   2020-08-07     CA          2020-08-02 2014-03-23 332         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14   2020-08-07     CA          2020-08-02 2014-03-30 331         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15   2020-08-07     CA          2020-08-02 2014-04-06 330         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16   2020-08-07     CA          2020-08-02 2014-04-13 329         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17   2020-08-07     CA          2020-08-02 2014-04-20 328         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18   2020-08-07     CA          2020-08-02 2014-04-27 327         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19   2020-08-07     CA          2020-08-02 2014-05-04 326         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20   2020-08-07     CA          2020-08-02 2014-05-11 325         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21   2020-08-07     CA          2020-08-02 2014-05-18 324         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22   2020-08-07     CA          2020-08-02 2014-05-25 323         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23   2020-08-07     CA          2020-08-02 2014-06-01 322         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24   2020-08-07     CA          2020-08-02 2014-06-08 321         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25   2020-08-07     CA          2020-08-02 2014-06-15 320         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26   2020-08-07     CA          2020-08-02 2014-06-22 319         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27   2020-08-07     CA          2020-08-02 2014-06-29 318         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28   2020-08-07     CA          2020-08-02 2014-07-06 317         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29   2020-08-07     CA          2020-08-02 2014-07-13 316         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30   2020-08-07     CA          2020-08-02 2014-07-20 315         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31   2020-08-07     CA          2020-08-02 2014-07-27 314         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32   2020-08-07     CA          2020-08-02 2014-08-03 313         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33   2020-08-07     CA          2020-08-02 2014-08-10 312         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34   2020-08-07     CA          2020-08-02 2014-08-17 311         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35   2020-08-07     CA          2020-08-02 2014-08-24 310         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36   2020-08-07     CA          2020-08-02 2014-08-31 309         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37   2020-08-07     CA          2020-08-02 2014-09-07 308         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38   2020-08-07     CA          2020-08-02 2014-09-14 307         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39   2020-08-07     CA          2020-08-02 2014-09-21 306         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40   2020-08-07     CA          2020-08-02 2014-09-28 305         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41   2020-08-07     CA          2020-08-02 2014-10-05 304         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42   2020-08-07     CA          2020-08-02 2014-10-12 303         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43   2020-08-07     CA          2020-08-02 2014-10-19 302         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44   2020-08-07     CA          2020-08-02 2014-10-26 301         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45   2020-08-07     CA          2020-08-02 2014-11-02 300         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46   2020-08-07     CA          2020-08-02 2014-11-09 299         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47   2020-08-07     CA          2020-08-02 2014-11-16 298         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48   2020-08-07     CA          2020-08-02 2014-11-23 297         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49   2020-08-07     CA          2020-08-02 2014-11-30 296         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50   2020-08-07     CA          2020-08-02 2014-12-07 295         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51   2020-08-07     CA          2020-08-02 2014-12-14 294         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52   2019-01-19     CA          2019-01-13 2014-12-21 212         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53   2020-08-07     CA          2020-08-02 2014-12-28 292         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54   2020-08-07     CA          2020-08-02 2015-01-04 291         0          0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    num_severe num_deaths incidence_rate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1           0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3           0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6           0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7           0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8           0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9           0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54          0          0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $result</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $message</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "success"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu">paho_dengue</span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201401</span>, <span class="fl">201501</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 54 × 11</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    release_date region serotype issue      epiweek      lag total_pop num_dengue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2020-08-07   CA     <span style="color: #949494;">"</span>  <span style="color: #949494;">"</span>     2020-08-02 2013-12-29   344         0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2020-08-07   CA     <span style="color: #949494;">"</span>  <span style="color: #949494;">"</span>     2020-08-02 2014-01-05   343         0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2020-08-07   CA     <span style="color: #949494;">"</span>  <span style="color: #949494;">"</span>     2020-08-02 2014-01-12   342         0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2020-08-07   CA     <span style="color: #949494;">"</span>  <span style="color: #949494;">"</span>     2020-08-02 2014-01-19   341         0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2020-08-07   CA     <span style="color: #949494;">"</span>  <span style="color: #949494;">"</span>     2020-08-02 2014-01-26   340         0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2020-08-07   CA     <span style="color: #949494;">"</span>  <span style="color: #949494;">"</span>     2020-08-02 2014-02-02   339         0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2020-08-07   CA     <span style="color: #949494;">"</span>  <span style="color: #949494;">"</span>     2020-08-02 2014-02-09   338         0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2020-08-07   CA     <span style="color: #949494;">"</span>  <span style="color: #949494;">"</span>     2020-08-02 2014-02-16   337         0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2020-08-07   CA     <span style="color: #949494;">"</span>  <span style="color: #949494;">"</span>     2020-08-02 2014-02-23   336         0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2020-08-07   CA     <span style="color: #949494;">"</span>  <span style="color: #949494;">"</span>     2020-08-02 2014-03-02   335         0          0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 44 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3 more variables: num_severe &lt;int&gt;, num_deaths &lt;int&gt;, incidence_rate &lt;dbl&gt;</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

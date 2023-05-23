@@ -76,6 +76,9 @@
     <loc>/reference/epirange.html</loc>
   </url>
   <url>
+    <loc>/reference/fetch_csv.html</loc>
+  </url>
+  <url>
     <loc>/reference/flusurv.html</loc>
   </url>
   <url>
@@ -146,6 +149,9 @@
   </url>
   <url>
     <loc>/reference/pvt_twitter.html</loc>
+  </url>
+  <url>
+    <loc>/reference/request_impl.html</loc>
   </url>
   <url>
     <loc>/reference/timeset.html</loc>

@@ -80,11 +80,13 @@
 
 
 <dt>dates</dt>
-<dd><p><code><a href="timeset.html">timeset</a></code>. The dates to fetch. Mutually exclusive with <code>epiweeks</code>.</p></dd>
+<dd><p><code><a href="timeset.html">timeset</a></code>. The dates to fetch. Mutually exclusive with
+<code>epiweeks</code>.</p></dd>
 
 
 <dt>epiweeks</dt>
-<dd><p><code><a href="timeset.html">timeset</a></code>. The epiweeks to fetch. Mutually exclusive with <code>dates</code>.</p></dd>
+<dd><p><code><a href="timeset.html">timeset</a></code>. The epiweeks to fetch. Mutually exclusive with
+<code>dates</code>.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -99,7 +101,7 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">pvt_twitter</span><span class="op">(</span>auth <span class="op">=</span> <span class="st">"yourkey"</span>, locations <span class="op">=</span> <span class="st">"CA"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201501</span>, <span class="fl">202001</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch_tbl</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">pvt_twitter</span><span class="op">(</span>auth <span class="op">=</span> <span class="st">"yourkey"</span>, locations <span class="op">=</span> <span class="st">"CA"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201501</span>, <span class="fl">202001</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

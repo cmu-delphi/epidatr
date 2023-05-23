@@ -89,7 +89,8 @@
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data</p>
+    <p>Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's
+epidemiological data</p>
 <p>The full list of location inputs can be accsssed at
 <a href="https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py" class="external-link">https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py</a>.</p>
     </div>
@@ -97,69 +98,21 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="fu">nowcast</span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201201</span>, <span class="fl">201301</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch_classic</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $epidata</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    location    epiweek   value      std</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        ca 2012-01-01 2.92262 0.268912</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        ca 2012-01-08 3.63267 0.270974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        ca 2012-01-15 3.34081 0.276507</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        ca 2012-01-22 3.14875 0.220892</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        ca 2012-01-29 3.57693 0.225261</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        ca 2012-02-05 3.84009 0.229291</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7        ca 2012-02-12 3.33749 0.228949</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8        ca 2012-02-19 3.36618 0.226517</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9        ca 2012-02-26 3.83474 0.233869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10       ca 2012-03-04 3.50958 0.231573</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11       ca 2012-03-11 3.28514 0.237959</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12       ca 2012-03-18 3.11802 0.219403</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13       ca 2012-03-25 2.95050 0.216536</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14       ca 2012-04-01 3.52740 0.228775</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15       ca 2012-04-08 2.80790 0.229098</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16       ca 2012-04-15 2.88201 0.225587</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17       ca 2012-04-22 2.28569 0.231725</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18       ca 2012-04-29 1.96564 0.229393</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19       ca 2012-05-06 2.31680 0.228129</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20       ca 2012-05-13 2.03369 0.226629</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21       ca 2012-05-20 1.90017 0.233793</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22       ca 2012-05-27 1.92108 0.232859</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23       ca 2012-06-03 2.01608 0.231671</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24       ca 2012-06-10 1.81726 0.229071</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25       ca 2012-06-17 1.68875 0.226744</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26       ca 2012-06-24 1.70759 0.225924</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27       ca 2012-07-01 1.71300 0.223859</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28       ca 2012-07-08 1.73485 0.222340</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29       ca 2012-07-15 1.69966 0.220112</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30       ca 2012-07-22 1.60709 0.217836</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31       ca 2012-07-29 1.55526 0.215753</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32       ca 2012-08-05 1.56399 0.214366</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33       ca 2012-08-12 1.60159 0.212334</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34       ca 2012-08-19 1.30282 0.215876</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35       ca 2012-08-26 1.65292 0.219376</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36       ca 2012-09-02 2.02401 0.219284</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37       ca 2012-09-09 2.09298 0.218744</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38       ca 2012-09-16 2.33006 0.217296</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39       ca 2012-09-23 2.37427 0.215807</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40       ca 2012-09-30 2.26272 0.197670</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41       ca 2012-10-07 2.08655 0.196881</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42       ca 2012-10-14 2.37426 0.195847</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43       ca 2012-10-21 2.41418 0.194330</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44       ca 2012-10-28 2.47758 0.192936</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45       ca 2012-11-04 2.28567 0.191366</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46       ca 2012-11-11 2.44067 0.190919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47       ca 2012-11-18 2.40930 0.190162</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48       ca 2012-11-25 2.69406 0.191854</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49       ca 2012-12-02 1.84544 0.191061</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50       ca 2012-12-09 2.65097 0.194333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51       ca 2012-12-16 3.51967 0.196022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52       ca 2012-12-23 3.31171 0.198272</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53       ca 2012-12-30 4.62854 0.220860</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $result</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $message</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "success"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu">nowcast</span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201201</span>, <span class="fl">201301</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 53 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    location epiweek    value   std</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> ca       2012-01-01  2.92 0.269</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> ca       2012-01-08  3.63 0.271</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> ca       2012-01-15  3.34 0.277</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> ca       2012-01-22  3.15 0.221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> ca       2012-01-29  3.58 0.225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> ca       2012-02-05  3.84 0.229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> ca       2012-02-12  3.34 0.229</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> ca       2012-02-19  3.37 0.227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> ca       2012-02-26  3.83 0.234</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> ca       2012-03-04  3.51 0.232</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 43 more rows</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
