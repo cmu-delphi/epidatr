@@ -14,6 +14,20 @@ Install latest version using [`remotes`](https://cran.r-project.org/package=remo
 remotes::install_github("cmu-delphi/epidatr")
 ```
 
+Note (2023-05-23): since version 0.6.0, the `fetch_{tbl,classic,df,json,csv}`
+functions have been replaced by the `fetch()` function, which almost always
+returns a tibble, except when used with a limited number of older endpoints
+(such as `delphi()` and `meta()`), where it will output a nested list structure.
+If you encounter an error like
+```{r}
+Error in fetch_tbl(.) : could not find function "fetch_tbl"
+```
+please update to use `fetch()` instead.  If instead you encounter
+```{r}
+Error in fetch(.) : could not find function "fetch"
+```
+please update to the newest `epidatr`.
+
 Note (2022-08-02): the package that this installs is being renamed from
 `delphi.epidata` to `epidatr`. To migrate, run the installation command above,
 followed by `remove.packages("delphi.epidata")`, and adjust all references to
