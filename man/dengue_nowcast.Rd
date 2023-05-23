@@ -25,6 +25,6 @@ TODO: what are valid locations here?
 dengue_nowcast(
   locations = "?",
   epiweeks = epirange(201501, 202001)
-) \%>\% fetch_classic()
+) \%>\% fetch()
 }
 }

@@ -6,12 +6,10 @@
 \usage{
 get_auth_key()
 }
-\arguments{
-\item{verbose}{Will print the source of the key if TRUE (e.g. options, environment, or config file)}
-}
 \value{
 The API key
 }
 \description{
-Get the API key from the environment variable DELPHI_EPIDATA_KEY or getOption("delphi.epidata.key")
+Get the API key from the environment variable \code{DELPHI_EPIDATA_KEY} or
+\code{getOption("delphi.epidata.key")}.
 }

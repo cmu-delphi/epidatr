@@ -11,17 +11,18 @@ ecdc_ili(regions, epiweeks, issues = NULL, lag = NULL)
 
 \item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch.}
 
-\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
-Mutually exclusive with \code{lag}.}
+\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
+most recent issue is returned. Mutually exclusive with \code{lag}.}
 
-\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-Mutually exclusive with \code{issues}.}
+\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
+the most recent issue is returned. Mutually exclusive with \code{issues}.}
 }
 \value{
 \code{\link{epidata_call}}
 }
 \description{
-Obtain information on influenza-like-illness from the European Centre for Disease Prevention and Control.
+Obtain information on influenza-like-illness from the European Centre for
+Disease Prevention and Control.
 }
 \details{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html}.
@@ -31,6 +32,6 @@ The list of location argument can be found in
 }
 \examples{
 \donttest{
-ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001)) \%>\% fetch_classic()
+ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001)) \%>\% fetch()
 }
 }

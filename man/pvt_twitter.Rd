@@ -11,9 +11,11 @@ pvt_twitter(auth, locations, dates = NULL, epiweeks = NULL)
 
 \item{locations}{character vector. The locations to fetch.}
 
-\item{dates}{\code{\link{timeset}}. The dates to fetch. Mutually exclusive with \code{epiweeks}.}
+\item{dates}{\code{\link{timeset}}. The dates to fetch. Mutually exclusive with
+\code{epiweeks}.}
 
-\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch. Mutually exclusive with \code{dates}.}
+\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch. Mutually exclusive with
+\code{dates}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -23,6 +25,6 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/twitter.html
 }
 \examples{
 \dontrun{
-pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001)) \%>\% fetch_tbl()
+pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001)) \%>\% fetch()
 }
 }

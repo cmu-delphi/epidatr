@@ -31,6 +31,6 @@ pvt_ght(
   locations = "ca",
   epiweeks = epirange(201201, 202001),
   query = "?"
-) \%>\% fetch_classic()
+) \%>\% fetch()
 }
 }

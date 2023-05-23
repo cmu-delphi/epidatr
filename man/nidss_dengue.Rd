@@ -15,17 +15,19 @@ nidss_dengue(locations, epiweeks)
 \code{\link{epidata_call}}
 }
 \description{
-Obtains counts of confirmed dengue cases in Taiwan from Taiwan National Infectious Disease Statistical System.
+Obtains counts of confirmed dengue cases in Taiwan from Taiwan National
+Infectious Disease Statistical System.
 }
 \details{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html}
 
 Possible location inputs can be found in
-\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_regions.txt} and
+\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_regions.txt}
+and
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt}.
 }
 \examples{
 \donttest{
-nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301)) \%>\% fetch_classic()
+nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301)) \%>\% fetch()
 }
 }

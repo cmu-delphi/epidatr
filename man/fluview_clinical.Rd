@@ -9,14 +9,15 @@ fluview_clinical(regions, epiweeks, issues = NULL, lag = NULL)
 \arguments{
 \item{regions}{character vector. The regions to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch in the form epirange(startweek,endweek), where startweek
-and endweek are of the form YYYYWW (string or numeric).}
+\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch in the form
+epirange(startweek,endweek), where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
-\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
-Mutually exclusive with \code{lag}.}
+\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
+most recent issue is returned. Mutually exclusive with \code{lag}.}
 
-\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-Mutually exclusive with \code{issues}.}
+\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
+the most recent issue is returned. Mutually exclusive with \code{issues}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -26,6 +27,6 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html
 }
 \examples{
 \donttest{
-fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701)) \%>\% fetch_classic()
+fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701)) \%>\% fetch()
 }
 }

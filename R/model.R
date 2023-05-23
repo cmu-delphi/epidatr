@@ -1,9 +1,9 @@
 #' builds a new EpiRange instances
 #'
-#' @param from A Date, integer-like value, or integer-like string that takes the form YYYYMMDD for dates
-#'   or YYYYMM for epiweeks.
-#' @param to A Date, integer-like value, or integer-like string that takes the form YYYYMMDD for dates
-#'  or YYYYMM for epiweeks.
+#' @param from A Date, integer-like value, or integer-like string that takes the
+#'   form YYYYMMDD for dates or YYYYMM for epiweeks.
+#' @param to A Date, integer-like value, or integer-like string that takes the
+#'  form YYYYMMDD for dates or YYYYMM for epiweeks.
 #' @return EpiRange instance
 #' @importFrom checkmate check_integerish check_character check_date assert
 #'
@@ -47,13 +47,14 @@ epirange <- function(from, to) {
 
 #' timeset
 #'
-#' A collection of date-like values, including dates, epiweeks, and ranges of dates or epiweeks
-#' ([`epirange`]). This is often used to specify the time dimension for an epidata query. The
-#' allowed values are:
+#' A collection of date-like values, including dates, epiweeks, and ranges of
+#' dates or epiweeks ([`epirange`]). This is often used to specify the time
+#' dimension for an epidata query. The allowed values are:
 #'
-#' - Dates: `Date` instances, integer-like values, or integer-like strings that take the form
-#'   YYYYMMDD,
-#' - Epiweeks: integer-like values or integer-like strings that take the form YYYYMM,
+#' - Dates: `Date` instances, integer-like values, or integer-like strings that
+#'   take the form YYYYMMDD,
+#' - Epiweeks: integer-like values or integer-like strings that take the form
+#'   YYYYMM,
 #' - EpiRanges: a list of [`epirange`] instances.
 #' - Wildcard: "*" (requests all available values for this dimension)
 #'
@@ -98,17 +99,21 @@ create_epidata_field_info <- function(name,
 
 parse_value <- function(info, value, disable_date_parsing = FALSE) {
   stopifnot(inherits(info, "EpidataFieldInfo"))
+
   if (is.null(value)) {
     return(value)
-  }
-  if (info$type == "date" && !disable_date_parsing) {
+  } else if (info$type == "date" && !disable_date_parsing) {
     return(parse_api_date(value))
-  }
-  if (info$type == "epiweek" && !disable_date_parsing) {
+  } else if (info$type == "epiweek" && !disable_date_parsing) {
     return(parse_api_week(value))
-  }
-  if (info$type == "bool") {
+  } else if (info$type == "bool") {
     return(as.logical(value))
+  } else if (info$type == "int") {
+    return(as.integer(value))
+  } else if (info$type == "float") {
+    return(as.double(value))
+  } else if (info$type == "categorical") {
+    return(factor(value, levels = info$categories))
   }
   value
 }
@@ -166,7 +171,6 @@ fields_to_predicate <- function(fields = NULL) {
 }
 
 #' @importFrom checkmate test_character test_class test_date test_integerish test_list
-#' @export
 parse_timeset_input <- function(value) {
   if (is.null(value)) {
     return(NULL)

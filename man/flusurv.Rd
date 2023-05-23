@@ -11,17 +11,18 @@ flusurv(locations, epiweeks, issues = NULL, lag = NULL)
 
 \item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch.}
 
-\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
-Mutually exclusive with \code{lag}.}
+\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
+most recent issue is returned. Mutually exclusive with \code{lag}.}
 
-\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-Mutually exclusive with \code{issues}.}
+\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
+the most recent issue is returned. Mutually exclusive with \code{issues}.}
 }
 \value{
 \code{\link{epidata_call}}
 }
 \description{
-Obtain information on flu hospitalization rates from the Center of Disease Control.
+Obtain information on flu hospitalization rates from the Center of Disease
+Control.
 }
 \details{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html}.
@@ -32,6 +33,6 @@ The list of location argument can be found in
 }
 \examples{
 \donttest{
-flusurv(locations = "CA", epiweeks = epirange(201701, 201801)) \%>\% fetch_classic()
+flusurv(locations = "CA", epiweeks = epirange(201701, 201801)) \%>\% fetch()
 }
 }

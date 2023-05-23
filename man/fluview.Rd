@@ -7,34 +7,38 @@
 fluview(regions, epiweeks, issues = NULL, lag = NULL, auth = NULL)
 }
 \arguments{
-\item{regions}{character vector. The locations to fetch. Can we any string IDs in national, HHS region,
-census division, most states and territories, and so on. Full list link below.}
+\item{regions}{character vector. The locations to fetch. Can we any string
+IDs in national, HHS region, census division, most states and territories,
+and so on. Full list link below.}
 
-\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch in the form epirange(startweek,endweek), where startweek
-and endweek are of the form YYYYWW (string or numeric).}
+\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch in the form
+epirange(startweek,endweek), where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
-\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the most recent issue is returned.
-Mutually exclusive with \code{lag}.}
+\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
+most recent issue is returned. Mutually exclusive with \code{lag}.}
 
-\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set, the most recent issue is returned.
-Mutually exclusive with \code{issues}.}
+\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
+the most recent issue is returned. Mutually exclusive with \code{issues}.}
 
-\item{auth}{string. Optionally, restricted access key (not the same as API key).}
+\item{auth}{string. Optionally, restricted access key (not the same as API
+key).}
 }
 \value{
 \code{\link{epidata_call}}
 }
 \description{
-Obtains information on outpatient inluenza-like-illness (ILI) from U.S. Outpatient Influenza-like Illness Surveillance
-Network (ILINet).
+Obtains information on outpatient inluenza-like-illness (ILI) from U.S.
+Outpatient Influenza-like Illness Surveillance Network (ILINet).
 }
 \details{
-API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview.html}.
-For more information on ILINet, see \url{https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html}.
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview.html}. For
+more information on ILINet, see
+\url{https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html}.
 
 The full list of location inputs can be accsssed at
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
 }
 \examples{
-fluview(regions = "nat", epiweeks = epirange(201201, 202001)) \%>\% fetch_classic()
+fluview(regions = "nat", epiweeks = epirange(201201, 202001)) \%>\% fetch()
 }

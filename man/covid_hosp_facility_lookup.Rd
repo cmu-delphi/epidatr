@@ -27,11 +27,13 @@ covid_hosp_facility_lookup(
 \code{\link{epidata_call}}
 }
 \description{
-Obtains unique identifiers and other metadata for COVID hospitalization facilities of interest.
+Obtains unique identifiers and other metadata for COVID hospitalization
+facilities of interest.
 This is a companinon endpoint to the \code{\link[=covid_hosp_facility]{covid_hosp_facility()}} endpoint.
 }
 \details{
-API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html}
+API docs:
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html}
 
 Only one argument needs to be specified.
 Combinations of the arguments are not currently supported.
@@ -39,7 +41,7 @@ For instance, specifying both city and state are not supported.
 }
 \examples{
 \donttest{
-covid_hosp_facility_lookup(state = "fl") \%>\% fetch_tbl()
+covid_hosp_facility_lookup(state = "fl") \%>\% fetch()
 }
 }
 \seealso{

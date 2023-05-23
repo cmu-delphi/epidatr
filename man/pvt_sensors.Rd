@@ -28,6 +28,6 @@ pvt_sensors(
   names = "sar3",
   locations = "nat",
   epiweeks = epirange(201501, 202001)
-) \%>\% fetch_classic()
+) \%>\% fetch()
 }
 }
