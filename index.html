@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0</span>
       </span>
     </div>
 
@@ -97,6 +97,11 @@
 <p>Install latest version using <a href="https://cran.r-project.org/package=remotes" class="external-link"><code>remotes</code></a> package</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"cmu-delphi/epidatr"</span><span class="op">)</span></span></code></pre></div>
+<p>Note (2023-05-23): since version 0.6.0, the <code>fetch_{tbl,classic,df,json,csv}</code> functions have been replaced by the <code><a href="reference/epidata_call.html">fetch()</a></code> function, which almost always returns a tibble, except when used with a limited number of older endpoints (such as <code><a href="reference/delphi.html">delphi()</a></code> and <code><a href="reference/meta.html">meta()</a></code>), where it will output a nested list structure. If you encounter an error like</p>
+<pre class="{r}"><code>Error in fetch_tbl(.) : could not find function "fetch_tbl"</code></pre>
+<p>please update to use <code><a href="reference/epidata_call.html">fetch()</a></code> instead. If instead you encounter</p>
+<pre class="{r}"><code>Error in fetch(.) : could not find function "fetch"</code></pre>
+<p>please update to the newest <code>epidatr</code>.</p>
 <p>Note (2022-08-02): the package that this installs is being renamed from <code>delphi.epidata</code> to <code>epidatr</code>. To migrate, run the installation command above, followed by <code>remove.packages("delphi.epidata")</code>, and adjust all references to the package name accordingly. For a short-term patch, a snapshot of the package can be still be installed with the old name by specifying <code>ref="delphi.epidata-before-rename"</code>.</p>
 </div>
 <div class="section level2">
@@ -114,7 +119,7 @@
 <h2 id="development-environment">Development Environment<a class="anchor" aria-label="anchor" href="#development-environment"></a>
 </h2>
 <p>Relevant R commands</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'devtools'</span>, <span class="st">'pkgdown'</span>, <span class="st">'styler'</span>, <span class="st">'lintr'</span><span class="op">)</span><span class="op">)</span> <span class="co"># install dev dependencies</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_deps</span><span class="op">(</span>dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># install package dependencies</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span> <span class="co"># generate package meta data and man files</span></span>
