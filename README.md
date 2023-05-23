@@ -14,10 +14,11 @@ Install latest version using [`remotes`](https://cran.r-project.org/package=remo
 remotes::install_github("cmu-delphi/epidatr")
 ```
 
-Note (2023-05-23): the `fetch_{tbl,classic,df,json,csv}` functions have been
-replaced by the `fetch()` function, which returns a tibble except for a few
-older endpoints, which will output a nested list structure. If you encounter an
-error like
+Note (2023-05-23): since version 0.6.0, the `fetch_{tbl,classic,df,json,csv}`
+functions have been replaced by the `fetch()` function, which almost always
+returns a tibble, except when used with a limited number of older endpoints
+(such as `delphi()` and `meta()`), where it will output a nested list structure.
+If you encounter an error like
 ```{r}
 Error in fetch_tbl(.) : could not find function "fetch_tbl"
 ```
