@@ -6,7 +6,7 @@
 #' \dontrun{
 #' pvt_cdc(
 #'   auth = "yourkey",
-#'   "fl,ca",
+#'   locations = "fl,ca",
 #'   epirange(201501, 201601)
 #' ) %>% fetch()
 #' }
@@ -62,6 +62,7 @@ pvt_cdc <- function(auth, locations, epiweeks) {
 #' @examples
 #' \donttest{
 #' covid_hosp_facility_lookup(state = "fl") %>% fetch()
+#' covid_hosp_facility_lookup(city = "southlake") %>% fetch()
 #' }
 #' @param state string. A two-letter character string state abbreviation.
 #' @param ccn string. A character string for facility CMS certification number.
@@ -583,7 +584,7 @@ covid_hosp_state_timeseries <- function(states, dates, issues = NULL) {
 #' covidcast_meta() %>% fetch()
 #' }
 #'
-#' @seealso [covidcast()]
+#' @seealso [covidcast()],[covidcast_epidata()]
 #' @export
 covidcast_meta <- function() {
   create_epidata_call(
@@ -614,6 +615,7 @@ covidcast_meta <- function() {
 #' Fetch covidcast data
 #'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html>
+#'
 #' COVIDcast public dashboard: <https://delphi.cmu.edu/covidcast/>
 #'
 #' @examples
@@ -626,11 +628,19 @@ covidcast_meta <- function() {
 #'   geo_values = "ca,fl",
 #'   time_values = epirange(20200601, 20200801)
 #' ) %>% fetch()
+#' covidcast(
+#'   data_source = "jhu-csse",
+#'   signals = "confirmed_7dav_incidence_prop",
+#'   geo_type = "state",
+#'   time_type = "day",
+#'   geo_values = "*",
+#'   time_values = epirange(20200601, 20200801)
+#' ) %>% fetch()
 #' }
 #' @param data_source string. The data source to query (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>).
 #' @param signals string. The signals to query from a specific source (see:
-#'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals>).
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals.html>).
 #' @param geo_type string. The geographic resolution of the data (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>).
 #' @param time_type string. The temporal resolution of the data (either "day" or
@@ -650,7 +660,7 @@ covidcast_meta <- function() {
 #'   `issues`.
 #' @return [`epidata_call`]
 #'
-#' @seealso [covidcast_meta()], [epirange()]
+#' @seealso [covidcast_meta()], [covidcast_epidata()], [epirange()]
 #'
 #' @export
 covidcast <- function(
@@ -770,7 +780,7 @@ delphi <- function(system, epiweek) {
 #' @examples
 #' \dontrun{
 #' dengue_nowcast(
-#'   locations = "?",
+#'   locations = "pr",
 #'   epiweeks = epirange(201501, 202001)
 #' ) %>% fetch()
 #' }
@@ -806,8 +816,8 @@ dengue_nowcast <- function(locations, epiweeks) {
 #' \dontrun{
 #' pvt_dengue_sensors(
 #'   auth = "yourkey",
-#'   names = "?",
-#'   locations = "?",
+#'   names = "ght",
+#'   locations = "ag",
 #'   epiweeks = epirange(201501, 202001)
 #' ) %>% fetch()
 #' }
@@ -1011,6 +1021,10 @@ fluview_clinical <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 #' Fetch FluView metadata
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html
+#' @examples
+#' \donttest{
+#' fluview_meta() %>% fetch()
+#' }
 #'
 #' @return [`epidata_call`]
 #'
@@ -1150,7 +1164,7 @@ gft <- function(locations, epiweeks) {
 #'   auth = "yourkey",
 #'   locations = "ca",
 #'   epiweeks = epirange(201201, 202001),
-#'   query = "?"
+#'   query = "how to get over the flu"
 #' ) %>% fetch()
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
@@ -1190,7 +1204,7 @@ pvt_ght <- function(auth, locations, epiweeks, query) {
 #' TODO: find a non-trivial region
 #' @examples
 #' \dontrun{
-#' kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001)) %>% fetch()
+#' kcdc_ili(regions = "ROK", epiweeks = 200436) %>% fetch()
 #' }
 #' @param regions character vector. The regions to be fetched.
 #' @param epiweeks [`timeset`]. The epiweeks to be fetched.
@@ -1235,6 +1249,10 @@ kcdc_ili <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html
 #'
+#' @examples
+#' \donttest{
+#' pvt_meta_norostat(auth = "yourkey") %>% fetch()
+#' }
 #' @param auth string. Restricted access key (not the same as API key).
 #' @return [`epidata_call`]
 #'
@@ -1355,8 +1373,8 @@ nidss_flu <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 #' \dontrun{
 #' pvt_norostat(
 #'   auth = "yourkey",
-#'   locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
-#'   epiweeks = epirange(201401, 201501)
+#'   locations = "1",
+#'   epiweeks = 201233
 #' ) %>% fetch()
 #' }
 #' @param auth string. Your authentication key.

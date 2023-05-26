@@ -23,7 +23,7 @@ TODO: what are valid locations here?
 \examples{
 \dontrun{
 dengue_nowcast(
-  locations = "?",
+  locations = "pr",
   epiweeks = epirange(201501, 202001)
 ) \%>\% fetch()
 }

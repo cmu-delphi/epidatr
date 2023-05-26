@@ -25,5 +25,5 @@ covidcast_meta() \%>\% fetch()
 
 }
 \seealso{
-\code{\link[=covidcast]{covidcast()}}
+\code{\link[=covidcast]{covidcast()}},\code{\link[=covidcast_epidata]{covidcast_epidata()}}
 }

@@ -23,7 +23,7 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/cdc.html
 \dontrun{
 pvt_cdc(
   auth = "yourkey",
-  "fl,ca",
+  locations = "fl,ca",
   epirange(201501, 201601)
 ) \%>\% fetch()
 }

@@ -23,8 +23,8 @@ API docs: https://cmu-delphi.github.io/delphi-epidata/api/norostat.html
 \dontrun{
 pvt_norostat(
   auth = "yourkey",
-  locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
-  epiweeks = epirange(201401, 201501)
+  locations = "1",
+  epiweeks = 201233
 ) \%>\% fetch()
 }
 }
