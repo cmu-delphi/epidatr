@@ -141,7 +141,7 @@ Example call:
 
 ```{r}
 del <- delphi(system = "ec", epiweek = 201501) %>% fetch()
-names(del$epidata$forecast)
+names(del[[1L]]$forecast)
 ```
 
 ### FluSurv hospitalization data
