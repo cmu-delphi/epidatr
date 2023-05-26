@@ -37,6 +37,9 @@
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/covidcast.html">COVIDcast API Client</a>
     </li>
+    <li>
+      <a href="../articles/endpoints.html">Endpoint Examples</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -97,7 +100,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="fu">pvt_cdc</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  auth <span class="op">=</span> <span class="st">"yourkey"</span>,</span></span>
-<span class="r-in"><span>  <span class="st">"fl,ca"</span>,</span></span>
+<span class="r-in"><span>  locations <span class="op">=</span> <span class="st">"fl,ca"</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201501</span>, <span class="fl">201601</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>

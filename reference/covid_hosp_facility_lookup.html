@@ -39,6 +39,9 @@ This is a companinon endpoint to the covid_hosp_facility() endpoint."><!-- mathj
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/covidcast.html">COVIDcast API Client</a>
     </li>
+    <li>
+      <a href="../articles/endpoints.html">Endpoint Examples</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -140,6 +143,13 @@ For instance, specifying both city and state are not supported.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 100018      FL    100018 NAPLES COMMUNI… 350 7T… NAPL… 34102 Short Term      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 100019      FL    100019 HOLMES REGIONA… 1350 S… MELB… 32901 Short Term      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 222 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: fips_code &lt;chr&gt;, is_metro_micro &lt;int&gt;</span></span>
+<span class="r-in"><span><span class="fu">covid_hosp_facility_lookup</span><span class="op">(</span>city <span class="op">=</span> <span class="st">"southlake"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   hospital_pk state ccn    hospital_name    address city  zip   hospital_subtype</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 450888      TX    450888 TEXAS HEALTH HA… 1545 E… SOUT… 76092 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 670132      TX    670132 METHODIST SOUTH… 421 E … SOUT… 76092 Short Term      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: fips_code &lt;chr&gt;, is_metro_micro &lt;int&gt;</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
