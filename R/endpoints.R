@@ -80,16 +80,6 @@ covid_hosp_facility_lookup <- function(state = NULL, ccn = NULL, city = NULL, zi
   assert_character_param("zip", zip, len = 1, required = FALSE)
   assert_character_param("fips_code", fips_code, len = 1, required = FALSE)
 
-  if (
-    missing(state) &&
-      missing(ccn) &&
-      missing(city) &&
-      missing(zip) &&
-      missing(fips_code)
-  ) {
-    stop("one of `state`, `ccn`, `city`, `zip`, or `fips_code` is required")
-  }
-
   create_epidata_call(
     "covid_hosp_facility_lookup/",
     list(
@@ -663,22 +653,7 @@ covidcast <- function(
     as_of = NULL,
     issues = NULL,
     lag = NULL) {
-  # Check parameters
-  if (
-    missing(data_source) ||
-      missing(signals) ||
-      missing(time_type) ||
-      missing(geo_type) ||
-      missing(time_values) || missing(geo_values)
-  ) {
-    stop(
-      "`data_source`, `signals`, `time_type`, `geo_type`, `time_values`, and `geo_value` are all required"
-    )
-  }
 
-  if (!missing(issues) && !missing(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
-  }
   assert_character_param("data_source", data_source, len = 1)
   assert_character_param("signals", signals)
   assert_character_param("time_type", time_type, len = 1)
@@ -873,9 +848,6 @@ ecdc_ili <- function(regions, epiweeks, issues = NULL, lag = NULL) {
   epiweeks <- parse_timeset_input(epiweeks)
   issues <- parse_timeset_input(issues)
 
-  if (!missing(issues) && !missing(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
-  }
   create_epidata_call(
     "ecdc_ili/",
     list(
@@ -927,9 +899,6 @@ flusurv <- function(locations, epiweeks, issues = NULL, lag = NULL) {
   epiweeks <- parse_timeset_input(epiweeks)
   issues <- parse_timeset_input(issues)
 
-  if (!missing(issues) && !missing(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
-  }
   create_epidata_call(
     "flusurv/",
     list(
@@ -981,9 +950,6 @@ fluview_clinical <- function(regions, epiweeks, issues = NULL, lag = NULL) {
   epiweeks <- parse_timeset_input(epiweeks)
   issues <- parse_timeset_input(issues)
 
-  if (!missing(issues) && !missing(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
-  }
   create_epidata_call(
     "fluview_clinical/",
     list(
@@ -1065,10 +1031,6 @@ fluview <- function(regions, epiweeks, issues = NULL, lag = NULL, auth = NULL) {
   assert_character_param("auth", auth, len = 1, required = FALSE)
   epiweeks <- parse_timeset_input(epiweeks)
   issues <- parse_timeset_input(issues)
-
-  if (!is.null(issues) && !is.null(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
-  }
 
   create_epidata_call(
     "fluview/",
@@ -1209,9 +1171,6 @@ kcdc_ili <- function(regions, epiweeks, issues = NULL, lag = NULL) {
   epiweeks <- parse_timeset_input(epiweeks)
   issues <- parse_timeset_input(issues)
 
-  if (!missing(issues) && !missing(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
-  }
   create_epidata_call(
     "kcdc_ili/",
     list(
@@ -1321,10 +1280,6 @@ nidss_flu <- function(regions, epiweeks, issues = NULL, lag = NULL) {
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
   epiweeks <- parse_timeset_input(epiweeks)
   issues <- parse_timeset_input(issues)
-
-  if (!is.null(issues) && !is.null(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
-  }
 
   create_epidata_call(
     "nidss_flu/",
@@ -1579,9 +1534,6 @@ pvt_twitter <- function(auth, locations, dates = NULL, epiweeks = NULL) {
   dates <- parse_timeset_input(dates)
   epiweeks <- parse_timeset_input(epiweeks)
 
-  if (!xor(is.null(dates), is.null(epiweeks))) {
-    stop("exactly one of `dates` and `epiweeks` is required")
-  }
   time_field <- if (!is.null(dates)) {
     create_epidata_field_info("date", "date")
   } else {
@@ -1632,9 +1584,6 @@ wiki <- function(articles, dates = NULL, epiweeks = NULL, hours = NULL, language
   dates <- parse_timeset_input(dates)
   epiweeks <- parse_timeset_input(epiweeks)
 
-  if (!xor(is.null(dates), is.null(epiweeks))) {
-    stop("exactly one of `dates` and `epiweeks` is required")
-  }
   time_field <- if (!is.null(dates)) {
     create_epidata_field_info("date", "date")
   } else {
