@@ -653,7 +653,6 @@ covidcast <- function(
     as_of = NULL,
     issues = NULL,
     lag = NULL) {
-
   assert_character_param("data_source", data_source, len = 1)
   assert_character_param("signals", signals)
   assert_character_param("time_type", time_type, len = 1)
