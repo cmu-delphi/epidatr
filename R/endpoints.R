@@ -748,7 +748,7 @@ covidcast <- function(
 #'
 #' @examples
 #' \donttest{
-#' delphi(system = "ec", epiweek = 202006) %>% fetch()
+#' delphi(system = "ec", epiweek = 201501) %>% fetch()
 #' }
 #' @param system string. The system name to fetch.
 #' @param epiweek [`timeset`]. The epiweeks to fetch.
@@ -1204,7 +1204,7 @@ pvt_ght <- function(auth, locations, epiweeks, query) {
 #' TODO: find a non-trivial region
 #' @examples
 #' \dontrun{
-#' kcdc_ili(regions = "ROC", epiweeks = 200436) %>% fetch()
+#' kcdc_ili(regions = "ROK", epiweeks = 200436) %>% fetch()
 #' }
 #' @param regions character vector. The regions to be fetched.
 #' @param epiweeks [`timeset`]. The epiweeks to be fetched.
