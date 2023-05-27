@@ -39,7 +39,7 @@ test_that("fetch_tbl warns on non-success", {
     # see generation code above
     readRDS(testthat::test_path("data/test-classic.rds")) %>%
     jsonlite::fromJSON() %>%
-    `[[<-`("message", "* This is a warning with a leading asterisk and {braces} to make sure we don't have bulleting/glue bugs.")
+    `[[<-`("message", artificial_warning)
   with_mocked_bindings(
     {
       expect_warning(epidata_call %>% fetch_tbl(),
