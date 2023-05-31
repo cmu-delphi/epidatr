@@ -195,72 +195,6 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
   return(response_content$epidata)
 }
 
-#' Fetches the data and returns a tibble or an `epidata_csv`
-#'
-#' @param epidata_call an instance of `epidata_call`
-#' @param fields filter fields
-#' @param disable_date_parsing Boolean. Optionally, `TRUE` to disable parsing of
-#'   columns we expect to be dates, keeping them as character columns instead.
-#'   `FALSE` (the default) to parse these columns into `Date` vectors.
-#' @param disable_tibble_output Boolean. Optionally, `TRUE` to output a
-#'   character vector with the `epidata_csv` class (which provides a custom
-#'   `print` method). `FALSE` (the default) to output a tibble.
-#' @return
-#' - For `fetch_csv`: a tibble, or `epidata_csv` if requested with
-#'   `disable_tibble_output = TRUE`
-#'
-#' @importFrom httr stop_for_status content
-#' @importFrom rlang abort
-fetch_csv <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE, disable_tibble_output = FALSE) {
-  stopifnot(inherits(epidata_call, "epidata_call"))
-  stopifnot(is.null(fields) || is.character(fields))
-
-  if (epidata_call$only_supports_classic) {
-    rlang::abort("This endpoint only supports the classic message format, due to a non-standard behavior. Use fetch_classic instead.",
-      epidata_call = epidata_call,
-      class = "only_supports_classic_format"
-    )
-  }
-
-  response <- request_impl(epidata_call, "csv", fields)
-  response_content <- httr::content(response, "text", encoding = "UTF-8")
-  class(response_content) <- c("epidata_csv", class(response_content))
-
-  if (disable_tibble_output) {
-    return(response_content)
-  }
-
-  meta <- epidata_call$meta
-  fields_pred <- fields_to_predicate(fields)
-  col_names <- c()
-  col_types <- list()
-  for (i in seq_len(length(meta))) {
-    info <- meta[[i]]
-    if (fields_pred(info$name)) {
-      col_names <- c(col_names, info$name)
-      col_types[info$name] <- info_to_type(info, disable_date_parsing)
-    }
-  }
-
-  csv_tibble <- if (length(col_names) > 0) {
-    readr::read_csv(response_content, col_types = col_types)
-  } else {
-    readr::read_csv(response_content)
-  }
-
-  if (!disable_date_parsing) {
-    # parse weeks
-    columns <- colnames(csv_tibble)
-    for (i in seq_len(length(meta))) {
-      info <- meta[[i]]
-      if (info$name %in% columns && info$type == "epiweek") {
-        csv_tibble[[info$name]] <- parse_api_week(csv_tibble[[info$name]])
-      }
-    }
-  }
-  csv_tibble
-}
-
 fetch_debug <- function(epidata_call, format_type = "classic", fields = NULL) {
   response <- request_impl(epidata_call, format_type, fields)
   content <- httr::content(response, "text", encoding = "UTF-8")
@@ -333,38 +267,4 @@ request_impl <- function(epidata_call, format_type, fields = NULL) {
   }
 
   response
-}
-
-#' @export
-print.epidata_csv <- function(x, ...) {
-  char_limit <- getOption("epidata_csv__char_limit", default = 300L)
-  cat(
-    "# A epidata_csv object with", nchar(x), "characters; showing up to", char_limit,
-    "characters below. To print the entire string, use `print(as.character(x))`:\n"
-  )
-  cat(substr(x, 1L, char_limit))
-  if (nchar(x) > char_limit) {
-    cat("[...]")
-  }
-  cat("\n")
-  invisible(x)
-}
-
-info_to_type <- function(info, disable_date_parsing = FALSE) {
-  types <- list(
-    date = if (disable_date_parsing) {
-      readr::col_integer()
-    } else {
-      readr::col_date(format = "%Y%m%d")
-    },
-    epiweek = readr::col_integer(),
-    bool = readr::col_logical(),
-    text = readr::col_character(),
-    int = readr::col_integer(),
-    float = readr::col_double(),
-    categorical = readr::col_factor(info$categories)
-  )
-  r <- types[info$type]
-  stopifnot(!is.null(r))
-  r
 }

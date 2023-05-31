@@ -34,8 +34,6 @@ RoxygenNote: 7.2.3
 Suggests:
     dplyr,
     knitr,
-    mockery,
-    mockr,
     rmarkdown,
     testthat (>= 3.1.5),
     withr
