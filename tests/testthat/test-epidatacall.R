@@ -1,11 +1,13 @@
 test_that("request_impl http errors", {
   # should give a 401 error
   epidata_call <- pvt_cdc(auth = "ImALittleTeapot", epiweeks = epirange(202003, 202304), locations = "ma")
-  # generated via
-  # url <- full_url(epidata_call)
-  # params <- request_arguments(epidata_call, "csv", NULL)
-  # result <- do_request(url, params) %>% readr::write_rds(testthat::test_path("data/test-http401.rds"))
-  mockery::stub(request_impl, "do_request", readRDS(testthat::test_path("data/test-http401.rds")))
+  local_mocked_bindings(
+    # generated via
+    # url <- full_url(epidata_call)
+    # params <- request_arguments(epidata_call, "csv", NULL)
+    # result <- do_request(url, params) %>% readr::write_rds(testthat::test_path("data/test-http401.rds"))
+    do_request = function(...) readRDS(testthat::test_path("data/test-http401.rds")),
+  )
   expect_error(response <- epidata_call %>% request_impl("csv"), class = "http_401")
 
   # should give a 500 error (the afhsb endpoint is removed)
@@ -15,8 +17,9 @@ test_that("request_impl http errors", {
   # url <- full_url(epidata_call)
   # params <- request_arguments(epidata_call, "csv", NULL)
   # response <- do_request(url, params) %>% readr::write_rds(testthat::test_path("data/test-http500.rds"))
-  #
-  mockery::stub(request_impl, "do_request", readRDS(testthat::test_path("data/test-http500.rds")))
+  local_mocked_bindings(
+    do_request = function(...) readRDS(testthat::test_path("data/test-http500.rds"))
+  )
   expect_error(response <- epidata_call %>% request_impl("csv"), class = "http_500")
 })
 
@@ -29,7 +32,6 @@ test_that("fetch_tbl and fetch_tbl", {
     time_values = epirange("2020-06-01", "2020-08-01"),
     geo_values = "ca,fl"
   )
-
   local_mocked_bindings(
     request_impl = function(...) NULL,
     .package = "epidatr"
@@ -85,20 +87,23 @@ test_that("fetch_tbl warns on non-success", {
 test_that("classic only fetch", {
   # delphi is an example endpoint that only suports the classic call
   epidata_call <- delphi(system = "ec", epiweek = 201501)
-  # generated using
-  # epidata_call %>%
-  #   fetch_debug(format_type = "classic") %>%
-  #   readr::write_rds(testthat::test_path("data/test-classic-only.rds"))
-  mockery::stub(fetch, "httr::content", readRDS(testthat::test_path("data/test-classic-only.rds")), depth = 2)
-  mockery::stub(fetch_classic, "httr::content", readRDS(testthat::test_path("data/test-classic-only.rds")))
-  # make sure that fetch actually uses the classic method on endpoints that only support the classic
-  fetch_out <- epidata_call %>% fetch()
-  fetch_classic_out <- epidata_call %>% fetch_classic()
-  expect_identical(fetch_out, fetch_classic_out)
+  with_mocked_bindings(
+    {
+      # make sure that fetch actually uses the classic method on endpoints that only support the classic
+      fetch_out <- epidata_call %>% fetch()
+      fetch_classic_out <- epidata_call %>% fetch_classic()
+      expect_identical(fetch_out, fetch_classic_out)
 
-  # making sure that fetch_tbl and fetch_csv throw the expected error on classic only
-  expect_error(epidata_call %>% fetch_tbl(), class = "only_supports_classic_format")
-  expect_error(epidata_call %>% fetch_csv(), class = "only_supports_classic_format")
+      # making sure that fetch_tbl and throws the expected error on classic only
+      expect_error(epidata_call %>% fetch_tbl(), class = "only_supports_classic_format")
+    },
+    # generated using
+    # epidata_call %>%
+    #   fetch_debug(format_type = "classic") %>%
+    #   readr::write_rds(testthat::test_path("data/test-classic-only.rds"))
+    content = function(...) readRDS(testthat::test_path("data/test-classic-only.rds")),
+    .package = "httr"
+  )
 })
 
 test_that("errors are passed up the chain", {
