@@ -44,10 +44,10 @@ test_that("fetch_tbl warns on non-success", {
     content = function(...) NULL,
     .package = "httr"
   )
-  artificial_warning <- "* This is a warning with a leading asterisk and {braces} to make sure we don't have bulleting/glue bugs."  
+  artificial_warning <- "* This is a warning with a leading asterisk and {braces} to make sure we don't have bulleting/glue bugs."
   debug_triplet <- readRDS(testthat::test_path("data/test-classic.rds")) %>%
-                              jsonlite::fromJSON() %>%
-                              `[[<-`("message", artificial_warning)
+    jsonlite::fromJSON() %>%
+    `[[<-`("message", artificial_warning)
   local_mocked_bindings(
     # see generation code above
     fromJSON = function(...) debug_triplet,
@@ -56,6 +56,6 @@ test_that("fetch_tbl warns on non-success", {
 
   expect_warning(epidata_call %>% fetch_tbl(),
     regexp = paste0("epidata warning: ", artificial_warning),
-      fixed = TRUE
+    fixed = TRUE
   )
 })
