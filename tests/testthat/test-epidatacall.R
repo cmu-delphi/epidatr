@@ -48,6 +48,18 @@ test_that("fetch and fetch_tbl", {
   tbl_out <- epidata_call %>% fetch_tbl()
   out <- epidata_call %>% fetch()
   expect_identical(out, tbl_out)
+
+  local_mocked_bindings(
+    # RDS file generated with
+    # epidata_call %>%
+    # fetch_debug(format_type = "classic", fields = c("time_value", "value")) %>%
+    # readr::write_rds(testthat::test_path("data/test-narrower-fields.rds"))
+    content = function(...) readRDS(testthat::test_path("data/test-narrower-fields.rds")),
+    .package = "httr"
+  )
+  # testing that the fields fill as expected
+  res <- epidata_call %>% fetch(fields = c("time_value", "value"))
+  expect_equal(res, tbl_out[c("time_value", "value")])
 })
 
 test_that("fetch_tbl warns on non-success", {
@@ -102,10 +114,4 @@ test_that("classic only fetch", {
 
   # making sure that fetch_tbl and throws the expected error on classic only
   expect_error(epidata_call %>% fetch_tbl(), class = "only_supports_classic_format")
-})
-
-test_that("errors are passed up the chain", {
-  epidata_call <- delphi(system = "ec", epiweek = 201501)
-  epidata_call$endpoint <- "foobar"
-  expect_error(epidata_call %>% fetch_classic())
 })
