@@ -23,7 +23,7 @@ test_that("request_impl http errors", {
   expect_error(response <- epidata_call %>% request_impl("csv"), class = "http_500")
 })
 
-test_that("fetch_tbl and fetch_tbl", {
+test_that("fetch and fetch_tbl", {
   epidata_call <- covidcast(
     data_source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
