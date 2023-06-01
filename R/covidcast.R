@@ -113,7 +113,7 @@ covidcast_epidata <- function(base_url = global_base_url) {
   if (response$status_code != 200) {
     # 500, 429, 401 are possible
     msg <- "fetch data from API"
-    if (httr::http_type(response) == "text/html" & length(res$content) > 0) {
+    if (httr::http_type(response) == "text/html" & length(response$content) > 0) {
       # grab the error information out of the returned HTML document
       msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
         xml2::read_html(content(response, "text")),

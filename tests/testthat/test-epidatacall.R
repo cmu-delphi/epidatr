@@ -87,16 +87,7 @@ test_that("fetch_tbl warns on non-success", {
 test_that("classic only fetch", {
   # delphi is an example endpoint that only suports the classic call
   epidata_call <- delphi(system = "ec", epiweek = 201501)
-  with_mocked_bindings(
-    {
-      # make sure that fetch actually uses the classic method on endpoints that only support the classic
-      fetch_out <- epidata_call %>% fetch()
-      fetch_classic_out <- epidata_call %>% fetch_classic()
-      expect_identical(fetch_out, fetch_classic_out)
-
-      # making sure that fetch_tbl and throws the expected error on classic only
-      expect_error(epidata_call %>% fetch_tbl(), class = "only_supports_classic_format")
-    },
+  local_mocked_bindings(
     # generated using
     # epidata_call %>%
     #   fetch_debug(format_type = "classic") %>%
@@ -104,6 +95,13 @@ test_that("classic only fetch", {
     content = function(...) readRDS(testthat::test_path("data/test-classic-only.rds")),
     .package = "httr"
   )
+  # make sure that fetch actually uses the classic method on endpoints that only support the classic
+  fetch_out <- epidata_call %>% fetch()
+  fetch_classic_out <- epidata_call %>% fetch_classic()
+  expect_identical(fetch_out, fetch_classic_out)
+
+  # making sure that fetch_tbl and throws the expected error on classic only
+  expect_error(epidata_call %>% fetch_tbl(), class = "only_supports_classic_format")
 })
 
 test_that("errors are passed up the chain", {

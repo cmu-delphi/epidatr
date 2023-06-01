@@ -15,16 +15,16 @@ test_that("dataframe converters", {
 })
 
 test_that("http errors", {
+  # generated with
+  # response <- httr::RETRY("GET",
+  #   url = "https://httpbin.org/status/400",
+  #   query = list(),
+  #   terminate_on = c(400, 401, 403, 405, 414, 500),
+  #   http_headers,
+  #   httr::authenticate("epidata", get_auth_key())
+  # ) %>% readr::write_rds(testthat::test_path("data/test-do_request-httpbin.rds"))
   local_mocked_bindings(
-    do_request = function(...) {
-      httr::RETRY("GET",
-        url = "https://httpbin.org/status/400",
-        query = list(),
-        terminate_on = c(400, 401, 403, 405, 414, 500),
-        http_headers,
-        httr::authenticate("epidata", get_auth_key())
-      )
-    }
+    do_request = function(...) readRDS(testthat::test_path("data/test-do_request-httpbin.rds"))
   )
   expect_error(covidcast_epidata(), class = "http_400")
 })
