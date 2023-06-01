@@ -5,3 +5,39 @@ test_that("covidcast", {
     covidcast("fb-survey", "smoothed_cli", "nation", "day", "us", epirange(20210405, 20210410))
   )
 })
+
+# quite minimal, could probably use some checks that the fields are as desired
+test_that("dataframe converters", {
+  res <- covidcast_epidata()$sources %>% as.data.frame()
+  expect_identical(class(res), "data.frame")
+  res <- covidcast_epidata()$signals %>% as.data.frame()
+  expect_identical(class(res), "data.frame")
+})
+
+test_that("http errors", {
+  local_mocked_bindings(
+    do_request = function(...) {
+      httr::RETRY("GET",
+        url = "https://httpbin.org/status/400",
+        query = list(),
+        terminate_on = c(400, 401, 403, 405, 414, 500),
+        http_headers,
+        httr::authenticate("epidata", get_auth_key())
+      )
+    }
+  )
+  expect_error(covidcast_epidata(), class = "http_400")
+})
+
+# test: http errors in covidcast
+
+# no guarantee we actually get an http file with any of these error codes
+res <- httr::RETRY("GET",
+  url = "https://httpbin.org/status/400",
+  query = list(),
+  terminate_on = c(400, 401, 403, 405, 414, 500),
+  http_headers,
+  httr::authenticate("epidata", get_auth_key())
+)
+res$status_code
+httr::http_type(res)
