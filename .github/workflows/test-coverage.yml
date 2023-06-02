@@ -3,7 +3,7 @@
 on:
   workflow_dispatch: #get a button to trigger it by hand
   push:
-    branches: [main, master]
+    branches: [main, master, extendingTests]
   pull_request:
     branches: [main, master]
 
