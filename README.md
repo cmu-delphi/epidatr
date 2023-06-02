@@ -1,7 +1,7 @@
 # delphi Epidata R client
 
 [![License: MIT][mit-image]][mit-url] [![Github Actions][github-actions-image]][github-actions-url]
-[![codecov](https://codecov.io/gh/dsweber2/epidatr/branch/extendingTests/graph/badge.svg?token=jVHL9eHZNZ)](https://codecov.io/gh/dsweber2/epidatr)
+[![codecov](https://codecov.io/gh/dsweber2/epidatr/branch/dev/graph/badge.svg?token=jVHL9eHZNZ)](https://codecov.io/gh/dsweber2/epidatr)
 
 ## Documentation
 
