@@ -20,7 +20,7 @@ get_auth_key <- function() {
   rlang::warn(
     c(
       "No API key found. You will be limited to non-complex queries and encounter rate limits if you proceed.",
-      "To avoid this, you can get your key [here] and then:",
+      "To avoid this, you can get your key by registering at https://api.delphi.cmu.edu/epidata/admin/registration_form and then:",
       "i" = "set the environment variable DELPHI_EPIDATA_KEY",
       "i" = "set the option 'delphi.epidata.key'",
       "",
