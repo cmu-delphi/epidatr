@@ -70,7 +70,7 @@ jobs:
           base: dev
           title: "chore: sync main->dev"
           labels: chore
-          reviewers: krivard
-          assignees: krivard
+          reviewers: dshemetov
+          assignees: dshemetov
           body: |
             Syncing Main->Dev.
