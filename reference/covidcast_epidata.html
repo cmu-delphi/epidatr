@@ -90,6 +90,17 @@ sources and signals.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">covidcast_api</span> <span class="op">&lt;-</span> <span class="fu">covidcast_epidata</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>No API key found. You will be limited to non-complex queries and encounter rate</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> limits if you proceed.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> To avoid this, you can get your key by registering at</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://api.delphi.cmu.edu/epidata/admin/registration_form and then:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> set the environment variable DELPHI_EPIDATA_KEY</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> set the option 'delphi.epidata.key'</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> To save your key for later sessions (and hide it from your code), you can edit</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> your .Renviron file with:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> usethis::edit_r_environ()</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">covidcast_api</span><span class="op">)</span> <span class="co"># print available sources and signals</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "COVIDcast Epidata Fetcher"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sources:"</span>

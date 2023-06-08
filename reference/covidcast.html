@@ -151,7 +151,7 @@ the most recent issue is returned. Mutually exclusive with <code>as_of</code> or
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="fu">covidcast</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data_source <span class="op">=</span> <span class="st">"jhu-csse"</span>,</span></span>
 <span class="r-in"><span>  signals <span class="op">=</span> <span class="st">"confirmed_7dav_incidence_prop"</span>,</span></span>
@@ -160,22 +160,6 @@ the most recent issue is returned. Mutually exclusive with <code>as_of</code> or
 <span class="r-in"><span>  geo_values <span class="op">=</span> <span class="st">"ca,fl"</span>,</span></span>
 <span class="r-in"><span>  time_values <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20200601</span>, <span class="fl">20200801</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 124 × 15</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    geo_value signal    source geo_type time_type time_value direction issue     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> ca        confirme… jhu-c… state    day       2020-06-01        <span style="color: #BB0000;">NA</span> 2023-03-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> fl        confirme… jhu-c… state    day       2020-06-01        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> ca        confirme… jhu-c… state    day       2020-06-02        <span style="color: #BB0000;">NA</span> 2023-03-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> fl        confirme… jhu-c… state    day       2020-06-02        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> ca        confirme… jhu-c… state    day       2020-06-03        <span style="color: #BB0000;">NA</span> 2023-03-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> fl        confirme… jhu-c… state    day       2020-06-03        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> ca        confirme… jhu-c… state    day       2020-06-04        <span style="color: #BB0000;">NA</span> 2023-03-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> fl        confirme… jhu-c… state    day       2020-06-04        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> ca        confirme… jhu-c… state    day       2020-06-05        <span style="color: #BB0000;">NA</span> 2023-03-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> fl        confirme… jhu-c… state    day       2020-06-05        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 114 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7 more variables: lag &lt;int&gt;, missing_value &lt;int&gt;, missing_stderr &lt;int&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   missing_sample_size &lt;int&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span>
 <span class="r-in"><span><span class="fu">covidcast</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data_source <span class="op">=</span> <span class="st">"jhu-csse"</span>,</span></span>
 <span class="r-in"><span>  signals <span class="op">=</span> <span class="st">"confirmed_7dav_incidence_prop"</span>,</span></span>
@@ -184,23 +168,7 @@ the most recent issue is returned. Mutually exclusive with <code>as_of</code> or
 <span class="r-in"><span>  geo_values <span class="op">=</span> <span class="st">"*"</span>,</span></span>
 <span class="r-in"><span>  time_values <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20200601</span>, <span class="fl">20200801</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3,472 × 15</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    geo_value signal    source geo_type time_type time_value direction issue     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> ak        confirme… jhu-c… state    day       2020-06-01        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> al        confirme… jhu-c… state    day       2020-06-01        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> ar        confirme… jhu-c… state    day       2020-06-01        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> as        confirme… jhu-c… state    day       2020-06-01        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> az        confirme… jhu-c… state    day       2020-06-01        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> ca        confirme… jhu-c… state    day       2020-06-01        <span style="color: #BB0000;">NA</span> 2023-03-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> co        confirme… jhu-c… state    day       2020-06-01        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> ct        confirme… jhu-c… state    day       2020-06-01        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> dc        confirme… jhu-c… state    day       2020-06-01        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> de        confirme… jhu-c… state    day       2020-06-01        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3,462 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7 more variables: lag &lt;int&gt;, missing_value &lt;int&gt;, missing_stderr &lt;int&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   missing_sample_size &lt;int&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>

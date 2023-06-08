@@ -93,10 +93,9 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="fu">delphi</span><span class="op">(</span>system <span class="op">=</span> <span class="st">"ec"</span>, epiweek <span class="op">=</span> <span class="fl">202006</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in request_impl(epidata_call, "classic", fields):</span> Internal Server Error (HTTP 500). Failed to fetch data from API : The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application..</span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">delphi</span><span class="op">(</span>system <span class="op">=</span> <span class="st">"ec"</span>, epiweek <span class="op">=</span> <span class="fl">201501</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
