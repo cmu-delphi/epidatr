@@ -183,6 +183,23 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
 
   response <- request_impl(epidata_call, "classic", fields)
   response_content <- httr::content(response, as = "text", encoding = "UTF-8")
+
+  # TODO Temporary workaround the first row of the response being a comment
+  # Remove on 2023-06-21
+  if (grepl("This request exceeded", response_content) && !epidata_call$only_supports_classic) {
+    response_content <- jsonlite::fromJSON(response_content, simplifyDataFrame = FALSE)
+    message <- response_content$epidata[[1L]]
+    cli::cli_abort(c(
+      "epidata warning, promoted to error: {message}",
+      "i" = "Either:",
+      "*" = "set the environment variable DELPHI_EPIDATA_KEY, or",
+      "*" = 'set the option "delphi.epidata.key":',
+      " " = '{.code options(delphi.epidata.key = "YOUR_KEY_OR_TEMP_KEY")}',
+      "To save your key for later sessions (and hide it from your code), you can edit your .Renviron file with:",
+      "*" = "usethis::edit_r_environ()"
+    ))
+  }
+
   response_content <- jsonlite::fromJSON(response_content, simplifyDataFrame = !disable_data_frame_parsing)
 
   # success is 1, no results is -2, truncated is 2, -1 is generic error

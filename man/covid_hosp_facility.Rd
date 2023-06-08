@@ -34,7 +34,7 @@ report annually. The companion function \code{\link[=covid_hosp_facility_lookup]
 used to look up facility identifiers in a variety of ways.
 }
 \examples{
-\donttest{
+\dontrun{
 covid_hosp_facility(
   hospital_pks = "100075",
   collection_weeks = epirange(20200101, 20200501)

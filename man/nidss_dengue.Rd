@@ -27,7 +27,7 @@ and
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt}.
 }
 \examples{
-\donttest{
+\dontrun{
 nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301)) \%>\% fetch()
 }
 }

@@ -26,7 +26,7 @@ the most recent issue is returned. Mutually exclusive with \code{issues}.}
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html
 }
 \examples{
-\donttest{
+\dontrun{
 fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701)) \%>\% fetch()
 }
 }

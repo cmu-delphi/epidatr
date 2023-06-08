@@ -32,7 +32,7 @@ The list of location argument can be found in
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt}.
 }
 \examples{
-\donttest{
+\dontrun{
 flusurv(locations = "CA", epiweeks = epirange(201701, 201801)) \%>\% fetch()
 }
 }

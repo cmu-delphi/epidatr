@@ -24,10 +24,10 @@ Imports:
     cli,
     httr,
     jsonlite,
-    readr,
-    MMWRweek,
-    rlang,
     magrittr,
+    MMWRweek,
+    readr,
+    rlang,
     tibble,
     xml2
 RoxygenNote: 7.2.3

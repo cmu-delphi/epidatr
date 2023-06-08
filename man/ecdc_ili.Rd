@@ -31,7 +31,7 @@ The list of location argument can be found in
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/ecdc_regions.txt}.
 }
 \examples{
-\donttest{
+\dontrun{
 ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001)) \%>\% fetch()
 }
 }

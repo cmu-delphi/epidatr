@@ -18,7 +18,7 @@ delphi(system, epiweek)
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/delphi.html
 }
 \examples{
-\donttest{
-delphi(system = "ec", epiweek = 202006) \%>\% fetch()
+\dontrun{
+delphi(system = "ec", epiweek = 201501) \%>\% fetch()
 }
 }

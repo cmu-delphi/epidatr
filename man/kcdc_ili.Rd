@@ -28,6 +28,6 @@ TODO: find a non-trivial region
 }
 \examples{
 \dontrun{
-kcdc_ili(regions = "ROC", epiweeks = 200436) \%>\% fetch()
+kcdc_ili(regions = "ROK", epiweeks = 200436) \%>\% fetch()
 }
 }

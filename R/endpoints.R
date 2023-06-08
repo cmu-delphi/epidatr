@@ -60,7 +60,7 @@ pvt_cdc <- function(auth, locations, epiweeks) {
 #' For instance, specifying both city and state are not supported.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' covid_hosp_facility_lookup(state = "fl") %>% fetch()
 #' covid_hosp_facility_lookup(city = "southlake") %>% fetch()
 #' }
@@ -129,7 +129,7 @@ covid_hosp_facility_lookup <- function(state = NULL, ccn = NULL, city = NULL, zi
 #' used to look up facility identifiers in a variety of ways.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' covid_hosp_facility(
 #'   hospital_pks = "100075",
 #'   collection_weeks = epirange(20200101, 20200501)
@@ -422,7 +422,7 @@ covid_hosp_facility <- function(hospital_pks, collection_weeks, publication_date
 #' report annually.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' covid_hosp_state_timeseries(
 #'   states = "fl",
 #'   dates = epirange(20200101, 20200501)
@@ -580,7 +580,7 @@ covid_hosp_state_timeseries <- function(states, dates, issues = NULL) {
 #' @return [`epidata_call`]
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' covidcast_meta() %>% fetch()
 #' }
 #'
@@ -619,7 +619,7 @@ covidcast_meta <- function() {
 #' COVIDcast public dashboard: <https://delphi.cmu.edu/covidcast/>
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' covidcast(
 #'   data_source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
@@ -747,7 +747,7 @@ covidcast <- function(
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/delphi.html
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' delphi(system = "ec", epiweek = 201501) %>% fetch()
 #' }
 #' @param system string. The system name to fetch.
@@ -863,7 +863,7 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks) {
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/ecdc_regions.txt>.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001)) %>% fetch()
 #' }
 #' @param regions character vector. The regions to fetch.
@@ -917,7 +917,7 @@ ecdc_ili <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt>.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' flusurv(locations = "CA", epiweeks = epirange(201701, 201801)) %>% fetch()
 #' }
 #' @param locations character vector. Character strings indicating location.
@@ -969,7 +969,7 @@ flusurv <- function(locations, epiweeks, issues = NULL, lag = NULL) {
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701)) %>% fetch()
 #' }
 #' @param regions character vector. The regions to fetch.
@@ -1022,7 +1022,7 @@ fluview_clinical <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 #'
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' fluview_meta() %>% fetch()
 #' }
 #'
@@ -1250,7 +1250,7 @@ kcdc_ili <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' pvt_meta_norostat(auth = "yourkey") %>% fetch()
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
@@ -1287,7 +1287,7 @@ meta <- function() {
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt>.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301)) %>% fetch()
 #' }
 #' @param locations character vector. The locations to fetch.
@@ -1320,7 +1320,7 @@ nidss_dengue <- function(locations, epiweeks) {
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601)) %>% fetch()
 #' }
 #' @param regions character vector. The regions to fetch.
@@ -1415,7 +1415,7 @@ pvt_norostat <- function(auth, locations, epiweeks) {
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' nowcast(locations = "ca", epiweeks = epirange(201201, 201301)) %>% fetch()
 #' }
 #' @param locations character vector. The locations to fetch.
@@ -1445,7 +1445,7 @@ nowcast <- function(locations, epiweeks) {
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501)) %>% fetch()
 #' }
 #' @param regions character vector. The regions to fetch.
@@ -1628,7 +1628,7 @@ pvt_twitter <- function(auth, locations, dates = NULL, epiweeks = NULL) {
 #' API docs: https://cmu-delphi.github.io/delphi-epidata/api/wiki.html
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601)) %>% fetch()
 #' }
 #' @param articles character vector. The articles to fetch.
