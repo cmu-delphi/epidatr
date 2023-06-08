@@ -17,7 +17,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::devtools, any::styler, any::lintr, local::.
+          extra-packages: any::devtools, any::rcmdcheck, any::styler, any::lintr, local::.
 
       - name: Style / Format
         shell: Rscript {0}
@@ -35,18 +35,11 @@ jobs:
           devtools::load_all()
           lintr::lint_package('.')
 
-      - name: Check
-        env:
-          _R_CHECK_CRAN_INCOMING_REMOTE_: false
-        shell: Rscript {0}
-        run: devtools::check(args = c("--no-manual", "--as-cran"), error_on = "error", check_dir = "check")
-
-      - name: Upload check results
-        if: failure()
-        uses: actions/upload-artifact@master
+      - uses: r-lib/actions/check-r-package@v2
         with:
-          name: ${{ runner.os }}-results
-          path: r_package/check
+          args: 'c("--no-manual", "--as-cran")'
+          build-args: 'c("--no-build-vignettes")'
+          error-on: '"error"'
 
       - name: Test
         shell: Rscript {0}
