@@ -24,7 +24,7 @@ the most recent issue is returned. Mutually exclusive with \code{issues}.}
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html
 }
 \examples{
-\donttest{
+\dontrun{
 paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501)) \%>\% fetch()
 }
 }

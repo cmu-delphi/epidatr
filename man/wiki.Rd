@@ -26,7 +26,7 @@ wiki(articles, dates = NULL, epiweeks = NULL, hours = NULL, language = "en")
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/wiki.html
 }
 \examples{
-\donttest{
+\dontrun{
 wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601)) \%>\% fetch()
 }
 }

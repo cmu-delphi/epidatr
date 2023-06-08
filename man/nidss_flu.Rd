@@ -28,7 +28,7 @@ Infectious Disease Statistical System.
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html}
 }
 \examples{
-\donttest{
+\dontrun{
 nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601)) \%>\% fetch()
 }
 }

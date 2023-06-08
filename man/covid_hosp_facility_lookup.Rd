@@ -40,7 +40,7 @@ Combinations of the arguments are not currently supported.
 For instance, specifying both city and state are not supported.
 }
 \examples{
-\donttest{
+\dontrun{
 covid_hosp_facility_lookup(state = "fl") \%>\% fetch()
 covid_hosp_facility_lookup(city = "southlake") \%>\% fetch()
 }

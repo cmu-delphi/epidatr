@@ -25,7 +25,7 @@ The full list of location inputs can be accsssed at
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
 }
 \examples{
-\donttest{
+\dontrun{
 nowcast(locations = "ca", epiweeks = epirange(201201, 201301)) \%>\% fetch()
 }
 }

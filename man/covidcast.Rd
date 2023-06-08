@@ -57,7 +57,7 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html}
 COVIDcast public dashboard: \url{https://delphi.cmu.edu/covidcast/}
 }
 \examples{
-\donttest{
+\dontrun{
 covidcast(
   data_source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",

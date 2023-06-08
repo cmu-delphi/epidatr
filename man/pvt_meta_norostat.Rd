@@ -16,7 +16,7 @@ pvt_meta_norostat(auth)
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html
 }
 \examples{
-\donttest{
+\dontrun{
 pvt_meta_norostat(auth = "yourkey") \%>\% fetch()
 }
 }

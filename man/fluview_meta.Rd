@@ -13,7 +13,7 @@ fluview_meta()
 API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html
 }
 \examples{
-\donttest{
+\dontrun{
 fluview_meta() \%>\% fetch()
 }
 
