@@ -23,12 +23,6 @@ jobs:
         shell: Rscript {0}
         run: styler::style_pkg(dry="fail")
 
-      - name: Build Package
-        shell: Rscript {0}
-        run: |
-          devtools::document()
-          devtools::build()
-
       - name: Lint
         shell: Rscript {0}
         run: |
@@ -40,7 +34,3 @@ jobs:
           args: 'c("--no-manual", "--as-cran")'
           build-args: 'c("--no-build-vignettes")'
           error-on: '"error"'
-
-      - name: Test
-        shell: Rscript {0}
-        run: devtools::test()
