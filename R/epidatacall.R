@@ -187,16 +187,18 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
 
   # TODO Temporary workaround the first row of the response being a comment
   # Remove on 2023-06-21
-  if (grepl("anonymous limit", response_content) && !epidata_call$only_supports_classic) {
-    rlang::warn("epidata error: anonymous user limit exceeded", "epidata_error")
-    response_content <- str_c("[", str_sub(response_content, 494, length(response_content) - 40), "]")
-    response_content <- jsonlite::fromJSON(response_content, simplifyDataFrame = !disable_data_frame_parsing)
-    return(response_content)
-  } else if (grepl("rate limit", response_content) && !epidata_call$only_supports_classic) {
-    rlang::warn("epidata error: rate limit exceeded", "epidata_error")
-    response_content <- str_c("[", str_sub(response_content, 489, length(response_content) - 40), "]")
-    response_content <- jsonlite::fromJSON(response_content, simplifyDataFrame = !disable_data_frame_parsing)
-    return(response_content)
+  if (grepl("This request exceeded", response_content) && !epidata_call$only_supports_classic) {
+    response_content <- jsonlite::fromJSON(response_content, simplifyDataFrame = FALSE)
+    message <- response_content$epidata[[1L]]
+    cli::cli_abort(c(
+      "epidata warning, promoted to error: {message}",
+      "i" = "Either:",
+      "*" = "set the environment variable DELPHI_EPIDATA_KEY, or",
+      "*" = 'set the option "delphi.epidata.key":',
+      " " = '{.code options(delphi.epidata.key = "YOUR_KEY_OR_TEMP_KEY")}',
+      "To save your key for later sessions (and hide it from your code), you can edit your .Renviron file with:",
+      "*" = "usethis::edit_r_environ()"
+    ))
   }
 
   response_content <- jsonlite::fromJSON(response_content, simplifyDataFrame = !disable_data_frame_parsing)
