@@ -174,7 +174,6 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 #'   a data frame)
 #' @importFrom httr stop_for_status content http_error
 #' @importFrom jsonlite fromJSON
-#' @importFrom stringr str_c str_sub
 #' @return
 #' - For `fetch_classic`: a JSON-like list
 #'

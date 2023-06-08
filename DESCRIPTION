@@ -28,7 +28,6 @@ Imports:
     MMWRweek,
     readr,
     rlang,
-    stringr,
     tibble,
     xml2
 RoxygenNote: 7.2.3
