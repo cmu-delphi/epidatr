@@ -30,7 +30,3 @@ epicall
 ```{r}
 epicall %>% fetch()
 ```
-
-```{r}
-delphi(system = "ec", epiweek = 201506) %>% fetch()
-```

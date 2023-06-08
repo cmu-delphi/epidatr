@@ -174,6 +174,7 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 #'   a data frame)
 #' @importFrom httr stop_for_status content http_error
 #' @importFrom jsonlite fromJSON
+#' @importFrom stringr str_c str_sub
 #' @return
 #' - For `fetch_classic`: a JSON-like list
 #'
@@ -183,6 +184,21 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
 
   response <- request_impl(epidata_call, "classic", fields)
   response_content <- httr::content(response, as = "text", encoding = "UTF-8")
+
+  # TODO Temporary workaround the first row of the response being a comment
+  # Remove on 2023-06-21
+  if (grepl("anonymous limit", response_content) && !epidata_call$only_supports_classic) {
+    rlang::warn("epidata error: anonymous user limit exceeded", "epidata_error")
+    response_content <- str_c("[", str_sub(response_content, 494, length(response_content) - 40), "]")
+    response_content <- jsonlite::fromJSON(response_content, simplifyDataFrame = !disable_data_frame_parsing)
+    return(response_content)
+  } else if (grepl("rate limit", response_content) && !epidata_call$only_supports_classic) {
+    rlang::warn("epidata error: rate limit exceeded", "epidata_error")
+    response_content <- str_c("[", str_sub(response_content, 489, length(response_content) - 40), "]")
+    response_content <- jsonlite::fromJSON(response_content, simplifyDataFrame = !disable_data_frame_parsing)
+    return(response_content)
+  }
+
   response_content <- jsonlite::fromJSON(response_content, simplifyDataFrame = !disable_data_frame_parsing)
 
   # success is 1, no results is -2, truncated is 2, -1 is generic error
