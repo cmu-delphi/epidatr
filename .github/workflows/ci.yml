@@ -1,6 +1,8 @@
 name: ci
 
-on: [push]
+on:
+  workflow_dispatch: #get a button to trigger it by hand
+  push:
 
 jobs:
   build:

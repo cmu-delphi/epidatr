@@ -1,6 +1,7 @@
 # delphi Epidata R client
 
 [![License: MIT][mit-image]][mit-url] [![Github Actions][github-actions-image]][github-actions-url]
+[![codecov](https://codecov.io/gh/dsweber2/epidatr/branch/dev/graph/badge.svg?token=jVHL9eHZNZ)](https://codecov.io/gh/dsweber2/epidatr)
 
 ## Documentation
 
@@ -19,13 +20,17 @@ functions have been replaced by the `fetch()` function, which almost always
 returns a tibble, except when used with a limited number of older endpoints
 (such as `delphi()` and `meta()`), where it will output a nested list structure.
 If you encounter an error like
+
 ```{r}
 Error in fetch_tbl(.) : could not find function "fetch_tbl"
 ```
-please update to use `fetch()` instead.  If instead you encounter
+
+please update to use `fetch()` instead. If instead you encounter
+
 ```{r}
 Error in fetch(.) : could not find function "fetch"
 ```
+
 please update to the newest `epidatr`.
 
 Note (2022-08-02): the package that this installs is being renamed from
@@ -54,6 +59,7 @@ a separate key that needs to be passed as an argument.
 ## Development Environment
 
 Relevant R commands
+
 ```r
 install.packages(c('devtools', 'pkgdown', 'styler', 'lintr')) # install dev dependencies
 devtools::install_deps(dependencies = TRUE) # install package dependencies
