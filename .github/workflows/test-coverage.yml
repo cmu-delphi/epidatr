@@ -3,7 +3,7 @@
 on:
   workflow_dispatch: #get a button to trigger it by hand
   push:
-    branches: [main, master, extendingTests]
+    branches: [main, dev]
   pull_request:
 
 name: test-coverage
