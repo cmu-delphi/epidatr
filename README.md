@@ -52,6 +52,9 @@ and then from the environment variable `DELPHI_EPIDATA_KEY`.
 We recommend storing your key in `.Renviron` file, which R will read by default.
 You can do this with `usethis::edit_r_environ()` and there enter `DELPHI_EPIDATA_KEY=<your-key>`.
 An alternative is [the dotenv package](https://github.com/gaborcsardi/dotenv/).
+To generate your key, register for a pseudo-anonymous account 
+[here](https://api.delphi.cmu.edu/epidata/admin/registration_form), and see more discussion on 
+the [general API website](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html).
 
 Note that for the time being, the private endpoints (i.e. those prefixed with `pvt`) will require
 a separate key that needs to be passed as an argument.
