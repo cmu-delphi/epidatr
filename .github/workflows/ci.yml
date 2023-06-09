@@ -32,6 +32,8 @@ jobs:
           lintr::lint_package('.')
 
       - uses: r-lib/actions/check-r-package@v2
+        env:
+          DELPHI_EPIDATA_KEY: ${{ secrets.SECRET_EPIPROCESS_GHACTIONS_DELPHI_EPIDATA_KEY }}
         with:
           args: 'c("--no-manual", "--as-cran")'
           build-args: 'c("--no-build-vignettes")'
