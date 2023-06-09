@@ -5,7 +5,6 @@ on:
   push:
     branches: [main, master, extendingTests]
   pull_request:
-    branches: [main, master]
 
 name: test-coverage
 
