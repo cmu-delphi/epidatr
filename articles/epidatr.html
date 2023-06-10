@@ -88,7 +88,7 @@
                         <h4 data-toc-skip class="author">Delphi
 Group</h4>
             
-            <h4 data-toc-skip class="date">2023-06-09</h4>
+            <h4 data-toc-skip class="date">2023-06-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/cmu-delphi/epidatr/blob/HEAD/vignettes/epidatr.Rmd" class="external-link"><code>vignettes/epidatr.Rmd</code></a></small>
       <div class="hidden name"><code>epidatr.Rmd</code></div>
@@ -114,17 +114,6 @@ Group</h4>
 <span><span class="co">##   https://api.delphi.cmu.edu/epidata//covidcast/?data_source=fb-survey&amp;signals=smoothed_cli&amp;geo_type=nation&amp;time_type=day&amp;geo_values=us&amp;time_values=20210405-20210410</span></span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: No API key found. You will be limited to non-complex queries and encounter rate</span></span>
-<span><span class="co">## limits if you proceed.</span></span>
-<span><span class="co">## To avoid this, you can get your key by registering at</span></span>
-<span><span class="co">## https://api.delphi.cmu.edu/epidata/admin/registration_form and then:</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> set the environment variable DELPHI_EPIDATA_KEY</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> set the option 'delphi.epidata.key'</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## To save your key for later sessions (and hide it from your code), you can edit</span></span>
-<span><span class="co">## your .Renviron file with:</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> usethis::edit_r_environ()</span></span>
-<span><span class="co">## <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span></code></pre>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 15</span></span></span>
 <span><span class="co">##   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>

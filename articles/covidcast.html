@@ -105,21 +105,9 @@ Group</h4>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/cmu-delphi/epidatr" class="external-link">"epidatr"</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://magrittr.tidyverse.org" class="external-link">"magrittr"</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">covidcast_api</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covidcast_epidata.html">covidcast_epidata</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: No API key found. You will be limited to non-complex queries and encounter rate</span></span>
-<span><span class="co">## limits if you proceed.</span></span>
-<span><span class="co">## To avoid this, you can get your key by registering at</span></span>
-<span><span class="co">## https://api.delphi.cmu.edu/epidata/admin/registration_form and then:</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> set the environment variable DELPHI_EPIDATA_KEY</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> set the option 'delphi.epidata.key'</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## To save your key for later sessions (and hide it from your code), you can edit</span></span>
-<span><span class="co">## your .Renviron file with:</span></span>
-<span><span class="co">## <span style="color: #00BBBB;">ℹ</span> usethis::edit_r_environ()</span></span>
-<span><span class="co">## <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span></code></pre>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op">&lt;-</span> <span class="va">covidcast_api</span><span class="op">$</span><span class="va">sources</span><span class="op">$</span><span class="va">`fb-survey`</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">smoothed_cli</span><span class="op">$</span><span class="fu">call</span><span class="op">(</span><span class="st">"nation"</span>, <span class="st">"us"</span>, <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">covidcast_api</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covidcast_epidata.html">covidcast_epidata</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">epicall</span> <span class="op">&lt;-</span> <span class="va">covidcast_api</span><span class="op">$</span><span class="va">sources</span><span class="op">$</span><span class="va">`fb-survey`</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">smoothed_cli</span><span class="op">$</span><span class="fu">call</span><span class="op">(</span><span class="st">"nation"</span>, <span class="st">"us"</span>, <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 15</span></span></span>
 <span><span class="co">##   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
