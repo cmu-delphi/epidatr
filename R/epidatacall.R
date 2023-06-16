@@ -35,7 +35,7 @@
 #'
 #' @return
 #' - For `create_epidata_call`: an `epidata_call` object
-#'
+#' @keywords internal
 create_epidata_call <- function(endpoint, params, meta = NULL,
                                 only_supports_classic = FALSE) {
   stopifnot(is.character(endpoint), length(endpoint) == 1)
@@ -142,7 +142,7 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
 #' @return
 #' - For `fetch_tbl`: a [`tibble::tibble`]
 #' @importFrom tibble as_tibble
-#'
+#' @keywords internal
 fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
@@ -176,7 +176,7 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 #' @importFrom jsonlite fromJSON
 #' @return
 #' - For `fetch_classic`: a JSON-like list
-#'
+#' @keywords internal
 fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsing = TRUE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
@@ -235,6 +235,7 @@ full_url <- function(epidata_call) {
 #' @importFrom httr modify_url
 #' @return
 #' - For `request_url`: string containing the URL
+#' @keywords internal
 request_url <- function(epidata_call, format_type = "classic", fields = NULL) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   url <- full_url(epidata_call)
