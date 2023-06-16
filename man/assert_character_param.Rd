@@ -9,3 +9,4 @@ assert_character_param(name, value, len = NULL, required = TRUE)
 \description{
 Allows character vectors
 }
+\keyword{internal}

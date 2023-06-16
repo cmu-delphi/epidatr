@@ -9,3 +9,4 @@ assert_integerish_param(name, value, len = NULL, required = TRUE)
 \description{
 Allows integer-like vectors
 }
+\keyword{internal}

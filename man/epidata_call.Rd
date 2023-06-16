@@ -111,3 +111,4 @@ covidcast(
 ) \%>\% fetch()
 
 }
+\keyword{internal}
