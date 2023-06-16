@@ -1,5 +1,6 @@
 #' Allows character vectors
 #' @importFrom checkmate assert_character assert_integerish
+#' @keywords internal
 assert_character_param <- function(name, value, len = NULL, required = TRUE) {
   null.ok <- !required
   assert_integerish(len, null.ok = TRUE, .var.name = "len")
@@ -8,6 +9,7 @@ assert_character_param <- function(name, value, len = NULL, required = TRUE) {
 
 #' Allows integer-like vectors
 #' @importFrom checkmate assert_integerish
+#' @keywords internal
 assert_integerish_param <- function(name, value, len = NULL, required = TRUE) {
   null.ok <- !required
   assert_integerish(len, null.ok = TRUE, .var.name = "len")
@@ -16,6 +18,7 @@ assert_integerish_param <- function(name, value, len = NULL, required = TRUE) {
 
 #' Allows a vector of date_like params: date, character, or integer-like
 #' @importFrom checkmate check_date check_character check_integerish
+#' @keywords internal
 assert_date_param <- function(name, value, len = NULL, required = TRUE) {
   null.ok <- !required
   assert_integerish(len, null.ok = TRUE, .var.name = "len")
