@@ -4,9 +4,6 @@
 \alias{create_epidata_call}
 \alias{epidata_call}
 \alias{fetch}
-\alias{fetch_tbl}
-\alias{fetch_classic}
-\alias{request_url}
 \alias{with_base_url}
 \title{An abstraction that holds information needed to make an epidata request}
 \usage{
@@ -18,12 +15,6 @@ create_epidata_call(
 )
 
 fetch(epidata_call, fields = NULL, disable_date_parsing = FALSE)
-
-fetch_tbl(epidata_call, fields = NULL, disable_date_parsing = FALSE)
-
-fetch_classic(epidata_call, fields = NULL, disable_data_frame_parsing = TRUE)
-
-request_url(epidata_call, format_type = "classic", fields = NULL)
 
 with_base_url(epidata_call, base_url)
 }
@@ -45,12 +36,6 @@ the direction field}
 
 \item{disable_date_parsing}{disable automatic date parsing}
 
-\item{disable_data_frame_parsing}{do not automatically cast the epidata
-output to a data frame (some endpoints return a list of lists, which is not
-a data frame)}
-
-\item{format_type}{format to return one of classic,json,csv}
-
 \item{base_url}{base URL to use}
 }
 \value{
@@ -60,18 +45,6 @@ a data frame)}
 
 \itemize{
 \item For \code{fetch}: a tibble or a JSON-like list
-}
-
-\itemize{
-\item For \code{fetch_tbl}: a \code{\link[tibble:tibble]{tibble::tibble}}
-}
-
-\itemize{
-\item For \code{fetch_classic}: a JSON-like list
-}
-
-\itemize{
-\item For \code{request_url}: string containing the URL
 }
 
 \itemize{
@@ -111,4 +84,3 @@ covidcast(
 ) \%>\% fetch()
 
 }
-\keyword{internal}

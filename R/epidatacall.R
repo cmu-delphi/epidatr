@@ -35,7 +35,7 @@
 #'
 #' @return
 #' - For `create_epidata_call`: an `epidata_call` object
-#' @keywords internal
+#'
 create_epidata_call <- function(endpoint, params, meta = NULL,
                                 only_supports_classic = FALSE) {
   stopifnot(is.character(endpoint), length(endpoint) == 1)
@@ -128,7 +128,7 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
 }
 
 #' Fetches the data and returns a tibble
-#' @rdname epidata_call
+#' @rdname fetch_tbl
 #'
 #' @param epidata_call an instance of `epidata_call`
 #' @param fields a list of epidata fields to return, or NULL to return all
@@ -162,7 +162,7 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 #' Fetches the data, raises on epidata errors, and returns the results as a
 #' JSON-like list
 #'
-#' @rdname epidata_call
+#' @rdname fetch_classic
 #'
 #' @param epidata_call an instance of `epidata_call`
 #' @param fields a list of epidata fields to return, or NULL to return all
@@ -224,7 +224,7 @@ full_url <- function(epidata_call) {
 }
 
 #' Returns the full request url for the given epidata_call
-#' @rdname epidata_call
+#' @rdname request_url
 #'
 #' @param epidata_call an instance of `epidata_call`
 #' @param format_type format to return one of classic,json,csv
