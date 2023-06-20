@@ -128,7 +128,7 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
 }
 
 #' Fetches the data and returns a tibble
-#' @rdname epidata_call
+#' @rdname fetch_tbl
 #'
 #' @param epidata_call an instance of `epidata_call`
 #' @param fields a list of epidata fields to return, or NULL to return all
@@ -142,7 +142,7 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
 #' @return
 #' - For `fetch_tbl`: a [`tibble::tibble`]
 #' @importFrom tibble as_tibble
-#'
+#' @keywords internal
 fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
@@ -162,7 +162,7 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 #' Fetches the data, raises on epidata errors, and returns the results as a
 #' JSON-like list
 #'
-#' @rdname epidata_call
+#' @rdname fetch_classic
 #'
 #' @param epidata_call an instance of `epidata_call`
 #' @param fields a list of epidata fields to return, or NULL to return all
@@ -176,7 +176,7 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 #' @importFrom jsonlite fromJSON
 #' @return
 #' - For `fetch_classic`: a JSON-like list
-#'
+#' @keywords internal
 fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsing = TRUE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
@@ -224,7 +224,7 @@ full_url <- function(epidata_call) {
 }
 
 #' Returns the full request url for the given epidata_call
-#' @rdname epidata_call
+#' @rdname request_url
 #'
 #' @param epidata_call an instance of `epidata_call`
 #' @param format_type format to return one of classic,json,csv
@@ -235,6 +235,7 @@ full_url <- function(epidata_call) {
 #' @importFrom httr modify_url
 #' @return
 #' - For `request_url`: string containing the URL
+#' @keywords internal
 request_url <- function(epidata_call, format_type = "classic", fields = NULL) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   url <- full_url(epidata_call)

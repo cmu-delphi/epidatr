@@ -1,6 +1,6 @@
 #' Helper function to cast values, non-list vectors, and/or EpiRanges to strings
 #'
-#' @noRd
+#' @keywords internal
 format_item <- function(value) {
   if (inherits(value, "EpiRange")) {
     paste0(toString(value$from), "-", toString(value$to))
@@ -13,7 +13,7 @@ format_item <- function(value) {
 
 #' Helper function to build a list of values and/or ranges
 #'
-#' @noRd
+#' @keywords internal
 format_list <- function(values) {
   paste(vapply(values, format_item, character(1L)), collapse = ",")
 }
