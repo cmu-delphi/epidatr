@@ -357,7 +357,7 @@ Function reference: <https://cmu-delphi.github.io/epidatr/reference/pvt_norostat
 Example call:
 
 ```{r, eval=FALSE}
-pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "1", epiweeks = 201233) %>% fetch()
+pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin", epiweeks = 201233) %>% fetch()
 ```
 
 ### Quidel Covid and Influenza testing
