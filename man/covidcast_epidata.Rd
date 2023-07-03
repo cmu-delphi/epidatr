@@ -4,10 +4,12 @@
 \alias{covidcast_epidata}
 \title{creates the covidcast epidata helper}
 \usage{
-covidcast_epidata(base_url = global_base_url)
+covidcast_epidata(base_url = global_base_url, timeout_seconds = 30)
 }
 \arguments{
 \item{base_url}{optional alternative API base url}
+
+\item{timeout_seconds}{the maximum amount of time to wait for a response}
 }
 \value{
 an instance of covidcast_epidata

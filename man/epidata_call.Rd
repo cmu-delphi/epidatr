@@ -18,7 +18,8 @@ fetch(
   epidata_call,
   fields = NULL,
   disable_date_parsing = FALSE,
-  return_empty = FALSE
+  return_empty = FALSE,
+  timeout_seconds = 30
 )
 
 with_base_url(epidata_call, base_url)
@@ -41,7 +42,9 @@ the direction field}
 
 \item{disable_date_parsing}{disable automatic date parsing}
 
-\item{return_empty}{boolean that allows returning an empty tibble if there is no data.}
+\item{return_empty}{boolean that allows returning an empty tibble if there is no data}
+
+\item{timeout_seconds}{the maximum amount of time to wait for a response}
 
 \item{base_url}{base URL to use}
 }
