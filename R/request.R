@@ -21,14 +21,15 @@ join_url <- function(url, endpoint) {
 #' }
 #'
 #' @importFrom httr RETRY
-do_request <- function(url, params) {
+do_request <- function(url, params, timeout_seconds = 30) {
   # don't retry in case of certain status codes
   res <- httr::RETRY("GET",
     url = url,
     query = params,
     terminate_on = c(400, 401, 403, 405, 414, 500),
     http_headers,
-    httr::authenticate("epidata", get_auth_key())
+    httr::authenticate("epidata", get_auth_key()),
+    httr::timeout(timeout_seconds)
   )
   if (res$status_code == 414) {
     res <- httr::RETRY("POST",
