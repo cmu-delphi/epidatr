@@ -122,9 +122,10 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE, ret
   stopifnot(is.null(fields) || is.character(fields))
   stopifnot(is.logical(disable_date_parsing), length(disable_date_parsing) == 1)
   stopifnot(is.logical(return_empty))
+  stopifnot(is.numeric(timeout_seconds))
 
   if (epidata_call$only_supports_classic) {
-    return(fetch_classic(epidata_call, fields, return_empty, timeout_seconds))
+    return(fetch_classic(epidata_call, fields, return_empty = return_empty, timeout_seconds = timeout_seconds))
   } else {
     return(fetch_tbl(epidata_call, fields, disable_date_parsing, return_empty))
   }
@@ -153,6 +154,7 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE,
   stopifnot(is.null(fields) || is.character(fields))
   stopifnot(is.logical(disable_date_parsing), length(disable_date_parsing) == 1)
   stopifnot(is.logical(return_empty))
+  stopifnot(is.numeric(timeout_seconds))
 
   if (epidata_call$only_supports_classic) {
     rlang::abort("This endpoint only supports the classic message format, due to a non-standard behavior. Use fetch_classic instead.",
@@ -161,7 +163,7 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE,
     )
   }
 
-  response_content <- fetch_classic(epidata_call, fields, disable_data_frame_parsing = FALSE, return_empty = return_empty, timeout_seconds)
+  response_content <- fetch_classic(epidata_call, fields, disable_data_frame_parsing = FALSE, return_empty = return_empty, timeout_seconds = timeout_seconds)
   if (return_empty && length(response_content) == 0) {
     return(tibble())
   }
@@ -192,6 +194,7 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
   stopifnot(is.logical(return_empty))
+  stopifnot(is.numeric(timeout_seconds))
 
   response <- request_impl(epidata_call, "classic", fields, timeout_seconds)
   response_content <- httr::content(response, as = "text", encoding = "UTF-8")
