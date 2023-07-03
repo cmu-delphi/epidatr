@@ -111,19 +111,21 @@ print.epidata_call <- function(epidata_call) {
 #'   time_value and value fields or c("-direction") to return everything except
 #'   the direction field
 #' @param disable_date_parsing disable automatic date parsing
+#' @param return_empty boolean that allows returning an empty tibble if there is no data.
 #' @return
 #' - For `fetch`: a tibble or a JSON-like list
 #' @export
 #'
-fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
+fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE, return_empty = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
   stopifnot(is.logical(disable_date_parsing), length(disable_date_parsing) == 1)
+  stopifnot(is.logical(return_empty))
 
   if (epidata_call$only_supports_classic) {
-    return(fetch_classic(epidata_call, fields))
+    return(fetch_classic(epidata_call, fields, return_empty))
   } else {
-    return(fetch_tbl(epidata_call, fields, disable_date_parsing))
+    return(fetch_tbl(epidata_call, fields, disable_date_parsing, return_empty))
   }
 }
 
@@ -136,6 +138,7 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
 #'   time_value and value fields or c("-direction") to return everything except
 #'   the direction field
 #' @param disable_date_parsing disable automatic date parsing
+#' @param return_empty boolean that allows returning an empty tibble if there is no data.
 #' @importFrom readr read_csv
 #' @importFrom httr stop_for_status content
 #' @importFrom rlang abort
@@ -143,10 +146,11 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
 #' - For `fetch_tbl`: a [`tibble::tibble`]
 #' @importFrom tibble as_tibble
 #' @keywords internal
-fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE) {
+fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE, return_empty = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
   stopifnot(is.logical(disable_date_parsing), length(disable_date_parsing) == 1)
+  stopifnot(is.logical(return_empty))
 
   if (epidata_call$only_supports_classic) {
     rlang::abort("This endpoint only supports the classic message format, due to a non-standard behavior. Use fetch_classic instead.",
@@ -155,7 +159,10 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
     )
   }
 
-  response_content <- fetch_classic(epidata_call, fields, disable_data_frame_parsing = FALSE)
+  response_content <- fetch_classic(epidata_call, fields, disable_data_frame_parsing = FALSE, return_empty = return_empty)
+  if (return_empty && length(response_content) == 0) {
+    return(tibble())
+  }
   return(parse_data_frame(epidata_call, response_content, disable_date_parsing) %>% as_tibble())
 }
 
@@ -172,14 +179,16 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE)
 #' @param disable_data_frame_parsing do not automatically cast the epidata
 #'   output to a data frame (some endpoints return a list of lists, which is not
 #'   a data frame)
+#' @param return_empty boolean that allows returning an empty tibble if there is no data.
 #' @importFrom httr stop_for_status content http_error
 #' @importFrom jsonlite fromJSON
 #' @return
 #' - For `fetch_classic`: a JSON-like list
 #' @keywords internal
-fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsing = TRUE) {
+fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsing = TRUE, return_empty = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.null(fields) || is.character(fields))
+  stopifnot(is.logical(return_empty))
 
   response <- request_impl(epidata_call, "classic", fields)
   response_content <- httr::content(response, as = "text", encoding = "UTF-8")
@@ -188,7 +197,9 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
 
   # success is 1, no results is -2, truncated is 2, -1 is generic error
   if (response_content$result != 1) {
-    rlang::abort(paste0("epidata error: ", response_content$message), "epidata_error")
+    if ((response_content$result != -2) && !(return_empty)) {
+      rlang::abort(paste0("epidata error: ", response_content$message), "epidata_error")
+    }
   }
   if (response_content$message != "success") {
     rlang::warn(paste0("epidata warning: ", response_content$message), "epidata_warning")

@@ -14,7 +14,12 @@ create_epidata_call(
   only_supports_classic = FALSE
 )
 
-fetch(epidata_call, fields = NULL, disable_date_parsing = FALSE)
+fetch(
+  epidata_call,
+  fields = NULL,
+  disable_date_parsing = FALSE,
+  return_empty = FALSE
+)
 
 with_base_url(epidata_call, base_url)
 }
@@ -35,6 +40,8 @@ time_value and value fields or c("-direction") to return everything except
 the direction field}
 
 \item{disable_date_parsing}{disable automatic date parsing}
+
+\item{return_empty}{boolean that allows returning an empty tibble if there is no data.}
 
 \item{base_url}{base URL to use}
 }
