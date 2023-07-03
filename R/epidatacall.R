@@ -127,7 +127,7 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE, ret
   if (epidata_call$only_supports_classic) {
     return(fetch_classic(epidata_call, fields, return_empty = return_empty, timeout_seconds = timeout_seconds))
   } else {
-    return(fetch_tbl(epidata_call, fields, disable_date_parsing, return_empty))
+    return(fetch_tbl(epidata_call, fields, disable_date_parsing, return_empty, timeout_seconds = timeout_seconds))
   }
 }
 
