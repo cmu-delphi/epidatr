@@ -100,15 +100,16 @@ print.covidcast_data_source <- function(source, ...) {
 #' print(smoothed_cli)
 #' df <- smoothed_cli$call("nation", "us", epirange(20210405, 20210410))
 #' @param base_url optional alternative API base url
+#' @param timeout_seconds the maximum amount of time to wait for a response
 #' @importFrom httr stop_for_status content http_type
 #' @importFrom jsonlite fromJSON
 #' @importFrom xml2 read_html xml_find_all xml_text
 #' @return an instance of covidcast_epidata
 #'
 #' @export
-covidcast_epidata <- function(base_url = global_base_url) {
+covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) {
   url <- join_url(base_url, "covidcast/meta")
-  response <- do_request(url, list())
+  response <- do_request(url, list(), timeout_seconds)
 
   if (response$status_code != 200) {
     # 500, 429, 401 are possible
