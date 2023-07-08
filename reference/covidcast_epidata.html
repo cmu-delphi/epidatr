@@ -71,13 +71,17 @@ sources and signals.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">covidcast_epidata</span><span class="op">(</span>base_url <span class="op">=</span> <span class="va">global_base_url</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">covidcast_epidata</span><span class="op">(</span>base_url <span class="op">=</span> <span class="va">global_base_url</span>, timeout_seconds <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>base_url</dt>
 <dd><p>optional alternative API base url</p></dd>
+
+
+<dt>timeout_seconds</dt>
+<dd><p>the maximum amount of time to wait for a response</p></dd>
 
 </dl></div>
     <div id="value">
