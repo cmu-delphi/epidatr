@@ -1,7 +1,7 @@
 Package: epidatr
 Type: Package
 Title: Client for Delphi's Epidata API
-Version: 0.6.0
+Version: 0.7.0
 Authors@R: as.person(c(
   "Jacob Bien <jbien@usc.edu> [aut]",
   "Logan Brooks <lcbrooks@andrew.cmu.edu> [aut]",
