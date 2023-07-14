@@ -4,7 +4,13 @@
 \alias{fetch_tbl}
 \title{Fetches the data and returns a tibble}
 \usage{
-fetch_tbl(epidata_call, fields = NULL, disable_date_parsing = FALSE)
+fetch_tbl(
+  epidata_call,
+  fields = NULL,
+  disable_date_parsing = FALSE,
+  return_empty = FALSE,
+  timeout_seconds = 30
+)
 }
 \arguments{
 \item{epidata_call}{an instance of \code{epidata_call}}
@@ -15,6 +21,10 @@ time_value and value fields or c("-direction") to return everything except
 the direction field}
 
 \item{disable_date_parsing}{disable automatic date parsing}
+
+\item{return_empty}{boolean that allows returning an empty tibble if there is no data.}
+
+\item{timeout_seconds}{the maximum amount of time to wait for a response}
 }
 \value{
 \itemize{
