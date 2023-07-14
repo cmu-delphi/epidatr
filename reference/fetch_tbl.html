@@ -56,7 +56,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fetch_tbl</span><span class="op">(</span><span class="va">epidata_call</span>, fields <span class="op">=</span> <span class="cn">NULL</span>, disable_date_parsing <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fetch_tbl</span><span class="op">(</span></span>
+<span>  <span class="va">epidata_call</span>,</span>
+<span>  fields <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  disable_date_parsing <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  return_empty <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  timeout_seconds <span class="op">=</span> <span class="fl">30</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -74,6 +80,14 @@ the direction field</p></dd>
 
 <dt>disable_date_parsing</dt>
 <dd><p>disable automatic date parsing</p></dd>
+
+
+<dt>return_empty</dt>
+<dd><p>boolean that allows returning an empty tibble if there is no data.</p></dd>
+
+
+<dt>timeout_seconds</dt>
+<dd><p>the maximum amount of time to wait for a response</p></dd>
 
 </dl></div>
     <div id="value">
