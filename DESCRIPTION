@@ -3,12 +3,9 @@ Type: Package
 Title: Client for Delphi's Epidata API
 Version: 0.7.1
 Authors@R: as.person(c(
-  "Jacob Bien <jbien@usc.edu> [aut]",
   "Logan Brooks <lcbrooks@andrew.cmu.edu> [aut]",
-  "David Farrow <dfarrow0@gmail.com> [aut]",
-  "Pedrito Maynard-Zhang <pedritom@amazon.com> [aut]",
-  "Alex Reinhart <areinhar@stat.cmu.edu> [aut,cre]",
-  "Ryan Tibshirani <ryantibs@stat.cmu.edu> [aut]",
+  "Dmitry Shemetov <dshemeto@andrew.cmu.edu> [aut]",
+  "David Weber <davidweb@andrew.cmu.edu> [ctb]"
   "Samuel Gratzl <sam@sgratzl.com> [aut]"
   ))
 URL: https://github.com/cmu-delphi/epidatr
