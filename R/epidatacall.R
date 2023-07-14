@@ -145,9 +145,9 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE, ret
 #' @importFrom readr read_csv
 #' @importFrom httr stop_for_status content
 #' @importFrom rlang abort
+#' @importFrom tibble as_tibble tibble
 #' @return
 #' - For `fetch_tbl`: a [`tibble::tibble`]
-#' @importFrom tibble as_tibble
 #' @keywords internal
 fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE, return_empty = FALSE, timeout_seconds = 30) {
   stopifnot(inherits(epidata_call, "epidata_call"))
