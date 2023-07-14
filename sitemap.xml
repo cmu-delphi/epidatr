@@ -7,12 +7,6 @@
     <loc>/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/articles/covidcast.html</loc>
-  </url>
-  <url>
-    <loc>/articles/endpoints.html</loc>
-  </url>
-  <url>
     <loc>/articles/epidatr.html</loc>
   </url>
   <url>
@@ -79,6 +73,12 @@
     <loc>/reference/epirange.html</loc>
   </url>
   <url>
+    <loc>/reference/fetch_classic.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fetch_tbl.html</loc>
+  </url>
+  <url>
     <loc>/reference/flusurv.html</loc>
   </url>
   <url>
@@ -89,6 +89,12 @@
   </url>
   <url>
     <loc>/reference/fluview_meta.html</loc>
+  </url>
+  <url>
+    <loc>/reference/format_item.html</loc>
+  </url>
+  <url>
+    <loc>/reference/format_list.html</loc>
   </url>
   <url>
     <loc>/reference/get_auth_key.html</loc>
@@ -152,6 +158,9 @@
   </url>
   <url>
     <loc>/reference/request_impl.html</loc>
+  </url>
+  <url>
+    <loc>/reference/request_url.html</loc>
   </url>
   <url>
     <loc>/reference/timeset.html</loc>

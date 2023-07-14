@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.1</span>
       </span>
     </div>
 
@@ -44,21 +44,6 @@
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="articles/covidcast.html">COVIDcast API Client</a>
-    </li>
-    <li>
-      <a href="articles/endpoints.html">Endpoint Examples</a>
-    </li>
-  </ul>
 </li>
 <li>
   <a href="news/index.html">Changelog</a>
@@ -84,39 +69,44 @@
       </header><div class="row">
   <div class="contents col-md-9">
 <div class="section level1">
-<div class="page-header"><h1 id="delphi-epidata-r-client">delphi Epidata R client<a class="anchor" aria-label="anchor" href="#delphi-epidata-r-client"></a>
+<div class="page-header"><h1 id="delphi-epidata-r-client">Delphi Epidata R client<a class="anchor" aria-label="anchor" href="#delphi-epidata-r-client"></a>
 </h1></div>
 <p><a href="https://opensource.org/licenses/MIT" class="external-link"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a> <a href="https://github.com/cmu-delphi/epidatr/actions" class="external-link"><img src="https://github.com/cmu-delphi/epidatr/workflows/ci/badge.svg" alt="Github Actions"></a> <a href="https://codecov.io/gh/dsweber2/epidatr" class="external-link"><img src="https://codecov.io/gh/dsweber2/epidatr/branch/dev/graph/badge.svg?token=jVHL9eHZNZ" alt="codecov"></a></p>
-<div class="section level2">
-<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
-</h2>
-<ul>
-<li><a href="https://cmu-delphi.github.io/epidatr/" class="external-link">Package website</a></li>
-</ul>
-</div>
-<div class="section level2">
-<h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
-</h2>
-<p>Install latest version using <a href="https://cran.r-project.org/package=remotes" class="external-link"><code>remotes</code></a> package</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"cmu-delphi/epidatr"</span><span class="op">)</span></span></code></pre></div>
-<p>Note (2023-05-23): since version 0.6.0, the <code>fetch_{tbl,classic,df,json,csv}</code> functions have been replaced by the <code><a href="reference/epidata_call.html">fetch()</a></code> function, which almost always returns a tibble, except when used with a limited number of older endpoints (such as <code><a href="reference/delphi.html">delphi()</a></code> and <code><a href="reference/meta.html">meta()</a></code>), where it will output a nested list structure. If you encounter an error like</p>
-<pre class="{r}"><code>Error in fetch_tbl(.) : could not find function "fetch_tbl"</code></pre>
-<p>please update to use <code><a href="reference/epidata_call.html">fetch()</a></code> instead. If instead you encounter</p>
-<pre class="{r}"><code>Error in fetch(.) : could not find function "fetch"</code></pre>
-<p>please update to the newest <code>epidatr</code>.</p>
-<p>Note (2022-08-02): the package that this installs is being renamed from <code>delphi.epidata</code> to <code>epidatr</code>. To migrate, run the installation command above, followed by <code>remove.packages("delphi.epidata")</code>, and adjust all references to the package name accordingly. For a short-term patch, a snapshot of the package can be still be installed with the old name by specifying <code>ref="delphi.epidata-before-rename"</code>.</p>
-</div>
+<p>This package provides an R client for the <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Delphi Epidata API</a>.</p>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>TODO</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cmu-delphi/epidatr" class="external-link">epidatr</a></span><span class="op">)</span></span>
+<span><span class="va">epicall</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/covidcast.html">covidcast</a></span><span class="op">(</span><span class="st">"fb-survey"</span>, <span class="st">"smoothed_cli"</span>, <span class="st">"nation"</span>, <span class="st">"day"</span>, <span class="st">"us"</span>, <span class="fu"><a href="reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">epicall</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code># A tibble: 6 × 15
+  geo_value signal       source   geo_type time_type time_value
+  &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;    &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;    
+1 us        smoothed_cli fb-surv… nation   day       2021-04-05
+2 us        smoothed_cli fb-surv… nation   day       2021-04-06
+3 us        smoothed_cli fb-surv… nation   day       2021-04-07
+4 us        smoothed_cli fb-surv… nation   day       2021-04-08
+5 us        smoothed_cli fb-surv… nation   day       2021-04-09
+6 us        smoothed_cli fb-surv… nation   day       2021-04-10
+# ℹ 9 more variables: direction &lt;dbl&gt;, issue &lt;date&gt;,
+#   lag &lt;int&gt;, missing_value &lt;int&gt;, missing_stderr &lt;int&gt;,
+#   missing_sample_size &lt;int&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;,
+#   sample_size &lt;dbl&gt;</code></pre>
 </div>
 <div class="section level2">
-<h2 id="api-keys">API Keys<a class="anchor" aria-label="anchor" href="#api-keys"></a>
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>The Delphi API will soon require a (free) API key for full functionality. The <code>epidatr</code> client will automatically look for this key in the R option <code>delphi.epidata.key</code> and then from the environment variable <code>DELPHI_EPIDATA_KEY</code>. We recommend storing your key in <code>.Renviron</code> file, which R will read by default. You can do this with <code>usethis::edit_r_environ()</code> and there enter <code>DELPHI_EPIDATA_KEY=&lt;your-key&gt;</code>. An alternative is <a href="https://github.com/gaborcsardi/dotenv/" class="external-link">the dotenv package</a>. To generate your key, register for a pseudo-anonymous account <a href="https://api.delphi.cmu.edu/epidata/admin/registration_form" class="external-link">here</a>, and see more discussion on the <a href="https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html" class="external-link">general API website</a>.</p>
+<p>Install the latest version using <a href="https://cran.r-project.org/package=pak" class="external-link"><code>pak</code></a> package</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="http://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"cmu-delphi/epidatr"</span><span class="op">)</span></span></code></pre></div>
+<p>CRAN version coming soon.</p>
+<div class="section level3">
+<h3 id="api-keys">API Keys<a class="anchor" aria-label="anchor" href="#api-keys"></a>
+</h3>
+<p>The Delphi API requires a (free) API key for full functionality. To generate your key, register for a pseudo-anonymous account <a href="https://api.delphi.cmu.edu/epidata/admin/registration_form" class="external-link">here</a> and see more discussion on the <a href="https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html" class="external-link">general API website</a>. The <code>epidatr</code> client will automatically look for this key in the R option <code>delphi.epidata.key</code> and then from the environment variable <code>DELPHI_EPIDATA_KEY</code>. We recommend storing your key in <code>.Renviron</code> file, which R will read by default.</p>
 <p>Note that for the time being, the private endpoints (i.e. those prefixed with <code>pvt</code>) will require a separate key that needs to be passed as an argument.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="development-environment">Development Environment<a class="anchor" aria-label="anchor" href="#development-environment"></a>
@@ -148,9 +138,8 @@
 <li>create a <a href="https://github.com/cmu-delphi/epidatr/releases" class="external-link">GitHub release</a> with automatically derived release notes</li>
 </ol>
 </li>
-<li>Done</li>
+<li>Release to CRAN</li>
 </ol>
-<p>TODO release to CRAN</p>
 </div>
 </div>
   </div>
