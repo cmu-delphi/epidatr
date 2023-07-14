@@ -2,12 +2,13 @@ Package: epidatr
 Type: Package
 Title: Client for Delphi's Epidata API
 Version: 0.7.1
-Authors@R: as.person(c(
-  "Logan Brooks <lcbrooks@andrew.cmu.edu> [aut]",
-  "Dmitry Shemetov <dshemeto@andrew.cmu.edu> [aut]",
-  "David Weber <davidweb@andrew.cmu.edu> [ctb]"
-  "Samuel Gratzl <sam@sgratzl.com> [aut]"
-  ))
+Authors@R: 
+  c(
+    person("Logan", "Brooks", email = "lcbrooks@andrew.cmu.edu", role = c("aut", "cre")),
+    person("Dmitry", "Shemetov", email = "dshemeto@andrew.cmu.edu", role = c("aut")),
+    person("David", "Weber", email = "davidweb@andrew.cmu.edu", role = c("ctb")),
+    person("Samuel", "Gratzl", email = "sam@sgratzl.com", role = c("aut"))
+  )
 URL: https://github.com/cmu-delphi/epidatr
 BugReports: https://github.com/cmu-delphi/epidatr/issues
 Description: R Client for Delphi's Epidata API. Tools for fetching data in various forms.
