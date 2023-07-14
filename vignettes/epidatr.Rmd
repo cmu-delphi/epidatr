@@ -1,7 +1,5 @@
 ---
 title: "Delphi Epidata R API Client"
-author: "Delphi Group"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Delphi Epidata R API Client}
@@ -15,8 +13,6 @@ options(tibble.print_min = 4L, tibble.print_max = 4L, max.print = 4L)
 library(epidatr)
 library(dplyr)
 ```
-
-# Delphi Epidata R API Client
 
 ## Basic Usage
 
