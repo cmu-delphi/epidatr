@@ -1,3 +1,13 @@
+# epidatr 0.7.1
+
+- Update README.md for better onboarding.
+- Consolidate the vignettes into one. Clean up the code, do not eval most examples.
+
+# epidatr 0.7.0
+
+- Remove temporary code for API key transition.
+- Add `timeout_seconds` and `return_empty` arguments to `fetch()`.
+
 # epidatr 0.6.0
 
 - The `fetch_{tbl,classic,df,json,csv}` functions have been replaced by the
