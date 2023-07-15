@@ -45,6 +45,18 @@
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/development.html">Notes for Developers</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="news/index.html">Changelog</a>
 </li>
@@ -71,7 +83,7 @@
 <div class="section level1">
 <div class="page-header"><h1 id="delphi-epidata-r-client">Delphi Epidata R client<a class="anchor" aria-label="anchor" href="#delphi-epidata-r-client"></a>
 </h1></div>
-<p><a href="https://opensource.org/licenses/MIT" class="external-link"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a> <a href="https://github.com/cmu-delphi/epidatr/actions" class="external-link"><img src="https://github.com/cmu-delphi/epidatr/workflows/ci/badge.svg" alt="Github Actions"></a> <a href="https://codecov.io/gh/dsweber2/epidatr" class="external-link"><img src="https://codecov.io/gh/dsweber2/epidatr/branch/dev/graph/badge.svg?token=jVHL9eHZNZ" alt="codecov"></a></p>
+<p>[[License: MIT][mit-image]][mit-url] [[Github Actions][github-actions-image]][github-actions-url] <a href="https://codecov.io/gh/dsweber2/epidatr" class="external-link"><img src="https://codecov.io/gh/dsweber2/epidatr/branch/dev/graph/badge.svg?token=jVHL9eHZNZ" alt="codecov"></a></p>
 <p>This package provides an R client for the <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Delphi Epidata API</a>.</p>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -107,39 +119,6 @@
 <p>The Delphi API requires a (free) API key for full functionality. To generate your key, register for a pseudo-anonymous account <a href="https://api.delphi.cmu.edu/epidata/admin/registration_form" class="external-link">here</a> and see more discussion on the <a href="https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html" class="external-link">general API website</a>. The <code>epidatr</code> client will automatically look for this key in the R option <code>delphi.epidata.key</code> and then from the environment variable <code>DELPHI_EPIDATA_KEY</code>. We recommend storing your key in <code>.Renviron</code> file, which R will read by default.</p>
 <p>Note that for the time being, the private endpoints (i.e. those prefixed with <code>pvt</code>) will require a separate key that needs to be passed as an argument.</p>
 </div>
-</div>
-<div class="section level2">
-<h2 id="development-environment">Development Environment<a class="anchor" aria-label="anchor" href="#development-environment"></a>
-</h2>
-<p>Relevant R commands</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'devtools'</span>, <span class="st">'pkgdown'</span>, <span class="st">'styler'</span>, <span class="st">'lintr'</span><span class="op">)</span><span class="op">)</span> <span class="co"># install dev dependencies</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_deps</span><span class="op">(</span>dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># install package dependencies</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span> <span class="co"># generate package meta data and man files</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">build</span><span class="op">(</span><span class="op">)</span> <span class="co"># build package</span></span>
-<span><span class="fu">styler</span><span class="fu">::</span><span class="fu">style_pkg</span><span class="op">(</span><span class="op">)</span> <span class="co"># format code</span></span>
-<span><span class="fu">lintr</span><span class="fu">::</span><span class="fu">lint_package</span><span class="op">(</span><span class="op">)</span> <span class="co"># lint package</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span> <span class="co"># test package</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span><span class="op">)</span> <span class="co"># check package for errors</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="release-process">Release Process<a class="anchor" aria-label="anchor" href="#release-process"></a>
-</h2>
-<p>The release consists of multiple steps which can be all done via the GitHub website:</p>
-<ol style="list-style-type: decimal">
-<li>Go to <a href="https://github.com/cmu-delphi/epidatr/actions/workflows/create_release.yml" class="external-link">create_release GitHub Action</a> and click the <code>Run workflow</code> button. Enter the next version number or one of the magic keywords (patch, minor, major) and hit the green <code>Run workflow</code> button.</li>
-<li>The action will prepare a new release and will end up with a new <a href="https://github.com/cmu-delphi/epidatr/pulls" class="external-link">Pull Request</a>
-</li>
-<li>Let the code owner review the PR and its changes and let the CI check whether everything builds successfully</li>
-<li>Once approved and merged, another GitHub action job starts which automatically will
-<ol style="list-style-type: decimal">
-<li>create a git tag</li>
-<li>create another <a href="https://github.com/cmu-delphi/epidatr/pulls" class="external-link">Pull Request</a> to merge the changes back to the <code>dev</code> branch</li>
-<li>create a <a href="https://github.com/cmu-delphi/epidatr/releases" class="external-link">GitHub release</a> with automatically derived release notes</li>
-</ol>
-</li>
-<li>Release to CRAN</li>
-</ol>
 </div>
 </div>
   </div>
