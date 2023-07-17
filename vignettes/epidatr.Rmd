@@ -286,7 +286,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
 pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "1", epiweeks = 201233) %>% fetch()
 ```
 
-#### Quidel Covid and Influenza testing
+#### Quidel Influenza testing
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/quidel.html>
 
