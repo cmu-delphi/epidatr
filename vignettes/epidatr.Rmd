@@ -46,7 +46,7 @@ epicall <- epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa", epirange
 epicall %>% fetch()
 ```
 
-## Example Queries For Every Endpoint
+## Example Queries
 
 (Some endpoints allow for the use of `*` to access data at all locations. Check the help for a given endpoint to see if it supports `*`.)
 
@@ -55,7 +55,7 @@ epicall %>% fetch()
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>
 
 
-County geo_values are [FIPS codes](https://en.wikipedia.org/wiki/List_of_United_States_FIPS_codes_by_county) and are discussed in the API docs [here](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html). The example above is for Orange County, California.
+County geo_values are [FIPS codes](https://en.wikipedia.org/wiki/List_of_United_States_FIPS_codes_by_county) and are discussed in the API docs [here](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html). The example below is for Orange County, California.
 
 ```{r}
 covidcast(
