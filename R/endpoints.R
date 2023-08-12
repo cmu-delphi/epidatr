@@ -91,6 +91,10 @@ covid_hosp_facility_lookup <- function(state = NULL, ccn = NULL, city = NULL, zi
     stop("one of `state`, `ccn`, `city`, `zip`, or `fips_code` is required")
   }
 
+  if (sum(missing(state), missing(ccn), missing(city), missing(zip), missing(fips_code)) > 1) {
+    stop("only one of `state`, `ccn`, `city`, `zip`, or `fips_code` can be specified")
+  }
+
   create_epidata_call(
     "covid_hosp_facility_lookup/",
     list(
