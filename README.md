@@ -8,9 +8,16 @@ API](https://cmu-delphi.github.io/delphi-epidata/).
 
 ## Usage
 
-```r
+```R
 library(epidatr)
-epicall <- covidcast("fb-survey", "smoothed_cli", "nation", "day", "us", epirange(20210405, 20210410))
+epicall <- covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "nation",
+  time_type = "day",
+  geo_values = "us",
+  time_values = epirange(20210405, 20210410)
+)
 epicall %>% fetch()
 ```
 
@@ -32,11 +39,12 @@ epicall %>% fetch()
 
 ## Installation
 
-Install the latest version using [`pak`](https://cran.r-project.org/package=pak)
-package
+Install from GitHub:
 
 ```R
+# Install the dev version using `pak` or `remotes`
 pak::pkg_install("cmu-delphi/epidatr")
+remotes::install_github("cmu-delphi/epidatr")
 ```
 
 CRAN version coming soon.
@@ -49,7 +57,7 @@ your key, register for a pseudo-anonymous account
 discussion on the [general API
 website](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html). The
 `epidatr` client will automatically look for this key in the R option
-`delphi.epidata.key` and then from the environment variable
+`delphi.epidata.key` or in the environment variable
 `DELPHI_EPIDATA_KEY`. We recommend storing your key in `.Renviron` file, which R
 will read by default.
 
