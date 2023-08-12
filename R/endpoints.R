@@ -689,9 +689,10 @@ covidcast <- function(
     )
   }
 
-  if (!missing(issues) && !missing(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
+  if (sum(missing(issues), missing(lag), missing(as_of)) > 1) {
+    stop("`issues`, `lag`, and `as_of` are mutually exclusive")
   }
+
   assert_character_param("data_source", source, len = 1)
   assert_character_param("signals", signals)
   assert_character_param("time_type", time_type, len = 1)
