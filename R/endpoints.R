@@ -91,7 +91,7 @@ covid_hosp_facility_lookup <- function(state = NULL, ccn = NULL, city = NULL, zi
     stop("one of `state`, `ccn`, `city`, `zip`, or `fips_code` is required")
   }
 
-  if (sum(missing(state), missing(ccn), missing(city), missing(zip), missing(fips_code)) > 1) {
+  if (sum(!missing(state), !missing(ccn), !missing(city), !missing(zip), !missing(fips_code)) > 1) {
     stop("only one of `state`, `ccn`, `city`, `zip`, or `fips_code` can be specified")
   }
 
@@ -689,7 +689,7 @@ covidcast <- function(
     )
   }
 
-  if (sum(missing(issues), missing(lag), missing(as_of)) > 1) {
+  if (sum(!missing(issues), !missing(lag), !missing(as_of)) > 1) {
     stop("`issues`, `lag`, and `as_of` are mutually exclusive")
   }
 
