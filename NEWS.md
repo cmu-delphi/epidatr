@@ -1,4 +1,4 @@
-# epidatr 0.7.2
+# epidatr 0.8.0
 
 - Fix source name duplication bug in `covidcast_epidata`
 - Mark `covidcast_epidata` as experimental and do not export it
