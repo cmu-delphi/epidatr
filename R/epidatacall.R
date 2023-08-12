@@ -20,7 +20,7 @@
 #'
 #' @examples
 #' covidcast(
-#'   data_source = "jhu-csse",
+#'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
 #'   time_type = "day",
 #'   geo_type = "state",

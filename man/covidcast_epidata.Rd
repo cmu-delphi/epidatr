@@ -18,12 +18,3 @@ an instance of covidcast_epidata
 Creates a helper object that can use auto-complete to help find covidcast
 sources and signals.
 }
-\examples{
-covidcast_api <- covidcast_epidata()
-print(covidcast_api) # print available sources and signals
-fb_survey <- covidcast_api$sources$`fb-survey` # tab completion for sources
-print(fb_survey) # print a verbose list of available signals
-smoothed_cli <- fb_survey$signals$smoothed_cli # tab completion for signals
-print(smoothed_cli)
-df <- smoothed_cli$call("nation", "us", epirange(20210405, 20210410))
-}

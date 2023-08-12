@@ -7,9 +7,9 @@
 gft(locations, epiweeks)
 }
 \arguments{
-\item{locations}{character vector. The locations to be fetched.}
+\item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}} The epiweeks to be fetched.}
+\item{epiweeks}{\code{\link{timeset}} Epiweeks to fetch.}
 }
 \value{
 \code{\link{epidata_call}}

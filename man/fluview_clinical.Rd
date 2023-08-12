@@ -7,9 +7,9 @@
 fluview_clinical(regions, epiweeks, issues = NULL, lag = NULL)
 }
 \arguments{
-\item{regions}{character vector. The regions to fetch.}
+\item{regions}{character. Regions to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch in the form
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch in the form
 epirange(startweek,endweek), where startweek and endweek are of the form
 YYYYWW (string or numeric).}
 

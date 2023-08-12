@@ -9,12 +9,11 @@ pvt_twitter(auth, locations, dates = NULL, epiweeks = NULL)
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
 
-\item{locations}{character vector. The locations to fetch.}
+\item{locations}{character. Locations to fetch.}
 
-\item{dates}{\code{\link{timeset}}. The dates to fetch. Mutually exclusive with
-\code{epiweeks}.}
+\item{dates}{\code{\link{timeset}}. Dates to fetch. Mutually exclusive with \code{epiweeks}.}
 
-\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch. Mutually exclusive with
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Mutually exclusive with
 \code{dates}.}
 }
 \value{

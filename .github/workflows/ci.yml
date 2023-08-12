@@ -36,5 +36,4 @@ jobs:
           DELPHI_EPIDATA_KEY: ${{ secrets.SECRET_EPIPROCESS_GHACTIONS_DELPHI_EPIDATA_KEY }}
         with:
           args: 'c("--no-manual", "--as-cran")'
-          build-args: 'c("--no-build-vignettes")'
           error-on: '"error"'

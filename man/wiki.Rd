@@ -7,17 +7,16 @@
 wiki(articles, dates = NULL, epiweeks = NULL, hours = NULL, language = "en")
 }
 \arguments{
-\item{articles}{character vector. The articles to fetch.}
+\item{articles}{character. Articles to fetch.}
 
-\item{dates}{\code{\link{timeset}}. The dates to fetch. Mutually exclusive with
-\code{epiweeks}.}
+\item{dates}{\code{\link{timeset}}. Dates to fetch. Mutually exclusive with \code{epiweeks}.}
 
-\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch. Mutually exclusive with
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Mutually exclusive with
 \code{dates}.}
 
 \item{hours}{integer. Optionally, the hours to fetch.}
 
-\item{language}{string. The language to fetch.}
+\item{language}{string. Language to fetch.}
 }
 \value{
 \code{\link{epidata_call}}

@@ -7,9 +7,9 @@
 paho_dengue(regions, epiweeks, issues = NULL, lag = NULL)
 }
 \arguments{
-\item{regions}{character vector. The regions to fetch.}
+\item{regions}{character. Regions to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
 
 \item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
 most recent issue is returned. Mutually exclusive with \code{lag}.}

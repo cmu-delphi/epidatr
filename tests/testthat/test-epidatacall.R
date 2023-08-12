@@ -25,7 +25,7 @@ test_that("request_impl http errors", {
 
 test_that("fetch and fetch_tbl", {
   epidata_call <- covidcast(
-    data_source = "jhu-csse",
+    source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
     time_type = "day",
     geo_type = "state",
@@ -64,7 +64,7 @@ test_that("fetch and fetch_tbl", {
 
 test_that("fetch_tbl warns on non-success", {
   epidata_call <- covidcast(
-    data_source = "jhu-csse",
+    source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
     time_type = "day",
     geo_type = "state",
@@ -80,7 +80,6 @@ test_that("fetch_tbl warns on non-success", {
     content = function(...) NULL,
     .package = "httr"
   )
-  # TODO: Turn these tests back on, when the API is fully online
   artificial_warning <- "* This is a warning with a leading asterisk and {braces} to make sure we don't have bulleting/glue bugs."
   debug_triplet <- readRDS(testthat::test_path("data/test-classic.rds")) %>%
     jsonlite::fromJSON() %>%

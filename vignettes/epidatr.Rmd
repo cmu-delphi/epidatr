@@ -17,7 +17,7 @@ library(dplyr)
 ## Basic Usage
 
 Fetching some data from the Delphi Epidata API is simple.
-First, we find the function for the endpoint we need, then, we find the right arguments, and finally, we `fetch` a tibble with the data.
+First, we find the function for the endpoint we need, then we find the right arguments, and finally we `fetch` a tibble with the data.
 
 ```{r}
 epicall <- covidcast("fb-survey", "smoothed_cli", "state", "day", "pa", epirange(20210405, 20210410))
@@ -25,23 +25,24 @@ epicall %>% fetch()
 ```
 
 The [Delphi Epidata API documentation](https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html) has more information on the available endpoints and arguments.
+Examples queries with all the endpoint functions available in this package are given below.
 
-## Advanced Usage
+## Advanced Usage (Experimental)
 
-You can also use `covidcast_epidata` function to get an API object, which can help with finding sources and functions without leaving R.
-Using tab completion after typing `epi$signals$` below, you can see all the available sources and signals in the API, with the format `source:signal`.
+You can use `covidcast_epidata` to get help with finding sources and functions without leaving R.
+Using tab completion after typing `epidata$signals$` below, you can see all the available sources and signals in the API, with the format `source:signal`.
 Note that some signal names have dashes in them, so to access them we rely on the backtick operator.
 
 ```{r}
-epidata <- covidcast_epidata()
+epidata <- epidatr:::covidcast_epidata()
 epidata$signals
-epidata$signals$`fb-survey.fb-survey:smoothed_cli`
+epidata$signals$`fb-survey:smoothed_cli`
 ```
 
 From there, you can construct a call analogous to the one above, but using the API object instead of the functions directly.
 
 ```{r}
-epicall <- epidata$signals$`fb-survey.fb-survey:smoothed_cli`$call("state", "pa", epirange(20210405, 20210410))
+epicall <- epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa", epirange(20210405, 20210410))
 epicall %>% fetch()
 ```
 
@@ -51,13 +52,14 @@ epicall %>% fetch()
 
 ### COVIDcast Main Endpoint
 
-All of these signals use the command `covidcast()`, with variation in which source and signal are used.
+API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>
 
-Data Sources and Signals documentation: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>
+
+County geo_values are [FIPS codes](https://en.wikipedia.org/wiki/List_of_United_States_FIPS_codes_by_county) and are discussed in the API docs [here](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html). The example above is for Orange County, California.
 
 ```{r}
 covidcast(
-  data_source = "fb-survey",
+  source = "fb-survey",
   signals = "smoothed_accept_covid_vaccine",
   geo_type = "county",
   time_type = "day",
@@ -66,12 +68,11 @@ covidcast(
 ) %>% fetch()
 ```
 
-County geo_values are [FIPS codes](https://en.wikipedia.org/wiki/List_of_United_States_FIPS_codes_by_county) and are discussed more here: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>. The example above is for Orange County, California.
-Since `covidcast` is an endpoint which supports `*`, here is an example of its use:
+The `covidcast` endpoint supports `*` in its time and geo fields:
 
 ```{r}
 covidcast(
-  data_source = "fb-survey",
+  source = "fb-survey",
   signals = "smoothed_accept_covid_vaccine",
   geo_type = "county",
   time_type = "day",

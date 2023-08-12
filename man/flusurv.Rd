@@ -7,9 +7,9 @@
 flusurv(locations, epiweeks, issues = NULL, lag = NULL)
 }
 \arguments{
-\item{locations}{character vector. Character strings indicating location.}
+\item{locations}{character. Character vector indicating location.}
 
-\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
 
 \item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
 most recent issue is returned. Mutually exclusive with \code{lag}.}
