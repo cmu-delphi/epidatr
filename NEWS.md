@@ -2,6 +2,12 @@
 
 - Fix source name duplication bug in `covidcast_epidata`
 - Mark `covidcast_epidata` as experimental and do not export it
+- Change `covidcast` arg `data_source` to `source`
+- Make `covidcast` args `issues`, `lag`, and `as_of` mutually exclusive
+- Make `covid_hosp_facility_lookup` args `state,` `ccn`, `city`, `zip`, and
+  `fips_code` mutually exclusive
+- Update documentation to only refer to character or strings (not character
+  vectors or character strings)
 
 # epidatr 0.7.1
 
