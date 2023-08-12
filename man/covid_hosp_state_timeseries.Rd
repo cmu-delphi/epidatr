@@ -7,7 +7,7 @@
 covid_hosp_state_timeseries(states, dates, issues = NULL)
 }
 \arguments{
-\item{states}{character vector. Two letter state abbreviations.}
+\item{states}{character. Two letter state abbreviations.}
 
 \item{dates}{\code{\link{timeset}}. Dates to fetch.}
 

@@ -9,11 +9,11 @@ pvt_sensors(auth, names, locations, epiweeks)
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
 
-\item{names}{character vector. The names of the sensors to fetch.}
+\item{names}{character. Sensor names to fetch.}
 
-\item{locations}{character vector. The locations to fetch.}
+\item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
 }
 \value{
 \code{\link{epidata_call}}

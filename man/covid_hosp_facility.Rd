@@ -7,8 +7,7 @@
 covid_hosp_facility(hospital_pks, collection_weeks, publication_dates = NULL)
 }
 \arguments{
-\item{hospital_pks}{string. A character string of facility unique
-identifiers.}
+\item{hospital_pks}{character. Facility identifiers.}
 
 \item{collection_weeks}{\code{\link{timeset}}. Epiweeks to fetch.}
 

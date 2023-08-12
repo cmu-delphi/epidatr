@@ -9,9 +9,9 @@ pvt_ght(auth, locations, epiweeks, query)
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
 
-\item{locations}{character vector. The locations to be fetched.}
+\item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. The epiweeks to be fetched.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
 
 \item{query}{string. The query to be fetched.}
 }

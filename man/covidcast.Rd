@@ -26,11 +26,11 @@ covidcast(
 \item{time_type}{string. The temporal resolution of the data (either "day" or
 "week", depending on signal).}
 
-\item{geo_values}{character vector. The geographies to return. "*" fetches
+\item{geo_values}{character. The geographies to return. "*" fetches
 all. (See:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.)}
 
-\item{time_values}{\code{\link{timeset}}. The dates to fetch.}
+\item{time_values}{\code{\link{timeset}}. Dates to fetch.}
 
 \item{as_of}{Date. Optionally, the as of date for the issues to fetch. If not
 specified, the most recent data is returned. Mutually exclusive with

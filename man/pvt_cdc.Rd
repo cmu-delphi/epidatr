@@ -9,7 +9,7 @@ pvt_cdc(auth, locations, epiweeks)
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
 
-\item{locations}{character vector. Locations to fetch (see docs).}
+\item{locations}{character. Locations to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
 }

@@ -7,11 +7,11 @@
 fluview(regions, epiweeks, issues = NULL, lag = NULL, auth = NULL)
 }
 \arguments{
-\item{regions}{character vector. The locations to fetch. Can we any string
-IDs in national, HHS region, census division, most states and territories,
-and so on. Full list link below.}
+\item{regions}{character. Locations to fetch. Can we any string IDs in
+national, HHS region, census division, most states and territories, and so
+on. Full list link below.}
 
-\item{epiweeks}{\code{\link{timeset}}. The epiweeks to fetch in the form
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch in the form
 epirange(startweek,endweek), where startweek and endweek are of the form
 YYYYWW (string or numeric).}
 

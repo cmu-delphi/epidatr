@@ -13,11 +13,11 @@ covid_hosp_facility_lookup(
 )
 }
 \arguments{
-\item{state}{string. A two-letter character string state abbreviation.}
+\item{state}{string. A two-letter character state abbreviation.}
 
-\item{ccn}{string. A character string for facility CMS certification number.}
+\item{ccn}{string. A facility CMS certification number.}
 
-\item{city}{string. A characater string for city name.}
+\item{city}{string. A city name.}
 
 \item{zip}{string. A 5-digit zip code.}
 
