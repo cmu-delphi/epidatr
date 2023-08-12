@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.8.0</span>
       </span>
     </div>
 
@@ -67,7 +67,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">covidcast</span><span class="op">(</span></span>
-<span>  <span class="va">data_source</span>,</span>
+<span>  <span class="va">source</span>,</span>
 <span>  <span class="va">signals</span>,</span>
 <span>  <span class="va">geo_type</span>,</span>
 <span>  <span class="va">time_type</span>,</span>
@@ -81,12 +81,7 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>data_source</dt>
-<dd><p>string. The data source to query (see:
-<a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html" class="external-link">https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html</a>).</p></dd>
-
-
-<dt>signals</dt>
+    <dl><dt>signals</dt>
 <dd><p>string. The signals to query from a specific source (see:
 <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals.html" class="external-link">https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals.html</a>).</p></dd>
 
@@ -102,13 +97,13 @@
 
 
 <dt>geo_values</dt>
-<dd><p>character vector. The geographies to return. "*" fetches
+<dd><p>character. The geographies to return. "*" fetches
 all. (See:
 <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html" class="external-link">https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html</a>.)</p></dd>
 
 
 <dt>time_values</dt>
-<dd><p><code><a href="timeset.html">timeset</a></code>. The dates to fetch.</p></dd>
+<dd><p><code><a href="timeset.html">timeset</a></code>. Dates to fetch.</p></dd>
 
 
 <dt>as_of</dt>
@@ -127,6 +122,11 @@ specified, the most recent issue is returned. Mutually exclusive with
 <dd><p>integer. Optionally, the lag of the issues to fetch. If not set,
 the most recent issue is returned. Mutually exclusive with <code>as_of</code> or
 <code>issues</code>.</p></dd>
+
+
+<dt>data_source</dt>
+<dd><p>string. The data source to query (see:
+<a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html" class="external-link">https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html</a>).</p></dd>
 
 </dl></div>
     <div id="value">
@@ -150,7 +150,7 @@ the most recent issue is returned. Mutually exclusive with <code>as_of</code> or
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="fu">covidcast</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  data_source <span class="op">=</span> <span class="st">"jhu-csse"</span>,</span></span>
+<span class="r-in"><span>  source <span class="op">=</span> <span class="st">"jhu-csse"</span>,</span></span>
 <span class="r-in"><span>  signals <span class="op">=</span> <span class="st">"confirmed_7dav_incidence_prop"</span>,</span></span>
 <span class="r-in"><span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span></span>
 <span class="r-in"><span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span></span>
@@ -158,7 +158,7 @@ the most recent issue is returned. Mutually exclusive with <code>as_of</code> or
 <span class="r-in"><span>  time_values <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20200601</span>, <span class="fl">20200801</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">covidcast</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  data_source <span class="op">=</span> <span class="st">"jhu-csse"</span>,</span></span>
+<span class="r-in"><span>  source <span class="op">=</span> <span class="st">"jhu-csse"</span>,</span></span>
 <span class="r-in"><span>  signals <span class="op">=</span> <span class="st">"confirmed_7dav_incidence_prop"</span>,</span></span>
 <span class="r-in"><span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span></span>
 <span class="r-in"><span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span></span>

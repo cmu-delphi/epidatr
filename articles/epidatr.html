@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.8.0</span>
       </span>
     </div>
 
@@ -95,9 +95,8 @@
 <h2 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
 </h2>
 <p>Fetching some data from the Delphi Epidata API is simple. First, we
-find the function for the endpoint we need, then, we find the right
-arguments, and finally, we <code>fetch</code> a tibble with the
-data.</p>
+find the function for the endpoint we need, then we find the right
+arguments, and finally we <code>fetch</code> a tibble with the data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epicall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covidcast.html">covidcast</a></span><span class="op">(</span><span class="st">"fb-survey"</span>, <span class="st">"smoothed_cli"</span>, <span class="st">"state"</span>, <span class="st">"day"</span>, <span class="st">"pa"</span>, <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">epicall</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -113,37 +112,37 @@ data.</p>
 <span><span class="co">#&gt; <span style="color: #949494;">#   missing_sample_size &lt;int&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>The <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html" class="external-link">Delphi
 Epidata API documentation</a> has more information on the available
-endpoints and arguments.</p>
+endpoints and arguments. Examples queries with all the endpoint
+functions available in this package are given below.</p>
 </div>
 <div class="section level2">
-<h2 id="advanced-usage">Advanced Usage<a class="anchor" aria-label="anchor" href="#advanced-usage"></a>
+<h2 id="advanced-usage-experimental">Advanced Usage (Experimental)<a class="anchor" aria-label="anchor" href="#advanced-usage-experimental"></a>
 </h2>
-<p>You can also use <code>covidcast_epidata</code> function to get an
-API object, which can help with finding sources and functions without
-leaving R. Using tab completion after typing <code>epi$signals$</code>
-below, you can see all the available sources and signals in the API,
-with the format <code>source:signal</code>. Note that some signal names
-have dashes in them, so to access them we rely on the backtick
-operator.</p>
+<p>You can use <code>covidcast_epidata</code> to get help with finding
+sources and functions without leaving R. Using tab completion after
+typing <code>epidata$signals$</code> below, you can see all the
+available sources and signals in the API, with the format
+<code>source:signal</code>. Note that some signal names have dashes in
+them, so to access them we rely on the backtick operator.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covidcast_epidata.html">covidcast_epidata</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu">epidatr</span><span class="fu">:::</span><span class="fu"><a href="../reference/covidcast_epidata.html">covidcast_epidata</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">epidata</span><span class="op">$</span><span class="va">signals</span></span>
-<span><span class="co">#&gt; $`chng.chng:smoothed_outpatient_cli`</span></span>
+<span><span class="co">#&gt; $`chng:smoothed_outpatient_cli`</span></span>
 <span><span class="co">#&gt; [1] "COVID-Related Doctor Visits"</span></span>
 <span><span class="co">#&gt; [1] "chng:smoothed_outpatient_cli"</span></span>
 <span><span class="co">#&gt; [1] "Estimated percentage of outpatient doctor visits primarily about COVID-related symptoms"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $`chng.chng:smoothed_adj_outpatient_cli`</span></span>
+<span><span class="co">#&gt; $`chng:smoothed_adj_outpatient_cli`</span></span>
 <span><span class="co">#&gt; [1] "COVID-Related Doctor Visits (Day-adjusted)"</span></span>
 <span><span class="co">#&gt; [1] "chng:smoothed_adj_outpatient_cli"</span></span>
 <span><span class="co">#&gt; [1] "Estimated percentage of outpatient doctor visits primarily about COVID-related symptoms"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $`chng.chng:smoothed_outpatient_covid`</span></span>
+<span><span class="co">#&gt; $`chng:smoothed_outpatient_covid`</span></span>
 <span><span class="co">#&gt; [1] "COVID-Confirmed Doctor Visits"</span></span>
 <span><span class="co">#&gt; [1] "chng:smoothed_outpatient_covid"</span></span>
 <span><span class="co">#&gt; [1] "COVID-Confirmed Doctor Visits"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $`chng.chng:smoothed_adj_outpatient_covid`</span></span>
+<span><span class="co">#&gt; $`chng:smoothed_adj_outpatient_covid`</span></span>
 <span><span class="co">#&gt; [1] "COVID-Confirmed Doctor Visits (Day-adjusted)"</span></span>
 <span><span class="co">#&gt; [1] "chng:smoothed_adj_outpatient_covid"</span></span>
 <span><span class="co">#&gt; [1] "COVID-Confirmed Doctor Visits"</span></span>
@@ -151,14 +150,14 @@ operator.</p>
 <span><span class="co">#&gt;  [ reached getOption("max.print") -- omitted 457 entries ]</span></span>
 <span><span class="co">#&gt; attr(,"class")</span></span>
 <span><span class="co">#&gt; [1] "covidcast_data_signal_list" "list"</span></span>
-<span><span class="va">epidata</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">`fb-survey.fb-survey:smoothed_cli`</span></span>
+<span><span class="va">epidata</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">`fb-survey:smoothed_cli`</span></span>
 <span><span class="co">#&gt; [1] "COVID-Like Symptoms (Unweighted 7-day average)"</span></span>
 <span><span class="co">#&gt; [1] "fb-survey:smoothed_cli"</span></span>
 <span><span class="co">#&gt; [1] "Estimated percentage of people with COVID-like illness "</span></span></code></pre></div>
 <p>From there, you can construct a call analogous to the one above, but
 using the API object instead of the functions directly.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op">&lt;-</span> <span class="va">epidata</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">`fb-survey.fb-survey:smoothed_cli`</span><span class="op">$</span><span class="fu">call</span><span class="op">(</span><span class="st">"state"</span>, <span class="st">"pa"</span>, <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op">&lt;-</span> <span class="va">epidata</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">`fb-survey:smoothed_cli`</span><span class="op">$</span><span class="fu">call</span><span class="op">(</span><span class="st">"state"</span>, <span class="st">"pa"</span>, <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">epicall</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 15</span></span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
@@ -180,12 +179,13 @@ all locations. Check the help for a given endpoint to see if it supports
 <div class="section level3">
 <h3 id="covidcast-main-endpoint">COVIDcast Main Endpoint<a class="anchor" aria-label="anchor" href="#covidcast-main-endpoint"></a>
 </h3>
-<p>All of these signals use the command <code><a href="../reference/covidcast.html">covidcast()</a></code>, with
-variation in which source and signal are used.</p>
-<p>Data Sources and Signals documentation: <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html</a></p>
+<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html</a></p>
+<p>County geo_values are <a href="https://en.wikipedia.org/wiki/List_of_United_States_FIPS_codes_by_county" class="external-link">FIPS
+codes</a> and are discussed in the API docs <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html" class="external-link">here</a>.
+The example above is for Orange County, California.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/covidcast.html">covidcast</a></span><span class="op">(</span></span>
-<span>  data_source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
+<span>  source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
 <span>  signals <span class="op">=</span> <span class="st">"smoothed_accept_covid_vaccine"</span>,</span>
 <span>  geo_type <span class="op">=</span> <span class="st">"county"</span>,</span>
 <span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
@@ -202,14 +202,11 @@ variation in which source and signal are used.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more row</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 7 more variables: lag &lt;int&gt;, missing_value &lt;int&gt;, missing_stderr &lt;int&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   missing_sample_size &lt;int&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></span></code></pre></div>
-<p>County geo_values are <a href="https://en.wikipedia.org/wiki/List_of_United_States_FIPS_codes_by_county" class="external-link">FIPS
-codes</a> and are discussed more here: <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html</a>.
-The example above is for Orange County, California. Since
-<code>covidcast</code> is an endpoint which supports <code>*</code>,
-here is an example of its use:</p>
+<p>The <code>covidcast</code> endpoint supports <code>*</code> in its
+time and geo fields:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/covidcast.html">covidcast</a></span><span class="op">(</span></span>
-<span>  data_source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
+<span>  source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
 <span>  signals <span class="op">=</span> <span class="st">"smoothed_accept_covid_vaccine"</span>,</span>
 <span>  geo_type <span class="op">=</span> <span class="st">"county"</span>,</span>
 <span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
