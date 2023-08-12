@@ -621,7 +621,7 @@ covidcast_meta <- function() {
 #' @examples
 #' \dontrun{
 #' covidcast(
-#'   data_source = "jhu-csse",
+#'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
 #'   geo_type = "state",
 #'   time_type = "day",
@@ -629,7 +629,7 @@ covidcast_meta <- function() {
 #'   time_values = epirange(20200601, 20200801)
 #' ) %>% fetch()
 #' covidcast(
-#'   data_source = "jhu-csse",
+#'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
 #'   geo_type = "state",
 #'   time_type = "day",
@@ -664,7 +664,7 @@ covidcast_meta <- function() {
 #'
 #' @export
 covidcast <- function(
-    data_source,
+    source,
     signals,
     geo_type,
     time_type,
@@ -675,7 +675,7 @@ covidcast <- function(
     lag = NULL) {
   # Check parameters
   if (
-    missing(data_source) ||
+    missing(source) ||
       missing(signals) ||
       missing(time_type) ||
       missing(geo_type) ||
@@ -689,7 +689,7 @@ covidcast <- function(
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
   }
-  assert_character_param("data_source", data_source, len = 1)
+  assert_character_param("data_source", source, len = 1)
   assert_character_param("signals", signals)
   assert_character_param("time_type", time_type, len = 1)
   assert_character_param("geo_type", geo_type, len = 1)
@@ -705,7 +705,7 @@ covidcast <- function(
   create_epidata_call(
     "covidcast/",
     list(
-      data_source = data_source,
+      data_source = source,
       signals = signals,
       geo_type = geo_type,
       time_type = time_type,

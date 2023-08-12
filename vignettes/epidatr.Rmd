@@ -59,7 +59,7 @@ County geo_values are [FIPS codes](https://en.wikipedia.org/wiki/List_of_United_
 
 ```{r}
 covidcast(
-  data_source = "fb-survey",
+  source = "fb-survey",
   signals = "smoothed_accept_covid_vaccine",
   geo_type = "county",
   time_type = "day",
@@ -72,7 +72,7 @@ The `covidcast` endpoint supports `*` in its time and geo fields:
 
 ```{r}
 covidcast(
-  data_source = "fb-survey",
+  source = "fb-survey",
   signals = "smoothed_accept_covid_vaccine",
   geo_type = "county",
   time_type = "day",

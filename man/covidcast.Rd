@@ -5,7 +5,7 @@
 \title{Fetch covidcast data}
 \usage{
 covidcast(
-  data_source,
+  source,
   signals,
   geo_type,
   time_type,
@@ -17,9 +17,6 @@ covidcast(
 )
 }
 \arguments{
-\item{data_source}{string. The data source to query (see:
-\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html}).}
-
 \item{signals}{string. The signals to query from a specific source (see:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals.html}).}
 
@@ -46,6 +43,9 @@ specified, the most recent issue is returned. Mutually exclusive with
 \item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
 the most recent issue is returned. Mutually exclusive with \code{as_of} or
 \code{issues}.}
+
+\item{data_source}{string. The data source to query (see:
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html}).}
 }
 \value{
 \code{\link{epidata_call}}
@@ -59,7 +59,7 @@ COVIDcast public dashboard: \url{https://delphi.cmu.edu/covidcast/}
 \examples{
 \dontrun{
 covidcast(
-  data_source = "jhu-csse",
+  source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
   geo_type = "state",
   time_type = "day",
@@ -67,7 +67,7 @@ covidcast(
   time_values = epirange(20200601, 20200801)
 ) \%>\% fetch()
 covidcast(
-  data_source = "jhu-csse",
+  source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
   geo_type = "state",
   time_type = "day",
