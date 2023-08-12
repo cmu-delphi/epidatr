@@ -91,14 +91,6 @@ print.covidcast_data_source <- function(source, ...) {
 #' Creates a helper object that can use auto-complete to help find covidcast
 #' sources and signals.
 #'
-#' @examples
-#' covidcast_api <- covidcast_epidata()
-#' print(covidcast_api) # print available sources and signals
-#' fb_survey <- covidcast_api$sources$`fb-survey` # tab completion for sources
-#' print(fb_survey) # print a verbose list of available signals
-#' smoothed_cli <- fb_survey$signals$smoothed_cli # tab completion for signals
-#' print(smoothed_cli)
-#' df <- smoothed_cli$call("nation", "us", epirange(20210405, 20210410))
 #' @param base_url optional alternative API base url
 #' @param timeout_seconds the maximum amount of time to wait for a response
 #' @importFrom httr stop_for_status content http_type
@@ -106,7 +98,6 @@ print.covidcast_data_source <- function(source, ...) {
 #' @importFrom xml2 read_html xml_find_all xml_text
 #' @return an instance of covidcast_epidata
 #'
-#' @export
 covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) {
   url <- join_url(base_url, "covidcast/meta")
   response <- do_request(url, list(), timeout_seconds)
@@ -130,11 +121,13 @@ covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) 
   sources <- do.call(c, lapply(response_content, parse_source, base_url = base_url))
   class(sources) <- c("covidcast_data_source_list", class(sources))
 
-  all_signals <- do.call(c, lapply(sources, function(x) {
-    l <- c(x$signals)
-    names(l) <- paste(x$source, names(l), sep = ":")
-    l
-  }))
+  all_signals <- do.call(c, unname(
+    lapply(sources, function(x) {
+      l <- c(x$signals)
+      names(l) <- paste(x$source, names(l), sep = ":")
+      l
+    })
+  ))
   class(all_signals) <- c("covidcast_data_signal_list", class(all_signals))
   structure(
     list(
@@ -161,7 +154,6 @@ as.data.frame.covidcast_data_source_list <- function(sources, ...) {
   }), ...)
 }
 
-#' @export
 print.covidcast_epidata <- function(epidata, ...) {
   print("COVIDcast Epidata Fetcher")
   print("Sources:")
