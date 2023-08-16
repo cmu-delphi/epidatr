@@ -14,18 +14,49 @@ library(epidatr)
 library(dplyr)
 ```
 
+The epidatr package provides access to all the endpoints of the [Delphi Epidata
+API](https://cmu-delphi.github.io/delphi-epidata/), and can be used to make
+requests for specific signals on specific dates and in selected geographic
+regions.
+
+We recommend you register for an API key. While most endpoints are available
+without one, there are [limits on API usage for anonymous
+users](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html), including
+a rate limit. If you regularly request large amounts of data, please consider
+[registering for an API
+key](https://api.delphi.cmu.edu/epidata/admin/registration_form). You can then
+specify this key by either
+
+- setting the environment variable `DELPHI_EPIDATA_KEY`, such as by editing your
+  `.Renviron` file
+- setting the option `delphi.epidata.key` using `options()`
+
 ## Basic Usage
 
-Fetching some data from the Delphi Epidata API is simple.
-First, we find the function for the endpoint we need, then we find the right arguments, and finally we `fetch` a tibble with the data.
+Fetching some data from the Delphi Epidata API is simple. Suppose we are
+interested in the [`covidcast`
+endpoint](https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html), which
+provides access to a range of data on COVID-19. Reviewing the endpoint
+documentation, we see that we need to specify a data source name, a signal name,
+a geographic level, a time resolution, and the location and times of interest.
+
+In this case, the `covidcast()` function lets us specify these parameters for
+the endpoint:
 
 ```{r}
-epicall <- covidcast("fb-survey", "smoothed_cli", "state", "day", "pa", epirange(20210405, 20210410))
+epicall <- covidcast("fb-survey", "smoothed_cli", "state", "day", "pa",
+                     epirange(20210405, 20210410))
+```
+
+The `epicall` object is now an object representing the query we wish to make.
+The `fetch()` function allows us to retrieve the results as a tibble:
+
+```{r}
 epicall %>% fetch()
 ```
 
-The [Delphi Epidata API documentation](https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html) has more information on the available endpoints and arguments.
-Examples queries with all the endpoint functions available in this package are given below.
+The [Delphi Epidata API documentation](https://cmu-delphi.github.io/delphi-epidata/) has more information on the available endpoints and arguments.
+Examples queries with all the endpoint functions available in this package are given [below](#example-queries).
 
 ## Advanced Usage (Experimental)
 
