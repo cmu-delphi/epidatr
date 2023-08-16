@@ -2,20 +2,31 @@
 % Please edit documentation in R/model.R
 \name{epirange}
 \alias{epirange}
-\title{builds a new EpiRange instances}
+\title{Specify a date range (in days or epiweeks) for an API request.}
 \usage{
 epirange(from, to)
 }
 \arguments{
-\item{from}{A Date, integer-like value, or integer-like string that takes the
-form YYYYMMDD for dates or YYYYMM for epiweeks.}
+\item{from}{A \code{Date}, integer-like value, or integer-like string that takes the
+form YYYYMMDD for dates or YYYYWW for epiweeks.}
 
-\item{to}{A Date, integer-like value, or integer-like string that takes the
-form YYYYMMDD for dates or YYYYMM for epiweeks.}
+\item{to}{A \code{Date}, integer-like value, or integer-like string that takes the
+form YYYYMMDD for dates or YYYYWW for epiweeks.}
 }
 \value{
 EpiRange instance
 }
 \description{
-builds a new EpiRange instances
+Epiweeks, also known as MMWR weeks number the weeks of the year from 1 to 53,
+each week spanning from Sunday to Saturday. The numbering is \href{https://ndc.services.cdc.gov/wp-content/uploads/MMWR_Week_overview.pdf}{defined by the CDC}.
+}
+\examples{
+# Represents 2021-01-01 to 2021-01-07, inclusive
+epirange(20210101, 20210107)
+
+# The same, but using Date objects
+epirange(as.Date("2021-01-01"), as.Date("2021-01-07"))
+
+# Represents epiweeks 2 through 4 of 2022, inclusive
+epirange(202202, 202204)
 }

@@ -4,22 +4,25 @@
 \alias{timeset}
 \title{timeset}
 \description{
-A collection of date-like values, including dates, epiweeks, and ranges of
-dates or epiweeks (\code{\link{epirange}}). This is often used to specify the time
-dimension for an epidata query. The allowed values are:
+Many API calls accept timesets to specify the time ranges of data being
+requested. Timesets can be specified with \code{epirange()}, as \code{Date} objects, or
+with wildcards.
 }
 \details{
+Timesets are not special R types; the term simply describes any value that
+would be accepted by epidatr to specify the time value of an epidata query.
+The allowed values are:
 \itemize{
 \item Dates: \code{Date} instances, integer-like values, or integer-like strings that
-take the form YYYYMMDD,
-\item Epiweeks: integer-like values or integer-like strings that take the form
-YYYYMM,
-\item EpiRanges: a list of \code{\link{epirange}} instances.
-\item Wildcard: "*" (requests all available values for this dimension)
+take the form YYYYMMDD.
+\item Epiweeks: Integer-like values or integer-like strings that take the form
+YYYYWW.
+\item EpiRanges: A range returned by \code{epirange()}, or a list of multiple ranges
+\item Wildcard: The string \code{"*"}, which request all available time values
 }
 
 Please refer to the specific endpoint documentation for guidance on using
 dates vs weeks. Most endpoints support only one or the other. Some (less
 commonly used) endpoints may not accept the \code{"*"} wildcard, but this can be
-simulated with a large \code{\link{epirange}}.
+simulated with a large \code{epirange()}.
 }
