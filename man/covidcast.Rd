@@ -17,8 +17,11 @@ covidcast(
 )
 }
 \arguments{
+\item{source}{string. The data source to query (see:
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html}).}
+
 \item{signals}{string. The signals to query from a specific source (see:
-\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals.html}).}
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html}).}
 
 \item{geo_type}{string. The geographic resolution of the data (see:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}).}
@@ -43,9 +46,6 @@ specified, the most recent issue is returned. Mutually exclusive with
 \item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
 the most recent issue is returned. Mutually exclusive with \code{as_of} or
 \code{issues}.}
-
-\item{data_source}{string. The data source to query (see:
-\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html}).}
 }
 \value{
 \code{\link{epidata_call}}
