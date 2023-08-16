@@ -44,8 +44,10 @@ In this case, the `covidcast()` function lets us specify these parameters for
 the endpoint:
 
 ```{r}
-epicall <- covidcast("fb-survey", "smoothed_cli", "state", "day", "pa",
-                     epirange(20210405, 20210410))
+epicall <- covidcast(
+  "fb-survey", "smoothed_cli", "state", "day", "pa",
+  epirange(20210405, 20210410)
+)
 ```
 
 The `epicall` object is now an object representing the query we wish to make.
