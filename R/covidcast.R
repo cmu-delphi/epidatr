@@ -14,6 +14,7 @@ parse_signal <- function(signal, base_url) {
   #' @param issues data source to fetch
   #' @param lag data source to fetch
   #' @return an instance of epidata_call
+  #' @keywords internal
   signal$call <- function(geo_type,
                           geo_values,
                           time_values,

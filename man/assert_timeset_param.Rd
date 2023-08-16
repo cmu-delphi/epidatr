@@ -11,3 +11,4 @@ assert_timeset_param(name, value, len = NULL, required = TRUE)
 Allows a timeset param: a date vector, a character vector, an integer-like
 vector, or a single EpiRange
 }
+\keyword{internal}

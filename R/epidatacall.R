@@ -264,6 +264,7 @@ with_base_url <- function(epidata_call, base_url) {
 #' HTTP errors and forwarding the HTTP body in R errors
 #' @importFrom httr stop_for_status content http_type
 #' @importFrom xml2 read_html xml_find_all xml_text
+#' @keywords internal
 request_impl <- function(epidata_call, format_type, fields = NULL, timeout_seconds = 30) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(format_type %in% c("json", "csv", "classic"))

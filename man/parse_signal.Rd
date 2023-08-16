@@ -31,3 +31,4 @@ an instance of epidata_call
 \description{
 fetch covidcast data
 }
+\keyword{internal}
