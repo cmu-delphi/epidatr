@@ -20,7 +20,7 @@ pvt_dengue_sensors(auth, names, locations, epiweeks)
 \code{\link{epidata_call}}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html}
 }
 \details{
 TODO: what are valid locations and names?

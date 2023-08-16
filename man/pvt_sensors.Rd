@@ -19,7 +19,7 @@ pvt_sensors(auth, names, locations, epiweeks)
 \code{\link{epidata_call}}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/sensors.html
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/sensors.html}
 }
 \examples{
 \dontrun{

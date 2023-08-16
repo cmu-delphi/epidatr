@@ -17,7 +17,7 @@ pvt_norostat(auth, locations, epiweeks)
 \code{\link{epidata_call}}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/norostat.html
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/norostat.html}
 }
 \examples{
 \dontrun{

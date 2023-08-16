@@ -21,7 +21,7 @@ the most recent issue is returned. Mutually exclusive with \code{issues}.}
 \code{\link{epidata_call}}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html}
 }
 \examples{
 \dontrun{

@@ -13,7 +13,7 @@ pvt_meta_norostat(auth)
 \code{\link{epidata_call}}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html}
 }
 \examples{
 \dontrun{

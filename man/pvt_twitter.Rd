@@ -20,7 +20,7 @@ pvt_twitter(auth, locations, dates = NULL, epiweeks = NULL)
 \code{\link{epidata_call}}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/twitter.html
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/twitter.html}
 }
 \examples{
 \dontrun{

@@ -19,7 +19,7 @@ pvt_ght(auth, locations, epiweeks, query)
 \code{\link{epidata_call}}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/ght.html
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/ght.html}
 }
 \details{
 TODO: find a non-trivial query

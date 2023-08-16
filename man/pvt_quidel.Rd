@@ -17,7 +17,7 @@ pvt_quidel(auth, locations, epiweeks)
 \code{\link{epidata_call}}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/quidel.html
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/quidel.html}
 }
 \examples{
 \dontrun{
