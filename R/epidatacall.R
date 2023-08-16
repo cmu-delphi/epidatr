@@ -89,12 +89,12 @@ request_arguments <- function(epidata_call, format_type, fields = NULL) {
 }
 
 #' @export
-print.epidata_call <- function(epidata_call) {
-  stopifnot(inherits(epidata_call, "epidata_call"))
+print.epidata_call <- function(x, ...) {
+  stopifnot(inherits(x, "epidata_call"))
   cli::cli_h1("<epidata_call> object:")
   cli::cli_bullets(c(
     "*" = "Pipe this object into `fetch()` to actually fetch the data",
-    "*" = paste0("Request URL: ", request_url(epidata_call))
+    "*" = paste0("Request URL: ", request_url(x))
   ))
 }
 

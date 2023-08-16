@@ -32,10 +32,10 @@ parse_signal <- function(signal, base_url) {
 }
 
 #' @export
-print.covidcast_data_signal <- function(signal, ...) {
-  print(signal$name)
-  print(signal$key)
-  print(signal$short_description)
+print.covidcast_data_signal <- function(x, ...) {
+  print(x$name)
+  print(x$key)
+  print(x$short_description)
 }
 
 parse_source <- function(source, base_url) {
@@ -79,11 +79,11 @@ as.data.frame.covidcast_data_signal_list <- function(signals, ...) {
 }
 
 #' @export
-print.covidcast_data_source <- function(source, ...) {
-  print(source$name, ...)
-  print(source$source, ...)
-  print(source$description, ...)
-  signals <- as.data.frame(source$signals)
+print.covidcast_data_source <- function(x, ...) {
+  print(x$name, ...)
+  print(x$source, ...)
+  print(x$description, ...)
+  signals <- as.data.frame(x$signals)
   print(signals[, c("signal", "name", "short_description")], ...)
 }
 
@@ -155,16 +155,16 @@ as.data.frame.covidcast_data_source_list <- function(sources, ...) {
   }), ...)
 }
 
-print.covidcast_epidata <- function(epidata, ...) {
+print.covidcast_epidata <- function(x, ...) {
   print("COVIDcast Epidata Fetcher")
   print("Sources:")
-  sources <- as.data.frame(epidata$sources)
+  sources <- as.data.frame(x$sources)
   print(sources[1:5, c("source", "name")], ...)
   if (nrow(sources) > 5) {
     print(paste0((nrow(sources) - 5), " more..."))
   }
   print("Signals")
-  signals <- as.data.frame(epidata$signals)
+  signals <- as.data.frame(x$signals)
   print(signals[1:5, c("source", "signal", "name")], ...)
   if (nrow(signals) > 5) {
     print(paste0((nrow(signals) - 5), " more..."))
