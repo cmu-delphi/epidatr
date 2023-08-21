@@ -87,9 +87,9 @@ print.covidcast_data_source <- function(x, ...) {
   print(signals[, c("signal", "name", "short_description")], ...)
 }
 
-#' creates the covidcast epidata helper
+#' Creates the COVIDcast Epidata autocomplete helper
 #'
-#' Creates a helper object that can use auto-complete to help find covidcast
+#' Creates a helper object that can use auto-complete to help find COVIDcast
 #' sources and signals.
 #'
 #' @param base_url optional alternative API base url
@@ -97,8 +97,8 @@ print.covidcast_data_source <- function(x, ...) {
 #' @importFrom httr stop_for_status content http_type
 #' @importFrom jsonlite fromJSON
 #' @importFrom xml2 read_html xml_find_all xml_text
-#' @return an instance of covidcast_epidata
-#'
+#' @return An instance of `covidcast_epidata`
+#' @export
 covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) {
   url <- join_url(base_url, "covidcast/meta")
   response <- do_request(url, list(), timeout_seconds)

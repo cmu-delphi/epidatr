@@ -62,17 +62,33 @@ Examples queries with all the endpoint functions available in this package are g
 
 ## Advanced Usage (Experimental)
 
-You can use `covidcast_epidata` to get help with finding sources and functions without leaving R.
-Using tab completion after typing `epidata$signals$` below, you can see all the available sources and signals in the API, with the format `source:signal`.
-Note that some signal names have dashes in them, so to access them we rely on the backtick operator.
+The [COVIDcast
+endpoint](https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html) of the
+Epidata API contains many separate data sources and signals. It can be difficult
+to find the name of the signal you're looking for, so you can use
+`covidcast_epidata` to get help with finding sources and functions without
+leaving R.
+
+The `covidcast_epidata()` function fetches a list of all signals, and returns an
+object containing fields for every signal:
 
 ```{r}
-epidata <- epidatr:::covidcast_epidata()
+epidata <- covidcast_epidata()
 epidata$signals
+```
+
+If you use an editor that supports tab completion, such as RStudio, type
+`epidata$signals$` and wait for the tab completion popup. You will be able to
+type the name of signals and have the autocomplete feature select them from the
+list for you. Note that some signal names have dashes in them, so to access them
+we rely on the backtick operator:
+
+```{r}
 epidata$signals$`fb-survey:smoothed_cli`
 ```
 
-From there, you can construct a call analogous to the one above, but using the API object instead of the functions directly.
+These objects can be used directly to fetch data, without requiring us to use
+the `covidcast()` function. Simple use the `$call` attribute of the object:
 
 ```{r}
 epicall <- epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa", epirange(20210405, 20210410))

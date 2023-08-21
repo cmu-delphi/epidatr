@@ -2,7 +2,7 @@
 % Please edit documentation in R/covidcast.R
 \name{covidcast_epidata}
 \alias{covidcast_epidata}
-\title{creates the covidcast epidata helper}
+\title{Creates the COVIDcast Epidata autocomplete helper}
 \usage{
 covidcast_epidata(base_url = global_base_url, timeout_seconds = 30)
 }
@@ -12,9 +12,9 @@ covidcast_epidata(base_url = global_base_url, timeout_seconds = 30)
 \item{timeout_seconds}{the maximum amount of time to wait for a response}
 }
 \value{
-an instance of covidcast_epidata
+An instance of \code{covidcast_epidata}
 }
 \description{
-Creates a helper object that can use auto-complete to help find covidcast
+Creates a helper object that can use auto-complete to help find COVIDcast
 sources and signals.
 }
