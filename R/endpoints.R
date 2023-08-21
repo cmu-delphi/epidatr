@@ -685,7 +685,7 @@ covidcast <- function(
       missing(time_values) || missing(geo_values)
   ) {
     stop(
-      "`data_source`, `signals`, `time_type`, `geo_type`, `time_values`, and `geo_value` are all required"
+      "`source`, `signals`, `time_type`, `geo_type`, `time_values`, and `geo_value` are all required"
     )
   }
 
