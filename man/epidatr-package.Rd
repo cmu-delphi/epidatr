@@ -11,6 +11,7 @@ R Client for Delphi's Epidata API. Tools for fetching data in various forms.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://cmu-delphi.github.io/epidatr/}
   \item \url{https://github.com/cmu-delphi/epidatr}
   \item Report bugs at \url{https://github.com/cmu-delphi/epidatr/issues}
 }
