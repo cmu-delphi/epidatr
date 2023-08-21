@@ -15,7 +15,7 @@ delphi(system, epiweek)
 \code{\link{epidata_call}}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/delphi.html
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/delphi.html}
 }
 \examples{
 \dontrun{

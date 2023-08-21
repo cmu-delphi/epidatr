@@ -11,3 +11,4 @@ request_impl(epidata_call, format_type, fields = NULL, timeout_seconds = 30)
 Makes a request to the API and returns the response, catching
 HTTP errors and forwarding the HTTP body in R errors
 }
+\keyword{internal}

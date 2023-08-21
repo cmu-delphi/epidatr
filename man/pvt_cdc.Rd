@@ -17,7 +17,7 @@ pvt_cdc(auth, locations, epiweeks)
 \code{\link{epidata_call}}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/cdc.html
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/cdc.html}
 }
 \examples{
 \dontrun{

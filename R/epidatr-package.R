@@ -1,7 +1,2 @@
-#' Delphi Epidata
-#'
-#' TODO
-#'
-#' @docType package
-#' @name epidatr
-NULL
+#' @keywords internal
+"_PACKAGE"

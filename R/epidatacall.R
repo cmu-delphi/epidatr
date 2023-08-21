@@ -89,12 +89,12 @@ request_arguments <- function(epidata_call, format_type, fields = NULL) {
 }
 
 #' @export
-print.epidata_call <- function(epidata_call) {
-  stopifnot(inherits(epidata_call, "epidata_call"))
+print.epidata_call <- function(x, ...) {
+  stopifnot(inherits(x, "epidata_call"))
   cli::cli_h1("<epidata_call> object:")
   cli::cli_bullets(c(
     "*" = "Pipe this object into `fetch()` to actually fetch the data",
-    "*" = paste0("Request URL: ", request_url(epidata_call))
+    "*" = paste0("Request URL: ", request_url(x))
   ))
 }
 
@@ -264,6 +264,7 @@ with_base_url <- function(epidata_call, base_url) {
 #' HTTP errors and forwarding the HTTP body in R errors
 #' @importFrom httr stop_for_status content http_type
 #' @importFrom xml2 read_html xml_find_all xml_text
+#' @keywords internal
 request_impl <- function(epidata_call, format_type, fields = NULL, timeout_seconds = 30) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(format_type %in% c("json", "csv", "classic"))

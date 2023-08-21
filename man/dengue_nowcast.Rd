@@ -15,7 +15,7 @@ dengue_nowcast(locations, epiweeks)
 \code{\link{epidata_call}}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html}
 }
 \details{
 TODO: what are valid locations here?

@@ -1,6 +1,6 @@
 #' Fetch CDC page hits
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/cdc.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/cdc.html>
 #'
 #' @examples
 #' \dontrun{
@@ -640,10 +640,10 @@ covidcast_meta <- function() {
 #'   time_values = epirange(20200601, 20200801)
 #' ) %>% fetch()
 #' }
-#' @param data_source string. The data source to query (see:
+#' @param source string. The data source to query (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>).
 #' @param signals string. The signals to query from a specific source (see:
-#'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals.html>).
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>).
 #' @param geo_type string. The geographic resolution of the data (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>).
 #' @param time_type string. The temporal resolution of the data (either "day" or
@@ -685,7 +685,7 @@ covidcast <- function(
       missing(time_values) || missing(geo_values)
   ) {
     stop(
-      "`data_source`, `signals`, `time_type`, `geo_type`, `time_values`, and `geo_value` are all required"
+      "`source`, `signals`, `time_type`, `geo_type`, `time_values`, and `geo_value` are all required"
     )
   }
 
@@ -748,7 +748,7 @@ covidcast <- function(
 
 #' Fetch Delphi's ILINet forecasts
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/delphi.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/delphi.html>
 #'
 #' @examples
 #' \dontrun{
@@ -778,7 +778,7 @@ delphi <- function(system, epiweek) {
 
 #' Fetch Delphi's PAHO Dengue nowcast
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html>
 #'
 #' TODO: what are valid locations here?
 #' @examples
@@ -813,7 +813,7 @@ dengue_nowcast <- function(locations, epiweeks) {
 #' Fetch Delphi's digital surveillance sensors for dengue in PAHO member
 #' countries
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html>
 #'
 #' TODO: what are valid locations and names?
 #' @examples
@@ -970,7 +970,7 @@ flusurv <- function(locations, epiweeks, issues = NULL, lag = NULL) {
 
 #' Fetch FluView virological data from clinical labs
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html>
 #'
 #' @examples
 #' \dontrun{
@@ -1024,7 +1024,7 @@ fluview_clinical <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 
 #' Fetch FluView metadata
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
 #' @examples
 #' \dontrun{
 #' fluview_meta() %>% fetch()
@@ -1159,7 +1159,7 @@ gft <- function(locations, epiweeks) {
 
 #' Fetch Google Health Trends data
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/ght.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
 #'
 #' TODO: find a non-trivial query
 #' @examples
@@ -1203,7 +1203,7 @@ pvt_ght <- function(auth, locations, epiweeks, query) {
 
 #' Fetch KCDC data
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html>
 #'
 #' TODO: find a non-trivial region
 #' @examples
@@ -1251,7 +1251,7 @@ kcdc_ili <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 
 #' Fetch NoroSTAT metadata
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html>
 #'
 #' @examples
 #' \dontrun{
@@ -1269,7 +1269,7 @@ pvt_meta_norostat <- function(auth) {
 
 #' Fetch api metadata
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/meta.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta.html>
 #'
 #' @return [`epidata_call`]
 #'
@@ -1371,7 +1371,7 @@ nidss_flu <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 
 #' Fetch NoroSTAT data (point data, no min/max)
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/norostat.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
 #'
 #' @examples
 #' \dontrun{
@@ -1446,7 +1446,7 @@ nowcast <- function(locations, epiweeks) {
 
 #' Fetch PAHO Dengue
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html>
 #'
 #' @examples
 #' \dontrun{
@@ -1495,7 +1495,7 @@ paho_dengue <- function(regions, epiweeks, issues = NULL, lag = NULL) {
 
 #' Fetch Quidel COVID-19 and influenza testing data
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/quidel.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/quidel.html>
 #'
 #' @examples
 #' \dontrun{
@@ -1534,7 +1534,7 @@ pvt_quidel <- function(auth, locations, epiweeks) {
 
 #' Fetch Delphi's digital surveillance sensors
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/sensors.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
 #'
 #' @examples
 #' \dontrun{
@@ -1578,7 +1578,7 @@ pvt_sensors <- function(auth, names, locations, epiweeks) {
 
 #' Fetch HealthTweets data
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/twitter.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/twitter.html>
 #'
 #' @examples
 #' \dontrun{
@@ -1628,7 +1628,7 @@ pvt_twitter <- function(auth, locations, dates = NULL, epiweeks = NULL) {
 
 #' Fetch Wikipedia access data
 #'
-#' API docs: https://cmu-delphi.github.io/delphi-epidata/api/wiki.html
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
 #'
 #' @examples
 #' \dontrun{

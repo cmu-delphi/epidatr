@@ -34,6 +34,7 @@ assert_date_param <- function(name, value, len = NULL, required = TRUE) {
 #' Allows a timeset param: a date vector, a character vector, an integer-like
 #' vector, or a single EpiRange
 #' @importFrom checkmate assert check_character check_date check_integerish check_class check_list check_names
+#' @keywords internal
 assert_timeset_param <- function(name, value, len = NULL, required = TRUE) {
   null.ok <- !required
   assert_integerish(len, len = 1L, null.ok = TRUE, .var.name = "len")

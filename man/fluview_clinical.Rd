@@ -23,7 +23,7 @@ the most recent issue is returned. Mutually exclusive with \code{issues}.}
 \code{\link{epidata_call}}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html}
 }
 \examples{
 \dontrun{

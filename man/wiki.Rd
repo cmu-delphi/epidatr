@@ -22,7 +22,7 @@ wiki(articles, dates = NULL, epiweeks = NULL, hours = NULL, language = "en")
 \code{\link{epidata_call}}
 }
 \description{
-API docs: https://cmu-delphi.github.io/delphi-epidata/api/wiki.html
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/wiki.html}
 }
 \examples{
 \dontrun{

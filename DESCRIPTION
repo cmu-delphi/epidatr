@@ -9,7 +9,7 @@ Authors@R:
     person("David", "Weber", email = "davidweb@andrew.cmu.edu", role = c("ctb")),
     person("Samuel", "Gratzl", email = "sam@sgratzl.com", role = c("aut"))
   )
-URL: https://github.com/cmu-delphi/epidatr
+URL: https://cmu-delphi.github.io/epidatr/, https://github.com/cmu-delphi/epidatr
 BugReports: https://github.com/cmu-delphi/epidatr/issues
 Description: R Client for Delphi's Epidata API. Tools for fetching data in various forms.
 Depends: R (>= 3.5.0)

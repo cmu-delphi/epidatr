@@ -14,6 +14,7 @@ parse_signal <- function(signal, base_url) {
   #' @param issues data source to fetch
   #' @param lag data source to fetch
   #' @return an instance of epidata_call
+  #' @keywords internal
   signal$call <- function(geo_type,
                           geo_values,
                           time_values,
@@ -31,10 +32,10 @@ parse_signal <- function(signal, base_url) {
 }
 
 #' @export
-print.covidcast_data_signal <- function(signal, ...) {
-  print(signal$name)
-  print(signal$key)
-  print(signal$short_description)
+print.covidcast_data_signal <- function(x, ...) {
+  print(x$name)
+  print(x$key)
+  print(x$short_description)
 }
 
 parse_source <- function(source, base_url) {
@@ -78,17 +79,17 @@ as.data.frame.covidcast_data_signal_list <- function(signals, ...) {
 }
 
 #' @export
-print.covidcast_data_source <- function(source, ...) {
-  print(source$name, ...)
-  print(source$source, ...)
-  print(source$description, ...)
-  signals <- as.data.frame(source$signals)
+print.covidcast_data_source <- function(x, ...) {
+  print(x$name, ...)
+  print(x$source, ...)
+  print(x$description, ...)
+  signals <- as.data.frame(x$signals)
   print(signals[, c("signal", "name", "short_description")], ...)
 }
 
-#' creates the covidcast epidata helper
+#' Creates the COVIDcast Epidata autocomplete helper
 #'
-#' Creates a helper object that can use auto-complete to help find covidcast
+#' Creates a helper object that can use auto-complete to help find COVIDcast
 #' sources and signals.
 #'
 #' @param base_url optional alternative API base url
@@ -96,8 +97,8 @@ print.covidcast_data_source <- function(source, ...) {
 #' @importFrom httr stop_for_status content http_type
 #' @importFrom jsonlite fromJSON
 #' @importFrom xml2 read_html xml_find_all xml_text
-#' @return an instance of covidcast_epidata
-#'
+#' @return An instance of `covidcast_epidata`
+#' @export
 covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) {
   url <- join_url(base_url, "covidcast/meta")
   response <- do_request(url, list(), timeout_seconds)
@@ -154,16 +155,16 @@ as.data.frame.covidcast_data_source_list <- function(sources, ...) {
   }), ...)
 }
 
-print.covidcast_epidata <- function(epidata, ...) {
+print.covidcast_epidata <- function(x, ...) {
   print("COVIDcast Epidata Fetcher")
   print("Sources:")
-  sources <- as.data.frame(epidata$sources)
+  sources <- as.data.frame(x$sources)
   print(sources[1:5, c("source", "name")], ...)
   if (nrow(sources) > 5) {
     print(paste0((nrow(sources) - 5), " more..."))
   }
   print("Signals")
-  signals <- as.data.frame(epidata$signals)
+  signals <- as.data.frame(x$signals)
   print(signals[1:5, c("source", "signal", "name")], ...)
   if (nrow(signals) > 5) {
     print(paste0((nrow(signals) - 5), " more..."))

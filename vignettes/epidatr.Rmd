@@ -14,32 +14,81 @@ library(epidatr)
 library(dplyr)
 ```
 
+The epidatr package provides access to all the endpoints of the [Delphi Epidata
+API](https://cmu-delphi.github.io/delphi-epidata/), and can be used to make
+requests for specific signals on specific dates and in selected geographic
+regions.
+
+We recommend you register for an API key. While most endpoints are available
+without one, there are [limits on API usage for anonymous
+users](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html), including
+a rate limit. If you regularly request large amounts of data, please consider
+[registering for an API
+key](https://api.delphi.cmu.edu/epidata/admin/registration_form). You can then
+specify this key by either
+
+- setting the environment variable `DELPHI_EPIDATA_KEY`, such as by editing your
+  `.Renviron` file
+- setting the option `delphi.epidata.key` using `options()`
+
 ## Basic Usage
 
-Fetching some data from the Delphi Epidata API is simple.
-First, we find the function for the endpoint we need, then we find the right arguments, and finally we `fetch` a tibble with the data.
+Fetching some data from the Delphi Epidata API is simple. Suppose we are
+interested in the [`covidcast`
+endpoint](https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html), which
+provides access to a range of data on COVID-19. Reviewing the endpoint
+documentation, we see that we need to specify a data source name, a signal name,
+a geographic level, a time resolution, and the location and times of interest.
+
+In this case, the `covidcast()` function lets us specify these parameters for
+the endpoint:
 
 ```{r}
-epicall <- covidcast("fb-survey", "smoothed_cli", "state", "day", "pa", epirange(20210405, 20210410))
+epicall <- covidcast(
+  "fb-survey", "smoothed_cli", "state", "day", "pa",
+  epirange(20210405, 20210410)
+)
+```
+
+The `epicall` object is now an object representing the query we wish to make.
+The `fetch()` function allows us to retrieve the results as a tibble:
+
+```{r}
 epicall %>% fetch()
 ```
 
-The [Delphi Epidata API documentation](https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html) has more information on the available endpoints and arguments.
-Examples queries with all the endpoint functions available in this package are given below.
+The [Delphi Epidata API documentation](https://cmu-delphi.github.io/delphi-epidata/) has more information on the available endpoints and arguments.
+Examples queries with all the endpoint functions available in this package are given [below](#example-queries).
 
 ## Advanced Usage (Experimental)
 
-You can use `covidcast_epidata` to get help with finding sources and functions without leaving R.
-Using tab completion after typing `epidata$signals$` below, you can see all the available sources and signals in the API, with the format `source:signal`.
-Note that some signal names have dashes in them, so to access them we rely on the backtick operator.
+The [COVIDcast
+endpoint](https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html) of the
+Epidata API contains many separate data sources and signals. It can be difficult
+to find the name of the signal you're looking for, so you can use
+`covidcast_epidata` to get help with finding sources and functions without
+leaving R.
+
+The `covidcast_epidata()` function fetches a list of all signals, and returns an
+object containing fields for every signal:
 
 ```{r}
-epidata <- epidatr:::covidcast_epidata()
+epidata <- covidcast_epidata()
 epidata$signals
+```
+
+If you use an editor that supports tab completion, such as RStudio, type
+`epidata$signals$` and wait for the tab completion popup. You will be able to
+type the name of signals and have the autocomplete feature select them from the
+list for you. Note that some signal names have dashes in them, so to access them
+we rely on the backtick operator:
+
+```{r}
 epidata$signals$`fb-survey:smoothed_cli`
 ```
 
-From there, you can construct a call analogous to the one above, but using the API object instead of the functions directly.
+These objects can be used directly to fetch data, without requiring us to use
+the `covidcast()` function. Simply use the `$call` attribute of the object:
 
 ```{r}
 epicall <- epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa", epirange(20210405, 20210410))

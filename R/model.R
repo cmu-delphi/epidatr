@@ -1,12 +1,25 @@
-#' builds a new EpiRange instances
+#' Specify a date range (in days or epiweeks) for an API request.
 #'
-#' @param from A Date, integer-like value, or integer-like string that takes the
-#'   form YYYYMMDD for dates or YYYYMM for epiweeks.
-#' @param to A Date, integer-like value, or integer-like string that takes the
-#'  form YYYYMMDD for dates or YYYYMM for epiweeks.
+#' Epiweeks, also known as MMWR weeks number the weeks of the year from 1 to 53,
+#' each week spanning from Sunday to Saturday. The numbering is [defined by the
+#' CDC](https://ndc.services.cdc.gov/wp-content/uploads/MMWR_Week_overview.pdf).
+#'
+#' @param from A `Date`, integer-like value, or integer-like string that takes the
+#'   form YYYYMMDD for dates or YYYYWW for epiweeks.
+#' @param to A `Date`, integer-like value, or integer-like string that takes the
+#'  form YYYYMMDD for dates or YYYYWW for epiweeks.
 #' @return EpiRange instance
 #' @importFrom checkmate check_integerish check_character check_date assert
 #'
+#' @examples
+#' # Represents 2021-01-01 to 2021-01-07, inclusive
+#' epirange(20210101, 20210107)
+#'
+#' # The same, but using Date objects
+#' epirange(as.Date("2021-01-01"), as.Date("2021-01-07"))
+#'
+#' # Represents epiweeks 2 through 4 of 2022, inclusive
+#' epirange(202202, 202204)
 #' @export
 epirange <- function(from, to) {
   assert(
@@ -47,21 +60,25 @@ epirange <- function(from, to) {
 
 #' timeset
 #'
-#' A collection of date-like values, including dates, epiweeks, and ranges of
-#' dates or epiweeks ([`epirange`]). This is often used to specify the time
-#' dimension for an epidata query. The allowed values are:
+#' Many API calls accept timesets to specify the time ranges of data being
+#' requested. Timesets can be specified with `epirange()`, as `Date` objects, or
+#' with wildcards.
+#'
+#' Timesets are not special R types; the term simply describes any value that
+#' would be accepted by epidatr to specify the time value of an epidata query.
+#' The allowed values are:
 #'
 #' - Dates: `Date` instances, integer-like values, or integer-like strings that
-#'   take the form YYYYMMDD,
-#' - Epiweeks: integer-like values or integer-like strings that take the form
-#'   YYYYMM,
-#' - EpiRanges: a list of [`epirange`] instances.
-#' - Wildcard: "*" (requests all available values for this dimension)
+#'   take the form YYYYMMDD.
+#' - Epiweeks: Integer-like values or integer-like strings that take the form
+#'   YYYYWW.
+#' - EpiRanges: A range returned by `epirange()`, or a list of multiple ranges
+#' - Wildcard: The string `"*"`, which request all available time values
 #'
 #' Please refer to the specific endpoint documentation for guidance on using
 #' dates vs weeks. Most endpoints support only one or the other. Some (less
 #' commonly used) endpoints may not accept the `"*"` wildcard, but this can be
-#' simulated with a large [`epirange`].
+#' simulated with a large `epirange()`.
 #'
 #' @name timeset
 NULL
