@@ -91,15 +91,42 @@
 
     
     
+<p>The epidatr package provides access to all the endpoints of the <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Delphi Epidata
+API</a>, and can be used to make requests for specific signals on
+specific dates and in selected geographic regions.</p>
+<p>We recommend you register for an API key. While most endpoints are
+available without one, there are <a href="https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html" class="external-link">limits
+on API usage for anonymous users</a>, including a rate limit. If you
+regularly request large amounts of data, please consider <a href="https://api.delphi.cmu.edu/epidata/admin/registration_form" class="external-link">registering
+for an API key</a>. You can then specify this key by either</p>
+<ul>
+<li>setting the environment variable <code>DELPHI_EPIDATA_KEY</code>,
+such as by editing your <code>.Renviron</code> file</li>
+<li>setting the option <code>delphi.epidata.key</code> using
+<code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>
+</li>
+</ul>
 <div class="section level2">
 <h2 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
 </h2>
-<p>Fetching some data from the Delphi Epidata API is simple. First, we
-find the function for the endpoint we need, then we find the right
-arguments, and finally we <code>fetch</code> a tibble with the data.</p>
+<p>Fetching some data from the Delphi Epidata API is simple. Suppose we
+are interested in the <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html" class="external-link"><code>covidcast</code>
+endpoint</a>, which provides access to a range of data on COVID-19.
+Reviewing the endpoint documentation, we see that we need to specify a
+data source name, a signal name, a geographic level, a time resolution,
+and the location and times of interest.</p>
+<p>In this case, the <code><a href="../reference/covidcast.html">covidcast()</a></code> function lets us specify
+these parameters for the endpoint:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covidcast.html">covidcast</a></span><span class="op">(</span><span class="st">"fb-survey"</span>, <span class="st">"smoothed_cli"</span>, <span class="st">"state"</span>, <span class="st">"day"</span>, <span class="st">"pa"</span>, <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">epicall</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covidcast.html">covidcast</a></span><span class="op">(</span></span>
+<span>  <span class="st">"fb-survey"</span>, <span class="st">"smoothed_cli"</span>, <span class="st">"state"</span>, <span class="st">"day"</span>, <span class="st">"pa"</span>,</span>
+<span>  <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The <code>epicall</code> object is now an object representing the
+query we wish to make. The <code><a href="../reference/epidata_call.html">fetch()</a></code> function allows us to
+retrieve the results as a tibble:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">epicall</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 15</span></span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
@@ -110,22 +137,23 @@ arguments, and finally we <code>fetch</code> a tibble with the data.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 7 more variables: lag &lt;int&gt;, missing_value &lt;int&gt;, missing_stderr &lt;int&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   missing_sample_size &lt;int&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></span></code></pre></div>
-<p>The <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html" class="external-link">Delphi
+<p>The <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Delphi
 Epidata API documentation</a> has more information on the available
 endpoints and arguments. Examples queries with all the endpoint
-functions available in this package are given below.</p>
+functions available in this package are given <a href="#example-queries">below</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="advanced-usage-experimental">Advanced Usage (Experimental)<a class="anchor" aria-label="anchor" href="#advanced-usage-experimental"></a>
 </h2>
-<p>You can use <code>covidcast_epidata</code> to get help with finding
-sources and functions without leaving R. Using tab completion after
-typing <code>epidata$signals$</code> below, you can see all the
-available sources and signals in the API, with the format
-<code>source:signal</code>. Note that some signal names have dashes in
-them, so to access them we rely on the backtick operator.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu">epidatr</span><span class="fu">:::</span><span class="fu"><a href="../reference/covidcast_epidata.html">covidcast_epidata</a></span><span class="op">(</span><span class="op">)</span></span>
+<p>The <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html" class="external-link">COVIDcast
+endpoint</a> of the Epidata API contains many separate data sources and
+signals. It can be difficult to find the name of the signal you’re
+looking for, so you can use <code>covidcast_epidata</code> to get help
+with finding sources and functions without leaving R.</p>
+<p>The <code><a href="../reference/covidcast_epidata.html">covidcast_epidata()</a></code> function fetches a list of all
+signals, and returns an object containing fields for every signal:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covidcast_epidata.html">covidcast_epidata</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">epidata</span><span class="op">$</span><span class="va">signals</span></span>
 <span><span class="co">#&gt; $`chng:smoothed_outpatient_cli`</span></span>
 <span><span class="co">#&gt; [1] "COVID-Related Doctor Visits"</span></span>
@@ -147,16 +175,24 @@ them, so to access them we rely on the backtick operator.</p>
 <span><span class="co">#&gt; [1] "chng:smoothed_adj_outpatient_covid"</span></span>
 <span><span class="co">#&gt; [1] "COVID-Confirmed Doctor Visits"</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  [ reached getOption("max.print") -- omitted 457 entries ]</span></span>
+<span><span class="co">#&gt;  [ reached getOption("max.print") -- omitted 439 entries ]</span></span>
 <span><span class="co">#&gt; attr(,"class")</span></span>
-<span><span class="co">#&gt; [1] "covidcast_data_signal_list" "list"</span></span>
-<span><span class="va">epidata</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">`fb-survey:smoothed_cli`</span></span>
+<span><span class="co">#&gt; [1] "covidcast_data_signal_list" "list"</span></span></code></pre></div>
+<p>If you use an editor that supports tab completion, such as RStudio,
+type <code>epidata$signals$</code> and wait for the tab completion
+popup. You will be able to type the name of signals and have the
+autocomplete feature select them from the list for you. Note that some
+signal names have dashes in them, so to access them we rely on the
+backtick operator:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">epidata</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">`fb-survey:smoothed_cli`</span></span>
 <span><span class="co">#&gt; [1] "COVID-Like Symptoms (Unweighted 7-day average)"</span></span>
 <span><span class="co">#&gt; [1] "fb-survey:smoothed_cli"</span></span>
 <span><span class="co">#&gt; [1] "Estimated percentage of people with COVID-like illness "</span></span></code></pre></div>
-<p>From there, you can construct a call analogous to the one above, but
-using the API object instead of the functions directly.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p>These objects can be used directly to fetch data, without requiring
+us to use the <code><a href="../reference/covidcast.html">covidcast()</a></code> function. Simply use the
+<code>$call</code> attribute of the object:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">epicall</span> <span class="op">&lt;-</span> <span class="va">epidata</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">`fb-survey:smoothed_cli`</span><span class="op">$</span><span class="fu">call</span><span class="op">(</span><span class="st">"state"</span>, <span class="st">"pa"</span>, <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">epicall</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 15</span></span></span>
@@ -183,7 +219,7 @@ all locations. Check the help for a given endpoint to see if it supports
 <p>County geo_values are <a href="https://en.wikipedia.org/wiki/List_of_United_States_FIPS_codes_by_county" class="external-link">FIPS
 codes</a> and are discussed in the API docs <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html" class="external-link">here</a>.
 The example below is for Orange County, California.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/covidcast.html">covidcast</a></span><span class="op">(</span></span>
 <span>  source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
 <span>  signals <span class="op">=</span> <span class="st">"smoothed_accept_covid_vaccine"</span>,</span>
@@ -204,7 +240,7 @@ The example below is for Orange County, California.</p>
 <span><span class="co">#&gt; <span style="color: #949494;">#   missing_sample_size &lt;int&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>The <code>covidcast</code> endpoint supports <code>*</code> in its
 time and geo fields:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/covidcast.html">covidcast</a></span><span class="op">(</span></span>
 <span>  source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
 <span>  signals <span class="op">=</span> <span class="st">"smoothed_accept_covid_vaccine"</span>,</span>
@@ -231,7 +267,7 @@ time and geo fields:</p>
 <h4 id="covid-19-hospitalization-facility-lookup">COVID-19 Hospitalization: Facility Lookup<a class="anchor" aria-label="anchor" href="#covid-19-hospitalization-facility-lookup"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html</a></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/covid_hosp_facility_lookup.html">covid_hosp_facility_lookup</a></span><span class="op">(</span>city <span class="op">=</span> <span class="st">"southlake"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/covid_hosp_facility_lookup.html">covid_hosp_facility_lookup</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"WY"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co"># A non-example (there is no city called New York in Wyoming)</span></span>
@@ -241,7 +277,7 @@ time and geo fields:</p>
 <h4 id="covid-19-hospitalization-by-facility">COVID-19 Hospitalization by Facility<a class="anchor" aria-label="anchor" href="#covid-19-hospitalization-by-facility"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html</a></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/covid_hosp_facility.html">covid_hosp_facility</a></span><span class="op">(</span></span>
 <span>  hospital_pks <span class="op">=</span> <span class="st">"100075"</span>,</span>
 <span>  collection_weeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20200101</span>, <span class="fl">20200501</span><span class="op">)</span></span>
@@ -251,7 +287,7 @@ time and geo fields:</p>
 <h4 id="covid-19-hospitalization-by-state">COVID-19 Hospitalization by State<a class="anchor" aria-label="anchor" href="#covid-19-hospitalization-by-state"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html</a></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/covid_hosp_state_timeseries.html">covid_hosp_state_timeseries</a></span><span class="op">(</span>states <span class="op">=</span> <span class="st">"MA"</span>, dates <span class="op">=</span> <span class="st">"20200510"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -262,7 +298,7 @@ time and geo fields:</p>
 <h4 id="delphis-ilinet-forecasts">Delphi’s ILINet forecasts<a class="anchor" aria-label="anchor" href="#delphis-ilinet-forecasts"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/delphi.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/delphi.html</a></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">del</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/delphi.html">delphi</a></span><span class="op">(</span>system <span class="op">=</span> <span class="st">"ec"</span>, epiweek <span class="op">=</span> <span class="fl">201501</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">del</span><span class="op">[[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">forecast</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -270,63 +306,63 @@ time and geo fields:</p>
 <h4 id="flusurv-hospitalization-data">FluSurv hospitalization data<a class="anchor" aria-label="anchor" href="#flusurv-hospitalization-data"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html</a></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/flusurv.html">flusurv</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fl">202001</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="fluview-data">Fluview data<a class="anchor" aria-label="anchor" href="#fluview-data"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/fluview.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/fluview.html</a></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/fluview.html">fluview</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"nat"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201201</span>, <span class="fl">202001</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="fluview-virological-data-from-clinical-labs">Fluview virological data from clinical labs<a class="anchor" aria-label="anchor" href="#fluview-virological-data-from-clinical-labs"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html</a></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/fluview_clinical.html">fluview_clinical</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"nat"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201601</span>, <span class="fl">201701</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="fluview-metadata">Fluview metadata<a class="anchor" aria-label="anchor" href="#fluview-metadata"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html</a></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/fluview_meta.html">fluview_meta</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="google-flu-trends-data">Google Flu Trends data<a class="anchor" aria-label="anchor" href="#google-flu-trends-data"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/gft.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/gft.html</a></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gft.html">gft</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"hhs1"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201201</span>, <span class="fl">202001</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="ecdc-ili">ECDC ILI<a class="anchor" aria-label="anchor" href="#ecdc-ili"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html</a></p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ecdc_ili.html">ecdc_ili</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"Armenia"</span>, epiweeks <span class="op">=</span> <span class="fl">201840</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="kcdc-ili">KCDC ILI<a class="anchor" aria-label="anchor" href="#kcdc-ili"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html</a></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/kcdc_ili.html">kcdc_ili</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"ROK"</span>, epiweeks <span class="op">=</span> <span class="fl">200436</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="nidss-flu">NIDSS Flu<a class="anchor" aria-label="anchor" href="#nidss-flu"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html</a></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/nidss_flu.html">nidss_flu</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"taipei"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200901</span>, <span class="fl">201301</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="ili-nearby-nowcast">ILI Nearby Nowcast<a class="anchor" aria-label="anchor" href="#ili-nearby-nowcast"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html</a></p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/nowcast.html">nowcast</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202201</span>, <span class="fl">202319</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -337,14 +373,14 @@ time and geo fields:</p>
 <h4 id="delphis-dengue-nowcast">Delphi’s Dengue Nowcast<a class="anchor" aria-label="anchor" href="#delphis-dengue-nowcast"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html</a></p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/dengue_nowcast.html">dengue_nowcast</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"pr"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201401</span>, <span class="fl">202301</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="nidss-dengue">NIDSS dengue<a class="anchor" aria-label="anchor" href="#nidss-dengue"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html</a></p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/nidss_dengue.html">nidss_dengue</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"taipei"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200301</span>, <span class="fl">201301</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -352,7 +388,7 @@ time and geo fields:</p>
 <h3 id="paho-dengue">PAHO Dengue<a class="anchor" aria-label="anchor" href="#paho-dengue"></a>
 </h3>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html</a></p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/paho_dengue.html">paho_dengue</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200201</span>, <span class="fl">202319</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -362,7 +398,7 @@ time and geo fields:</p>
 <h4 id="wikipedia-access">Wikipedia Access<a class="anchor" aria-label="anchor" href="#wikipedia-access"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/wiki.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/wiki.html</a></p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/wiki.html">wiki</a></span><span class="op">(</span>language <span class="op">=</span> <span class="st">"en"</span>, articles <span class="op">=</span> <span class="st">"influenza"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202001</span>, <span class="fl">202319</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -377,14 +413,14 @@ environmental variables.</p>
 <h4 id="cdc">CDC<a class="anchor" aria-label="anchor" href="#cdc"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/cdc.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/cdc.html</a></p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_cdc.html">pvt_cdc</a></span><span class="op">(</span>auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_CDC"</span><span class="op">)</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202003</span>, <span class="fl">202304</span><span class="op">)</span>, locations <span class="op">=</span> <span class="st">"ma"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="dengue-digital-surveillance-sensors">Dengue Digital Surveillance Sensors<a class="anchor" aria-label="anchor" href="#dengue-digital-surveillance-sensors"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html</a></p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_dengue_sensors.html">pvt_dengue_sensors</a></span><span class="op">(</span></span>
 <span>  auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_SENSORS"</span><span class="op">)</span>,</span>
 <span>  names <span class="op">=</span> <span class="st">"ght"</span>,</span>
@@ -396,7 +432,7 @@ environmental variables.</p>
 <h4 id="google-health-trends">Google Health Trends<a class="anchor" aria-label="anchor" href="#google-health-trends"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/ght.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/ght.html</a></p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_ght.html">pvt_ght</a></span><span class="op">(</span></span>
 <span>  auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_GHT"</span><span class="op">)</span>,</span>
 <span>  epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">199301</span>, <span class="fl">202304</span><span class="op">)</span>,</span>
@@ -408,28 +444,28 @@ environmental variables.</p>
 <h4 id="norostat-metadata">NoroSTAT metadata<a class="anchor" aria-label="anchor" href="#norostat-metadata"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html</a></p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_meta_norostat.html">pvt_meta_norostat</a></span><span class="op">(</span>auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_NOROSTAT"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="norostat-data">NoroSTAT data<a class="anchor" aria-label="anchor" href="#norostat-data"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/norostat.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/norostat.html</a></p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_norostat.html">pvt_norostat</a></span><span class="op">(</span>auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_NOROSTAT"</span><span class="op">)</span>, locations <span class="op">=</span> <span class="st">"1"</span>, epiweeks <span class="op">=</span> <span class="fl">201233</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="quidel-influenza-testing">Quidel Influenza testing<a class="anchor" aria-label="anchor" href="#quidel-influenza-testing"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/quidel.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/quidel.html</a></p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_quidel.html">pvt_quidel</a></span><span class="op">(</span>auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_QUIDEL"</span><span class="op">)</span>, locations <span class="op">=</span> <span class="st">"hhs1"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200301</span>, <span class="fl">202105</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="sensors">Sensors<a class="anchor" aria-label="anchor" href="#sensors"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/sensors.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/sensors.html</a></p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_sensors.html">pvt_sensors</a></span><span class="op">(</span></span>
 <span>  auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_SENSORS"</span><span class="op">)</span>,</span>
 <span>  names <span class="op">=</span> <span class="st">"sar3"</span>,</span>
@@ -441,7 +477,7 @@ environmental variables.</p>
 <h4 id="twitter">Twitter<a class="anchor" aria-label="anchor" href="#twitter"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/twitter.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/twitter.html</a></p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_twitter.html">pvt_twitter</a></span><span class="op">(</span></span>
 <span>  auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_TWITTER"</span><span class="op">)</span>,</span>
 <span>  locations <span class="op">=</span> <span class="st">"nat"</span>,</span>

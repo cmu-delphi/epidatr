@@ -60,14 +60,33 @@
     </div>
 
     <table class="ref-index"><colgroup><col class="alias"><col class="title"></colgroup><tbody><tr><th colspan="2">
-          <h2 id="all-functions">All functions <a href="#all-functions" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
+          <h2 id="configuration-and-utilities">Configuration and utilities <a href="#configuration-and-utilities" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Set API keys and handle API data types</p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="assert_timeset_param.html">assert_timeset_param()</a></code> </p>
+          <p><code><a href="get_auth_key.html">get_auth_key()</a></code> </p>
         </td>
-        <td><p>Allows a timeset param: a date vector, a character vector, an integer-like
-vector, or a single EpiRange</p></td>
+        <td><p>Get the API key</p></td>
+      </tr><tr><td>
+          <p><code><a href="parse_api_week.html">parse_api_week()</a></code> </p>
+        </td>
+        <td><p>parses a week</p></td>
+      </tr><tr><td>
+          <p><code><a href="epirange.html">epirange()</a></code> </p>
+        </td>
+        <td><p>Specify a date range (in days or epiweeks) for an API request.</p></td>
+      </tr><tr><td>
+          <p><code><a href="timeset.html">timeset</a></code> </p>
+        </td>
+        <td><p>timeset</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="make-api-requests">Make API requests <a href="#make-api-requests" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Query Delphi Epidata endpoints</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="epidata_call.html">create_epidata_call()</a></code> <code><a href="epidata_call.html">fetch()</a></code> <code><a href="epidata_call.html">with_base_url()</a></code> </p>
+        </td>
+        <td><p>An abstraction that holds information needed to make an epidata request</p></td>
       </tr><tr><td>
           <p><code><a href="covid_hosp_facility.html">covid_hosp_facility()</a></code> </p>
         </td>
@@ -85,10 +104,6 @@ vector, or a single EpiRange</p></td>
         </td>
         <td><p>Fetch covidcast data</p></td>
       </tr><tr><td>
-          <p><code><a href="covidcast_epidata.html">covidcast_epidata()</a></code> </p>
-        </td>
-        <td><p>creates the covidcast epidata helper</p></td>
-      </tr><tr><td>
           <p><code><a href="covidcast_meta.html">covidcast_meta()</a></code> </p>
         </td>
         <td><p>Fetch covidcast metadata</p></td>
@@ -101,25 +116,9 @@ vector, or a single EpiRange</p></td>
         </td>
         <td><p>Fetch Delphi's PAHO Dengue nowcast</p></td>
       </tr><tr><td>
-          <p><code><a href="do_request.html">do_request()</a></code> </p>
-        </td>
-        <td><p>performs the request</p></td>
-      </tr><tr><td>
           <p><code><a href="ecdc_ili.html">ecdc_ili()</a></code> </p>
         </td>
         <td><p>Fetch ECDC data</p></td>
-      </tr><tr><td>
-          <p><code><a href="epidata_call.html">create_epidata_call()</a></code> <code><a href="epidata_call.html">fetch()</a></code> <code><a href="epidata_call.html">with_base_url()</a></code> </p>
-        </td>
-        <td><p>An abstraction that holds information needed to make an epidata request</p></td>
-      </tr><tr><td>
-          <p><code><a href="epidatr.html">epidatr</a></code> </p>
-        </td>
-        <td><p>Delphi Epidata</p></td>
-      </tr><tr><td>
-          <p><code><a href="epirange.html">epirange()</a></code> </p>
-        </td>
-        <td><p>builds a new EpiRange instances</p></td>
       </tr><tr><td>
           <p><code><a href="flusurv.html">flusurv()</a></code> </p>
         </td>
@@ -136,10 +135,6 @@ vector, or a single EpiRange</p></td>
           <p><code><a href="fluview_meta.html">fluview_meta()</a></code> </p>
         </td>
         <td><p>Fetch FluView metadata</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_auth_key.html">get_auth_key()</a></code> </p>
-        </td>
-        <td><p>Get the API key</p></td>
       </tr><tr><td>
           <p><code><a href="gft.html">gft()</a></code> </p>
         </td>
@@ -169,14 +164,14 @@ vector, or a single EpiRange</p></td>
         </td>
         <td><p>Fetch PAHO Dengue</p></td>
       </tr><tr><td>
-          <p><code><a href="parse_api_week.html">parse_api_week()</a></code> </p>
+          <p><code><a href="wiki.html">wiki()</a></code> </p>
         </td>
-        <td><p>parses a week</p></td>
-      </tr><tr><td>
-          <p><code><a href="parse_signal.html">parse_signal()</a></code> </p>
-        </td>
-        <td><p>fetch covidcast data</p></td>
-      </tr><tr><td>
+        <td><p>Fetch Wikipedia access data</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="make-requests-to-private-api-endpoints">Make requests to private API endpoints <a href="#make-requests-to-private-api-endpoints" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>These endpoints require additional authorization to use</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
           <p><code><a href="pvt_cdc.html">pvt_cdc()</a></code> </p>
         </td>
         <td><p>Fetch CDC page hits</p></td>
@@ -209,19 +204,14 @@ countries</p></td>
           <p><code><a href="pvt_twitter.html">pvt_twitter()</a></code> </p>
         </td>
         <td><p>Fetch HealthTweets data</p></td>
-      </tr><tr><td>
-          <p><code><a href="request_impl.html">request_impl()</a></code> </p>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="autocomplete-helpers">Autocomplete helpers <a href="#autocomplete-helpers" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Objects that can autocomplete API signals names for faster exploration</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="covidcast_epidata.html">covidcast_epidata()</a></code> </p>
         </td>
-        <td><p>Makes a request to the API and returns the response, catching
-HTTP errors and forwarding the HTTP body in R errors</p></td>
-      </tr><tr><td>
-          <p><code><a href="timeset.html">timeset</a></code> </p>
-        </td>
-        <td><p>timeset</p></td>
-      </tr><tr><td>
-          <p><code><a href="wiki.html">wiki()</a></code> </p>
-        </td>
-        <td><p>Fetch Wikipedia access data</p></td>
+        <td><p>Creates the COVIDcast Epidata autocomplete helper</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
