@@ -1060,7 +1060,7 @@ fluview_meta <- function() {
 #'
 #' @examples
 #' fluview(regions = "nat", epiweeks = epirange(201201, 202001)) %>% fetch()
-#' @param regions character. Locations to fetch. Can we any string IDs in
+#' @param regions character. Locations to fetch. Can be any string IDs in
 #'   national, HHS region, census division, most states and territories, and so
 #'   on. Full list link below.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch in the form

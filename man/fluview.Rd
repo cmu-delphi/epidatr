@@ -7,7 +7,7 @@
 fluview(regions, epiweeks, issues = NULL, lag = NULL, auth = NULL)
 }
 \arguments{
-\item{regions}{character. Locations to fetch. Can we any string IDs in
+\item{regions}{character. Locations to fetch. Can be any string IDs in
 national, HHS region, census division, most states and territories, and so
 on. Full list link below.}
 
