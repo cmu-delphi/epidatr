@@ -186,6 +186,7 @@ fetch_args_list <- function(
 #' @return
 #' - For `fetch`: a tibble or a JSON-like list
 #' @export
+#' @include cache.R
 #'
 fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(epidata_call, "epidata_call"))
@@ -203,11 +204,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     return(fetch_debug(epidata_call, fetch_args))
   }
 
-  if (epidata_call$only_supports_classic) {
-    return(fetch_classic(epidata_call, fetch_args))
-  } else {
-    return(fetch_tbl(epidata_call, fetch_args))
-  }
+  cache_epidata_call(epidata_call, fetch_args)
 }
 
 #' Fetches the data and returns a tibble
