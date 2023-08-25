@@ -1,8 +1,21 @@
 test_that("covidcast", {
   covidcast_api <- epidatr:::covidcast_epidata()
   expect_identical(
-    covidcast_api$sources$`fb-survey`$signals$smoothed_cli$call("nation", "us", epirange(20210405, 20210410)),
-    covidcast("fb-survey", "smoothed_cli", "nation", "day", "us", epirange(20210405, 20210410))
+    covidcast_api$sources$`fb-survey`$signals$smoothed_cli$call(
+      "nation",
+      "us",
+      epirange(20210405, 20210410),
+      fetch_args = fetch_args_list(make_call = FALSE)
+    ),
+    covidcast(
+      "fb-survey",
+      "smoothed_cli",
+      "nation",
+      "day",
+      "us",
+      epirange(20210405, 20210410),
+      fetch_args = fetch_args_list(make_call = FALSE)
+    )
   )
 })
 

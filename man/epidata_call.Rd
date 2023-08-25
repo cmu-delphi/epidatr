@@ -3,8 +3,23 @@
 \name{create_epidata_call}
 \alias{create_epidata_call}
 \alias{epidata_call}
+\alias{fetch_args_list}
+\alias{fetch_args}
+\alias{A}
+\alias{constructor}
+\alias{for}
+\alias{`fetch_args`}
+\alias{objects,}
+\alias{which}
+\alias{are}
+\alias{used}
+\alias{to}
+\alias{pass}
+\alias{arguments}
+\alias{the}
+\alias{`fetch`}
+\alias{function.}
 \alias{fetch}
-\alias{with_base_url}
 \title{An abstraction that holds information needed to make an epidata request}
 \usage{
 create_epidata_call(
@@ -14,15 +29,20 @@ create_epidata_call(
   only_supports_classic = FALSE
 )
 
-fetch(
-  epidata_call,
+fetch_args_list(
+  ...,
   fields = NULL,
   disable_date_parsing = FALSE,
+  disable_data_frame_parsing = FALSE,
   return_empty = FALSE,
-  timeout_seconds = 30
+  timeout_seconds = 30,
+  base_url = NULL,
+  make_call = TRUE,
+  debug = FALSE,
+  format_type = "json"
 )
 
-with_base_url(epidata_call, base_url)
+fetch(epidata_call, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{endpoint}{the epidata endpoint to call}
@@ -33,8 +53,6 @@ with_base_url(epidata_call, base_url)
 
 \item{only_supports_classic}{if true only classic format is supported}
 
-\item{epidata_call}{an instance of \code{epidata_call}}
-
 \item{fields}{a list of epidata fields to return, or NULL to return all
 fields (default) e.g. c("time_value", "value") to return only the
 time_value and value fields or c("-direction") to return everything except
@@ -42,11 +60,26 @@ the direction field}
 
 \item{disable_date_parsing}{disable automatic date parsing}
 
+\item{disable_data_frame_parsing}{disable automatic conversion to data frame; this
+is only supported by endpoints that only support the 'classic' format (non-tabular)}
+
 \item{return_empty}{boolean that allows returning an empty tibble if there is no data}
 
 \item{timeout_seconds}{the maximum amount of time to wait for a response}
 
 \item{base_url}{base URL to use}
+
+\item{make_call}{boolean that allows skipping the call to the API and instead
+returns the \code{epidata_call} object (useful for debugging)}
+
+\item{debug}{boolean that allows returning the raw response from the API}
+
+\item{format_type}{the format to request from the API, one of classic, json, csv; this
+is only used by \code{fetch_debug}}
+
+\item{epidata_call}{an instance of \code{epidata_call}}
+
+\item{fetch_args}{a \code{fetch_args} object}
 }
 \value{
 \itemize{
@@ -54,11 +87,11 @@ the direction field}
 }
 
 \itemize{
-\item For \code{fetch}: a tibble or a JSON-like list
+\item For \code{fetch_args_list}: a \code{fetch_args} object
 }
 
 \itemize{
-\item For \code{with_base_url}: an \code{epidata_call} object
+\item For \code{fetch}: a tibble or a JSON-like list
 }
 }
 \description{
@@ -75,8 +108,6 @@ There are some other functions available for debugging and advanced usage:
 \itemize{
 \item \code{request_url} (for debugging):  outputs the request URL from which data
 would be fetched (note additional parameters below)
-\item \code{with_base_url} (advanced): outputs an \code{epidata_call} that requests data
-from a different Epidata server
 }
 
 \code{fetch} usually returns the data in tibble format, but a few of the endpoints
@@ -84,6 +115,7 @@ only support the JSON classic format (delphi, pvt_meta_norostat, and meta).
 In that case a JSON-like nested list structure is returned instead.
 }
 \examples{
+\dontrun{
 covidcast(
   source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
@@ -91,6 +123,7 @@ covidcast(
   geo_type = "state",
   time_values = epirange(20200601, 20200801),
   geo_values = c("ca", "fl")
-) \%>\% fetch()
+)
+}
 
 }

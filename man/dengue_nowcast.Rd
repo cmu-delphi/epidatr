@@ -4,12 +4,14 @@
 \alias{dengue_nowcast}
 \title{Fetch Delphi's PAHO Dengue nowcast}
 \usage{
-dengue_nowcast(locations, epiweeks)
+dengue_nowcast(locations, epiweeks, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{locations}{character. Locations to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -25,6 +27,6 @@ TODO: what are valid locations here?
 dengue_nowcast(
   locations = "pr",
   epiweeks = epirange(201501, 202001)
-) \%>\% fetch()
+)
 }
 }

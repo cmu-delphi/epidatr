@@ -4,7 +4,10 @@
 \alias{meta}
 \title{Fetch api metadata}
 \usage{
-meta()
+meta(fetch_args = fetch_args_list())
+}
+\arguments{
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}

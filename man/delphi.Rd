@@ -4,12 +4,14 @@
 \alias{delphi}
 \title{Fetch Delphi's ILINet forecasts}
 \usage{
-delphi(system, epiweek)
+delphi(system, epiweek, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{system}{character. System name to fetch.}
 
 \item{epiweek}{\code{\link{timeset}}. Epiweeks to fetch.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -19,6 +21,6 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/delphi.html}
 }
 \examples{
 \dontrun{
-delphi(system = "ec", epiweek = 201501) \%>\% fetch()
+delphi(system = "ec", epiweek = 201501)
 }
 }

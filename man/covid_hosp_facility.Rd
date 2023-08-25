@@ -4,7 +4,12 @@
 \alias{covid_hosp_facility}
 \title{Fetch COVID hospitalization data for specific facilities}
 \usage{
-covid_hosp_facility(hospital_pks, collection_weeks, publication_dates = NULL)
+covid_hosp_facility(
+  hospital_pks,
+  collection_weeks,
+  publication_dates = NULL,
+  fetch_args = fetch_args_list()
+)
 }
 \arguments{
 \item{hospital_pks}{character. Facility identifiers.}
@@ -12,6 +17,8 @@ covid_hosp_facility(hospital_pks, collection_weeks, publication_dates = NULL)
 \item{collection_weeks}{\code{\link{timeset}}. Epiweeks to fetch.}
 
 \item{publication_dates}{\code{\link{timeset}}. Publication dates to fetch.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -37,7 +44,7 @@ used to look up facility identifiers in a variety of ways.
 covid_hosp_facility(
   hospital_pks = "100075",
   collection_weeks = epirange(20200101, 20200501)
-) \%>\% fetch()
+)
 }
 }
 \seealso{

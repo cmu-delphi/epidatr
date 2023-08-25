@@ -4,7 +4,14 @@
 \alias{fluview}
 \title{Fetch FluView data}
 \usage{
-fluview(regions, epiweeks, issues = NULL, lag = NULL, auth = NULL)
+fluview(
+  regions,
+  epiweeks,
+  issues = NULL,
+  lag = NULL,
+  auth = NULL,
+  fetch_args = fetch_args_list()
+)
 }
 \arguments{
 \item{regions}{character. Locations to fetch. Can be any string IDs in
@@ -23,6 +30,8 @@ the most recent issue is returned. Mutually exclusive with \code{issues}.}
 
 \item{auth}{string. Optionally, restricted access key (not the same as API
 key).}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -40,5 +49,5 @@ The full list of location inputs can be accsssed at
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
 }
 \examples{
-fluview(regions = "nat", epiweeks = epirange(201201, 202001)) \%>\% fetch()
+fluview(regions = "nat", epiweeks = epirange(201201, 202001))
 }

@@ -9,7 +9,8 @@ covid_hosp_facility_lookup(
   ccn = NULL,
   city = NULL,
   zip = NULL,
-  fips_code = NULL
+  fips_code = NULL,
+  fetch_args = fetch_args_list()
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ covid_hosp_facility_lookup(
 \item{zip}{string. A 5-digit zip code.}
 
 \item{fips_code}{string. A 5-digit fips county code, zero-padded.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -41,8 +44,8 @@ For instance, specifying both city and state are not supported.
 }
 \examples{
 \dontrun{
-covid_hosp_facility_lookup(state = "fl") \%>\% fetch()
-covid_hosp_facility_lookup(city = "southlake") \%>\% fetch()
+covid_hosp_facility_lookup(state = "fl")
+covid_hosp_facility_lookup(city = "southlake")
 }
 }
 \seealso{

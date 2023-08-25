@@ -5,29 +5,12 @@
 \title{Fetches the data, raises on epidata errors, and returns the results as a
 JSON-like list}
 \usage{
-fetch_classic(
-  epidata_call,
-  fields = NULL,
-  disable_data_frame_parsing = TRUE,
-  return_empty = FALSE,
-  timeout_seconds = 30
-)
+fetch_classic(epidata_call, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{epidata_call}{an instance of \code{epidata_call}}
 
-\item{fields}{a list of epidata fields to return, or NULL to return all
-fields (default) e.g. c("time_value", "value") to return only the
-time_value and value fields or c("-direction") to return everything except
-the direction field}
-
-\item{disable_data_frame_parsing}{do not automatically cast the epidata
-output to a data frame (some endpoints return a list of lists, which is not
-a data frame)}
-
-\item{return_empty}{boolean that allows returning an empty tibble if there is no data.}
-
-\item{timeout_seconds}{the maximum amount of time to wait for a response}
+\item{fetch_args}{a \code{fetch_args} object}
 }
 \value{
 \itemize{

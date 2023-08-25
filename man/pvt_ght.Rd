@@ -4,7 +4,7 @@
 \alias{pvt_ght}
 \title{Fetch Google Health Trends data}
 \usage{
-pvt_ght(auth, locations, epiweeks, query)
+pvt_ght(auth, locations, epiweeks, query, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
@@ -14,6 +14,8 @@ pvt_ght(auth, locations, epiweeks, query)
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
 
 \item{query}{string. The query to be fetched.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -31,6 +33,6 @@ pvt_ght(
   locations = "ca",
   epiweeks = epirange(201201, 202001),
   query = "how to get over the flu"
-) \%>\% fetch()
+)
 }
 }

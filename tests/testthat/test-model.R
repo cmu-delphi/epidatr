@@ -49,7 +49,11 @@ test_that("`parse_timeset_input` on valid inputs", {
 
 test_that("null parsing", {
   # parse_data_frame (df[[info$name]] = NULL)-> parse_value
-  epidata_call <- flusurv(locations = "ca", epiweeks = 202001)
+  epidata_call <- flusurv(
+    locations = "ca",
+    epiweeks = 202001,
+    fetch_args = fetch_args_list(make_call = FALSE)
+  )
   # mocked data generated with
   # epidata_call %>%
   #   fetch_classic() %>%

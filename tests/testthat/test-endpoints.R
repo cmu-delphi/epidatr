@@ -1,59 +1,148 @@
 test_that("basic_epidata_call", {
-  expect_no_error(pvt_cdc(auth = "yourkey", "fl,ca", epirange(201501, 201601)))
-  expect_no_error(covid_hosp_facility_lookup(state = "fl"))
-  expect_no_error(covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(20200101, 20200501)))
-  expect_no_error(covid_hosp_state_timeseries(states = "fl", dates = epirange(20200101, 20200501)))
-  expect_no_error(covidcast_meta())
-  expect_no_error(covidcast(source = "jhu-csse", signals = "confirmed_7dav_incidence_prop", time_type = "day", geo_type = "state", time_values = epirange(20200601, 20200801), geo_values = "ca,fl"))
-  expect_no_error(delphi(system = "ec", epiweek = 202006))
-  expect_no_error(dengue_nowcast(locations = "?", epiweeks = epirange(201501, 202001)))
-  expect_no_error(pvt_dengue_sensors(auth = "yourkey", names = "?", locations = "?", epiweeks = epirange(201501, 202001)))
-  expect_no_error(ecdc_ili(regions = "austria", epiweeks = epirange(201201, 202001)))
-  expect_no_error(flusurv(locations = "CA", epiweeks = epirange(201201, 202001)))
-  expect_no_error(fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701)))
-  expect_no_error(fluview_meta())
-  expect_no_error(fluview(regions = "nat", epiweeks = epirange(201601, 201701)))
-  expect_no_error(gft(locations = "hhs1", epiweeks = epirange(201201, 202001)))
-  expect_no_error(pvt_ght(auth = "yourkey", locations = "ca", epiweeks = epirange(201201, 202001), query = "?"))
-  expect_no_error(kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001)))
-  expect_no_error(pvt_meta_norostat(auth = "yourkey"))
-  expect_no_error(meta())
-  expect_no_error(nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 202001)))
-  expect_no_error(nidss_flu(regions = "taipei", epiweeks = epirange(201201, 202001)))
-  expect_no_error(pvt_norostat(auth = "yourkey", locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin", epiweeks = epirange(201201, 202001)))
-  expect_no_error(nowcast(locations = "ca", epiweeks = epirange(201201, 202001)))
-  expect_no_error(paho_dengue(regions = "ca", epiweeks = epirange(201201, 202001)))
-  expect_no_error(pvt_quidel(auth = "yourkey", locations = "hhs1", epiweeks = epirange(201201, 202001)))
-  expect_no_error(pvt_sensors(auth = "yourkey", names = "sar3", locations = "nat", epiweeks = epirange(201501, 202001)))
-  expect_no_error(pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001)))
-  expect_no_error(wiki(articles = "avian_influenza", epiweeks = epirange(201501, 202001)))
-
-  expect_no_error(pvt_cdc(auth = "yourkey", "fl,ca", epirange(201501, 201601)) %>% request_url())
-  expect_no_error(covid_hosp_facility_lookup(state = "fl") %>% request_url())
-  expect_no_error(covid_hosp_facility(hospital_pks = "100075", collection_weeks = epirange(20200101, 20200501)) %>% request_url())
-  expect_no_error(covid_hosp_state_timeseries(states = "fl", dates = epirange(20200101, 20200501)) %>% request_url())
-  expect_no_error(covidcast_meta() %>% request_url())
-  expect_no_error(covidcast(source = "jhu-csse", signals = "confirmed_7dav_incidence_prop", time_type = "day", geo_type = "state", time_values = epirange(20200601, 20200801), geo_values = "ca,fl") %>% request_url())
-  expect_no_error(delphi(system = "ec", epiweek = 202006) %>% request_url())
-  expect_no_error(dengue_nowcast(locations = "?", epiweeks = epirange(201501, 202001)) %>% request_url())
-  expect_no_error(pvt_dengue_sensors(auth = "yourkey", names = "?", locations = "?", epiweeks = epirange(201501, 202001)) %>% request_url())
-  expect_no_error(ecdc_ili(regions = "austria", epiweeks = epirange(201201, 202001)) %>% request_url())
-  expect_no_error(flusurv(locations = "CA", epiweeks = epirange(201201, 202001)) %>% request_url())
-  expect_no_error(fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701)) %>% request_url())
-  expect_no_error(fluview_meta() %>% request_url())
-  expect_no_error(fluview(regions = "nat", epiweeks = epirange(201601, 201701)) %>% request_url())
-  expect_no_error(gft(locations = "hhs1", epiweeks = epirange(201201, 202001)) %>% request_url())
-  expect_no_error(pvt_ght(auth = "yourkey", locations = "ca", epiweeks = epirange(201201, 202001), query = "?") %>% request_url())
-  expect_no_error(kcdc_ili(regions = "?", epiweeks = epirange(201201, 202001)) %>% request_url())
-  expect_no_error(pvt_meta_norostat(auth = "yourkey") %>% request_url())
-  expect_no_error(meta() %>% request_url())
-  expect_no_error(nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 202001)) %>% request_url())
-  expect_no_error(nidss_flu(regions = "taipei", epiweeks = epirange(201201, 202001)) %>% request_url())
-  expect_no_error(pvt_norostat(auth = "yourkey", locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin", epiweeks = epirange(201201, 202001)) %>% request_url())
-  expect_no_error(nowcast(locations = "ca", epiweeks = epirange(201201, 202001)) %>% request_url())
-  expect_no_error(paho_dengue(regions = "ca", epiweeks = epirange(201201, 202001)) %>% request_url())
-  expect_no_error(pvt_quidel(auth = "yourkey", locations = "hhs1", epiweeks = epirange(201201, 202001)) %>% request_url())
-  expect_no_error(pvt_sensors(auth = "yourkey", names = "sar3", locations = "nat", epiweeks = epirange(201501, 202001)) %>% request_url())
-  expect_no_error(pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001)) %>% request_url())
-  expect_no_error(wiki(articles = "avian_influenza", epiweeks = epirange(201501, 202001)) %>% request_url())
+  expect_no_error(pvt_cdc(
+    auth = "yourkey",
+    "fl,ca",
+    epirange(201501, 201601),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(covid_hosp_facility_lookup(
+    state = "fl",
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(covid_hosp_facility(
+    hospital_pks = "100075",
+    collection_weeks = epirange(20200101, 20200501),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(covid_hosp_state_timeseries(
+    states = "fl",
+    dates = epirange(20200101, 20200501),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(covidcast_meta(
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(covidcast(
+    source = "jhu-csse",
+    signals = "confirmed_7dav_incidence_prop",
+    time_type = "day",
+    geo_type = "state",
+    time_values = epirange(20200601, 20200801),
+    geo_values = "ca,fl",
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(delphi(
+    system = "ec",
+    epiweek = 202006,
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(dengue_nowcast(
+    locations = "?",
+    epiweeks = epirange(201501, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(pvt_dengue_sensors(
+    auth = "yourkey",
+    names = "?",
+    locations = "?",
+    epiweeks = epirange(201501, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(ecdc_ili(
+    regions = "austria",
+    epiweeks = epirange(201201, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(flusurv(
+    locations = "CA",
+    epiweeks = epirange(201201, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(fluview_clinical(
+    regions = "nat",
+    epiweeks = epirange(201601, 201701),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(fluview_meta(
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(fluview(
+    regions = "nat",
+    epiweeks = epirange(201601, 201701),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(gft(
+    locations = "hhs1",
+    epiweeks = epirange(201201, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(pvt_ght(
+    auth = "yourkey",
+    locations = "ca",
+    epiweeks = epirange(201201, 202001),
+    query = "?",
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(kcdc_ili(
+    regions = "?",
+    epiweeks = epirange(201201, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(pvt_meta_norostat(
+    auth = "yourkey",
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(meta(
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(nidss_dengue(
+    locations = "taipei",
+    epiweeks = epirange(201201, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(nidss_flu(
+    regions = "taipei",
+    epiweeks = epirange(201201, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(pvt_norostat(
+    auth = "yourkey",
+    locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
+    epiweeks = epirange(201201, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(nowcast(
+    locations = "ca",
+    epiweeks = epirange(201201, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(paho_dengue(
+    regions = "ca",
+    epiweeks = epirange(201201, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(pvt_quidel(
+    auth = "yourkey",
+    locations = "hhs1",
+    epiweeks = epirange(201201, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(pvt_sensors(
+    auth = "yourkey",
+    names = "sar3",
+    locations = "nat",
+    epiweeks = epirange(201501, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(pvt_twitter(
+    auth = "yourkey",
+    locations = "CA",
+    epiweeks = epirange(201501, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
+  expect_no_error(wiki(
+    articles = "avian_influenza",
+    epiweeks = epirange(201501, 202001),
+    fetch_args = fetch_args_list(make_call = FALSE)
+  ) %>% request_url())
 })

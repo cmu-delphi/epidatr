@@ -6,10 +6,10 @@ parse_signal <- function(signal, base_url) {
   #'
   #' @param data_source data source to fetch
   #' @param signals data source to fetch
-  #' @param time_type data source to fetch
-  #' @param time_values data source to fetch
   #' @param geo_type geo_type to fetch
+  #' @param time_type data source to fetch
   #' @param geo_values data source to fetch
+  #' @param time_values data source to fetch
   #' @param as_of data source to fetch
   #' @param issues data source to fetch
   #' @param lag data source to fetch
@@ -18,13 +18,24 @@ parse_signal <- function(signal, base_url) {
   signal$call <- function(geo_type,
                           geo_values,
                           time_values,
-                          ...) {
-    epicall <- covidcast(
-      signal$source, signal$signal, geo_type, signal$time_type,
-      geo_values, time_values, ...
+                          as_of = NULL,
+                          issues = NULL,
+                          lag = NULL,
+                          fetch_args = fetch_args_list()) {
+    stopifnot(is.character(geo_type) & length(geo_type) == 1)
+
+    covidcast(
+      source = signal$source,
+      signals = signal$signal,
+      geo_type = geo_type,
+      time_type = signal$time_type,
+      geo_values = geo_values,
+      time_values = time_values,
+      as_of = as_of,
+      issues = issues,
+      lag = lag,
+      fetch_args = fetch_args
     )
-    epicall$base_url <- base_url
-    epicall
   }
   r <- list()
   r[[signal$signal]] <- signal

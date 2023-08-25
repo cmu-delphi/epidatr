@@ -4,7 +4,7 @@
 \alias{pvt_sensors}
 \title{Fetch Delphi's digital surveillance sensors}
 \usage{
-pvt_sensors(auth, names, locations, epiweeks)
+pvt_sensors(auth, names, locations, epiweeks, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
@@ -14,6 +14,8 @@ pvt_sensors(auth, names, locations, epiweeks)
 \item{locations}{character. Locations to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -28,6 +30,6 @@ pvt_sensors(
   names = "sar3",
   locations = "nat",
   epiweeks = epirange(201501, 202001)
-) \%>\% fetch()
+)
 }
 }

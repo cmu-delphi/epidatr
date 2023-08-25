@@ -1,6 +1,11 @@
 test_that("request_impl http errors", {
   # should give a 401 error
-  epidata_call <- pvt_cdc(auth = "ImALittleTeapot", epiweeks = epirange(202003, 202304), locations = "ma")
+  epidata_call <- pvt_cdc(
+    auth = "ImALittleTeapot",
+    epiweeks = epirange(202003, 202304),
+    locations = "ma",
+    fetch_args = fetch_args_list(make_call = FALSE)
+  )
   local_mocked_bindings(
     # generated via
     # url <- full_url(epidata_call)
@@ -23,6 +28,53 @@ test_that("request_impl http errors", {
   expect_error(response <- epidata_call %>% request_impl("csv"), class = "http_500")
 })
 
+test_that("fetch_args", {
+  expect_identical(
+    fetch_args_list(),
+    structure(
+      list(
+        fields = NULL,
+        disable_date_parsing = FALSE,
+        disable_data_frame_parsing = FALSE,
+        return_empty = FALSE,
+        timeout_seconds = 30,
+        base_url = NULL,
+        make_call = TRUE,
+        debug = FALSE,
+        format_type = "json"
+      ),
+      class = "fetch_args"
+    )
+  )
+  expect_identical(
+    fetch_args_list(
+      fields = c("a", "b"),
+      disable_date_parsing = TRUE,
+      disable_data_frame_parsing = TRUE,
+      return_empty = TRUE,
+      timeout_seconds = 10,
+      base_url = "https://example.com",
+      make_call = FALSE,
+      debug = TRUE,
+      format_type = "classic"
+    ),
+    structure(
+      list(
+        fields = c("a", "b"),
+        disable_date_parsing = TRUE,
+        disable_data_frame_parsing = TRUE,
+        return_empty = TRUE,
+        timeout_seconds = 10,
+        base_url = "https://example.com",
+        make_call = FALSE,
+        debug = TRUE,
+        format_type = "classic"
+      ),
+      class = "fetch_args"
+    )
+  )
+})
+
 test_that("fetch and fetch_tbl", {
   epidata_call <- covidcast(
     source = "jhu-csse",
@@ -30,7 +82,8 @@ test_that("fetch and fetch_tbl", {
     time_type = "day",
     geo_type = "state",
     time_values = epirange("2020-06-01", "2020-08-01"),
-    geo_values = "ca,fl"
+    geo_values = "ca,fl",
+    fetch_args = fetch_args_list(make_call = FALSE)
   )
   local_mocked_bindings(
     request_impl = function(...) NULL,
@@ -58,7 +111,7 @@ test_that("fetch and fetch_tbl", {
     .package = "httr"
   )
   # testing that the fields fill as expected
-  res <- epidata_call %>% fetch(fields = c("time_value", "value"))
+  res <- epidata_call %>% fetch(fetch_args_list(fields = c("time_value", "value")))
   expect_equal(res, tbl_out[c("time_value", "value")])
 })
 
@@ -69,7 +122,8 @@ test_that("fetch_tbl warns on non-success", {
     time_type = "day",
     geo_type = "state",
     time_values = epirange("2020-06-01", "2020-08-01"),
-    geo_values = "ca,fl"
+    geo_values = "ca,fl",
+    fetch_args = fetch_args_list(make_call = FALSE)
   )
 
   local_mocked_bindings(
@@ -98,7 +152,11 @@ test_that("fetch_tbl warns on non-success", {
 
 test_that("classic only fetch", {
   # delphi is an example endpoint that only suports the classic call
-  epidata_call <- delphi(system = "ec", epiweek = 201501)
+  epidata_call <- delphi(
+    system = "ec",
+    epiweek = 201501,
+    fetch_args = fetch_args_list(make_call = FALSE)
+  )
   local_mocked_bindings(
     # generated using
     # epidata_call %>%

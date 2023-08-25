@@ -11,13 +11,13 @@ parse_signal(signal, base_url)
 
 \item{signals}{data source to fetch}
 
-\item{time_type}{data source to fetch}
-
-\item{time_values}{data source to fetch}
-
 \item{geo_type}{geo_type to fetch}
 
+\item{time_type}{data source to fetch}
+
 \item{geo_values}{data source to fetch}
+
+\item{time_values}{data source to fetch}
 
 \item{as_of}{data source to fetch}
 

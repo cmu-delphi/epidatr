@@ -15,10 +15,9 @@
 #' There are some other functions available for debugging and advanced usage:
 #' - `request_url` (for debugging):  outputs the request URL from which data
 #'    would be fetched (note additional parameters below)
-#' - `with_base_url` (advanced): outputs an `epidata_call` that requests data
-#'    from a different Epidata server
 #'
 #' @examples
+#' \dontrun{
 #' covidcast(
 #'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
@@ -26,7 +25,8 @@
 #'   geo_type = "state",
 #'   time_values = epirange(20200601, 20200801),
 #'   geo_values = c("ca", "fl")
-#' ) %>% fetch()
+#' )
+#' }
 #'
 #' @param endpoint the epidata endpoint to call
 #' @param params the parameters to pass to the epidata endpoint
@@ -98,6 +98,72 @@ print.epidata_call <- function(x, ...) {
   ))
 }
 
+#' Fetch args
+#' @rdname epidata_call
+#' @aliases fetch_args
+#'
+#' A constructor for `fetch_args` objects, which are used to pass arguments to
+#' the `fetch` function.
+#'
+#' @param fields a list of epidata fields to return, or NULL to return all
+#'  fields (default) e.g. c("time_value", "value") to return only the
+#' time_value and value fields or c("-direction") to return everything except
+#' the direction field
+#' @param disable_date_parsing disable automatic date parsing
+#' @param disable_data_frame_parsing disable automatic conversion to data frame; this
+#'   is only supported by endpoints that only support the 'classic' format (non-tabular)
+#' @param return_empty boolean that allows returning an empty tibble if there is no data
+#' @param timeout_seconds the maximum amount of time to wait for a response
+#' @param base_url base URL to use
+#' @param make_call boolean that allows skipping the call to the API and instead
+#'  returns the `epidata_call` object (useful for debugging)
+#' @param debug boolean that allows returning the raw response from the API
+#' @param format_type the format to request from the API, one of classic, json, csv; this
+#'  is only used by `fetch_debug`
+#' @return
+#' - For `fetch_args_list`: a `fetch_args` object
+#' @export
+#'
+#' @importFrom checkmate assert_character assert_logical assert_numeric
+#'
+fetch_args_list <- function(
+    ...,
+    fields = NULL,
+    disable_date_parsing = FALSE,
+    disable_data_frame_parsing = FALSE,
+    return_empty = FALSE,
+    timeout_seconds = 30,
+    base_url = NULL,
+    make_call = TRUE,
+    debug = FALSE,
+    format_type = "json") {
+  assert_character(fields, null.ok = TRUE, len = NULL, any.missing = FALSE)
+  assert_logical(disable_date_parsing, null.ok = TRUE, len = 1L, any.missing = FALSE)
+  assert_logical(disable_data_frame_parsing, null.ok = TRUE, len = 1L, any.missing = FALSE)
+  assert_logical(return_empty, null.ok = TRUE, len = 1L, any.missing = FALSE)
+  assert_numeric(timeout_seconds, null.ok = TRUE, len = 1L, any.missing = FALSE)
+  assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
+  assert_logical(make_call, null.ok = TRUE, len = 1L, any.missing = FALSE)
+  assert_logical(debug, null.ok = TRUE, len = 1L, any.missing = FALSE)
+  assert_character(format_type, null.ok = TRUE, len = 1L, any.missing = FALSE)
+  assert(format_type %in% c("json", "csv", "classic"), "format_type must be one of json, csv, classic")
+
+  structure(
+    list(
+      fields = fields,
+      disable_date_parsing = disable_date_parsing,
+      disable_data_frame_parsing = disable_data_frame_parsing,
+      return_empty = return_empty,
+      timeout_seconds = timeout_seconds,
+      base_url = base_url,
+      make_call = make_call,
+      debug = debug,
+      format_type = format_type
+    ),
+    class = "fetch_args"
+  )
+}
+
 #' Fetches the data
 #'
 #' `fetch` usually returns the data in tibble format, but a few of the endpoints
@@ -106,28 +172,31 @@ print.epidata_call <- function(x, ...) {
 #'
 #' @rdname epidata_call
 #' @param epidata_call an instance of `epidata_call`
-#' @param fields a list of epidata fields to return, or NULL to return all
-#'   fields (default) e.g. c("time_value", "value") to return only the
-#'   time_value and value fields or c("-direction") to return everything except
-#'   the direction field
-#' @param disable_date_parsing disable automatic date parsing
-#' @param return_empty boolean that allows returning an empty tibble if there is no data
-#' @param timeout_seconds the maximum amount of time to wait for a response
+#' @param fetch_args a `fetch_args` object
 #' @return
 #' - For `fetch`: a tibble or a JSON-like list
 #' @export
 #'
-fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE, return_empty = FALSE, timeout_seconds = 30) {
+fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(epidata_call, "epidata_call"))
-  stopifnot(is.null(fields) || is.character(fields))
-  stopifnot(is.logical(disable_date_parsing), length(disable_date_parsing) == 1)
-  stopifnot(is.logical(return_empty))
-  stopifnot(is.numeric(timeout_seconds))
+  stopifnot(inherits(fetch_args, "fetch_args"))
+
+  if (!is.null(fetch_args$base_url)) {
+    epidata_call <- with_base_url(epidata_call, fetch_args$base_url)
+  }
+
+  if (!fetch_args$make_call) {
+    return(epidata_call)
+  }
+
+  if (fetch_args$debug) {
+    return(fetch_debug(epidata_call, fetch_args))
+  }
 
   if (epidata_call$only_supports_classic) {
-    return(fetch_classic(epidata_call, fields, return_empty = return_empty, timeout_seconds = timeout_seconds))
+    return(fetch_classic(epidata_call, fetch_args))
   } else {
-    return(fetch_tbl(epidata_call, fields, disable_date_parsing, return_empty, timeout_seconds = timeout_seconds))
+    return(fetch_tbl(epidata_call, fetch_args))
   }
 }
 
@@ -135,13 +204,7 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE, ret
 #' @rdname fetch_tbl
 #'
 #' @param epidata_call an instance of `epidata_call`
-#' @param fields a list of epidata fields to return, or NULL to return all
-#'   fields (default) e.g. c("time_value", "value") to return only the
-#'   time_value and value fields or c("-direction") to return everything except
-#'   the direction field
-#' @param disable_date_parsing disable automatic date parsing
-#' @param return_empty boolean that allows returning an empty tibble if there is no data.
-#' @param timeout_seconds the maximum amount of time to wait for a response
+#' @param fetch_args a `fetch_args` object
 #' @importFrom readr read_csv
 #' @importFrom httr stop_for_status content
 #' @importFrom rlang abort
@@ -149,25 +212,22 @@ fetch <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE, ret
 #' @return
 #' - For `fetch_tbl`: a [`tibble::tibble`]
 #' @keywords internal
-fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE, return_empty = FALSE, timeout_seconds = 30) {
+fetch_tbl <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(epidata_call, "epidata_call"))
-  stopifnot(is.null(fields) || is.character(fields))
-  stopifnot(is.logical(disable_date_parsing), length(disable_date_parsing) == 1)
-  stopifnot(is.logical(return_empty))
-  stopifnot(is.numeric(timeout_seconds))
+  stopifnot(inherits(fetch_args, "fetch_args"))
 
   if (epidata_call$only_supports_classic) {
-    rlang::abort("This endpoint only supports the classic message format, due to a non-standard behavior. Use fetch_classic instead.",
+    rlang::abort("This endpoint only supports the classic message format, due to non-standard behavior. Use fetch_classic instead.",
       epidata_call = epidata_call,
       class = "only_supports_classic_format"
     )
   }
 
-  response_content <- fetch_classic(epidata_call, fields, disable_data_frame_parsing = FALSE, return_empty = return_empty, timeout_seconds = timeout_seconds)
-  if (return_empty && length(response_content) == 0) {
+  response_content <- fetch_classic(epidata_call, fetch_args = fetch_args)
+  if (fetch_args$return_empty && length(response_content) == 0) {
     return(tibble())
   }
-  return(parse_data_frame(epidata_call, response_content, disable_date_parsing) %>% as_tibble())
+  return(parse_data_frame(epidata_call, response_content, fetch_args$disable_date_parsing) %>% as_tibble())
 }
 
 #' Fetches the data, raises on epidata errors, and returns the results as a
@@ -176,34 +236,24 @@ fetch_tbl <- function(epidata_call, fields = NULL, disable_date_parsing = FALSE,
 #' @rdname fetch_classic
 #'
 #' @param epidata_call an instance of `epidata_call`
-#' @param fields a list of epidata fields to return, or NULL to return all
-#'   fields (default) e.g. c("time_value", "value") to return only the
-#'   time_value and value fields or c("-direction") to return everything except
-#'   the direction field
-#' @param disable_data_frame_parsing do not automatically cast the epidata
-#'   output to a data frame (some endpoints return a list of lists, which is not
-#'   a data frame)
-#' @param return_empty boolean that allows returning an empty tibble if there is no data.
-#' @param timeout_seconds the maximum amount of time to wait for a response
+#' @param fetch_args a `fetch_args` object
 #' @importFrom httr stop_for_status content http_error
 #' @importFrom jsonlite fromJSON
 #' @return
 #' - For `fetch_classic`: a JSON-like list
 #' @keywords internal
-fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsing = TRUE, return_empty = FALSE, timeout_seconds = 30) {
+fetch_classic <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(epidata_call, "epidata_call"))
-  stopifnot(is.null(fields) || is.character(fields))
-  stopifnot(is.logical(return_empty))
-  stopifnot(is.numeric(timeout_seconds))
+  stopifnot(inherits(fetch_args, "fetch_args"))
 
-  response <- request_impl(epidata_call, "classic", fields, timeout_seconds)
+  response <- request_impl(epidata_call, "classic", fetch_args$fields, fetch_args$timeout_seconds)
   response_content <- httr::content(response, as = "text", encoding = "UTF-8")
 
-  response_content <- jsonlite::fromJSON(response_content, simplifyDataFrame = !disable_data_frame_parsing)
+  response_content <- jsonlite::fromJSON(response_content, simplifyDataFrame = !fetch_args$disable_data_frame_parsing)
 
   # success is 1, no results is -2, truncated is 2, -1 is generic error
   if (response_content$result != 1) {
-    if ((response_content$result != -2) && !(return_empty)) {
+    if ((response_content$result != -2) && !(fetch_args$return_empty)) {
       rlang::abort(paste0("epidata error: ", response_content$message), "epidata_error")
     }
   }
@@ -213,8 +263,11 @@ fetch_classic <- function(epidata_call, fields = NULL, disable_data_frame_parsin
   return(response_content$epidata)
 }
 
-fetch_debug <- function(epidata_call, format_type = "classic", fields = NULL, timeout_seconds = 30) {
-  response <- request_impl(epidata_call, format_type, fields, timeout_seconds)
+fetch_debug <- function(epidata_call, fetch_args = fetch_args_list()) {
+  stopifnot(inherits(epidata_call, "epidata_call"))
+  stopifnot(inherits(fetch_args, "fetch_args"))
+
+  response <- request_impl(epidata_call, fetch_args$format_type, fetch_args$fields, fetch_args$timeout_seconds)
   content <- httr::content(response, "text", encoding = "UTF-8")
   content
 }
@@ -245,14 +298,11 @@ request_url <- function(epidata_call, format_type = "classic", fields = NULL) {
 }
 
 #' `epidata_call` object using a different base URL
-#' @rdname epidata_call
 #'
 #' @param epidata_call an instance of `epidata_call`
 #' @param base_url base URL to use
-#' @return
-#' - For `with_base_url`: an `epidata_call` object
-#'
-#' @export
+#' @return an `epidata_call` object
+#' @keywords internal
 with_base_url <- function(epidata_call, base_url) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.character(base_url), length(base_url) == 1)
