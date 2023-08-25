@@ -15,5 +15,5 @@ List all available endpoints
 }
 \examples{
 endps <- avail_endpoints()
-print(eps, n = nrow(endps))
+print(endps, n = nrow(endps))
 }

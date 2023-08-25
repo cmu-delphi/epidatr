@@ -61,32 +61,34 @@ parse_source <- function(source, base_url) {
 
 #' @method as.data.frame covidcast_data_signal_list
 #' @export
-as.data.frame.covidcast_data_signal_list <- function(signals, ...) {
-  as.data.frame(do.call(rbind, lapply(signals, function(x) {
-    sub <- x[c(
-      "source",
-      "signal",
-      "name",
-      "active",
-      "short_description",
-      "description",
-      "time_type",
-      "time_label",
-      "value_label",
-      "format",
-      "category",
-      "high_values_are",
-      "is_smoothed",
-      "is_weighted",
-      "is_cumulative",
-      "has_stderr",
-      "has_sample_size"
-    )]
-    sub$geo_types <- paste0(names(x$geo_types), collapse = ",")
-    sub
-  })), row.names = sapply(signals, function(x) {
-    x$key
-  }), ...)
+as.data.frame.covidcast_data_signal_list <- function(x, ...) {
+  as.data.frame(
+    do.call(rbind, lapply(x, function(z) {
+        sub <- z[c(
+          "source",
+          "signal",
+          "name",
+          "active",
+          "short_description",
+          "description",
+          "time_type",
+          "time_label",
+          "value_label",
+          "format",
+          "category",
+          "high_values_are",
+          "is_smoothed",
+          "is_weighted",
+          "is_cumulative",
+          "has_stderr",
+          "has_sample_size"
+        )]
+        sub$geo_types <- paste0(names(z$geo_types), collapse = ",")
+        sub
+      })
+    ), 
+    row.names = sapply(x, function(y) y$key), 
+    ...)
 }
 
 #' @export
@@ -152,18 +154,24 @@ covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) 
 
 #' @method as.data.frame covidcast_data_source_list
 #' @export
-as.data.frame.covidcast_data_source_list <- function(sources, ...) {
-  as.data.frame(do.call(rbind, lapply(sources, function(x) {
-    sub <- x[c(
-      "source", "name", "description", "reference_signal", "license"
-    )]
-    sub$signals <- paste0(sapply(x$signals, function(y) {
-      y$signal
-    }), collapse = ",")
-    sub
-  })), row.names = sapply(sources, function(x) {
-    x$source
-  }), ...)
+as.data.frame.covidcast_data_source_list <- function(x, ...) {
+  as.data.frame(
+    do.call(
+      rbind, 
+      lapply(
+        x, 
+        FUN = function(z) {
+          cols <- c("source", "name", "description", "reference_signal", 
+                    "license")
+          sub <- z[cols]
+          sub$signals <- paste0(
+            sapply(z$signals, function(y) y$signal), collapse = ","
+          )
+          sub
+        })
+    ), 
+    row.names = sapply(x, function(z) z$source), 
+    ...)
 }
 
 print.covidcast_epidata <- function(x, ...) {
