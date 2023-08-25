@@ -19,7 +19,7 @@ national, HHS region, census division, most states and territories, and so
 on. Full list link below.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch in the form
-epirange(startweek,endweek), where startweek and endweek are of the form
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
 YYYYWW (string or numeric).}
 
 \item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the

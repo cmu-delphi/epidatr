@@ -1,6 +1,6 @@
 #' List all available endpoints
 #'
-#' @return A `tibble::tibble` with 2 columns. `Endpoint` contains the function
+#' @return A [`tibble::tibble`] with 2 columns. `Endpoint` contains the function
 #'   for accessing the Delphi Epidata API endpoint along with a `Description`.
 #' @export
 #'
@@ -13,8 +13,8 @@ avail_endpoints <- function() {
   all_ids <- db$Base$ID
   our_endpoints <- all_ids %in% endpoint_ids
   tib <- tibble::tibble( # printing is much nicer than data.frame
-    `Endpoint` = paste0(db$Base$Name[our_endpoints], "()"),
-    `Description` = db$Base$Title[our_endpoints]
+    Endpoint = paste0(db$Base$Name[our_endpoints], "()"),
+    Description = db$Base$Title[our_endpoints]
   )
   tib
 }

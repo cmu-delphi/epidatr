@@ -1099,7 +1099,7 @@ fluview_meta <- function(fetch_args = fetch_args_list()) {
 #'   national, HHS region, census division, most states and territories, and so
 #'   on. Full list link below.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch in the form
-#'   epirange(startweek,endweek), where startweek and endweek are of the form
+#'   `epirange(startweek, endweek)`, where startweek and endweek are of the form
 #'   YYYYWW (string or numeric).
 #' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
 #'   most recent issue is returned. Mutually exclusive with `lag`.

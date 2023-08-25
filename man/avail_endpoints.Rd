@@ -7,7 +7,7 @@
 avail_endpoints()
 }
 \value{
-A \code{tibble::tibble} with 2 columns. \code{Endpoint} contains the function
+A \code{\link[tibble:tibble]{tibble::tibble}} with 2 columns. \code{Endpoint} contains the function
 for accessing the Delphi Epidata API endpoint along with a \code{Description}.
 }
 \description{
