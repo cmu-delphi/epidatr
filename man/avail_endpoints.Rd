@@ -14,5 +14,6 @@ for accessing the Delphi Epidata API endpoint along with a \code{Description}.
 List all available endpoints
 }
 \examples{
-avail_endpoints()
+eps <- avail_endpoints()
+print(eps, n = length(eps))
 }
