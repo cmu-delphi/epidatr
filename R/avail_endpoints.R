@@ -5,8 +5,8 @@
 #' @export
 #'
 #' @examples
-#' eps <- avail_endpoints()
-#' print(eps, n = length(eps))
+#' endps <- avail_endpoints()
+#' print(eps, n = nrow(endps))
 avail_endpoints <- function() {
   db <- utils::hsearch_db("epidatr")
   endpoint_ids <- db$Concepts$ID[db$Concepts$Concept == "endpoint"]

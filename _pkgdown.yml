@@ -12,6 +12,7 @@ reference:
   - contents:
       - get_auth_key
       - parse_api_week
+      - avail_endpoints
       - epirange
       - timeset
   - title: Make API requests
@@ -19,37 +20,12 @@ reference:
   - contents:
       - epidata_call
       - fetch_args_list
-      - covid_hosp_facility
-      - covid_hosp_facility_lookup
-      - covid_hosp_state_timeseries
-      - covidcast
-      - covidcast_meta
-      - delphi
-      - dengue_nowcast
-      - ecdc_ili
-      - flusurv
-      - fluview
-      - fluview_clinical
-      - fluview_meta
-      - gft
-      - kcdc_ili
-      - meta
-      - nidss_dengue
-      - nidss_flu
-      - nowcast
-      - paho_dengue
-      - wiki
+      - has_keyword("endpoint")
+      - -starts_with("pvt_")
   - title: Make requests to private API endpoints
     desc: These endpoints require additional authorization to use
   - contents:
-      - pvt_cdc
-      - pvt_dengue_sensors
-      - pvt_ght
-      - pvt_meta_norostat
-      - pvt_norostat
-      - pvt_quidel
-      - pvt_sensors
-      - pvt_twitter
+      - starts_with("pvt_")
   - title: Autocomplete helpers
     desc: Objects that can autocomplete API signals names for faster exploration
   - contents:
