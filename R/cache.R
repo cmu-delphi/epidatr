@@ -32,10 +32,7 @@ cache_environ$epidatr_cache <- NULL
 #' @param prune_rate how many calls to go between checking if any cache elements are too old or if the cache overall is too large. Defaults to `2000L`. Since cachem fixes the max time between prune checks to 5 seconds, there's little reason to actually change this parameter. Doesn't have a corresponding environmental variable.
 #' @export
 #' @import cachem
-<<<<<<< Updated upstream
 set_cache <- function(cache_dir = NULL,
-=======
->>>>>>> Stashed changes
                       days = NULL,
                       max_size = NULL,
                       logfile = NULL,
@@ -128,18 +125,6 @@ cache_info <- function() {
   cache_environ$epidatr_cache$info()
 }
 
-<<<<<<< Updated upstream
-=======
-cache_epidata_call <- function(call, ...) {
-#' turn off the caching for this session
-#' @description
-#' Print out the information about the cache (as would be returned by cachem's `info()` method)
-#' @export
-cache_info <- function() {
-  cache_environ$epidatr_cache$info()
-}
-
->>>>>>> Stashed changes
 #' create a new cache for this session
 #'
 #' @description
