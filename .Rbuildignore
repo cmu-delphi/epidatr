@@ -3,7 +3,7 @@
 ^.*\.Rproj$
 ^.*\..Rcheck$
 ^\.Rproj\.user$
-
+^DEVELOPMENT\.md$
 ^doc$
 ^shiny$
 ^docs$
