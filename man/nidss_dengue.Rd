@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{nidss_dengue}
 \alias{nidss_dengue}
-\title{Fetch NIDSS dengue data}
+\title{NIDSS dengue data}
 \usage{
 nidss_dengue(locations, epiweeks, fetch_args = fetch_args_list())
 }
@@ -33,3 +33,4 @@ and
 nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301))
 }
 }
+\keyword{endpoint}

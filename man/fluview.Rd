@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{fluview}
 \alias{fluview}
-\title{Fetch FluView data}
+\title{FluView ILINet data}
 \usage{
 fluview(
   regions,
@@ -51,3 +51,4 @@ The full list of location inputs can be accsssed at
 \examples{
 fluview(regions = "nat", epiweeks = epirange(201201, 202001))
 }
+\keyword{endpoint}

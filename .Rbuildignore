@@ -7,7 +7,6 @@
 ^doc$
 ^shiny$
 ^docs$
-^Meta$
 ^_pkgdown\.yml$
 ^pkgdown$
 ^data-raw$

@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{fluview_meta}
 \alias{fluview_meta}
-\title{Fetch FluView metadata}
+\title{FluView metadata}
 \usage{
 fluview_meta(fetch_args = fetch_args_list())
 }
@@ -21,3 +21,4 @@ fluview_meta()
 }
 
 }
+\keyword{endpoint}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_sensors}
 \alias{pvt_sensors}
-\title{Fetch Delphi's digital surveillance sensors}
+\title{Digital surveillance sensors}
 \usage{
 pvt_sensors(auth, names, locations, epiweeks, fetch_args = fetch_args_list())
 }
@@ -33,3 +33,4 @@ pvt_sensors(
 )
 }
 }
+\keyword{endpoint}

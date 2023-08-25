@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{fluview_clinical}
 \alias{fluview_clinical}
-\title{Fetch FluView virological data from clinical labs}
+\title{FluView virological data from clinical labs}
 \usage{
 fluview_clinical(
   regions,
@@ -38,3 +38,4 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.
 fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
 }
 }
+\keyword{endpoint}

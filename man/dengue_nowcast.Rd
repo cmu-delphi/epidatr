@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{dengue_nowcast}
 \alias{dengue_nowcast}
-\title{Fetch Delphi's PAHO Dengue nowcast}
+\title{Delphi's PAHO Dengue nowcast}
 \usage{
 dengue_nowcast(locations, epiweeks, fetch_args = fetch_args_list())
 }
@@ -30,3 +30,4 @@ dengue_nowcast(
 )
 }
 }
+\keyword{endpoint}

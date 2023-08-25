@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{delphi}
 \alias{delphi}
-\title{Fetch Delphi's ILINet forecasts}
+\title{Delphi's ILINet forecasts}
 \usage{
 delphi(system, epiweek, fetch_args = fetch_args_list())
 }
@@ -24,3 +24,4 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/delphi.html}
 delphi(system = "ec", epiweek = 201501)
 }
 }
+\keyword{endpoint}

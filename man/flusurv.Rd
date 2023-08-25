@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{flusurv}
 \alias{flusurv}
-\title{Fetch FluSurv hospitalization data}
+\title{FluSurv hospitalization data}
 \usage{
 flusurv(
   locations,
@@ -44,3 +44,4 @@ The list of location argument can be found in
 flusurv(locations = "CA", epiweeks = epirange(201701, 201801))
 }
 }
+\keyword{endpoint}

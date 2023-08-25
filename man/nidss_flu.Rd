@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{nidss_flu}
 \alias{nidss_flu}
-\title{Fetch NIDSS flu data}
+\title{NIDSS flu data}
 \usage{
 nidss_flu(
   regions,
@@ -40,3 +40,4 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html}
 nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601))
 }
 }
+\keyword{endpoint}

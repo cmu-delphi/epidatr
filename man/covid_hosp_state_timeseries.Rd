@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{covid_hosp_state_timeseries}
 \alias{covid_hosp_state_timeseries}
-\title{Fetch COVID Hospitalization Data by State}
+\title{COVID Hospitalization Data by State}
 \usage{
 covid_hosp_state_timeseries(
   states,
@@ -23,9 +23,6 @@ most recent issue is returned.}
 }
 \value{
 \code{\link{epidata_call}}
-
-See also the official description and data dictionary at <healthdata.gov> for
-more information.
 }
 \description{
 Obtains the COVID-19 reported patient impact and hospital capacity data by
@@ -37,6 +34,9 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html}.
 
 Starting October 1, 2022, some facilities are only required to
 report annually.
+
+See also the official description and data dictionary at <healthdata.gov> for
+more information.
 }
 \examples{
 \dontrun{
@@ -45,4 +45,6 @@ covid_hosp_state_timeseries(
   dates = epirange(20200101, 20200501)
 )
 }
+
 }
+\keyword{endpoint}

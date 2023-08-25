@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{covid_hosp_facility}
 \alias{covid_hosp_facility}
-\title{Fetch COVID hospitalization data for specific facilities}
+\title{COVID hospitalization data for specific facilities}
 \usage{
 covid_hosp_facility(
   hospital_pks,
@@ -22,9 +22,6 @@ covid_hosp_facility(
 }
 \value{
 \code{\link{epidata_call}}
-
-See also the official description and data dictionary at <healthdata.gov> for
-more information.
 }
 \description{
 Obtains the COVID-19 reported patient impact and hospital capacity data by
@@ -38,6 +35,9 @@ API docs:
 Starting October 1, 2022, some facilities are only required to
 report annually. The companion function \code{\link[=covid_hosp_facility_lookup]{covid_hosp_facility_lookup()}} can be
 used to look up facility identifiers in a variety of ways.
+
+See also the official description and data dictionary at <healthdata.gov> for
+more information.
 }
 \examples{
 \dontrun{
@@ -50,3 +50,4 @@ covid_hosp_facility(
 \seealso{
 \code{\link[=covid_hosp_facility_lookup]{covid_hosp_facility_lookup()}}, \code{\link[=epirange]{epirange()}}
 }
+\keyword{endpoint}

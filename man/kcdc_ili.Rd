@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{kcdc_ili}
 \alias{kcdc_ili}
-\title{Fetch KCDC data}
+\title{KCDC ILI data}
 \usage{
 kcdc_ili(
   regions,
@@ -39,3 +39,4 @@ TODO: find a non-trivial region
 kcdc_ili(regions = "ROK", epiweeks = 200436)
 }
 }
+\keyword{endpoint}

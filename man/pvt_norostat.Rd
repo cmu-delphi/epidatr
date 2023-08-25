@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_norostat}
 \alias{pvt_norostat}
-\title{Fetch NoroSTAT data (point data, no min/max)}
+\title{NoroSTAT data (point data, no min/max)}
 \usage{
 pvt_norostat(auth, locations, epiweeks, fetch_args = fetch_args_list())
 }
@@ -30,3 +30,4 @@ pvt_norostat(
 )
 }
 }
+\keyword{endpoint}

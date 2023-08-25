@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{covid_hosp_facility_lookup}
 \alias{covid_hosp_facility_lookup}
-\title{Fetch COVID hospitalization facility identifiers}
+\title{COVID hospitalization facility identifiers}
 \usage{
 covid_hosp_facility_lookup(
   state = NULL,
@@ -51,3 +51,4 @@ covid_hosp_facility_lookup(city = "southlake")
 \seealso{
 \code{\link[=covid_hosp_facility]{covid_hosp_facility()}}
 }
+\keyword{endpoint}

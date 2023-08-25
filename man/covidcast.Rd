@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{covidcast}
 \alias{covidcast}
-\title{Fetch covidcast data}
+\title{COVID data via the covidcast endpoint}
 \usage{
 covidcast(
   source,
@@ -78,7 +78,9 @@ covidcast(
   time_values = epirange(20200601, 20200801)
 )
 }
+
 }
 \seealso{
 \code{\link[=covidcast_meta]{covidcast_meta()}}, \code{\link[=covidcast_epidata]{covidcast_epidata()}}, \code{\link[=epirange]{epirange()}}
 }
+\keyword{endpoint}

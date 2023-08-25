@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{paho_dengue}
 \alias{paho_dengue}
-\title{Fetch PAHO Dengue}
+\title{PAHO Dengue data}
 \usage{
 paho_dengue(
   regions,
@@ -36,3 +36,4 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html}
 paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501))
 }
 }
+\keyword{endpoint}

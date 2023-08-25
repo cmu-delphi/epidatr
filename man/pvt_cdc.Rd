@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_cdc}
 \alias{pvt_cdc}
-\title{Fetch CDC page hits}
+\title{CDC page hits}
 \usage{
 pvt_cdc(auth, locations, epiweeks, fetch_args = fetch_args_list())
 }
@@ -30,4 +30,6 @@ pvt_cdc(
   epirange(201501, 201601)
 )
 }
+
 }
+\keyword{endpoint}

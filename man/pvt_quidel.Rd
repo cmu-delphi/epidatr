@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_quidel}
 \alias{pvt_quidel}
-\title{Fetch Quidel COVID-19 and influenza testing data}
+\title{Quidel COVID-19 and influenza testing data}
 \usage{
 pvt_quidel(auth, locations, epiweeks, fetch_args = fetch_args_list())
 }
@@ -30,3 +30,4 @@ pvt_quidel(
 )
 }
 }
+\keyword{endpoint}

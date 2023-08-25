@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_twitter}
 \alias{pvt_twitter}
-\title{Fetch HealthTweets data}
+\title{HealthTweets data}
 \usage{
 pvt_twitter(
   auth,
@@ -35,3 +35,4 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/twitter.html}
 pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001))
 }
 }
+\keyword{endpoint}

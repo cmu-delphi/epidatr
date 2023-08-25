@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{nowcast}
 \alias{nowcast}
-\title{Fetch Delphi's ILI nowcast}
+\title{Delphi's ILI nowcast}
 \usage{
 nowcast(locations, epiweeks, fetch_args = fetch_args_list())
 }
@@ -31,3 +31,4 @@ The full list of location inputs can be accsssed at
 nowcast(locations = "ca", epiweeks = epirange(201201, 201301))
 }
 }
+\keyword{endpoint}
