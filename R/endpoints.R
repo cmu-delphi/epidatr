@@ -10,14 +10,14 @@
 #'   epirange(201501, 201601)
 #' )
 #' }
-#' 
+#'
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param locations character. Locations to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'   See `fetch_args_list()` for details.
 #' @return [`epidata_call`]
-#' 
+#'
 #' @keywords endpoint
 #' @export
 pvt_cdc <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
@@ -75,7 +75,7 @@ pvt_cdc <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
 #' @param fips_code string. A 5-digit fips county code, zero-padded.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`epidata_call`]
-#' 
+#'
 #' @seealso [covid_hosp_facility()]
 #' @keywords endpoint
 #' @export
@@ -142,7 +142,7 @@ covid_hosp_facility_lookup <- function(
 #' @details Starting October 1, 2022, some facilities are only required to
 #' report annually. The companion function [covid_hosp_facility_lookup()] can be
 #' used to look up facility identifiers in a variety of ways.
-#' 
+#'
 #' See also the official description and data dictionary at <healthdata.gov> for
 #' more information.
 #'
@@ -441,7 +441,7 @@ covid_hosp_facility <- function(
 #'
 #' @details Starting October 1, 2022, some facilities are only required to
 #' report annually.
-#' 
+#'
 #' See also the official description and data dictionary at <healthdata.gov> for
 #' more information.
 #'
@@ -452,14 +452,14 @@ covid_hosp_facility <- function(
 #'   dates = epirange(20200101, 20200501)
 #' )
 #' }
-#' 
+#'
 #' @param states character. Two letter state abbreviations.
 #' @param dates [`timeset`]. Dates to fetch.
 #' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
 #' most recent issue is returned.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`epidata_call`]
-#' 
+#'
 #' @keywords endpoint
 #' @export
 #
@@ -604,7 +604,7 @@ covid_hosp_state_timeseries <- function(states, dates, issues = NULL, fetch_args
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'
 #' @return [`epidata_call`]
-#' 
+#'
 #'
 #' @examples
 #' \dontrun{
@@ -665,7 +665,7 @@ covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #'   time_values = epirange(20200601, 20200801)
 #' )
 #' }
-#' 
+#'
 #' @param source string. The data source to query (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>).
 #' @param signals string. The signals to query from a specific source (see:
@@ -689,8 +689,8 @@ covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #'   `issues`.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`epidata_call`]
-#' 
-#' 
+#'
+#'
 #' @seealso [covidcast_meta()], [covidcast_epidata()], [epirange()]
 #' @keywords endpoint
 #' @export
@@ -1683,7 +1683,7 @@ pvt_twitter <- function(auth, locations, dates = NULL, epiweeks = NULL, fetch_ar
 #' Wikipedia access data
 #'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
-#' 
+#'
 #' ```{r results="asis", echo = FALSE}
 #' url <- "https://raw.githubusercontent.com/cmu-delphi/delphi-epidata/dev/docs/api/covidcast_signals.md"
 #' txt <- readLines(url)
