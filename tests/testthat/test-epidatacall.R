@@ -7,21 +7,14 @@ test_that("request_impl http errors", {
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   local_mocked_bindings(
-    # generated via
-    # url <- full_url(epidata_call)
-    # params <- request_arguments(epidata_call, "csv", NULL)
-    # result <- do_request(url, params) %>% readr::write_rds(testthat::test_path("data/test-http401.rds"))
+    # see generate_test_data.R
     do_request = function(...) readRDS(testthat::test_path("data/test-http401.rds")),
   )
   expect_error(response <- epidata_call %>% request_impl("csv"), class = "http_401")
 
   # should give a 500 error (the afhsb endpoint is removed)
 
-  # generated via
-  # epidata_call <- pvt_afhsb(auth = Sys.getenv("SECRET_API_AUTH_AFHSB"), locations = "mn", epiweeks = epirange(202002, 202110), flu_types = "flu1")
-  # url <- full_url(epidata_call)
-  # params <- request_arguments(epidata_call, "csv", NULL)
-  # response <- do_request(url, params) %>% readr::write_rds(testthat::test_path("data/test-http500.rds"))
+  # see generate_test_data.R
   local_mocked_bindings(
     do_request = function(...) readRDS(testthat::test_path("data/test-http500.rds"))
   )
@@ -90,10 +83,7 @@ test_that("fetch and fetch_tbl", {
     .package = "epidatr"
   )
   local_mocked_bindings(
-    # RDS file generated with
-    # epidata_call %>%
-    # fetch_debug(format_type = "classic") %>%
-    # readr::write_rds(testthat::test_path("data/test-classic.rds"))
+    # see generate_test_data.R
     content = function(...) readRDS(testthat::test_path("data/test-classic.rds")),
     .package = "httr"
   )
@@ -103,10 +93,7 @@ test_that("fetch and fetch_tbl", {
   expect_identical(out, tbl_out)
 
   local_mocked_bindings(
-    # RDS file generated with
-    # epidata_call %>%
-    # fetch_debug(format_type = "classic", fields = c("time_value", "value")) %>%
-    # readr::write_rds(testthat::test_path("data/test-narrower-fields.rds"))
+    # see generate_test_data.R
     content = function(...) readRDS(testthat::test_path("data/test-narrower-fields.rds")),
     .package = "httr"
   )
@@ -134,12 +121,15 @@ test_that("fetch_tbl warns on non-success", {
     content = function(...) NULL,
     .package = "httr"
   )
-  artificial_warning <- "* This is a warning with a leading asterisk and {braces} to make sure we don't have bulleting/glue bugs."
+  artificial_warning <- paste(
+    "* This is a warning with a leading asterisk and {braces}",
+    " to make sure we don't have bulleting/glue bugs."
+  )
   debug_triplet <- readRDS(testthat::test_path("data/test-classic.rds")) %>%
     jsonlite::fromJSON() %>%
     `[[<-`("message", artificial_warning)
   local_mocked_bindings(
-    # see generation code above
+    # see generate_test_data.R
     fromJSON = function(...) debug_triplet,
     .package = "jsonlite"
   )
@@ -158,10 +148,7 @@ test_that("classic only fetch", {
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   local_mocked_bindings(
-    # generated using
-    # epidata_call %>%
-    #   fetch_debug(format_type = "classic") %>%
-    #   readr::write_rds(testthat::test_path("data/test-classic-only.rds"))
+    # see generate_test_data.R
     content = function(...) readRDS(testthat::test_path("data/test-classic-only.rds")),
     .package = "httr"
   )

@@ -77,7 +77,13 @@ pvt_cdc <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
 #' @seealso [covid_hosp_facility()]
 #'
 #' @export
-covid_hosp_facility_lookup <- function(state = NULL, ccn = NULL, city = NULL, zip = NULL, fips_code = NULL, fetch_args = fetch_args_list()) {
+covid_hosp_facility_lookup <- function(
+    state = NULL,
+    ccn = NULL,
+    city = NULL,
+    zip = NULL,
+    fips_code = NULL,
+    fetch_args = fetch_args_list()) {
   assert_character_param("state", state, len = 1, required = FALSE)
   assert_character_param("ccn", ccn, len = 1, required = FALSE)
   assert_character_param("city", city, len = 1, required = FALSE)
@@ -154,7 +160,11 @@ covid_hosp_facility_lookup <- function(state = NULL, ccn = NULL, city = NULL, zi
 #' @seealso [covid_hosp_facility_lookup()], [epirange()]
 #' @export
 #
-covid_hosp_facility <- function(hospital_pks, collection_weeks, publication_dates = NULL, fetch_args = fetch_args_list()) {
+covid_hosp_facility <- function(
+    hospital_pks,
+    collection_weeks,
+    publication_dates = NULL,
+    fetch_args = fetch_args_list()) {
   assert_character_param("hospital_pks", hospital_pks)
   assert_timeset_param("collection_weeks", collection_weeks)
   assert_timeset_param("publication_dates", publication_dates, required = FALSE)
@@ -1679,7 +1689,13 @@ pvt_twitter <- function(auth, locations, dates = NULL, epiweeks = NULL, fetch_ar
 #' @return [`epidata_call`]
 #'
 #' @export
-wiki <- function(articles, dates = NULL, epiweeks = NULL, hours = NULL, language = "en", fetch_args = fetch_args_list()) {
+wiki <- function(
+    articles,
+    dates = NULL,
+    epiweeks = NULL,
+    hours = NULL,
+    language = "en",
+    fetch_args = fetch_args_list()) {
   assert_character_param("articles", articles)
   assert_timeset_param("dates", dates, required = FALSE)
   assert_timeset_param("epiweeks", epiweeks, required = FALSE)

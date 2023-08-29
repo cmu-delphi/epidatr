@@ -217,7 +217,6 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 #' @param fetch_args a `fetch_args` object
 #' @importFrom readr read_csv
 #' @importFrom httr stop_for_status content
-#' @importFrom rlang abort
 #' @importFrom tibble as_tibble tibble
 #' @return
 #' - For `fetch_tbl`: a [`tibble::tibble`]
@@ -227,7 +226,11 @@ fetch_tbl <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(fetch_args, "fetch_args"))
 
   if (epidata_call$only_supports_classic) {
-    rlang::abort("This endpoint only supports the classic message format, due to non-standard behavior. Use fetch_classic instead.",
+    cli::cli_abort(
+      c(
+        "This endpoint only supports the classic message format, due to non-standard behavior.
+        Use fetch_classic instead."
+      ),
       epidata_call = epidata_call,
       class = "only_supports_classic_format"
     )
@@ -264,11 +267,23 @@ fetch_classic <- function(epidata_call, fetch_args = fetch_args_list()) {
   # success is 1, no results is -2, truncated is 2, -1 is generic error
   if (response_content$result != 1) {
     if ((response_content$result != -2) && !(fetch_args$return_empty)) {
-      rlang::abort(paste0("epidata error: ", response_content$message), "epidata_error")
+      cli::cli_abort(
+        c(
+          "epidata error: ",
+          response_content$message
+        ),
+        class = "epidata_error"
+      )
     }
   }
   if (response_content$message != "success") {
-    rlang::warn(paste0("epidata warning: ", response_content$message), "epidata_warning")
+    cli::cli_warn(
+      c(
+        "epidata warning: ",
+        response_content$message
+      ),
+      class = "epidata_warning"
+    )
   }
   return(response_content$epidata)
 }
