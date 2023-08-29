@@ -109,6 +109,7 @@ print.epidata_call <- function(x, ...) {
 #' A constructor for `fetch_args` objects, which are used to pass arguments to
 #' the `fetch` function.
 #'
+#' @param ... not used for values, forces later arguments to bind by name
 #' @param fields a list of epidata fields to return, or NULL to return all
 #'  fields (default) e.g. c("time_value", "value") to return only the
 #'  time_value and value fields or c("-direction") to return everything except
@@ -146,15 +147,15 @@ fetch_args_list <- function(
     dry_run = FALSE,
     debug = FALSE,
     format_type = "json") {
-  assert_character(fields, null.ok = TRUE, len = NULL, any.missing = FALSE)
-  assert_logical(disable_date_parsing, null.ok = TRUE, len = 1L, any.missing = FALSE)
-  assert_logical(disable_data_frame_parsing, null.ok = TRUE, len = 1L, any.missing = FALSE)
-  assert_logical(return_empty, null.ok = TRUE, len = 1L, any.missing = FALSE)
-  assert_numeric(timeout_seconds, null.ok = TRUE, len = 1L, any.missing = FALSE)
+  assert_character(fields, null.ok = TRUE, any.missing = FALSE)
+  assert_logical(disable_date_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
+  assert_logical(disable_data_frame_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
+  assert_logical(return_empty, null.ok = FALSE, len = 1L, any.missing = FALSE)
+  assert_numeric(timeout_seconds, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
-  assert_logical(debug, null.ok = TRUE, len = 1L, any.missing = FALSE)
-  assert_character(format_type, null.ok = TRUE, len = 1L, any.missing = FALSE)
+  assert_logical(debug, null.ok = FALSE, len = 1L, any.missing = FALSE)
+  assert_character(format_type, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert(format_type %in% c("json", "csv", "classic"), "format_type must be one of json, csv, classic")
 
   structure(
