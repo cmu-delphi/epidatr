@@ -194,7 +194,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     epidata_call <- with_base_url(epidata_call, fetch_args$base_url)
   }
 
-  if (!fetch_args$dry_run) {
+  if (fetch_args$dry_run) {
     return(epidata_call)
   }
 
