@@ -4,7 +4,7 @@ test_that("request_impl http errors", {
     auth = "ImALittleTeapot",
     epiweeks = epirange(202003, 202304),
     locations = "ma",
-    fetch_args = fetch_args_list(make_call = FALSE)
+    fetch_args = fetch_args_list(dry_run = TRUE)
   )
   local_mocked_bindings(
     # generated via
@@ -39,7 +39,7 @@ test_that("fetch_args", {
         return_empty = FALSE,
         timeout_seconds = 30,
         base_url = NULL,
-        make_call = TRUE,
+        dry_run = FALSE,
         debug = FALSE,
         format_type = "json"
       ),
@@ -54,7 +54,7 @@ test_that("fetch_args", {
       return_empty = TRUE,
       timeout_seconds = 10,
       base_url = "https://example.com",
-      make_call = FALSE,
+      dry_run = TRUE,
       debug = TRUE,
       format_type = "classic"
     ),
@@ -66,7 +66,7 @@ test_that("fetch_args", {
         return_empty = TRUE,
         timeout_seconds = 10,
         base_url = "https://example.com",
-        make_call = FALSE,
+        dry_run = TRUE,
         debug = TRUE,
         format_type = "classic"
       ),
@@ -83,7 +83,7 @@ test_that("fetch and fetch_tbl", {
     geo_type = "state",
     time_values = epirange("2020-06-01", "2020-08-01"),
     geo_values = "ca,fl",
-    fetch_args = fetch_args_list(make_call = FALSE)
+    fetch_args = fetch_args_list(dry_run = TRUE)
   )
   local_mocked_bindings(
     request_impl = function(...) NULL,
@@ -123,7 +123,7 @@ test_that("fetch_tbl warns on non-success", {
     geo_type = "state",
     time_values = epirange("2020-06-01", "2020-08-01"),
     geo_values = "ca,fl",
-    fetch_args = fetch_args_list(make_call = FALSE)
+    fetch_args = fetch_args_list(dry_run = TRUE)
   )
 
   local_mocked_bindings(
@@ -155,7 +155,7 @@ test_that("classic only fetch", {
   epidata_call <- delphi(
     system = "ec",
     epiweek = 201501,
-    fetch_args = fetch_args_list(make_call = FALSE)
+    fetch_args = fetch_args_list(dry_run = TRUE)
   )
   local_mocked_bindings(
     # generated using

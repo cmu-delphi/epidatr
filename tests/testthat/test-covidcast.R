@@ -5,7 +5,7 @@ test_that("covidcast", {
       "nation",
       "us",
       epirange(20210405, 20210410),
-      fetch_args = fetch_args_list(make_call = FALSE)
+      fetch_args = fetch_args_list(dry_run = TRUE)
     ),
     covidcast(
       "fb-survey",
@@ -14,7 +14,7 @@ test_that("covidcast", {
       "day",
       "us",
       epirange(20210405, 20210410),
-      fetch_args = fetch_args_list(make_call = FALSE)
+      fetch_args = fetch_args_list(dry_run = TRUE)
     )
   )
 })

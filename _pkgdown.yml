@@ -18,7 +18,7 @@ reference:
     desc: Query Delphi Epidata endpoints
   - contents:
       - epidata_call
-      - fetch_args_list
+      - fetch_args
       - covid_hosp_facility
       - covid_hosp_facility_lookup
       - covid_hosp_state_timeseries

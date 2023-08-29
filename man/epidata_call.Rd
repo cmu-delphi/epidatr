@@ -66,7 +66,7 @@ call <- covidcast(
   geo_type = "state",
   time_values = epirange(20200601, 20200801),
   geo_values = c("ca", "fl"),
-  fetch_args = fetch_args_list(make_call = FALSE)
+  fetch_args = fetch_args_list(dry_run = TRUE)
 )
 call \%>\% fetch()
 }

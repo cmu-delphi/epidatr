@@ -27,7 +27,7 @@
 #'   geo_type = "state",
 #'   time_values = epirange(20200601, 20200801),
 #'   geo_values = c("ca", "fl"),
-#'   fetch_args = fetch_args_list(make_call = FALSE)
+#'   fetch_args = fetch_args_list(dry_run = TRUE)
 #' )
 #' call %>% fetch()
 #' }
@@ -123,7 +123,7 @@ print.epidata_call <- function(x, ...) {
 #'  `FALSE`
 #' @param base_url base URL to use; by default `NULL`, which means the global base url
 #'  `"https://api.delphi.cmu.edu/epidata/"`
-#' @param make_call boolean that allows skipping the call to the API and instead
+#' @param dry_run boolean that allows skipping the call to the API and instead
 #'  returns the `epidata_call` object (useful for debugging); by default `TRUE`
 #' @param debug boolean that allows returning the raw response from the API; by default
 #'  `FALSE`
@@ -143,7 +143,7 @@ fetch_args_list <- function(
     return_empty = FALSE,
     timeout_seconds = 30,
     base_url = NULL,
-    make_call = TRUE,
+    dry_run = FALSE,
     debug = FALSE,
     format_type = "json") {
   assert_character(fields, null.ok = TRUE, len = NULL, any.missing = FALSE)
@@ -152,7 +152,7 @@ fetch_args_list <- function(
   assert_logical(return_empty, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_numeric(timeout_seconds, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
-  assert_logical(make_call, null.ok = TRUE, len = 1L, any.missing = FALSE)
+  assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
   assert_logical(debug, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_character(format_type, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert(format_type %in% c("json", "csv", "classic"), "format_type must be one of json, csv, classic")
@@ -165,7 +165,7 @@ fetch_args_list <- function(
       return_empty = return_empty,
       timeout_seconds = timeout_seconds,
       base_url = base_url,
-      make_call = make_call,
+      dry_run = dry_run,
       debug = debug,
       format_type = format_type
     ),
@@ -194,7 +194,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     epidata_call <- with_base_url(epidata_call, fetch_args$base_url)
   }
 
-  if (!fetch_args$make_call) {
+  if (!fetch_args$dry_run) {
     return(epidata_call)
   }
 

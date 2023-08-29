@@ -52,7 +52,7 @@ test_that("null parsing", {
   epidata_call <- flusurv(
     locations = "ca",
     epiweeks = 202001,
-    fetch_args = fetch_args_list(make_call = FALSE)
+    fetch_args = fetch_args_list(dry_run = TRUE)
   )
   # mocked data generated with
   # epidata_call %>%
