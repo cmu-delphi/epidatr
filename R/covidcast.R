@@ -6,10 +6,10 @@ parse_signal <- function(signal, base_url) {
   #'
   #' @param data_source data source to fetch
   #' @param signals data source to fetch
-  #' @param time_type data source to fetch
-  #' @param time_values data source to fetch
   #' @param geo_type geo_type to fetch
+  #' @param time_type data source to fetch
   #' @param geo_values data source to fetch
+  #' @param time_values data source to fetch
   #' @param as_of data source to fetch
   #' @param issues data source to fetch
   #' @param lag data source to fetch
@@ -18,13 +18,24 @@ parse_signal <- function(signal, base_url) {
   signal$call <- function(geo_type,
                           geo_values,
                           time_values,
-                          ...) {
-    epicall <- covidcast(
-      signal$source, signal$signal, geo_type, signal$time_type,
-      geo_values, time_values, ...
+                          as_of = NULL,
+                          issues = NULL,
+                          lag = NULL,
+                          fetch_args = fetch_args_list()) {
+    stopifnot(is.character(geo_type) & length(geo_type) == 1)
+
+    covidcast(
+      source = signal$source,
+      signals = signal$signal,
+      geo_type = geo_type,
+      time_type = signal$time_type,
+      geo_values = geo_values,
+      time_values = time_values,
+      as_of = as_of,
+      issues = issues,
+      lag = lag,
+      fetch_args = fetch_args
     )
-    epicall$base_url <- base_url
-    epicall
   }
   r <- list()
   r[[signal$signal]] <- signal
@@ -106,7 +117,7 @@ covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) 
   if (response$status_code != 200) {
     # 500, 429, 401 are possible
     msg <- "fetch data from API"
-    if (httr::http_type(response) == "text/html" & length(response$content) > 0) {
+    if (httr::http_type(response) == "text/html" && length(response$content) > 0) {
       # grab the error information out of the returned HTML document
       msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
         xml2::read_html(content(response, "text")),

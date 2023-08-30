@@ -4,12 +4,14 @@
 \alias{nowcast}
 \title{Fetch Delphi's ILI nowcast}
 \usage{
-nowcast(locations, epiweeks)
+nowcast(locations, epiweeks, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{locations}{character. Locations to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -26,6 +28,6 @@ The full list of location inputs can be accsssed at
 }
 \examples{
 \dontrun{
-nowcast(locations = "ca", epiweeks = epirange(201201, 201301)) \%>\% fetch()
+nowcast(locations = "ca", epiweeks = epirange(201201, 201301))
 }
 }

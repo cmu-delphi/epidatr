@@ -4,7 +4,10 @@
 \alias{fluview_meta}
 \title{Fetch FluView metadata}
 \usage{
-fluview_meta()
+fluview_meta(fetch_args = fetch_args_list())
+}
+\arguments{
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -14,7 +17,7 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html
 }
 \examples{
 \dontrun{
-fluview_meta() \%>\% fetch()
+fluview_meta()
 }
 
 }

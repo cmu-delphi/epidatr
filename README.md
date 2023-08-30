@@ -18,13 +18,12 @@ epicall <- covidcast(
   geo_values = "us",
   time_values = epirange(20210405, 20210410)
 )
-epicall %>% fetch()
 ```
 
 ```
 # A tibble: 6 × 15
   geo_value signal       source   geo_type time_type time_value
-  <chr>     <chr>        <chr>    <fct>    <fct>     <date>    
+  <chr>     <chr>        <chr>    <fct>    <fct>     <date>
 1 us        smoothed_cli fb-surv… nation   day       2021-04-05
 2 us        smoothed_cli fb-surv… nation   day       2021-04-06
 3 us        smoothed_cli fb-surv… nation   day       2021-04-07
@@ -63,7 +62,6 @@ will read by default.
 
 Note that for the time being, the private endpoints (i.e. those prefixed with
 `pvt`) will require a separate key that needs to be passed as an argument.
-
 
 [mit-image]: https://img.shields.io/badge/License-MIT-yellow.svg
 [mit-url]: https://opensource.org/licenses/MIT

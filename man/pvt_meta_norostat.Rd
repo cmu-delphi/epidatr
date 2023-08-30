@@ -4,10 +4,12 @@
 \alias{pvt_meta_norostat}
 \title{Fetch NoroSTAT metadata}
 \usage{
-pvt_meta_norostat(auth)
+pvt_meta_norostat(auth, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -17,6 +19,6 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.htm
 }
 \examples{
 \dontrun{
-pvt_meta_norostat(auth = "yourkey") \%>\% fetch()
+pvt_meta_norostat(auth = "yourkey")
 }
 }

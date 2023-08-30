@@ -4,7 +4,7 @@
 \alias{pvt_norostat}
 \title{Fetch NoroSTAT data (point data, no min/max)}
 \usage{
-pvt_norostat(auth, locations, epiweeks)
+pvt_norostat(auth, locations, epiweeks, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{auth}{string. Your authentication key.}
@@ -12,6 +12,8 @@ pvt_norostat(auth, locations, epiweeks)
 \item{locations}{character. Locations to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -25,6 +27,6 @@ pvt_norostat(
   auth = "yourkey",
   locations = "1",
   epiweeks = 201233
-) \%>\% fetch()
+)
 }
 }

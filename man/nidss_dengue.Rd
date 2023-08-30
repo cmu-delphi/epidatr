@@ -4,12 +4,14 @@
 \alias{nidss_dengue}
 \title{Fetch NIDSS dengue data}
 \usage{
-nidss_dengue(locations, epiweeks)
+nidss_dengue(locations, epiweeks, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{locations}{character. Locations to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -28,6 +30,6 @@ and
 }
 \examples{
 \dontrun{
-nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301)) \%>\% fetch()
+nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301))
 }
 }

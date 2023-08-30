@@ -4,7 +4,13 @@
 \alias{fluview_clinical}
 \title{Fetch FluView virological data from clinical labs}
 \usage{
-fluview_clinical(regions, epiweeks, issues = NULL, lag = NULL)
+fluview_clinical(
+  regions,
+  epiweeks,
+  issues = NULL,
+  lag = NULL,
+  fetch_args = fetch_args_list()
+)
 }
 \arguments{
 \item{regions}{character. Regions to fetch.}
@@ -18,6 +24,8 @@ most recent issue is returned. Mutually exclusive with \code{lag}.}
 
 \item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
 the most recent issue is returned. Mutually exclusive with \code{issues}.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -27,6 +35,6 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.
 }
 \examples{
 \dontrun{
-fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701)) \%>\% fetch()
+fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
 }
 }

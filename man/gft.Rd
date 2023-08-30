@@ -4,12 +4,14 @@
 \alias{gft}
 \title{Fetch Google Flu Trends data}
 \usage{
-gft(locations, epiweeks)
+gft(locations, epiweeks, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{locations}{character. Locations to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}} Epiweeks to fetch.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -30,6 +32,6 @@ and
 }
 \examples{
 \dontrun{
-gft(locations = "hhs1", epiweeks = epirange(201201, 202001)) \%>\% fetch()
+gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
 }
 }

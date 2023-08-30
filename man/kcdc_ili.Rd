@@ -4,7 +4,13 @@
 \alias{kcdc_ili}
 \title{Fetch KCDC data}
 \usage{
-kcdc_ili(regions, epiweeks, issues = NULL, lag = NULL)
+kcdc_ili(
+  regions,
+  epiweeks,
+  issues = NULL,
+  lag = NULL,
+  fetch_args = fetch_args_list()
+)
 }
 \arguments{
 \item{regions}{character. Regions to fetch.}
@@ -16,6 +22,8 @@ most recent issue is returned. Mutually exclusive with \code{lag}.}
 
 \item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
 the most recent issue is returned. Mutually exclusive with \code{issues}.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -28,6 +36,6 @@ TODO: find a non-trivial region
 }
 \examples{
 \dontrun{
-kcdc_ili(regions = "ROK", epiweeks = 200436) \%>\% fetch()
+kcdc_ili(regions = "ROK", epiweeks = 200436)
 }
 }

@@ -17,17 +17,17 @@ get_auth_key <- function() {
     return(key)
   }
 
-  rlang::warn(
+  cli::cli_warn(
     c(
-      "No API key found. You will be limited to non-complex queries and encounter rate limits if you proceed.",
-      "To avoid this, you can get your key by registering at https://api.delphi.cmu.edu/epidata/admin/registration_form and then:",
+      "No API key found. You will be limited to non-complex queries and encounter rate limits if you proceed.
+      To avoid this, you can get your key by registering
+      at https://api.delphi.cmu.edu/epidata/admin/registration_form and then:",
       "i" = "set the environment variable DELPHI_EPIDATA_KEY",
       "i" = "set the option 'delphi.epidata.key'",
       "",
       "To save your key for later sessions (and hide it from your code), you can edit your .Renviron file with:",
       "i" = "usethis::edit_r_environ()"
     ),
-    use_cli_format = TRUE,
     .frequency = "regularly",
     .frequency_id = "delphi.epidata.key"
   )

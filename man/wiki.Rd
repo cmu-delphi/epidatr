@@ -4,7 +4,14 @@
 \alias{wiki}
 \title{Fetch Wikipedia access data}
 \usage{
-wiki(articles, dates = NULL, epiweeks = NULL, hours = NULL, language = "en")
+wiki(
+  articles,
+  dates = NULL,
+  epiweeks = NULL,
+  hours = NULL,
+  language = "en",
+  fetch_args = fetch_args_list()
+)
 }
 \arguments{
 \item{articles}{character. Articles to fetch.}
@@ -17,6 +24,8 @@ wiki(articles, dates = NULL, epiweeks = NULL, hours = NULL, language = "en")
 \item{hours}{integer. Optionally, the hours to fetch.}
 
 \item{language}{string. Language to fetch.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -26,6 +35,6 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/wiki.html}
 }
 \examples{
 \dontrun{
-wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601)) \%>\% fetch()
+wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601))
 }
 }

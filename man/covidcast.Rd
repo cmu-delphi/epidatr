@@ -13,7 +13,8 @@ covidcast(
   time_values,
   as_of = NULL,
   issues = NULL,
-  lag = NULL
+  lag = NULL,
+  fetch_args = fetch_args_list()
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ specified, the most recent issue is returned. Mutually exclusive with
 \item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
 the most recent issue is returned. Mutually exclusive with \code{as_of} or
 \code{issues}.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -65,7 +68,7 @@ covidcast(
   time_type = "day",
   geo_values = "ca,fl",
   time_values = epirange(20200601, 20200801)
-) \%>\% fetch()
+)
 covidcast(
   source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
@@ -73,7 +76,7 @@ covidcast(
   time_type = "day",
   geo_values = "*",
   time_values = epirange(20200601, 20200801)
-) \%>\% fetch()
+)
 }
 }
 \seealso{

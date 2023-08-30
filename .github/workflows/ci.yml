@@ -19,17 +19,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::devtools, any::rcmdcheck, any::styler, any::lintr, local::.
-
-      - name: Style / Format
-        shell: Rscript {0}
-        run: styler::style_pkg(dry="fail")
-
-      - name: Lint
-        shell: Rscript {0}
-        run: |
-          devtools::load_all()
-          lintr::lint_package('.')
+          extra-packages: any::devtools, any::rcmdcheck, local::.
 
       - uses: r-lib/actions/check-r-package@v2
         env:

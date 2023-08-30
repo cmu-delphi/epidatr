@@ -49,18 +49,18 @@ test_that("`parse_timeset_input` on valid inputs", {
 
 test_that("null parsing", {
   # parse_data_frame (df[[info$name]] = NULL)-> parse_value
-  epidata_call <- flusurv(locations = "ca", epiweeks = 202001)
-  # mocked data generated with
-  # epidata_call %>%
-  #   fetch_classic() %>%
-  #   readr::write_rds(testthat::test_path("data/flusurv-epiweeks.rds"))
+  epidata_call <- flusurv(
+    locations = "ca",
+    epiweeks = 202001,
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  # see generate_test_data.R
   mock_df <- as.data.frame(readr::read_rds(testthat::test_path("data/flusurv-epiweeks.rds")))
   metadata <- epidata_call$meta
   mock_df[[metadata[[1]]$name]][1] <- list(NULL)
   mock_df[[metadata[[2]]$name]] <- c(TRUE)
   epidata_call$meta[[2]]$type <- "bool"
   res <- parse_data_frame(epidata_call, mock_df) %>% as_tibble()
-  # expect_null(res[["release_date"]]) # this is actually a list
   expect_true(res$location)
 
   # if the call has no metadata, return the whole frame as is

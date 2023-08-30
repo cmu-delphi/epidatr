@@ -5,7 +5,13 @@
 \title{Fetch Delphi's digital surveillance sensors for dengue in PAHO member
 countries}
 \usage{
-pvt_dengue_sensors(auth, names, locations, epiweeks)
+pvt_dengue_sensors(
+  auth,
+  names,
+  locations,
+  epiweeks,
+  fetch_args = fetch_args_list()
+)
 }
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
@@ -15,15 +21,14 @@ pvt_dengue_sensors(auth, names, locations, epiweeks)
 \item{locations}{character. Locations to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html}
-}
-\details{
-TODO: what are valid locations and names?
 }
 \examples{
 \dontrun{
@@ -32,6 +37,6 @@ pvt_dengue_sensors(
   names = "ght",
   locations = "ag",
   epiweeks = epirange(201501, 202001)
-) \%>\% fetch()
+)
 }
 }

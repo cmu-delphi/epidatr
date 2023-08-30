@@ -1,13 +1,20 @@
+# epidatr 0.9.0
+
+- Major interface change: all endpoints now fetch by default.
+- Make all `fetch` function internal.
+- Change `fetch` and `fetch_*` function interfaces now rely on `fetch_args_list`.
+- Added `fetch_args_list` which returns a list of arguments to be passed to `fetch`.
+
 # epidatr 0.8.0
 
-- Fix source name duplication bug in `covidcast_epidata`
-- Mark `covidcast_epidata` as experimental and do not export it
-- Change `covidcast` arg `data_source` to `source`
-- Make `covidcast` args `issues`, `lag`, and `as_of` mutually exclusive
+- Fix source name duplication bug in `covidcast_epidata`.
+- Mark `covidcast_epidata` as experimental and do not export it.
+- Change `covidcast` arg `data_source` to `source`.
+- Make `covidcast` args `issues`, `lag`, and `as_of` mutually exclusive.
 - Make `covid_hosp_facility_lookup` args `state,` `ccn`, `city`, `zip`, and
-  `fips_code` mutually exclusive
+  `fips_code` mutually exclusive.
 - Update documentation to only refer to character or strings (not character
-  vectors or character strings)
+  vectors or character strings).
 
 # epidatr 0.7.1
 

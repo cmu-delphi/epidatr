@@ -4,7 +4,13 @@
 \alias{pvt_twitter}
 \title{Fetch HealthTweets data}
 \usage{
-pvt_twitter(auth, locations, dates = NULL, epiweeks = NULL)
+pvt_twitter(
+  auth,
+  locations,
+  dates = NULL,
+  epiweeks = NULL,
+  fetch_args = fetch_args_list()
+)
 }
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
@@ -15,6 +21,8 @@ pvt_twitter(auth, locations, dates = NULL, epiweeks = NULL)
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Mutually exclusive with
 \code{dates}.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -24,6 +32,6 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/twitter.html}
 }
 \examples{
 \dontrun{
-pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001)) \%>\% fetch()
+pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001))
 }
 }

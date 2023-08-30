@@ -4,7 +4,7 @@
 \alias{pvt_cdc}
 \title{Fetch CDC page hits}
 \usage{
-pvt_cdc(auth, locations, epiweeks)
+pvt_cdc(auth, locations, epiweeks, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
@@ -12,6 +12,9 @@ pvt_cdc(auth, locations, epiweeks)
 \item{locations}{character. Locations to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.
+See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -25,6 +28,6 @@ pvt_cdc(
   auth = "yourkey",
   locations = "fl,ca",
   epirange(201501, 201601)
-) \%>\% fetch()
+)
 }
 }

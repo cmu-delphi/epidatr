@@ -4,7 +4,12 @@
 \alias{covid_hosp_state_timeseries}
 \title{Fetch COVID Hospitalization Data by State}
 \usage{
-covid_hosp_state_timeseries(states, dates, issues = NULL)
+covid_hosp_state_timeseries(
+  states,
+  dates,
+  issues = NULL,
+  fetch_args = fetch_args_list()
+)
 }
 \arguments{
 \item{states}{character. Two letter state abbreviations.}
@@ -13,6 +18,8 @@ covid_hosp_state_timeseries(states, dates, issues = NULL)
 
 \item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
 most recent issue is returned.}
+
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
 \code{\link{epidata_call}}
@@ -36,6 +43,6 @@ report annually.
 covid_hosp_state_timeseries(
   states = "fl",
   dates = epirange(20200101, 20200501)
-) \%>\% fetch()
+)
 }
 }
