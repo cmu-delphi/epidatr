@@ -87,6 +87,19 @@ the `covidcast()` function. Simply use the `$call` attribute of the object:
 epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa", epirange(20210405, 20210410))
 ```
 
+## Advanced Usage (Debugging)
+
+We can obtain the `epidata_call` object underlying a request by setting the
+`dry_run` argument to `TRUE` in `fetch_args_list`:
+
+```{r}
+covidcast(
+  "fb-survey", "smoothed_cli", "state", "day", "pa",
+  epirange(20210405, 20210410),
+  fetch_args = fetch_args_list(dry_run = TRUE)
+)
+```
+
 ## Example Queries
 
 (Some endpoints allow for the use of `*` to access data at all locations. Check the help for a given endpoint to see if it supports `*`.)
