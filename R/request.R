@@ -1,5 +1,5 @@
 join_url <- function(url, endpoint) {
-  if (url[length(url)] != "/") {
+  if (!endsWith(url, "/")) {
     url <- paste0(url, "/")
   }
   paste0(url, endpoint)
