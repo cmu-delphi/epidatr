@@ -19,7 +19,7 @@ This is a companinon endpoint to the covid_hosp_facility() endpoint."><!-- mathj
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.0</span>
       </span>
     </div>
 
@@ -75,7 +75,8 @@ This is a companinon endpoint to the <code><a href="covid_hosp_facility.html">co
 <span>  ccn <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  city <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  zip <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  fips_code <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  fips_code <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fetch_args <span class="op">=</span> <span class="fu"><a href="fetch_args_list.html">fetch_args_list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -99,6 +100,10 @@ This is a companinon endpoint to the <code><a href="covid_hosp_facility.html">co
 
 <dt>fips_code</dt>
 <dd><p>string. A 5-digit fips county code, zero-padded.</p></dd>
+
+
+<dt>fetch_args</dt>
+<dd><p><code><a href="fetch_args_list.html">fetch_args</a></code>. Additional arguments to pass to <code><a href="epidata_call.html">fetch()</a></code>.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -125,8 +130,8 @@ For instance, specifying both city and state are not supported.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">covid_hosp_facility_lookup</span><span class="op">(</span>state <span class="op">=</span> <span class="st">"fl"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">covid_hosp_facility_lookup</span><span class="op">(</span>city <span class="op">=</span> <span class="st">"southlake"</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">covid_hosp_facility_lookup</span><span class="op">(</span>state <span class="op">=</span> <span class="st">"fl"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">covid_hosp_facility_lookup</span><span class="op">(</span>city <span class="op">=</span> <span class="st">"southlake"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

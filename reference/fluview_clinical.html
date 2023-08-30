@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.0</span>
       </span>
     </div>
 
@@ -66,7 +66,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fluview_clinical</span><span class="op">(</span><span class="va">regions</span>, <span class="va">epiweeks</span>, issues <span class="op">=</span> <span class="cn">NULL</span>, lag <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fluview_clinical</span><span class="op">(</span></span>
+<span>  <span class="va">regions</span>,</span>
+<span>  <span class="va">epiweeks</span>,</span>
+<span>  issues <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lag <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fetch_args <span class="op">=</span> <span class="fu"><a href="fetch_args_list.html">fetch_args_list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -90,6 +96,10 @@ most recent issue is returned. Mutually exclusive with <code>lag</code>.</p></dd
 <dd><p>integer. Optionally, the lag of the issues to fetch. If not set,
 the most recent issue is returned. Mutually exclusive with <code>issues</code>.</p></dd>
 
+
+<dt>fetch_args</dt>
+<dd><p><code><a href="fetch_args_list.html">fetch_args</a></code>. Additional arguments to pass to <code><a href="epidata_call.html">fetch()</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -103,7 +113,7 @@ the most recent issue is returned. Mutually exclusive with <code>issues</code>.<
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">fluview_clinical</span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"nat"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201601</span>, <span class="fl">201701</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">fluview_clinical</span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"nat"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201601</span>, <span class="fl">201701</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

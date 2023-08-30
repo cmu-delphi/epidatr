@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.0</span>
       </span>
     </div>
 
@@ -75,7 +75,8 @@
 <span>  <span class="va">time_values</span>,</span>
 <span>  as_of <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  issues <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  lag <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  lag <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fetch_args <span class="op">=</span> <span class="fu"><a href="fetch_args_list.html">fetch_args_list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -128,6 +129,10 @@ specified, the most recent issue is returned. Mutually exclusive with
 the most recent issue is returned. Mutually exclusive with <code>as_of</code> or
 <code>issues</code>.</p></dd>
 
+
+<dt>fetch_args</dt>
+<dd><p><code><a href="fetch_args_list.html">fetch_args</a></code>. Additional arguments to pass to <code><a href="epidata_call.html">fetch()</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -156,7 +161,7 @@ the most recent issue is returned. Mutually exclusive with <code>as_of</code> or
 <span class="r-in"><span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span></span>
 <span class="r-in"><span>  geo_values <span class="op">=</span> <span class="st">"ca,fl"</span>,</span></span>
 <span class="r-in"><span>  time_values <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20200601</span>, <span class="fl">20200801</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">covidcast</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  source <span class="op">=</span> <span class="st">"jhu-csse"</span>,</span></span>
 <span class="r-in"><span>  signals <span class="op">=</span> <span class="st">"confirmed_7dav_incidence_prop"</span>,</span></span>
@@ -164,7 +169,7 @@ the most recent issue is returned. Mutually exclusive with <code>as_of</code> or
 <span class="r-in"><span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span></span>
 <span class="r-in"><span>  geo_values <span class="op">=</span> <span class="st">"*"</span>,</span></span>
 <span class="r-in"><span>  time_values <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20200601</span>, <span class="fl">20200801</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

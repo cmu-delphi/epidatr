@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.0</span>
       </span>
     </div>
 
@@ -97,11 +97,10 @@
 <span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
 <span>  geo_values <span class="op">=</span> <span class="st">"us"</span>,</span>
 <span>  time_values <span class="op">=</span> <span class="fu"><a href="reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">epicall</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="reference/epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code># A tibble: 6 × 15
   geo_value signal       source   geo_type time_type time_value
-  &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;    &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;    
+  &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;    &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;
 1 us        smoothed_cli fb-surv… nation   day       2021-04-05
 2 us        smoothed_cli fb-surv… nation   day       2021-04-06
 3 us        smoothed_cli fb-surv… nation   day       2021-04-07

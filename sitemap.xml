@@ -76,6 +76,9 @@
     <loc>/reference/epirange.html</loc>
   </url>
   <url>
+    <loc>/reference/fetch_args_list.html</loc>
+  </url>
+  <url>
     <loc>/reference/fetch_classic.html</loc>
   </url>
   <url>
@@ -170,5 +173,8 @@
   </url>
   <url>
     <loc>/reference/wiki.html</loc>
+  </url>
+  <url>
+    <loc>/reference/with_base_url.html</loc>
   </url>
 </urlset>

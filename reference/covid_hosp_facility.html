@@ -19,7 +19,7 @@ Services via healthdata.gov."><!-- mathjax --><script src="https://cdnjs.cloudfl
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.0</span>
       </span>
     </div>
 
@@ -70,7 +70,12 @@ Services via healthdata.gov.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">covid_hosp_facility</span><span class="op">(</span><span class="va">hospital_pks</span>, <span class="va">collection_weeks</span>, publication_dates <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">covid_hosp_facility</span><span class="op">(</span></span>
+<span>  <span class="va">hospital_pks</span>,</span>
+<span>  <span class="va">collection_weeks</span>,</span>
+<span>  publication_dates <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fetch_args <span class="op">=</span> <span class="fu"><a href="fetch_args_list.html">fetch_args_list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -85,6 +90,10 @@ Services via healthdata.gov.</p>
 
 <dt>publication_dates</dt>
 <dd><p><code><a href="timeset.html">timeset</a></code>. Publication dates to fetch.</p></dd>
+
+
+<dt>fetch_args</dt>
+<dd><p><code><a href="fetch_args_list.html">fetch_args</a></code>. Additional arguments to pass to <code><a href="epidata_call.html">fetch()</a></code>.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -117,7 +126,7 @@ used to look up facility identifiers in a variety of ways.</p>
 <span class="r-in"><span><span class="fu">covid_hosp_facility</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  hospital_pks <span class="op">=</span> <span class="st">"100075"</span>,</span></span>
 <span class="r-in"><span>  collection_weeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20200101</span>, <span class="fl">20200501</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

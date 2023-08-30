@@ -20,7 +20,7 @@ JSON-like list"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/l
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.0</span>
       </span>
     </div>
 
@@ -71,13 +71,7 @@ JSON-like list</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fetch_classic</span><span class="op">(</span></span>
-<span>  <span class="va">epidata_call</span>,</span>
-<span>  fields <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  disable_data_frame_parsing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  return_empty <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  timeout_seconds <span class="op">=</span> <span class="fl">30</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fetch_classic</span><span class="op">(</span><span class="va">epidata_call</span>, fetch_args <span class="op">=</span> <span class="fu"><a href="fetch_args_list.html">fetch_args_list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -86,25 +80,8 @@ JSON-like list</p>
 <dd><p>an instance of <code>epidata_call</code></p></dd>
 
 
-<dt>fields</dt>
-<dd><p>a list of epidata fields to return, or NULL to return all
-fields (default) e.g. c("time_value", "value") to return only the
-time_value and value fields or c("-direction") to return everything except
-the direction field</p></dd>
-
-
-<dt>disable_data_frame_parsing</dt>
-<dd><p>do not automatically cast the epidata
-output to a data frame (some endpoints return a list of lists, which is not
-a data frame)</p></dd>
-
-
-<dt>return_empty</dt>
-<dd><p>boolean that allows returning an empty tibble if there is no data.</p></dd>
-
-
-<dt>timeout_seconds</dt>
-<dd><p>the maximum amount of time to wait for a response</p></dd>
+<dt>fetch_args</dt>
+<dd><p>a <code>fetch_args</code> object</p></dd>
 
 </dl></div>
     <div id="value">

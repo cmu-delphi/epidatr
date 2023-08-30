@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.0</span>
       </span>
     </div>
 
@@ -66,7 +66,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pvt_twitter</span><span class="op">(</span><span class="va">auth</span>, <span class="va">locations</span>, dates <span class="op">=</span> <span class="cn">NULL</span>, epiweeks <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pvt_twitter</span><span class="op">(</span></span>
+<span>  <span class="va">auth</span>,</span>
+<span>  <span class="va">locations</span>,</span>
+<span>  dates <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  epiweeks <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fetch_args <span class="op">=</span> <span class="fu"><a href="fetch_args_list.html">fetch_args_list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -87,6 +93,10 @@
 <dd><p><code><a href="timeset.html">timeset</a></code>. Epiweeks to fetch. Mutually exclusive with
 <code>dates</code>.</p></dd>
 
+
+<dt>fetch_args</dt>
+<dd><p><code><a href="fetch_args_list.html">fetch_args</a></code>. Additional arguments to pass to <code><a href="epidata_call.html">fetch()</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -100,7 +110,7 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">pvt_twitter</span><span class="op">(</span>auth <span class="op">=</span> <span class="st">"yourkey"</span>, locations <span class="op">=</span> <span class="st">"CA"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201501</span>, <span class="fl">202001</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu"><a href="epidata_call.html">fetch</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">pvt_twitter</span><span class="op">(</span>auth <span class="op">=</span> <span class="st">"yourkey"</span>, locations <span class="op">=</span> <span class="st">"CA"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201501</span>, <span class="fl">202001</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
