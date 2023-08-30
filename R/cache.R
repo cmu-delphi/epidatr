@@ -61,26 +61,24 @@ disable_cache <- function() {
 }
 
 cache_epidata_call <- function(call, ...) {
+cache_epidata_call <- function(epidata_call, ...) {
   if (cache_environ$use_cache && !is.null(cache_environ$epidatr_cache)) {
-    target <- request_url(call)
+    target <- request_url(epidata_call)
     hashed <- md5(target)
     cached <- cache_environ$epidatr_cache$get(hashed)
-    if (is.key_missing(cached)) {
-      if (epidata_call$only_supports_classic) {
-        fetched <- fetch_classic(epidata_call, ...)
-      } else {
-        fetched <- fetch_tbl(epidata_call, ...)
-      }
-      cache_environ$epidatr_cache$set(hashed, fetched)
-      return(fetched)
-    } else {
+    if (!is.key_missing(cached)) {
       return(cached)
     }
-  } else {
-    if (epidata_call$only_supports_classic) {
-      return(fetch_classic(epidata_call, fields, return_empty = return_empty, timeout_seconds = timeout_seconds))
-    } else {
-      return(fetch_tbl(epidata_call, fields, disable_date_parsing, return_empty, timeout_seconds = timeout_seconds))
-    }
   }
+  # need to actually get the data, since its either not in the cache or we're not caching
+  if (epidata_call$only_supports_classic) {
+    fetched <- fetch_classic(epidata_call, ...)
+  } else {
+    fetched <- fetch_tbl(epidata_call, ...)
+  }
+  # add it to the cache if appropriate
+  if (cache_environ$use_cache && !is.null(cache_environ$epidatr_cache)) {
+    cache_environ$epidatr_cache$set(hashed, fetched)
+  }
+  return(fetched)
 }

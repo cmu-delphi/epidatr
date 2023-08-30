@@ -192,18 +192,6 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
 
-  if (!is.null(fetch_args$base_url)) {
-    epidata_call <- with_base_url(epidata_call, fetch_args$base_url)
-  }
-
-  if (fetch_args$dry_run) {
-    return(epidata_call)
-  }
-
-  if (fetch_args$debug) {
-    return(fetch_debug(epidata_call, fetch_args))
-  }
-
   cache_epidata_call(epidata_call, fetch_args)
 }
 
