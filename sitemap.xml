@@ -4,10 +4,10 @@
     <loc>/404.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>/DEVELOPMENT.html</loc>
   </url>
   <url>
-    <loc>/articles/development.html</loc>
+    <loc>/LICENSE-text.html</loc>
   </url>
   <url>
     <loc>/articles/epidatr.html</loc>
@@ -35,6 +35,9 @@
   </url>
   <url>
     <loc>/reference/assert_timeset_param.html</loc>
+  </url>
+  <url>
+    <loc>/reference/avail_endpoints.html</loc>
   </url>
   <url>
     <loc>/reference/covid_hosp_facility.html</loc>
