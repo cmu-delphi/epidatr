@@ -50,7 +50,12 @@ covidcast(
 )
 ```
 
-The [Delphi Epidata API documentation](https://cmu-delphi.github.io/delphi-epidata/) has more information on the available endpoints and arguments.
+The [Delphi Epidata API documentation](https://cmu-delphi.github.io/delphi-epidata/) has more information on the available endpoints and arguments. You can also use the `avail_endpoints()` function to get a table of endpoint functions:
+
+```{r}
+avail_endpoints()
+```
+
 Example queries with all the endpoint functions available in this package are given [below](#example-queries).
 
 ## Advanced Usage (Experimental)
