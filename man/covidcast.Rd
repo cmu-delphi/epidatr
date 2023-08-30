@@ -11,6 +11,7 @@ covidcast(
   time_type,
   geo_values,
   time_values,
+  ...,
   as_of = NULL,
   issues = NULL,
   lag = NULL,
@@ -35,6 +36,8 @@ all. (See:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.)}
 
 \item{time_values}{\code{\link{timeset}}. Dates to fetch.}
+
+\item{...}{not used for values, forces later arguments to bind by name}
 
 \item{as_of}{Date. Optionally, the as of date for the issues to fetch. If not
 specified, the most recent data is returned. Mutually exclusive with

@@ -5,6 +5,7 @@
 \title{COVID hospitalization facility identifiers}
 \usage{
 covid_hosp_facility_lookup(
+  ...,
   state = NULL,
   ccn = NULL,
   city = NULL,
@@ -14,6 +15,8 @@ covid_hosp_facility_lookup(
 )
 }
 \arguments{
+\item{...}{not used for values, forces later arguments to bind by name}
+
 \item{state}{string. A two-letter character state abbreviation.}
 
 \item{ccn}{string. A facility CMS certification number.}

@@ -7,6 +7,7 @@
 covid_hosp_facility(
   hospital_pks,
   collection_weeks,
+  ...,
   publication_dates = NULL,
   fetch_args = fetch_args_list()
 )
@@ -15,6 +16,8 @@ covid_hosp_facility(
 \item{hospital_pks}{character. Facility identifiers.}
 
 \item{collection_weeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+
+\item{...}{not used for values, forces later arguments to bind by name}
 
 \item{publication_dates}{\code{\link{timeset}}. Publication dates to fetch.}
 

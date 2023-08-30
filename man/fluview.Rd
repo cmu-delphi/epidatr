@@ -7,6 +7,7 @@
 fluview(
   regions,
   epiweeks,
+  ...,
   issues = NULL,
   lag = NULL,
   auth = NULL,
@@ -21,6 +22,8 @@ on. Full list link below.}
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch in the form
 \code{epirange(startweek, endweek)}, where startweek and endweek are of the form
 YYYYWW (string or numeric).}
+
+\item{...}{not used for values, forces later arguments to bind by name}
 
 \item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
 most recent issue is returned. Mutually exclusive with \code{lag}.}

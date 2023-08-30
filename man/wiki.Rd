@@ -6,6 +6,7 @@
 \usage{
 wiki(
   articles,
+  ...,
   dates = NULL,
   epiweeks = NULL,
   hours = NULL,
@@ -15,6 +16,8 @@ wiki(
 }
 \arguments{
 \item{articles}{character. Articles to fetch.}
+
+\item{...}{not used for values, forces later arguments to bind by name}
 
 \item{dates}{\code{\link{timeset}}. Dates to fetch. Mutually exclusive with \code{epiweeks}.}
 

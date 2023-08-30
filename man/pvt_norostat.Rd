@@ -24,7 +24,7 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/norostat.html}
 \examples{
 \dontrun{
 pvt_norostat(
-  auth = "yourkey",
+  auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"),
   locations = "1",
   epiweeks = 201233
 )

@@ -25,7 +25,7 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/cdc.html}
 \examples{
 \dontrun{
 pvt_cdc(
-  auth = "yourkey",
+  auth = Sys.getenv("SECRET_API_AUTH_CDC"),
   locations = "fl,ca",
   epirange(201501, 201601)
 )

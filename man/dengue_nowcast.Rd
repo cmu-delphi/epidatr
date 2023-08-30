@@ -19,14 +19,11 @@ dengue_nowcast(locations, epiweeks, fetch_args = fetch_args_list())
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html}
 }
-\details{
-TODO: what are valid locations here?
-}
 \examples{
 \dontrun{
 dengue_nowcast(
   locations = "pr",
-  epiweeks = epirange(201501, 202001)
+  epiweeks = epirange(201401, 202301)
 )
 }
 }

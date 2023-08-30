@@ -26,7 +26,7 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/sensors.html}
 \examples{
 \dontrun{
 pvt_sensors(
-  auth = "yourkey",
+  auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
   names = "sar3",
   locations = "nat",
   epiweeks = epirange(201501, 202001)

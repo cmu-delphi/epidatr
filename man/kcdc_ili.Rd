@@ -7,6 +7,7 @@
 kcdc_ili(
   regions,
   epiweeks,
+  ...,
   issues = NULL,
   lag = NULL,
   fetch_args = fetch_args_list()
@@ -16,6 +17,8 @@ kcdc_ili(
 \item{regions}{character. Regions to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+
+\item{...}{not used for values, forces later arguments to bind by name}
 
 \item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
 most recent issue is returned. Mutually exclusive with \code{lag}.}
@@ -30,9 +33,6 @@ the most recent issue is returned. Mutually exclusive with \code{issues}.}
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html}
-}
-\details{
-TODO: find a non-trivial region
 }
 \examples{
 \dontrun{

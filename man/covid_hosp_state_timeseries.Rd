@@ -7,6 +7,7 @@
 covid_hosp_state_timeseries(
   states,
   dates,
+  ...,
   issues = NULL,
   fetch_args = fetch_args_list()
 )
@@ -15,6 +16,8 @@ covid_hosp_state_timeseries(
 \item{states}{character. Two letter state abbreviations.}
 
 \item{dates}{\code{\link{timeset}}. Dates to fetch.}
+
+\item{...}{not used for values, forces later arguments to bind by name}
 
 \item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
 most recent issue is returned.}

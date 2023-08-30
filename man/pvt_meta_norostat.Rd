@@ -19,7 +19,7 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.htm
 }
 \examples{
 \dontrun{
-pvt_meta_norostat(auth = "yourkey")
+pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
 }
 }
 \keyword{endpoint}
