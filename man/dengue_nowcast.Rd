@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{dengue_nowcast}
 \alias{dengue_nowcast}
-\title{Fetch Delphi's PAHO Dengue nowcast}
+\title{Delphi's PAHO Dengue nowcast}
 \usage{
 dengue_nowcast(locations, epiweeks, fetch_args = fetch_args_list())
 }
@@ -19,14 +19,12 @@ dengue_nowcast(locations, epiweeks, fetch_args = fetch_args_list())
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html}
 }
-\details{
-TODO: what are valid locations here?
-}
 \examples{
 \dontrun{
 dengue_nowcast(
   locations = "pr",
-  epiweeks = epirange(201501, 202001)
+  epiweeks = epirange(201401, 202301)
 )
 }
 }
+\keyword{endpoint}

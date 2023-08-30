@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_quidel}
 \alias{pvt_quidel}
-\title{Fetch Quidel COVID-19 and influenza testing data}
+\title{Quidel COVID-19 and influenza testing data}
 \usage{
 pvt_quidel(auth, locations, epiweeks, fetch_args = fetch_args_list())
 }
@@ -24,9 +24,10 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/quidel.html}
 \examples{
 \dontrun{
 pvt_quidel(
-  auth = "yourkey",
+  auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"),
   epiweeks = epirange(201201, 202001),
   locations = "hhs1"
 )
 }
 }
+\keyword{endpoint}

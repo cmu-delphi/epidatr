@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_sensors}
 \alias{pvt_sensors}
-\title{Fetch Delphi's digital surveillance sensors}
+\title{Digital surveillance sensors}
 \usage{
 pvt_sensors(auth, names, locations, epiweeks, fetch_args = fetch_args_list())
 }
@@ -26,10 +26,11 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/sensors.html}
 \examples{
 \dontrun{
 pvt_sensors(
-  auth = "yourkey",
+  auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
   names = "sar3",
   locations = "nat",
   epiweeks = epirange(201501, 202001)
 )
 }
 }
+\keyword{endpoint}

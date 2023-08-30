@@ -2,11 +2,12 @@
 % Please edit documentation in R/endpoints.R
 \name{paho_dengue}
 \alias{paho_dengue}
-\title{Fetch PAHO Dengue}
+\title{PAHO Dengue data}
 \usage{
 paho_dengue(
   regions,
   epiweeks,
+  ...,
   issues = NULL,
   lag = NULL,
   fetch_args = fetch_args_list()
@@ -16,6 +17,8 @@ paho_dengue(
 \item{regions}{character. Regions to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+
+\item{...}{not used for values, forces later arguments to bind by name}
 
 \item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
 most recent issue is returned. Mutually exclusive with \code{lag}.}
@@ -36,3 +39,4 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html}
 paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501))
 }
 }
+\keyword{endpoint}

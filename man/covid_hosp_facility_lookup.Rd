@@ -2,9 +2,10 @@
 % Please edit documentation in R/endpoints.R
 \name{covid_hosp_facility_lookup}
 \alias{covid_hosp_facility_lookup}
-\title{Fetch COVID hospitalization facility identifiers}
+\title{COVID hospitalization facility identifiers}
 \usage{
 covid_hosp_facility_lookup(
+  ...,
   state = NULL,
   ccn = NULL,
   city = NULL,
@@ -14,6 +15,8 @@ covid_hosp_facility_lookup(
 )
 }
 \arguments{
+\item{...}{not used for values, forces later arguments to bind by name}
+
 \item{state}{string. A two-letter character state abbreviation.}
 
 \item{ccn}{string. A facility CMS certification number.}
@@ -51,3 +54,4 @@ covid_hosp_facility_lookup(city = "southlake")
 \seealso{
 \code{\link[=covid_hosp_facility]{covid_hosp_facility()}}
 }
+\keyword{endpoint}

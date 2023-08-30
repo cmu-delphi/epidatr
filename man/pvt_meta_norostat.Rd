@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_meta_norostat}
 \alias{pvt_meta_norostat}
-\title{Fetch NoroSTAT metadata}
+\title{NoroSTAT metadata}
 \usage{
 pvt_meta_norostat(auth, fetch_args = fetch_args_list())
 }
@@ -19,6 +19,7 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.htm
 }
 \examples{
 \dontrun{
-pvt_meta_norostat(auth = "yourkey")
+pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
 }
 }
+\keyword{endpoint}

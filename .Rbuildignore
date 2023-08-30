@@ -3,11 +3,10 @@
 ^.*\.Rproj$
 ^.*\..Rcheck$
 ^\.Rproj\.user$
-
+^DEVELOPMENT\.md$
 ^doc$
 ^shiny$
 ^docs$
-^Meta$
 ^_pkgdown\.yml$
 ^pkgdown$
 ^data-raw$

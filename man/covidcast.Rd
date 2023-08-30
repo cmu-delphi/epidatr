@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{covidcast}
 \alias{covidcast}
-\title{Fetch covidcast data}
+\title{COVID data via the covidcast endpoint}
 \usage{
 covidcast(
   source,
@@ -11,6 +11,7 @@ covidcast(
   time_type,
   geo_values,
   time_values,
+  ...,
   as_of = NULL,
   issues = NULL,
   lag = NULL,
@@ -35,6 +36,8 @@ all. (See:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.)}
 
 \item{time_values}{\code{\link{timeset}}. Dates to fetch.}
+
+\item{...}{not used for values, forces later arguments to bind by name}
 
 \item{as_of}{Date. Optionally, the as of date for the issues to fetch. If not
 specified, the most recent data is returned. Mutually exclusive with
@@ -78,7 +81,9 @@ covidcast(
   time_values = epirange(20200601, 20200801)
 )
 }
+
 }
 \seealso{
 \code{\link[=covidcast_meta]{covidcast_meta()}}, \code{\link[=covidcast_epidata]{covidcast_epidata()}}, \code{\link[=epirange]{epirange()}}
 }
+\keyword{endpoint}

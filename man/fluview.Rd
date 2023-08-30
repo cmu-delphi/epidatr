@@ -2,11 +2,12 @@
 % Please edit documentation in R/endpoints.R
 \name{fluview}
 \alias{fluview}
-\title{Fetch FluView data}
+\title{FluView ILINet data}
 \usage{
 fluview(
   regions,
   epiweeks,
+  ...,
   issues = NULL,
   lag = NULL,
   auth = NULL,
@@ -19,8 +20,10 @@ national, HHS region, census division, most states and territories, and so
 on. Full list link below.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch in the form
-epirange(startweek,endweek), where startweek and endweek are of the form
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
 YYYYWW (string or numeric).}
+
+\item{...}{not used for values, forces later arguments to bind by name}
 
 \item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
 most recent issue is returned. Mutually exclusive with \code{lag}.}
@@ -51,3 +54,4 @@ The full list of location inputs can be accsssed at
 \examples{
 fluview(regions = "nat", epiweeks = epirange(201201, 202001))
 }
+\keyword{endpoint}

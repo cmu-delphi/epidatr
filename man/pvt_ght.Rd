@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_ght}
 \alias{pvt_ght}
-\title{Fetch Google Health Trends data}
+\title{Google Health Trends data}
 \usage{
 pvt_ght(auth, locations, epiweeks, query, fetch_args = fetch_args_list())
 }
@@ -23,16 +23,14 @@ pvt_ght(auth, locations, epiweeks, query, fetch_args = fetch_args_list())
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/ght.html}
 }
-\details{
-TODO: find a non-trivial query
-}
 \examples{
 \dontrun{
 pvt_ght(
-  auth = "yourkey",
-  locations = "ca",
-  epiweeks = epirange(201201, 202001),
+  auth = Sys.getenv("SECRET_API_AUTH_GHT"),
+  locations = "ma",
+  epiweeks = epirange(199301, 202304),
   query = "how to get over the flu"
 )
 }
 }
+\keyword{endpoint}

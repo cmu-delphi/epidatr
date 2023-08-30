@@ -50,7 +50,12 @@ covidcast(
 )
 ```
 
-The [Delphi Epidata API documentation](https://cmu-delphi.github.io/delphi-epidata/) has more information on the available endpoints and arguments.
+The [Delphi Epidata API documentation](https://cmu-delphi.github.io/delphi-epidata/) has more information on the available endpoints and arguments. You can also use the `avail_endpoints()` function to get a table of endpoint functions:
+
+```{r}
+avail_endpoints()
+```
+
 Example queries with all the endpoint functions available in this package are given [below](#example-queries).
 
 ## Advanced Usage (Experimental)
@@ -85,6 +90,19 @@ the `covidcast()` function. Simply use the `$call` attribute of the object:
 
 ```{r}
 epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa", epirange(20210405, 20210410))
+```
+
+## Advanced Usage (Debugging)
+
+We can obtain the `epidata_call` object underlying a request by setting the
+`dry_run` argument to `TRUE` in `fetch_args_list`:
+
+```{r}
+covidcast(
+  "fb-survey", "smoothed_cli", "state", "day", "pa",
+  epirange(20210405, 20210410),
+  fetch_args = fetch_args_list(dry_run = TRUE)
+)
 ```
 
 ## Example Queries

@@ -2,11 +2,12 @@
 % Please edit documentation in R/endpoints.R
 \name{ecdc_ili}
 \alias{ecdc_ili}
-\title{Fetch ECDC data}
+\title{ECDC ILI data}
 \usage{
 ecdc_ili(
   regions,
   epiweeks,
+  ...,
   issues = NULL,
   lag = NULL,
   fetch_args = fetch_args_list()
@@ -16,6 +17,8 @@ ecdc_ili(
 \item{regions}{character. Regions to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+
+\item{...}{not used for values, forces later arguments to bind by name}
 
 \item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
 most recent issue is returned. Mutually exclusive with \code{lag}.}
@@ -43,3 +46,4 @@ The list of location argument can be found in
 ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001))
 }
 }
+\keyword{endpoint}

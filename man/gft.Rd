@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{gft}
 \alias{gft}
-\title{Fetch Google Flu Trends data}
+\title{Google Flu Trends data}
 \usage{
 gft(locations, epiweeks, fetch_args = fetch_args_list())
 }
@@ -35,3 +35,4 @@ and
 gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
 }
 }
+\keyword{endpoint}

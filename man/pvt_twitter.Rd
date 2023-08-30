@@ -2,11 +2,12 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_twitter}
 \alias{pvt_twitter}
-\title{Fetch HealthTweets data}
+\title{HealthTweets data}
 \usage{
 pvt_twitter(
   auth,
   locations,
+  ...,
   dates = NULL,
   epiweeks = NULL,
   fetch_args = fetch_args_list()
@@ -16,6 +17,8 @@ pvt_twitter(
 \item{auth}{string. Restricted access key (not the same as API key).}
 
 \item{locations}{character. Locations to fetch.}
+
+\item{...}{not used for values, forces later arguments to bind by name}
 
 \item{dates}{\code{\link{timeset}}. Dates to fetch. Mutually exclusive with \code{epiweeks}.}
 
@@ -32,6 +35,11 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/twitter.html}
 }
 \examples{
 \dontrun{
-pvt_twitter(auth = "yourkey", locations = "CA", epiweeks = epirange(201501, 202001))
+pvt_twitter(
+  auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
+  locations = "CA",
+  epiweeks = epirange(201501, 202001)
+)
 }
 }
+\keyword{endpoint}

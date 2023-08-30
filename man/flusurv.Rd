@@ -2,11 +2,12 @@
 % Please edit documentation in R/endpoints.R
 \name{flusurv}
 \alias{flusurv}
-\title{Fetch FluSurv hospitalization data}
+\title{FluSurv hospitalization data}
 \usage{
 flusurv(
   locations,
   epiweeks,
+  ...,
   issues = NULL,
   lag = NULL,
   fetch_args = fetch_args_list()
@@ -16,6 +17,8 @@ flusurv(
 \item{locations}{character. Character vector indicating location.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+
+\item{...}{not used for values, forces later arguments to bind by name}
 
 \item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
 most recent issue is returned. Mutually exclusive with \code{lag}.}
@@ -44,3 +47,4 @@ The list of location argument can be found in
 flusurv(locations = "CA", epiweeks = epirange(201701, 201801))
 }
 }
+\keyword{endpoint}

@@ -2,11 +2,12 @@
 % Please edit documentation in R/endpoints.R
 \name{nidss_flu}
 \alias{nidss_flu}
-\title{Fetch NIDSS flu data}
+\title{NIDSS flu data}
 \usage{
 nidss_flu(
   regions,
   epiweeks,
+  ...,
   issues = NULL,
   lag = NULL,
   fetch_args = fetch_args_list()
@@ -16,6 +17,8 @@ nidss_flu(
 \item{regions}{character. Regions to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+
+\item{...}{not used for values, forces later arguments to bind by name}
 
 \item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
 most recent issue is returned. Mutually exclusive with \code{lag}.}
@@ -40,3 +43,4 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html}
 nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601))
 }
 }
+\keyword{endpoint}

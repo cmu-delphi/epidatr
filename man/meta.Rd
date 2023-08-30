@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{meta}
 \alias{meta}
-\title{Fetch api metadata}
+\title{Api metadata}
 \usage{
 meta(fetch_args = fetch_args_list())
 }
@@ -15,3 +15,4 @@ meta(fetch_args = fetch_args_list())
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/meta.html}
 }
+\keyword{endpoint}

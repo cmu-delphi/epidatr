@@ -1,19 +1,3 @@
----
-title: "Notes for Developers"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Notes for Developers}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
-
 ## Development Environment
 
 Relevant R commands

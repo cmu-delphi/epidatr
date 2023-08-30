@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_norostat}
 \alias{pvt_norostat}
-\title{Fetch NoroSTAT data (point data, no min/max)}
+\title{NoroSTAT data (point data, no min/max)}
 \usage{
 pvt_norostat(auth, locations, epiweeks, fetch_args = fetch_args_list())
 }
@@ -24,9 +24,10 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/norostat.html}
 \examples{
 \dontrun{
 pvt_norostat(
-  auth = "yourkey",
+  auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"),
   locations = "1",
   epiweeks = 201233
 )
 }
 }
+\keyword{endpoint}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{covidcast_meta}
 \alias{covidcast_meta}
-\title{Fetch covidcast metadata}
+\title{Metadata for covidcast endpoint}
 \usage{
 covidcast_meta(fetch_args = fetch_args_list())
 }
@@ -30,3 +30,4 @@ covidcast_meta()
 \seealso{
 \code{\link[=covidcast]{covidcast()}},\code{\link[=covidcast_epidata]{covidcast_epidata()}}
 }
+\keyword{endpoint}
