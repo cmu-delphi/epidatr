@@ -41,7 +41,7 @@ documentation, we see that we need to specify a data source name, a signal name,
 a geographic level, a time resolution, and the location and times of interest.
 
 In this case, the `covidcast()` function lets us specify these parameters for
-the endpoint:
+the endpoint and returns a tibble with the results:
 
 ```{r}
 covidcast(
@@ -51,7 +51,7 @@ covidcast(
 ```
 
 The [Delphi Epidata API documentation](https://cmu-delphi.github.io/delphi-epidata/) has more information on the available endpoints and arguments.
-Examples queries with all the endpoint functions available in this package are given [below](#example-queries).
+Example queries with all the endpoint functions available in this package are given [below](#example-queries).
 
 ## Advanced Usage (Experimental)
 
@@ -94,7 +94,6 @@ epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa", epirange(20210405, 
 ### COVIDcast Main Endpoint
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>
-
 
 County geo_values are [FIPS codes](https://en.wikipedia.org/wiki/List_of_United_States_FIPS_codes_by_county) and are discussed in the API docs [here](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html). The example below is for Orange County, California.
 
