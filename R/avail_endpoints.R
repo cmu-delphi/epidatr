@@ -8,7 +8,8 @@
 #' endps <- avail_endpoints()
 #' print(endps, n = nrow(endps))
 avail_endpoints <- function() {
-  h <- help.search("endpoint", package = "epidatr", fields = "concept")$matches
+  h <- help.search("endpoint", package = "epidatr", fields = "concept",
+                   agrep = FALSE)$matches
   tib <- tibble::tibble( # printing is much nicer than data.frame
     Endpoint = paste0(h$Name, "()"),
     Description = h$Title
