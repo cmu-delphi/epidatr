@@ -259,18 +259,16 @@ fetch_classic <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
 
-  response <- request_impl(epidata_call, "classic", fetch_args$fields, fetch_args$timeout_seconds)
-  response_content <- httr::content(response, as = "text", encoding = "UTF-8")
-
-  response_content <- jsonlite::fromJSON(response_content, simplifyDataFrame = !fetch_args$disable_data_frame_parsing)
+  response_content <- request_impl(epidata_call, "classic", fetch_args$fields, fetch_args$timeout_seconds) %>%
+    httr::content(as = "text", encoding = "UTF-8") %>%
+    jsonlite::fromJSON(simplifyDataFrame = !fetch_args$disable_data_frame_parsing)
 
   # success is 1, no results is -2, truncated is 2, -1 is generic error
   if (response_content$result != 1) {
     if ((response_content$result != -2) && !(fetch_args$return_empty)) {
       cli::cli_abort(
         c(
-          "epidata error: ",
-          response_content$message
+          "epidata error: {.code {response_content$message}}"
         ),
         class = "epidata_error"
       )
@@ -279,8 +277,7 @@ fetch_classic <- function(epidata_call, fetch_args = fetch_args_list()) {
   if (response_content$message != "success") {
     cli::cli_warn(
       c(
-        "epidata warning: ",
-        response_content$message
+        "epidata warning: {.code {response_content$message}}"
       ),
       class = "epidata_warning"
     )

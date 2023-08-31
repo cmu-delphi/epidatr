@@ -121,7 +121,7 @@ test_that("fetch_tbl warns on non-success", {
     content = function(...) NULL,
     .package = "httr"
   )
-  artificial_warning <- paste(
+  artificial_warning <- paste0(
     "* This is a warning with a leading asterisk and {braces}",
     " to make sure we don't have bulleting/glue bugs."
   )
@@ -135,7 +135,7 @@ test_that("fetch_tbl warns on non-success", {
   )
 
   expect_warning(epidata_call %>% fetch_tbl(),
-    regexp = paste0("epidata warning: ", artificial_warning),
+    regexp = paste0("epidata warning: `", artificial_warning, "`"),
     fixed = TRUE
   )
 })
