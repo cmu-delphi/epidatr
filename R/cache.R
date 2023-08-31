@@ -154,6 +154,9 @@ disable_cache <- function() {
 cache_info <- function() {
   cache_environ$epidatr_cache$info()
 }
+check_is_recent <- function(dates, max_age) {
+  (!is.null(dates) && any(dates >= format(Sys.Date() - max_age, format = "%Y%m%d")))
+}
 
 #' create a new cache for this session
 #'
@@ -173,12 +176,22 @@ cache_epidata_call <- function(epidata_call, fetch_args = fetch_args_list()) {
       !(fetch_args$dry_run) &&
       is.null(fetch_args$base_url) &&
       !fetch_args$debug &&
-      fetch_args$format_type != "json"
+      fetch_args$format_type == "json"
   )
   if (is_cachable) {
     target <- request_url(epidata_call)
     hashed <- md5(target)
     cached <- cache_environ$epidatr_cache$get(hashed)
+    as_of_recent <- check_is_recent(epidata_call$params$as_of, max_age)
+    issues_recent <- check_is_recent(epidata_call$params$issues, max_age)
+    if (as_of_recent || issues_recent) {
+      cli::cli_warn("using cached results with `as_of` within the past week (or the future!). This will likely result in an invalid cache. Consider
+1. disabling the cache for this session with `disable_cache` or permanently with environmental variable `EPIDATR_USE_CACHE=FALSE`
+2. setting `EPIDATR_CACHE_MAX_AGE_DAYS={Sys.getenv('EPIDATR_CACHE_MAX_AGE_DAYS', unset = 1)}` to e.g. `3/24` (3 hours).",
+        .frequency = "regularly",
+        .frequency_id = "cache timing issues"
+      )
+    }
     if (!is.key_missing(cached)) {
       cli::cli_warn("loading from the cache at {cache_environ$epidatr_cache$info()$dir}; see {cache_environ$epidatr_cache$info()$logfile} for more details.",
         .frequency = "regularly",
