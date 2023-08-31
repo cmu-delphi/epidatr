@@ -13,6 +13,8 @@ set_cache(
 )
 }
 \arguments{
+\item{cache_dir}{the directory in which the cache is stored. By default, this is \code{tools::R_user_dir()} if on R 4.0+, but must be specified for earlier versions of R. The path can be either relative or absolute. The environmental variable is \code{EPIDATR_CACHE_DIR}}
+
 \item{days}{the maximum length of time in days to keep any particular cached call. By default this is \code{1}. The environmental variable is \code{EPIDATR_CACHE_MAX_AGE_DAYS}}
 
 \item{max_size}{the size of the entire cache, in MB, at which to start pruning entries. By default this is \code{1024}, or 1GB. The environmental variable is \code{EPIDATR_CACHE_MAX_SIZE_MB}.}
@@ -20,8 +22,6 @@ set_cache(
 \item{logfile}{where cachem's log of transactions is stored, relative to the cache directory. By default, it is \code{"logfile.txt"}. The environmental variable is \code{EPIDATR_CACHE_LOGFILE}.}
 
 \item{prune_rate}{how many calls to go between checking if any cache elements are too old or if the cache overall is too large. Defaults to \code{2000L}. Since cachem fixes the max time between prune checks to 5 seconds, there's little reason to actually change this parameter. Doesn't have a corresponding environmental variable.}
-
-\item{dir}{the directory in which the cache is stored. By default, this is \code{tools::R_user_dir()} if on R 4.0+, but must be specified for earlier versions of R. The environmental variable is \code{EPIDATR_CACHE_DIR}}
 }
 \description{
 \code{set_cache} (re)defines the cache to use. This does not clear existing data at any previous location, but defines a new access for this R session.
