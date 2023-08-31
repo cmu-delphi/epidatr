@@ -1,6 +1,5 @@
 # IMPORTANT DEV NOTE:
-# any file that manipulates this cache variable needs to be loaded after this, otherwise the superassignment operators will throw this in global!
-# this is done by either only writing them in this file, or @include cache.R in the Roxygen docs
+# make sure to @include cache.R in the Roxygen docs of any function referencing this environment, so this file is loaded first
 cache_environ <- new.env(parent = emptyenv())
 cache_environ$use_cache <- NULL
 cache_environ$epidatr_cache <- NULL
@@ -12,6 +11,31 @@ cache_environ$epidatr_cache <- NULL
 #' Or if you know the data from 2 days ago is wrong, you could call `set_cache(days = 1)` to clear older data. In both cases, these changes would only last for a single session.
 #' In general, it is better to set your preferences via environmental variables in your `.Renviron` folder, with the corresponding variables listed in the arguments section below.
 #' In addition to those, there is the `EPIDATR_USE_CACHE` environmental variable, which unless defined to be `TRUE` otherwise defaults to `FALSE`.
+#'
+#' An important feature of the caching in this package is that only calls which specify either `issues` before a certain date, or `as_of` before a certain date will actually cache. For example the call
+#' ```
+#' covidcast(
+#'   source = "jhu-csse",
+#'   signals = "confirmed_7dav_incidence_prop",
+#'   geo_type = "state",
+#'   time_type = "day",
+#'   geo_values = "ca,fl",
+#'   time_values = epirange(20200601, 20230801)
+#' )
+#' ```
+#' *won't* cache, since it is possible for the cache to be invalidated by new releases with no warning. On the other hand, the call
+#' ```
+#' covidcast(
+#'   source = "jhu-csse",
+#'   signals = "confirmed_7dav_incidence_prop",
+#'   geo_type = "state",
+#'   time_type = "day",
+#'   geo_values = "ca,fl",
+#'   time_values = epirange(20200601, 20230801),
+#'   as_of = "2023-08-01"
+#' )
+#' ```
+#' *will* cache, since normal new versions of data can't invalidate it. It is still possible that Delphi may patch such data, but the frequency is on the order of months rather than days. We are working on creating a public channel to communicate such updates. Stars for `issues` won't cache, since they're subject to cache invalidation by normal versioning.
 #'
 #' On the backend, the cache uses cachem, with filenames generated using an md5 encoding of the call url. Each file corresponds to a unique epidata-API call.
 #' @examples
@@ -25,10 +49,10 @@ cache_environ$epidatr_cache <- NULL
 #' )
 #' }
 #'
-#' @param dir the directory in which the cache is stored. By default, this is `here::here(".epidatr_cache")`. The environmental variable is `EPIDATR_CACHE_DIR`
-#' @param days the maximum length of time in days to keep any particular cached call. By default this is `7`
-#' @param max_size the size of the entire cache, in MB, at which to start pruning entries.
-#' @param logfile where cachem's log of transactions is stored. By default, it is `file.path(dir, "logfile.txt")`, so it's contained in the cache's directory. The environmental variable is `EPIDATR_CACHE_LOGFILE`
+#' @param dir the directory in which the cache is stored. By default, this is `tools::R_user_dir()` if on R 4.0+, but must be specified for earlier versions of R. The environmental variable is `EPIDATR_CACHE_DIR`
+#' @param days the maximum length of time in days to keep any particular cached call. By default this is `1`. The environmental variable is `EPIDATR_CACHE_MAX_AGE_DAYS`
+#' @param max_size the size of the entire cache, in MB, at which to start pruning entries. By default this is `1024`, or 1GB. The environmental variable is `EPIDATR_CACHE_MAX_SIZE_MB`.
+#' @param logfile where cachem's log of transactions is stored, relative to the cache directory. By default, it is `"logfile.txt"`. The environmental variable is `EPIDATR_CACHE_LOGFILE`.
 #' @param prune_rate how many calls to go between checking if any cache elements are too old or if the cache overall is too large. Defaults to `2000L`. Since cachem fixes the max time between prune checks to 5 seconds, there's little reason to actually change this parameter. Doesn't have a corresponding environmental variable.
 #' @export
 #' @import cachem
@@ -37,18 +61,24 @@ set_cache <- function(cache_dir = NULL,
                       max_size = NULL,
                       logfile = NULL,
                       prune_rate = 2000L) {
-  if (is.null(cache_dir)) {
-    cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR", unset = here::here(".epidatr_cache"))
+  if (is.null(cache_dir) && sessionInfo()$R.version$major >= 4) {
+    cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR", unset = tools::R_user_dir("epidatr"))
+  } else if (is.null(cache_dir)) {
+    # earlier version, so no tools
+    cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR")
+    if (cach_dir == "") {
+      abort("no valid EPIDATR_CACHE_DIR")
+    }
   }
   stopifnot(is.character(cache_dir))
   if (is.null(days)) {
-    days <- Sys.getenv("EPIDATR_CACHE_MAX_AGE_DAYS", unset = 7) %>% as.numeric()
+    days <- Sys.getenv("EPIDATR_CACHE_MAX_AGE_DAYS", unset = 1) %>% as.numeric()
   }
   if (is.null(max_size)) {
     max_size <- Sys.getenv("EPIDATR_CACHE_MAX_SIZE_MB", unset = 1024) %>% as.numeric()
   }
   if (is.null(logfile)) {
-    logfile <- Sys.getenv("EPIDATR_CACHE_LOGFILE", unset = file.path(cache_dir, "logfile.txt"))
+    logfile <- Sys.getenv("EPIDATR_CACHE_LOGFILE", unset = "logfile.txt")
   }
   stopifnot(is.character(logfile))
   stopifnot(is.numeric(days), is.numeric(max_size), is.integer(prune_rate))
@@ -80,7 +110,7 @@ set_cache <- function(cache_dir = NULL,
       dir = cache_dir,
       max_size = as.integer(max_size * 1024^2),
       max_age = days * 24 * 60 * 60,
-      logfile = logfile,
+      logfile = file.path(cache_dir, logfile),
       prune_rate = prune_rate
     )
   }
@@ -133,24 +163,51 @@ cache_info <- function() {
 #' @param call the `epidata_call` object
 #' @inheritParams fetch
 #' @import cachem openssl
-cache_epidata_call <- function(epidata_call, ...) {
-  if (cache_environ$use_cache && !is.null(cache_environ$epidatr_cache)) {
+cache_epidata_call <- function(epidata_call, fetch_args = fetch_args_list()) {
+  as_of_cachable <- (!is.null(epidata_call$params$as_of) && epidata_call$params$as_of != "*")
+  issues_cachable <- (!is.null(epidata_call$params$issues) && epidata_call$params$issues != "*")
+  is_cachable <- (
+    cache_environ$use_cache &&
+      !is.null(cache_environ$epidatr_cache) &&
+      (as_of_cachable || issues_cachable) &&
+      !(fetch_args$dry_run) &&
+      is.null(fetch_args$base_url) &&
+      !fetch_args$debug &&
+      fetch_args$format_type != "json"
+  )
+  if (is_cachable) {
     target <- request_url(epidata_call)
     hashed <- md5(target)
     cached <- cache_environ$epidatr_cache$get(hashed)
     if (!is.key_missing(cached)) {
-      return(cached)
+      cli::cli_warn("loading from the cache at {cache_environ$epidatr_cache$info()$dir}; see {cache_environ$epidatr_cache$info()$logfile} for more details.",
+        .frequency = "regularly",
+        .frequency_id = "using the cache"
+      )
+      return(cached[[1]])
     }
   }
+  'which was saved on {format(cached[[2]],"%A %B %d, %Y")}, which took {round(cached[[3]][[3]], digits=5)} seconds.'
   # need to actually get the data, since its either not in the cache or we're not caching
-  if (epidata_call$only_supports_classic) {
-    fetched <- fetch_classic(epidata_call, ...)
+  runtime <- system.time(if (epidata_call$only_supports_classic) {
+    fetched <- fetch_classic(epidata_call, fetch_args)
   } else {
-    fetched <- fetch_tbl(epidata_call, ...)
-  }
+    fetched <- fetch_tbl(epidata_call, fetch_args)
+  })
   # add it to the cache if appropriate
-  if (cache_environ$use_cache && !is.null(cache_environ$epidatr_cache)) {
-    cache_environ$epidatr_cache$set(hashed, fetched)
+  if (is_cachable) {
+    cache_environ$epidatr_cache$set(hashed, list(fetched, Sys.time(), runtime))
   }
   return(fetched)
 }
+
+# debugonce(cache_epidata_call)
+# thing <- covidcast(
+#   source = "jhu-csse",
+#   signals = "confirmed_7dav_incidence_prop",
+#   geo_type = "state",
+#   time_type = "day",
+#   geo_values = "ca,fl",
+#   time_values = epirange(20200601, 20200801),
+#   as_of = "20230101",
+# )
