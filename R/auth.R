@@ -1,4 +1,5 @@
 #' Get the API key
+#' @aliases get_auth
 #'
 #' Get the API key from the environment variable `DELPHI_EPIDATA_KEY` or
 #' `getOption("delphi.epidata.key")`.
@@ -9,7 +10,7 @@
 get_auth_key <- function() {
   key <- Sys.getenv("DELPHI_EPIDATA_KEY", unset = "")
   if (key != "") {
-    return(key)
+      return(key)
   }
 
   key <- getOption("delphi.epidata.key", default = "")
