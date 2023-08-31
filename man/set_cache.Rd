@@ -13,15 +13,15 @@ set_cache(
 )
 }
 \arguments{
-\item{days}{the maximum length of time in days to keep any particular cached call. By default this is \code{7}}
+\item{days}{the maximum length of time in days to keep any particular cached call. By default this is \code{1}. The environmental variable is \code{EPIDATR_CACHE_MAX_AGE_DAYS}}
 
-\item{max_size}{the size of the entire cache, in MB, at which to start pruning entries.}
+\item{max_size}{the size of the entire cache, in MB, at which to start pruning entries. By default this is \code{1024}, or 1GB. The environmental variable is \code{EPIDATR_CACHE_MAX_SIZE_MB}.}
 
-\item{logfile}{where cachem's log of transactions is stored. By default, it is \code{file.path(dir, "logfile.txt")}, so it's contained in the cache's directory. The environmental variable is \code{EPIDATR_CACHE_LOGFILE}}
+\item{logfile}{where cachem's log of transactions is stored, relative to the cache directory. By default, it is \code{"logfile.txt"}. The environmental variable is \code{EPIDATR_CACHE_LOGFILE}.}
 
 \item{prune_rate}{how many calls to go between checking if any cache elements are too old or if the cache overall is too large. Defaults to \code{2000L}. Since cachem fixes the max time between prune checks to 5 seconds, there's little reason to actually change this parameter. Doesn't have a corresponding environmental variable.}
 
-\item{dir}{the directory in which the cache is stored. By default, this is \code{here::here(".epidatr_cache")}. The environmental variable is \code{EPIDATR_CACHE_DIR}}
+\item{dir}{the directory in which the cache is stored. By default, this is \code{tools::R_user_dir()} if on R 4.0+, but must be specified for earlier versions of R. The environmental variable is \code{EPIDATR_CACHE_DIR}}
 }
 \description{
 \code{set_cache} (re)defines the cache to use. This does not clear existing data at any previous location, but defines a new access for this R session.
@@ -29,6 +29,33 @@ Say your cache is normally stored in the default directory, but for the current 
 Or if you know the data from 2 days ago is wrong, you could call \code{set_cache(days = 1)} to clear older data. In both cases, these changes would only last for a single session.
 In general, it is better to set your preferences via environmental variables in your \code{.Renviron} folder, with the corresponding variables listed in the arguments section below.
 In addition to those, there is the \code{EPIDATR_USE_CACHE} environmental variable, which unless defined to be \code{TRUE} otherwise defaults to \code{FALSE}.
+
+An important feature of the caching in this package is that only calls which specify either \code{issues} before a certain date, or \code{as_of} before a certain date will actually cache. For example the call
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{covidcast(
+  source = "jhu-csse",
+  signals = "confirmed_7dav_incidence_prop",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = "ca,fl",
+  time_values = epirange(20200601, 20230801)
+)
+}\if{html}{\out{</div>}}
+
+\emph{won't} cache, since it is possible for the cache to be invalidated by new releases with no warning. On the other hand, the call
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{covidcast(
+  source = "jhu-csse",
+  signals = "confirmed_7dav_incidence_prop",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = "ca,fl",
+  time_values = epirange(20200601, 20230801),
+  as_of = "2023-08-01"
+)
+}\if{html}{\out{</div>}}
+
+\emph{will} cache, since normal new versions of data can't invalidate it. It is still possible that Delphi may patch such data, but the frequency is on the order of months rather than days. We are working on creating a public channel to communicate such updates. Stars for \code{issues} won't cache, since they're subject to cache invalidation by normal versioning.
 
 On the backend, the cache uses cachem, with filenames generated using an md5 encoding of the call url. Each file corresponds to a unique epidata-API call.
 }

@@ -4,10 +4,12 @@
 \alias{cache_epidata_call}
 \title{create a new cache for this session}
 \usage{
-cache_epidata_call(epidata_call, ...)
+cache_epidata_call(epidata_call, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{epidata_call}{an instance of \code{epidata_call}}
+
+\item{fetch_args}{a \code{fetch_args} object}
 
 \item{call}{the \code{epidata_call} object}
 }
