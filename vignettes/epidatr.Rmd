@@ -4,6 +4,7 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Delphi Epidata R API Client}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{ggplot2}
   \usepackage[utf8]{inputenc}
 ---
 
