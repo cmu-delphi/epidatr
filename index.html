@@ -72,20 +72,24 @@
 <div class="page-header"><h1 id="delphi-epidata-r-client">Delphi Epidata R client<a class="anchor" aria-label="anchor" href="#delphi-epidata-r-client"></a>
 </h1></div>
 <p><a href="https://opensource.org/licenses/MIT" class="external-link"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a> <a href="https://github.com/cmu-delphi/epidatr/actions" class="external-link"><img src="https://github.com/cmu-delphi/epidatr/workflows/ci/badge.svg" alt="Github Actions"></a> <a href="https://codecov.io/gh/dsweber2/epidatr" class="external-link"><img src="https://codecov.io/gh/dsweber2/epidatr/branch/dev/graph/badge.svg?token=jVHL9eHZNZ" alt="codecov"></a></p>
-<p>This package provides an R client for the <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Delphi Epidata API</a>.</p>
+<p>The <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Delphi Epidata API</a> provides real-time access to epidemiological surveillance data for influenza, COVID-19, and other diseases from both official government sources such as the <a href="https://www.cdc.gov/datastatistics/index.html" class="external-link">Center for Disease Control (CDC)</a> and private partners such as <a href="https://www.quidel.com/" class="external-link">Quidel</a>, <a href="https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/" class="external-link">Facebook</a>, and <a href="https://www.changehealthcare.com/" class="external-link">Change Healthcare</a>. It is built and maintained by the Carnegie Mellon University <a href="https://delphi.cmu.edu/" class="external-link">Delphi research group</a>.</p>
+<p>This package is designed to streamline the downloading and usage of data from the <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Delphi Epidata API</a>. It provides a simple R interface to the API, including functions for downloading data, parsing the results, and converting the data into a tidy format. The API stores a historical record of all data, including corrections and updates, which is particularly useful for accurately backtesting forecasting models. We also provide packages for downstream data processing (<a href="https://github.com/cmu-delphi/epiprocess" class="external-link">epiprocess</a>) and modeling (<a href="https://github.com/cmu-delphi/epipredict" class="external-link">epipredict</a>).</p>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cmu-delphi.github.io/epidatr/" class="external-link">epidatr</a></span><span class="op">)</span></span>
-<span><span class="va">epicall</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/covidcast.html">covidcast</a></span><span class="op">(</span></span>
+<span><span class="co"># Obtain the smoothed covid-like illness (CLI) signal from the Facebook survey as it was on April 10, 2021 for the US</span></span>
+<span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/covidcast.html">covidcast</a></span><span class="op">(</span></span>
 <span>  source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
 <span>  signals <span class="op">=</span> <span class="st">"smoothed_cli"</span>,</span>
 <span>  geo_type <span class="op">=</span> <span class="st">"nation"</span>,</span>
 <span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
 <span>  geo_values <span class="op">=</span> <span class="st">"us"</span>,</span>
-<span>  time_values <span class="op">=</span> <span class="fu"><a href="reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>  time_values <span class="op">=</span> <span class="fu"><a href="reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210101</span>, <span class="fl">20210601</span><span class="op">)</span>,</span>
+<span>  as_of <span class="op">=</span> <span class="st">"2021-06-01"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">epidata</span></span></code></pre></div>
 <pre><code># A tibble: 6 × 15
   geo_value signal       source   geo_type time_type time_value
   &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;    &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;
@@ -99,12 +103,22 @@
 #   lag &lt;int&gt;, missing_value &lt;int&gt;, missing_stderr &lt;int&gt;,
 #   missing_sample_size &lt;int&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;,
 #   sample_size &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Plot this data</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">epidata</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time_value</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Smoothed CLI from Facebook Survey"</span>,</span>
+<span>       subtitle <span class="op">=</span> <span class="st">"US, 2021"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Date"</span>,</span>
+<span>       y <span class="op">=</span> <span class="st">"CLI"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/fb-cli-signal.png" style="height:750px; width:750px" alt="Smoothed CLI from Facebook Survey"></p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>Install from GitHub:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install the dev version using `pak` or `remotes`</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"cmu-delphi/epidatr"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"cmu-delphi/epidatr"</span><span class="op">)</span></span></code></pre></div>
