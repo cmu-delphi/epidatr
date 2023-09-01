@@ -1,0 +1,16 @@
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+on:
+  issue_comment:
+    types: [created]
+
+name: Test
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      VAR: ${{ github.event.comment.author_association }}
+    steps:
+      - name: Echo
+        run: |
+          echo $VAR
