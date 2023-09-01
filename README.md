@@ -52,7 +52,7 @@ ggplot(epidata, aes(x = time_value, y = value)) +
        y = "CLI")
 ```
 
-![Smoothed CLI from Facebook Survey](fb-cli-signal.png){height=65%}
+![Smoothed CLI from Facebook Survey](man/figures/fb-cli-signal.png){height=65%}
 
 ## Installation
 
