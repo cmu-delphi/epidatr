@@ -4,6 +4,7 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Delphi Epidata R API Client}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{ggplot2}
   \usepackage[utf8]{inputenc}
 ---
 
@@ -44,10 +45,25 @@ In this case, the `covidcast()` function lets us specify these parameters for
 the endpoint and returns a tibble with the results:
 
 ```{r}
-covidcast(
+epidata <- covidcast(
   "fb-survey", "smoothed_cli", "state", "day", "pa",
-  epirange(20210405, 20210410)
+  epirange(20210105, 20210410)
 )
+epidata
+```
+
+We can then easily plot the data using ggplot2:
+
+```{r, out.height="65%"}
+library(ggplot2)
+ggplot(epidata, aes(x = time_value, y = value)) +
+  geom_line() +
+  labs(
+    title = "Smoothed CLI from Facebook Survey",
+    subtitle = "PA, 2021",
+    x = "Date",
+    y = "CLI"
+  )
 ```
 
 The [Delphi Epidata API documentation](https://cmu-delphi.github.io/delphi-epidata/) has more information on the available endpoints and arguments. You can also use the `avail_endpoints()` function to get a table of endpoint functions:

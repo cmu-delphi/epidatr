@@ -3,21 +3,26 @@
 [![License: MIT][mit-image]][mit-url] [![Github Actions][github-actions-image]][github-actions-url]
 [![codecov](https://codecov.io/gh/dsweber2/epidatr/branch/dev/graph/badge.svg?token=jVHL9eHZNZ)](https://codecov.io/gh/dsweber2/epidatr)
 
-This package provides an R client for the [Delphi Epidata
-API](https://cmu-delphi.github.io/delphi-epidata/).
+The [Delphi Epidata API](https://cmu-delphi.github.io/delphi-epidata/) provides real-time access to epidemiological surveillance data for influenza, COVID-19, and other diseases from both official government sources such as the [Center for Disease Control (CDC)](https://www.cdc.gov/datastatistics/index.html) and private partners such as [Quidel](https://www.quidel.com/), [Facebook](https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/), and [Change Healthcare](https://www.changehealthcare.com/). It is built and maintained by the Carnegie Mellon University [Delphi research group](https://delphi.cmu.edu/).
+
+This package is designed to streamline the downloading and usage of data from the [Delphi Epidata
+API](https://cmu-delphi.github.io/delphi-epidata/). It provides a simple R interface to the API, including functions for downloading data, parsing the results, and converting the data into a tidy format. The API stores a historical record of all data, including corrections and updates, which is particularly useful for accurately backtesting forecasting models. We also provide packages for downstream data processing ([epiprocess](https://github.com/cmu-delphi/epiprocess)) and modeling ([epipredict](https://github.com/cmu-delphi/epipredict)).
 
 ## Usage
 
 ```R
 library(epidatr)
-epicall <- covidcast(
+# Obtain the smoothed covid-like illness (CLI) signal from the Facebook survey as it was on April 10, 2021 for the US
+epidata <- covidcast(
   source = "fb-survey",
   signals = "smoothed_cli",
   geo_type = "nation",
   time_type = "day",
   geo_values = "us",
-  time_values = epirange(20210405, 20210410)
+  time_values = epirange(20210101, 20210601),
+  as_of = "2021-06-01"
 )
+epidata
 ```
 
 ```
@@ -35,6 +40,19 @@ epicall <- covidcast(
 #   missing_sample_size <int>, value <dbl>, stderr <dbl>,
 #   sample_size <dbl>
 ```
+
+```r
+# Plot this data
+library(ggplot2)
+ggplot(epidata, aes(x = time_value, y = value)) +
+  geom_line() +
+  labs(title = "Smoothed CLI from Facebook Survey",
+       subtitle = "US, 2021",
+       x = "Date",
+       y = "CLI")
+```
+
+<img src="man/figures/fb-cli-signal.png" style="height:750px; width:750px" alt="Smoothed CLI from Facebook Survey">
 
 ## Installation
 
