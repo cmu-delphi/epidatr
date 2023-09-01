@@ -29,6 +29,12 @@ Authors:
 Other contributors:
 \itemize{
   \item David Weber \email{davidweb@andrew.cmu.edu} [contributor]
+  \item Alex Reinhart [contributor]
+  \item Daniel McDonald [contributor]
+  \item Kean Ming Tan [contributor]
+  \item Will Townes [contributor]
+  \item George Haff [contributor]
+  \item Kathryn Mazaitis [contributor]
 }
 
 }
