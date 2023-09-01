@@ -10,7 +10,7 @@
 get_auth_key <- function() {
   key <- Sys.getenv("DELPHI_EPIDATA_KEY", unset = "")
   if (key != "") {
-          return(key)
+            return(key)
   }
 
   key <- getOption("delphi.epidata.key", default = "")
