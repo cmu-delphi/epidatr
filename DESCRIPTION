@@ -6,8 +6,14 @@ Authors@R:
   c(
     person("Logan", "Brooks", email = "lcbrooks@andrew.cmu.edu", role = c("aut", "cre")),
     person("Dmitry", "Shemetov", email = "dshemeto@andrew.cmu.edu", role = c("aut")),
+    person("Samuel", "Gratzl", email = "sam@sgratzl.com", role = c("aut")),
     person("David", "Weber", email = "davidweb@andrew.cmu.edu", role = c("ctb")),
-    person("Samuel", "Gratzl", email = "sam@sgratzl.com", role = c("aut"))
+    person("Alex", "Reinhart", role = c("ctb")),
+    person("Daniel", "McDonald", role = c("ctb")),
+    person("Kean Ming", "Tan", role = c("ctb")),
+    person("Will", "Townes", role = c("ctb")),
+    person("George", "Haff", role = c("ctb")),
+    person("Kathryn", "Mazaitis", role = c("ctb"))
   )
 URL: https://cmu-delphi.github.io/epidatr/, https://github.com/cmu-delphi/epidatr
 BugReports: https://github.com/cmu-delphi/epidatr/issues

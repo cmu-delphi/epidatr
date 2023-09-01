@@ -3,6 +3,7 @@
 #' @return A [`tibble::tibble`] with 2 columns. `Endpoint` contains the function
 #'   for accessing the Delphi Epidata API endpoint along with a `Description`.
 #' @export
+#' @importFrom utils help.search
 #'
 #' @examples
 #' endps <- avail_endpoints()
