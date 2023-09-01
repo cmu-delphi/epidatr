@@ -54,13 +54,15 @@ cache_environ$epidatr_cache <- NULL
 #' @param max_size the size of the entire cache, in MB, at which to start pruning entries. By default this is `1024`, or 1GB. The environmental variable is `EPIDATR_CACHE_MAX_SIZE_MB`.
 #' @param logfile where cachem's log of transactions is stored, relative to the cache directory. By default, it is `"logfile.txt"`. The environmental variable is `EPIDATR_CACHE_LOGFILE`.
 #' @param prune_rate how many calls to go between checking if any cache elements are too old or if the cache overall is too large. Defaults to `2000L`. Since cachem fixes the max time between prune checks to 5 seconds, there's little reason to actually change this parameter. Doesn't have a corresponding environmental variable.
+#' @param confirm whether to confirm directory creation. default is `TRUE`; should only be set in scripts
 #' @export
 #' @import cachem
 set_cache <- function(cache_dir = NULL,
                       days = NULL,
                       max_size = NULL,
                       logfile = NULL,
-                      prune_rate = 2000L) {
+                      prune_rate = 2000L,
+                      confirm = TRUE) {
   if (is.null(cache_dir) && sessionInfo()$R.version$major >= 4) {
     cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR", unset = tools::R_user_dir("epidatr"))
   } else if (is.null(cache_dir)) {
@@ -87,13 +89,17 @@ set_cache <- function(cache_dir = NULL,
   cache_exists <- file.exists(cache_dir)
   cache_usable <- file.access(cache_dir, mode = 6) == 0
   if (!(cache_exists)) {
-    user_input <- readline(glue::glue("there is no directory at {cache_dir}; the cache will be turned off until a viable directory has been set. Create one? (yes|no) "))
-    repeat {
-      valid_user_input <- ifelse(grepl("yes|no", user_input), sub(".*(yes|no).*", "\\1", user_input), NA)
-      if (!is.na(valid_user_input)) {
-        break
+    if (confirm) {
+      user_input <- readline(glue::glue("there is no directory at {cache_dir}; the cache will be turned off until a viable directory has been set. Create one? (yes|no) "))
+      repeat {
+        valid_user_input <- ifelse(grepl("yes|no", user_input), sub(".*(yes|no).*", "\\1", user_input), NA)
+        if (!is.na(valid_user_input)) {
+          break
+        }
+        user_input <- readline(glue::glue(" please answer either yes or no: "))
       }
-      user_input <- readline(glue::glue(" please answer either yes or no: "))
+    } else {
+      valid_user_input <- "yes"
     }
     if (valid_user_input == "yes") {
       dir.create(cache_dir, showWarnings = TRUE, recursive = TRUE)
@@ -132,11 +138,16 @@ set_cache <- function(cache_dir = NULL,
 #' )
 #' }
 #'
+#' @param disable instead of setting a new cache, disable caching entirely; defaults to `FALSE`
 #' @inheritParams set_cache
+#' @seealso [set_cache] to start a new cache (and general caching info), [disable_cache] to only disable without deleting, and [cache_info]
 #' @export
-clear_cache <- function(...) {
+#' @import cachem
+clear_cache <- function(disable = FALSE, ...) {
   cache_environ$epidatr_cache$destroy()
-  set_cache(...)
+  if (!disable) {
+    set_cache(...)
+  }
 }
 
 #' turn off the caching for this session
@@ -154,9 +165,6 @@ disable_cache <- function() {
 cache_info <- function() {
   cache_environ$epidatr_cache$info()
 }
-check_is_recent <- function(dates, max_age) {
-  (!is.null(dates) && any(dates >= format(Sys.Date() - max_age, format = "%Y%m%d")))
-}
 
 #' create a new cache for this session
 #'
@@ -168,35 +176,27 @@ check_is_recent <- function(dates, max_age) {
 #' @keywords internal
 #' @import cachem openssl
 cache_epidata_call <- function(epidata_call, fetch_args = fetch_args_list()) {
-  as_of_cachable <- (!is.null(epidata_call$params$as_of) && epidata_call$params$as_of != "*")
-  issues_cachable <- (!is.null(epidata_call$params$issues) && epidata_call$params$issues != "*")
-  is_cachable <- (
-    cache_environ$use_cache &&
-      !is.null(cache_environ$epidatr_cache) &&
-      (as_of_cachable || issues_cachable) &&
-      !(fetch_args$dry_run) &&
-      is.null(fetch_args$base_url) &&
-      !fetch_args$debug &&
-      fetch_args$format_type == "json"
-  )
+  is_cachable <- check_is_cachable(epidata_call, fetch_args)
   if (is_cachable) {
     target <- request_url(epidata_call)
     hashed <- md5(target)
     cached <- cache_environ$epidatr_cache$get(hashed)
-    as_of_recent <- check_is_recent(epidata_call$params$as_of, max_age)
-    issues_recent <- check_is_recent(epidata_call$params$issues, max_age)
+    as_of_recent <- check_is_recent(epidata_call$params$as_of, 7)
+    issues_recent <- check_is_recent(epidata_call$params$issues, 7)
     if (as_of_recent || issues_recent) {
       cli::cli_warn("using cached results with `as_of` within the past week (or the future!). This will likely result in an invalid cache. Consider
 1. disabling the cache for this session with `disable_cache` or permanently with environmental variable `EPIDATR_USE_CACHE=FALSE`
 2. setting `EPIDATR_CACHE_MAX_AGE_DAYS={Sys.getenv('EPIDATR_CACHE_MAX_AGE_DAYS', unset = 1)}` to e.g. `3/24` (3 hours).",
         .frequency = "regularly",
-        .frequency_id = "cache timing issues"
+        .frequency_id = "cache timing issues",
+        class = "cache_recent_data"
       )
     }
     if (!is.key_missing(cached)) {
       cli::cli_warn("loading from the cache at {cache_environ$epidatr_cache$info()$dir}; see {cache_environ$epidatr_cache$info()$logfile} for more details.",
         .frequency = "regularly",
-        .frequency_id = "using the cache"
+        .frequency_id = "using the cache",
+        class = "cache_access"
       )
       return(cached[[1]])
     }
