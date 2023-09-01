@@ -47,6 +47,7 @@ Language: en-US
 Config/testthat/edition: 3
 Collate: 
     'auth.R'
+    'avail_endpoints.R'
     'cache.R'
     'check.R'
     'constants.R'
