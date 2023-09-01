@@ -60,7 +60,7 @@ ggplot(epidata, aes(x = time_value, y = value)) +
   geom_line() +
   labs(
     title = "Smoothed CLI from Facebook Survey",
-    subtitle = "US, 2021",
+    subtitle = "PA, 2021",
     x = "Date",
     y = "CLI"
   )
