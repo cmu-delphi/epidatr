@@ -1,7 +1,7 @@
 test_that("basic cache setup", {
   expect_true(is.null(cache_environ$epidatr_cache))
 })
-
+# clear_cache(disable = TRUE)
 tmp_base_dir <- Sys.getenv("TMPDIR")
 if (tmp_base_dir == "") {
   new_temp_dir <- md5(paste(Sys.time(), "I am the very model of a modern major general"))
@@ -12,13 +12,27 @@ if (tmp_base_dir == "") {
   )
 }
 test_set_cache <- function(cache_dir = new_temp_dir,
-                           days = 7,
+                           days = 1,
                            max_size = 1,
                            logfile = "logfile.txt",
                            prune_rate = 3L,
                            confirm = FALSE) {
   set_cache(cache_dir = cache_dir, days = days, max_size = max_size, logfile = logfile, prune_rate = prune_rate, confirm = confirm)
 }
+
+test_that("cache set as expected", {
+  test_set_cache()
+  tmp <- strsplit(cache_info()$dir, "/")[[1]]
+  expect_equal(tmp[length(tmp)], as.character(new_temp_dir))
+  expect_equal(cache_info()$max_size, 1024^2)
+  expect_equal(cache_info()$max_age, 24 * 60 * 60)
+  expect_equal(cache_info()$prune_rate, 3)
+  expect_equal(cache_info()$logfile, file.path(new_temp_dir, "logfile.txt"))
+  expect_equal(cache_info()$evict, "lru")
+  expect_equal(cache_info()$max_n, Inf)
+  disable_cache()
+})
+
 # use an existing example to save, then load and compare the values
 test_that("cache saves & loads", {
   test_set_cache()
@@ -41,6 +55,7 @@ test_that("cache saves & loads", {
     content = function(...) readRDS(testthat::test_path("data/test-classic.rds")),
     .package = "httr"
   )
+  # testing the cache_info
 
   first_call <- epidata_call %>% fetch()
   # compare cached call w/non cached (and make sure it's fetching from the cache)
@@ -49,7 +64,8 @@ test_that("cache saves & loads", {
   rlang::reset_warning_verbosity("using the cache")
   expect_equal(first_call, cache_call)
   # and compare directly with the file saved
-  request_hash <- "14d02f06987261dadf88b6bc67a13079.rds"
+  # the request url hashed here is "https://api.delphi.cmu.edu/epidata/covidcast/?data_source=jhu-csse&signals=confirmed_7dav_incidence_prop&geo_type=state&time_type=day&geo_values=ca%2Cfl&time_values=20200601-20200801&as_of=20220101"
+  request_hash <- "01479468989102176d7cb70374f18f1f.rds"
   direct_from_cache <- readRDS(file.path(new_temp_dir, request_hash))
   expect_equal(first_call, direct_from_cache[[1]])
 })
