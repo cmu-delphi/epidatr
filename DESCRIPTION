@@ -24,6 +24,7 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 Imports:
+    cachem,
     checkmate,
     cli,
     httr,
@@ -31,16 +32,15 @@ Imports:
     magrittr,
     MMWRweek,
     purrr,
+    openssl,
     readr,
     tibble,
     xml2
 RoxygenNote: 7.2.3
 Suggests:
-    cachem,
     dplyr,
     ggplot2,
     knitr,
-    openssl,
     rmarkdown,
     testthat (>= 3.1.5),
     withr
