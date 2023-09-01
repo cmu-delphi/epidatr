@@ -57,10 +57,12 @@ We can then easily plot the data using ggplot2:
 library(ggplot2)
 ggplot(epidata, aes(x = time_value, y = value)) +
   geom_line() +
-  labs(title = "Smoothed CLI from Facebook Survey",
-       subtitle = "US, 2021",
-       x = "Date",
-       y = "CLI")
+  labs(
+    title = "Smoothed CLI from Facebook Survey",
+    subtitle = "US, 2021",
+    x = "Date",
+    y = "CLI"
+  )
 ```
 
 The [Delphi Epidata API documentation](https://cmu-delphi.github.io/delphi-epidata/) has more information on the available endpoints and arguments. You can also use the `avail_endpoints()` function to get a table of endpoint functions:
