@@ -2,10 +2,16 @@
 % Please edit documentation in R/cache.R
 \name{cache_info}
 \alias{cache_info}
-\title{turn off the caching for this session}
+\title{describe current cache}
 \usage{
 cache_info()
 }
 \description{
 Print out the information about the cache (as would be returned by cachem's \code{info()} method)
+}
+\examples{
+cache_info()
+}
+\seealso{
+\link{set_cache} to start a new cache (and general caching info), \link{clear_cache} to delete the cache and set a new one, and \link{disable_cache} to disable without deleting
 }

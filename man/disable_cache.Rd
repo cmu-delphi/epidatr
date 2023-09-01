@@ -9,3 +9,6 @@ disable_cache()
 \description{
 Disable caching until you call \code{set_cache} or restart R. The files defining the cache are untouched. If you are looking to disable the caching more permanently, set \code{EPIDATR_USE_CACHE=FALSE} as environmental variable in your \code{.Renviron}.
 }
+\seealso{
+\link{set_cache} to start a new cache (and general caching info), \link{clear_cache} to delete the cache and set a new one, and \link{cache_info}
+}
