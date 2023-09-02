@@ -30,6 +30,7 @@ Imports:
     jsonlite,
     magrittr,
     MMWRweek,
+    purrr,
     readr,
     tibble,
     xml2

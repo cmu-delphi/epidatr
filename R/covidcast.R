@@ -59,36 +59,50 @@ parse_source <- function(source, base_url) {
   r
 }
 
-#' @method as.data.frame covidcast_data_signal_list
+#' @method as_tibble covidcast_data_signal_list
+#' @importFrom tibble as_tibble
+#' @importFrom purrr map_chr map_lgl
 #' @export
-as.data.frame.covidcast_data_signal_list <- function(x, ...) {
-  as.data.frame(
-    do.call(rbind, lapply(x, function(z) {
-      sub <- z[c(
-        "source",
-        "signal",
-        "name",
-        "active",
-        "short_description",
-        "description",
-        "time_type",
-        "time_label",
-        "value_label",
-        "format",
-        "category",
-        "high_values_are",
-        "is_smoothed",
-        "is_weighted",
-        "is_cumulative",
-        "has_stderr",
-        "has_sample_size"
-      )]
-      sub$geo_types <- paste0(names(z$geo_types), collapse = ",")
-      sub
-    })),
-    row.names = sapply(x, function(y) y$key),
-    ...
-  )
+as_tibble.covidcast_data_signal_list <- function(x, ...) {
+  tib <- list()
+  tib$source <- unname(map_chr(x, "source"))
+  tib$signal <- unname(map_chr(x, "signal"))
+  tib$name <- unname(map_chr(x, "name"))
+  tib$active <- unname(map_lgl(x, "active"))
+  tib$short_description <- unname(map_chr(x, "short_description"))
+  tib$description <- unname(map_chr(x, "description"))
+  tib$time_type <- unname(map_chr(x, "time_type"))
+  tib$time_label <- unname(map_chr(x, "time_label"))
+  tib$value_label <- unname(map_chr(x, "value_label"))
+  tib$format <- unname(map_chr(x, "format"))
+  tib$category <- unname(map_chr(x, "category"))
+  tib$high_values_are <- unname(map_chr(x, "high_values_are"))
+  if ("is_smoothed" %in% names(x)) {
+    tib$is_smoothed <- unname(map_lgl(x, "is_smoothed"))
+  } else {
+    tib$is_smoothed <- NA
+  }
+  if ("is_weighted" %in% names(x)) {
+    tib$is_weighted <- unname(map_lgl(x, "is_weighted"))
+  } else {
+    tib$is_weighted <- NA
+  }
+  if ("is_cumulative" %in% names(x)) {
+    tib$is_cumulative <- unname(map_lgl(x, "is_cumulative"))
+  } else {
+    tib$is_cumulative <- NA
+  }
+  if ("has_stderr" %in% names(x)) {
+    tib$has_stderr <- unname(map_lgl(x, "has_stderr"))
+  } else {
+    tib$has_stderr <- NA
+  }
+  if ("has_sample_size" %in% names(x)) {
+    tib$has_sample_size <- unname(map_lgl(x, "has_sample_size"))
+  } else {
+    tib$has_sample_size <- NA
+  }
+  as_tibble(tib)
 }
 
 #' @export
@@ -96,8 +110,8 @@ print.covidcast_data_source <- function(x, ...) {
   print(x$name, ...)
   print(x$source, ...)
   print(x$description, ...)
-  signals <- as.data.frame(x$signals)
-  print(signals[, c("signal", "name", "short_description")], ...)
+  signals <- as_tibble(x$signals)
+  print(signals[, c("signal", "short_description")], ...)
 }
 
 #' Creates the COVIDcast Epidata autocomplete helper
@@ -152,45 +166,26 @@ covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) 
   )
 }
 
-#' @method as.data.frame covidcast_data_source_list
+#' @method as_tibble covidcast_data_source_list
 #' @export
-as.data.frame.covidcast_data_source_list <- function(x, ...) {
-  as.data.frame(
-    do.call(
-      rbind,
-      lapply(
-        x,
-        FUN = function(z) {
-          cols <- c(
-            "source", "name", "description", "reference_signal",
-            "license"
-          )
-          sub <- z[cols]
-          sub$signals <- paste0(
-            sapply(z$signals, function(y) y$signal),
-            collapse = ","
-          )
-          sub
-        }
-      )
-    ),
-    row.names = sapply(x, function(z) z$source),
-    ...
-  )
+as_tibble.covidcast_data_source_list <- function(x, ...) {
+  tib <- list()
+  tib$source <- unname(map_chr(x$sources, "source"))
+  tib$name <- unname(map_chr(x$sources, "name"))
+  tib$description <- unname(map_chr(x$sources, "description"))
+  tib$reference_signal <- unname(map_chr(x$sources, "reference_signal"))
+  tib$license <- unname(map_chr(x$sources, "license"))
+  tib <- as_tibble(tib)
 }
 
+#' @export
 print.covidcast_epidata <- function(x, ...) {
   print("COVIDcast Epidata Fetcher")
   print("Sources:")
-  sources <- as.data.frame(x$sources)
-  print(sources[1:5, c("source", "name")], ...)
-  if (nrow(sources) > 5) {
-    print(paste0((nrow(sources) - 5), " more..."))
-  }
+  sources <- as_tibble(x$sources)
+  print(sources[, c("source", "name")], ...)
+
   print("Signals")
-  signals <- as.data.frame(x$signals)
-  print(signals[1:5, c("source", "signal", "name")], ...)
-  if (nrow(signals) > 5) {
-    print(paste0((nrow(signals) - 5), " more..."))
-  }
+  signals <- as_tibble(x$signals)
+  print(signals[, c("source", "signal", "name")], ...)
 }
