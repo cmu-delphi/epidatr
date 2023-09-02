@@ -170,12 +170,12 @@ covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) 
 #' @export
 as_tibble.covidcast_data_source_list <- function(x, ...) {
   tib <- list()
-  tib$source <- unname(map_chr(x$sources, "source"))
-  tib$name <- unname(map_chr(x$sources, "name"))
-  tib$description <- unname(map_chr(x$sources, "description"))
-  tib$reference_signal <- unname(map_chr(x$sources, "reference_signal"))
-  tib$license <- unname(map_chr(x$sources, "license"))
-  tib <- as_tibble(tib)
+  tib$source <- unname(map_chr(x, "source"))
+  tib$name <- unname(map_chr(x, "name"))
+  tib$description <- unname(map_chr(x, "description"))
+  tib$reference_signal <- unname(map_chr(x, "reference_signal"))
+  tib$license <- unname(map_chr(x, "license"))
+  as_tibble(tib)
 }
 
 #' @export
