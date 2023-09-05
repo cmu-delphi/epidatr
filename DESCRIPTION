@@ -35,6 +35,7 @@ Imports:
     purrr,
     openssl,
     readr,
+    rlang,
     tibble,
     xml2
 RoxygenNote: 7.2.3
