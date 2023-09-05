@@ -249,7 +249,11 @@ cache_epidata_call <- function(epidata_call, fetch_args = fetch_args_list()) {
       )
     }
     if (!is.key_missing(cached)) {
-      cli::cli_warn("loading from the cache at {cache_environ$epidatr_cache$info()$dir}; see {cache_environ$epidatr_cache$info()$logfile} for more details.",
+      cli::cli_warn(
+        c(
+          "loading from the cache at {cache_environ$epidatr_cache$info()$dir}; ",
+          "see {cache_environ$epidatr_cache$info()$logfile} for more details."
+        ),
         .frequency = "regularly",
         .frequency_id = "using the cache",
         class = "cache_access"
