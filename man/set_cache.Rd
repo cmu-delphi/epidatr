@@ -14,29 +14,47 @@ set_cache(
 )
 }
 \arguments{
-\item{cache_dir}{the directory in which the cache is stored. By default, this is \code{tools::R_user_dir()} if on R 4.0+, but must be specified for earlier versions of R. The path can be either relative or absolute. The environmental variable is \code{EPIDATR_CACHE_DIR}.}
+\item{cache_dir}{the directory in which the cache is stored. By default, this is \code{tools::R_user_dir()} if on R 4.0+,
+but must be specified for earlier versions of R. The path can be either relative or absolute. The environmental
+variable is \code{EPIDATR_CACHE_DIR}.}
 
-\item{days}{the maximum length of time in days to keep any particular cached call. By default this is \code{1}. The environmental variable is \code{EPIDATR_CACHE_MAX_AGE_DAYS}.}
+\item{days}{the maximum length of time in days to keep any particular cached call. By default this is \code{1}. The
+environmental variable is \code{EPIDATR_CACHE_MAX_AGE_DAYS}.}
 
-\item{max_size}{the size of the entire cache, in MB, at which to start pruning entries. By default this is \code{1024}, or 1GB. The environmental variable is \code{EPIDATR_CACHE_MAX_SIZE_MB}.}
+\item{max_size}{the size of the entire cache, in MB, at which to start pruning entries. By default this is \code{1024}, or
+1GB. The environmental variable is \code{EPIDATR_CACHE_MAX_SIZE_MB}.}
 
-\item{logfile}{where cachem's log of transactions is stored, relative to the cache directory. By default, it is \code{"logfile.txt"}. The environmental variable is \code{EPIDATR_CACHE_LOGFILE}.}
+\item{logfile}{where cachem's log of transactions is stored, relative to the cache directory. By default, it is
+\code{"logfile.txt"}. The environmental variable is \code{EPIDATR_CACHE_LOGFILE}.}
 
-\item{prune_rate}{how many calls to go between checking if any cache elements are too old or if the cache overall is too large. Defaults to \code{2000L}. Since cachem fixes the max time between prune checks to 5 seconds, there's little reason to actually change this parameter. Doesn't have a corresponding environmental variable.}
+\item{prune_rate}{how many calls to go between checking if any cache elements are too old or if the cache overall is
+too large. Defaults to \code{2000L}. Since cachem fixes the max time between prune checks to 5 seconds, there's little
+reason to actually change this parameter. Doesn't have a corresponding environmental variable.}
 
-\item{confirm}{whether to confirm directory creation. default is \code{TRUE}; should only be set in non-interactive scripts}
+\item{confirm}{whether to confirm directory creation. default is \code{TRUE}; should only be set in non-interactive
+scripts}
 }
 \description{
-By default, epidatr re-requests data from the API on every call of \code{fetch}. In case you find yourself repeatedly calling the same data, you can enable the cache using either this function for a given session, or environmental variables for a persistent cache.
-The typical recommended workflow for using the cache is to set the environmental variables \code{EPIDATR_USE_CACHE=TRUE} and \code{EPIDATR_CACHE_DIRECTORY="/your/directory/here"}in your \code{.Renviron}, for example by calling \code{usethis::edit_r_environ()}.
+By default, epidatr re-requests data from the API on every call of \code{fetch}. In case you find yourself repeatedly
+calling the same data, you can enable the cache using either this function for a given session, or environmental
+variables for a persistent cache.
+The typical recommended workflow for using the cache is to set the environmental variables \code{EPIDATR_USE_CACHE=TRUE}
+and \code{EPIDATR_CACHE_DIRECTORY="/your/directory/here"}in your \code{.Renviron}, for example by calling
+\code{usethis::edit_r_environ()}.
 See the parameters below for some more configurables if you're so inclined.
 
-\code{set_cache} (re)defines the cache to use in a particular R session. This does not clear existing data at any previous location, but instead creates a handle to the new cache using \href{https://cachem.r-lib.org/index.html}{cachem} that seamlessly handles caching for you.
-Say your cache is normally stored in some default directory, but for the current session you want to save your results in \verb{~/my/temporary/savedirectory}, then you would call \code{set_cache(dir = "~/my/temporary/savedirectory")}.
-Or if you know the data from 2 days ago is wrong, you could call \code{set_cache(days = 1)} to clear older data whenever the cache is referenced.
-In both cases, these changes would only last for a single session (though the deleted data would be gone permanently!).
+\code{set_cache} (re)defines the cache to use in a particular R session. This does not clear existing data at any previous
+location, but instead creates a handle to the new cache using \href{https://cachem.r-lib.org/index.html}{cachem} that
+seamlessly handles caching for you.
+Say your cache is normally stored in some default directory, but for the current session you want to save your
+results in \verb{~/my/temporary/savedirectory}, then you would call \code{set_cache(dir = "~/my/temporary/savedirectory")}.
+Or if you know the data from 2 days ago is wrong, you could call \code{set_cache(days = 1)} to clear older data whenever
+the cache is referenced.
+In both cases, these changes would only last for a single session (though the deleted data would be gone
+permanently!).
 
-An important feature of the caching in this package is that only calls which specify either \code{issues} before a certain date, or \code{as_of} before a certain date will actually cache. For example the call
+An important feature of the caching in this package is that only calls which specify either \code{issues} before a certain
+date, or \code{as_of} before a certain date will actually cache. For example the call
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{covidcast(
   source = "jhu-csse",
@@ -48,7 +66,8 @@ An important feature of the caching in this package is that only calls which spe
 )
 }\if{html}{\out{</div>}}
 
-\emph{won't} cache, since it is possible for the cache to be invalidated by new releases with no warning. On the other hand, the call
+\emph{won't} cache, since it is possible for the cache to be invalidated by new releases with no warning. On the other
+hand, the call
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{covidcast(
   source = "jhu-csse",
@@ -61,9 +80,13 @@ An important feature of the caching in this package is that only calls which spe
 )
 }\if{html}{\out{</div>}}
 
-\emph{will} cache, since normal new versions of data can't invalidate it (since they would be \code{as_of} a later date). It is still possible that Delphi may patch such data, but the frequency is on the order of months rather than days. We are working on creating a public channel to communicate such updates. While specifying \code{issues} will usually cache, a call with \code{issues="*"} won't cache, since its subject to cache invalidation by normal versioning.
+\emph{will} cache, since normal new versions of data can't invalidate it (since they would be \code{as_of} a later date). It is
+still possible that Delphi may patch such data, but the frequency is on the order of months rather than days. We
+are working on creating a public channel to communicate such updates. While specifying \code{issues} will usually cache,
+a call with \code{issues="*"} won't cache, since its subject to cache invalidation by normal versioning.
 
-On the backend, the cache uses cachem, with filenames generated using an md5 encoding of the call url. Each file corresponds to a unique epidata-API call.
+On the backend, the cache uses cachem, with filenames generated using an md5 encoding of the call url. Each file
+corresponds to a unique epidata-API call.
 }
 \examples{
 \dontrun{
@@ -78,5 +101,6 @@ set_cache(
 
 }
 \seealso{
-\link{clear_cache} to delete the old cache while making a new one, \link{disable_cache} to disable without deleting, and \link{cache_info}
+\link{clear_cache} to delete the old cache while making a new one, \link{disable_cache} to disable without deleting,
+and \link{cache_info}
 }

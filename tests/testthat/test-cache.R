@@ -22,8 +22,14 @@ test_set_cache <- function(cache_dir = new_temp_dir,
 
 test_that("cache set as expected", {
   test_set_cache()
-  tmp <- strsplit(cache_info()$dir, "/")[[1]]
-  expect_equal(tmp[length(tmp)], as.character(new_temp_dir))
+  if (grepl("/", as.character(new_temp_dir))) {
+    # this is what check produces
+    expect_equal(cache_info()$dir, as.character(new_temp_dir))
+  } else {
+    # this is what test produces directly
+    tmp <- strsplit(cache_info()$dir, "/")[[1]]
+    expect_equal(tmp[length(tmp)], as.character(new_temp_dir))
+  }
   expect_equal(cache_info()$max_size, 1024^2)
   expect_equal(cache_info()$max_age, 24 * 60 * 60)
   expect_equal(cache_info()$prune_rate, 3)
@@ -71,14 +77,14 @@ test_that("cache saves & loads", {
 })
 
 test_that("check_is_recent", {
-  expect_true(epidatr:::check_is_recent(format(Sys.Date() - 7, format = "%Y%m%d"), 7))
-  expect_true(epidatr:::check_is_recent(format(Sys.Date(), format = "%Y%m%d"), 7))
-  expect_true(epidatr:::check_is_recent(format(Sys.Date() + 12, format = "%Y%m%d"), 7))
-  expect_false(epidatr:::check_is_recent(format(Sys.Date() - 12, format = "%Y%m%d"), 7))
-  expect_false(epidatr:::check_is_recent(epirange(format(Sys.Date() - 12, format = "%Y%m%d"), format(Sys.Date() - 9, format = "%Y%m%d")), 7))
-  expect_true(epidatr:::check_is_recent(epirange(format(Sys.Date() - 12, format = "%Y%m%d"), format(Sys.Date(), format = "%Y%m%d")), 7))
-  expect_true(epidatr:::check_is_recent(epirange(format(Sys.Date() - 2, format = "%Y%m%d"), format(Sys.Date(), format = "%Y%m%d")), 7))
-  expect_true(epidatr:::check_is_recent(epirange(format(Sys.Date(), format = "%Y%m%d"), format(Sys.Date() + 5, format = "%Y%m%d")), 7))
+  expect_true(check_is_recent(format(Sys.Date() - 7, format = "%Y%m%d"), 7))
+  expect_true(check_is_recent(format(Sys.Date(), format = "%Y%m%d"), 7))
+  expect_true(check_is_recent(format(Sys.Date() + 12, format = "%Y%m%d"), 7))
+  expect_false(check_is_recent(format(Sys.Date() - 12, format = "%Y%m%d"), 7))
+  expect_false(check_is_recent(epirange(format(Sys.Date() - 12, format = "%Y%m%d"), format(Sys.Date() - 9, format = "%Y%m%d")), 7))
+  expect_true(check_is_recent(epirange(format(Sys.Date() - 12, format = "%Y%m%d"), format(Sys.Date(), format = "%Y%m%d")), 7))
+  expect_true(check_is_recent(epirange(format(Sys.Date() - 2, format = "%Y%m%d"), format(Sys.Date(), format = "%Y%m%d")), 7))
+  expect_true(check_is_recent(epirange(format(Sys.Date(), format = "%Y%m%d"), format(Sys.Date() + 5, format = "%Y%m%d")), 7))
 })
 
 test_that("check_is_cachable", {
@@ -94,9 +100,9 @@ test_that("check_is_cachable", {
       fetch_args = fetch_args_list(dry_run = TRUE)
     )
     if (expected_result) {
-      expect_true(epidatr:::check_is_cachable(epidata_call, fetch_args))
+      expect_true(check_is_cachable(epidata_call, fetch_args))
     } else {
-      expect_false(epidatr:::check_is_cachable(epidata_call, fetch_args))
+      expect_false(check_is_cachable(epidata_call, fetch_args))
     }
   }
   test_set_cache()
@@ -161,8 +167,7 @@ res <- epidata_call %>% fetch(fetch_args_list(fields = c("time_value", "value"))
 expect_equal(res, tbl_out[c("time_value", "value")])
 
 test_set_cache()
-clear_cache()
-disable_cache()
+clear_cache(disable = TRUE)
 rm(new_temp_dir)
 
 test_that("cache teardown", {

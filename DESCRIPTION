@@ -28,6 +28,7 @@ Imports:
     checkmate,
     cli,
     httr,
+    glue,
     jsonlite,
     magrittr,
     MMWRweek,
