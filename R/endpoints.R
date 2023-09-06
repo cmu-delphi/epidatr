@@ -66,8 +66,8 @@ pvt_cdc <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
 #'
 #' @examples
 #' \dontrun{
-#' covid_hosp_facility_lookup(state = "fl")
-#' covid_hosp_facility_lookup(city = "southlake")
+#' pub_covid_hosp_facility_lookup(state = "fl")
+#' pub_covid_hosp_facility_lookup(city = "southlake")
 #' }
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param state string. A two-letter character state abbreviation.
@@ -78,10 +78,10 @@ pvt_cdc <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`epidata_call`]
 #'
-#' @seealso [covid_hosp_facility()]
+#' @seealso [pub_covid_hosp_facility()]
 #' @keywords endpoint
 #' @export
-covid_hosp_facility_lookup <- function(
+pub_covid_hosp_facility_lookup <- function(
     ...,
     state = NULL,
     ccn = NULL,
@@ -151,7 +151,7 @@ covid_hosp_facility_lookup <- function(
 #'
 #' @examples
 #' \dontrun{
-#' covid_hosp_facility(
+#' pub_covid_hosp_facility(
 #'   hospital_pks = "100075",
 #'   collection_weeks = epirange(20200101, 20200501)
 #' )
@@ -164,11 +164,11 @@ covid_hosp_facility_lookup <- function(
 #' @return [`epidata_call`]
 #'
 #'
-#' @seealso [covid_hosp_facility_lookup()], [epirange()]
+#' @seealso [pub_covid_hosp_facility()], [epirange()]
 #' @keywords endpoint
 #' @export
 #
-covid_hosp_facility <- function(
+pub_covid_hosp_facility <- function(
     hospital_pks,
     collection_weeks,
     ...,
@@ -452,7 +452,7 @@ covid_hosp_facility <- function(
 #'
 #' @examples
 #' \dontrun{
-#' covid_hosp_state_timeseries(
+#' pub_covid_hosp_state_timeseries(
 #'   states = "fl",
 #'   dates = epirange(20200101, 20200501)
 #' )
@@ -469,7 +469,7 @@ covid_hosp_facility <- function(
 #' @keywords endpoint
 #' @export
 #
-covid_hosp_state_timeseries <- function(states, dates, ..., issues = NULL, fetch_args = fetch_args_list()) {
+pub_covid_hosp_state_timeseries <- function(states, dates, ..., issues = NULL, fetch_args = fetch_args_list()) {
   assert_character_param("states", states)
   assert_timeset_param("dates", dates)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -615,13 +615,13 @@ covid_hosp_state_timeseries <- function(states, dates, ..., issues = NULL, fetch
 #'
 #' @examples
 #' \dontrun{
-#' covidcast_meta()
+#' pub_covidcast_meta()
 #' }
 #'
-#' @seealso [covidcast()],[covidcast_epidata()]
+#' @seealso [pub_covidcast()],[covidcast_epidata()]
 #' @keywords endpoint
 #' @export
-covidcast_meta <- function(fetch_args = fetch_args_list()) {
+pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
   create_epidata_call(
     "covidcast_meta/",
     list(),
@@ -655,7 +655,7 @@ covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #'
 #' @examples
 #' \dontrun{
-#' covidcast(
+#' pub_covidcast(
 #'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
 #'   geo_type = "state",
@@ -663,7 +663,7 @@ covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #'   geo_values = "ca,fl",
 #'   time_values = epirange(20200601, 20200801)
 #' )
-#' covidcast(
+#' pub_covidcast(
 #'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
 #'   geo_type = "state",
@@ -699,10 +699,10 @@ covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #' @return [`epidata_call`]
 #'
 #'
-#' @seealso [covidcast_meta()], [covidcast_epidata()], [epirange()]
+#' @seealso [pub_covidcast_meta()], [covidcast_epidata()], [epirange()]
 #' @keywords endpoint
 #' @export
-covidcast <- function(
+pub_covidcast <- function(
     source,
     signals,
     geo_type,
@@ -790,7 +790,7 @@ covidcast <- function(
 #'
 #' @examples
 #' \dontrun{
-#' delphi(system = "ec", epiweek = 201501)
+#' pub_delphi(system = "ec", epiweek = 201501)
 #' }
 #' @param system character. System name to fetch.
 #' @param epiweek [`timeset`]. Epiweeks to fetch.
@@ -798,7 +798,7 @@ covidcast <- function(
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-delphi <- function(system, epiweek, fetch_args = fetch_args_list()) {
+pub_delphi <- function(system, epiweek, fetch_args = fetch_args_list()) {
   assert_character_param("system", system)
   assert_timeset_param("epiweek", epiweek, len = 1)
   epiweek <- parse_timeset_input(epiweek)
@@ -821,7 +821,7 @@ delphi <- function(system, epiweek, fetch_args = fetch_args_list()) {
 #'
 #' @examples
 #' \dontrun{
-#' dengue_nowcast(
+#' pub_dengue_nowcast(
 #'   locations = "pr",
 #'   epiweeks = epirange(201401, 202301)
 #' )
@@ -832,7 +832,7 @@ delphi <- function(system, epiweek, fetch_args = fetch_args_list()) {
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-dengue_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
+pub_dengue_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
   epiweeks <- parse_timeset_input(epiweeks)
@@ -907,7 +907,7 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks, fetch_args = fe
 #'
 #' @examples
 #' \dontrun{
-#' ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001))
+#' pub_ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001))
 #' }
 #' @param regions character. Regions to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
@@ -920,7 +920,7 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks, fetch_args = fe
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+pub_ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -964,7 +964,7 @@ ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_ar
 #'
 #' @examples
 #' \dontrun{
-#' flusurv(locations = "CA", epiweeks = epirange(201701, 201801))
+#' pub_flusurv(locations = "CA", epiweeks = epirange(201701, 201801))
 #' }
 #' @param locations character. Character vector indicating location.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
@@ -977,7 +977,7 @@ ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_ar
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+pub_flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1018,7 +1018,7 @@ flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fetch_a
 #'
 #' @examples
 #' \dontrun{
-#' fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
+#' pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
 #' }
 #' @param regions character. Regions to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch in the form
@@ -1033,7 +1033,7 @@ flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fetch_a
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+pub_fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1073,7 +1073,7 @@ fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, 
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
 #' @examples
 #' \dontrun{
-#' fluview_meta()
+#' pub_fluview_meta()
 #' }
 #'
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
@@ -1081,7 +1081,7 @@ fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, 
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-fluview_meta <- function(fetch_args = fetch_args_list()) {
+pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
   create_epidata_call(
     "fluview_meta/",
     list(),
@@ -1108,7 +1108,7 @@ fluview_meta <- function(fetch_args = fetch_args_list()) {
 #'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
 #' @examples
-#' fluview(regions = "nat", epiweeks = epirange(201201, 202001))
+#' pub_fluview(regions = "nat", epiweeks = epirange(201201, 202001))
 #' @param regions character. Locations to fetch. Can be any string IDs in
 #'   national, HHS region, census division, most states and territories, and so
 #'   on. Full list link below.
@@ -1126,7 +1126,7 @@ fluview_meta <- function(fetch_args = fetch_args_list()) {
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-fluview <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, auth = NULL, fetch_args = fetch_args_list()) {
+pub_fluview <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, auth = NULL, fetch_args = fetch_args_list()) {
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1185,7 +1185,7 @@ fluview <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, auth = NU
 #'
 #' @examples
 #' \dontrun{
-#' gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
+#' pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
 #' }
 #' @param locations character. Locations to fetch.
 #' @param epiweeks [`timeset`] Epiweeks to fetch.
@@ -1194,7 +1194,7 @@ fluview <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, auth = NU
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-gft <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
+pub_gft <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
   epiweeks <- parse_timeset_input(epiweeks)
@@ -1260,7 +1260,7 @@ pvt_ght <- function(auth, locations, epiweeks, query, fetch_args = fetch_args_li
 #'
 #' @examples
 #' \dontrun{
-#' kcdc_ili(regions = "ROK", epiweeks = 200436)
+#' pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
 #' }
 #' @param regions character. Regions to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
@@ -1273,7 +1273,7 @@ pvt_ght <- function(auth, locations, epiweeks, query, fetch_args = fetch_args_li
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-kcdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+pub_kcdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1326,7 +1326,7 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' Api metadata
+#' API metadata
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta.html>
 #'
@@ -1335,7 +1335,7 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-meta <- function(fetch_args = fetch_args_list()) {
+pub_meta <- function(fetch_args = fetch_args_list()) {
   create_epidata_call("meta/", list(), only_supports_classic = TRUE) %>% fetch(fetch_args = fetch_args)
 }
 
@@ -1354,7 +1354,7 @@ meta <- function(fetch_args = fetch_args_list()) {
 #'
 #' @examples
 #' \dontrun{
-#' nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301))
+#' pub_nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301))
 #' }
 #' @param locations character. Locations to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
@@ -1363,7 +1363,7 @@ meta <- function(fetch_args = fetch_args_list()) {
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-nidss_dengue <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
+pub_nidss_dengue <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
   epiweeks <- parse_timeset_input(epiweeks)
@@ -1389,7 +1389,7 @@ nidss_dengue <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 #'
 #' @examples
 #' \dontrun{
-#' nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601))
+#' pub_nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601))
 #' }
 #' @param regions character. Regions to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
@@ -1402,7 +1402,7 @@ nidss_dengue <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-nidss_flu <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+pub_nidss_flu <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1487,7 +1487,7 @@ pvt_norostat <- function(auth, locations, epiweeks, fetch_args = fetch_args_list
 #'
 #' @examples
 #' \dontrun{
-#' nowcast(locations = "ca", epiweeks = epirange(201201, 201301))
+#' pub_nowcast(locations = "ca", epiweeks = epirange(201201, 201301))
 #' }
 #' @param locations character. Locations to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
@@ -1495,7 +1495,7 @@ pvt_norostat <- function(auth, locations, epiweeks, fetch_args = fetch_args_list
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
+pub_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
   epiweeks <- parse_timeset_input(epiweeks)
@@ -1518,7 +1518,7 @@ nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 #'
 #' @examples
 #' \dontrun{
-#' paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501))
+#' pub_paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501))
 #' }
 #' @param regions character. Regions to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
@@ -1531,7 +1531,7 @@ nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-paho_dengue <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+pub_paho_dengue <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1717,7 +1717,7 @@ pvt_twitter <- function(auth, locations, ..., dates = NULL, epiweeks = NULL, fet
 #'
 #' @examples
 #' \dontrun{
-#' wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601))
+#' pub_wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601))
 #' }
 #' @param articles character. Articles to fetch.
 #' @param ... not used for values, forces later arguments to bind by name
@@ -1730,7 +1730,7 @@ pvt_twitter <- function(auth, locations, ..., dates = NULL, epiweeks = NULL, fet
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-wiki <- function(
+pub_wiki <- function(
     articles,
     ...,
     dates = NULL,
