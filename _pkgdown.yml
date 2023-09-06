@@ -16,6 +16,7 @@ reference:
       - epirange
       - timeset
   - title: Control Caching behavior
+    desc: configure an optional persistent cache
   - contents:
       - set_cache
       - clear_cache

@@ -39,14 +39,14 @@ fetch(epidata_call, fetch_args = fetch_args_list())
 }
 \description{
 \code{epidata_call} objects are generated internally by endpoint functions like
-\code{\link{covidcast}}; by default, they are piped directly into the \code{fetch}
+\code{\link{pub_covidcast}}; by default, they are piped directly into the \code{fetch}
 function to fetch and format the data. For most endpoints this will return
 a tibble, but a few non-COVIDCAST endpoints only support will return a
 JSON-like list instead.
 
 \code{create_epidata_call} is the constructor for \code{epidata_call} objects, but you
 should not need to use it directly; instead, use an endpoint function,
-e.g., \code{\link{covidcast}}, to generate an \code{epidata_call} for the data of
+e.g., \code{\link{pub_covidcast}}, to generate an \code{epidata_call} for the data of
 interest.
 
 There are some other functions available for debugging and advanced usage: -
@@ -59,7 +59,7 @@ In that case a JSON-like nested list structure is returned instead.
 }
 \examples{
 \dontrun{
-call <- covidcast(
+call <- pub_covidcast(
   source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
   time_type = "day",

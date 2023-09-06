@@ -2,7 +2,7 @@
 % Please edit documentation in R/cache.R
 \name{disable_cache}
 \alias{disable_cache}
-\title{turn off the caching for this session}
+\title{Turn off the caching for this session}
 \usage{
 disable_cache()
 }
@@ -13,6 +13,6 @@ permanently, set \code{EPIDATR_USE_CACHE=FALSE} as environmental variable in
 your \code{.Renviron}.
 }
 \seealso{
-\link{set_cache} to start a new cache (and general caching info),
-\link{clear_cache} to delete the cache and set a new one, and \link{cache_info}
+\code{\link{set_cache}} to start a new cache (and general caching info),
+\code{\link{clear_cache}} to delete the cache and set a new one, and \code{\link{cache_info}}
 }

@@ -4,14 +4,14 @@
 #'
 #' @description
 #' `epidata_call` objects are generated internally by endpoint functions like
-#'   [`covidcast`]; by default, they are piped directly into the `fetch`
+#'   [`pub_covidcast`]; by default, they are piped directly into the `fetch`
 #'   function to fetch and format the data. For most endpoints this will return
 #'   a tibble, but a few non-COVIDCAST endpoints only support will return a
 #'   JSON-like list instead.
 #'
 #' `create_epidata_call` is the constructor for `epidata_call` objects, but you
 #'   should not need to use it directly; instead, use an endpoint function,
-#'   e.g., [`covidcast`], to generate an `epidata_call` for the data of
+#'   e.g., [`pub_covidcast`], to generate an `epidata_call` for the data of
 #'   interest.
 #'
 #' There are some other functions available for debugging and advanced usage: -
@@ -20,7 +20,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' call <- covidcast(
+#' call <- pub_covidcast(
 #'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
 #'   time_type = "day",

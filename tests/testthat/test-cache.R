@@ -17,14 +17,12 @@ test_set_cache <- function(cache_dir = new_temp_dir,
                            days = 1,
                            max_size = 1,
                            logfile = "logfile.txt",
-                           prune_rate = 3L,
                            confirm = FALSE) {
   set_cache(
     cache_dir = cache_dir,
     days = days,
     max_size = max_size,
     logfile = logfile,
-    prune_rate = prune_rate,
     confirm = confirm
   )
 }
@@ -41,7 +39,7 @@ test_that("cache set as expected", {
   }
   expect_equal(cache_info()$max_size, 1024^2)
   expect_equal(cache_info()$max_age, 24 * 60 * 60)
-  expect_equal(cache_info()$prune_rate, 3)
+  expect_equal(cache_info()$prune_rate, 20)
   expect_equal(cache_info()$logfile, file.path(new_temp_dir, "logfile.txt"))
   expect_equal(cache_info()$evict, "lru")
   expect_equal(cache_info()$max_n, Inf)
@@ -51,7 +49,7 @@ test_that("cache set as expected", {
 # use an existing example to save, then load and compare the values
 test_that("cache saves & loads", {
   test_set_cache()
-  epidata_call <- covidcast(
+  epidata_call <- pub_covidcast(
     source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
     time_type = "day",
@@ -124,7 +122,7 @@ test_that("check_is_recent", {
 
 test_that("check_is_cachable", {
   check_fun <- function(..., fetch_args = fetch_args_list(), expected_result) {
-    epidata_call <- covidcast(
+    epidata_call <- pub_covidcast(
       source = "jhu-csse",
       signals = "confirmed_7dav_incidence_prop",
       time_type = "day",
@@ -198,6 +196,7 @@ test_that("check_is_cachable", {
 })
 
 test_set_cache()
+cache_environ$epidatr_cache$prune()
 clear_cache(disable = TRUE)
 rm(new_temp_dir)
 

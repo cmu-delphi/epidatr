@@ -24,7 +24,7 @@ parse_signal <- function(signal, base_url) {
                           fetch_args = fetch_args_list()) {
     stopifnot(is.character(geo_type) & length(geo_type) == 1)
 
-    covidcast(
+    pub_covidcast(
       source = signal$source,
       signals = signal$signal,
       geo_type = geo_type,
@@ -77,32 +77,13 @@ as_tibble.covidcast_data_signal_list <- function(x, ...) {
   tib$format <- unname(map_chr(x, "format"))
   tib$category <- unname(map_chr(x, "category"))
   tib$high_values_are <- unname(map_chr(x, "high_values_are"))
-  if ("is_smoothed" %in% names(x)) {
-    tib$is_smoothed <- unname(map_lgl(x, "is_smoothed"))
-  } else {
-    tib$is_smoothed <- NA
-  }
-  if ("is_weighted" %in% names(x)) {
-    tib$is_weighted <- unname(map_lgl(x, "is_weighted"))
-  } else {
-    tib$is_weighted <- NA
-  }
-  if ("is_cumulative" %in% names(x)) {
-    tib$is_cumulative <- unname(map_lgl(x, "is_cumulative"))
-  } else {
-    tib$is_cumulative <- NA
-  }
-  if ("has_stderr" %in% names(x)) {
-    tib$has_stderr <- unname(map_lgl(x, "has_stderr"))
-  } else {
-    tib$has_stderr <- NA
-  }
-  if ("has_sample_size" %in% names(x)) {
-    tib$has_sample_size <- unname(map_lgl(x, "has_sample_size"))
-  } else {
-    tib$has_sample_size <- NA
-  }
   as_tibble(tib)
+}
+
+#' @export
+print.covidcast_data_signal_list <- function(x, ...) {
+  tib <- as_tibble(x)
+  print(tib[, c("source", "signal", "short_description")], ...)
 }
 
 #' @export

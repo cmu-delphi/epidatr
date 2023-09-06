@@ -2,14 +2,13 @@
 % Please edit documentation in R/cache.R
 \name{set_cache}
 \alias{set_cache}
-\title{create or renew a cache for this session}
+\title{Create or renew a cache for this session}
 \usage{
 set_cache(
   cache_dir = NULL,
   days = NULL,
   max_size = NULL,
   logfile = NULL,
-  prune_rate = 2000L,
   confirm = TRUE
 )
 }
@@ -30,12 +29,6 @@ variable is \code{EPIDATR_CACHE_MAX_SIZE_MB}.}
 \item{logfile}{where cachem's log of transactions is stored, relative to the
 cache directory. By default, it is \code{"logfile.txt"}. The environmental
 variable is \code{EPIDATR_CACHE_LOGFILE}.}
-
-\item{prune_rate}{how many calls to go between checking if any cache elements
-are too old or if the cache overall is too large. Defaults to \code{2000L}.
-Since cachem fixes the max time between prune checks to 5 seconds, there's
-little reason to actually change this parameter. Doesn't have a
-corresponding environmental variable.}
 
 \item{confirm}{whether to confirm directory creation. default is \code{TRUE};
 should only be set in non-interactive scripts}
@@ -109,13 +102,12 @@ set_cache(
   dir = "some/subdir",
   days = 14,
   max_size = 512,
-  logfile = "some/subdir/logs.txt",
-  prune_rate = 20L
+  logfile = "some/subdir/logs.txt"
 )
 }
 
 }
 \seealso{
-\link{clear_cache} to delete the old cache while making a new one,
-\link{disable_cache} to disable without deleting, and \link{cache_info}
+\code{\link{clear_cache}} to delete the old cache while making a new one,
+\code{\link{disable_cache}} to disable without deleting, and \code{\link{cache_info}}
 }

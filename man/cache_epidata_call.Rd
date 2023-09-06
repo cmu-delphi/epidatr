@@ -2,7 +2,7 @@
 % Please edit documentation in R/cache.R
 \name{cache_epidata_call}
 \alias{cache_epidata_call}
-\title{dispatch caching}
+\title{Dispatch caching}
 \usage{
 cache_epidata_call(epidata_call, fetch_args = fetch_args_list())
 }

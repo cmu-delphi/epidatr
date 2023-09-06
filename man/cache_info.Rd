@@ -2,7 +2,7 @@
 % Please edit documentation in R/cache.R
 \name{cache_info}
 \alias{cache_info}
-\title{describe current cache}
+\title{Describe current cache}
 \usage{
 cache_info()
 }
@@ -11,7 +11,7 @@ Print out the information about the cache (as would be returned by cachem's
 \code{info()} method)
 }
 \seealso{
-\link{set_cache} to start a new cache (and general caching info),
-\link{clear_cache} to delete the cache and set a new one, and \link{disable_cache} to
+\code{\link{set_cache}} to start a new cache (and general caching info),
+\code{\link{clear_cache}} to delete the cache and set a new one, and \code{\link{disable_cache}} to
 disable without deleting
 }

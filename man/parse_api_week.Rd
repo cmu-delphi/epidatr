@@ -2,7 +2,7 @@
 % Please edit documentation in R/model.R
 \name{parse_api_week}
 \alias{parse_api_week}
-\title{parses a week}
+\title{parse_api_week converts an integer to a date}
 \usage{
 parse_api_week(value)
 }
@@ -13,5 +13,6 @@ parse_api_week(value)
 a date
 }
 \description{
-parses a week
+parse_api_week converts an integer to a date
 }
+\keyword{internal}

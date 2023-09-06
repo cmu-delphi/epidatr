@@ -3,7 +3,8 @@
 cache_environ <- new.env(parent = emptyenv())
 cache_environ$use_cache <- NULL
 cache_environ$epidatr_cache <- NULL
-#' create or renew a cache for this session
+
+#' Create or renew a cache for this session
 #' @aliases set_cache
 #' @description
 #' By default, epidatr re-requests data from the API on every call of `fetch`.
@@ -72,8 +73,7 @@ cache_environ$epidatr_cache <- NULL
 #'   dir = "some/subdir",
 #'   days = 14,
 #'   max_size = 512,
-#'   logfile = "some/subdir/logs.txt",
-#'   prune_rate = 20L
+#'   logfile = "some/subdir/logs.txt"
 #' )
 #' }
 #'
@@ -90,15 +90,10 @@ cache_environ$epidatr_cache <- NULL
 #' @param logfile where cachem's log of transactions is stored, relative to the
 #'   cache directory. By default, it is `"logfile.txt"`. The environmental
 #'   variable is `EPIDATR_CACHE_LOGFILE`.
-#' @param prune_rate how many calls to go between checking if any cache elements
-#'   are too old or if the cache overall is too large. Defaults to `2000L`.
-#'   Since cachem fixes the max time between prune checks to 5 seconds, there's
-#'   little reason to actually change this parameter. Doesn't have a
-#'   corresponding environmental variable.
 #' @param confirm whether to confirm directory creation. default is `TRUE`;
 #'   should only be set in non-interactive scripts
-#' @seealso [clear_cache] to delete the old cache while making a new one,
-#'   [disable_cache] to disable without deleting, and [cache_info]
+#' @seealso [`clear_cache`] to delete the old cache while making a new one,
+#'   [`disable_cache`] to disable without deleting, and [`cache_info`]
 #' @export
 #' @import cachem
 #' @import glue
@@ -107,7 +102,6 @@ set_cache <- function(cache_dir = NULL,
                       days = NULL,
                       max_size = NULL,
                       logfile = NULL,
-                      prune_rate = 2000L,
                       confirm = TRUE) {
   if (is.null(cache_dir) && sessionInfo()$R.version$major >= 4) {
     cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR", unset = tools::R_user_dir("epidatr"))
@@ -129,7 +123,7 @@ set_cache <- function(cache_dir = NULL,
     logfile <- Sys.getenv("EPIDATR_CACHE_LOGFILE", unset = "logfile.txt")
   }
   stopifnot(is.character(logfile))
-  stopifnot(is.numeric(days), is.numeric(max_size), is.integer(prune_rate))
+  stopifnot(is.numeric(days), is.numeric(max_size))
   #
   # make sure that that directory exists and drag the user into that process
   cache_exists <- file.exists(cache_dir)
@@ -171,15 +165,14 @@ set_cache <- function(cache_dir = NULL,
       dir = cache_dir,
       max_size = as.integer(max_size * 1024^2),
       max_age = days * 24 * 60 * 60,
-      logfile = file.path(cache_dir, logfile),
-      prune_rate = prune_rate
+      logfile = file.path(cache_dir, logfile)
     )
   }
 }
 
-#' manually reset the cache, deleting all currently saved data and starting afresh
+#' Manually reset the cache, deleting all currently saved data and starting afresh
 #' @description
-#' deletes the current cache and resets a new cache. Deletes local data! If you
+#' Deletes the current cache and resets a new cache. Deletes local data! If you
 #'   are using a session unique cache, you will have to pass the arguments you
 #'   used for `set_cache` earlier, otherwise the system-wide `.Renviron`-based
 #'   defaults will be used.
@@ -190,15 +183,13 @@ set_cache <- function(cache_dir = NULL,
 #'   days = 14,
 #'   max_size = 512,
 #'   logfile = "some/subdir/logs.txt",
-#'   prune_rate = 20L
 #' )
 #' }
 #' @param disable instead of setting a new cache, disable caching entirely;
-#' defaults to `FALSE`
-#' @param ... see the `set_cache` arguments below
-#' @inheritParams set_cache
-#' @seealso [set_cache] to start a new cache (and general caching info),
-#'   [disable_cache] to only disable without deleting, and [cache_info]
+#'   defaults to `FALSE`
+#' @param ... arguments passed to `set_cache`
+#' @seealso [`set_cache`] to start a new cache (and general caching info),
+#'   [`disable_cache`] to only disable without deleting, and [`cache_info`]
 #' @export
 #' @import cachem
 clear_cache <- function(disable = FALSE, ...) {
@@ -210,26 +201,26 @@ clear_cache <- function(disable = FALSE, ...) {
   }
 }
 
-#' turn off the caching for this session
+#' Turn off the caching for this session
 #' @description
 #' Disable caching until you call `set_cache` or restart R. The files defining
 #'   the cache are untouched. If you are looking to disable the caching more
 #'   permanently, set `EPIDATR_USE_CACHE=FALSE` as environmental variable in
 #'   your `.Renviron`.
 #' @export
-#' @seealso [set_cache] to start a new cache (and general caching info),
-#'   [clear_cache] to delete the cache and set a new one, and [cache_info]
+#' @seealso [`set_cache`] to start a new cache (and general caching info),
+#'   [`clear_cache`] to delete the cache and set a new one, and [`cache_info`]
 #' @import cachem
 disable_cache <- function() {
   cache_environ$epidatr_cache <- NULL
 }
 
-#' describe current cache
+#' Describe current cache
 #' @description
 #' Print out the information about the cache (as would be returned by cachem's
 #' `info()` method)
-#' @seealso [set_cache] to start a new cache (and general caching info),
-#'   [clear_cache] to delete the cache and set a new one, and [disable_cache] to
+#' @seealso [`set_cache`] to start a new cache (and general caching info),
+#'   [`clear_cache`] to delete the cache and set a new one, and [`disable_cache`] to
 #'   disable without deleting
 #' @export
 cache_info <- function() {
@@ -240,16 +231,16 @@ cache_info <- function() {
   }
 }
 
-#' dispatch caching
+#' Dispatch caching
 #'
 #' @description
 #' the guts of caching, its interposed between fetch and the specific fetch
 #' methods. Internal method only.
 #'
 #' @param call the `epidata_call` object
-#' @param fetch_args the args list for fetch as generated by [fetch_args_list()]
+#' @param fetch_args the args list for fetch as generated by [`fetch_args_list()`]
 #' @keywords internal
-#' @import cachem openssl
+#' @importFrom openssl md5
 cache_epidata_call <- function(epidata_call, fetch_args = fetch_args_list()) {
   is_cachable <- check_is_cachable(epidata_call, fetch_args)
   if (is_cachable) {
