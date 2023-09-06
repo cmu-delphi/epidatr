@@ -5,24 +5,24 @@ test_that("basic_epidata_call", {
     epirange(201501, 201601),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(covid_hosp_facility_lookup(
+  expect_no_error(pub_covid_hosp_facility_lookup(
     state = "fl",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(covid_hosp_facility(
+  expect_no_error(pub_covid_hosp_facility(
     hospital_pks = "100075",
     collection_weeks = epirange(20200101, 20200501),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(covid_hosp_state_timeseries(
+  expect_no_error(pub_covid_hosp_state_timeseries(
     states = "fl",
     dates = epirange(20200101, 20200501),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(covidcast_meta(
+  expect_no_error(pub_covidcast_meta(
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(covidcast(
+  expect_no_error(pub_covidcast(
     source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
     time_type = "day",
@@ -31,12 +31,12 @@ test_that("basic_epidata_call", {
     geo_values = "ca,fl",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(delphi(
+  expect_no_error(pub_delphi(
     system = "ec",
     epiweek = 202006,
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(dengue_nowcast(
+  expect_no_error(pub_dengue_nowcast(
     locations = "?",
     epiweeks = epirange(201501, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
@@ -48,30 +48,30 @@ test_that("basic_epidata_call", {
     epiweeks = epirange(201501, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(ecdc_ili(
+  expect_no_error(pub_ecdc_ili(
     regions = "austria",
     epiweeks = epirange(201201, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(flusurv(
+  expect_no_error(pub_flusurv(
     locations = "CA",
     epiweeks = epirange(201201, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(fluview_clinical(
+  expect_no_error(pub_fluview_clinical(
     regions = "nat",
     epiweeks = epirange(201601, 201701),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(fluview_meta(
+  expect_no_error(pub_fluview_meta(
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(fluview(
+  expect_no_error(pub_fluview(
     regions = "nat",
     epiweeks = epirange(201601, 201701),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(gft(
+  expect_no_error(pub_gft(
     locations = "hhs1",
     epiweeks = epirange(201201, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
@@ -83,7 +83,7 @@ test_that("basic_epidata_call", {
     query = "?",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(kcdc_ili(
+  expect_no_error(pub_kcdc_ili(
     regions = "?",
     epiweeks = epirange(201201, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
@@ -92,15 +92,15 @@ test_that("basic_epidata_call", {
     auth = "yourkey",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(meta(
+  expect_no_error(pub_meta(
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(nidss_dengue(
+  expect_no_error(pub_nidss_dengue(
     locations = "taipei",
     epiweeks = epirange(201201, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(nidss_flu(
+  expect_no_error(pub_nidss_flu(
     regions = "taipei",
     epiweeks = epirange(201201, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
@@ -111,12 +111,12 @@ test_that("basic_epidata_call", {
     epiweeks = epirange(201201, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(nowcast(
+  expect_no_error(pub_nowcast(
     locations = "ca",
     epiweeks = epirange(201201, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(paho_dengue(
+  expect_no_error(pub_paho_dengue(
     regions = "ca",
     epiweeks = epirange(201201, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
@@ -140,7 +140,7 @@ test_that("basic_epidata_call", {
     epiweeks = epirange(201501, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(wiki(
+  expect_no_error(pub_wiki(
     articles = "avian_influenza",
     epiweeks = epirange(201501, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)

@@ -69,7 +69,7 @@ test_that("fetch_args", {
 })
 
 test_that("fetch and fetch_tbl", {
-  epidata_call <- covidcast(
+  epidata_call <- pub_covidcast(
     source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
     time_type = "day",
@@ -103,7 +103,7 @@ test_that("fetch and fetch_tbl", {
 })
 
 test_that("fetch_tbl warns on non-success", {
-  epidata_call <- covidcast(
+  epidata_call <- pub_covidcast(
     source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
     time_type = "day",
@@ -142,7 +142,7 @@ test_that("fetch_tbl warns on non-success", {
 
 test_that("classic only fetch", {
   # delphi is an example endpoint that only suports the classic call
-  epidata_call <- delphi(
+  epidata_call <- pub_delphi(
     system = "ec",
     epiweek = 201501,
     fetch_args = fetch_args_list(dry_run = TRUE)

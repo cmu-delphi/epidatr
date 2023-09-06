@@ -7,7 +7,7 @@ test_that("covidcast", {
       epirange(20210405, 20210410),
       fetch_args = fetch_args_list(dry_run = TRUE)
     ),
-    covidcast(
+    pub_covidcast(
       "fb-survey",
       "smoothed_cli",
       "nation",

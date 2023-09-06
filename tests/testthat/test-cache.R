@@ -49,7 +49,7 @@ test_that("cache set as expected", {
 # use an existing example to save, then load and compare the values
 test_that("cache saves & loads", {
   test_set_cache()
-  epidata_call <- covidcast(
+  epidata_call <- pub_covidcast(
     source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
     time_type = "day",
@@ -122,7 +122,7 @@ test_that("check_is_recent", {
 
 test_that("check_is_cachable", {
   check_fun <- function(..., fetch_args = fetch_args_list(), expected_result) {
-    epidata_call <- covidcast(
+    epidata_call <- pub_covidcast(
       source = "jhu-csse",
       signals = "confirmed_7dav_incidence_prop",
       time_type = "day",
