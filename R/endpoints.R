@@ -1,5 +1,5 @@
 #' CDC page hits
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/cdc.html>
 #'
 #' @examples
@@ -51,13 +51,14 @@ pvt_cdc <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
 }
 
 #' COVID hospitalization facility identifiers
+#' @description
+#' API docs:
+#' <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html>
 #'
 #' Obtains unique identifiers and other metadata for COVID hospitalization
 #' facilities of interest.
 #' This is a companinon endpoint to the [covid_hosp_facility()] endpoint.
 #'
-#' API docs:
-#' <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html>
 #'
 #' @details Only one argument needs to be specified.
 #' Combinations of the arguments are not currently supported.
@@ -133,13 +134,13 @@ covid_hosp_facility_lookup <- function(
 }
 
 #' COVID hospitalization data for specific facilities
+#' @description
+#' API docs:
+#' <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
 #'
 #' Obtains the COVID-19 reported patient impact and hospital capacity data by
 #' facility. This dataset is provided by the US Department of Health & Human
 #' Services via healthdata.gov.
-#'
-#' API docs:
-#' <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
 #'
 #' @details Starting October 1, 2022, some facilities are only required to
 #' report annually. The companion function [covid_hosp_facility_lookup()] can be
@@ -436,12 +437,12 @@ covid_hosp_facility <- function(
 }
 
 #' COVID Hospitalization Data by State
+#' @description
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>.
 #'
 #' Obtains the COVID-19 reported patient impact and hospital capacity data by
 #' state. This dataset is provided by the US Department of Health & Human
 #' Services via healthdata.gov.
-#'
-#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>.
 #'
 #' @details Starting October 1, 2022, some facilities are only required to
 #' report annually.
@@ -598,13 +599,14 @@ covid_hosp_state_timeseries <- function(states, dates, ..., issues = NULL, fetch
 }
 
 #' Metadata for covidcast endpoint
+#' @description
+#' API docs:
+#' <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html>.
 #'
 #' Fetch a summary of metadata for all sources and signals that are available in
 #' the API, along with basic summary statistics such as the dates they are
 #' available, the geographic levels at which they are reported, and etc.
 #'
-#' API docs:
-#' <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html>.
 #'
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'
@@ -646,7 +648,7 @@ covidcast_meta <- function(fetch_args = fetch_args_list()) {
 }
 
 #' COVID data via the covidcast endpoint
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html>
 #'
 #' COVIDcast public dashboard: <https://delphi.cmu.edu/covidcast/>
@@ -783,7 +785,7 @@ covidcast <- function(
 }
 
 #' Delphi's ILINet forecasts
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/delphi.html>
 #'
 #' @examples
@@ -814,7 +816,7 @@ delphi <- function(system, epiweek, fetch_args = fetch_args_list()) {
 }
 
 #' Delphi's PAHO Dengue nowcast
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html>
 #'
 #' @examples
@@ -848,7 +850,7 @@ dengue_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) 
 }
 
 #' Dengue digital surveillance sensors in PAHO member countries
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html>
 #'
 #' @examples
@@ -893,11 +895,12 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks, fetch_args = fe
 }
 
 #' ECDC ILI data
+#' @description
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>.
 #'
 #' Obtain information on influenza-like-illness from the European Centre for
 #' Disease Prevention and Control.
 #'
-#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>.
 #'
 #' @details The list of location argument can be found in
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/ecdc_regions.txt>.
@@ -948,11 +951,12 @@ ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_ar
 }
 
 #' FluSurv hospitalization data
+#' @description
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>.
 #'
 #' Obtain information on flu hospitalization rates from the Center of Disease
 #' Control.
 #'
-#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>.
 #' See also <https://gis.cdc.gov/GRASP/Fluview/FluHospRates.html>.
 #'
 #' @details The list of location argument can be found in
@@ -1009,7 +1013,7 @@ flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fetch_a
 }
 
 #' FluView virological data from clinical labs
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html>
 #'
 #' @examples
@@ -1065,7 +1069,7 @@ fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, 
 }
 
 #' FluView metadata
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
 #' @examples
 #' \dontrun{
@@ -1091,11 +1095,12 @@ fluview_meta <- function(fetch_args = fetch_args_list()) {
 
 
 #' FluView ILINet data
+#' @description
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>. For
 #'
 #' Obtains information on outpatient inluenza-like-illness (ILI) from U.S.
 #'   Outpatient Influenza-like Illness Surveillance Network (ILINet).
 #'
-#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>. For
 #' more information on ILINet, see
 #' <https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html>.
 #'
@@ -1164,11 +1169,12 @@ fluview <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, auth = NU
 }
 
 #' Google Flu Trends data
+#' @description
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/gft.html>
 #'
 #' Obtains estimates of inluenza activity based on volume of certain search
 #' queries from Google.
 #'
-#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/gft.html>
 #'
 #' @details Google has discontinued Flu Trends and this is now a static
 #'   endpoint. Possibile input for locations can be found in
@@ -1205,7 +1211,7 @@ gft <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 }
 
 #' Google Health Trends data
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
 #'
 #' @examples
@@ -1249,7 +1255,7 @@ pvt_ght <- function(auth, locations, epiweeks, query, fetch_args = fetch_args_li
 }
 
 #' KCDC ILI data
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html>
 #'
 #' @examples
@@ -1298,7 +1304,7 @@ kcdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_ar
 }
 
 #' NoroSTAT metadata
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html>
 #'
 #' @examples
@@ -1321,7 +1327,7 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 }
 
 #' Api metadata
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta.html>
 #'
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
@@ -1334,11 +1340,12 @@ meta <- function(fetch_args = fetch_args_list()) {
 }
 
 #' NIDSS dengue data
+#' @description
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html>
 #'
 #' Obtains counts of confirmed dengue cases in Taiwan from Taiwan National
 #' Infectious Disease Statistical System.
 #'
-#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html>
 #'
 #' @details Possible location inputs can be found in
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_regions.txt>
@@ -1373,11 +1380,12 @@ nidss_dengue <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 }
 
 #' NIDSS flu data
+#' @description
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
 #'
 #' Obtains information on outpatient inluenza-like-illness from Taiwan National
 #' Infectious Disease Statistical System.
 #'
-#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
 #'
 #' @examples
 #' \dontrun{
@@ -1428,7 +1436,7 @@ nidss_flu <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_a
 
 
 #' NoroSTAT data (point data, no min/max)
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
 #'
 #' @examples
@@ -1468,7 +1476,7 @@ pvt_norostat <- function(auth, locations, epiweeks, fetch_args = fetch_args_list
 }
 
 #' Delphi's ILI nowcast
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>.
 #'
 #' Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's
@@ -1505,7 +1513,7 @@ nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 }
 
 #' PAHO Dengue data
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html>
 #'
 #' @examples
@@ -1556,7 +1564,7 @@ paho_dengue <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch
 }
 
 #' Quidel COVID-19 and influenza testing data
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/quidel.html>
 #'
 #' @examples
@@ -1596,7 +1604,7 @@ pvt_quidel <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()
 }
 
 #' Digital surveillance sensors
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
 #'
 #' @examples
@@ -1641,7 +1649,7 @@ pvt_sensors <- function(auth, names, locations, epiweeks, fetch_args = fetch_arg
 }
 
 #' HealthTweets data
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/twitter.html>
 #'
 #' @examples
@@ -1697,7 +1705,7 @@ pvt_twitter <- function(auth, locations, ..., dates = NULL, epiweeks = NULL, fet
 }
 
 #' Wikipedia access data
-#'
+#' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
 #'
 #' ```{r results="asis", echo = FALSE}
