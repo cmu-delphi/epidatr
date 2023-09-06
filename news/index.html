@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -51,6 +51,14 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="1.0.0" id="epidatr-100">epidatr 1.0.0<a class="anchor" aria-label="anchor" href="#epidatr-100"></a></h2>
+<ul><li>Add <code>set_cache</code> and other caching functions.</li>
+<li>Prefix all non-private endpoints with <code>pub_</code>.</li>
+<li>Update printing of <code>avail_endpoints</code> to be more readable.</li>
+<li>Update printing of <code><a href="../reference/covidcast_epidata.html">covidcast_epidata()</a></code> to be more readable.</li>
+<li>Update landing docs to be more friendly, add plots.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.9.0" id="epidatr-090">epidatr 0.9.0<a class="anchor" aria-label="anchor" href="#epidatr-090"></a></h2>
 <ul><li>Major interface change: all endpoints now fetch by default.</li>
 <li>Make all <code>fetch</code> function internal.</li>
@@ -78,7 +86,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.6.0" id="epidatr-060">epidatr 0.6.0<a class="anchor" aria-label="anchor" href="#epidatr-060"></a></h2>
-<ul><li>The <code>fetch_{tbl,classic,df,json,csv}</code> functions have been replaced by the <code><a href="../reference/epidata_call.html">fetch()</a></code> function, which almost always returns a tibble, except when used with a limited number of older endpoints (such as <code><a href="../reference/delphi.html">delphi()</a></code> and <code><a href="../reference/meta.html">meta()</a></code>), where it will output a nested list structure.</li>
+<ul><li>The <code>fetch_{tbl,classic,df,json,csv}</code> functions have been replaced by the <code><a href="../reference/epidata_call.html">fetch()</a></code> function, which almost always returns a tibble, except when used with a limited number of older endpoints (such as <code>delphi()</code> and <code>meta()</code>), where it will output a nested list structure.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.5.0" id="epidatr-050">epidatr 0.5.0<a class="anchor" aria-label="anchor" href="#epidatr-050"></a></h2>
@@ -94,7 +102,7 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Logan Brooks, Dmitry Shemetov, Samuel Gratzl.</p>
+  <p></p><p>Developed by Logan Brooks, Dmitry Shemetov, Samuel Gratzl, David Weber.</p>
 </div>
 
 <div class="pkgdown">

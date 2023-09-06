@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">epidatr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -72,7 +72,7 @@
 <div class="page-header"><h1 id="delphi-epidata-r-client">Delphi Epidata R client<a class="anchor" aria-label="anchor" href="#delphi-epidata-r-client"></a>
 </h1></div>
 <p><a href="https://opensource.org/licenses/MIT" class="external-link"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a> <a href="https://github.com/cmu-delphi/epidatr/actions" class="external-link"><img src="https://github.com/cmu-delphi/epidatr/workflows/ci/badge.svg" alt="Github Actions"></a> <a href="https://codecov.io/gh/dsweber2/epidatr" class="external-link"><img src="https://codecov.io/gh/dsweber2/epidatr/branch/dev/graph/badge.svg?token=jVHL9eHZNZ" alt="codecov"></a></p>
-<p>The <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Delphi Epidata API</a> provides real-time access to epidemiological surveillance data for influenza, COVID-19, and other diseases from both official government sources such as the <a href="https://www.cdc.gov/datastatistics/index.html" class="external-link">Center for Disease Control (CDC)</a> and private partners such as <a href="https://www.quidel.com/" class="external-link">Quidel</a>, <a href="https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/" class="external-link">Facebook</a>, and <a href="https://www.changehealthcare.com/" class="external-link">Change Healthcare</a>. It is built and maintained by the Carnegie Mellon University <a href="https://delphi.cmu.edu/" class="external-link">Delphi research group</a>.</p>
+<p>The <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Delphi Epidata API</a> provides real-time access to epidemiological surveillance data for influenza, COVID-19, and other diseases from both official government sources such as the <a href="https://www.cdc.gov/datastatistics/index.html" class="external-link">Center for Disease Control (CDC)</a> and <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/google-symptoms.html" class="external-link">Google Trends</a> and private partners such as <a href="https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/" class="external-link">Facebook</a> and <a href="https://www.changehealthcare.com/" class="external-link">Change Healthcare</a>. It is built and maintained by the Carnegie Mellon University <a href="https://delphi.cmu.edu/" class="external-link">Delphi research group</a>.</p>
 <p>This package is designed to streamline the downloading and usage of data from the <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Delphi Epidata API</a>. It provides a simple R interface to the API, including functions for downloading data, parsing the results, and converting the data into a tidy format. The API stores a historical record of all data, including corrections and updates, which is particularly useful for accurately backtesting forecasting models. We also provide packages for downstream data processing (<a href="https://github.com/cmu-delphi/epiprocess" class="external-link">epiprocess</a>) and modeling (<a href="https://github.com/cmu-delphi/epipredict" class="external-link">epipredict</a>).</p>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -80,7 +80,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cmu-delphi.github.io/epidatr/" class="external-link">epidatr</a></span><span class="op">)</span></span>
 <span><span class="co"># Obtain the smoothed covid-like illness (CLI) signal from the Facebook survey as it was on April 10, 2021 for the US</span></span>
-<span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/covidcast.html">covidcast</a></span><span class="op">(</span></span>
+<span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu">covidcast</span><span class="op">(</span></span>
 <span>  source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
 <span>  signals <span class="op">=</span> <span class="st">"smoothed_cli"</span>,</span>
 <span>  geo_type <span class="op">=</span> <span class="st">"nation"</span>,</span>
@@ -112,7 +112,9 @@
 <span>       subtitle <span class="op">=</span> <span class="st">"US, 2021"</span>,</span>
 <span>       x <span class="op">=</span> <span class="st">"Date"</span>,</span>
 <span>       y <span class="op">=</span> <span class="st">"CLI"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/fb-cli-signal.png" style="height:750px; width:750px" alt="Smoothed CLI from Facebook Survey"></p>
+<div class="figure">
+<img src="reference/figures/fb-cli-signal.png" alt=""><p class="caption">Smoothed CLI from Facebook Survey</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -129,6 +131,16 @@
 <p>The Delphi API requires a (free) API key for full functionality. To generate your key, register for a pseudo-anonymous account <a href="https://api.delphi.cmu.edu/epidata/admin/registration_form" class="external-link">here</a> and see more discussion on the <a href="https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html" class="external-link">general API website</a>. The <code>epidatr</code> client will automatically look for this key in the R option <code>delphi.epidata.key</code> or in the environment variable <code>DELPHI_EPIDATA_KEY</code>. We recommend storing your key in <code>.Renviron</code> file, which R will read by default.</p>
 <p>Note that for the time being, the private endpoints (i.e. those prefixed with <code>pvt</code>) will require a separate key that needs to be passed as an argument.</p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="get-updates">Get updates<a class="anchor" aria-label="anchor" href="#get-updates"></a>
+</h2>
+<p>You should consider subscribing to the <a href="https://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api" class="external-link">API mailing list</a> to be notified of package updates, new data sources, corrections, and other updates.</p>
+</div>
+<div class="section level2">
+<h2 id="for-users-of-the-covidcast-r-package">For users of the <code>covidcast</code> R package<a class="anchor" aria-label="anchor" href="#for-users-of-the-covidcast-r-package"></a>
+</h2>
+<p>The <code>epidatr</code> package is a complete rewrite of the <a href="https://cmu-delphi.github.io/covidcast/covidcastR/" class="external-link"><code>covidcast</code> package</a>, with a focus on speed, reliability, and ease of use. The <code>covidcast</code> package is deprecated and will no longer be updated.</p>
 </div>
 </div>
   </div>
@@ -164,9 +176,10 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Logan Brooks <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Logan Brooks <br><small class="roles"> Author </small>  </li>
 <li>Dmitry Shemetov <br><small class="roles"> Author </small>  </li>
 <li>Samuel Gratzl <br><small class="roles"> Author </small>  </li>
+<li>David Weber <br><small class="roles"> Contributor, maintainer </small>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -179,7 +192,7 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Logan Brooks, Dmitry Shemetov, Samuel Gratzl.</p>
+<p>Developed by Logan Brooks, Dmitry Shemetov, Samuel Gratzl, David Weber.</p>
 </div>
 
 <div class="pkgdown">
