@@ -57,7 +57,7 @@ pvt_cdc <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
 #'
 #' Obtains unique identifiers and other metadata for COVID hospitalization
 #' facilities of interest.
-#' This is a companinon endpoint to the [covid_hosp_facility()] endpoint.
+#' This is a companinon endpoint to the [`pub_covid_hosp_facility()`] endpoint.
 #'
 #'
 #' @details Only one argument needs to be specified.
@@ -78,7 +78,7 @@ pvt_cdc <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`epidata_call`]
 #'
-#' @seealso [pub_covid_hosp_facility()]
+#' @seealso [`pub_covid_hosp_facility()`]
 #' @keywords endpoint
 #' @export
 pub_covid_hosp_facility_lookup <- function(
@@ -143,7 +143,7 @@ pub_covid_hosp_facility_lookup <- function(
 #' Services via healthdata.gov.
 #'
 #' @details Starting October 1, 2022, some facilities are only required to
-#' report annually. The companion function [covid_hosp_facility_lookup()] can be
+#' report annually. The companion function [`pub_covid_hosp_facility_lookup()`] can be
 #' used to look up facility identifiers in a variety of ways.
 #'
 #' See also the official description and data dictionary at <healthdata.gov> for
@@ -164,7 +164,7 @@ pub_covid_hosp_facility_lookup <- function(
 #' @return [`epidata_call`]
 #'
 #'
-#' @seealso [pub_covid_hosp_facility()], [epirange()]
+#' @seealso [`pub_covid_hosp_facility()`], [`epirange()`]
 #' @keywords endpoint
 #' @export
 #
