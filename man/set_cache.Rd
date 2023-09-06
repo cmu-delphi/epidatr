@@ -9,7 +9,6 @@ set_cache(
   days = NULL,
   max_size = NULL,
   logfile = NULL,
-  prune_rate = 2000L,
   confirm = TRUE
 )
 }
@@ -30,12 +29,6 @@ variable is \code{EPIDATR_CACHE_MAX_SIZE_MB}.}
 \item{logfile}{where cachem's log of transactions is stored, relative to the
 cache directory. By default, it is \code{"logfile.txt"}. The environmental
 variable is \code{EPIDATR_CACHE_LOGFILE}.}
-
-\item{prune_rate}{how many calls to go between checking if any cache elements
-are too old or if the cache overall is too large. Defaults to \code{2000L}.
-Since cachem fixes the max time between prune checks to 5 seconds, there's
-little reason to actually change this parameter. Doesn't have a
-corresponding environmental variable.}
 
 \item{confirm}{whether to confirm directory creation. default is \code{TRUE};
 should only be set in non-interactive scripts}
@@ -109,8 +102,7 @@ set_cache(
   dir = "some/subdir",
   days = 14,
   max_size = 512,
-  logfile = "some/subdir/logs.txt",
-  prune_rate = 20L
+  logfile = "some/subdir/logs.txt"
 )
 }
 

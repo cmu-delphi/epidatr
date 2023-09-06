@@ -18,17 +18,17 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Logan Brooks \email{lcbrooks@andrew.cmu.edu}
+\strong{Maintainer}: David Weber \email{davidweb@andrew.cmu.edu} [contributor]
 
 Authors:
 \itemize{
+  \item Logan Brooks \email{lcbrooks@andrew.cmu.edu}
   \item Dmitry Shemetov \email{dshemeto@andrew.cmu.edu}
   \item Samuel Gratzl \email{sam@sgratzl.com}
 }
 
 Other contributors:
 \itemize{
-  \item David Weber \email{davidweb@andrew.cmu.edu} [contributor]
   \item Alex Reinhart [contributor]
   \item Daniel McDonald [contributor]
   \item Kean Ming Tan [contributor]

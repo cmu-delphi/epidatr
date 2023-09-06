@@ -25,7 +25,6 @@ clear_cache(
   days = 14,
   max_size = 512,
   logfile = "some/subdir/logs.txt",
-  prune_rate = 20L
 )
 }
 }
