@@ -1126,7 +1126,14 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 #' @return [`epidata_call`]
 #' @keywords endpoint
 #' @export
-pub_fluview <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, auth = NULL, fetch_args = fetch_args_list()) {
+pub_fluview <- function(
+    regions,
+    epiweeks,
+    ...,
+    issues = NULL,
+    lag = NULL,
+    auth = NULL,
+    fetch_args = fetch_args_list()) {
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
