@@ -7,13 +7,15 @@
 clear_cache(disable = FALSE, ...)
 }
 \arguments{
-\item{disable}{instead of setting a new cache, disable caching entirely; defaults to \code{FALSE}}
+\item{disable}{instead of setting a new cache, disable caching entirely;
+defaults to \code{FALSE}}
 
 \item{...}{see the \code{set_cache} arguments below}
 }
 \description{
-deletes the current cache and resets a new cache. Deletes local data! If you are using a session unique cache, you
-will have to pass the arguments you used for \code{set_cache} earlier, otherwise the system-wide \code{.Renviron}-based
+deletes the current cache and resets a new cache. Deletes local data! If you
+are using a session unique cache, you will have to pass the arguments you
+used for \code{set_cache} earlier, otherwise the system-wide \code{.Renviron}-based
 defaults will be used.
 }
 \examples{
@@ -28,6 +30,6 @@ clear_cache(
 }
 }
 \seealso{
-\link{set_cache} to start a new cache (and general caching info), \link{disable_cache} to only disable without
-deleting, and \link{cache_info}
+\link{set_cache} to start a new cache (and general caching info),
+\link{disable_cache} to only disable without deleting, and \link{cache_info}
 }
