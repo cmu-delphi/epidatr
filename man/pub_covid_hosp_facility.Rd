@@ -36,7 +36,7 @@ API docs:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html}
 
 Starting October 1, 2022, some facilities are only required to
-report annually. The companion function \code{\link[=covid_hosp_facility_lookup]{covid_hosp_facility_lookup()}} can be
+report annually. The companion function \code{\link[=pub_covid_hosp_facility_lookup]{pub_covid_hosp_facility_lookup()}} can be
 used to look up facility identifiers in a variety of ways.
 
 See also the official description and data dictionary at <healthdata.gov> for

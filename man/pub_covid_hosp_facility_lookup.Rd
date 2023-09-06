@@ -35,7 +35,7 @@ pub_covid_hosp_facility_lookup(
 \description{
 Obtains unique identifiers and other metadata for COVID hospitalization
 facilities of interest.
-This is a companinon endpoint to the \code{\link[=covid_hosp_facility]{covid_hosp_facility()}} endpoint.
+This is a companinon endpoint to the \code{\link[=pub_covid_hosp_facility]{pub_covid_hosp_facility()}} endpoint.
 }
 \details{
 API docs:
