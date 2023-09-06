@@ -127,7 +127,9 @@ set_cache <- function(cache_dir = NULL,
       ))
       repeat {
         valid_user_input <- ifelse(grepl("yes|no", user_input), sub(".*(yes|no).*", "\\1", user_input), NA)
-        valid_user_input <- ifelse(grepl("", user_input), "", NA)
+        if (user_input == "") {
+          valid_user_input <- ""
+        }
         if (!is.na(valid_user_input)) {
           break
         }

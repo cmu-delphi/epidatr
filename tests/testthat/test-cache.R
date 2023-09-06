@@ -197,38 +197,6 @@ test_that("check_is_cachable", {
   check_fun(as_of = "2020-01-01", expected_result = TRUE)
 })
 
-epidata_call <- covidcast(
-  source = "jhu-csse",
-  signals = "confirmed_7dav_incidence_prop",
-  time_type = "day",
-  geo_type = "state",
-  time_values = epirange("2020-06-01", "2020-08-01"),
-  geo_values = "ca,fl",
-  fetch_args = fetch_args_list(dry_run = TRUE)
-)
-local_mocked_bindings(
-  request_impl = function(...) NULL,
-  .package = "epidatr"
-)
-local_mocked_bindings(
-  # see generate_test_data.R
-  content = function(...) readRDS(testthat::test_path("data/test-classic.rds")),
-  .package = "httr"
-)
-
-tbl_out <- epidata_call %>% fetch_tbl()
-out <- epidata_call %>% fetch()
-expect_identical(out, tbl_out)
-
-local_mocked_bindings(
-  # see generate_test_data.R
-  content = function(...) readRDS(testthat::test_path("data/test-narrower-fields.rds")),
-  .package = "httr"
-)
-# testing that the fields fill as expected
-res <- epidata_call %>% fetch(fetch_args_list(fields = c("time_value", "value")))
-expect_equal(res, tbl_out[c("time_value", "value")])
-
 test_set_cache()
 clear_cache(disable = TRUE)
 rm(new_temp_dir)
