@@ -20,7 +20,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' call <- covidcast(
+#' call <- pub_covidcast(
 #'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
 #'   time_type = "day",
