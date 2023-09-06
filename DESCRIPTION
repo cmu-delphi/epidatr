@@ -1,7 +1,7 @@
 Package: epidatr
 Type: Package
 Title: Client for Delphi's Epidata API
-Version: 1.0.0
+Version: 0.9.0
 Authors@R: 
   c(
     person("Logan", "Brooks", email = "lcbrooks@andrew.cmu.edu", role = c("aut")),
@@ -35,7 +35,6 @@ Imports:
     purrr,
     openssl,
     readr,
-    rlang,
     tibble,
     xml2
 RoxygenNote: 7.2.3
@@ -44,6 +43,7 @@ Suggests:
     ggplot2,
     knitr,
     rmarkdown,
+    rlang,
     testthat (>= 3.1.5),
     withr
 VignetteBuilder: knitr
