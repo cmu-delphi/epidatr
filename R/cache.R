@@ -3,7 +3,8 @@
 cache_environ <- new.env(parent = emptyenv())
 cache_environ$use_cache <- NULL
 cache_environ$epidatr_cache <- NULL
-#' create or renew a cache for this session
+
+#' Create or renew a cache for this session
 #' @aliases set_cache
 #' @description
 #' By default, epidatr re-requests data from the API on every call of `fetch`.
@@ -169,7 +170,7 @@ set_cache <- function(cache_dir = NULL,
   }
 }
 
-#' manually reset the cache, deleting all currently saved data and starting afresh
+#' Manually reset the cache, deleting all currently saved data and starting afresh
 #' @description
 #' deletes the current cache and resets a new cache. Deletes local data! If you
 #'   are using a session unique cache, you will have to pass the arguments you
@@ -201,7 +202,7 @@ clear_cache <- function(disable = FALSE, ...) {
   }
 }
 
-#' turn off the caching for this session
+#' Turn off the caching for this session
 #' @description
 #' Disable caching until you call `set_cache` or restart R. The files defining
 #'   the cache are untouched. If you are looking to disable the caching more
@@ -215,7 +216,7 @@ disable_cache <- function() {
   cache_environ$epidatr_cache <- NULL
 }
 
-#' describe current cache
+#' Describe current cache
 #' @description
 #' Print out the information about the cache (as would be returned by cachem's
 #' `info()` method)
@@ -231,7 +232,7 @@ cache_info <- function() {
   }
 }
 
-#' dispatch caching
+#' Dispatch caching
 #'
 #' @description
 #' the guts of caching, its interposed between fetch and the specific fetch
