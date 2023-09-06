@@ -58,8 +58,7 @@ the most recent issue is returned. Mutually exclusive with \code{as_of} or
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html}
-}
-\details{
+
 COVIDcast public dashboard: \url{https://delphi.cmu.edu/covidcast/}
 }
 \examples{

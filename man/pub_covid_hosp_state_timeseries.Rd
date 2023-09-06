@@ -28,13 +28,13 @@ most recent issue is returned.}
 \code{\link{epidata_call}}
 }
 \description{
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html}.
+
 Obtains the COVID-19 reported patient impact and hospital capacity data by
 state. This dataset is provided by the US Department of Health & Human
 Services via healthdata.gov.
 }
 \details{
-API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html}.
-
 Starting October 1, 2022, some facilities are only required to
 report annually.
 

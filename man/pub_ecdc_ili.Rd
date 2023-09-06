@@ -32,12 +32,12 @@ the most recent issue is returned. Mutually exclusive with \code{issues}.}
 \code{\link{epidata_call}}
 }
 \description{
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html}.
+
 Obtain information on influenza-like-illness from the European Centre for
 Disease Prevention and Control.
 }
 \details{
-API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html}.
-
 The list of location argument can be found in
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/ecdc_regions.txt}.
 }

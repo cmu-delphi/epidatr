@@ -32,11 +32,10 @@ the most recent issue is returned. Mutually exclusive with \code{issues}.}
 \code{\link{epidata_call}}
 }
 \description{
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html}
+
 Obtains information on outpatient inluenza-like-illness from Taiwan National
 Infectious Disease Statistical System.
-}
-\details{
-API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html}
 }
 \examples{
 \dontrun{

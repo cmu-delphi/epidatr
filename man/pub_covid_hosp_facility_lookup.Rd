@@ -33,14 +33,14 @@ pub_covid_hosp_facility_lookup(
 \code{\link{epidata_call}}
 }
 \description{
+API docs:
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html}
+
 Obtains unique identifiers and other metadata for COVID hospitalization
 facilities of interest.
 This is a companinon endpoint to the \code{\link[=pub_covid_hosp_facility]{pub_covid_hosp_facility()}} endpoint.
 }
 \details{
-API docs:
-\url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html}
-
 Only one argument needs to be specified.
 Combinations of the arguments are not currently supported.
 For instance, specifying both city and state are not supported.

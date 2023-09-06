@@ -27,14 +27,14 @@ pub_covid_hosp_facility(
 \code{\link{epidata_call}}
 }
 \description{
+API docs:
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html}
+
 Obtains the COVID-19 reported patient impact and hospital capacity data by
 facility. This dataset is provided by the US Department of Health & Human
 Services via healthdata.gov.
 }
 \details{
-API docs:
-\url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html}
-
 Starting October 1, 2022, some facilities are only required to
 report annually. The companion function \code{\link[=pub_covid_hosp_facility_lookup]{pub_covid_hosp_facility_lookup()}} can be
 used to look up facility identifiers in a variety of ways.

@@ -40,14 +40,15 @@ key).}
 \code{\link{epidata_call}}
 }
 \description{
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview.html}. For
+
 Obtains information on outpatient inluenza-like-illness (ILI) from U.S.
 Outpatient Influenza-like Illness Surveillance Network (ILINet).
-}
-\details{
-API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview.html}. For
+
 more information on ILINet, see
 \url{https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html}.
-
+}
+\details{
 The full list of location inputs can be accsssed at
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
 }

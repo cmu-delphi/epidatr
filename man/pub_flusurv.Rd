@@ -32,13 +32,14 @@ the most recent issue is returned. Mutually exclusive with \code{issues}.}
 \code{\link{epidata_call}}
 }
 \description{
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html}.
+
 Obtain information on flu hospitalization rates from the Center of Disease
 Control.
+
+See also \url{https://gis.cdc.gov/GRASP/Fluview/FluHospRates.html}.
 }
 \details{
-API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html}.
-See also \url{https://gis.cdc.gov/GRASP/Fluview/FluHospRates.html}.
-
 The list of location argument can be found in
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt}.
 }
