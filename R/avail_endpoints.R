@@ -17,5 +17,5 @@ avail_endpoints <- function() {
     Endpoint = paste0(h$Name, "()"),
     Description = h$Title
   )
-  tib
+  tib %>% print(n = 50)
 }
