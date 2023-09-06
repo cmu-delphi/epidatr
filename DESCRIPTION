@@ -24,14 +24,18 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 Imports:
+    cachem,
     checkmate,
     cli,
     httr,
+    glue,
     jsonlite,
     magrittr,
     MMWRweek,
     purrr,
+    openssl,
     readr,
+    rlang,
     tibble,
     xml2
 RoxygenNote: 7.2.3
@@ -45,3 +49,17 @@ Suggests:
 VignetteBuilder: knitr
 Language: en-US
 Config/testthat/edition: 3
+Collate: 
+    'auth.R'
+    'avail_endpoints.R'
+    'cache.R'
+    'check.R'
+    'constants.R'
+    'covidcast.R'
+    'endpoints.R'
+    'epidatacall.R'
+    'epidatr-package.R'
+    'model.R'
+    'request.R'
+    'utils-pipe.R'
+    'utils.R'

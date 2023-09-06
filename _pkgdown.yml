@@ -15,6 +15,12 @@ reference:
       - avail_endpoints
       - epirange
       - timeset
+  - title: Control Caching behavior
+  - contents:
+      - set_cache
+      - clear_cache
+      - disable_cache
+      - cache_info
   - title: Make API requests
     desc: Query Delphi Epidata endpoints
   - contents:
