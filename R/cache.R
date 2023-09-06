@@ -72,8 +72,7 @@ cache_environ$epidatr_cache <- NULL
 #'   dir = "some/subdir",
 #'   days = 14,
 #'   max_size = 512,
-#'   logfile = "some/subdir/logs.txt",
-#'   prune_rate = 20L
+#'   logfile = "some/subdir/logs.txt"
 #' )
 #' }
 #'
@@ -90,11 +89,6 @@ cache_environ$epidatr_cache <- NULL
 #' @param logfile where cachem's log of transactions is stored, relative to the
 #'   cache directory. By default, it is `"logfile.txt"`. The environmental
 #'   variable is `EPIDATR_CACHE_LOGFILE`.
-#' @param prune_rate how many calls to go between checking if any cache elements
-#'   are too old or if the cache overall is too large. Defaults to `2000L`.
-#'   Since cachem fixes the max time between prune checks to 5 seconds, there's
-#'   little reason to actually change this parameter. Doesn't have a
-#'   corresponding environmental variable.
 #' @param confirm whether to confirm directory creation. default is `TRUE`;
 #'   should only be set in non-interactive scripts
 #' @seealso [clear_cache] to delete the old cache while making a new one,
@@ -107,7 +101,6 @@ set_cache <- function(cache_dir = NULL,
                       days = NULL,
                       max_size = NULL,
                       logfile = NULL,
-                      prune_rate = 2000L,
                       confirm = TRUE) {
   if (is.null(cache_dir) && sessionInfo()$R.version$major >= 4) {
     cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR", unset = tools::R_user_dir("epidatr"))
@@ -129,7 +122,7 @@ set_cache <- function(cache_dir = NULL,
     logfile <- Sys.getenv("EPIDATR_CACHE_LOGFILE", unset = "logfile.txt")
   }
   stopifnot(is.character(logfile))
-  stopifnot(is.numeric(days), is.numeric(max_size), is.integer(prune_rate))
+  stopifnot(is.numeric(days), is.numeric(max_size))
   #
   # make sure that that directory exists and drag the user into that process
   cache_exists <- file.exists(cache_dir)
@@ -171,8 +164,7 @@ set_cache <- function(cache_dir = NULL,
       dir = cache_dir,
       max_size = as.integer(max_size * 1024^2),
       max_age = days * 24 * 60 * 60,
-      logfile = file.path(cache_dir, logfile),
-      prune_rate = prune_rate
+      logfile = file.path(cache_dir, logfile)
     )
   }
 }
@@ -190,7 +182,6 @@ set_cache <- function(cache_dir = NULL,
 #'   days = 14,
 #'   max_size = 512,
 #'   logfile = "some/subdir/logs.txt",
-#'   prune_rate = 20L
 #' )
 #' }
 #' @param disable instead of setting a new cache, disable caching entirely;
