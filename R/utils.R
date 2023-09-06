@@ -24,6 +24,7 @@ format_list <- function(values) {
 check_is_recent <- function(dates, max_age) {
   (!is.null(dates) && any(dates >= format(Sys.Date() - max_age, format = "%Y%m%d")))
 }
+
 #' helper that checks whether a call is actually cachable
 #'
 #' @keywords internal

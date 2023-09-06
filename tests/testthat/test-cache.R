@@ -1,6 +1,7 @@
 test_that("basic cache setup", {
   expect_true(is.null(cache_environ$epidatr_cache))
 })
+
 tmp_base_dir <- Sys.getenv("TMPDIR")
 new_temp_dir <- NULL
 if (tmp_base_dir == "") {
@@ -11,6 +12,7 @@ if (tmp_base_dir == "") {
     md5(paste(Sys.time(), "I am the very model of a modern major general"))
   )
 }
+
 test_set_cache <- function(cache_dir = new_temp_dir,
                            days = 1,
                            max_size = 1,
