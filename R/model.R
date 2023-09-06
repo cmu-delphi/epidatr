@@ -158,9 +158,10 @@ parse_api_date <- function(value) {
   as.Date(as.character(value), format = "%Y%m%d")
 }
 
+#' parse_api_week converts an integer to a date
 #' @param value value to be converted to an epiweek
-#' @importFrom MMWRweek MMWRweek2Date
 #' @return a date
+#' @importFrom MMWRweek MMWRweek2Date
 #' @keywords internal
 parse_api_week <- function(value) {
   v <- as.integer(value)
