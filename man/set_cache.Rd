@@ -2,7 +2,7 @@
 % Please edit documentation in R/cache.R
 \name{set_cache}
 \alias{set_cache}
-\title{create or renew a cache for this session}
+\title{Create or renew a cache for this session}
 \usage{
 set_cache(
   cache_dir = NULL,
@@ -108,6 +108,6 @@ set_cache(
 
 }
 \seealso{
-\link{clear_cache} to delete the old cache while making a new one,
-\link{disable_cache} to disable without deleting, and \link{cache_info}
+\code{\link{clear_cache}} to delete the old cache while making a new one,
+\code{\link{disable_cache}} to disable without deleting, and \code{\link{cache_info}}
 }

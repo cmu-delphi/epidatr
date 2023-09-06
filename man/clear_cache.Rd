@@ -2,7 +2,7 @@
 % Please edit documentation in R/cache.R
 \name{clear_cache}
 \alias{clear_cache}
-\title{manually reset the cache, deleting all currently saved data and starting afresh}
+\title{Manually reset the cache, deleting all currently saved data and starting afresh}
 \usage{
 clear_cache(disable = FALSE, ...)
 }
@@ -10,10 +10,10 @@ clear_cache(disable = FALSE, ...)
 \item{disable}{instead of setting a new cache, disable caching entirely;
 defaults to \code{FALSE}}
 
-\item{...}{see the \code{set_cache} arguments below}
+\item{...}{arguments passed to \code{set_cache}}
 }
 \description{
-deletes the current cache and resets a new cache. Deletes local data! If you
+Deletes the current cache and resets a new cache. Deletes local data! If you
 are using a session unique cache, you will have to pass the arguments you
 used for \code{set_cache} earlier, otherwise the system-wide \code{.Renviron}-based
 defaults will be used.
@@ -29,6 +29,6 @@ clear_cache(
 }
 }
 \seealso{
-\link{set_cache} to start a new cache (and general caching info),
-\link{disable_cache} to only disable without deleting, and \link{cache_info}
+\code{\link{set_cache}} to start a new cache (and general caching info),
+\code{\link{disable_cache}} to only disable without deleting, and \code{\link{cache_info}}
 }

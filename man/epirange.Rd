@@ -14,9 +14,12 @@ form YYYYMMDD for dates or YYYYWW for epiweeks.}
 form YYYYMMDD for dates or YYYYWW for epiweeks.}
 }
 \value{
-EpiRange instance
+An \code{EpiRange} object.
 }
 \description{
+Specify a date range (in days or epiweeks) for an API request.
+}
+\details{
 Epiweeks, also known as MMWR weeks number the weeks of the year from 1 to 53,
 each week spanning from Sunday to Saturday. The numbering is \href{https://ndc.services.cdc.gov/wp-content/uploads/MMWR_Week_overview.pdf}{defined by the CDC}.
 }

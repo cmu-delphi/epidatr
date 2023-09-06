@@ -59,7 +59,7 @@ In that case a JSON-like nested list structure is returned instead.
 }
 \examples{
 \dontrun{
-call <- covidcast(
+call <- pub_covidcast(
   source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
   time_type = "day",

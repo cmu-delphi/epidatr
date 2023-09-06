@@ -2,7 +2,7 @@
 % Please edit documentation in R/model.R
 \name{timeset}
 \alias{timeset}
-\title{timeset}
+\title{Timeset}
 \description{
 Many API calls accept timesets to specify the time ranges of data being
 requested. Timesets can be specified with \code{epirange()}, as \code{Date} objects, or
@@ -17,8 +17,8 @@ The allowed values are:
 take the form YYYYMMDD.
 \item Epiweeks: Integer-like values or integer-like strings that take the form
 YYYYWW.
-\item EpiRanges: A range returned by \code{epirange()}, or a list of multiple ranges
-\item Wildcard: The string \code{"*"}, which request all available time values
+\item EpiRanges: A range returned by \code{epirange()}, or a list of multiple ranges.
+\item Wildcard: The string \code{"*"}, which request all available time values.
 }
 
 Please refer to the specific endpoint documentation for guidance on using
