@@ -1,15 +1,16 @@
 #' Specify a date range (in days or epiweeks) for an API request.
 #'
-#' Epiweeks, also known as MMWR weeks number the weeks of the year from 1 to 53,
-#' each week spanning from Sunday to Saturday. The numbering is [defined by the
-#' CDC](https://ndc.services.cdc.gov/wp-content/uploads/MMWR_Week_overview.pdf).
-#'
 #' @param from A `Date`, integer-like value, or integer-like string that takes the
 #'   form YYYYMMDD for dates or YYYYWW for epiweeks.
 #' @param to A `Date`, integer-like value, or integer-like string that takes the
 #'  form YYYYMMDD for dates or YYYYWW for epiweeks.
-#' @return EpiRange instance
+#' @return An `EpiRange` object.
 #' @importFrom checkmate check_integerish check_character check_date assert
+#'
+#' @details
+#' Epiweeks, also known as MMWR weeks number the weeks of the year from 1 to 53,
+#' each week spanning from Sunday to Saturday. The numbering is [defined by the
+#' CDC](https://ndc.services.cdc.gov/wp-content/uploads/MMWR_Week_overview.pdf).
 #'
 #' @examples
 #' # Represents 2021-01-01 to 2021-01-07, inclusive
@@ -58,7 +59,7 @@ epirange <- function(from, to) {
 }
 
 
-#' timeset
+#' Timeset
 #'
 #' Many API calls accept timesets to specify the time ranges of data being
 #' requested. Timesets can be specified with `epirange()`, as `Date` objects, or
@@ -72,8 +73,8 @@ epirange <- function(from, to) {
 #'   take the form YYYYMMDD.
 #' - Epiweeks: Integer-like values or integer-like strings that take the form
 #'   YYYYWW.
-#' - EpiRanges: A range returned by `epirange()`, or a list of multiple ranges
-#' - Wildcard: The string `"*"`, which request all available time values
+#' - EpiRanges: A range returned by `epirange()`, or a list of multiple ranges.
+#' - Wildcard: The string `"*"`, which request all available time values.
 #'
 #' Please refer to the specific endpoint documentation for guidance on using
 #' dates vs weeks. Most endpoints support only one or the other. Some (less
@@ -152,14 +153,15 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
   df
 }
 
+#' @keywords internal
 parse_api_date <- function(value) {
   as.Date(as.character(value), format = "%Y%m%d")
 }
 
-#' parses a week
 #' @param value value to be converted to an epiweek
 #' @importFrom MMWRweek MMWRweek2Date
 #' @return a date
+#' @keywords internal
 parse_api_week <- function(value) {
   v <- as.integer(value)
   years <- floor(v / 100)
@@ -168,6 +170,7 @@ parse_api_week <- function(value) {
 }
 
 #' @importFrom checkmate test_character test_class test_date test_integerish test_list
+#' @keywords internal
 parse_timeset_input <- function(value) {
   if (is.null(value)) {
     return(NULL)
