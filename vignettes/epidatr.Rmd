@@ -41,11 +41,11 @@ provides access to a range of data on COVID-19. Reviewing the endpoint
 documentation, we see that we need to specify a data source name, a signal name,
 a geographic level, a time resolution, and the location and times of interest.
 
-In this case, the `covidcast()` function lets us specify these parameters for
+In this case, the `pub_covidcast()` function lets us specify these parameters for
 the endpoint and returns a tibble with the results:
 
 ```{r}
-epidata <- covidcast(
+epidata <- pub_covidcast(
   "fb-survey", "smoothed_cli", "state", "day", "pa",
   epirange(20210105, 20210410)
 )
@@ -114,7 +114,7 @@ We can obtain the `epidata_call` object underlying a request by setting the
 `dry_run` argument to `TRUE` in `fetch_args_list`:
 
 ```{r}
-covidcast(
+pub_covidcast(
   "fb-survey", "smoothed_cli", "state", "day", "pa",
   epirange(20210405, 20210410),
   fetch_args = fetch_args_list(dry_run = TRUE)
@@ -132,7 +132,7 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.htm
 County geo_values are [FIPS codes](https://en.wikipedia.org/wiki/List_of_United_States_FIPS_codes_by_county) and are discussed in the API docs [here](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html). The example below is for Orange County, California.
 
 ```{r}
-covidcast(
+pub_covidcast(
   source = "fb-survey",
   signals = "smoothed_accept_covid_vaccine",
   geo_type = "county",
@@ -145,7 +145,7 @@ covidcast(
 The `covidcast` endpoint supports `*` in its time and geo fields:
 
 ```{r}
-covidcast(
+pub_covidcast(
   source = "fb-survey",
   signals = "smoothed_accept_covid_vaccine",
   geo_type = "county",
@@ -162,10 +162,10 @@ covidcast(
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html>
 
 ```{r, eval = FALSE}
-covid_hosp_facility_lookup(city = "southlake")
-covid_hosp_facility_lookup(state = "WY")
+pub_covid_hosp_facility_lookup(city = "southlake")
+pub_covid_hosp_facility_lookup(state = "WY")
 # A non-example (there is no city called New York in Wyoming)
-covid_hosp_facility_lookup(state = "WY", city = "New York")
+pub_covid_hosp_facility_lookup(state = "WY", city = "New York")
 ```
 
 #### COVID-19 Hospitalization by Facility
@@ -173,7 +173,7 @@ covid_hosp_facility_lookup(state = "WY", city = "New York")
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
 
 ```{r, eval = FALSE}
-covid_hosp_facility(
+pub_covid_hosp_facility(
   hospital_pks = "100075",
   collection_weeks = epirange(20200101, 20200501)
 )
@@ -184,7 +184,7 @@ covid_hosp_facility(
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>
 
 ```{r, eval = FALSE}
-covid_hosp_state_timeseries(states = "MA", dates = "20200510")
+pub_covid_hosp_state_timeseries(states = "MA", dates = "20200510")
 ```
 
 ### Flu Endpoints
@@ -194,7 +194,7 @@ covid_hosp_state_timeseries(states = "MA", dates = "20200510")
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/delphi.html>
 
 ```{r, eval = FALSE}
-del <- delphi(system = "ec", epiweek = 201501)
+del <- pub_delphi(system = "ec", epiweek = 201501)
 names(del[[1L]]$forecast)
 ```
 
@@ -203,7 +203,7 @@ names(del[[1L]]$forecast)
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>
 
 ```{r, eval = FALSE}
-flusurv(locations = "ca", epiweeks = 202001)
+pub_flusurv(locations = "ca", epiweeks = 202001)
 ```
 
 #### Fluview data
@@ -211,7 +211,7 @@ flusurv(locations = "ca", epiweeks = 202001)
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>
 
 ```{r, eval = FALSE}
-fluview(regions = "nat", epiweeks = epirange(201201, 202001))
+pub_fluview(regions = "nat", epiweeks = epirange(201201, 202001))
 ```
 
 #### Fluview virological data from clinical labs
@@ -219,7 +219,7 @@ fluview(regions = "nat", epiweeks = epirange(201201, 202001))
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html>
 
 ```{r, eval = FALSE}
-fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
+pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
 ```
 
 #### Fluview metadata
@@ -227,7 +227,7 @@ fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
 
 ```{r, eval = FALSE}
-fluview_meta()
+pub_fluview_meta()
 ```
 
 #### Google Flu Trends data
@@ -235,7 +235,7 @@ fluview_meta()
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/gft.html>
 
 ```{r, eval = FALSE}
-gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
+pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
 ```
 
 #### ECDC ILI
@@ -243,7 +243,7 @@ gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>
 
 ```{r, eval = FALSE}
-ecdc_ili(regions = "Armenia", epiweeks = 201840)
+pub_ecdc_ili(regions = "Armenia", epiweeks = 201840)
 ```
 
 #### KCDC ILI
@@ -251,7 +251,7 @@ ecdc_ili(regions = "Armenia", epiweeks = 201840)
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html>
 
 ```{r, eval = FALSE}
-kcdc_ili(regions = "ROK", epiweeks = 200436)
+pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
 ```
 
 #### NIDSS Flu
@@ -259,7 +259,7 @@ kcdc_ili(regions = "ROK", epiweeks = 200436)
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
 
 ```{r, eval = FALSE}
-nidss_flu(regions = "taipei", epiweeks = epirange(200901, 201301))
+pub_nidss_flu(regions = "taipei", epiweeks = epirange(200901, 201301))
 ```
 
 #### ILI Nearby Nowcast
@@ -267,7 +267,7 @@ nidss_flu(regions = "taipei", epiweeks = epirange(200901, 201301))
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>
 
 ```{r, eval = FALSE}
-nowcast(locations = "ca", epiweeks = epirange(202201, 202319))
+pub_nowcast(locations = "ca", epiweeks = epirange(202201, 202319))
 ```
 
 ### Dengue Endpoints
@@ -277,7 +277,7 @@ nowcast(locations = "ca", epiweeks = epirange(202201, 202319))
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html>
 
 ```{r, eval = FALSE}
-dengue_nowcast(locations = "pr", epiweeks = epirange(201401, 202301))
+pub_dengue_nowcast(locations = "pr", epiweeks = epirange(201401, 202301))
 ```
 
 #### NIDSS dengue
@@ -285,7 +285,7 @@ dengue_nowcast(locations = "pr", epiweeks = epirange(201401, 202301))
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html>
 
 ```{r, eval = FALSE}
-nidss_dengue(locations = "taipei", epiweeks = epirange(200301, 201301))
+pub_nidss_dengue(locations = "taipei", epiweeks = epirange(200301, 201301))
 ```
 
 ### PAHO Dengue
@@ -293,7 +293,7 @@ nidss_dengue(locations = "taipei", epiweeks = epirange(200301, 201301))
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html>
 
 ```{r, eval=FALSE}
-paho_dengue(regions = "ca", epiweeks = epirange(200201, 202319))
+pub_paho_dengue(regions = "ca", epiweeks = epirange(200201, 202319))
 ```
 
 ### Other Endpoints
@@ -303,7 +303,7 @@ paho_dengue(regions = "ca", epiweeks = epirange(200201, 202319))
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
 
 ```{r, eval = FALSE}
-wiki(language = "en", articles = "influenza", epiweeks = epirange(202001, 202319))
+pub_wiki(language = "en", articles = "influenza", epiweeks = epirange(202001, 202319))
 ```
 
 ### Private methods
@@ -393,4 +393,3 @@ pvt_twitter(
   epiweeks = epirange(200301, 202105)
 )
 ```
-
