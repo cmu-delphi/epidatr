@@ -82,7 +82,7 @@ Note that for the time being, the private endpoints (i.e. those prefixed with
 `pvt`) will require a separate key that needs to be passed as an argument.
 
 [mit-image]: https://img.shields.io/badge/License-MIT-yellow.svg
-[mit-url]: https://opensource.org/licenses/mit
+[mit-url]: https://opensource.org/license/mit
 [github-actions-image]: https://github.com/cmu-delphi/epidatr/workflows/ci/badge.svg
 [github-actions-url]: https://github.com/cmu-delphi/epidatr/actions
 

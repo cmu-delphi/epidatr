@@ -27,6 +27,6 @@ The release consists of multiple steps which can be all done via the GitHub webs
 5. Release to CRAN
 
 [mit-image]: https://img.shields.io/badge/License-MIT-yellow.svg
-[mit-url]: https://opensource.org/licenses/MIT
+[mit-url]: https://opensource.org/license/MIT
 [github-actions-image]: https://github.com/cmu-delphi/epidatr/workflows/ci/badge.svg
 [github-actions-url]: https://github.com/cmu-delphi/epidatr/actions
