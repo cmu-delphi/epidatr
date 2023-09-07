@@ -1719,6 +1719,13 @@ pvt_twitter <- function(auth, locations, ..., dates = NULL, epiweeks = NULL, fet
 #' url <- "https://raw.githubusercontent.com/cmu-delphi/delphi-epidata/dev/docs/api/covidcast_signals.md"
 #' txt <- readLines(url)
 #' txt <- txt[7:length(txt)]
+#' txt %<>% gsub("covidcast_meta", "pub_covidcast_meta", .) %>%
+#'   gsub("\\[`(fb-.*)`\\].*\\.md)", "\\1", .) %>%
+#'   gsub("\\[`(jhu-.*)`\\].*\\.md)", "\\1", .) %>%
+#'   gsub("\\[`(hhs.*)`\\].*\\.md)", "\\1", .) %>%
+#'   gsub("\\[`(goog.*)`\\].*\\.md)", "\\1", .) %>%
+#'   gsub("\\[`(doc.*)`\\].*\\.md)", "\\1", .) %>%
+#'   gsub("covidcast_changelog.md", "https://cmu-delphi.github.io/delphi-epidata/api/covidcast_changelog.html", .)
 #' cat(txt, sep = "\n")
 #' ```
 #'
