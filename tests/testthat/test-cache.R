@@ -21,11 +21,11 @@ test_that("cache set as expected", {
   test_set_cache()
   if (grepl("/", as.character(new_temp_dir))) {
     # this is what check produces
-    expect_equal(cache_info()$dir, as.character(new_temp_dir))
+    expect_equal(cache_info()$dir, normalizePath(new_temp_dir))
   } else {
     # this is what test produces directly
     tmp <- strsplit(cache_info()$dir, "/")[[1]]
-    expect_equal(tmp[length(tmp)], as.character(new_temp_dir))
+    expect_equal(tmp[length(tmp)], normalizePath(new_temp_dir))
   }
   expect_equal(cache_info()$max_size, 1024^2)
   expect_equal(cache_info()$max_age, 24 * 60 * 60)
