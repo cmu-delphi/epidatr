@@ -10,7 +10,16 @@ name: R-CMD-check
 
 jobs:
   R-CMD-check:
+    name: check ${{matrix.os}} ${{github.event_name}}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macOS-latest
+        arch:
+          - x64
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
