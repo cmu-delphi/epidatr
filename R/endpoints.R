@@ -795,7 +795,7 @@ pub_covidcast <- function(
 #' @param system character. System name to fetch.
 #' @param epiweek [`timeset`]. Epiweeks to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`json`]
+#' @return [`list`]
 #' @keywords endpoint
 #' @export
 pub_delphi <- function(system, epiweek, fetch_args = fetch_args_list()) {
@@ -1320,7 +1320,7 @@ pub_kcdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetc
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`json`]
+#' @return [`list`]
 #' @keywords endpoint
 #' @export
 pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
@@ -1339,7 +1339,7 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 #'
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'
-#' @return [`json`]
+#' @return [`list`]
 #' @keywords endpoint
 #' @export
 pub_meta <- function(fetch_args = fetch_args_list()) {

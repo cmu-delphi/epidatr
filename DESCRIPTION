@@ -17,7 +17,7 @@ Authors@R:
   )
 URL: https://cmu-delphi.github.io/epidatr/, https://github.com/cmu-delphi/epidatr
 BugReports: https://github.com/cmu-delphi/epidatr/issues
-Description: R Client for Delphi's 'Epidata' API. Tools for fetching data in various forms.
+Description: The [Delphi 'Epidata' API](https://cmu-delphi.github.io/delphi-epidata/) provides real-time access to epidemiological surveillance data for influenza, COVID-19, and other diseases for the USA at various geographical resolutions, both from official government sources such as the [Center for Disease Control (CDC)](https://www.cdc.gov/datastatistics/index.html) and [Google Trends](https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/google-symptoms.html) and private partners such as [Facebook](https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/) and [Change Healthcare](https://www.changehealthcare.com/). It is built and maintained by the Carnegie Mellon University [Delphi research group](https://delphi.cmu.edu/).
 Depends: R (>= 3.5.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
