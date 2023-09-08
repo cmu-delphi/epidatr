@@ -106,35 +106,6 @@
 
 
     </div>
-    <div id="delphi-s-covid-data-sources-and-signals">
-    <h2>Delphi's COVID-19 Data Sources and Signals</h2>
-    <p>Delphi's COVID-19 Surveillance Streams data includes the following data sources.
-Data from most of these sources is typically updated daily. You can use the
-<a href="covidcast_meta.html"><code>covidcast_meta</code></a> endpoint to get summary information
-about the ranges of the different attributes for the different data sources.</p>
-<p>The API for retrieving data from these sources is described in the
-<a href="covidcast.html">COVIDcast endpoint documentation</a>. Changes and corrections to
-data from this endpoint are listed in the <a href="covidcast_changelog.html">changelog</a>.</p>
-<p>To obtain many of these signals and update them daily, Delphi has written
-extensive software to obtain data from various sources, aggregate the data,
-calculate statistical estimates, and format the data to be shared through the
-COVIDcast endpoint of the Delphi Epidata API. This code is
-<a href="https://github.com/cmu-delphi/covidcast-indicators" class="external-link">open source and available on GitHub</a>,
-and contributions are welcome.</p><div class="section">
-<h3 id="covidcast-dashboard-signals">COVIDcast Dashboard Signals<a class="anchor" aria-label="anchor" href="#covidcast-dashboard-signals"></a></h3>
-
-
-<p>The following signals are currently displayed on <a href="https://delphi.cmu.edu/covidcast/" class="external-link">the public COVIDcast dashboard</a>:</p><table class="table table"><tr><td>Kind</td><td>Name</td><td>Source</td><td>Signal</td></tr><tr><td>Public Behavior</td><td>People Wearing Masks</td><td><a href="covidcast-signals/fb-survey.html"><code>fb-survey</code></a></td><td><code>smoothed_wwearing_mask_7d</code></td></tr><tr><td>Public Behavior</td><td>Vaccine Acceptance</td><td><a href="covidcast-signals/fb-survey.html"><code>fb-survey</code></a></td><td><code>smoothed_wcovid_vaccinated_appointment_or_accept</code></td></tr><tr><td>Public Behavior</td><td>COVID Symptom Searches on Google</td><td><a href="covidcast-signals/google-symptoms.html"><code>google-symptoms</code></a></td><td><code>sum_anosmia_ageusia_smoothed_search</code></td></tr><tr><td>Early Indicators</td><td>COVID-Like Symptoms</td><td><a href="covidcast-signals/fb-survey.html"><code>fb-survey</code></a></td><td><code>smoothed_wcli</code></td></tr><tr><td>Early Indicators</td><td>COVID-Like Symptoms in Community</td><td><a href="covidcast-signals/fb-survey.html"><code>fb-survey</code></a></td><td><code>smoothed_whh_cmnty_cli</code></td></tr><tr><td>Early Indicators</td><td>COVID-Related Doctor Visits</td><td><a href="covidcast-signals/doctor-visits.html"><code>doctor-visits</code></a></td><td><code>smoothed_adj_cli</code></td></tr><tr><td>Cases and Testing</td><td>COVID Cases</td><td><a href="covidcast-signals/jhu-csse.html"><code>jhu-csse</code></a></td><td><code>confirmed_7dav_incidence_prop</code></td></tr><tr><td>Late Indicators</td><td>COVID Hospital Admissions</td><td><a href="covidcast-signals/hhs.html"><code>hhs</code></a></td><td><code>confirmed_admissions_covid_1d_prop_7dav</code></td></tr><tr><td>Late Indicators</td><td>Deaths</td><td><a href="covidcast-signals/jhu-csse.html"><code>jhu-csse</code></a></td><td><code>deaths_7dav_incidence_prop</code></td></tr></table></div>
-
-<div class="section">
-<h3 id="all-available-sources-and-signals">All Available Sources and Signals<a class="anchor" aria-label="anchor" href="#all-available-sources-and-signals"></a></h3>
-
-
-<p>Beyond the signals available on the COVIDcast dashboard, numerous other signals are
-available through our <a href="https://delphi.cmu.edu/covidcast/export/" class="external-link">data export tool</a> or directly through the API:</p>
-</div>
-
-    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
