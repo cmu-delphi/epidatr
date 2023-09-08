@@ -37,7 +37,7 @@ key).}
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
-\code{\link{epidata_call}}
+\code{\link{tibble}}
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview.html}. For

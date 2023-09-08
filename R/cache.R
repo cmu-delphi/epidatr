@@ -187,7 +187,7 @@ set_cache <- function(cache_dir = NULL,
 #' }
 #' @param disable instead of setting a new cache, disable caching entirely;
 #'   defaults to `FALSE`
-#' @param ... arguments passed to `set_cache`
+#' @inheritDotParams set_cache
 #' @seealso [`set_cache`] to start a new cache (and general caching info),
 #'   [`disable_cache`] to only disable without deleting, and [`cache_info`]
 #' @export

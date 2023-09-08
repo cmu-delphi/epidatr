@@ -10,7 +10,25 @@ clear_cache(disable = FALSE, ...)
 \item{disable}{instead of setting a new cache, disable caching entirely;
 defaults to \code{FALSE}}
 
-\item{...}{arguments passed to \code{set_cache}}
+\item{...}{
+  Arguments passed on to \code{\link[=set_cache]{set_cache}}
+  \describe{
+    \item{\code{cache_dir}}{the directory in which the cache is stored. By default, this
+is \code{tools::R_user_dir()} if on R 4.0+, but must be specified for earlier
+versions of R. The path can be either relative or absolute. The
+environmental variable is \code{EPIDATR_CACHE_DIR}.}
+    \item{\code{days}}{the maximum length of time in days to keep any particular cached
+call. By default this is \code{1}. The environmental variable is
+\code{EPIDATR_CACHE_MAX_AGE_DAYS}.}
+    \item{\code{max_size}}{the size of the entire cache, in MB, at which to start
+pruning entries. By default this is \code{1024}, or 1GB. The environmental
+variable is \code{EPIDATR_CACHE_MAX_SIZE_MB}.}
+    \item{\code{logfile}}{where cachem's log of transactions is stored, relative to the
+cache directory. By default, it is \code{"logfile.txt"}. The environmental
+variable is \code{EPIDATR_CACHE_LOGFILE}.}
+    \item{\code{confirm}}{whether to confirm directory creation. default is \code{TRUE};
+should only be set in non-interactive scripts}
+  }}
 }
 \description{
 Deletes the current cache and resets a new cache. Deletes local data! If you
