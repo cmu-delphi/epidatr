@@ -73,7 +73,33 @@ defaults to <code>FALSE</code></p></dd>
 
 
 <dt>...</dt>
-<dd><p>arguments passed to <code>set_cache</code></p></dd>
+<dd><p>Arguments passed on to <code><a href="set_cache.html">set_cache</a></code></p><dl><dt><code>cache_dir</code></dt>
+<dd><p>the directory in which the cache is stored. By default, this
+is <code><a href="https://rdrr.io/r/tools/userdir.html" class="external-link">tools::R_user_dir()</a></code> if on R 4.0+, but must be specified for earlier
+versions of R. The path can be either relative or absolute. The
+environmental variable is <code>EPIDATR_CACHE_DIR</code>.</p></dd>
+
+    <dt><code>days</code></dt>
+<dd><p>the maximum length of time in days to keep any particular cached
+call. By default this is <code>1</code>. The environmental variable is
+<code>EPIDATR_CACHE_MAX_AGE_DAYS</code>.</p></dd>
+
+    <dt><code>max_size</code></dt>
+<dd><p>the size of the entire cache, in MB, at which to start
+pruning entries. By default this is <code>1024</code>, or 1GB. The environmental
+variable is <code>EPIDATR_CACHE_MAX_SIZE_MB</code>.</p></dd>
+
+    <dt><code>logfile</code></dt>
+<dd><p>where cachem's log of transactions is stored, relative to the
+cache directory. By default, it is <code>"logfile.txt"</code>. The environmental
+variable is <code>EPIDATR_CACHE_LOGFILE</code>.</p></dd>
+
+    <dt><code>confirm</code></dt>
+<dd><p>whether to confirm directory creation. default is <code>TRUE</code>;
+should only be set in non-interactive scripts</p></dd>
+
+  
+</dl></dd>
 
 </dl></div>
     <div id="see-also">
