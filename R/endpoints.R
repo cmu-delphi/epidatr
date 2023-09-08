@@ -16,7 +16,7 @@
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'   See `fetch_args_list()` for details.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #'
 #' @keywords endpoint
 #' @export
@@ -76,7 +76,7 @@ pvt_cdc <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
 #' @param zip string. A 5-digit zip code.
 #' @param fips_code string. A 5-digit fips county code, zero-padded.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #'
 #' @seealso [`pub_covid_hosp_facility()`]
 #' @keywords endpoint
@@ -161,7 +161,7 @@ pub_covid_hosp_facility_lookup <- function(
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param publication_dates [`timeset`]. Publication dates to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #'
 #'
 #' @seealso [`pub_covid_hosp_facility()`], [`epirange()`]
@@ -464,7 +464,7 @@ pub_covid_hosp_facility <- function(
 #' most recent issue is returned.
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #'
 #' @keywords endpoint
 #' @export
@@ -610,7 +610,7 @@ pub_covid_hosp_state_timeseries <- function(states, dates, ..., issues = NULL, f
 #'
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #'
 #'
 #' @examples
@@ -696,7 +696,7 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #'   the most recent issue is returned. Mutually exclusive with `as_of` or
 #'   `issues`.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #'
 #'
 #' @seealso [pub_covidcast_meta()], [covidcast_epidata()], [epirange()]
@@ -795,7 +795,7 @@ pub_covidcast <- function(
 #' @param system character. System name to fetch.
 #' @param epiweek [`timeset`]. Epiweeks to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`json`]
 #' @keywords endpoint
 #' @export
 pub_delphi <- function(system, epiweek, fetch_args = fetch_args_list()) {
@@ -829,7 +829,7 @@ pub_delphi <- function(system, epiweek, fetch_args = fetch_args_list()) {
 #' @param locations character. Locations to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pub_dengue_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
@@ -867,7 +867,7 @@ pub_dengue_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list
 #' @param locations character. Locations to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pvt_dengue_sensors <- function(auth, names, locations, epiweeks, fetch_args = fetch_args_list()) {
@@ -917,7 +917,7 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks, fetch_args = fe
 #' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
 #'   the most recent issue is returned. Mutually exclusive with `issues`.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pub_ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
@@ -974,7 +974,7 @@ pub_ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetc
 #' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
 #'   the most recent issue is returned. Mutually exclusive with `issues`.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pub_flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
@@ -1030,7 +1030,7 @@ pub_flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fet
 #' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
 #'   the most recent issue is returned. Mutually exclusive with `issues`.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pub_fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
@@ -1078,7 +1078,7 @@ pub_fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NU
 #'
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
@@ -1123,7 +1123,7 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 #' @param auth string. Optionally, restricted access key (not the same as API
 #' key).
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pub_fluview <- function(
@@ -1198,7 +1198,7 @@ pub_fluview <- function(
 #' @param epiweeks [`timeset`] Epiweeks to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pub_gft <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
@@ -1235,7 +1235,7 @@ pub_gft <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
 #' @param query string. The query to be fetched.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pvt_ght <- function(auth, locations, epiweeks, query, fetch_args = fetch_args_list()) {
@@ -1277,7 +1277,7 @@ pvt_ght <- function(auth, locations, epiweeks, query, fetch_args = fetch_args_li
 #' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
 #'   the most recent issue is returned. Mutually exclusive with `issues`.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pub_kcdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
@@ -1320,7 +1320,7 @@ pub_kcdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetc
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`json`]
 #' @keywords endpoint
 #' @export
 pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
@@ -1339,7 +1339,7 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 #'
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'
-#' @return [`epidata_call`]
+#' @return [`json`]
 #' @keywords endpoint
 #' @export
 pub_meta <- function(fetch_args = fetch_args_list()) {
@@ -1367,7 +1367,7 @@ pub_meta <- function(fetch_args = fetch_args_list()) {
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pub_nidss_dengue <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
@@ -1406,7 +1406,7 @@ pub_nidss_dengue <- function(locations, epiweeks, fetch_args = fetch_args_list()
 #' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
 #'   the most recent issue is returned. Mutually exclusive with `issues`.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pub_nidss_flu <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
@@ -1458,7 +1458,7 @@ pub_nidss_flu <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fet
 #' @param locations character. Locations to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pvt_norostat <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
@@ -1499,7 +1499,7 @@ pvt_norostat <- function(auth, locations, epiweeks, fetch_args = fetch_args_list
 #' @param locations character. Locations to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pub_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
@@ -1535,7 +1535,7 @@ pub_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 #' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
 #'   the most recent issue is returned. Mutually exclusive with `issues`.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pub_paho_dengue <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
@@ -1586,7 +1586,7 @@ pub_paho_dengue <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, f
 #' @param locations character. Locations to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pvt_quidel <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
@@ -1628,7 +1628,7 @@ pvt_quidel <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()
 #' @param locations character. Locations to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pvt_sensors <- function(auth, names, locations, epiweeks, fetch_args = fetch_args_list()) {
@@ -1674,7 +1674,7 @@ pvt_sensors <- function(auth, names, locations, epiweeks, fetch_args = fetch_arg
 #' @param epiweeks [`timeset`]. Epiweeks to fetch. Mutually exclusive with
 #' `dates`.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pvt_twitter <- function(auth, locations, ..., dates = NULL, epiweeks = NULL, fetch_args = fetch_args_list()) {
@@ -1727,7 +1727,7 @@ pvt_twitter <- function(auth, locations, ..., dates = NULL, epiweeks = NULL, fet
 #' @param language string. Language to fetch.
 #' @param hours integer. Optionally, the hours to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#' @return [`epidata_call`]
+#' @return [`tibble`]
 #' @keywords endpoint
 #' @export
 pub_wiki <- function(
