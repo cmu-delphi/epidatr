@@ -4,9 +4,9 @@
 \name{epidatr-package}
 \alias{epidatr}
 \alias{epidatr-package}
-\title{epidatr: Client for Delphi's Epidata API}
+\title{epidatr: Client for Delphi's 'Epidata' API}
 \description{
-R Client for Delphi's Epidata API. Tools for fetching data in various forms.
+R Client for Delphi's 'Epidata' API. Tools for fetching data in various forms.
 }
 \seealso{
 Useful links:

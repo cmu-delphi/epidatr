@@ -24,7 +24,7 @@ pub_covid_hosp_facility(
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
-\code{\link{epidata_call}}
+\code{\link{tibble}}
 }
 \description{
 API docs:
