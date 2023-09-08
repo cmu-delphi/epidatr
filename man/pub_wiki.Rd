@@ -36,46 +36,6 @@ pub_wiki(
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/wiki.html}
 }
-\section{Delphi's COVID-19 Data Sources and Signals}{
-Delphi's COVID-19 Surveillance Streams data includes the following data sources.
-Data from most of these sources is typically updated daily. You can use the
-\href{covidcast_meta.md}{\code{covidcast_meta}} endpoint to get summary information
-about the ranges of the different attributes for the different data sources.
-
-The API for retrieving data from these sources is described in the
-\href{covidcast.md}{COVIDcast endpoint documentation}. Changes and corrections to
-data from this endpoint are listed in the \href{covidcast_changelog.md}{changelog}.
-
-To obtain many of these signals and update them daily, Delphi has written
-extensive software to obtain data from various sources, aggregate the data,
-calculate statistical estimates, and format the data to be shared through the
-COVIDcast endpoint of the Delphi Epidata API. This code is
-\href{https://github.com/cmu-delphi/covidcast-indicators}{open source and available on GitHub},
-and contributions are welcome.
-\subsection{COVIDcast Dashboard Signals}{
-
-The following signals are currently displayed on \href{https://delphi.cmu.edu/covidcast/}{the public COVIDcast dashboard}:\tabular{llll}{
-   Kind \tab Name \tab Source \tab Signal \cr
-   Public Behavior \tab People Wearing Masks \tab \href{covidcast-signals/fb-survey.md}{\code{fb-survey}} \tab \code{smoothed_wwearing_mask_7d} \cr
-   Public Behavior \tab Vaccine Acceptance \tab \href{covidcast-signals/fb-survey.md}{\code{fb-survey}} \tab \code{smoothed_wcovid_vaccinated_appointment_or_accept} \cr
-   Public Behavior \tab COVID Symptom Searches on Google \tab \href{covidcast-signals/google-symptoms.md}{\code{google-symptoms}} \tab \code{sum_anosmia_ageusia_smoothed_search} \cr
-   Early Indicators \tab COVID-Like Symptoms \tab \href{covidcast-signals/fb-survey.md}{\code{fb-survey}} \tab \code{smoothed_wcli} \cr
-   Early Indicators \tab COVID-Like Symptoms in Community \tab \href{covidcast-signals/fb-survey.md}{\code{fb-survey}} \tab \code{smoothed_whh_cmnty_cli} \cr
-   Early Indicators \tab COVID-Related Doctor Visits \tab \href{covidcast-signals/doctor-visits.md}{\code{doctor-visits}} \tab \code{smoothed_adj_cli} \cr
-   Cases and Testing \tab COVID Cases \tab \href{covidcast-signals/jhu-csse.md}{\code{jhu-csse}} \tab \code{confirmed_7dav_incidence_prop} \cr
-   Late Indicators \tab COVID Hospital Admissions \tab \href{covidcast-signals/hhs.md}{\code{hhs}} \tab \code{confirmed_admissions_covid_1d_prop_7dav} \cr
-   Late Indicators \tab Deaths \tab \href{covidcast-signals/jhu-csse.md}{\code{jhu-csse}} \tab \code{deaths_7dav_incidence_prop} \cr
-}
-
-}
-
-\subsection{All Available Sources and Signals}{
-
-Beyond the signals available on the COVIDcast dashboard, numerous other signals are
-available through our \href{https://delphi.cmu.edu/covidcast/export/}{data export tool} or directly through the API:
-}
-}
-
 \examples{
 \dontrun{
 pub_wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601))

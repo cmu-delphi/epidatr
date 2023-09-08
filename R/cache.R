@@ -250,12 +250,15 @@ cache_epidata_call <- function(epidata_call, fetch_args = fetch_args_list()) {
     as_of_recent <- check_is_recent(epidata_call$params$as_of, 7)
     issues_recent <- check_is_recent(epidata_call$params$issues, 7)
     if (as_of_recent || issues_recent) {
-      cli::cli_warn("using cached results with `as_of` within the past week (or the future!). This will likely result ",
-        "in an invalid cache. Consider\n",
-        "1. disabling the cache for this session with `disable_cache` or permanently with environmental ",
-        "variable `EPIDATR_USE_CACHE=FALSE`\n",
-        "2. setting `EPIDATR_CACHE_MAX_AGE_DAYS={Sys.getenv('EPIDATR_CACHE_MAX_AGE_DAYS', unset = 1)}` to e.g. `3/24` ",
-        "(3 hours).",
+      cli::cli_warn(
+        c(
+          "using cached results with `as_of` within the past week (or the future!).",
+          "This will likely result in an invalid cache. Consider\n",
+          "1. disabling the cache for this session with `disable_cache` or permanently with environmental ",
+          "variable `EPIDATR_USE_CACHE=FALSE`\n",
+          "2. setting `EPIDATR_CACHE_MAX_AGE_DAYS={Sys.getenv('EPIDATR_CACHE_MAX_AGE_DAYS', unset = 1)}`",
+          " to e.g. `3/24` (3 hours)."
+        ),
         .frequency = "regularly",
         .frequency_id = "cache timing issues",
         class = "cache_recent_data"

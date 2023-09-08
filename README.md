@@ -1,7 +1,7 @@
 # Delphi Epidata R client
 
 [![License: MIT][mit-image]][mit-url] [![Github Actions][github-actions-image]][github-actions-url]
-[![codecov](https://codecov.io/gh/dsweber2/epidatr/branch/dev/graph/badge.svg?token=jVHL9eHZNZ)](https://codecov.io/gh/dsweber2/epidatr)
+[![codecov](https://codecov.io/gh/dsweber2/epidatr/branch/dev/graph/badge.svg?token=jVHL9eHZNZ)](https://app.codecov.io/gh/dsweber2/epidatr)
 
 The [Delphi Epidata API](https://cmu-delphi.github.io/delphi-epidata/) provides real-time access to epidemiological surveillance data for influenza, COVID-19, and other diseases from both official government sources such as the [Center for Disease Control (CDC)](https://www.cdc.gov/datastatistics/index.html) and [Google Trends](https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/google-symptoms.html) and private partners such as [Facebook](https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/) and [Change Healthcare](https://www.changehealthcare.com/). It is built and maintained by the Carnegie Mellon University [Delphi research group](https://delphi.cmu.edu/).
 
@@ -82,7 +82,7 @@ Note that for the time being, the private endpoints (i.e. those prefixed with
 `pvt`) will require a separate key that needs to be passed as an argument.
 
 [mit-image]: https://img.shields.io/badge/License-MIT-yellow.svg
-[mit-url]: https://opensource.org/licenses/MIT
+[mit-url]: https://opensource.org/license/mit
 [github-actions-image]: https://github.com/cmu-delphi/epidatr/workflows/ci/badge.svg
 [github-actions-url]: https://github.com/cmu-delphi/epidatr/actions
 

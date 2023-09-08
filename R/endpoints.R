@@ -1715,13 +1715,6 @@ pvt_twitter <- function(auth, locations, ..., dates = NULL, epiweeks = NULL, fet
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
 #'
-#' ```{r results="asis", echo = FALSE}
-#' url <- "https://raw.githubusercontent.com/cmu-delphi/delphi-epidata/dev/docs/api/covidcast_signals.md"
-#' txt <- readLines(url)
-#' txt <- txt[7:length(txt)]
-#' cat(txt, sep = "\n")
-#' ```
-#'
 #' @examples
 #' \dontrun{
 #' pub_wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601))

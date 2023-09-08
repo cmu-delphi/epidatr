@@ -2,17 +2,7 @@ test_that("basic cache setup", {
   expect_true(is.null(cache_environ$epidatr_cache))
 })
 
-tmp_base_dir <- Sys.getenv("TMPDIR")
-new_temp_dir <- NULL
-if (tmp_base_dir == "") {
-  new_temp_dir <- md5(paste(Sys.time(), "I am the very model of a modern major general"))
-} else {
-  new_temp_dir <- file.path(
-    Sys.getenv("TMPDIR"),
-    md5(paste(Sys.time(), "I am the very model of a modern major general"))
-  )
-}
-
+new_temp_dir <- tempdir()
 test_set_cache <- function(cache_dir = new_temp_dir,
                            days = 1,
                            max_size = 1,
@@ -31,11 +21,11 @@ test_that("cache set as expected", {
   test_set_cache()
   if (grepl("/", as.character(new_temp_dir))) {
     # this is what check produces
-    expect_equal(cache_info()$dir, as.character(new_temp_dir))
+    expect_equal(cache_info()$dir, normalizePath(new_temp_dir))
   } else {
     # this is what test produces directly
     tmp <- strsplit(cache_info()$dir, "/")[[1]]
-    expect_equal(tmp[length(tmp)], as.character(new_temp_dir))
+    expect_equal(tmp[length(tmp)], normalizePath(new_temp_dir))
   }
   expect_equal(cache_info()$max_size, 1024^2)
   expect_equal(cache_info()$max_age, 24 * 60 * 60)
