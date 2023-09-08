@@ -1,6 +1,6 @@
 Package: epidatr
 Type: Package
-Title: Client for Delphi's Epidata API
+Title: Client for Delphi's 'Epidata' API
 Version: 1.0.0
 Authors@R: 
   c(
@@ -17,7 +17,7 @@ Authors@R:
   )
 URL: https://cmu-delphi.github.io/epidatr/, https://github.com/cmu-delphi/epidatr
 BugReports: https://github.com/cmu-delphi/epidatr/issues
-Description: R Client for Delphi's Epidata API. Tools for fetching data in various forms.
+Description: R Client for Delphi's 'Epidata' API. Tools for fetching data in various forms.
 Depends: R (>= 3.5.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
