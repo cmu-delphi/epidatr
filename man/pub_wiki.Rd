@@ -31,10 +31,18 @@ pub_wiki(
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
-\code{\link{tibble}}
+\code{\link[tibble:tibble]{tibble::tibble}}
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/wiki.html}
+Number of page visits for selected English, Influenza-related wikipedia articles.
+\itemize{
+\item Source: Wikimedia
+\item Temporal Resolution: Hourly, daily, and weekly from 2007-12-09 (2007w50)
+\item Spatial Resolution: N/A
+\item Other resolution: By article (54)
+\item Open access
+}
 }
 \examples{
 \dontrun{

@@ -9,6 +9,7 @@
 #'   a tibble, but a few non-COVIDCAST endpoints only support will return a
 #'   JSON-like list instead.
 #'
+#' @details
 #' `create_epidata_call` is the constructor for `epidata_call` objects, but you
 #'   should not need to use it directly; instead, use an endpoint function,
 #'   e.g., [`pub_covidcast`], to generate an `epidata_call` for the data of
@@ -103,9 +104,11 @@ print.epidata_call <- function(x, ...) {
 }
 
 #' Customize fetch settings
+#'
 #' @rdname fetch_args_list
 #' @aliases fetch_args
 #'
+#' @description
 #' A constructor for `fetch_args` objects, which are used to pass arguments to
 #' the `fetch` function.
 #'
@@ -176,6 +179,7 @@ fetch_args_list <- function(
 
 #' Fetches the data
 #'
+#' @details
 #' `fetch` usually returns the data in tibble format, but a few of the endpoints
 #' only support the JSON classic format (delphi, pvt_meta_norostat, and meta).
 #' In that case a JSON-like nested list structure is returned instead.

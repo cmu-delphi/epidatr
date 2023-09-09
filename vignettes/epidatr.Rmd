@@ -80,7 +80,7 @@ The [COVIDcast
 endpoint](https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html) of the
 Epidata API contains many separate data sources and signals. It can be difficult
 to find the name of the signal you're looking for, so you can use
-`covidcast_epidata` to get help with finding sources and functions without
+`covidcast_epidata()` to get help with finding sources and functions without
 leaving R.
 
 The `covidcast_epidata()` function fetches a list of all signals, and returns an
@@ -102,7 +102,7 @@ epidata$signals$`fb-survey:smoothed_cli`
 ```
 
 These objects can be used directly to fetch data, without requiring us to use
-the `covidcast()` function. Simply use the `$call` attribute of the object:
+the `pub_covidcast()` function. Simply use the `$call` attribute of the object:
 
 ```{r}
 epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa", epirange(20210405, 20210410))
@@ -110,8 +110,8 @@ epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa", epirange(20210405, 
 
 ## Advanced Usage (Debugging)
 
-We can obtain the `epidata_call` object underlying a request by setting the
-`dry_run` argument to `TRUE` in `fetch_args_list`:
+We can obtain the [`epidata_call`] object underlying a request by setting the
+`dry_run` argument to `TRUE` in `fetch_args_list()`:
 
 ```{r}
 pub_covidcast(

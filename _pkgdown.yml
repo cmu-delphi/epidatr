@@ -11,12 +11,11 @@ reference:
     desc: Set API keys and handle API data types
   - contents:
       - get_auth_key
-      - parse_api_week
       - avail_endpoints
       - epirange
       - timeset
   - title: Control Caching behavior
-    desc: configure an optional persistent cache
+    desc: Configure an optional persistent cache
   - contents:
       - set_cache
       - clear_cache

@@ -1,9 +1,10 @@
-#' Get the API key
+#' Getting the API key
 #'
+#' @description
 #' Get the API key from the environment variable `DELPHI_EPIDATA_KEY` or
 #' `getOption("delphi.epidata.key")`.
 #'
-#' @return The API key
+#' @return The API key as a string or "".
 #'
 #' @export
 get_auth_key <- function() {

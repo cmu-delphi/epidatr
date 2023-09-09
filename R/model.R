@@ -1,3 +1,6 @@
+#' EpiRange
+#'
+#' @description
 #' Specify a date range (in days or epiweeks) for an API request.
 #'
 #' @param from A `Date`, integer-like value, or integer-like string that takes the
@@ -61,6 +64,7 @@ epirange <- function(from, to) {
 
 #' Timeset
 #'
+#' @description
 #' Many API calls accept timesets to specify the time ranges of data being
 #' requested. Timesets can be specified with `epirange()`, as `Date` objects, or
 #' with wildcards.

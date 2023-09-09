@@ -25,21 +25,18 @@ most recent issue is returned.}
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
-\code{\link{tibble}}
+\code{\link[tibble:tibble]{tibble::tibble}}
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html}.
 
 Obtains the COVID-19 reported patient impact and hospital capacity data by
 state. This dataset is provided by the US Department of Health & Human
-Services via healthdata.gov.
+Services.
 }
 \details{
 Starting October 1, 2022, some facilities are only required to
 report annually.
-
-See also the official description and data dictionary at <healthdata.gov> for
-more information.
 }
 \examples{
 \dontrun{

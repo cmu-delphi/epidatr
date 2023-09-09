@@ -3,20 +3,6 @@
 \name{fetch_args_list}
 \alias{fetch_args_list}
 \alias{fetch_args}
-\alias{A}
-\alias{constructor}
-\alias{for}
-\alias{`fetch_args`}
-\alias{objects,}
-\alias{which}
-\alias{are}
-\alias{used}
-\alias{to}
-\alias{pass}
-\alias{arguments}
-\alias{the}
-\alias{`fetch`}
-\alias{function.}
 \title{Customize fetch settings}
 \usage{
 fetch_args_list(
@@ -70,5 +56,6 @@ is only used by \code{fetch_debug}, and by default is \code{"json"}}
 }
 }
 \description{
-Customize fetch settings
+A constructor for \code{fetch_args} objects, which are used to pass arguments to
+the \code{fetch} function.
 }

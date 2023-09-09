@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_covidcast_meta}
 \alias{pub_covidcast_meta}
-\title{Metadata for covidcast endpoint}
+\title{Metadata for the COVIDcast endpoint}
 \usage{
 pub_covidcast_meta(fetch_args = fetch_args_list())
 }
@@ -10,7 +10,7 @@ pub_covidcast_meta(fetch_args = fetch_args_list())
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
-\code{\link{tibble}}
+\code{\link[tibble:tibble]{tibble::tibble}}
 }
 \description{
 API docs:

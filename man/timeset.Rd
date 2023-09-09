@@ -7,8 +7,7 @@
 Many API calls accept timesets to specify the time ranges of data being
 requested. Timesets can be specified with \code{epirange()}, as \code{Date} objects, or
 with wildcards.
-}
-\details{
+
 Timesets are not special R types; the term simply describes any value that
 would be accepted by epidatr to specify the time value of an epidata query.
 The allowed values are:

@@ -2,7 +2,7 @@
 % Please edit documentation in R/model.R
 \name{epirange}
 \alias{epirange}
-\title{Specify a date range (in days or epiweeks) for an API request.}
+\title{EpiRange}
 \usage{
 epirange(from, to)
 }

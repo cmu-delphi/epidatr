@@ -6,7 +6,7 @@
 \alias{epidatr-package}
 \title{epidatr: Client for Delphi's 'Epidata' API}
 \description{
-R Client for Delphi's 'Epidata' API. Tools for fetching data in various forms.
+The Delphi 'Epidata' API provides real-time access to epidemiological surveillance data for influenza, COVID-19, and other diseases for the USA at various geographical resolutions, both from official government sources such as the Center for Disease Control (CDC) and Google Trends and private partners such as Facebook and Change Healthcare. It is built and maintained by the Carnegie Mellon University Delphi research group.
 }
 \seealso{
 Useful links:
