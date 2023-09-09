@@ -13,7 +13,7 @@ API](https://cmu-delphi.github.io/delphi-epidata/). It provides a simple R inter
 ```R
 library(epidatr)
 # Obtain the smoothed covid-like illness (CLI) signal from the Facebook survey as it was on April 10, 2021 for the US
-epidata <- covidcast(
+epidata <- pub_covidcast(
   source = "fb-survey",
   signals = "smoothed_cli",
   geo_type = "nation",
