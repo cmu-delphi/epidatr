@@ -35,6 +35,14 @@ pub_wiki(
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/wiki.html}
+Number of page visits for selected English, Influenza-related wikipedia articles.
+\itemize{
+\item Source: Wikimedia
+\item Temporal Resolution: Hourly, daily, and weekly from 2007-12-09 (2007w50)
+\item Spatial Resolution: N/A
+\item Other resolution: By article (54)
+\item Open access
+}
 }
 \examples{
 \dontrun{

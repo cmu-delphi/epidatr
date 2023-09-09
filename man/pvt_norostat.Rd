@@ -20,6 +20,9 @@ pvt_norostat(auth, locations, epiweeks, fetch_args = fetch_args_list())
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/norostat.html}
+
+This is the documentation of the API for accessing the NoroSTAT (norostat)
+endpoint of the Delphi’s epidemiological data.
 }
 \examples{
 \dontrun{

@@ -20,6 +20,8 @@ pvt_quidel(auth, locations, epiweeks, fetch_args = fetch_args_list())
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/quidel.html}
+
+Data provided by Quidel Corp., which contains flu lab test results.
 }
 \examples{
 \dontrun{

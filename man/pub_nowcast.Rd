@@ -20,7 +20,6 @@ pub_nowcast(locations, epiweeks, fetch_args = fetch_args_list())
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html}.
 
 Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's
-epidemiological data
 }
 \details{
 The full list of location inputs can be accsssed at

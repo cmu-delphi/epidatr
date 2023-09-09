@@ -32,6 +32,9 @@ pvt_twitter(
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/twitter.html}
+
+This is the API documentation for accessing the Twitter Stream (twitter) endpoint of Delphi’s epidemiological data.
+Sourced from \href{http://www.healthtweets.org/}{Healthtweets}
 }
 \examples{
 \dontrun{

@@ -96,10 +96,39 @@ print.covidcast_data_source <- function(x, ...) {
 }
 
 #' Creates the COVIDcast Epidata autocomplete helper
-#'
+#' @description
 #' Creates a helper object that can use auto-complete to help find COVIDcast
-#' sources and signals.
+#' sources and signals. The [COVIDcast
+#' endpoint](https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html) of
+#' the Epidata API contains many separate data sources and signals. It can be
+#' difficult to find the name of the signal you're looking for, so you can use
+#' `covidcast_epidata` to get help with finding sources and functions without
+#' leaving R.
 #'
+#' The `covidcast_epidata()` function fetches a list of all signals, and returns
+#' an object containing fields for every signal:
+#' ```{r}
+#' epidata <- covidcast_epidata()
+#' epidata$signals
+#' ```
+#'
+#' If you use an editor that supports tab completion, such as RStudio, type
+#'   `epidata$signals$` and wait for the tab completion popup. You will be able
+#'   to type the name of signals and have the autocomplete feature select them
+#'   from the list for you. Note that some signal names have dashes in them, so
+#'   to access them we rely on the backtick operator:
+#'
+#' ```{r}
+#' epidata$signals$`fb-survey:smoothed_cli`
+#' ```
+#'
+#' These objects can be used directly to fetch data, without requiring us to use
+#' the `covidcast()` function. Simply use the `$call` attribute of the object:
+#'
+#' ```{r}
+#' epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa",
+#'                                               epirange(20210405, 20210410))
+#' ```
 #' @param base_url optional alternative API base url
 #' @param timeout_seconds the maximum amount of time to wait for a response
 #' @importFrom httr stop_for_status content http_type

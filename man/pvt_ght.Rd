@@ -22,6 +22,8 @@ pvt_ght(auth, locations, epiweeks, query, fetch_args = fetch_args_list())
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/ght.html}
+
+Estimate of influenza activity based on volume of certain search queries. …
 }
 \examples{
 \dontrun{

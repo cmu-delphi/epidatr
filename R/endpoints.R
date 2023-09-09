@@ -1068,6 +1068,7 @@ pub_fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NU
 #' FluView metadata
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
+#' Returns information about the fluview endpoint.
 #' @examples
 #' \dontrun{
 #' pub_fluview_meta()
@@ -1218,6 +1219,8 @@ pub_gft <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 #'
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
+#'
+#' Estimate of influenza activity based on volume of certain search queries. …
 #'
 #' @examples
 #' \dontrun{
@@ -1444,6 +1447,9 @@ pub_nidss_flu <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fet
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
 #'
+#' This is the documentation of the API for accessing the NoroSTAT (norostat)
+#'   endpoint of the Delphi’s epidemiological data.
+#'
 #' @examples
 #' \dontrun{
 #' pvt_norostat(
@@ -1485,7 +1491,6 @@ pvt_norostat <- function(auth, locations, epiweeks, fetch_args = fetch_args_list
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>.
 #'
 #' Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's
-#' epidemiological data
 #'
 #' @details The full list of location inputs can be accsssed at
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
@@ -1572,6 +1577,8 @@ pub_paho_dengue <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, f
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/quidel.html>
 #'
+#' Data provided by Quidel Corp., which contains flu lab test results.
+#'
 #' @examples
 #' \dontrun{
 #' pvt_quidel(
@@ -1611,6 +1618,17 @@ pvt_quidel <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()
 #' Digital surveillance sensors
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
+#'
+#' This is the documentation of the API for accessing the Digital Surveillance
+#'   Sensors (sensors) endpoint of the Delphi’s epidemiological Note: this
+#'   repository was built to support modeling and forecasting efforts
+#'   surrounding seasonal influenza (and dengue). In the current COVID-19
+#'   pandemic, syndromic surveillance data, like ILI data (influenza-like
+#'   illness) through FluView, will likely prove very useful. However, we urge
+#'   caution to users examining the digital surveillance sensors, like ILI
+#'   Nearby, Google Flu Trends, etc., during the COVID-19 pandemic, because
+#'   these were designed to track ILI as driven by seasonal influenza, and were
+#'   NOT designed to track ILI during the COVID-19 pandemic.
 #'
 #' @examples
 #' \dontrun{
@@ -1656,6 +1674,9 @@ pvt_sensors <- function(auth, names, locations, epiweeks, fetch_args = fetch_arg
 #' HealthTweets data
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/twitter.html>
+#'
+#' This is the API documentation for accessing the Twitter Stream (twitter) endpoint of Delphi’s epidemiological data.
+#' Sourced from [Healthtweets](http://www.healthtweets.org/)
 #'
 #' @examples
 #' \dontrun{
@@ -1712,6 +1733,14 @@ pvt_twitter <- function(auth, locations, ..., dates = NULL, epiweeks = NULL, fet
 #' Wikipedia access data
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
+#
+#' Number of page visits for selected English, Influenza-related wikipedia articles.
+#'
+#' * Source: Wikimedia
+#' * Temporal Resolution: Hourly, daily, and weekly from 2007-12-09 (2007w50)
+#' * Spatial Resolution: N/A
+#' * Other resolution: By article (54)
+#' * Open access
 #'
 #' @examples
 #' \dontrun{
