@@ -1,20 +1,23 @@
+#' turn a signal into a callable
+#' @param signal the signal of interest
+#' @param base_url the base url
 parse_signal <- function(signal, base_url) {
   class(signal) <- c("covidcast_data_signal", class(signal))
   signal$key <- paste(signal$source, signal$signal, sep = ":")
 
   #' fetch covidcast data
   #'
-  #' @param data_source data source to fetch
-  #' @param signals data source to fetch
-  #' @param geo_type geo_type to fetch
-  #' @param time_type data source to fetch
-  #' @param geo_values data source to fetch
-  #' @param time_values data source to fetch
-  #' @param as_of data source to fetch
-  #' @param issues data source to fetch
-  #' @param lag data source to fetch
-  #' @return an instance of epidata_call
-  #' @keywords internal
+  #' param data_source data source to fetch
+  #' param signals data source to fetch
+  #' param geo_type geo_type to fetch
+  #' param time_type data source to fetch
+  #' param geo_values data source to fetch
+  #' param time_values data source to fetch
+  #' param as_of data source to fetch
+  #' param issues data source to fetch
+  #' param lag data source to fetch
+  #' return an instance of epidata_call
+  #' keywords internal
   signal$call <- function(geo_type,
                           geo_values,
                           time_values,

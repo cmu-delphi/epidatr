@@ -1106,7 +1106,9 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 #'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
 #' @examples
-#' pub_fluview(regions = "nat", epiweeks = epirange(201201, 202001))
+#' \dontrun{
+#' pub_fluview(regions = "nat", epiweeks = epirange(201201, 202005))
+#' }
 #' @param regions character. Locations to fetch. Can be any string IDs in
 #'   national, HHS region, census division, most states and territories, and so
 #'   on. Full list link below.
