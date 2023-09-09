@@ -2,7 +2,14 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    paths: ["**.[rR]", "**.[qrR]md", "**.[rR]markdown", "**.[rR]nw", "**.[rR]profile"]
+    paths:
+      [
+        "**.[rR]",
+        "**.[qrR]md",
+        "**.[rR]markdown",
+        "**.[rR]nw",
+        "**.[rR]profile",
+      ]
 
 name: Style
 
@@ -11,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      DELPHI_EPIDATA_KEY: ${{ secrets.DELPHI_GITHUB_ACTIONS_EPIDATA_API_KEY }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
