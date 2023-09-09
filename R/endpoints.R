@@ -1,4 +1,5 @@
 #' CDC page hits
+#'
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/cdc.html>
 #'
@@ -51,18 +52,17 @@ pvt_cdc <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
 }
 
 #' COVID hospitalization facility identifiers
+#'
 #' @description
 #' API docs:
 #' <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html>
 #'
 #' Obtains unique identifiers and other metadata for COVID hospitalization
-#' facilities of interest.
-#' This is a companinon endpoint to the [`pub_covid_hosp_facility()`] endpoint.
+#' facilities of interest. This is a companion endpoint to the
+#' [`pub_covid_hosp_facility()`] endpoint.
 #'
-#'
-#' @details Only one argument needs to be specified.
+#' @details Only one location argument needs to be specified.
 #' Combinations of the arguments are not currently supported.
-#' For instance, specifying both city and state are not supported.
 #'
 #' @examples
 #' \dontrun{
@@ -134,20 +134,18 @@ pub_covid_hosp_facility_lookup <- function(
 }
 
 #' COVID hospitalization data for specific facilities
+#'
 #' @description
 #' API docs:
 #' <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
 #'
 #' Obtains the COVID-19 reported patient impact and hospital capacity data by
 #' facility. This dataset is provided by the US Department of Health & Human
-#' Services via healthdata.gov.
-#'
-#' @details Starting October 1, 2022, some facilities are only required to
-#' report annually. The companion function [`pub_covid_hosp_facility_lookup()`] can be
+#' Services. The companion function [`pub_covid_hosp_facility_lookup()`] can be
 #' used to look up facility identifiers in a variety of ways.
 #'
-#' See also the official description and data dictionary at <healthdata.gov> for
-#' more information.
+#' @details Starting October 1, 2022, some facilities are only required to
+#' report annually.
 #'
 #' @examples
 #' \dontrun{
@@ -162,7 +160,6 @@ pub_covid_hosp_facility_lookup <- function(
 #' @param publication_dates [`timeset`]. Publication dates to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
-#'
 #'
 #' @seealso [`pub_covid_hosp_facility()`], [`epirange()`]
 #' @keywords endpoint
@@ -437,18 +434,16 @@ pub_covid_hosp_facility <- function(
 }
 
 #' COVID Hospitalization Data by State
+#'
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>.
 #'
 #' Obtains the COVID-19 reported patient impact and hospital capacity data by
 #' state. This dataset is provided by the US Department of Health & Human
-#' Services via healthdata.gov.
+#' Services.
 #'
 #' @details Starting October 1, 2022, some facilities are only required to
 #' report annually.
-#'
-#' See also the official description and data dictionary at <healthdata.gov> for
-#' more information.
 #'
 #' @examples
 #' \dontrun{
@@ -598,7 +593,8 @@ pub_covid_hosp_state_timeseries <- function(states, dates, ..., issues = NULL, f
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' Metadata for covidcast endpoint
+#' Metadata for the COVIDcast endpoint
+#'
 #' @description
 #' API docs:
 #' <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html>.
@@ -607,11 +603,9 @@ pub_covid_hosp_state_timeseries <- function(states, dates, ..., issues = NULL, f
 #' the API, along with basic summary statistics such as the dates they are
 #' available, the geographic levels at which they are reported, and etc.
 #'
-#'
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'
 #' @return [`tibble::tibble`]
-#'
 #'
 #' @examples
 #' \dontrun{
@@ -648,10 +642,14 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 }
 
 #' COVID data via the covidcast endpoint
-#' @description
-#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html>
 #'
-#' COVIDcast public dashboard: <https://delphi.cmu.edu/covidcast/>
+#' @description
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>
+#'
+#' The primary endpoint for fetching COVID-19 data, providing access to a wide
+#' variety of signals from a wide variety of sources. See the API documentation
+#' link above for more. Delphi's [COVIDcast public
+#' dashboard](https://delphi.cmu.edu/covidcast/) is powered by this endpoint.
 #'
 #' @examples
 #' \dontrun{
@@ -697,7 +695,6 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #'   `issues`.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
-#'
 #'
 #' @seealso [pub_covidcast_meta()], [covidcast_epidata()], [epirange()]
 #' @keywords endpoint
@@ -1218,6 +1215,7 @@ pub_gft <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 }
 
 #' Google Health Trends data
+#'
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
 #'
