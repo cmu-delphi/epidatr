@@ -28,16 +28,6 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/covidcast.html">COVIDcast API Client</a>
-    </li>
-  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -60,181 +50,181 @@
     </div>
 
     <table class="ref-index"><colgroup><col class="alias"><col class="title"></colgroup><tbody><tr><th colspan="2">
-          <h2 id="all-functions">All functions <a href="#all-functions" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
+          <h2 id="configuration-and-utilities">Configuration and utilities <a href="#configuration-and-utilities" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Set API keys and handle API data types</p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="covid_hosp_facility.html">covid_hosp_facility()</a></code> </p>
+          <p><code><a href="get_auth_key.html">get_auth_key()</a></code> </p>
         </td>
-        <td><p>fetch COVID hospitalization data for specific facilities</p></td>
+        <td><p>Getting the API key</p></td>
       </tr><tr><td>
-          <p><code><a href="covid_hosp_facility_lookup.html">covid_hosp_facility_lookup()</a></code> </p>
+          <p><code><a href="avail_endpoints.html">avail_endpoints()</a></code> </p>
         </td>
-        <td><p>fetch COVID hospitalization facility identifiers</p></td>
-      </tr><tr><td>
-          <p><code><a href="covid_hosp_state_timeseries.html">covid_hosp_state_timeseries()</a></code> </p>
-        </td>
-        <td><p>Fetch COVID Hospitalization Data by State</p></td>
-      </tr><tr><td>
-          <p><code><a href="covidcast.html">covidcast()</a></code> </p>
-        </td>
-        <td><p>fetch covidcast data</p></td>
-      </tr><tr><td>
-          <p><code><a href="covidcast_epidata.html">covidcast_epidata()</a></code> </p>
-        </td>
-        <td><p>creates the covidcast epidata helper</p></td>
-      </tr><tr><td>
-          <p><code><a href="covidcast_meta.html">covidcast_meta()</a></code> </p>
-        </td>
-        <td><p>fetch covidcast meta data</p></td>
-      </tr><tr><td>
-          <p><code><a href="delphi.html">delphi()</a></code> </p>
-        </td>
-        <td><p>fetch Delphi's forecast</p></td>
-      </tr><tr><td>
-          <p><code><a href="dengue_nowcast.html">dengue_nowcast()</a></code> </p>
-        </td>
-        <td><p>fetch Delphi's PAHO Dengue nowcast</p></td>
-      </tr><tr><td>
-          <p><code><a href="do_request.html">do_request()</a></code> </p>
-        </td>
-        <td><p>performs the request</p></td>
-      </tr><tr><td>
-          <p><code><a href="ecdc_ili.html">ecdc_ili()</a></code> </p>
-        </td>
-        <td><p>fetch ECDC data</p></td>
-      </tr><tr><td>
-          <p><code><a href="epidatr.html">epidatr</a></code> </p>
-        </td>
-        <td><p>Delphi Epidata</p></td>
+        <td><p>List all available endpoints.</p></td>
       </tr><tr><td>
           <p><code><a href="epirange.html">epirange()</a></code> </p>
         </td>
-        <td><p>builds a new EpiRange instances</p></td>
+        <td><p>EpiRange</p></td>
       </tr><tr><td>
-          <p><code><a href="fetch_classic.html">fetch_classic()</a></code> </p>
+          <p><code><a href="timeset.html">timeset</a></code> </p>
         </td>
-        <td><p>fetches the data and returns the classic format</p></td>
-      </tr><tr><td>
-          <p><code><a href="fetch_csv.html">fetch_csv()</a></code> </p>
+        <td><p>Timeset</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="control-caching-behavior">Control Caching behavior <a href="#control-caching-behavior" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Configure an optional persistent cache</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="set_cache.html">set_cache()</a></code> </p>
         </td>
-        <td><p>fetches the data and returns the CSV text</p></td>
+        <td><p>Create or renew a cache for this session</p></td>
       </tr><tr><td>
-          <p><code><a href="fetch_df.html">fetch_df()</a></code> </p>
+          <p><code><a href="clear_cache.html">clear_cache()</a></code> </p>
         </td>
-        <td><p>fetches the data and returns data frame</p></td>
+        <td><p>Manually reset the cache, deleting all currently saved data and starting afresh</p></td>
       </tr><tr><td>
-          <p><code><a href="fetch_json.html">fetch_json()</a></code> </p>
+          <p><code><a href="disable_cache.html">disable_cache()</a></code> </p>
         </td>
-        <td><p>fetches the data and returns the josn format</p></td>
+        <td><p>Turn off the caching for this session</p></td>
       </tr><tr><td>
-          <p><code><a href="fetch_tbl.html">fetch_tbl()</a></code> </p>
+          <p><code><a href="cache_info.html">cache_info()</a></code> </p>
         </td>
-        <td><p>fetches the data and returns data frame</p></td>
-      </tr><tr><td>
-          <p><code><a href="flusurv.html">flusurv()</a></code> </p>
+        <td><p>Describe current cache</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="make-api-requests">Make API requests <a href="#make-api-requests" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Query Delphi Epidata endpoints</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="epidata_call.html">create_epidata_call()</a></code> <code><a href="epidata_call.html">fetch()</a></code> </p>
         </td>
-        <td><p>fetch FluSurv virological data</p></td>
+        <td><p>An abstraction that holds information needed to make an epidata request</p></td>
       </tr><tr><td>
-          <p><code><a href="fluview.html">fluview()</a></code> </p>
+          <p><code><a href="fetch_args_list.html">fetch_args_list()</a></code> </p>
         </td>
-        <td><p>Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's epidemiological data</p></td>
+        <td><p>Customize fetch settings</p></td>
       </tr><tr><td>
-          <p><code><a href="fluview_clinical.html">fluview_clinical()</a></code> </p>
+          <p><code><a href="pub_covid_hosp_facility.html">pub_covid_hosp_facility()</a></code> </p>
         </td>
-        <td><p>fetch FluView virological data</p></td>
+        <td><p>COVID hospitalization data for specific facilities</p></td>
       </tr><tr><td>
-          <p><code><a href="fluview_meta.html">fluview_meta()</a></code> </p>
+          <p><code><a href="pub_covid_hosp_facility_lookup.html">pub_covid_hosp_facility_lookup()</a></code> </p>
         </td>
-        <td><p>fetch fluview meta data</p></td>
+        <td><p>COVID hospitalization facility identifiers</p></td>
       </tr><tr><td>
-          <p><code><a href="gft.html">gft()</a></code> </p>
+          <p><code><a href="pub_covid_hosp_state_timeseries.html">pub_covid_hosp_state_timeseries()</a></code> </p>
         </td>
-        <td><p>fetch Google Flu Trends data</p></td>
+        <td><p>COVID Hospitalization Data by State</p></td>
       </tr><tr><td>
-          <p><code><a href="kcdc_ili.html">kcdc_ili()</a></code> </p>
+          <p><code><a href="pub_covidcast.html">pub_covidcast()</a></code> </p>
         </td>
-        <td><p>fetch KCDC data</p></td>
+        <td><p>COVID data via the covidcast endpoint</p></td>
       </tr><tr><td>
-          <p><code><a href="meta.html">meta()</a></code> </p>
+          <p><code><a href="pub_covidcast_meta.html">pub_covidcast_meta()</a></code> </p>
         </td>
-        <td><p>fetch api meta data</p></td>
+        <td><p>Metadata for the COVIDcast endpoint</p></td>
       </tr><tr><td>
-          <p><code><a href="nidss_dengue.html">nidss_dengue()</a></code> </p>
+          <p><code><a href="pub_delphi.html">pub_delphi()</a></code> </p>
         </td>
-        <td><p>fetch NIDSS dengue data</p></td>
+        <td><p>Delphi's ILINet forecasts</p></td>
       </tr><tr><td>
-          <p><code><a href="nidss_flu.html">nidss_flu()</a></code> </p>
+          <p><code><a href="pub_dengue_nowcast.html">pub_dengue_nowcast()</a></code> </p>
         </td>
-        <td><p>fetch NIDSS flu data</p></td>
+        <td><p>Delphi's PAHO Dengue nowcast</p></td>
       </tr><tr><td>
-          <p><code><a href="nowcast.html">nowcast()</a></code> </p>
+          <p><code><a href="pub_ecdc_ili.html">pub_ecdc_ili()</a></code> </p>
         </td>
-        <td><p>fetch Delphi's ILI nowcast</p></td>
+        <td><p>ECDC ILI data</p></td>
       </tr><tr><td>
-          <p><code><a href="paho_dengue.html">paho_dengue()</a></code> </p>
+          <p><code><a href="pub_flusurv.html">pub_flusurv()</a></code> </p>
         </td>
-        <td><p>fetch Paho Dengue</p></td>
+        <td><p>FluSurv hospitalization data</p></td>
       </tr><tr><td>
-          <p><code><a href="parse_api_week.html">parse_api_week()</a></code> </p>
+          <p><code><a href="pub_fluview.html">pub_fluview()</a></code> </p>
         </td>
-        <td><p>parses a week</p></td>
+        <td><p>FluView ILINet data</p></td>
       </tr><tr><td>
-          <p><code><a href="parse_signal.html">parse_signal()</a></code> </p>
+          <p><code><a href="pub_fluview_clinical.html">pub_fluview_clinical()</a></code> </p>
         </td>
-        <td><p>fetch covidcast data</p></td>
+        <td><p>FluView virological data from clinical labs</p></td>
       </tr><tr><td>
-          <p><code><a href="pvt_afhsb.html">pvt_afhsb()</a></code> </p>
+          <p><code><a href="pub_fluview_meta.html">pub_fluview_meta()</a></code> </p>
         </td>
-        <td><p>fetch AFHSB data (point data, no min/max)</p></td>
+        <td><p>FluView metadata</p></td>
       </tr><tr><td>
+          <p><code><a href="pub_gft.html">pub_gft()</a></code> </p>
+        </td>
+        <td><p>Google Flu Trends data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pub_kcdc_ili.html">pub_kcdc_ili()</a></code> </p>
+        </td>
+        <td><p>KCDC ILI data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pub_meta.html">pub_meta()</a></code> </p>
+        </td>
+        <td><p>API metadata</p></td>
+      </tr><tr><td>
+          <p><code><a href="pub_nidss_dengue.html">pub_nidss_dengue()</a></code> </p>
+        </td>
+        <td><p>NIDSS dengue data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pub_nidss_flu.html">pub_nidss_flu()</a></code> </p>
+        </td>
+        <td><p>NIDSS flu data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pub_nowcast.html">pub_nowcast()</a></code> </p>
+        </td>
+        <td><p>Delphi's ILI nowcast</p></td>
+      </tr><tr><td>
+          <p><code><a href="pub_paho_dengue.html">pub_paho_dengue()</a></code> </p>
+        </td>
+        <td><p>PAHO Dengue data</p></td>
+      </tr><tr><td>
+          <p><code><a href="pub_wiki.html">pub_wiki()</a></code> </p>
+        </td>
+        <td><p>Wikipedia access data</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="make-requests-to-private-api-endpoints">Make requests to private API endpoints <a href="#make-requests-to-private-api-endpoints" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>These endpoints require additional authorization to use</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
           <p><code><a href="pvt_cdc.html">pvt_cdc()</a></code> </p>
         </td>
-        <td><p>fetch CDC page hits</p></td>
+        <td><p>CDC page hits</p></td>
       </tr><tr><td>
           <p><code><a href="pvt_dengue_sensors.html">pvt_dengue_sensors()</a></code> </p>
         </td>
-        <td><p>fetch Delphi's digital surveillance sensors</p></td>
+        <td><p>Dengue digital surveillance sensors in PAHO member countries</p></td>
       </tr><tr><td>
           <p><code><a href="pvt_ght.html">pvt_ght()</a></code> </p>
         </td>
-        <td><p>fetch Google Health Trends data</p></td>
-      </tr><tr><td>
-          <p><code><a href="pvt_meta_afhsb.html">pvt_meta_afhsb()</a></code> </p>
-        </td>
-        <td><p>fetch AFHSB meta data</p></td>
+        <td><p>Google Health Trends data</p></td>
       </tr><tr><td>
           <p><code><a href="pvt_meta_norostat.html">pvt_meta_norostat()</a></code> </p>
         </td>
-        <td><p>fetch NoroSTAT meta data</p></td>
+        <td><p>NoroSTAT metadata</p></td>
       </tr><tr><td>
           <p><code><a href="pvt_norostat.html">pvt_norostat()</a></code> </p>
         </td>
-        <td><p>fetch NoroSTAT data (point data, no min/max)</p></td>
+        <td><p>NoroSTAT data (point data, no min/max)</p></td>
       </tr><tr><td>
           <p><code><a href="pvt_quidel.html">pvt_quidel()</a></code> </p>
         </td>
-        <td><p>fetch Quidel data</p></td>
+        <td><p>Quidel COVID-19 and influenza testing data</p></td>
       </tr><tr><td>
           <p><code><a href="pvt_sensors.html">pvt_sensors()</a></code> </p>
         </td>
-        <td><p>fetch Delphi's digital surveillance sensors</p></td>
+        <td><p>Digital surveillance sensors</p></td>
       </tr><tr><td>
           <p><code><a href="pvt_twitter.html">pvt_twitter()</a></code> </p>
         </td>
-        <td><p>fetch HealthTweets data</p></td>
-      </tr><tr><td>
-          <p><code><a href="request_url.html">request_url()</a></code> </p>
+        <td><p>HealthTweets data</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="autocomplete-helpers">Autocomplete helpers <a href="#autocomplete-helpers" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Objects that can autocomplete API signals names for faster exploration</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="covidcast_epidata.html">covidcast_epidata()</a></code> </p>
         </td>
-        <td><p>returns the full request url for the given epidata_call</p></td>
-      </tr><tr><td>
-          <p><code><a href="wiki.html">wiki()</a></code> </p>
-        </td>
-        <td><p>fetch Wikipedia access data</p></td>
-      </tr><tr><td>
-          <p><code><a href="with_base_url.html">with_base_url()</a></code> </p>
-        </td>
-        <td><p>use a different base url</p></td>
+        <td><p>Creates the COVIDcast Epidata autocomplete helper</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -244,7 +234,7 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Jacob Bien, Logan Brooks, David Farrow, Pedrito Maynard-Zhang, Alex Reinhart, Ryan Tibshirani, Samuel Gratzl.</p>
+  <p></p><p>Developed by Logan Brooks, Dmitry Shemetov, Samuel Gratzl, David Weber.</p>
 </div>
 
 <div class="pkgdown">

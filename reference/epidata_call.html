@@ -3,17 +3,7 @@
 pub_covidcast; by default, they are piped directly into the fetch
 function to fetch and format the data. For most endpoints this will return
 a tibble, but a few non-COVIDCAST endpoints only support will return a
-JSON-like list instead.
-create_epidata_call is the constructor for epidata_call objects, but you
-should not need to use it directly; instead, use an endpoint function,
-e.g., pub_covidcast, to generate an epidata_call for the data of
-interest.
-There are some other functions available for debugging and advanced usage: -
-request_url (for debugging):  outputs the request URL from which data
-would be fetched (note additional parameters below)
-fetch usually returns the data in tibble format, but a few of the endpoints
-only support the JSON classic format (delphi, pvt_meta_norostat, and meta).
-In that case a JSON-like nested list structure is returned instead."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
+JSON-like list instead."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
@@ -71,16 +61,6 @@ In that case a JSON-like nested list structure is returned instead."><!-- mathja
 function to fetch and format the data. For most endpoints this will return
 a tibble, but a few non-COVIDCAST endpoints only support will return a
 JSON-like list instead.</p>
-<p><code>create_epidata_call</code> is the constructor for <code>epidata_call</code> objects, but you
-should not need to use it directly; instead, use an endpoint function,
-e.g., <code><a href="pub_covidcast.html">pub_covidcast</a></code>, to generate an <code>epidata_call</code> for the data of
-interest.</p>
-<p>There are some other functions available for debugging and advanced usage: -
-<code>request_url</code> (for debugging):  outputs the request URL from which data
-would be fetched (note additional parameters below)</p>
-<p><code>fetch</code> usually returns the data in tibble format, but a few of the endpoints
-only support the JSON classic format (delphi, pvt_meta_norostat, and meta).
-In that case a JSON-like nested list structure is returned instead.</p>
     </div>
 
     <div id="ref-usage">
@@ -127,6 +107,19 @@ In that case a JSON-like nested list structure is returned instead.</p>
 <ul><li><p>For <code>create_epidata_call</code>: an <code>epidata_call</code> object</p></li>
 </ul><ul><li><p>For <code>fetch</code>: a tibble or a JSON-like list</p></li>
 </ul></div>
+    <div id="details">
+    <h2>Details</h2>
+    <p><code>create_epidata_call</code> is the constructor for <code>epidata_call</code> objects, but you
+should not need to use it directly; instead, use an endpoint function,
+e.g., <code><a href="pub_covidcast.html">pub_covidcast</a></code>, to generate an <code>epidata_call</code> for the data of
+interest.</p>
+<p>There are some other functions available for debugging and advanced usage: -
+<code>request_url</code> (for debugging):  outputs the request URL from which data
+would be fetched (note additional parameters below)</p>
+<p><code>fetch</code> usually returns the data in tibble format, but a few of the endpoints
+only support the JSON classic format (delphi, pvt_meta_norostat, and meta).
+In that case a JSON-like nested list structure is returned instead.</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
