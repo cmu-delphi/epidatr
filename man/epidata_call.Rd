@@ -43,7 +43,8 @@ fetch(epidata_call, fetch_args = fetch_args_list())
 function to fetch and format the data. For most endpoints this will return
 a tibble, but a few non-COVIDCAST endpoints only support will return a
 JSON-like list instead.
-
+}
+\details{
 \code{create_epidata_call} is the constructor for \code{epidata_call} objects, but you
 should not need to use it directly; instead, use an endpoint function,
 e.g., \code{\link{pub_covidcast}}, to generate an \code{epidata_call} for the data of

@@ -14,7 +14,7 @@ pub_dengue_nowcast(locations, epiweeks, fetch_args = fetch_args_list())
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
-\code{\link{tibble}}
+\code{\link[tibble:tibble]{tibble::tibble}}
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html}

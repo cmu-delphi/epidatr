@@ -8,7 +8,7 @@ cache_info()
 }
 \description{
 Print out the information about the cache (as would be returned by cachem's
-\code{info()} method)
+\code{info()} method).
 }
 \seealso{
 \code{\link{set_cache}} to start a new cache (and general caching info),

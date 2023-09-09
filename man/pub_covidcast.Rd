@@ -54,12 +54,14 @@ the most recent issue is returned. Mutually exclusive with \code{as_of} or
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
-\code{\link{tibble}}
+\code{\link[tibble:tibble]{tibble::tibble}}
 }
 \description{
-API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html}
+API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html}
 
-COVIDcast public dashboard: \url{https://delphi.cmu.edu/covidcast/}
+The primary endpoint for fetching COVID-19 data, providing access to a wide
+variety of signals from a wide variety of sources. See the API documentation
+link above for more. Delphi's \href{https://delphi.cmu.edu/covidcast/}{COVIDcast public dashboard} is powered by this endpoint.
 }
 \examples{
 \dontrun{

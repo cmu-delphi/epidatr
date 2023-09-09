@@ -12,7 +12,7 @@ cache_epidata_call(epidata_call, fetch_args = fetch_args_list())
 \item{call}{the \code{epidata_call} object}
 }
 \description{
-the guts of caching, its interposed between fetch and the specific fetch
+The guts of caching, its interposed between fetch and the specific fetch
 methods. Internal method only.
 }
 \keyword{internal}

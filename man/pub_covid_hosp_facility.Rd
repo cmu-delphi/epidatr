@@ -24,7 +24,7 @@ pub_covid_hosp_facility(
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
 \value{
-\code{\link{tibble}}
+\code{\link[tibble:tibble]{tibble::tibble}}
 }
 \description{
 API docs:
@@ -32,15 +32,12 @@ API docs:
 
 Obtains the COVID-19 reported patient impact and hospital capacity data by
 facility. This dataset is provided by the US Department of Health & Human
-Services via healthdata.gov.
+Services. The companion function \code{\link[=pub_covid_hosp_facility_lookup]{pub_covid_hosp_facility_lookup()}} can be
+used to look up facility identifiers in a variety of ways.
 }
 \details{
 Starting October 1, 2022, some facilities are only required to
-report annually. The companion function \code{\link[=pub_covid_hosp_facility_lookup]{pub_covid_hosp_facility_lookup()}} can be
-used to look up facility identifiers in a variety of ways.
-
-See also the official description and data dictionary at <healthdata.gov> for
-more information.
+report annually.
 }
 \examples{
 \dontrun{

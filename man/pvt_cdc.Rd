@@ -17,7 +17,7 @@ pvt_cdc(auth, locations, epiweeks, fetch_args = fetch_args_list())
 See \code{fetch_args_list()} for details.}
 }
 \value{
-\code{\link{tibble}}
+\code{\link[tibble:tibble]{tibble::tibble}}
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/cdc.html}
