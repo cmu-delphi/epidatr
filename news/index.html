@@ -28,6 +28,16 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/covidcast.html">COVIDcast API Client</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -52,46 +62,7 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0.0" id="epidatr-100">epidatr 1.0.0<a class="anchor" aria-label="anchor" href="#epidatr-100"></a></h2>
-<ul><li>Add <code>set_cache</code> and other caching functions.</li>
-<li>Prefix all non-private endpoints with <code>pub_</code>.</li>
-<li>Update printing of <code>avail_endpoints</code> to be more readable.</li>
-<li>Update printing of <code><a href="../reference/covidcast_epidata.html">covidcast_epidata()</a></code> to be more readable.</li>
-<li>Update landing docs to be more friendly, add plots.</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="page-header" data-toc-text="0.9.0" id="epidatr-090">epidatr 0.9.0<a class="anchor" aria-label="anchor" href="#epidatr-090"></a></h2>
-<ul><li>Major interface change: all endpoints now fetch by default.</li>
-<li>Make all <code>fetch</code> function internal.</li>
-<li>Change <code>fetch</code> and <code>fetch_*</code> function interfaces now rely on <code>fetch_args_list</code>.</li>
-<li>Added <code>fetch_args_list</code> which returns a list of arguments to be passed to <code>fetch</code>.</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="page-header" data-toc-text="0.8.0" id="epidatr-080">epidatr 0.8.0<a class="anchor" aria-label="anchor" href="#epidatr-080"></a></h2>
-<ul><li>Fix source name duplication bug in <code>covidcast_epidata</code>.</li>
-<li>Mark <code>covidcast_epidata</code> as experimental and do not export it.</li>
-<li>Change <code>covidcast</code> arg <code>data_source</code> to <code>source</code>.</li>
-<li>Make <code>covidcast</code> args <code>issues</code>, <code>lag</code>, and <code>as_of</code> mutually exclusive.</li>
-<li>Make <code>covid_hosp_facility_lookup</code> args <code>state,</code> <code>ccn</code>, <code>city</code>, <code>zip</code>, and <code>fips_code</code> mutually exclusive.</li>
-<li>Update documentation to only refer to character or strings (not character vectors or character strings).</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="page-header" data-toc-text="0.7.1" id="epidatr-071">epidatr 0.7.1<a class="anchor" aria-label="anchor" href="#epidatr-071"></a></h2>
-<ul><li>Update README.md for better onboarding.</li>
-<li>Consolidate the vignettes into one. Clean up the code, do not eval most examples.</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="page-header" data-toc-text="0.7.0" id="epidatr-070">epidatr 0.7.0<a class="anchor" aria-label="anchor" href="#epidatr-070"></a></h2>
-<ul><li>Remove temporary code for API key transition.</li>
-<li>Add <code>timeout_seconds</code> and <code>return_empty</code> arguments to <code><a href="../reference/epidata_call.html">fetch()</a></code>.</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="page-header" data-toc-text="0.6.0" id="epidatr-060">epidatr 0.6.0<a class="anchor" aria-label="anchor" href="#epidatr-060"></a></h2>
-<ul><li>The <code>fetch_{tbl,classic,df,json,csv}</code> functions have been replaced by the <code><a href="../reference/epidata_call.html">fetch()</a></code> function, which almost always returns a tibble, except when used with a limited number of older endpoints (such as <code>delphi()</code> and <code>meta()</code>), where it will output a nested list structure.</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="page-header" data-toc-text="0.5.0" id="epidatr-050">epidatr 0.5.0<a class="anchor" aria-label="anchor" href="#epidatr-050"></a></h2>
-<ul><li>The package that this installs is being renamed from <code>delphi.epidata</code> to <code>epidatr</code>. To migrate, run the installation command above, followed by <code>remove.packages("delphi.epidata")</code>, and adjust all references to the package name accordingly.</li>
-</ul></div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -102,7 +73,7 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Logan Brooks, Dmitry Shemetov, Samuel Gratzl, David Weber.</p>
+  <p></p><p>Developed by Jacob Bien, Logan Brooks, David Farrow, Pedrito Maynard-Zhang, Alex Reinhart, Ryan Tibshirani, Samuel Gratzl.</p>
 </div>
 
 <div class="pkgdown">

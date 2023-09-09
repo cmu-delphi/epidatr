@@ -4,10 +4,10 @@
     <loc>/404.html</loc>
   </url>
   <url>
-    <loc>/DEVELOPMENT.html</loc>
+    <loc>/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>/articles/covidcast.html</loc>
   </url>
   <url>
     <loc>/articles/epidatr.html</loc>
@@ -25,73 +25,91 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/assert_character_param.html</loc>
+    <loc>/reference/covid_hosp_facility.html</loc>
   </url>
   <url>
-    <loc>/reference/assert_date_param.html</loc>
+    <loc>/reference/covid_hosp_facility_lookup.html</loc>
   </url>
   <url>
-    <loc>/reference/assert_integerish_param.html</loc>
+    <loc>/reference/covid_hosp_state_timeseries.html</loc>
   </url>
   <url>
-    <loc>/reference/assert_timeset_param.html</loc>
-  </url>
-  <url>
-    <loc>/reference/avail_endpoints.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cache_epidata_call.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cache_info.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check_is_cachable.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check_is_recent.html</loc>
-  </url>
-  <url>
-    <loc>/reference/clear_cache.html</loc>
+    <loc>/reference/covidcast.html</loc>
   </url>
   <url>
     <loc>/reference/covidcast_epidata.html</loc>
   </url>
   <url>
-    <loc>/reference/disable_cache.html</loc>
+    <loc>/reference/covidcast_meta.html</loc>
+  </url>
+  <url>
+    <loc>/reference/delphi.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dengue_nowcast.html</loc>
   </url>
   <url>
     <loc>/reference/do_request.html</loc>
   </url>
   <url>
-    <loc>/reference/epidata_call.html</loc>
+    <loc>/reference/ecdc_ili.html</loc>
   </url>
   <url>
-    <loc>/reference/epidatr-package.html</loc>
+    <loc>/reference/epidatr.html</loc>
   </url>
   <url>
     <loc>/reference/epirange.html</loc>
   </url>
   <url>
-    <loc>/reference/fetch_args_list.html</loc>
+    <loc>/reference/fetch_classic.html</loc>
   </url>
   <url>
-    <loc>/reference/fetch_classic.html</loc>
+    <loc>/reference/fetch_csv.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fetch_df.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fetch_json.html</loc>
   </url>
   <url>
     <loc>/reference/fetch_tbl.html</loc>
   </url>
   <url>
-    <loc>/reference/format_item.html</loc>
+    <loc>/reference/flusurv.html</loc>
   </url>
   <url>
-    <loc>/reference/format_list.html</loc>
+    <loc>/reference/fluview.html</loc>
   </url>
   <url>
-    <loc>/reference/get_auth_key.html</loc>
+    <loc>/reference/fluview_clinical.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fluview_meta.html</loc>
+  </url>
+  <url>
+    <loc>/reference/gft.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/kcdc_ili.html</loc>
+  </url>
+  <url>
+    <loc>/reference/meta.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nidss_dengue.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nidss_flu.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nowcast.html</loc>
+  </url>
+  <url>
+    <loc>/reference/paho_dengue.html</loc>
   </url>
   <url>
     <loc>/reference/parse_api_week.html</loc>
@@ -100,67 +118,7 @@
     <loc>/reference/parse_signal.html</loc>
   </url>
   <url>
-    <loc>/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_covid_hosp_facility.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_covid_hosp_facility_lookup.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_covid_hosp_state_timeseries.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_covidcast.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_covidcast_meta.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_delphi.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_dengue_nowcast.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_ecdc_ili.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_flusurv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_fluview.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_fluview_clinical.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_fluview_meta.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_gft.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_kcdc_ili.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_meta.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_nidss_dengue.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_nidss_flu.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_nowcast.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_paho_dengue.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pub_wiki.html</loc>
+    <loc>/reference/pvt_afhsb.html</loc>
   </url>
   <url>
     <loc>/reference/pvt_cdc.html</loc>
@@ -170,6 +128,9 @@
   </url>
   <url>
     <loc>/reference/pvt_ght.html</loc>
+  </url>
+  <url>
+    <loc>/reference/pvt_meta_afhsb.html</loc>
   </url>
   <url>
     <loc>/reference/pvt_meta_norostat.html</loc>
@@ -187,16 +148,10 @@
     <loc>/reference/pvt_twitter.html</loc>
   </url>
   <url>
-    <loc>/reference/request_impl.html</loc>
-  </url>
-  <url>
     <loc>/reference/request_url.html</loc>
   </url>
   <url>
-    <loc>/reference/set_cache.html</loc>
-  </url>
-  <url>
-    <loc>/reference/timeset.html</loc>
+    <loc>/reference/wiki.html</loc>
   </url>
   <url>
     <loc>/reference/with_base_url.html</loc>
