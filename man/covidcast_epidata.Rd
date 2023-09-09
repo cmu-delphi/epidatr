@@ -26,6 +26,16 @@ The \code{covidcast_epidata()} function fetches a list of all signals, and retur
 an object containing fields for every signal:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata <- covidcast_epidata()
+#> Warning: No API key found. You will be limited to non-complex queries and encounter rate
+#> limits if you proceed. To avoid this, you can get your key by registering at
+#> https://api.delphi.cmu.edu/epidata/admin/registration_form and then:
+#> i set the environment variable DELPHI_EPIDATA_KEY
+#> i set the option 'delphi.epidata.key'
+#> 
+#> To save your key for later sessions (and hide it from your code), you can edit
+#> your .Renviron file with:
+#> i usethis::edit_r_environ()
+#> This warning is displayed once every 8 hours.
 epidata$signals
 #> # A tibble: 443 x 3
 #>    source        signal                        short_description                
