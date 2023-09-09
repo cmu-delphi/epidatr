@@ -216,9 +216,11 @@ disable_cache <- function() {
 }
 
 #' Describe current cache
+#'
 #' @description
 #' Print out the information about the cache (as would be returned by cachem's
-#' `info()` method)
+#' `info()` method).
+#'
 #' @seealso [`set_cache`] to start a new cache (and general caching info),
 #'   [`clear_cache`] to delete the cache and set a new one, and [`disable_cache`] to
 #'   disable without deleting
@@ -234,7 +236,7 @@ cache_info <- function() {
 #' Dispatch caching
 #'
 #' @description
-#' the guts of caching, its interposed between fetch and the specific fetch
+#' The guts of caching, its interposed between fetch and the specific fetch
 #' methods. Internal method only.
 #'
 #' @param call the `epidata_call` object
