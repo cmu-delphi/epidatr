@@ -12,6 +12,7 @@ The Delphi 'Epidata' API provides real-time access to epidemiological surveillan
 Useful links:
 \itemize{
   \item \url{https://cmu-delphi.github.io/epidatr/}
+  \item \url{https://cmu-delphi.github.io/delphi-epidata/}
   \item \url{https://github.com/cmu-delphi/epidatr}
   \item Report bugs at \url{https://github.com/cmu-delphi/epidatr/issues}
 }
