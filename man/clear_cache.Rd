@@ -30,21 +30,15 @@ variable is \code{EPIDATR_CACHE_LOGFILE}.}
 should only be set in non-interactive scripts}
   }}
 }
+\value{
+\code{\link{NULL}} no return value, all effects are stored in the package
+environment
+}
 \description{
 Deletes the current cache and resets a new cache. Deletes local data! If you
 are using a session unique cache, you will have to pass the arguments you
 used for \code{set_cache} earlier, otherwise the system-wide \code{.Renviron}-based
 defaults will be used.
-}
-\examples{
-\dontrun{
-clear_cache(
-  dir = "some/subdir",
-  days = 14,
-  max_size = 512,
-  logfile = "some/subdir/logs.txt",
-)
-}
 }
 \seealso{
 \code{\link{set_cache}} to start a new cache (and general caching info),

@@ -1,6 +1,7 @@
 #' turn a signal into a callable
 #' @param signal the signal of interest
 #' @param base_url the base url
+#' @keywords internal
 parse_signal <- function(signal, base_url) {
   class(signal) <- c("covidcast_data_signal", class(signal))
   signal$key <- paste(signal$source, signal$signal, sep = ":")

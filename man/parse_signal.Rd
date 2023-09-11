@@ -9,21 +9,30 @@ parse_signal(signal, base_url)
 \arguments{
 \item{signal}{the signal of interest}
 
-\item{base_url}{the base url
-fetch covidcast data
-
-param data_source data source to fetch
-param signals data source to fetch
-param geo_type geo_type to fetch
-param time_type data source to fetch
-param geo_values data source to fetch
-param time_values data source to fetch
-param as_of data source to fetch
-param issues data source to fetch
-param lag data source to fetch
-return an instance of epidata_call
-keywords internal}
+\item{base_url}{the base url}
 }
 \description{
 turn a signal into a callable
 }
+\keyword{an}
+\keyword{as_of}
+\keyword{covidcast}
+\keyword{data}
+\keyword{data_source}
+\keyword{epidata_call}
+\keyword{fetch}
+\keyword{geo_type}
+\keyword{geo_values}
+\keyword{instance}
+\keyword{internal}
+\keyword{issues}
+\keyword{keywords}
+\keyword{lag}
+\keyword{of}
+\keyword{param}
+\keyword{return}
+\keyword{signals}
+\keyword{source}
+\keyword{time_type}
+\keyword{time_values}
+\keyword{to}

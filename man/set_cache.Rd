@@ -33,6 +33,10 @@ variable is \code{EPIDATR_CACHE_LOGFILE}.}
 \item{confirm}{whether to confirm directory creation. default is \code{TRUE};
 should only be set in non-interactive scripts}
 }
+\value{
+\code{\link{NULL}} no return value, all effects are stored in the package
+environment
+}
 \description{
 By default, epidatr re-requests data from the API on every call of \code{fetch}.
 In case you find yourself repeatedly calling the same data, you can enable
@@ -97,14 +101,12 @@ encoding of the call url. Each file corresponds to a unique epidata-API
 call.
 }
 \examples{
-\dontrun{
 set_cache(
   dir = "some/subdir",
   days = 14,
   max_size = 512,
   logfile = "some/subdir/logs.txt"
 )
-}
 
 }
 \seealso{

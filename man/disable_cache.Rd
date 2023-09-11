@@ -6,6 +6,10 @@
 \usage{
 disable_cache()
 }
+\value{
+\code{\link{NULL}} no return value, all effects are stored in the package
+environment
+}
 \description{
 Disable caching until you call \code{set_cache} or restart R. The files defining
 the cache are untouched. If you are looking to disable the caching more
