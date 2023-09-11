@@ -658,7 +658,7 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #'   signals = "confirmed_7dav_incidence_prop",
 #'   geo_type = "state",
 #'   time_type = "day",
-#'   geo_values = "ca,fl",
+#'   geo_values = c("ca", "fl"),
 #'   time_values = epirange(20200601, 20200801)
 #' )
 #' pub_covidcast(
