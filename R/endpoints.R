@@ -1102,7 +1102,7 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 #' more information on ILINet, see
 #' <https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html>.
 #'
-#' @details The full list of location inputs can be accsssed at
+#' @details The full list of location inputs can be accessed at
 #'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
 #' @examples
@@ -1494,7 +1494,7 @@ pvt_norostat <- function(auth, locations, epiweeks, fetch_args = fetch_args_list
 #'
 #' Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's
 #'
-#' @details The full list of location inputs can be accsssed at
+#' @details The full list of location inputs can be accessed at
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
 #' @examples

@@ -102,7 +102,7 @@ call.
 }
 \examples{
 set_cache(
-  dir = tempdir(),
+  cache_dir = tempdir(),
   days = 14,
   max_size = 512,
   logfile = "logs.txt"

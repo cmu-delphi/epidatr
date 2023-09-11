@@ -49,7 +49,7 @@ more information on ILINet, see
 \url{https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html}.
 }
 \details{
-The full list of location inputs can be accsssed at
+The full list of location inputs can be accessed at
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
 }
 \examples{

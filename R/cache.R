@@ -69,7 +69,7 @@ cache_environ$epidatr_cache <- NULL
 #'   call.
 #' @examples
 #' set_cache(
-#'   dir = tempdir(),
+#'   cache_dir = tempdir(),
 #'   days = 14,
 #'   max_size = 512,
 #'   logfile = "logs.txt"
@@ -186,7 +186,7 @@ set_cache <- function(cache_dir = NULL,
 #' @export
 #' @import cachem
 clear_cache <- function(disable = FALSE, ...) {
-  if (!is.na(cache_environ$epidatr_cache)) {
+  if (any(!is.na(cache_environ$epidatr_cache))) {
     cache_environ$epidatr_cache$destroy()
   }
   if (disable) {
