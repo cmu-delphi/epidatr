@@ -1,3 +1,17 @@
+template:
+  bootstrap: 5
+  bootswatch: cosmo
+  bslib:
+    font_scale: 1.0
+    primary: '#C41230'
+    link-color: '#C41230'
+    navbar-bg: '#C41230'
+    navbar-fg: '#f8f8f8'
+
+navbar:
+  bg: '#C41230'
+  fg: '#f8f8f8'
+
 home:
   links:
     - text: Get the Python client
@@ -5,6 +19,18 @@ home:
 
     - text: View the Delphi Website
       href: https://delphi.cmu.edu/
+      
+    - text: Introduction to Delphi's Tooling Work
+      href: https://cmu-delphi.github.io/delphi-tooling-book/
+    
+    - text: The epiprocess R package
+      href: https://cmu-delphi.github.io/epiprocess/
+    
+    - text: The epipredict R package
+      href: https://cmu-delphi.github.io/epipredict/
+    
+    - text: The epidatasets R package
+      href: https://cmu-delphi.github.io/epidatasets/
 
 reference:
   - title: Configuration and utilities
