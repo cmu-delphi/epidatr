@@ -40,7 +40,7 @@ modeling ([epipredict](https://github.com/cmu-delphi/epipredict)).
 
 ``` r
 library(epidatr)
-# Obtain the smoothed covid-like illness (CLI) signal from the 
+# Obtain the smoothed covid-like illness (CLI) signal from the
 # Facebook survey as it was on April 10, 2021 for the US
 epidata <- pub_covidcast(
   source = "fb-survey",
@@ -75,10 +75,12 @@ epidata
 library(ggplot2)
 ggplot(epidata, aes(x = time_value, y = value)) +
   geom_line() +
-  labs(title = "Smoothed CLI from Facebook Survey",
-       subtitle = "US, 2021",
-       x = "Date",
-       y = "CLI")
+  labs(
+    title = "Smoothed CLI from Facebook Survey",
+    subtitle = "US, 2021",
+    x = "Date",
+    y = "CLI"
+  )
 ```
 
 <img src="man/figures/README-fb-cli-signal-1.png" width="100%" />
