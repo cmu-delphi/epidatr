@@ -17,8 +17,8 @@ provides real-time access to epidemiological surveillance data for
 influenza, COVID-19, and other diseases for the USA at various
 geographical resolutions, both from official government sources such as
 the [Center for Disease Control
-(CDC)](https://www.cdc.gov/datastatistics/index.html) and [Google
-Trends](https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/google-symptoms.html)
+(CDC)](https://www.cdc.gov/datastatistics/index.html), public sources such as [Google
+Trends](https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/google-symptoms.html),
 and private partners such as
 [Facebook](https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/)
 and [Change Healthcare](https://www.changehealthcare.com/). It is built
