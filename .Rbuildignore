@@ -20,4 +20,5 @@
 ^.venv$
 ^env$
 ^.env$
+^README\.Rmd$
 ^CRAN-SUBMISSION$
