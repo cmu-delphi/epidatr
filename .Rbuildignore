@@ -20,3 +20,4 @@
 ^.venv$
 ^env$
 ^.env$
+^README\.Rmd$
