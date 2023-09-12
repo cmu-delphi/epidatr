@@ -658,7 +658,7 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #'   signals = "confirmed_7dav_incidence_prop",
 #'   geo_type = "state",
 #'   time_type = "day",
-#'   geo_values = "ca,fl",
+#'   geo_values = c("ca", "fl"),
 #'   time_values = epirange(20200601, 20200801)
 #' )
 #' pub_covidcast(
@@ -1102,11 +1102,13 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 #' more information on ILINet, see
 #' <https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html>.
 #'
-#' @details The full list of location inputs can be accsssed at
+#' @details The full list of location inputs can be accessed at
 #'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
 #' @examples
-#' pub_fluview(regions = "nat", epiweeks = epirange(201201, 202001))
+#' \dontrun{
+#' pub_fluview(regions = "nat", epiweeks = epirange(201201, 202005))
+#' }
 #' @param regions character. Locations to fetch. Can be any string IDs in
 #'   national, HHS region, census division, most states and territories, and so
 #'   on. Full list link below.
@@ -1492,7 +1494,7 @@ pvt_norostat <- function(auth, locations, epiweeks, fetch_args = fetch_args_list
 #'
 #' Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's
 #'
-#' @details The full list of location inputs can be accsssed at
+#' @details The full list of location inputs can be accessed at
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
 #' @examples

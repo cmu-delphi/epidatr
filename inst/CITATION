@@ -1,0 +1,7 @@
+bibentry(
+  "Misc",
+  title = "Delphi Epidata API",
+  author = "David C. Farrow, Logan C. Brooks, Aaron Rumack, Ryan J. Tibshirani, Roni Rosenfeld",
+  year = 2015,
+  url = "https://github.com/cmu-delphi/delphi-epidata"
+)

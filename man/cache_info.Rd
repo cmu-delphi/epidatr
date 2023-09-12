@@ -6,6 +6,9 @@
 \usage{
 cache_info()
 }
+\value{
+\code{\link{list}} containing the info result as created by cachem
+}
 \description{
 Print out the information about the cache (as would be returned by cachem's
 \code{info()} method).
