@@ -33,5 +33,5 @@ response <- httr::RETRY("GET",
   query = list(),
   terminate_on = c(400, 401, 403, 405, 414, 500),
   http_headers,
-  httr::authenticate("epidata", get_auth_key())
+  httr::authenticate("epidata", get_api_key())
 ) %>% readr::write_rds(testthat::test_path("data/test-do_request-httpbin.rds"))

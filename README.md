@@ -17,8 +17,8 @@ provides real-time access to epidemiological surveillance data for
 influenza, COVID-19, and other diseases for the USA at various
 geographical resolutions, both from official government sources such as
 the [Center for Disease Control
-(CDC)](https://www.cdc.gov/datastatistics/index.html), public sources such as [Google
-Trends](https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/google-symptoms.html),
+(CDC)](https://www.cdc.gov/datastatistics/index.html) and [Google
+Trends](https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/google-symptoms.html)
 and private partners such as
 [Facebook](https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/)
 and [Change Healthcare](https://www.changehealthcare.com/). It is built
@@ -104,14 +104,12 @@ generate your key, register for a pseudo-anonymous account
 [here](https://api.delphi.cmu.edu/epidata/admin/registration_form) and
 see more discussion on the [general API
 website](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html).
-The `epidatr` client will automatically look for this key in the R
-option `delphi.epidata.key` or in the environment variable
-`DELPHI_EPIDATA_KEY`. We recommend storing your key in `.Renviron` file,
-which R will read by default.
+See the `set_api_key()` function documentation for details on how to use
+your API key.
 
-Note that for the time being, the private endpoints (i.e. those prefixed
-with `pvt`) will require a separate key that needs to be passed as an
-argument.
+Note that the private endpoints (i.e. those prefixed with `pvt_`)
+require a separate key that needs to be passed as an argument. These
+endpoints require specific data use agreements to access.
 
 ## Get updates
 
