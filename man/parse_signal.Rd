@@ -2,33 +2,37 @@
 % Please edit documentation in R/covidcast.R
 \name{parse_signal}
 \alias{parse_signal}
-\title{fetch covidcast data}
+\title{turn a signal into a callable}
 \usage{
 parse_signal(signal, base_url)
 }
 \arguments{
-\item{data_source}{data source to fetch}
+\item{signal}{the signal of interest}
 
-\item{signals}{data source to fetch}
-
-\item{geo_type}{geo_type to fetch}
-
-\item{time_type}{data source to fetch}
-
-\item{geo_values}{data source to fetch}
-
-\item{time_values}{data source to fetch}
-
-\item{as_of}{data source to fetch}
-
-\item{issues}{data source to fetch}
-
-\item{lag}{data source to fetch}
-}
-\value{
-an instance of epidata_call
+\item{base_url}{the base url}
 }
 \description{
-fetch covidcast data
+turn a signal into a callable
 }
+\keyword{an}
+\keyword{as_of}
+\keyword{covidcast}
+\keyword{data}
+\keyword{data_source}
+\keyword{epidata_call}
+\keyword{fetch}
+\keyword{geo_type}
+\keyword{geo_values}
+\keyword{instance}
 \keyword{internal}
+\keyword{issues}
+\keyword{keywords}
+\keyword{lag}
+\keyword{of}
+\keyword{param}
+\keyword{return}
+\keyword{signals}
+\keyword{source}
+\keyword{time_type}
+\keyword{time_values}
+\keyword{to}
