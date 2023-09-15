@@ -79,14 +79,12 @@ The Delphi API requires a (free) API key for full functionality. To generate
 your key, register for a pseudo-anonymous account
 [here](https://api.delphi.cmu.edu/epidata/admin/registration_form) and see more
 discussion on the [general API
-website](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html). The
-`epidatr` client will automatically look for this key in the R option
-`delphi.epidata.key` or in the environment variable
-`DELPHI_EPIDATA_KEY`. We recommend storing your key in `.Renviron` file, which R
-will read by default.
+website](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html). See the
+`set_api_key()` function documentation for details on how to use your API key.
 
-Note that for the time being, the private endpoints (i.e. those prefixed with
-`pvt`) will require a separate key that needs to be passed as an argument.
+Note that the private endpoints (i.e. those prefixed with `pvt_`) require a
+separate key that needs to be passed as an argument. These endpoints require
+specific data use agreements to access.
 
 [mit-image]: https://img.shields.io/badge/License-MIT-yellow.svg
 [mit-url]: https://opensource.org/license/mit/
