@@ -52,7 +52,7 @@ Delphi Epidata API Registration Form.
 \url{https://api.delphi.cmu.edu/epidata/admin/registration_form}
 }
 \seealso{
-\code{\link[usethis:edit]{usethis::edit_r_environ()}} to automatically edit the \code{.Renviron}
-file; \code{\link[usethis:edit]{usethis::edit_r_profile()}} to automatically edit the \code{.Rprofile}
+\code{\link[usethis:edit_r_environ]{usethis::edit_r_environ()}} to automatically edit the \code{.Renviron}
+file; \code{\link[usethis:edit_r_profile]{usethis::edit_r_profile()}} to automatically edit the \code{.Rprofile}
 file
 }
