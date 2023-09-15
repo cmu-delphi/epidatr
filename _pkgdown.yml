@@ -36,7 +36,7 @@ reference:
   - title: Configuration and utilities
     desc: Set API keys and handle API data types
   - contents:
-      - get_auth_key
+      - get_api_key
       - avail_endpoints
       - epirange
       - timeset

@@ -29,7 +29,7 @@ do_request <- function(url, params, timeout_seconds = 30) {
     query = params,
     terminate_on = c(400, 401, 403, 405, 414, 500),
     http_headers,
-    httr::authenticate("epidata", get_auth_key()),
+    httr::authenticate("epidata", get_api_key()),
     httr::timeout(timeout_seconds)
   )
   if (res$status_code == 414) {
@@ -39,7 +39,7 @@ do_request <- function(url, params, timeout_seconds = 30) {
       encode = "form",
       terminate_on = c(400, 401, 403, 405, 414, 500),
       http_headers,
-      httr::authenticate("epidata", get_auth_key())
+      httr::authenticate("epidata", get_api_key())
     )
   }
   res

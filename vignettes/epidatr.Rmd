@@ -23,14 +23,8 @@ regions.
 We recommend you register for an API key. While most endpoints are available
 without one, there are [limits on API usage for anonymous
 users](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html), including
-a rate limit. If you regularly request large amounts of data, please consider
-[registering for an API
-key](https://api.delphi.cmu.edu/epidata/admin/registration_form). You can then
-specify this key by either
-
-- setting the environment variable `DELPHI_EPIDATA_KEY`, such as by editing your
-  `.Renviron` file
-- setting the option `delphi.epidata.key` using `options()`
+a rate limit. See `set_api_key()` for details on how to obtain an API key and
+set this package to use it.
 
 ## Basic Usage
 
