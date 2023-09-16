@@ -1,3 +1,9 @@
+# epidatr 1.1.0
+- renamed the mostly internal `get_auth_key` to `get_api_key`
+- added `set_api_key` to more easily set the option
+- various CRAN submission related doc-fixes
+- fixed some errors from passing "" as a key
+
 # epidatr 1.0.0
 
 - Add `set_cache` and other caching functions.
