@@ -12,13 +12,13 @@ Actions](https://github.com/cmu-delphi/epidatr/workflows/ci/badge.svg)](https://
 [![codecov](https://codecov.io/gh/dsweber2/epidatr/branch/dev/graph/badge.svg?token=jVHL9eHZNZ)](https://app.codecov.io/gh/dsweber2/epidatr)
 <!-- badges: end -->
 
-The [Delphi Epidatr package](https://cmu-delphi.github.io/epidatr/) is 
-an R frontend for the
-[Delphi Epidata API](https://cmu-delphi.github.io/delphi-epidata/), which
-provides real-time access to epidemiological surveillance data for
-influenza, COVID-19, and other diseases for the USA at various
-geographical resolutions, both from official government sources such as
-the [Center for Disease Control
+The [Delphi Epidatr package](https://cmu-delphi.github.io/epidatr/) is
+an R front-end for the [Delphi Epidata
+API](https://cmu-delphi.github.io/delphi-epidata/), which provides
+real-time access to epidemiological surveillance data for influenza,
+COVID-19, and other diseases for the USA at various geographical
+resolutions, both from official government sources such as the [Center
+for Disease Control
 (CDC)](https://www.cdc.gov/datastatistics/index.html) and [Google
 Trends](https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/google-symptoms.html)
 and private partners such as
@@ -39,8 +39,8 @@ processing ([epiprocess](https://github.com/cmu-delphi/epiprocess)) and
 modeling ([epipredict](https://github.com/cmu-delphi/epipredict)).
 
 ## Usage
-You can find detailed docs here: 
-[https://cmu-delphi.github.io/epidatr/](https://cmu-delphi.github.io/epidatr/)
+
+You can find detailed docs here:
 
 ``` r
 library(epidatr)
@@ -90,22 +90,26 @@ ggplot(epidata, aes(x = time_value, y = value)) +
 <img src="man/figures/README-fb-cli-signal-1.png" width="100%" />
 
 ## Installation
+
 You can install the stable version of this package from CRAN:
 
 ``` r
+```R
 install.packages("epidatr")
 pak::pkg_install("epidatr")
 renv::install("epidatr")
 ```
 
-Or if you want the development version, install from GitHub:
 
-``` r
-# Install the dev version using `pak` or `remotes`
-pak::pkg_install("cmu-delphi/epidatr")
-renv::install("cmu-delphi/epidatr")
-remotes::install_github("cmu-delphi/epidatr")
-```
+    Or if you want the development version, install from GitHub:
+
+    ```R
+    ```R
+    # Install the dev version using `pak` or `remotes`
+    pak::pkg_install("cmu-delphi/epidatr")
+    remotes::install_github("cmu-delphi/epidatr")
+
+\`\`\`
 
 ### API Keys
 
