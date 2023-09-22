@@ -94,22 +94,19 @@ ggplot(epidata, aes(x = time_value, y = value)) +
 You can install the stable version of this package from CRAN:
 
 ``` r
-```R
 install.packages("epidatr")
 pak::pkg_install("epidatr")
 renv::install("epidatr")
 ```
 
+Or if you want the development version, install from GitHub:
 
-    Or if you want the development version, install from GitHub:
-
-    ```R
-    ```R
-    # Install the dev version using `pak` or `remotes`
-    pak::pkg_install("cmu-delphi/epidatr")
-    remotes::install_github("cmu-delphi/epidatr")
-
-\`\`\`
+``` r
+# Install the dev version using `pak` or `remotes`
+pak::pkg_install("cmu-delphi/epidatr")
+remotes::install_github("cmu-delphi/epidatr")
+renv::install("cmu-delphi/epidatr")
+```
 
 ### API Keys
 
