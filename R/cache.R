@@ -163,7 +163,7 @@ set_cache <- function(cache_dir = NULL,
   } else if (cache_exists) {
     cache_environ$epidatr_cache <- cachem::cache_disk(
       dir = cache_dir,
-      max_size = as.integer(max_size * 1024^2),
+      max_size = max_size * 1024^2,
       max_age = days * 24 * 60 * 60,
       logfile = file.path(cache_dir, logfile)
     )
