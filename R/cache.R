@@ -258,7 +258,10 @@ cache_epidata_call <- function(epidata_call, fetch_args = fetch_args_list()) {
           permanently with environmental variable `EPIDATR_USE_CACHE=FALSE`",
           "i" = "setting `EPIDATR_CACHE_MAX_AGE_DAYS={Sys.getenv('EPIDATR_CACHE_MAX_AGE_DAYS
           ', unset = 1)}` to e.g. `3/24` (3 hours)."
-        )
+        ),
+        .frequency = "regularly",
+        .frequency_id = "cache timing issues",
+        class = "cache_recent_data"
       )
     }
     if (!is.key_missing(cached)) {
