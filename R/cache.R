@@ -252,12 +252,12 @@ cache_epidata_call <- function(epidata_call, fetch_args = fetch_args_list()) {
     if (as_of_recent || issues_recent) {
       cli::cli_warn(
         c(
-          "using cached results with `as_of` within the past week (or the future!).",
-          "This will likely result in an invalid cache. Consider\n",
-          "1. disabling the cache for this session with `disable_cache` or permanently with environmental ",
-          "variable `EPIDATR_USE_CACHE=FALSE`\n",
-          "2. setting `EPIDATR_CACHE_MAX_AGE_DAYS={Sys.getenv('EPIDATR_CACHE_MAX_AGE_DAYS', unset = 1)}`",
-          " to e.g. `3/24` (3 hours)."
+          "Using cached results with `as_of` within the past week (or the future!).
+          This will likely result in an invalid cache. Consider",
+          "i" = "disabling the cache for this session with `disable_cache` or
+          permanently with environmental variable `EPIDATR_USE_CACHE=FALSE`",
+          "i" = "setting `EPIDATR_CACHE_MAX_AGE_DAYS={Sys.getenv('EPIDATR_CACHE_MAX_AGE_DAYS
+          ', unset = 1)}` to e.g. `3/24` (3 hours)."
         ),
         .frequency = "regularly",
         .frequency_id = "cache timing issues",
@@ -267,8 +267,8 @@ cache_epidata_call <- function(epidata_call, fetch_args = fetch_args_list()) {
     if (!is.key_missing(cached)) {
       cli::cli_warn(
         c(
-          "loading from the cache at {cache_environ$epidatr_cache$info()$dir}; ",
-          "see {cache_environ$epidatr_cache$info()$logfile} for more details."
+          "Loading from the cache at {cache_environ$epidatr_cache$info()$dir};
+          see {cache_environ$epidatr_cache$info()$logfile} for more details."
         ),
         .frequency = "regularly",
         .frequency_id = "using the cache",
@@ -277,7 +277,6 @@ cache_epidata_call <- function(epidata_call, fetch_args = fetch_args_list()) {
       return(cached[[1]])
     }
   }
-  'which was saved on {format(cached[[2]],"%A %B %d, %Y")}, which took {round(cached[[3]][[3]], digits=5)} seconds.'
   # need to actually get the data, since its either not in the cache or we're not caching
   runtime <- system.time(if (epidata_call$only_supports_classic) {
     fetched <- fetch_classic(epidata_call, fetch_args)
