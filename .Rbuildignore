@@ -22,3 +22,4 @@
 ^.env$
 ^README\.Rmd$
 ^CRAN-SUBMISSION$
+^LICENSE\.md$
