@@ -4,12 +4,9 @@
 \alias{clear_cache}
 \title{Manually reset the cache, deleting all currently saved data and starting afresh}
 \usage{
-clear_cache(disable = FALSE, ...)
+clear_cache(..., disable = FALSE)
 }
 \arguments{
-\item{disable}{instead of setting a new cache, disable caching entirely;
-defaults to \code{FALSE}}
-
 \item{...}{
   Arguments passed on to \code{\link[=set_cache]{set_cache}}
   \describe{
@@ -29,6 +26,9 @@ variable is \code{EPIDATR_CACHE_LOGFILE}.}
     \item{\code{confirm}}{whether to confirm directory creation. default is \code{TRUE};
 should only be set in non-interactive scripts}
   }}
+
+\item{disable}{instead of setting a new cache, disable caching entirely;
+defaults to \code{FALSE}}
 }
 \value{
 \code{\link{NULL}} no return value, all effects are stored in the package

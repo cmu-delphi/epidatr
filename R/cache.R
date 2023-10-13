@@ -185,7 +185,7 @@ set_cache <- function(cache_dir = NULL,
 #'   [`disable_cache`] to only disable without deleting, and [`cache_info`]
 #' @export
 #' @import cachem
-clear_cache <- function(disable = FALSE, ...) {
+clear_cache <- function(..., disable = FALSE) {
   if (any(!is.na(cache_environ$epidatr_cache))) {
     cache_environ$epidatr_cache$destroy()
   }
