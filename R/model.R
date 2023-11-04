@@ -1,12 +1,12 @@
-#' EpiRange
+#' Specify a range of days or weeks for API requests
 #'
-#' @description
 #' Specify a date range (in days or epiweeks) for an API request.
 #'
-#' @param from A `Date`, integer-like value, or integer-like string that takes the
-#'   form YYYYMMDD for dates or YYYYWW for epiweeks.
-#' @param to A `Date`, integer-like value, or integer-like string that takes the
-#'  form YYYYMMDD for dates or YYYYWW for epiweeks.
+#' @param from The first date to request. Can be specified as a `Date` or as an
+#'   integer or integer-like string in the format YYYYMMDD for dates or YYYYWW
+#'   for epiweeks.
+#' @param to The final date to request (inclusive), specified the same way as
+#'   `from`.
 #' @return An `EpiRange` object.
 #' @importFrom checkmate check_integerish check_character check_date assert
 #'
@@ -62,28 +62,26 @@ epirange <- function(from, to) {
 }
 
 
-#' Timeset
+#' Timeset formats for specifying dates
 #'
-#' @description
 #' Many API calls accept timesets to specify the time ranges of data being
 #' requested. Timesets can be specified with `epirange()`, as `Date` objects, or
 #' with wildcards.
 #'
-#' Timesets are not special R types; the term simply describes any value that
-#' would be accepted by epidatr to specify the time value of an epidata query.
-#' The allowed values are:
+#' Timesets are not special R types; the term simply describes any value that is
+#' accepted by epidatr to specify the time value of an epidata query:
 #'
-#' - Dates: `Date` instances, integer-like values, or integer-like strings that
-#'   take the form YYYYMMDD.
-#' - Epiweeks: Integer-like values or integer-like strings that take the form
-#'   YYYYWW.
+#' - Dates: `Date` instances.
+#' - Date strings or integers: Strings or integers in the format YYYYMMDD.
+#' - Epiweeks: Strings or integers in the format YYYYWW, where WW is the epiweek
+#'   number.
 #' - EpiRanges: A range returned by `epirange()`, or a list of multiple ranges.
-#' - Wildcard: The string `"*"`, which request all available time values.
+#' - Wildcard: The string `"*"`, which requests all available time values.
 #'
-#' Please refer to the specific endpoint documentation for guidance on using
-#' dates vs weeks. Most endpoints support only one or the other. Some (less
-#' commonly used) endpoints may not accept the `"*"` wildcard, but this can be
-#' simulated with a large `epirange()`.
+#' Refer to the specific endpoint documentation for guidance on using dates vs
+#' weeks. Most endpoints support only one or the other. Some (less commonly
+#' used) endpoints may not accept the `"*"` wildcard, but this can be simulated
+#' with a large `epirange()`.
 #'
 #' @name timeset
 NULL
