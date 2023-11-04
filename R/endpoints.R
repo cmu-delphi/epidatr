@@ -433,7 +433,7 @@ pub_covid_hosp_facility <- function(
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' COVID Hospitalization Data by State
+#' COVID hospitalization data by state
 #'
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>.

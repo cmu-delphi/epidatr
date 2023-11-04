@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_covid_hosp_state_timeseries}
 \alias{pub_covid_hosp_state_timeseries}
-\title{COVID Hospitalization Data by State}
+\title{COVID hospitalization data by state}
 \usage{
 pub_covid_hosp_state_timeseries(
   states,
