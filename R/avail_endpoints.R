@@ -1,11 +1,13 @@
-#' List all available endpoints.
+#' List all available Epidata API endpoints
 #'
 #' @description
-#' A function that prints a tibble with two columns: `Endpoint` contains the
-#' function for accessing the Delphi Epidata API endpoint along with a
-#' `Description`.
+#' Fetches a data frame of all Epidata API endpoints that can be accessed using
+#' this package, with a brief description.
 #'
-#' @return A [`tibble::tibble`].
+#' @return A [`tibble::tibble`] of endpoints, with two columns:
+#'   \item{Endpoint}{Name of the function for accessing this API endpoint.}
+#'   \item{Description}{One-sentence description of the data available at the
+#'   endpoint.}
 #' @export
 #' @importFrom utils help.search
 #'

@@ -103,42 +103,36 @@ print.epidata_call <- function(x, ...) {
   ))
 }
 
-#' Customize fetch settings
+#' Set custom API request parameters
 #'
-#' @rdname fetch_args_list
-#' @aliases fetch_args
-#'
-#' @description
-#' A constructor for `fetch_args` objects, which are used to pass arguments to
-#' the `fetch` function.
+#' Used to specify custom options when making API requests, such as to set
+#' timeouts or change data formats. These options are used by `fetch()` when it
+#' makes calls to the Epidata API.
 #'
 #' @param ... not used for values, forces later arguments to bind by name
-#' @param fields a list of epidata fields to return, or NULL to return all
-#'  fields (default) e.g. c("time_value", "value") to return only the
-#'  time_value and value fields or c("-direction") to return everything except
-#'  the direction field
-#' @param disable_date_parsing disable automatic date parsing; by default `FALSE`
-#' @param disable_data_frame_parsing disable automatic conversion to data frame; this
-#'  is only supported by endpoints that only support the 'classic' format (non-tabular).
-#'  by default `FALSE`
-#' @param return_empty boolean that allows returning an empty tibble if there is no data;
-#'  by default `FALSE`
-#' @param timeout_seconds the maximum amount of time to wait for a response; by default
-#'  `FALSE`
-#' @param base_url base URL to use; by default `NULL`, which means the global base url
-#'  `"https://api.delphi.cmu.edu/epidata/"`
-#' @param dry_run boolean that allows skipping the call to the API and instead
-#'  returns the `epidata_call` object (useful for debugging); by default `TRUE`
-#' @param debug boolean that allows returning the raw response from the API; by default
-#'  `FALSE`
-#' @param format_type the format to request from the API, one of classic, json, csv; this
-#'  is only used by `fetch_debug`, and by default is `"json"`
-#' @return
-#' - For `fetch_args_list`: a `fetch_args` object
+#' @param fields a list of epidata fields to return, or `NULL` to return all
+#'   fields (default). e.g. `c("time_value", "value")` to return only the
+#'   `time_value` and `value` fields or `c("-direction")` to return everything
+#'   except the direction field
+#' @param disable_date_parsing disable automatic date parsing
+#' @param disable_data_frame_parsing disable automatic conversion to data frame;
+#'   this is only supported by endpoints that only support the 'classic' format
+#'   (non-tabular)
+#' @param return_empty boolean that allows returning an empty tibble if there is
+#'   no data
+#' @param timeout_seconds the maximum amount of time (in seconds) to wait for a
+#'   response from the API server
+#' @param base_url base URL to use; by default `NULL`, which means the global
+#'   base URL `"https://api.delphi.cmu.edu/epidata/"`
+#' @param dry_run if `TRUE`, skip the call to the API and instead return the
+#'   `epidata_call` object (useful for debugging)
+#' @param debug if `TRUE`, return the raw response from the API
+#' @param format_type the format to request from the API, one of classic, json,
+#'   csv; this is only used by `fetch_debug`, and by default is `"json"`
+#' @return A `fetch_args` object containing all the specified options
 #' @export
-#'
+#' @aliases fetch_args
 #' @importFrom checkmate assert_character assert_logical assert_numeric
-#'
 fetch_args_list <- function(
     ...,
     fields = NULL,
@@ -149,7 +143,7 @@ fetch_args_list <- function(
     base_url = NULL,
     dry_run = FALSE,
     debug = FALSE,
-    format_type = "json") {
+    format_type = c("json", "classic", "csv")) {
   assert_character(fields, null.ok = TRUE, any.missing = FALSE)
   assert_logical(disable_date_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_logical(disable_data_frame_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
@@ -158,8 +152,7 @@ fetch_args_list <- function(
   assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
   assert_logical(debug, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  assert_character(format_type, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  assert(format_type %in% c("json", "csv", "classic"), "format_type must be one of json, csv, classic")
+  format_type <- match.arg(format_type)
 
   structure(
     list(
