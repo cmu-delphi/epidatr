@@ -145,7 +145,7 @@ fetch_args_list <- function(
     base_url = NULL,
     dry_run = FALSE,
     debug = FALSE,
-    format_type = "json") {
+    format_type = c("json", "classic", "csv")) {
   assert_character(fields, null.ok = TRUE, any.missing = FALSE)
   assert_logical(disable_date_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_logical(disable_data_frame_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
@@ -155,7 +155,7 @@ fetch_args_list <- function(
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
   assert_logical(debug, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_character(format_type, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  assert(format_type %in% c("json", "csv", "classic"), "format_type must be one of json, csv, classic")
+  format_type <- match.arg(format_type)
 
   structure(
     list(
