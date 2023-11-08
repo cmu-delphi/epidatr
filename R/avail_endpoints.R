@@ -1,5 +1,6 @@
 #' List all available Epidata API endpoints
 #'
+#' @description
 #' Fetches a data frame of all Epidata API endpoints that can be accessed using
 #' this package, with a brief description.
 #'
