@@ -114,21 +114,19 @@ print.epidata_call <- function(x, ...) {
 #'   fields (default). e.g. `c("time_value", "value")` to return only the
 #'   `time_value` and `value` fields or `c("-direction")` to return everything
 #'   except the direction field
-#' @param disable_date_parsing disable automatic date parsing; by default
-#'   `FALSE`
+#' @param disable_date_parsing disable automatic date parsing
 #' @param disable_data_frame_parsing disable automatic conversion to data frame;
 #'   this is only supported by endpoints that only support the 'classic' format
-#'   (non-tabular). by default `FALSE`
+#'   (non-tabular)
 #' @param return_empty boolean that allows returning an empty tibble if there is
-#'   no data; by default `FALSE`
+#'   no data
 #' @param timeout_seconds the maximum amount of time (in seconds) to wait for a
-#'   response from the API server; by default 30
+#'   response from the API server
 #' @param base_url base URL to use; by default `NULL`, which means the global
 #'   base URL `"https://api.delphi.cmu.edu/epidata/"`
 #' @param dry_run if `TRUE`, skip the call to the API and instead return the
-#'   `epidata_call` object (useful for debugging); by default `FALSE`
-#' @param debug if `TRUE`, return the raw response from the API; by default
-#'   `FALSE`
+#'   `epidata_call` object (useful for debugging)
+#' @param debug if `TRUE`, return the raw response from the API
 #' @param format_type the format to request from the API, one of classic, json,
 #'   csv; this is only used by `fetch_debug`, and by default is `"json"`
 #' @return A `fetch_args` object containing all the specified options

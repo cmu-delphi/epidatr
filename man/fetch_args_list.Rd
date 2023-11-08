@@ -15,7 +15,7 @@ fetch_args_list(
   base_url = NULL,
   dry_run = FALSE,
   debug = FALSE,
-  format_type = "json"
+  format_type = c("json", "classic", "csv")
 )
 }
 \arguments{
@@ -26,27 +26,25 @@ fields (default). e.g. \code{c("time_value", "value")} to return only the
 \code{time_value} and \code{value} fields or \code{c("-direction")} to return everything
 except the direction field}
 
-\item{disable_date_parsing}{disable automatic date parsing; by default
-\code{FALSE}}
+\item{disable_date_parsing}{disable automatic date parsing}
 
 \item{disable_data_frame_parsing}{disable automatic conversion to data frame;
 this is only supported by endpoints that only support the 'classic' format
-(non-tabular). by default \code{FALSE}}
+(non-tabular)}
 
 \item{return_empty}{boolean that allows returning an empty tibble if there is
-no data; by default \code{FALSE}}
+no data}
 
 \item{timeout_seconds}{the maximum amount of time (in seconds) to wait for a
-response from the API server; by default 30}
+response from the API server}
 
 \item{base_url}{base URL to use; by default \code{NULL}, which means the global
 base URL \code{"https://api.delphi.cmu.edu/epidata/"}}
 
 \item{dry_run}{if \code{TRUE}, skip the call to the API and instead return the
-\code{epidata_call} object (useful for debugging); by default \code{FALSE}}
+\code{epidata_call} object (useful for debugging)}
 
-\item{debug}{if \code{TRUE}, return the raw response from the API; by default
-\code{FALSE}}
+\item{debug}{if \code{TRUE}, return the raw response from the API}
 
 \item{format_type}{the format to request from the API, one of classic, json,
 csv; this is only used by \code{fetch_debug}, and by default is \code{"json"}}
