@@ -152,7 +152,6 @@ fetch_args_list <- function(
   assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
   assert_logical(debug, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  assert_character(format_type, null.ok = FALSE, len = 1L, any.missing = FALSE)
   format_type <- match.arg(format_type)
 
   structure(
