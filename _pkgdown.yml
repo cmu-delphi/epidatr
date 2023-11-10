@@ -37,10 +37,14 @@ reference:
     desc: Set API keys and handle API data types
   - contents:
       - get_api_key
-      - avail_endpoints
       - epirange
       - timeset
-  - title: Control Caching behavior
+  - title: Data source and signal discovery
+    desc: Quickly explore endpoints, and API signal and source names
+  - contents:
+      - avail_endpoints
+      - covidcast_epidata
+  - title: Control caching behavior
     desc: Configure an optional persistent cache
   - contents:
       - set_cache
@@ -58,7 +62,3 @@ reference:
     desc: These endpoints require additional authorization to use
   - contents:
       - starts_with("pvt_")
-  - title: Autocomplete helpers
-    desc: Objects that can autocomplete API signals names for faster exploration
-  - contents:
-      - covidcast_epidata
