@@ -5,9 +5,9 @@
 # update the documentation web site on pushes to `dev` branch.
 on:
   push:
-    branches: [main]
+    branches: [dev]
   pull_request:
-    branches: [main]
+    branches: [dev]
   release:
     types: [published]
   workflow_dispatch:
