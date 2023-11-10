@@ -717,10 +717,11 @@ pub_covidcast <- function(
       missing(signals) ||
       missing(time_type) ||
       missing(geo_type) ||
-      missing(time_values) || missing(geo_values)
+      missing(time_values) ||
+      missing(geo_values)
   ) {
     stop(
-      "`source`, `signals`, `time_type`, `geo_type`, `time_values`, and `geo_value` are all required"
+      "`source`, `signals`, `time_type`, `geo_type`, `time_values`, and `geo_values` are all required"
     )
   }
 
