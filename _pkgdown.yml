@@ -8,6 +8,9 @@ template:
     navbar-bg: '#C41230'
     navbar-fg: '#f8f8f8'
 
+development:
+  mode: auto
+
 navbar:
   bg: '#C41230'
   fg: '#f8f8f8'
