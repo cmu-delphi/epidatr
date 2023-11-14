@@ -36,15 +36,15 @@ R -e 'devtools::document()'
 python -m http.server -d docs
 ```
 
+For `pkgdown` to correctly generate both public (`main`) and `dev` documentation sites, the package version in `DESCRIPTION` on `dev` must have four components, and be of the format `x.x.x.9000`. The package version on `main` must be in the format `x.x.x`.
+
+The documentation website is updated on push or pull request to the `main` and `dev` branches.
+
 ## Release process
 
 ### Manual
 
 TBD
-
-For `pkgdown` to correctly generate both public (`main`) and `dev` documentation sites, the package version in `DESCRIPTION` on `dev` must have four components, and be of the format `x.x.x.9000`. The package version on `main` must be in the format `x.x.x`.
-
-The documentation website is updated on push or pull request to the `main` and `dev` branches.
 
 ### Automated (currently unavailable)
 
