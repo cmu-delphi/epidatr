@@ -56,7 +56,7 @@ to access them we rely on the backtick operator:
 }\if{html}{\out{</div>}}
 
 These objects can be used directly to fetch data, without requiring us to use
-the \code{covidcast()} function. Simply use the \verb{$call} attribute of the object:
+the \code{pub_covidcast()} function. Simply use the \verb{$call} attribute of the object:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa",
                                               epirange(20210405, 20210410))
