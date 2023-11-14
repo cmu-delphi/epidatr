@@ -146,3 +146,105 @@ test_that("basic_epidata_call", {
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
 })
+
+test_that("endpoints fail when given args via dots", {
+  dots_error <- "`...` must be empty"
+
+  # time value/epiweek arg is passed erroneously as `date_range`
+  expect_error(
+    pub_covid_hosp_facility_lookup(
+      state = "fl",
+      date_range = 20200101
+    ),
+    regexp = dots_error
+  )
+  expect_error(
+    pub_covid_hosp_facility(
+      hospital_pks = "100075",
+      date_range = epirange(20200101, 20200501)
+    ),
+    regexp = dots_error
+  )
+  expect_error(
+    pub_covid_hosp_state_timeseries(
+      states = "fl",
+      date_range = epirange(20200101, 20200501)
+    ),
+    regexp = dots_error
+  )
+  expect_error(
+    pub_covidcast(
+      source = "jhu-csse",
+      signals = "confirmed_7dav_incidence_prop",
+      time_type = "day",
+      geo_type = "state",
+      date_range = epirange(20200601, 20200801),
+      geo_values = "ca,fl"
+    ),
+    regexp = dots_error
+  )
+  expect_error(
+    pub_ecdc_ili(
+      regions = "austria",
+      date_range = epirange(201201, 202001)
+    ),
+    regexp = dots_error
+  )
+  expect_error(
+    pub_flusurv(
+      locations = "CA",
+      date_range = epirange(201201, 202001)
+    ),
+    regexp = dots_error
+  )
+  expect_error(
+    pub_fluview_clinical(
+      regions = "nat",
+      date_range = epirange(201601, 201701)
+    ),
+    regexp = dots_error
+  )
+  expect_error(
+    pub_fluview(
+      regions = "nat",
+      date_range = epirange(201601, 201701)
+    ),
+    regexp = dots_error
+  )
+  expect_error(
+    pub_kcdc_ili(
+      regions = "?",
+      date_range = epirange(201201, 202001)
+    ),
+    regexp = dots_error
+  )
+  expect_error(
+    pub_nidss_flu(
+      regions = "taipei",
+      date_range = epirange(201201, 202001)
+    ),
+    regexp = dots_error
+  )
+  expect_error(
+    pub_paho_dengue(
+      regions = "ca",
+      date_range = epirange(201201, 202001)
+    ),
+    regexp = dots_error
+  )
+  expect_error(
+    pvt_twitter(
+      auth = "yourkey",
+      locations = "CA",
+      date_range = epirange(201501, 202001)
+    ),
+    regexp = dots_error
+  )
+  expect_error(
+    pub_wiki(
+      articles = "avian_influenza",
+      date_range = epirange(201501, 202001)
+    ),
+    regexp = dots_error
+  )
+})
