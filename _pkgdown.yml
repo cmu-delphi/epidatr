@@ -33,24 +33,11 @@ home:
       href: https://cmu-delphi.github.io/epidatasets/
 
 reference:
-  - title: Configuration and utilities
-    desc: Set API keys and handle API data types
-  - contents:
-      - get_api_key
-      - epirange
-      - timeset
   - title: Data source and signal discovery
     desc: Quickly explore endpoints, and API signal and source names
   - contents:
       - avail_endpoints
       - covidcast_epidata
-  - title: Control caching behavior
-    desc: Configure an optional persistent cache
-  - contents:
-      - set_cache
-      - clear_cache
-      - disable_cache
-      - cache_info
   - title: Make API requests
     desc: Query Delphi Epidata endpoints
   - contents:
@@ -58,6 +45,19 @@ reference:
       - fetch_args_list
       - has_keyword("endpoint")
       - -starts_with("pvt_")
+  - title: Configuration and utilities
+    desc: Set API keys and handle API data types
+  - contents:
+      - get_api_key
+      - epirange
+      - timeset
+  - title: Control caching behavior
+    desc: Configure an optional persistent cache
+  - contents:
+      - set_cache
+      - clear_cache
+      - disable_cache
+      - cache_info
   - title: Make requests to private API endpoints
     desc: These endpoints require additional authorization to use
   - contents:
