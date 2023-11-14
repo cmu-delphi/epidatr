@@ -89,6 +89,8 @@ pub_covid_hosp_facility_lookup <- function(
     zip = NULL,
     fips_code = NULL,
     fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("state", state, len = 1, required = FALSE)
   assert_character_param("ccn", ccn, len = 1, required = FALSE)
   assert_character_param("city", city, len = 1, required = FALSE)
@@ -171,6 +173,8 @@ pub_covid_hosp_facility <- function(
     ...,
     publication_dates = NULL,
     fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("hospital_pks", hospital_pks)
   assert_timeset_param("collection_weeks", collection_weeks)
   assert_timeset_param("publication_dates", publication_dates, required = FALSE)
@@ -465,6 +469,8 @@ pub_covid_hosp_facility <- function(
 #' @export
 #
 pub_covid_hosp_state_timeseries <- function(states, dates, ..., issues = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("states", states)
   assert_timeset_param("dates", dates)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -711,6 +717,8 @@ pub_covidcast <- function(
     issues = NULL,
     lag = NULL,
     fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   # Check parameters
   if (
     missing(source) ||
@@ -918,6 +926,8 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks, fetch_args = fe
 #' @keywords endpoint
 #' @export
 pub_ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -975,6 +985,8 @@ pub_ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetc
 #' @keywords endpoint
 #' @export
 pub_flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1031,6 +1043,8 @@ pub_flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fet
 #' @keywords endpoint
 #' @export
 pub_fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1134,6 +1148,8 @@ pub_fluview <- function(
     lag = NULL,
     auth = NULL,
     fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1284,6 +1300,8 @@ pvt_ght <- function(auth, locations, epiweeks, query, fetch_args = fetch_args_li
 #' @keywords endpoint
 #' @export
 pub_kcdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1413,6 +1431,8 @@ pub_nidss_dengue <- function(locations, epiweeks, fetch_args = fetch_args_list()
 #' @keywords endpoint
 #' @export
 pub_nidss_flu <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1544,6 +1564,8 @@ pub_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 #' @keywords endpoint
 #' @export
 pub_paho_dengue <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1699,6 +1721,8 @@ pvt_sensors <- function(auth, names, locations, epiweeks, fetch_args = fetch_arg
 #' @keywords endpoint
 #' @export
 pvt_twitter <- function(auth, locations, ..., dates = NULL, epiweeks = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
   assert_timeset_param("dates", dates, required = FALSE)
@@ -1767,6 +1791,8 @@ pub_wiki <- function(
     hours = NULL,
     language = "en",
     fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("articles", articles)
   assert_timeset_param("dates", dates, required = FALSE)
   assert_timeset_param("epiweeks", epiweeks, required = FALSE)
