@@ -58,8 +58,3 @@ The release consists of multiple steps which can be all done via the GitHub webs
    2. create another [Pull Request](https://github.com/cmu-delphi/epidatr/pulls) to merge the changes back to the `dev` branch
    3. create a [GitHub release](https://github.com/cmu-delphi/epidatr/releases) with automatically derived release notes
 5. Release to CRAN
-
-[mit-image]: https://img.shields.io/badge/License-MIT-yellow.svg
-[mit-url]: https://opensource.org/license/MIT
-[github-actions-image]: https://github.com/cmu-delphi/epidatr/workflows/ci/badge.svg
-[github-actions-url]: https://github.com/cmu-delphi/epidatr/actions
