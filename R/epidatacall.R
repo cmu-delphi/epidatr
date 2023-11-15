@@ -144,6 +144,8 @@ fetch_args_list <- function(
     dry_run = FALSE,
     debug = FALSE,
     format_type = c("json", "classic", "csv")) {
+  rlang::check_dots_empty()
+
   assert_character(fields, null.ok = TRUE, any.missing = FALSE)
   assert_logical(disable_date_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_logical(disable_data_frame_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
