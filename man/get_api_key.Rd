@@ -2,12 +2,12 @@
 % Please edit documentation in R/auth.R
 \name{get_api_key}
 \alias{get_api_key}
-\alias{set_api_key}
+\alias{save_api_key}
 \title{Get and set API keys}
 \usage{
 get_api_key()
 
-set_api_key()
+save_api_key()
 }
 \value{
 For \code{get_api_key()}, returns the current API key as a string, or
@@ -24,7 +24,7 @@ including a rate limit. If you regularly request large amounts of data,
 please consider \href{https://api.delphi.cmu.edu/epidata/admin/registration_form}{registering for an API key}.
 
 API keys are strings read from the environment variable \code{DELPHI_EPIDATA_KEY}.
-We recommend setting your key with \code{set_api_key()}, which will modify your
+We recommend setting your key with \code{save_api_key()}, which will modify your
 \code{.Renviron} file and will persist your key across R sessions (see \code{?Startup}
 for a description of \code{.Renviron} files). Alternatively, you can modify the
 environment variable in the shell or with \code{Sys.setenv()}, but these will not
