@@ -7,10 +7,7 @@
 \usage{
 get_api_key()
 
-set_api_key(key)
-}
-\arguments{
-\item{key}{API key to use for future requests}
+set_api_key()
 }
 \value{
 For \code{get_api_key()}, returns the current API key as a string, or
@@ -26,33 +23,19 @@ without one, there are \href{https://cmu-delphi.github.io/delphi-epidata/api/api
 including a rate limit. If you regularly request large amounts of data,
 please consider \href{https://api.delphi.cmu.edu/epidata/admin/registration_form}{registering for an API key}.
 
-API keys are strings and can be set in two ways. If the environment variable
-\code{DELPHI_EPIDATA_KEY} is set, it will be used automatically. Environment
-variables can be set either in the shell or by editing your \code{.Renviron} file,
-which will ensure the setting applies to all R sessions. See \code{?Startup} for a
-description of \code{Renviron} files and where they can be placed.
-
-Alternately, the API key can be set from within a session by using
-\code{set_api_key()}, which sets the R option \code{delphi.epidata.key} using
-\code{options()}. If this option is set, it is used in preference to the
-environment variable, so you may change keys within an R session. R options
-are not preserved between sessions, so \code{set_api_key()} must be run every time
-you open R. Alternately, you can have R set the option at startup by adding
-it to your \code{.Rprofile}; see \code{?Startup} for a description of \code{Rprofile} files
-and where they can be placed.
+API keys are strings read from the environment variable \code{DELPHI_EPIDATA_KEY}.
+We recommend setting your key with \code{set_api_key()}, which will modify your
+\code{.Renviron} file and will persist your key across R sessions (see \code{?Startup}
+for a description of \code{.Renviron} files). Alternatively, you can modify the
+environment variable in the shell or with \code{Sys.setenv()}, but these will not
+persist across sessions.
 
 Once an API key is set, it is automatically used for all requests made by
 functions in this package.
 }
 \references{
-Delphi Epidata API Keys documentation.
-\url{https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html}
-
-Delphi Epidata API Registration Form.
-\url{https://api.delphi.cmu.edu/epidata/admin/registration_form}
+\itemize{
+\item \href{https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html}{Delphi Epidata API Keys documentation}.
+\item \href{https://api.delphi.cmu.edu/epidata/admin/registration_form}{Delphi Epidata API Registration Form}.
 }
-\seealso{
-\code{\link[usethis:edit_r_environ]{usethis::edit_r_environ()}} to automatically edit the \code{.Renviron}
-file; \code{\link[usethis:edit_r_profile]{usethis::edit_r_profile()}} to automatically edit the \code{.Rprofile}
-file
 }
