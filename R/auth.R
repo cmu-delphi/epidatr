@@ -11,7 +11,7 @@
 #' key](https://api.delphi.cmu.edu/epidata/admin/registration_form).
 #'
 #' API keys are strings read from the environment variable `DELPHI_EPIDATA_KEY`.
-#' We recommend setting your key with `set_api_key()`, which will modify your
+#' We recommend setting your key with `save_api_key()`, which will modify your
 #' `.Renviron` file and will persist your key across R sessions (see `?Startup`
 #' for a description of `.Renviron` files). Alternatively, you can modify the
 #' environment variable in the shell or with `Sys.setenv()`, but these will not
@@ -39,7 +39,7 @@ get_api_key <- function() {
   cli::cli_warn(
     c(
       "No API key found. You will be limited to non-complex queries and encounter rate limits if you proceed.",
-      "i" = "See {.help set_api_key} for details on obtaining and setting API keys."
+      "i" = "See {.help save_api_key} for details on obtaining and setting API keys."
     ),
     .frequency = "regularly",
     .frequency_id = "delphi.epidata.key"
@@ -49,7 +49,7 @@ get_api_key <- function() {
 
 #' @rdname get_api_key
 #' @export
-set_api_key <- function() {
+save_api_key <- function() {
   cli::cli_inform(
     c(
       "i" = "This function will open your .Renviron file in a text editor. You will need to
