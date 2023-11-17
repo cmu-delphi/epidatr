@@ -8,6 +8,7 @@ pub_covid_hosp_state_timeseries(
   states,
   dates,
   ...,
+  as_of = NULL,
   issues = NULL,
   fetch_args = fetch_args_list()
 )
@@ -19,8 +20,13 @@ pub_covid_hosp_state_timeseries(
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
-\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
-most recent issue is returned.}
+\item{as_of}{Date. Optionally, the as of date for the issues to fetch. If not
+specified, the most recent data is returned. Mutually exclusive with
+\code{issues} or \code{lag}.}
+
+\item{issues}{\code{\link{timeset}}. Optionally, the issue of the data to fetch. If not
+specified, the most recent issue is returned. Mutually exclusive with
+\code{as_of} or \code{lag}.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
