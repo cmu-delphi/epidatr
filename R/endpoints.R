@@ -1103,7 +1103,7 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
       create_epidata_field_info("latest_issue", "date"),
       create_epidata_field_info("table_rows", "int")
     )
-  )
+  ) %>% fetch(fetch_args = fetch_args)
 }
 
 
