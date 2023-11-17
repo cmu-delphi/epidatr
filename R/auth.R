@@ -56,12 +56,20 @@ save_api_key <- function() {
       write {.code DELPHI_EPIDATA_KEY=yourkeyhere} in the file and save it. If the editor
       does not open, you will need to edit the file manually.",
       "i" = "Press any key to continue."
-    ),
+    )
   )
   readline()
 
   if (file.exists(usethis::proj_path(".Renviron"))) {
     usethis::edit_r_environ(scope = "project")
+
+    cat("\n\n")
+    cli::cli_inform(
+      c(
+        "i" = "Your project {.code .Renviron} file has been updated. Make sure not to share this
+        file (add it to .gitignore or equivalents)."
+      )
+    )
   } else {
     usethis::edit_r_environ(scope = "user")
   }
