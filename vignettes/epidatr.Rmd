@@ -23,7 +23,7 @@ regions.
 We recommend you register for an API key. While most endpoints are available
 without one, there are [limits on API usage for anonymous
 users](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html), including
-a rate limit. See `set_api_key()` for details on how to obtain an API key and
+a rate limit. See `save_api_key()` for details on how to obtain an API key and
 set this package to use it.
 
 ## Basic Usage
