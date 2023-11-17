@@ -52,8 +52,8 @@ get_api_key <- function() {
 save_api_key <- function() {
   cli::cli_inform(
     c(
-      "i" = "This function will open your .Renviron file in a text editor. You will need to
-      write DELPHI_EPIDATA_KEY=yourkeyhere in the file and save it. If the editor
+      "i" = "This function will open your {.code .Renviron} file in a text editor. You will need to
+      write {.code DELPHI_EPIDATA_KEY=yourkeyhere} in the file and save it. If the editor
       does not open, you will need to edit the file manually.",
       "i" = "Press any key to continue."
     ),
