@@ -133,37 +133,38 @@ endpoints and arguments. You can also use the
 functions:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/avail_endpoints.html">avail_endpoints</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Data is available for the US only, unless otherwise specified</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 28 × 2</span></span></span>
 <span><span class="co">#&gt;    Endpoint                          Description                                </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> pub_covid_hosp_facility()         COVID hospitalization data for specific fa…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> pub_covid_hosp_facility_lookup()  COVID hospitalization facility identifiers </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> pub_covid_hosp_state_timeseries() COVID hospitalization data by state        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> pub_covidcast()                   COVID data via the covidcast endpoint      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> pub_covid_hosp_facility()         COVID hospitalizations by facility         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> pub_covid_hosp_facility_lookup()  Helper for finding COVID hospitalization f…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> pub_covid_hosp_state_timeseries() COVID hospitalizations by state            </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> pub_covidcast()                   Various COVID and flu signals via the COVI…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> pub_covidcast_meta()              Metadata for the COVIDcast endpoint        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> pub_delphi()                      Delphi's ILINet forecasts                  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> pub_dengue_nowcast()              Delphi's PAHO Dengue nowcast               </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> pub_ecdc_ili()                    ECDC ILI data                              </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> pub_flusurv()                     FluSurv hospitalization data               </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> pub_fluview()                     FluView ILINet data                        </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> pub_fluview_clinical()            FluView virological data from clinical labs</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> pub_fluview_meta()                FluView metadata                           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> pub_gft()                         Google Flu Trends data                     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> pub_kcdc_ili()                    KCDC ILI data                              </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> pub_meta()                        API metadata                               </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> pub_nidss_dengue()                NIDSS dengue data                          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> pub_nidss_flu()                   NIDSS flu data                             </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> pub_nowcast()                     Delphi's ILI nowcast                       </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> pub_paho_dengue()                 PAHO Dengue data                           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">20</span> pub_wiki()                        Wikipedia access data                      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">21</span> pvt_cdc()                         CDC page hits                              </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">22</span> pvt_dengue_sensors()              Dengue digital surveillance sensors in PAH…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">23</span> pvt_ght()                         Google Health Trends data                  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">24</span> pvt_meta_norostat()               NoroSTAT metadata                          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">25</span> pvt_norostat()                    NoroSTAT data (point data, no min/max)     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> pub_delphi()                      Delphi's ILINet outpatient doctor visits f…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> pub_dengue_nowcast()              Delphi's PAHO dengue nowcasts (North and S…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> pub_ecdc_ili()                    ECDC ILI incidence (Europe)                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> pub_flusurv()                     CDC FluSurv flu hospitalizations           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> pub_fluview()                     CDC FluView ILINet outpatient doctor visits</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> pub_fluview_clinical()            CDC FluView flu tests from clinical labs   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> pub_fluview_meta()                Metadata for the FluView endpoint          </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> pub_gft()                         Google Flu Trends flu search volume        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> pub_kcdc_ili()                    KCDC ILI incidence (Korea)                 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> pub_meta()                        Metadata for the Delphi Epidata API        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> pub_nidss_dengue()                NIDSS dengue cases (Taiwan)                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> pub_nidss_flu()                   NIDSS flu doctor visits (Taiwan)           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> pub_nowcast()                     Delphi's ILI Nearby nowcasts               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> pub_paho_dengue()                 PAHO dengue data (North and South America) </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">20</span> pub_wiki()                        Wikipedia webpage counts by article        </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">21</span> pvt_cdc()                         CDC total and by topic webpage visits      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">22</span> pvt_dengue_sensors()              PAHO dengue digital surveillance sensors (…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">23</span> pvt_ght()                         Google Health Trends health topics search …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">24</span> pvt_meta_norostat()               Metadata for the NoroSTAT endpoint         </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">25</span> pvt_norostat()                    CDC NoroSTAT norovirus outbreaks           </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">26</span> pvt_quidel()                      Quidel COVID-19 and influenza testing data </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">27</span> pvt_sensors()                     Digital surveillance sensors               </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">28</span> pvt_twitter()                     HealthTweets data</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">27</span> pvt_sensors()                     Influenza and dengue digital surveillance …</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">28</span> pvt_twitter()                     HealthTweets total and influenza-related t…</span></span></code></pre></div>
 <p>Example queries with all the endpoint functions available in this
 package are given <a href="#example-queries">below</a>.</p>
 </div>
