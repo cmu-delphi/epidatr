@@ -59,15 +59,9 @@ key, requests may be subject to rate limits and other limitations.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_api_key</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">set_api_key</span><span class="op">(</span><span class="va">key</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">save_api_key</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
     </div>
 
-    <div class="section level2">
-    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>key</dt>
-<dd><p>API key to use for future requests</p></dd>
-
-</dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
@@ -81,35 +75,22 @@ key, requests may be subject to rate limits and other limitations.</p>
 without one, there are <a href="https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html" class="external-link">limits on API usage for anonymous users</a>,
 including a rate limit. If you regularly request large amounts of data,
 please consider <a href="https://api.delphi.cmu.edu/epidata/admin/registration_form" class="external-link">registering for an API key</a>.</p>
-<p>API keys are strings and can be set in two ways. If the environment variable
-<code>DELPHI_EPIDATA_KEY</code> is set, it will be used automatically. Environment
-variables can be set either in the shell or by editing your <code>.Renviron</code> file,
-which will ensure the setting applies to all R sessions. See <code><a href="https://rdrr.io/r/base/Startup.html" class="external-link">?Startup</a></code> for a
-description of <code>Renviron</code> files and where they can be placed.</p>
-<p>Alternately, the API key can be set from within a session by using
-<code>set_api_key()</code>, which sets the R option <code>delphi.epidata.key</code> using
-<code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>. If this option is set, it is used in preference to the
-environment variable, so you may change keys within an R session. R options
-are not preserved between sessions, so <code>set_api_key()</code> must be run every time
-you open R. Alternately, you can have R set the option at startup by adding
-it to your <code>.Rprofile</code>; see <code><a href="https://rdrr.io/r/base/Startup.html" class="external-link">?Startup</a></code> for a description of <code>Rprofile</code> files
-and where they can be placed.</p>
+<p>API keys are strings read from the environment variable <code>DELPHI_EPIDATA_KEY</code>.
+We recommend setting your key with <code>save_api_key()</code>, which will modify an
+applicable <code>.Renviron</code> file, which will be read in automatically when you
+start future R sessions (see <code><a href="https://rdrr.io/r/base/Startup.html" class="external-link">?Startup</a></code> for details on
+<code>.Renviron</code> files). Alternatively, you can modify the environment variable at
+the command line before/while launching R, or inside an R session with
+<code><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv()</a></code>, but these will not persist across sessions.</p>
 <p>Once an API key is set, it is automatically used for all requests made by
 functions in this package.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Delphi Epidata API Keys documentation.
-<a href="https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html" class="external-link">https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html</a></p>
-<p>Delphi Epidata API Registration Form.
-<a href="https://api.delphi.cmu.edu/epidata/admin/registration_form" class="external-link">https://api.delphi.cmu.edu/epidata/admin/registration_form</a></p>
-    </div>
-    <div class="section level2">
-    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code>usethis::edit_r_environ()</code> to automatically edit the <code>.Renviron</code>
-file; <code>usethis::edit_r_profile()</code> to automatically edit the <code>.Rprofile</code>
-file</p></div>
-    </div>
+    
+<ul><li><p><a href="https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html" class="external-link">Delphi Epidata API Keys documentation</a>.</p></li>
+<li><p><a href="https://api.delphi.cmu.edu/epidata/admin/registration_form" class="external-link">Delphi Epidata API Registration Form</a>.</p></li>
+</ul></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
