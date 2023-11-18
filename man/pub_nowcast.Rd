@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_nowcast}
 \alias{pub_nowcast}
-\title{Delphi's ILI nowcast}
+\title{Delphi's ILI Nearby nowcasts}
 \usage{
 pub_nowcast(locations, epiweeks, fetch_args = fetch_args_list())
 }

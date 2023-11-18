@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_nidss_dengue}
 \alias{pub_nidss_dengue}
-\title{NIDSS dengue data}
+\title{NIDSS dengue cases (Taiwan)}
 \usage{
 pub_nidss_dengue(locations, epiweeks, fetch_args = fetch_args_list())
 }

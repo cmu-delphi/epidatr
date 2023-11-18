@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_twitter}
 \alias{pvt_twitter}
-\title{HealthTweets data}
+\title{HealthTweets total and influenza-related tweets}
 \usage{
 pvt_twitter(
   auth,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_fluview}
 \alias{pub_fluview}
-\title{FluView ILINet data}
+\title{CDC FluView ILINet outpatient doctor visits}
 \usage{
 pub_fluview(
   regions,

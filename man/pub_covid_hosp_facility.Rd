@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_covid_hosp_facility}
 \alias{pub_covid_hosp_facility}
-\title{COVID hospitalization data for specific facilities}
+\title{COVID hospitalizations by facility}
 \usage{
 pub_covid_hosp_facility(
   hospital_pks,

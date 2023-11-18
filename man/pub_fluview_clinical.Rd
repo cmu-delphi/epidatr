@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_fluview_clinical}
 \alias{pub_fluview_clinical}
-\title{FluView virological data from clinical labs}
+\title{CDC FluView flu tests from clinical labs}
 \usage{
 pub_fluview_clinical(
   regions,

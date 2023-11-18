@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_cdc}
 \alias{pvt_cdc}
-\title{CDC page hits}
+\title{CDC total and by topic webpage visits}
 \usage{
 pvt_cdc(auth, locations, epiweeks, fetch_args = fetch_args_list())
 }

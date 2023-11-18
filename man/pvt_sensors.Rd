@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_sensors}
 \alias{pvt_sensors}
-\title{Digital surveillance sensors}
+\title{Influenza and dengue digital surveillance sensors}
 \usage{
 pvt_sensors(auth, names, locations, epiweeks, fetch_args = fetch_args_list())
 }

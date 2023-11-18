@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_delphi}
 \alias{pub_delphi}
-\title{Delphi's ILINet forecasts}
+\title{Delphi's ILINet outpatient doctor visits forecasts}
 \usage{
 pub_delphi(system, epiweek, fetch_args = fetch_args_list())
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_gft}
 \alias{pub_gft}
-\title{Google Flu Trends data}
+\title{Google Flu Trends flu search volume}
 \usage{
 pub_gft(locations, epiweeks, fetch_args = fetch_args_list())
 }
