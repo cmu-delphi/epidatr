@@ -115,8 +115,8 @@ generate your key, register for a pseudo-anonymous account
 [here](https://api.delphi.cmu.edu/epidata/admin/registration_form) and
 see more discussion on the [general API
 website](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html).
-See the `set_api_key()` function documentation for details on how to use
-your API key.
+See the `save_api_key()` function documentation for details on how to
+use your API key.
 
 Note that the private endpoints (i.e. those prefixed with `pvt_`)
 require a separate key that needs to be passed as an argument. These
