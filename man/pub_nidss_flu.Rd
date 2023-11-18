@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_nidss_flu}
 \alias{pub_nidss_flu}
-\title{NIDSS flu data}
+\title{NIDSS flu doctor visits (Taiwan)}
 \usage{
 pub_nidss_flu(
   regions,

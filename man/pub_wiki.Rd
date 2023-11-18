@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_wiki}
 \alias{pub_wiki}
-\title{Wikipedia access data}
+\title{Wikipedia webpage counts by article}
 \usage{
 pub_wiki(
   articles,

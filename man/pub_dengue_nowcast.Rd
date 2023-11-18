@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_dengue_nowcast}
 \alias{pub_dengue_nowcast}
-\title{Delphi's PAHO Dengue nowcast}
+\title{Delphi's PAHO dengue nowcasts (North and South America)}
 \usage{
 pub_dengue_nowcast(locations, epiweeks, fetch_args = fetch_args_list())
 }

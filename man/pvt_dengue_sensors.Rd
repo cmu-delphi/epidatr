@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_dengue_sensors}
 \alias{pvt_dengue_sensors}
-\title{Dengue digital surveillance sensors in PAHO member countries}
+\title{PAHO dengue digital surveillance sensors (North and South America)}
 \usage{
 pvt_dengue_sensors(
   auth,
