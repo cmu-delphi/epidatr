@@ -56,7 +56,7 @@ save_api_key <- function() {
       "i" = "This function will open your {.code .Renviron} file in a text editor. You will need to
       write {.code DELPHI_EPIDATA_KEY=yourkeyhere} (without quotes) in the file and save it. If the editor
       does not open, you will need to edit the file manually.",
-      "i" = "Press any key to continue."
+      "i" = "Press enter to continue."
     )
   )
   readline()
