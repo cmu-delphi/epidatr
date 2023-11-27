@@ -41,12 +41,31 @@
 #' @return
 #' - For `create_epidata_call`: an `epidata_call` object
 #'
+#' @importFrom purrr map_chr
 create_epidata_call <- function(endpoint, params, meta = NULL,
                                 only_supports_classic = FALSE) {
   stopifnot(is.character(endpoint), length(endpoint) == 1)
   stopifnot(is.list(params))
   stopifnot(is.null(meta) || is.list(meta))
   stopifnot(is.logical(only_supports_classic), length(only_supports_classic) == 1)
+
+  if (length(unique(meta)) != length(meta)) {
+    cli::cli_abort(c(
+      "List of expected epidata fields contains duplicate entries",
+      "i" = "duplicates in meta can cause problems parsing fetched data",
+      "Please fix in `endpoints.R`"
+    ))
+  }
+
+  meta_field_names <- map_chr(meta, ~ .x$name)
+  if (length(meta_field_names) != length(unique(meta_field_names))) {
+    cli::cli_abort(c(
+      "List of expected epidata fields contains duplicate names",
+      "i" = "duplicates in meta can cause problems parsing fetched data",
+      "Please fix in `endpoints.R`"
+    ))
+  }
+
   if (is.null(meta)) {
     meta <- list()
   }
