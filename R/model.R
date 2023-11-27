@@ -122,9 +122,9 @@ parse_value <- function(info, value, disable_date_parsing = FALSE) {
 
   if (is.null(value)) {
     return(value)
-  } else if (info$type == "date" && !disable_date_parsing) {
+  } else if (info$type == "date" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_date(value))
-  } else if (info$type == "epiweek" && !disable_date_parsing) {
+  } else if (info$type == "epiweek" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_week(value))
   } else if (info$type == "bool") {
     return(as.logical(value))
@@ -142,6 +142,11 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   meta <- epidata_call$meta
   df <- as.data.frame(df)
+
+  if (length(meta) != 0 && ncol(df) != length(meta)) {
+    cli::cli_warn("Not all return columns are specified as expected epidata fields")
+  }
+
   if (length(meta) == 0) {
     return(df)
   }
