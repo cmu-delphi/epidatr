@@ -254,9 +254,11 @@ test_that("pub_covid_hosp_state_timeseries supports versioned queries", {
     "ut", epirange(12340101, 34560101),
     issues = 20220101,
     fetch_args = fetch_args_list(
-      fields = c("state", "geocoded_state", "date", "issue",
+      fields = c(
+        "state", "geocoded_state", "date", "issue",
         "previous_day_admission_influenza_confirmed",
-        "previous_day_admission_influenza_confirmed_coverage"),
+        "previous_day_admission_influenza_confirmed_coverage"
+      ),
       disable_date_parsing = TRUE,
       dry_run = TRUE
     )
@@ -270,9 +272,11 @@ test_that("pub_covid_hosp_state_timeseries supports versioned queries", {
     "ut", epirange(12340101, 34560101),
     as_of = 20220101,
     fetch_args = fetch_args_list(
-      fields = c("state", "geocoded_state", "date", "issue",
+      fields = c(
+        "state", "geocoded_state", "date", "issue",
         "previous_day_admission_influenza_confirmed",
-        "previous_day_admission_influenza_confirmed_coverage"),
+        "previous_day_admission_influenza_confirmed_coverage"
+      ),
       disable_date_parsing = TRUE,
       dry_run = TRUE
     )
