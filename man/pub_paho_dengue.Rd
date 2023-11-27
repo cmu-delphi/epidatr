@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_paho_dengue}
 \alias{pub_paho_dengue}
-\title{PAHO Dengue data}
+\title{PAHO dengue data (North and South America)}
 \usage{
 pub_paho_dengue(
   regions,

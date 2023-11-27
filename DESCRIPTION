@@ -1,9 +1,9 @@
 Package: epidatr
 Type: Package
 Title: Client for Delphi's 'Epidata' API
-Version: 1.1.0
+Version: 1.1.0.9000
 Date: 2023-09-11
-Authors@R: 
+Authors@R:
   c(
     person("Logan", "Brooks", email = "lcbrooks@andrew.cmu.edu", role = c("aut")),
     person("Dmitry", "Shemetov", email = "dshemeto@andrew.cmu.edu", role = c("aut")),
@@ -37,6 +37,7 @@ Imports:
     openssl,
     readr,
     tibble,
+    usethis,
     xml2
 RoxygenNote: 7.2.3
 Suggests:
@@ -50,7 +51,7 @@ Suggests:
 VignetteBuilder: knitr
 Language: en-US
 Config/testthat/edition: 3
-Collate: 
+Collate:
     'auth.R'
     'avail_endpoints.R'
     'cache.R'

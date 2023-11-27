@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_norostat}
 \alias{pvt_norostat}
-\title{NoroSTAT data (point data, no min/max)}
+\title{CDC NoroSTAT norovirus outbreaks}
 \usage{
 pvt_norostat(auth, locations, epiweeks, fetch_args = fetch_args_list())
 }
@@ -19,6 +19,8 @@ pvt_norostat(auth, locations, epiweeks, fetch_args = fetch_args_list())
 \code{\link[tibble:tibble]{tibble::tibble}}
 }
 \description{
+This is point data only, and does not include minima or maxima.
+
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/norostat.html}
 
 This is the documentation of the API for accessing the NoroSTAT (norostat)

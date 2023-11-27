@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_covidcast}
 \alias{pub_covidcast}
-\title{COVID data via the covidcast endpoint}
+\title{Various COVID and flu signals via the COVIDcast endpoint}
 \usage{
 pub_covidcast(
   source,

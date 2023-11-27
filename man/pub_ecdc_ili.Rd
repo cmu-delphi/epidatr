@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_ecdc_ili}
 \alias{pub_ecdc_ili}
-\title{ECDC ILI data}
+\title{ECDC ILI incidence (Europe)}
 \usage{
 pub_ecdc_ili(
   regions,

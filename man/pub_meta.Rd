@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_meta}
 \alias{pub_meta}
-\title{API metadata}
+\title{Metadata for the Delphi Epidata API}
 \usage{
 pub_meta(fetch_args = fetch_args_list())
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_kcdc_ili}
 \alias{pub_kcdc_ili}
-\title{KCDC ILI data}
+\title{KCDC ILI incidence (Korea)}
 \usage{
 pub_kcdc_ili(
   regions,

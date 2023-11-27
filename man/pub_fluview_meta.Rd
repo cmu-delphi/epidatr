@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_fluview_meta}
 \alias{pub_fluview_meta}
-\title{FluView metadata}
+\title{Metadata for the FluView endpoint}
 \usage{
 pub_fluview_meta(fetch_args = fetch_args_list())
 }
@@ -21,5 +21,8 @@ Returns information about the fluview endpoint.
 pub_fluview_meta()
 }
 
+}
+\seealso{
+\code{\link[=pub_fluview]{pub_fluview()}}
 }
 \keyword{endpoint}

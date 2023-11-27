@@ -1,4 +1,4 @@
-#' CDC page hits
+#' CDC total and by topic webpage visits
 #'
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/cdc.html>
@@ -51,7 +51,7 @@ pvt_cdc <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' COVID hospitalization facility identifiers
+#' Helper for finding COVID hospitalization facilities
 #'
 #' @description
 #' API docs:
@@ -89,6 +89,8 @@ pub_covid_hosp_facility_lookup <- function(
     zip = NULL,
     fips_code = NULL,
     fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("state", state, len = 1, required = FALSE)
   assert_character_param("ccn", ccn, len = 1, required = FALSE)
   assert_character_param("city", city, len = 1, required = FALSE)
@@ -133,7 +135,7 @@ pub_covid_hosp_facility_lookup <- function(
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' COVID hospitalization data for specific facilities
+#' COVID hospitalizations by facility
 #'
 #' @description
 #' API docs:
@@ -171,6 +173,8 @@ pub_covid_hosp_facility <- function(
     ...,
     publication_dates = NULL,
     fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("hospital_pks", hospital_pks)
   assert_timeset_param("collection_weeks", collection_weeks)
   assert_timeset_param("publication_dates", publication_dates, required = FALSE)
@@ -433,7 +437,7 @@ pub_covid_hosp_facility <- function(
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' COVID hospitalization data by state
+#' COVID hospitalizations by state
 #'
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>.
@@ -476,6 +480,8 @@ pub_covid_hosp_state_timeseries <- function(
     issues = NULL,
     fetch_args = fetch_args_list()) {
   # Check parameters
+  rlang::check_dots_empty()
+
   if (missing(states) || missing(dates)) {
     stop(
       "`states` and `dates` are both required"
@@ -666,7 +672,7 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' COVID data via the covidcast endpoint
+#' Various COVID and flu signals via the COVIDcast endpoint
 #'
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>
@@ -736,16 +742,19 @@ pub_covidcast <- function(
     issues = NULL,
     lag = NULL,
     fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   # Check parameters
   if (
     missing(source) ||
       missing(signals) ||
       missing(time_type) ||
       missing(geo_type) ||
-      missing(time_values) || missing(geo_values)
+      missing(time_values) ||
+      missing(geo_values)
   ) {
     stop(
-      "`source`, `signals`, `time_type`, `geo_type`, `time_values`, and `geo_value` are all required"
+      "`source`, `signals`, `time_type`, `geo_type`, `time_values`, and `geo_values` are all required"
     )
   }
 
@@ -806,7 +815,7 @@ pub_covidcast <- function(
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' Delphi's ILINet forecasts
+#' Delphi's ILINet outpatient doctor visits forecasts
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/delphi.html>
 #'
@@ -837,7 +846,7 @@ pub_delphi <- function(system, epiweek, fetch_args = fetch_args_list()) {
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' Delphi's PAHO Dengue nowcast
+#' Delphi's PAHO dengue nowcasts (North and South America)
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html>
 #'
@@ -871,7 +880,7 @@ pub_dengue_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' Dengue digital surveillance sensors in PAHO member countries
+#' PAHO dengue digital surveillance sensors (North and South America)
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html>
 #'
@@ -916,7 +925,7 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks, fetch_args = fe
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' ECDC ILI data
+#' ECDC ILI incidence (Europe)
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>.
 #'
@@ -943,6 +952,8 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks, fetch_args = fe
 #' @keywords endpoint
 #' @export
 pub_ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -972,11 +983,11 @@ pub_ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetc
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' FluSurv hospitalization data
+#' CDC FluSurv flu hospitalizations
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>.
 #'
-#' Obtain information on flu hospitalization rates from the Center of Disease
+#' Obtain information on influenza hospitalization rates from the Center of Disease
 #' Control.
 #'
 #' See also <https://gis.cdc.gov/GRASP/Fluview/FluHospRates.html>.
@@ -1000,6 +1011,8 @@ pub_ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetc
 #' @keywords endpoint
 #' @export
 pub_flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1034,7 +1047,7 @@ pub_flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fet
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' FluView virological data from clinical labs
+#' CDC FluView flu tests from clinical labs
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html>
 #'
@@ -1056,6 +1069,8 @@ pub_flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fet
 #' @keywords endpoint
 #' @export
 pub_fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1090,7 +1105,7 @@ pub_fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NU
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' FluView metadata
+#' Metadata for the FluView endpoint
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
 #' Returns information about the fluview endpoint.
@@ -1102,6 +1117,7 @@ pub_fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NU
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'
 #' @return [`tibble::tibble`]
+#' @seealso [`pub_fluview()`]
 #' @keywords endpoint
 #' @export
 pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
@@ -1113,11 +1129,11 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
       create_epidata_field_info("latest_issue", "date"),
       create_epidata_field_info("table_rows", "int")
     )
-  )
+  ) %>% fetch(fetch_args = fetch_args)
 }
 
 
-#' FluView ILINet data
+#' CDC FluView ILINet outpatient doctor visits
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>. For
 #'
@@ -1159,6 +1175,8 @@ pub_fluview <- function(
     lag = NULL,
     auth = NULL,
     fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1200,7 +1218,7 @@ pub_fluview <- function(
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' Google Flu Trends data
+#' Google Flu Trends flu search volume
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/gft.html>
 #'
@@ -1242,7 +1260,7 @@ pub_gft <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' Google Health Trends data
+#' Google Health Trends health topics search volume
 #'
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
@@ -1289,7 +1307,7 @@ pvt_ght <- function(auth, locations, epiweeks, query, fetch_args = fetch_args_li
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' KCDC ILI data
+#' KCDC ILI incidence (Korea)
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html>
 #'
@@ -1309,6 +1327,8 @@ pvt_ght <- function(auth, locations, epiweeks, query, fetch_args = fetch_args_li
 #' @keywords endpoint
 #' @export
 pub_kcdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1338,7 +1358,7 @@ pub_kcdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetc
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' NoroSTAT metadata
+#' Metadata for the NoroSTAT endpoint
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html>
 #'
@@ -1349,6 +1369,7 @@ pub_kcdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetc
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`list`]
+#' @seealso [`pvt_norostat()`]
 #' @keywords endpoint
 #' @export
 pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
@@ -1361,7 +1382,7 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' API metadata
+#' Metadata for the Delphi Epidata API
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta.html>
 #'
@@ -1374,7 +1395,7 @@ pub_meta <- function(fetch_args = fetch_args_list()) {
   create_epidata_call("meta/", list(), only_supports_classic = TRUE) %>% fetch(fetch_args = fetch_args)
 }
 
-#' NIDSS dengue data
+#' NIDSS dengue cases (Taiwan)
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html>
 #'
@@ -1414,7 +1435,7 @@ pub_nidss_dengue <- function(locations, epiweeks, fetch_args = fetch_args_list()
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' NIDSS flu data
+#' NIDSS flu doctor visits (Taiwan)
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
 #'
@@ -1438,6 +1459,8 @@ pub_nidss_dengue <- function(locations, epiweeks, fetch_args = fetch_args_list()
 #' @keywords endpoint
 #' @export
 pub_nidss_flu <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1470,8 +1493,10 @@ pub_nidss_flu <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fet
 }
 
 
-#' NoroSTAT data (point data, no min/max)
+#' CDC NoroSTAT norovirus outbreaks
 #' @description
+#' This is point data only, and does not include minima or maxima.
+#'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
 #'
 #' This is the documentation of the API for accessing the NoroSTAT (norostat)
@@ -1513,7 +1538,7 @@ pvt_norostat <- function(auth, locations, epiweeks, fetch_args = fetch_args_list
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' Delphi's ILI nowcast
+#' Delphi's ILI Nearby nowcasts
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>.
 #'
@@ -1549,7 +1574,7 @@ pub_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' PAHO Dengue data
+#' PAHO dengue data (North and South America)
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html>
 #'
@@ -1569,6 +1594,8 @@ pub_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 #' @keywords endpoint
 #' @export
 pub_paho_dengue <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1642,7 +1669,7 @@ pvt_quidel <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' Digital surveillance sensors
+#' Influenza and dengue digital surveillance sensors
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
 #'
@@ -1698,7 +1725,7 @@ pvt_sensors <- function(auth, names, locations, epiweeks, fetch_args = fetch_arg
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' HealthTweets data
+#' HealthTweets total and influenza-related tweets
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/twitter.html>
 #'
@@ -1724,6 +1751,8 @@ pvt_sensors <- function(auth, names, locations, epiweeks, fetch_args = fetch_arg
 #' @keywords endpoint
 #' @export
 pvt_twitter <- function(auth, locations, ..., dates = NULL, epiweeks = NULL, fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
   assert_timeset_param("dates", dates, required = FALSE)
@@ -1757,7 +1786,7 @@ pvt_twitter <- function(auth, locations, ..., dates = NULL, epiweeks = NULL, fet
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' Wikipedia access data
+#' Wikipedia webpage counts by article
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
 #
@@ -1792,6 +1821,8 @@ pub_wiki <- function(
     hours = NULL,
     language = "en",
     fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
   assert_character_param("articles", articles)
   assert_timeset_param("dates", dates, required = FALSE)
   assert_timeset_param("epiweeks", epiweeks, required = FALSE)

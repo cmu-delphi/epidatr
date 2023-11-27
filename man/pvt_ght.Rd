@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_ght}
 \alias{pvt_ght}
-\title{Google Health Trends data}
+\title{Google Health Trends health topics search volume}
 \usage{
 pvt_ght(auth, locations, epiweeks, query, fetch_args = fetch_args_list())
 }

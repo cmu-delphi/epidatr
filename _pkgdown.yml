@@ -8,6 +8,9 @@ template:
     navbar-bg: '#C41230'
     navbar-fg: '#f8f8f8'
 
+development:
+  mode: auto
+
 navbar:
   bg: '#C41230'
   fg: '#f8f8f8'
@@ -33,20 +36,11 @@ home:
       href: https://cmu-delphi.github.io/epidatasets/
 
 reference:
-  - title: Configuration and utilities
-    desc: Set API keys and handle API data types
+  - title: Data source and signal discovery
+    desc: Quickly explore endpoints, and API signal and source names
   - contents:
-      - get_api_key
       - avail_endpoints
-      - epirange
-      - timeset
-  - title: Control Caching behavior
-    desc: Configure an optional persistent cache
-  - contents:
-      - set_cache
-      - clear_cache
-      - disable_cache
-      - cache_info
+      - covidcast_epidata
   - title: Make API requests
     desc: Query Delphi Epidata endpoints
   - contents:
@@ -54,11 +48,20 @@ reference:
       - fetch_args_list
       - has_keyword("endpoint")
       - -starts_with("pvt_")
+  - title: Configuration and utilities
+    desc: Set API keys and handle API data types
+  - contents:
+      - get_api_key
+      - epirange
+      - timeset
+  - title: Control caching behavior
+    desc: Configure an optional persistent cache
+  - contents:
+      - set_cache
+      - clear_cache
+      - disable_cache
+      - cache_info
   - title: Make requests to private API endpoints
     desc: These endpoints require additional authorization to use
   - contents:
       - starts_with("pvt_")
-  - title: Autocomplete helpers
-    desc: Objects that can autocomplete API signals names for faster exploration
-  - contents:
-      - covidcast_epidata

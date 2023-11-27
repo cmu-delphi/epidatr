@@ -6,8 +6,8 @@
 #' `epidata_call` objects are generated internally by endpoint functions like
 #'   [`pub_covidcast`]; by default, they are piped directly into the `fetch`
 #'   function to fetch and format the data. For most endpoints this will return
-#'   a tibble, but a few non-COVIDCAST endpoints only support will return a
-#'   JSON-like list instead.
+#'   a tibble, but a few non-COVIDCAST endpoints will return a JSON-like list
+#'   instead.
 #'
 #' @details
 #' `create_epidata_call` is the constructor for `epidata_call` objects, but you
@@ -144,6 +144,8 @@ fetch_args_list <- function(
     dry_run = FALSE,
     debug = FALSE,
     format_type = c("json", "classic", "csv")) {
+  rlang::check_dots_empty()
+
   assert_character(fields, null.ok = TRUE, any.missing = FALSE)
   assert_logical(disable_date_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_logical(disable_data_frame_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)

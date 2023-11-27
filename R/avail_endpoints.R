@@ -22,5 +22,6 @@ avail_endpoints <- function() {
     Endpoint = paste0(h$Name, "()"),
     Description = h$Title
   )
+  cli::cli_inform(c("i" = "Data is available for the US only, unless otherwise specified"))
   tib %>% print(n = 50)
 }

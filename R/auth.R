@@ -10,20 +10,13 @@
 #' please consider [registering for an API
 #' key](https://api.delphi.cmu.edu/epidata/admin/registration_form).
 #'
-#' API keys are strings and can be set in two ways. If the environment variable
-#' `DELPHI_EPIDATA_KEY` is set, it will be used automatically. Environment
-#' variables can be set either in the shell or by editing your `.Renviron` file,
-#' which will ensure the setting applies to all R sessions. See `?Startup` for a
-#' description of `Renviron` files and where they can be placed.
-#'
-#' Alternately, the API key can be set from within a session by using
-#' `set_api_key()`, which sets the R option `delphi.epidata.key` using
-#' `options()`. If this option is set, it is used in preference to the
-#' environment variable, so you may change keys within an R session. R options
-#' are not preserved between sessions, so `set_api_key()` must be run every time
-#' you open R. Alternately, you can have R set the option at startup by adding
-#' it to your `.Rprofile`; see `?Startup` for a description of `Rprofile` files
-#' and where they can be placed.
+#' API keys are strings read from the environment variable `DELPHI_EPIDATA_KEY`.
+#' We recommend setting your key with `save_api_key()`, which will modify an
+#' applicable `.Renviron` file, which will be read in automatically when you
+#' start future R sessions (see [`?Startup`][base::Startup] for details on
+#' `.Renviron` files). Alternatively, you can modify the environment variable at
+#' the command line before/while launching R, or inside an R session with
+#' [`Sys.setenv()`], but these will not persist across sessions.
 #'
 #' Once an API key is set, it is automatically used for all requests made by
 #' functions in this package.
@@ -31,22 +24,14 @@
 #' @return For `get_api_key()`, returns the current API key as a string, or
 #'   `""` if none is set.
 #'
-#' @seealso [usethis::edit_r_environ()] to automatically edit the `.Renviron`
-#'   file; [usethis::edit_r_profile()] to automatically edit the `.Rprofile`
-#'   file
+#' @references
+#' - [Delphi Epidata API Keys
+#'   documentation](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html).
+#' - [Delphi Epidata API Registration
+#'   Form](https://api.delphi.cmu.edu/epidata/admin/registration_form).
 #'
-#' @references Delphi Epidata API Keys documentation.
-#'   <https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html>
-#'
-#' Delphi Epidata API Registration Form.
-#' <https://api.delphi.cmu.edu/epidata/admin/registration_form>
 #' @export
 get_api_key <- function() {
-  key <- getOption("delphi.epidata.key", default = "")
-  if (key != "") {
-    return(key)
-  }
-
   key <- Sys.getenv("DELPHI_EPIDATA_KEY", unset = "")
   if (key != "") {
     return(key)
@@ -55,7 +40,7 @@ get_api_key <- function() {
   cli::cli_warn(
     c(
       "No API key found. You will be limited to non-complex queries and encounter rate limits if you proceed.",
-      "i" = "See {.help set_api_key} for details on obtaining and setting API keys."
+      "i" = "See {.help save_api_key} for details on obtaining and setting API keys."
     ),
     .frequency = "regularly",
     .frequency_id = "delphi.epidata.key"
@@ -64,8 +49,29 @@ get_api_key <- function() {
 }
 
 #' @rdname get_api_key
-#' @param key API key to use for future requests
 #' @export
-set_api_key <- function(key) {
-  options(delphi.epidata.key = key)
+save_api_key <- function() {
+  cli::cli_inform(
+    c(
+      "i" = "This function will open your {.code .Renviron} file in a text editor. You will need to
+      write {.code DELPHI_EPIDATA_KEY=yourkeyhere} (without quotes) in the file and save it. If the editor
+      does not open, you will need to edit the file manually.",
+      "i" = "Press enter to continue."
+    )
+  )
+  readline()
+
+  if (file.exists(usethis::proj_path(".Renviron"))) {
+    usethis::edit_r_environ(scope = "project")
+
+    cat("\n\n")
+    cli::cli_inform(
+      c(
+        "i" = "Your project {.code .Renviron} file has been updated. Make sure not to share this
+        file (add it to .gitignore or equivalents)."
+      )
+    )
+  } else {
+    usethis::edit_r_environ(scope = "user")
+  }
 }
