@@ -462,7 +462,7 @@ pub_covid_hosp_facility <- function(
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param as_of Date. Optionally, the as of date for the issues to fetch. If not
 #'   specified, the most recent data is returned. Mutually exclusive with
-#'   `issues` or `lag`.
+#'   `issues`.
 #' @param issues [`timeset`]. Optionally, the issue of the data to fetch. If not
 #'   specified, the most recent issue is returned. Mutually exclusive with
 #'   `as_of` or `lag`.
