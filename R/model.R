@@ -138,18 +138,23 @@ parse_value <- function(info, value, disable_date_parsing = FALSE) {
   value
 }
 
+#' @importFrom purrr map_chr
 parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   meta <- epidata_call$meta
   df <- as.data.frame(df)
 
-  if (length(meta) != 0 && ncol(df) != length(meta)) {
-    cli::cli_warn("Not all return columns are specified as expected epidata fields")
-  }
-
   if (length(meta) == 0) {
     return(df)
   }
+
+  meta_field_names <- map_chr(meta, ~ .x$name)
+  if (
+    length(setdiff(names(df), meta_field_names)) != 0
+  ) {
+    cli::cli_warn("Not all return columns are specified as expected epidata fields")
+  }
+
   columns <- colnames(df)
   for (i in seq_len(length(meta))) {
     info <- meta[[i]]
