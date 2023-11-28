@@ -432,7 +432,63 @@ pub_covid_hosp_facility <- function(
       create_epidata_field_info(
         "total_patients_hosp_confirmed_influenza_and_covid_7d_avg",
         "float"
-      )
+      ),
+      create_epidata_field_info("geocoded_hospital_address", "text"),
+      create_epidata_field_info("hhs_ids", "text"),
+      create_epidata_field_info("is_corrected", "bool"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_7_day_coverage",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_7_day_coverage",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_day_admission_pediatric_covid_confirmed_7_day_coverage",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_day_admission_pediatric_covid_suspected_7_day_coverage",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_week_patients_covid_vaccinated_doses_all_7_day",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_week_patients_covid_vaccinated_doses_all_7_day_sum",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_week_patients_covid_vaccinated_doses_one_7_day",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_week_patients_covid_vaccinated_doses_one_7_day_sum",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_week_personnel_covid_vaccd_doses_administered_7_day",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_week_personnel_covid_vaccd_doses_administered_7_day_sum",
+        "int"
+      ),
+      create_epidata_field_info("total_personnel_covid_vaccinated_doses_all_7_day", "int"),
+      create_epidata_field_info(
+        "total_personnel_covid_vaccinated_doses_all_7_day_sum",
+        "int"
+      ),
+      create_epidata_field_info("total_personnel_covid_vaccinated_doses_none_7_day", "int"),
+      create_epidata_field_info(
+        "total_personnel_covid_vaccinated_doses_none_7_day_sum",
+        "int"
+      ),
+      create_epidata_field_info("total_personnel_covid_vaccinated_doses_one_7_day", "int"),
+      create_epidata_field_info("total_personnel_covid_vaccinated_doses_one_7_day_sum",
+                                "int")
     )
   ) %>% fetch(fetch_args = fetch_args)
 }
@@ -618,7 +674,157 @@ pub_covid_hosp_state_timeseries <- function(
       create_epidata_field_info("percent_of_inpatients_with_covid", "float"),
       create_epidata_field_info("inpatient_bed_covid_utilization", "float"),
       create_epidata_field_info("adult_icu_bed_covid_utilization", "float"),
-      create_epidata_field_info("adult_icu_bed_utilization", "float")
+      create_epidata_field_info("adult_icu_bed_utilization", "float"),
+      create_epidata_field_info("geocoded_state", "text"),
+      create_epidata_field_info("deaths_covid", "int"),
+      create_epidata_field_info("deaths_covid_coverage", "int"),
+      create_epidata_field_info("icu_patients_confirmed_influenza", "int"),
+      create_epidata_field_info("icu_patients_confirmed_influenza_coverage", "int"),
+      create_epidata_field_info(
+        "on_hand_supply_therapeutic_a_casirivimab_imdevimab_courses",
+        "int"
+      ),
+      create_epidata_field_info("on_hand_supply_therapeutic_b_bamlanivimab_courses", "int"),
+      create_epidata_field_info(
+        "on_hand_supply_therapeutic_c_bamlanivimab_etesevimab_courses",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_adult_covid_confirmed_18_19", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_18_19_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_adult_covid_confirmed_20_29", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_20_29_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_adult_covid_confirmed_30_39", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_30_39_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_adult_covid_confirmed_40_49", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_40_49_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_adult_covid_confirmed_50_59", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_50_59_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_adult_covid_confirmed_60_69", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_60_69_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_adult_covid_confirmed_70_79", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_70_79_coverage",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_80plus",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_80plus_coverage",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_unknown",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_unknown_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_adult_covid_suspected_18_19", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_18_19_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_adult_covid_suspected_20_29", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_20_29_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_adult_covid_suspected_30_39", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_30_39_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_adult_covid_suspected_40_49", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_40_49_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_adult_covid_suspected_50_59", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_50_59_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_adult_covid_suspected_60_69", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_60_69_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_adult_covid_suspected_70_79", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_70_79_coverage",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_80plus",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_80plus_coverage",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_unknown",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_unknown_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_admission_influenza_confirmed", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_influenza_confirmed_coverage",
+        "int"
+      ),
+      create_epidata_field_info("previous_day_deaths_covid_and_influenza", "int"),
+      create_epidata_field_info("previous_day_deaths_covid_and_influenza_coverage", "int"),
+      create_epidata_field_info("previous_day_deaths_influenza", "int"),
+      create_epidata_field_info("previous_day_deaths_influenza_coverage", "int"),
+      create_epidata_field_info(
+        "previous_week_therapeutic_a_casirivimab_imdevimab_courses_used",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_week_therapeutic_b_bamlanivimab_courses_used",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_week_therapeutic_c_bamlanivimab_etesevimab_courses_used",
+        "int"
+      ),
+      create_epidata_field_info(
+        "total_patients_hospitalized_confirmed_influenza_covid",
+        "int"
+      ),
+      create_epidata_field_info(
+        "total_patients_hospitalized_confirmed_influenza_covid_coverage",
+        "int"
+      ),
+      create_epidata_field_info("total_patients_hospitalized_confirmed_influenza", "int"),
+      create_epidata_field_info(
+        "total_patients_hospitalized_confirmed_influenza_coverage",
+                                "int"
+                                )
     )
   ) %>% fetch(fetch_args = fetch_args)
 }
@@ -655,6 +861,11 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
       create_epidata_field_info("time_type", "categorical",
         categories =
           c("week", "day")
+      ),
+      create_epidata_field_info(
+        "geo_type",
+        "categorical",
+        categories = c("nation", "msa", "hrr", "hhs", "state", "county", "dma")
       ),
       create_epidata_field_info("min_time", "date"),
       create_epidata_field_info("max_time", "date"),
@@ -1205,6 +1416,7 @@ pub_fluview <- function(
       create_epidata_field_info("lag", "int"),
       create_epidata_field_info("num_ili", "int"),
       create_epidata_field_info("num_patients", "int"),
+      create_epidata_field_info("num_providers", "int"),
       create_epidata_field_info("num_age_0", "int"),
       create_epidata_field_info("num_age_1", "int"),
       create_epidata_field_info("num_age_2", "int"),
