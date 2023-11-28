@@ -149,11 +149,15 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
   }
 
   meta_field_names <- map_chr(meta, ~ .x$name)
+  missing_fields <- setdiff(names(df), meta_field_names)
   if (
-    length(setdiff(names(df), meta_field_names)) != 0
+    length(missing_fields) != 0
   ) {
     cli::cli_warn(
-      "Not all return columns are specified as expected epidata fields",
+      c(
+        "Not all return columns are specified as expected epidata fields",
+        "i" = "Unspecified fields {missing_fields} may need to be manually converted to more appropriate classes"
+      ),
       class = "epidatr__missing_meta_fields"
     )
   }
