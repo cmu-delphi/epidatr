@@ -69,7 +69,32 @@ test_that("null parsing", {
 })
 
 test_that("parse invalid time", {
-  vale <- list(3)
-  vale$class <- "my nonexistant class"
-  expect_error(parse_timeset_input(vale))
+  value <- list(3)
+  value$class <- "my nonexistant class"
+  expect_error(parse_timeset_input(value))
+})
+
+test_that("parse_data_frame warns when df contains fields not listed in meta", {
+  epidata_call <- pub_flusurv(
+    locations = "ca",
+    epiweeks = 202001,
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  # see generate_test_data.R
+  mock_df <- as.data.frame(readr::read_rds(testthat::test_path("data/flusurv-epiweeks.rds")))
+
+  # Success when meta and df fields match exactly
+  expect_no_warning(parse_data_frame(epidata_call, mock_df))
+
+  # Warning when df contains extra fields
+  mock_df$extra <- 5
+  expect_warning(
+    parse_data_frame(epidata_call, mock_df),
+    class = "epidatr__missing_meta_fields"
+  )
+  mock_df$extra <- NULL
+
+  # Success when meta contains extra fields
+  mock_df$rate_age_0 <- NULL
+  expect_no_warning(parse_data_frame(epidata_call, mock_df))
 })
