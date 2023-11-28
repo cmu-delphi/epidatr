@@ -152,7 +152,10 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
   if (
     length(setdiff(names(df), meta_field_names)) != 0
   ) {
-    cli::cli_warn("Not all return columns are specified as expected epidata fields")
+    cli::cli_warn(
+      "Not all return columns are specified as expected epidata fields",
+      class = "epidatr__missing_meta_fields"
+    )
   }
 
   columns <- colnames(df)

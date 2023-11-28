@@ -50,20 +50,26 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
   stopifnot(is.logical(only_supports_classic), length(only_supports_classic) == 1)
 
   if (length(unique(meta)) != length(meta)) {
-    cli::cli_abort(c(
-      "List of expected epidata fields contains duplicate entries",
-      "i" = "duplicates in meta can cause problems parsing fetched data",
-      "Please fix in `endpoints.R`"
-    ))
+    cli::cli_abort(
+      c(
+        "List of expected epidata fields contains duplicate entries",
+        "i" = "duplicates in meta can cause problems parsing fetched data",
+        "Please fix in `endpoints.R`"
+      ),
+      class = "epidatr__duplicate_meta_entries"
+    )
   }
 
   meta_field_names <- map_chr(meta, ~ .x$name)
   if (length(meta_field_names) != length(unique(meta_field_names))) {
-    cli::cli_abort(c(
-      "List of expected epidata fields contains duplicate names",
-      "i" = "duplicates in meta can cause problems parsing fetched data",
-      "Please fix in `endpoints.R`"
-    ))
+    cli::cli_abort(
+      c(
+        "List of expected epidata fields contains duplicate names",
+        "i" = "duplicates in meta can cause problems parsing fetched data",
+        "Please fix in `endpoints.R`"
+      ),
+      class = "epidatr__duplicate_meta_names"
+    )
   }
 
   if (is.null(meta)) {
