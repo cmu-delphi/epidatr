@@ -248,3 +248,40 @@ test_that("endpoints fail when given args via dots", {
     regexp = dots_error
   )
 })
+
+test_that("pub_covid_hosp_state_timeseries supports versioned queries", {
+  epidata_call <- pub_covid_hosp_state_timeseries(
+    "ut", epirange(12340101, 34560101),
+    issues = 20220101,
+    fetch_args = fetch_args_list(
+      fields = c(
+        "state", "geocoded_state", "date", "issue",
+        "previous_day_admission_influenza_confirmed",
+        "previous_day_admission_influenza_confirmed_coverage"
+      ),
+      disable_date_parsing = TRUE,
+      dry_run = TRUE
+    )
+  )
+  expect_identical(epidata_call$params$issues, 20220101)
+  expect_identical(epidata_call$params$as_of, NULL)
+  # COVID hosp state timeseries server code doesn't support `lag`
+  expect_identical(epidata_call$params$lag, NULL)
+
+  epidata_call <- pub_covid_hosp_state_timeseries(
+    "ut", epirange(12340101, 34560101),
+    as_of = 20220101,
+    fetch_args = fetch_args_list(
+      fields = c(
+        "state", "geocoded_state", "date", "issue",
+        "previous_day_admission_influenza_confirmed",
+        "previous_day_admission_influenza_confirmed_coverage"
+      ),
+      disable_date_parsing = TRUE,
+      dry_run = TRUE
+    )
+  )
+  expect_identical(epidata_call$params$issues, NULL)
+  expect_identical(epidata_call$params$as_of, 20220101)
+  expect_identical(epidata_call$params$lag, NULL)
+})

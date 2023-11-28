@@ -459,30 +459,55 @@ pub_covid_hosp_facility <- function(
 #'
 #' @param states character. Two letter state abbreviations.
 #' @param dates [`timeset`]. Dates to fetch.
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#' most recent issue is returned.
 #' @param ... not used for values, forces later arguments to bind by name
+#' @param as_of Date. Optionally, the as of date for the issues to fetch. If not
+#'   specified, the most recent data is returned. Mutually exclusive with
+#'   `issues`.
+#' @param issues [`timeset`]. Optionally, the issue of the data to fetch. If not
+#'   specified, the most recent issue is returned. Mutually exclusive with
+#'   `as_of` or `lag`.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #'
 #' @keywords endpoint
 #' @export
 #
-pub_covid_hosp_state_timeseries <- function(states, dates, ..., issues = NULL, fetch_args = fetch_args_list()) {
+pub_covid_hosp_state_timeseries <- function(
+    states,
+    dates,
+    ...,
+    as_of = NULL,
+    issues = NULL,
+    fetch_args = fetch_args_list()) {
+  # Check parameters
   rlang::check_dots_empty()
+
+  if (missing(states) || missing(dates)) {
+    stop(
+      "`states` and `dates` are both required"
+    )
+  }
+
+  if (sum(!is.null(issues), !is.null(as_of)) > 1) {
+    stop("`issues`and `as_of` are mutually exclusive")
+  }
 
   assert_character_param("states", states)
   assert_timeset_param("dates", dates)
+  assert_date_param("as_of", as_of, len = 1, required = FALSE)
   assert_timeset_param("issues", issues, required = FALSE)
+
   dates <- parse_timeset_input(dates)
   issues <- parse_timeset_input(issues)
+  as_of <- parse_timeset_input(as_of)
 
   create_epidata_call(
     "covid_hosp_state_timeseries/",
     list(
       states = states,
       dates = dates,
-      issues = issues
+      issues = issues,
+      as_of = as_of
     ),
     list(
       create_epidata_field_info("state", "text"),
