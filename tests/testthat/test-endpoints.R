@@ -37,7 +37,7 @@ test_that("basic_epidata_call", {
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
   expect_no_error(pub_dengue_nowcast(
-    locations = "?",
+    locations = "ca",
     epiweeks = epirange(201501, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
@@ -84,7 +84,7 @@ test_that("basic_epidata_call", {
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
   expect_no_error(pub_kcdc_ili(
-    regions = "?",
+    regions = "ROK",
     epiweeks = epirange(201201, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
@@ -213,7 +213,7 @@ test_that("endpoints fail when given args via dots", {
   )
   expect_error(
     pub_kcdc_ili(
-      regions = "?",
+      regions = "ROK",
       date_range = epirange(201201, 202001)
     ),
     regexp = dots_error
