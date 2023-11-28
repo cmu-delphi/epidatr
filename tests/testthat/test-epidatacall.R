@@ -174,7 +174,7 @@ test_that("create_epidata_call basic behavior", {
     meta = meta,
     only_supports_classic = FALSE
   )
-  class(expected) = "epidata_call"
+  class(expected) <- "epidata_call"
 
   expect_identical(create_epidata_call(endpoint, params, meta = meta), expected)
 
