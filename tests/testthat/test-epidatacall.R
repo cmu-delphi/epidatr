@@ -166,7 +166,10 @@ test_that("create_epidata_call basic behavior", {
   params <- list()
 
   # Success
-  meta <- list(list(name = "time_value", class = "date"), list(name = "value", class = "double"))
+  meta <- list(
+    create_epidata_field_info("time_value", "date"),
+    create_epidata_field_info("value", "float")
+  )
   expected <- list(
     endpoint = endpoint,
     params = params,
@@ -175,7 +178,6 @@ test_that("create_epidata_call basic behavior", {
     only_supports_classic = FALSE
   )
   class(expected) <- "epidata_call"
-
   expect_identical(create_epidata_call(endpoint, params, meta = meta), expected)
 
   expected$meta <- list()
@@ -189,10 +191,22 @@ test_that("create_epidata_call fails when meta arg contains duplicates", {
   params <- list()
 
   # Duplicate names
-  meta <- list(list(name = "time_value", class = "date"), list(name = "time_value", class = "int"))
-  expect_error(create_epidata_call(endpoint, params, meta = meta), class = "epidatr__duplicate_meta_names")
+  meta <- list(
+    create_epidata_field_info("time_value", "date"),
+    create_epidata_field_info("time_value", "int")
+  )
+  expect_error(
+    create_epidata_call(endpoint, params, meta = meta),
+    class = "epidatr__duplicate_meta_names"
+  )
 
   # Duplicate entries
-  meta <- list(list(name = "time_value", class = "date"), list(name = "time_value", class = "date"))
-  expect_error(create_epidata_call(endpoint, params, meta = meta), class = "epidatr__duplicate_meta_entries")
+  meta <- list(
+    create_epidata_field_info("time_value", "date"),
+    create_epidata_field_info("time_value", "date")
+  )
+  expect_error(
+    create_epidata_call(endpoint, params, meta = meta),
+    class = "epidatr__duplicate_meta_entries"
+  )
 })

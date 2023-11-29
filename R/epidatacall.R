@@ -41,12 +41,13 @@
 #' @return
 #' - For `create_epidata_call`: an `epidata_call` object
 #'
-#' @importFrom purrr map_chr
+#' @importFrom purrr map_chr map_lgl
 create_epidata_call <- function(endpoint, params, meta = NULL,
                                 only_supports_classic = FALSE) {
   stopifnot(is.character(endpoint), length(endpoint) == 1)
   stopifnot(is.list(params))
   stopifnot(is.null(meta) || is.list(meta))
+  stopifnot(all(map_lgl(meta, ~ inherits(.x, "EpidataFieldInfo"))))
   stopifnot(is.logical(only_supports_classic), length(only_supports_classic) == 1)
 
   if (length(unique(meta)) != length(meta)) {
@@ -60,7 +61,7 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
     )
   }
 
-  meta_field_names <- map_chr(meta, ~ .x$name)
+  meta_field_names <- map_chr(meta, "name")
   if (length(meta_field_names) != length(unique(meta_field_names))) {
     cli::cli_abort(
       c(

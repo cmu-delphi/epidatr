@@ -148,7 +148,7 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
     return(df)
   }
 
-  meta_field_names <- map_chr(meta, ~ .x$name)
+  meta_field_names <- map_chr(meta, "name")
   missing_fields <- setdiff(names(df), meta_field_names)
   if (
     length(missing_fields) != 0
