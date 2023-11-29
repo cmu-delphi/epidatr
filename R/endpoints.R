@@ -487,8 +487,10 @@ pub_covid_hosp_facility <- function(
         "int"
       ),
       create_epidata_field_info("total_personnel_covid_vaccinated_doses_one_7_day", "int"),
-      create_epidata_field_info("total_personnel_covid_vaccinated_doses_one_7_day_sum",
-                                "int")
+      create_epidata_field_info(
+        "total_personnel_covid_vaccinated_doses_one_7_day_sum",
+        "int"
+      )
     )
   ) %>% fetch(fetch_args = fetch_args)
 }
@@ -823,8 +825,8 @@ pub_covid_hosp_state_timeseries <- function(
       create_epidata_field_info("total_patients_hospitalized_confirmed_influenza", "int"),
       create_epidata_field_info(
         "total_patients_hospitalized_confirmed_influenza_coverage",
-                                "int"
-                                )
+        "int"
+      )
     )
   ) %>% fetch(fetch_args = fetch_args)
 }
