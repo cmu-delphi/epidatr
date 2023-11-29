@@ -20,3 +20,42 @@ test_that("format_list", {
   expect_identical(format_list(list("5", "6")), "5,6")
   expect_identical(format_list(list("*", "*")), "*,*")
 })
+
+test_that("check_is_cachable can handle both str and date inputs of various lengths", {
+  epidata_call <- list(
+    params = list(as_of = NULL, issues = NULL)
+  )
+  fetch_args <- fetch_args_list()
+
+  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+
+  # as_of string
+  epidata_call$params$as_of <- "2022-01-01"
+  epidata_call$params$issues <- NULL
+  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+
+  # as_of date
+  epidata_call$params$as_of <- as.Date("2022-01-01")
+  epidata_call$params$issues <- NULL
+  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+
+  # issues single string
+  epidata_call$params$as_of <- NULL
+  epidata_call$params$issues <- "2022-01-01"
+  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+
+  # issues string vector
+  epidata_call$params$as_of <- NULL
+  epidata_call$params$issues <- c("2022-01-01", "2022-02-01")
+  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+
+  # issues single date
+  epidata_call$params$as_of <- NULL
+  epidata_call$params$issues <- as.Date("2022-01-01")
+  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+
+  # issues date vector
+  epidata_call$params$as_of <- NULL
+  epidata_call$params$issues <- c(as.Date("2022-01-01"), as.Date("2022-02-01"))
+  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+})
