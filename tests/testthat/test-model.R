@@ -98,3 +98,13 @@ test_that("parse_data_frame warns when df contains fields not listed in meta", {
   mock_df$rate_age_0 <- NULL
   expect_no_warning(parse_data_frame(epidata_call, mock_df))
 })
+
+test_that("parse_api_date accepts str and int input", {
+  expect_identical(parse_api_date("20200101"), as.Date("2020-01-01"))
+  expect_identical(parse_api_date(20200101), as.Date("2020-01-01"))
+})
+
+test_that("parse_api_date accepts YYYYMMDD and YYYY-MM-DD", {
+  expect_identical(parse_api_date(20200101), as.Date("2020-01-01"))
+  expect_identical(parse_api_date("2020-01-01"), as.Date("2020-01-01"))
+})
