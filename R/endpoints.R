@@ -1242,7 +1242,7 @@ pub_flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fet
       lag = lag
     ),
     list(
-      create_epidata_field_info("release_date", "text"),
+      create_epidata_field_info("release_date", "date"),
       create_epidata_field_info("location", "text"),
       create_epidata_field_info("issue", "epiweek"),
       create_epidata_field_info("epiweek", "epiweek"),
@@ -1300,7 +1300,7 @@ pub_fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NU
       lag = lag
     ),
     list(
-      create_epidata_field_info("release_date", "text"),
+      create_epidata_field_info("release_date", "date"),
       create_epidata_field_info("region", "text"),
       create_epidata_field_info("issue", "epiweek"),
       create_epidata_field_info("epiweek", "epiweek"),
@@ -1335,7 +1335,7 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
     "fluview_meta/",
     list(),
     list(
-      create_epidata_field_info("latest_update", "text"),
+      create_epidata_field_info("latest_update", "date"),
       create_epidata_field_info("latest_issue", "date"),
       create_epidata_field_info("table_rows", "int")
     )
@@ -1409,7 +1409,7 @@ pub_fluview <- function(
       auth = auth
     ),
     list(
-      create_epidata_field_info("release_date", "text"),
+      create_epidata_field_info("release_date", "date"),
       create_epidata_field_info("region", "text"),
       create_epidata_field_info("issue", "epiweek"),
       create_epidata_field_info("epiweek", "epiweek"),
@@ -1559,7 +1559,7 @@ pub_kcdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetc
       lag = lag
     ),
     list(
-      create_epidata_field_info("release_date", "text"),
+      create_epidata_field_info("release_date", "date"),
       create_epidata_field_info("region", "text"),
       create_epidata_field_info("issue", "epiweek"),
       create_epidata_field_info("epiweek", "epiweek"),
@@ -1692,7 +1692,7 @@ pub_nidss_flu <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fet
       lag = lag
     ),
     list(
-      create_epidata_field_info("release_date", "text"),
+      create_epidata_field_info("release_date", "date"),
       create_epidata_field_info("region", "text"),
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("issue", "epiweek"),
@@ -1742,7 +1742,7 @@ pvt_norostat <- function(auth, locations, epiweeks, fetch_args = fetch_args_list
       epiweeks = epiweeks
     ),
     list(
-      create_epidata_field_info("release_date", "text"),
+      create_epidata_field_info("release_date", "date"),
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("value", "int")
     )
@@ -1823,7 +1823,7 @@ pub_paho_dengue <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, f
       lag = lag
     ),
     list(
-      create_epidata_field_info("release_date", "text"),
+      create_epidata_field_info("release_date", "date"),
       create_epidata_field_info("region", "text"),
       create_epidata_field_info("serotype", "text"),
       create_epidata_field_info("epiweek", "epiweek"),
