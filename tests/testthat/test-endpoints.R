@@ -43,8 +43,8 @@ test_that("basic_epidata_call", {
   ) %>% request_url())
   expect_no_error(pvt_dengue_sensors(
     auth = "yourkey",
-    names = "?",
-    locations = "?",
+    names = "ght",
+    locations = "ag",
     epiweeks = epirange(201501, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
@@ -80,7 +80,7 @@ test_that("basic_epidata_call", {
     auth = "yourkey",
     locations = "ca",
     epiweeks = epirange(201201, 202001),
-    query = "?",
+    query = "how to get over the flu",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
   expect_no_error(pub_kcdc_ili(
