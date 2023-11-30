@@ -57,11 +57,12 @@ test_that("null parsing", {
   # see generate_test_data.R
   mock_df <- as.data.frame(readr::read_rds(testthat::test_path("data/flusurv-epiweeks.rds")))
   metadata <- epidata_call$meta
-  mock_df[[metadata[[1]]$name]][1] <- list(NULL)
+  mock_df[[metadata[[1]]$name]][1] <- NA
   mock_df[[metadata[[2]]$name]] <- c(TRUE)
   epidata_call$meta[[2]]$type <- "bool"
-  res <- parse_data_frame(epidata_call, mock_df) %>% as_tibble()
+  expect_no_error(res <- parse_data_frame(epidata_call, mock_df) %>% as_tibble())
   expect_true(res$location)
+  expect_identical(res$release_date, as.Date(NA))
 
   # if the call has no metadata, return the whole frame as is
   epidata_call$meta <- NULL
@@ -97,4 +98,18 @@ test_that("parse_data_frame warns when df contains fields not listed in meta", {
   # Success when meta contains extra fields
   mock_df$rate_age_0 <- NULL
   expect_no_warning(parse_data_frame(epidata_call, mock_df))
+})
+
+test_that("parse_api_date accepts str and int input", {
+  expect_identical(parse_api_date("20200101"), as.Date("2020-01-01"))
+  expect_identical(parse_api_date(20200101), as.Date("2020-01-01"))
+})
+
+test_that("parse_api_date accepts YYYYMMDD and YYYY-MM-DD", {
+  expect_identical(parse_api_date(20200101), as.Date("2020-01-01"))
+  expect_identical(parse_api_date("2020-01-01"), as.Date("2020-01-01"))
+})
+
+test_that("parse_api_date handles missing values appropriately", {
+  expect_identical(parse_api_date(NA), as.Date(NA))
 })

@@ -174,7 +174,7 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
 
 #' @keywords internal
 parse_api_date <- function(value) {
-  as.Date(as.character(value), format = "%Y%m%d")
+  as.Date(as.character(value), tryFormats = c("%Y%m%d", "%Y-%m-%d"))
 }
 
 #' parse_api_week converts an integer to a date
