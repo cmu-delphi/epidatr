@@ -160,3 +160,53 @@ test_that("classic only fetch", {
   # making sure that fetch_tbl and throws the expected error on classic only
   expect_error(epidata_call %>% fetch_tbl(), class = "only_supports_classic_format")
 })
+
+test_that("create_epidata_call basic behavior", {
+  endpoint <- "endpoint"
+  params <- list()
+
+  # Success
+  meta <- list(
+    create_epidata_field_info("time_value", "date"),
+    create_epidata_field_info("value", "float")
+  )
+  expected <- list(
+    endpoint = endpoint,
+    params = params,
+    base_url = "https://api.delphi.cmu.edu/epidata/",
+    meta = meta,
+    only_supports_classic = FALSE
+  )
+  class(expected) <- "epidata_call"
+  expect_identical(create_epidata_call(endpoint, params, meta = meta), expected)
+
+  expected$meta <- list()
+  expect_identical(create_epidata_call(endpoint, params, meta = NULL), expected)
+  expect_identical(create_epidata_call(endpoint, params, meta = list()), expected)
+})
+
+
+test_that("create_epidata_call fails when meta arg contains duplicates", {
+  endpoint <- "endpoint"
+  params <- list()
+
+  # Duplicate names
+  meta <- list(
+    create_epidata_field_info("time_value", "date"),
+    create_epidata_field_info("time_value", "int")
+  )
+  expect_error(
+    create_epidata_call(endpoint, params, meta = meta),
+    class = "epidatr__duplicate_meta_names"
+  )
+
+  # Duplicate entries
+  meta <- list(
+    create_epidata_field_info("time_value", "date"),
+    create_epidata_field_info("time_value", "date")
+  )
+  expect_error(
+    create_epidata_call(endpoint, params, meta = meta),
+    class = "epidatr__duplicate_meta_entries"
+  )
+})

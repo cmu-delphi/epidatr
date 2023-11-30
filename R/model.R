@@ -122,9 +122,9 @@ parse_value <- function(info, value, disable_date_parsing = FALSE) {
 
   if (is.null(value)) {
     return(value)
-  } else if (info$type == "date" && !disable_date_parsing) {
+  } else if (info$type == "date" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_date(value))
-  } else if (info$type == "epiweek" && !disable_date_parsing) {
+  } else if (info$type == "epiweek" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_week(value))
   } else if (info$type == "bool") {
     return(as.logical(value))
@@ -138,13 +138,30 @@ parse_value <- function(info, value, disable_date_parsing = FALSE) {
   value
 }
 
+#' @importFrom purrr map_chr
 parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   meta <- epidata_call$meta
   df <- as.data.frame(df)
+
   if (length(meta) == 0) {
     return(df)
   }
+
+  meta_field_names <- map_chr(meta, "name")
+  missing_fields <- setdiff(names(df), meta_field_names)
+  if (
+    length(missing_fields) != 0
+  ) {
+    cli::cli_warn(
+      c(
+        "Not all return columns are specified as expected epidata fields",
+        "i" = "Unspecified fields {missing_fields} may need to be manually converted to more appropriate classes"
+      ),
+      class = "epidatr__missing_meta_fields"
+    )
+  }
+
   columns <- colnames(df)
   for (i in seq_len(length(meta))) {
     info <- meta[[i]]

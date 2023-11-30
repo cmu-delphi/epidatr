@@ -513,7 +513,6 @@ pub_covid_hosp_state_timeseries <- function(
       create_epidata_field_info("state", "text"),
       create_epidata_field_info("issue", "date"),
       create_epidata_field_info("date", "date"),
-      create_epidata_field_info("issue", "date"),
       create_epidata_field_info("critical_staffing_shortage_today_yes", "bool"),
       create_epidata_field_info("critical_staffing_shortage_today_no", "bool"),
       create_epidata_field_info("critical_staffing_shortage_today_not_reported", "bool"),
