@@ -1,4 +1,4 @@
-# epidatr 1.1.0.9000
+# epidatr 1.0.0.9000
 
 - Function reference now displays commonly-used functions first (#205).
 - Endpoints now fail when passed misspelled arguments (#187, #201).
@@ -17,9 +17,6 @@
 - Improve line-wrapping of warning messages (#191).
 - `set_api_key` now available to help persist API key environment variables (#181, #217).
 - `get_api_key` no longer reads from R options and only uses environment variables (#217).
-
-# epidatr 1.1.0
-
 - Rename the mostly internal `get_auth_key` to `get_api_key` (#181).
 - Add `save_api_key` to more easily set the option (#181).
 - Fix documentation related to CRAN submission.

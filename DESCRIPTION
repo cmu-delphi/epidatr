@@ -1,8 +1,8 @@
 Package: epidatr
 Type: Package
 Title: Client for Delphi's 'Epidata' API
-Version: 1.1.0.9000
-Date: 2023-09-11
+Version: 1.0.0.9000
+Date: 2023-12-07
 Authors@R:
   c(
     person("Logan", "Brooks", email = "lcbrooks@andrew.cmu.edu", role = c("aut")),
