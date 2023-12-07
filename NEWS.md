@@ -13,6 +13,11 @@
   than being parsed as `Date` and returning a missing value.
 - Support `Date` objects passed to version arguments `as_of` and `issues` in
   endpoints (#192, #194).
+- `set_cache` cache size no longer runs into integer overflow (#189)
+- `clear_cache` now handles positional arguments just like `set_cache` (#197)
+- Improve line-wrapping of warning messages (#191)
+- `set_api_key` now available to help persist API key environment variables (#181, #217)
+- `get_api_key` no longer reads from R options and only uses environment variables (#217)
 
 # epidatr 1.1.0
 
