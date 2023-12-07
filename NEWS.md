@@ -1,9 +1,25 @@
+# epidatr 1.1.0.9000
+
+- Function reference now displays commonly-used functions first (#205).
+- Endpoints now fail when passed misspelled arguments (#187, #201).
+- `pub_fluview_meta` fixed to `fetch` the response automatically.
+- `pub_covid_hosp_state_timeseries` now supports use of the `as_of` parameter
+  (#209).
+- `pub_covid_hosp_state_timeseries` now correctly parses the `issue` field,
+  instead of returning a missing value (#202).
+- `release_date` and `latest_update` fields are now parsed as `Date`, rather
+  than as text. This change impacts several endpoints..
+- In `pub_fluview_meta`, `latest_issue` field is now parsed as epiweek, rather
+  than being parsed as `Date` and returning a missing value.
+- Support `Date` objects passed to version arguments `as_of` and `issues` in
+  endpoints (#192, #194).
+
 # epidatr 1.1.0
 
-- renamed the mostly internal `get_auth_key` to `get_api_key`
-- added `save_api_key` to more easily set the option
-- various CRAN submission related doc-fixes
-- fixed some errors from passing "" as a key
+- Rename the mostly internal `get_auth_key` to `get_api_key` (#181).
+- Add `save_api_key` to more easily set the option (#181).
+- Fix documentation related to CRAN submission.
+- Fix some errors from passing "" as a key.
 
 # epidatr 1.0.0
 
