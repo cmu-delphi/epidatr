@@ -1,0 +1,15 @@
+---
+title: "Understanding and accessing versioned data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Understanding and accessing versioned data}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+options(tibble.print_min = 4L, tibble.print_max = 4L, max.print = 4L)
+library(epidatr)
+library(dplyr)
+```
