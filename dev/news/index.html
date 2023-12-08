@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,12 +48,32 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.0" id="epidatr-110">epidatr 1.1.0<a class="anchor" aria-label="anchor" href="#epidatr-110"></a></h2>
-<ul><li>renamed the mostly internal <code>get_auth_key</code> to <code>get_api_key</code>
-</li>
-<li>added <code>save_api_key</code> to more easily set the option</li>
-<li>various CRAN submission related doc-fixes</li>
-<li>fixed some errors from passing “” as a key</li>
+<h2 class="pkg-version" data-toc-text="1.0.0.9000" id="epidatr-1009000">epidatr 1.0.0.9000<a class="anchor" aria-label="anchor" href="#epidatr-1009000"></a></h2>
+<ul><li>Function reference now displays commonly-used functions first (<a href="https://github.com/cmu-delphi/epidatr/issues/205" class="external-link">#205</a>).</li>
+<li>Endpoints now fail when passed misspelled arguments (<a href="https://github.com/cmu-delphi/epidatr/issues/187" class="external-link">#187</a>, <a href="https://github.com/cmu-delphi/epidatr/issues/201" class="external-link">#201</a>).</li>
+<li>
+<code>pub_fluview_meta</code> fixed to <code>fetch</code> the response automatically.</li>
+<li>
+<code>pub_covid_hosp_state_timeseries</code> now supports use of the <code>as_of</code> parameter (<a href="https://github.com/cmu-delphi/epidatr/issues/209" class="external-link">#209</a>).</li>
+<li>
+<code>pub_covid_hosp_state_timeseries</code> now correctly parses the <code>issue</code> field, instead of returning a missing value (<a href="https://github.com/cmu-delphi/epidatr/issues/202" class="external-link">#202</a>).</li>
+<li>
+<code>release_date</code> and <code>latest_update</code> fields are now parsed as <code>Date</code>, rather than as text. This change impacts several endpoints..</li>
+<li>In <code>pub_fluview_meta</code>, <code>latest_issue</code> field is now parsed as epiweek, rather than being parsed as <code>Date</code> and returning a missing value.</li>
+<li>Support <code>Date</code> objects passed to version arguments <code>as_of</code> and <code>issues</code> in endpoints (<a href="https://github.com/cmu-delphi/epidatr/issues/192" class="external-link">#192</a>, <a href="https://github.com/cmu-delphi/epidatr/issues/194" class="external-link">#194</a>).</li>
+<li>
+<code>set_cache</code> cache size no longer runs into integer overflow (<a href="https://github.com/cmu-delphi/epidatr/issues/189" class="external-link">#189</a>).</li>
+<li>
+<code>clear_cache</code> now handles positional arguments just like <code>set_cache</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/197" class="external-link">#197</a>).</li>
+<li>Improve line-wrapping of warning messages (<a href="https://github.com/cmu-delphi/epidatr/issues/191" class="external-link">#191</a>).</li>
+<li>
+<code>set_api_key</code> now available to help persist API key environment variables (<a href="https://github.com/cmu-delphi/epidatr/issues/181" class="external-link">#181</a>, <a href="https://github.com/cmu-delphi/epidatr/issues/217" class="external-link">#217</a>).</li>
+<li>
+<code>get_auth_key</code> renamed to <code>get_api_key</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/181" class="external-link">#181</a>).</li>
+<li>
+<code>get_api_key</code> no longer reads from R options and only uses environment variables (<a href="https://github.com/cmu-delphi/epidatr/issues/217" class="external-link">#217</a>).</li>
+<li>Fix documentation related to CRAN submission.</li>
+<li>Fix some errors from passing “” as a key.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="epidatr-100">epidatr 1.0.0<a class="anchor" aria-label="anchor" href="#epidatr-100"></a></h2><p class="text-muted">CRAN release: 2023-09-19</p>
