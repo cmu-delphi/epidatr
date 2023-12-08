@@ -146,6 +146,29 @@ epidata <- pub_covidcast(
 knitr::kable(head(epidata))
 ```
 
+## Getting versioned data
+
+The Epidata API stores a historical record of all data, including corrections and updates, which is particularly useful for accurately backtesting forecasting models. To fetch versioned data
+
+We can also request data for a single location at a time, via the `geo_values` argument.
+
+```{r, eval = FALSE}
+# Obtain the smoothed covid-like illness (CLI) signal from the COVID-19
+# Trends and Impact survey for Pennsylvania as it was on 2021-06-01
+pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = "pa",
+  time_values = epirange(20210105, 20210410),
+  as_of = "2021-06-01"
+)
+```
+
+See `vignette("versioned-data")` for more information and more ways to specify versioned data.
+
+
 ## Plotting
 
 Because the output data is in a standard `tibble` format, we can easily plot
