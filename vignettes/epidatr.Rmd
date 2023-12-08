@@ -1,8 +1,8 @@
 ---
-title: "Delphi Epidata R API Client"
+title: "Get started with `epidatr`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Delphi Epidata R API Client}
+  %\VignetteIndexEntry{Get started with `epidatr`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteDepends{ggplot2}
   \usepackage[utf8]{inputenc}
@@ -210,9 +210,14 @@ International data is available via
 
 ## Finding data sources and signals of interest
 
-Above we used data from [Delphi’s symptom surveys](https://delphi.cmu.edu/covid19/ctis/), but the Epidata API includes numerous data streams: medical claims data, cases and deaths, mobility, and many others. This can make it a challenge to find the data stream that you are most interested in.
+Above we used data from [Delphi’s symptom surveys](https://delphi.cmu.edu/covid19/ctis/),
+but the Epidata API includes numerous data streams: medical claims data, cases
+and deaths, mobility, and many others. This can make it a challenge to find
+the data stream that you are most interested in.
 
-The Epidata documentation lists all the data sources and signals available through the API for [COVID-19](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html) and for [other diseases](https://cmu-delphi.github.io/delphi-epidata/api/README.html#source-specific-parameters).
+The Epidata documentation lists all the data sources and signals available
+through the API for [COVID-19](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html)
+and for [other diseases](https://cmu-delphi.github.io/delphi-epidata/api/README.html#source-specific-parameters).
 
 You can also use the `avail_endpoints()` function to get a table of endpoint functions:
 
