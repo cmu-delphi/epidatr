@@ -165,9 +165,14 @@ ggplot(epidata, aes(x = time_value, y = value)) +
 
 ## Signal discovery
 
-The [Delphi Epidata API documentation](https://cmu-delphi.github.io/delphi-epidata/) has more information on available endpoints. You can also use the `avail_endpoints()` function to get a table of endpoint functions:
+Above we used data from [Delphi’s symptom surveys](https://delphi.cmu.edu/covid19/ctis/), but the Epidata API includes numerous data streams: medical claims data, cases and deaths, mobility, and many others. This can make it a challenge to find the data stream that you are most interested in.
+
+The Epidata documentation lists all the data sources and signals available through the API for [COVID-19](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html) and for [other diseases](https://cmu-delphi.github.io/delphi-epidata/api/README.html#source-specific-parameters).
+
+You can also use the `avail_endpoints()` function to get a table of endpoint functions:
 
 ```{r}
 avail_endpoints()
 ```
 
+See `vignette("signal-discovery")` for more information.
