@@ -29,6 +29,11 @@ for [other diseases](https://cmu-delphi.github.io/delphi-epidata/api/README.html
 The site also includes a search tool if you have a keyword (e.g. "Taiwan") in mind.
 
 
+## Signal metadata
+
+...?
+
+
 ## Interactive tooling
 
 We provide a couple `epidatr` functions to help find data sources and signals.
@@ -84,7 +89,10 @@ These signal objects can be used directly to fetch data, without requiring us to
 the `pub_covidcast()` function. Simply use the `$call` attribute of the object:
 
 ```{r}
-covid_sources$signals$`fb-survey:smoothed_cli`$call("state", "pa", epirange(20210405, 20210410))
+epidata <- covid_sources$signals$`fb-survey:smoothed_cli`$call(
+  "state", "pa", epirange(20210405, 20210410)
+)
+knitr::kable(epidata)
 ```
 
 
