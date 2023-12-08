@@ -31,8 +31,14 @@ The site also includes a search tool if you have a keyword (e.g. "Taiwan") in mi
 
 ## Signal metadata
 
-...?
+Some endpoints have partner metadata available that, depending on
+the endpoint, provides information about the signals that are available, what
+time ranges they are available for, and when they have been updated.
 
+```{r, echo = FALSE}
+invisible(capture.output(endpts <- avail_endpoints()))
+filter(endpts, endsWith(Endpoint, "_meta()")) %>% knitr::kable()
+```
 
 ## Interactive tooling
 
