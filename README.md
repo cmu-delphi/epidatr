@@ -51,19 +51,19 @@ diseases](https://cmu-delphi.github.io/delphi-epidata/api/README.html#source-spe
 **To get started** using this package, view the Getting Started guide at
 `vignette("epidatr")`.
 
-## Get updates
-
-**You should consider subscribing to the [API mailing
-list](https://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api)**
-to be notified of package updates, new data sources, corrections, and
-other updates.
-
 ## For users of the `covidcast` R package
 
 `epidatr` is a complete rewrite of the [`covidcast`
 package](https://cmu-delphi.github.io/covidcast/covidcastR/), with a
 focus on speed, reliability, and ease of use. The `covidcast` package is
 deprecated and will no longer be updated.
+
+## Get updates
+
+**You should consider subscribing to the [API mailing
+list](https://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api)**
+to be notified of package updates, new data sources, corrections, and
+other updates.
 
 ## Usage terms and citation
 
