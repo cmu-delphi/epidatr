@@ -148,9 +148,10 @@ knitr::kable(head(epidata))
 
 ## Getting versioned data
 
-The Epidata API stores a historical record of all data, including corrections and updates, which is particularly useful for accurately backtesting forecasting models. To fetch versioned data
-
-We can also request data for a single location at a time, via the `geo_values` argument.
+The Epidata API stores a historical record of all data, including corrections
+and updates, which is particularly useful for accurately backtesting
+forecasting models. To fetch versioned data, we can use the `as_of`
+argument.
 
 ```{r, eval = FALSE}
 # Obtain the smoothed covid-like illness (CLI) signal from the COVID-19
@@ -166,7 +167,7 @@ pub_covidcast(
 )
 ```
 
-See `vignette("versioned-data")` for more information and more ways to specify versioned data.
+See `vignette("versioned-data")` for details and more ways to specify versioned data.
 
 
 ## Plotting
