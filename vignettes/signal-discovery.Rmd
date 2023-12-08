@@ -36,7 +36,7 @@ the endpoint, provides information about the signals that are available, what
 time ranges they are available for, and when they have been updated.
 
 ```{r, echo = FALSE}
-invisible(capture.output(endpts <- avail_endpoints()))
+suppressMessages(invisible(capture.output(endpts <- avail_endpoints())))
 filter(endpts, endsWith(Endpoint, "_meta()")) %>% knitr::kable()
 ```
 
@@ -54,7 +54,7 @@ avail_endpoints()
 ```
 
 ```{r, echo = FALSE}
-invisible(capture.output(endpts <- avail_endpoints()))
+suppressMessages(invisible(capture.output(endpts <- avail_endpoints())))
 knitr::kable(endpts)
 ```
 
