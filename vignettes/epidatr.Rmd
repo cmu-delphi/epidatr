@@ -195,6 +195,19 @@ For endpoints that report US data, see the
 for available geographic levels.
 
 
+### International data
+
+International data is available via
+
+- `pub_dengue_nowcast` (North and South America)
+- `pub_ecdc_ili` (Europe)
+- `pub_kcdc_ili` (Korea)
+- `pub_nidss_dengue` (Taiwan)
+- `pub_nidss_flu` (Taiwan)
+- `pub_paho_dengue` (North and South America)
+- `pvt_dengue_sensors` (North and South America)
+
+
 ## Finding data sources and signals of interest
 
 Above we used data from [Delphi’s symptom surveys](https://delphi.cmu.edu/covid19/ctis/), but the Epidata API includes numerous data streams: medical claims data, cases and deaths, mobility, and many others. This can make it a challenge to find the data stream that you are most interested in.
