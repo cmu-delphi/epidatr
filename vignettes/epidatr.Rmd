@@ -186,7 +186,16 @@ ggplot(epidata, aes(x = time_value, y = value)) +
   )
 ```
 
-## Signal discovery
+## Finding locations of interest
+
+Most data is only available for the US. Select endpoints report other countries at the national and/or regional levels. Endpoint descriptions explicitly state when they cover non-US locations.
+
+For endpoints that report US data, see the
+[geographic coding documentation](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html)
+for available geographic levels.
+
+
+## Finding data sources and signals of interest
 
 Above we used data from [Delphi’s symptom surveys](https://delphi.cmu.edu/covid19/ctis/), but the Epidata API includes numerous data streams: medical claims data, cases and deaths, mobility, and many others. This can make it a challenge to find the data stream that you are most interested in.
 
@@ -194,8 +203,13 @@ The Epidata documentation lists all the data sources and signals available throu
 
 You can also use the `avail_endpoints()` function to get a table of endpoint functions:
 
-```{r}
+```{r, eval = FALSE}
 avail_endpoints()
+```
+
+```{r, echo = FALSE}
+invisible(capture.output(endpts <- avail_endpoints()))
+knitr::kable(endpts)
 ```
 
 See `vignette("signal-discovery")` for more information.
