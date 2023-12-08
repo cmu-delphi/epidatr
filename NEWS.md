@@ -16,9 +16,8 @@
 - `clear_cache` now handles positional arguments just like `set_cache` (#197).
 - Improve line-wrapping of warning messages (#191).
 - `set_api_key` now available to help persist API key environment variables (#181, #217).
+- `get_auth_key` renamed to `get_api_key` (#181).
 - `get_api_key` no longer reads from R options and only uses environment variables (#217).
-- Rename the mostly internal `get_auth_key` to `get_api_key` (#181).
-- Add `save_api_key` to more easily set the option (#181).
 - Fix documentation related to CRAN submission.
 - Fix some errors from passing "" as a key.
 
