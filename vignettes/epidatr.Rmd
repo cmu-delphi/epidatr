@@ -192,7 +192,7 @@ ggplot(epidata, aes(x = time_value, y = value)) +
 `ggplot2` can also be used to [create choropleths](https://r-graphics.org/recipe-miscgraph-choropleth).
 
 
-```{r class.source = "fold-hide", out.height="65%"}
+```{r, class.source = "fold-hide", out.height="65%"}
 library(maps)
 
 # Obtain the most up-to-date version of the smoothed covid-like illness (CLI)

@@ -45,6 +45,7 @@ Suggests:
     ggplot2,
     knitr,
     maps,
+    mapproj,
     rmarkdown,
     rlang,
     testthat (>= 3.1.5),
