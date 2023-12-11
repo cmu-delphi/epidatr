@@ -211,7 +211,8 @@ states_map <- map_data("state")
 
 # Convert state abbreviations into state names
 cli_states <- mutate(
-  cli_states, state = ifelse(
+  cli_states,
+  state = ifelse(
     geo_value == "dc",
     "district of columbia",
     state.name[match(geo_value, tolower(state.abb))] %>% tolower()
