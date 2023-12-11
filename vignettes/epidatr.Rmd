@@ -1,8 +1,10 @@
 ---
-title: "Get started with `epidatr`"
-output: rmarkdown::html_vignette
+title: "Get started with epidatr"
+output:
+  rmarkdown::html_vignette:
+    code_folding: show
 vignette: >
-  %\VignetteIndexEntry{Get started with `epidatr`}
+  %\VignetteIndexEntry{Get started with epidatr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteDepends{ggplot2}
   \usepackage[utf8]{inputenc}
@@ -186,6 +188,51 @@ ggplot(epidata, aes(x = time_value, y = value)) +
     y = "CLI"
   )
 ```
+
+`ggplot2` can also be used to [create choropleths](https://r-graphics.org/recipe-miscgraph-choropleth).
+
+
+```{r class.source = "fold-hide", out.height="65%"}
+library(maps)
+
+# Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
+# signal from the COVID-19 Trends and Impact survey for all states on a single day
+cli_states <- pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = "*",
+  time_values = 20210410
+)
+
+# Get a mapping of states to longitude/latitude coordinates
+states_map <- map_data("state")
+
+# Convert state abbreviations into state names
+cli_states <- mutate(
+  cli_states, state = ifelse(
+    geo_value == "dc",
+    "district of columbia",
+    state.name[match(geo_value, tolower(state.abb))] %>% tolower()
+  )
+)
+
+# Add coordinates for each state
+cli_states <- left_join(states_map, cli_states, by = c("region" = "state"))
+
+# Plot
+ggplot(cli_states, aes(x = long, y = lat, group = group, fill = value)) +
+  geom_polygon(colour = "black", linewidth = 0.2) +
+  coord_map("polyconic") +
+  labs(
+    title = "Smoothed CLI from Facebook Survey",
+    subtitle = "All states, 2021-04-10",
+    x = "Longitude",
+    y = "Latitude"
+  )
+```
+
 
 ## Finding locations of interest
 
