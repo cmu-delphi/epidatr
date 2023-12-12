@@ -1887,7 +1887,7 @@ pvt_quidel <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
 #'
 #' This is the documentation of the API for accessing the Digital Surveillance
-#'   Sensors endpoint of the Delphi’s epidemiological Note: this
+#'   Sensors endpoint of the Delphi’s epidemiological. Note: this
 #'   repository was built to support modeling and forecasting efforts
 #'   surrounding seasonal influenza (and dengue). In the current COVID-19
 #'   pandemic, syndromic surveillance data, like ILI data (influenza-like
