@@ -54,9 +54,10 @@ There are some other functions available for debugging and advanced usage: -
 \code{request_url} (for debugging):  outputs the request URL from which data
 would be fetched (note additional parameters below)
 
-\code{fetch} usually returns the data in tibble format, but a few of the endpoints
-only support the JSON classic format (delphi, pvt_meta_norostat, and meta).
-In that case a JSON-like nested list structure is returned instead.
+\code{fetch} usually returns the data in tibble format, but a few of the
+endpoints only support the JSON classic format (\code{pub_delphi},
+\code{pvt_meta_norostat}, and \code{pub_meta}). In that case a
+JSON-like nested list structure is returned instead.
 }
 \examples{
 \dontrun{

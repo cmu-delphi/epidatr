@@ -34,7 +34,7 @@ cache_environ$epidatr_cache <- NULL
 #'   specify either `issues` before a certain date, or `as_of` before a certain
 #'   date will actually cache. For example the call
 #' ```
-#' covidcast(
+#' pub_covidcast(
 #'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
 #'   geo_type = "state",
@@ -46,7 +46,7 @@ cache_environ$epidatr_cache <- NULL
 #' *won't* cache, since it is possible for the cache to be invalidated by new
 #'   releases with no warning. On the other hand, the call
 #' ```
-#' covidcast(
+#' pub_covidcast(
 #'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
 #'   geo_type = "state",

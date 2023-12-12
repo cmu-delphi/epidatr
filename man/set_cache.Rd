@@ -64,7 +64,7 @@ An important feature of the caching in this package is that only calls which
 specify either \code{issues} before a certain date, or \code{as_of} before a certain
 date will actually cache. For example the call
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{covidcast(
+\if{html}{\out{<div class="sourceCode">}}\preformatted{pub_covidcast(
   source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
   geo_type = "state",
@@ -77,7 +77,7 @@ date will actually cache. For example the call
 \emph{won't} cache, since it is possible for the cache to be invalidated by new
 releases with no warning. On the other hand, the call
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{covidcast(
+\if{html}{\out{<div class="sourceCode">}}\preformatted{pub_covidcast(
   source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
   geo_type = "state",

@@ -1320,7 +1320,7 @@ pub_fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NU
 #' Metadata for the FluView endpoint
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
-#' Returns information about the fluview endpoint.
+#'
 #' @examples
 #' \dontrun{
 #' pub_fluview_meta()
@@ -1712,8 +1712,8 @@ pub_nidss_flu <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fet
 #'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
 #'
-#' This is the documentation of the API for accessing the NoroSTAT (norostat)
-#'   endpoint of the Delphi’s epidemiological data.
+#' This is the documentation of the API for accessing the NoroSTAT endpoint of
+#'   the Delphi’s epidemiological data.
 #'
 #' @examples
 #' \dontrun{
@@ -1887,7 +1887,7 @@ pvt_quidel <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
 #'
 #' This is the documentation of the API for accessing the Digital Surveillance
-#'   Sensors (sensors) endpoint of the Delphi’s epidemiological Note: this
+#'   Sensors endpoint of the Delphi’s epidemiological Note: this
 #'   repository was built to support modeling and forecasting efforts
 #'   surrounding seasonal influenza (and dengue). In the current COVID-19
 #'   pandemic, syndromic surveillance data, like ILI data (influenza-like
@@ -1942,8 +1942,9 @@ pvt_sensors <- function(auth, names, locations, epiweeks, fetch_args = fetch_arg
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/twitter.html>
 #'
-#' This is the API documentation for accessing the Twitter Stream (twitter) endpoint of Delphi’s epidemiological data.
-#' Sourced from [Healthtweets](http://www.healthtweets.org/)
+#' This is the API documentation for accessing the Twitter Stream endpoint of
+#' Delphi’s epidemiological data. Sourced from
+#' [Healthtweets](http://www.healthtweets.org/)
 #'
 #' @examples
 #' \dontrun{

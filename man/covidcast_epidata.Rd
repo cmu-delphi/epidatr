@@ -26,6 +26,9 @@ The \code{covidcast_epidata()} function fetches a list of all signals, and retur
 an object containing fields for every signal:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata <- covidcast_epidata()
+#> Warning: No API key found. You will be limited to non-complex queries and encounter rate limits if you proceed.
+#> i See `?save_api_key()` for details on obtaining and setting API keys.
+#> This warning is displayed once every 8 hours.
 epidata$signals
 #> # A tibble: 443 x 3
 #>    source        signal                        short_description                
