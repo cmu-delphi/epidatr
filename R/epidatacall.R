@@ -201,9 +201,10 @@ fetch_args_list <- function(
 #' Fetches the data
 #'
 #' @details
-#' `fetch` usually returns the data in tibble format, but a few of the endpoints
-#' only support the JSON classic format (delphi, pvt_meta_norostat, and meta).
-#' In that case a JSON-like nested list structure is returned instead.
+#' `fetch` usually returns the data in tibble format, but a few of the
+#' endpoints only support the JSON classic format (`pub_delphi`,
+#' `pvt_meta_norostat`, and `pub_meta`). In that case a
+#' JSON-like nested list structure is returned instead.
 #'
 #' @rdname epidata_call
 #' @param epidata_call an instance of `epidata_call`
