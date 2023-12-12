@@ -22,7 +22,7 @@ deleted data would be gone permanently!).
 An important feature of the caching in this package is that only calls which
 specify either issues before a certain date, or as_of before a certain
 date will actually cache. For example the call
-covidcast(
+pub_covidcast(
   source = &quot;jhu-csse&quot;,
   signals = &quot;confirmed_7dav_incidence_prop&quot;,
   geo_type = &quot;state&quot;,
@@ -33,7 +33,7 @@ covidcast(
 
 won't cache, since it is possible for the cache to be invalidated by new
 releases with no warning. On the other hand, the call
-covidcast(
+pub_covidcast(
   source = &quot;jhu-csse&quot;,
   signals = &quot;confirmed_7dav_incidence_prop&quot;,
   geo_type = &quot;state&quot;,
@@ -75,7 +75,7 @@ deleted data would be gone permanently!).
 An important feature of the caching in this package is that only calls which
 specify either issues before a certain date, or as_of before a certain
 date will actually cache. For example the call
-covidcast(
+pub_covidcast(
   source = &quot;jhu-csse&quot;,
   signals = &quot;confirmed_7dav_incidence_prop&quot;,
   geo_type = &quot;state&quot;,
@@ -86,7 +86,7 @@ covidcast(
 
 won't cache, since it is possible for the cache to be invalidated by new
 releases with no warning. On the other hand, the call
-covidcast(
+pub_covidcast(
   source = &quot;jhu-csse&quot;,
   signals = &quot;confirmed_7dav_incidence_prop&quot;,
   geo_type = &quot;state&quot;,
@@ -185,7 +185,7 @@ deleted data would be gone permanently!).</p>
 <p>An important feature of the caching in this package is that only calls which
 specify either <code>issues</code> before a certain date, or <code>as_of</code> before a certain
 date will actually cache. For example the call</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">covidcast</span>(</span>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pub_covidcast</span>(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">source =</span> <span class="st">"jhu-csse"</span>,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">signals =</span> <span class="st">"confirmed_7dav_incidence_prop"</span>,</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">geo_type =</span> <span class="st">"state"</span>,</span>
@@ -195,7 +195,7 @@ date will actually cache. For example the call</p>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre><p></p></div>
 <p><em>won't</em> cache, since it is possible for the cache to be invalidated by new
 releases with no warning. On the other hand, the call</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">covidcast</span>(</span>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pub_covidcast</span>(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">source =</span> <span class="st">"jhu-csse"</span>,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">signals =</span> <span class="st">"confirmed_7dav_incidence_prop"</span>,</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">geo_type =</span> <span class="st">"state"</span>,</span>
