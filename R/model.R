@@ -63,8 +63,6 @@ epirange <- function(from, to) {
 
 #' @export
 print.EpiRange <- function(x, ...) {
-  stopifnot(inherits(x, "EpiRange"))
-
   if (nchar(x$from) == 8) {
     date_type <- "Days" # nolint: object_usage_linter
     x$from <- as.Date(as.character(x$from), "%Y%m%d")
@@ -143,7 +141,6 @@ create_epidata_field_info <- function(name,
 
 #' @export
 print.EpidataFieldInfo <- function(x, ...) {
-  stopifnot(inherits(x, "EpidataFieldInfo"))
   cli::cli_h1("<EpidataFieldInfo> object:")
   # Print all non-class fields.
   print(x[attr(x, "names")])

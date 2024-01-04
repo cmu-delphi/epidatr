@@ -121,7 +121,6 @@ request_arguments <- function(epidata_call, format_type, fields = NULL) {
 
 #' @export
 print.epidata_call <- function(x, ...) {
-  stopifnot(inherits(x, "epidata_call"))
   cli::cli_h1("<epidata_call> object:")
   cli::cli_bullets(c(
     "*" = "Pipe this object into `fetch()` to actually fetch the data",
@@ -200,7 +199,6 @@ fetch_args_list <- function(
 
 #' @export
 print.fetch_args <- function(x, ...) {
-  stopifnot(inherits(x, "fetch_args"))
   cli::cli_h1("<fetch_args> object:")
   # Print all non-class fields.
   print(x[attr(x, "names")])
