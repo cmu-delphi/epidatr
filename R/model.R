@@ -141,7 +141,7 @@ create_epidata_field_info <- function(name,
 print.EpidataFieldInfo <- function(x, ...) {
   cli::cli_h1("<EpidataFieldInfo> object:")
   # Print all non-class fields.
-  print(x[attr(x, "names")])
+  cli::cli_dl(x[attr(x, "names")])
 }
 
 parse_value <- function(info, value, disable_date_parsing = FALSE) {

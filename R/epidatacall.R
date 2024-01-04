@@ -201,7 +201,7 @@ fetch_args_list <- function(
 print.fetch_args <- function(x, ...) {
   cli::cli_h1("<fetch_args> object:")
   # Print all non-class fields.
-  print(x[attr(x, "names")])
+  cli::cli_dl(x[attr(x, "names")])
 }
 
 #' Fetches the data
