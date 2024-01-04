@@ -141,6 +141,14 @@ create_epidata_field_info <- function(name,
   )
 }
 
+#' @export
+print.EpidataFieldInfo <- function(x, ...) {
+  stopifnot(inherits(x, "EpidataFieldInfo"))
+  cli::cli_h1("<EpidataFieldInfo> object:")
+  # Print all non-class fields.
+  print(x[attr(x, "names")])
+}
+
 parse_value <- function(info, value, disable_date_parsing = FALSE) {
   stopifnot(inherits(info, "EpidataFieldInfo"))
 

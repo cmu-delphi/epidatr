@@ -198,6 +198,14 @@ fetch_args_list <- function(
   )
 }
 
+#' @export
+print.fetch_args <- function(x, ...) {
+  stopifnot(inherits(x, "fetch_args"))
+  cli::cli_h1("<fetch_args> object:")
+  # Print all non-class fields.
+  print(x[attr(x, "names")])
+}
+
 #' Fetches the data
 #'
 #' @details
