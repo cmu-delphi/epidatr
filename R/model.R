@@ -61,6 +61,31 @@ epirange <- function(from, to) {
   structure(list(from = from, to = to), class = "EpiRange")
 }
 
+#' @export
+print.EpiRange <- function(x, ...) {
+  stopifnot(inherits(x, "EpiRange"))
+
+  if (nchar(x$from) == 8) {
+    date_type <- "Days"
+    x$from <- as.Date(as.character(x$from), "%Y%m%d")
+    x$to <- as.Date(as.character(x$to), "%Y%m%d")
+  } else if (nchar(x$from) == 6) {
+    date_type <- "Epiweeks"
+    x$from <- format(
+      as.Date(as.character(x$from), "%Y%U"),
+      "%Yw%U"
+    )
+    x$to <- format(
+      as.Date(as.character(x$to), "%Y%U"),
+      "%Yw%U"
+    )
+  }
+
+  cli::cli_h1("<EpiRange> object:")
+  cli::cli_bullets(
+    "{date_type} from {x$from} to {x$to}"
+  )
+}
 
 #' Timeset formats for specifying dates
 #'
@@ -85,7 +110,6 @@ epirange <- function(from, to) {
 #'
 #' @name timeset
 NULL
-
 
 create_epidata_field_info <- function(name,
                                       type,
