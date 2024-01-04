@@ -66,11 +66,11 @@ print.EpiRange <- function(x, ...) {
   stopifnot(inherits(x, "EpiRange"))
 
   if (nchar(x$from) == 8) {
-    date_type <- "Days"
+    date_type <- "Days" # nolint: object_usage_linter
     x$from <- as.Date(as.character(x$from), "%Y%m%d")
     x$to <- as.Date(as.character(x$to), "%Y%m%d")
   } else if (nchar(x$from) == 6) {
-    date_type <- "Epiweeks"
+    date_type <- "Epiweeks" # nolint: object_usage_linter
     x$from <- format(
       as.Date(as.character(x$from), "%Y%U"),
       "%Yw%U"
