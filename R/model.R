@@ -69,13 +69,11 @@ print.EpiRange <- function(x, ...) {
     x$to <- as.Date(as.character(x$to), "%Y%m%d")
   } else if (nchar(x$from) == 6) {
     date_type <- "Epiweeks" # nolint: object_usage_linter
-    x$from <- format(
-      as.Date(as.character(x$from), "%Y%U"),
-      "%Yw%U"
+    x$from <- paste0(
+      substr(x$from, 1, 4), "w", substr(x$from, 5, 6)
     )
-    x$to <- format(
-      as.Date(as.character(x$to), "%Y%U"),
-      "%Yw%U"
+    x$to <- paste0(
+      substr(x$to, 1, 4), "w", substr(x$to, 5, 6)
     )
   }
 
