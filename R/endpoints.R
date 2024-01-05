@@ -2163,13 +2163,18 @@ pvt_twitter <- function(
 #'
 #' @examples
 #' \dontrun{
-#' pub_wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601))
+#' pub_wiki(
+#'  articles = "avian_influenza",
+#'  time_type = "week",
+#'  time_values = epirange(201501, 201601)
+#' )
 #' }
 #' @param articles character. Articles to fetch.
 #' @param ... not used for values, forces later arguments to bind by name
-#' @param dates [`timeset`]. Dates to fetch. Mutually exclusive with `epiweeks`.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Mutually exclusive with
-#' `dates`.
+#' @param time_type string. The temporal resolution of the data (either "day" or
+#'  "week", depending on signal).
+#' @param time_values [`timeset`]. Dates or epiweeks to fetch. Defaults to all
+#'  ("*") dates.
 #' @param language string. Language to fetch.
 #' @param hours integer. Optionally, the hours to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
@@ -2179,14 +2184,27 @@ pvt_twitter <- function(
 pub_wiki <- function(
     articles,
     ...,
-    dates = NULL,
-    epiweeks = NULL,
+    time_type = c("day", "week"),
+    time_values = "*",
     hours = NULL,
     language = "en",
     fetch_args = fetch_args_list()) {
   rlang::check_dots_empty()
 
+  time_type <- match.arg(time_type)
+  if (time_type == "day") {
+    dates <- time_values
+    epiweeks <- NULL
+    dates <- get_wildcard_equivalent_dates(dates, "day")
+  } else {
+    dates <- NULL
+    epiweeks <- time_values
+    epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
+  }
+
   assert_character_param("articles", articles)
+  assert_character_param("time_type", time_type, len = 1)
+  assert_timeset_param("time_values", time_values)
   assert_timeset_param("dates", dates, required = FALSE)
   assert_timeset_param("epiweeks", epiweeks, required = FALSE)
   assert_integerish_param("hours", hours, required = FALSE)
@@ -2194,9 +2212,6 @@ pub_wiki <- function(
   dates <- parse_timeset_input(dates)
   epiweeks <- parse_timeset_input(epiweeks)
 
-  if (!xor(is.null(dates), is.null(epiweeks))) {
-    stop("exactly one of `dates` and `epiweeks` is required")
-  }
   time_field <- if (!is.null(dates)) {
     create_epidata_field_info("date", "date")
   } else {

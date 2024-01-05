@@ -142,7 +142,8 @@ test_that("basic_epidata_call", {
   ) %>% request_url())
   expect_no_error(pub_wiki(
     articles = "avian_influenza",
-    epiweeks = epirange(201501, 202001),
+    time_type = "week",
+    time_values = epirange(201501, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
 })
@@ -420,6 +421,7 @@ test_that("endpoints fail when given args via dots", {
   expect_error(
     pub_wiki(
       articles = "avian_influenza",
+      time_type = "week",
       date_range = epirange(201501, 202001)
     ),
     regexp = dots_error
