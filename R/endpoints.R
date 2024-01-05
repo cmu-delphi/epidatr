@@ -161,13 +161,21 @@ pub_covid_hosp_facility_lookup <- function(
 #'   hospital_pks = "100075",
 #'   collection_weeks = epirange(20200101, 20200501)
 #' )
+#'
+#' pub_covid_hosp_facility(
+#'   hospital_pks = "100075",
+#'   collection_weeks = epirange(202001, 202005)
+#' )
 #' }
 #' @param hospital_pks character. Facility identifiers.
-#' @param collection_weeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
+#' @param collection_weeks [`timeset`]. Dates (corresponding to epiweeks) to
+#'  fetch. Defaults to all ("*") dates.
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param publication_dates [`timeset`]. Publication dates to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
+#'
+#' @importFrom checkmate test_class
 #'
 #' @seealso [`pub_covid_hosp_facility()`], [`epirange()`]
 #' @keywords endpoint
@@ -181,13 +189,20 @@ pub_covid_hosp_facility <- function(
     fetch_args = fetch_args_list()) {
   rlang::check_dots_empty()
 
-  collection_weeks <- get_wildcard_equivalent_dates(collection_weeks, "week")
+  collection_weeks <- get_wildcard_equivalent_dates(collection_weeks, "day")
 
   assert_character_param("hospital_pks", hospital_pks)
   assert_timeset_param("collection_weeks", collection_weeks)
   assert_timeset_param("publication_dates", publication_dates, required = FALSE)
   collection_weeks <- parse_timeset_input(collection_weeks)
   publication_dates <- parse_timeset_input(publication_dates)
+
+  # Confusingly, the endpoint expects `collection_weeks` to be in day format,
+  # but correspond to epiweeks. Allow `collection_weeks` to be provided in
+  # either day or week format.
+  if (test_class(collection_weeks, "EpiRange")) {
+    collection_weeks <- convert_epirange_format(collection_weeks, to_type = "day")
+  }
 
   create_epidata_call(
     "covid_hosp_facility/",
@@ -1047,6 +1062,7 @@ pub_covidcast <- function(
 #' }
 #' @param system character. System name to fetch.
 #' @param epiweek [`timeset`]. Epiweek to fetch. Does not support multiple dates.
+#'  Make separate calls to fetch data for multiple epiweeks.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`list`]
 #' @keywords endpoint
