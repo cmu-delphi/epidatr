@@ -378,7 +378,8 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/twitter.html>
 pvt_twitter(
   auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
   locations = "nat",
-  epiweeks = epirange(200301, 202105)
+  time_type = "week",
+  time_values = epirange(200301, 202105)
 )
 ```
 

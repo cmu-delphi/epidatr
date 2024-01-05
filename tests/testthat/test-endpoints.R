@@ -137,7 +137,8 @@ test_that("basic_epidata_call", {
   expect_no_error(pvt_twitter(
     auth = "yourkey",
     locations = "CA",
-    epiweeks = epirange(201501, 202001),
+    time_type = "week",
+    time_values = epirange(201501, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
   expect_no_error(pub_wiki(
@@ -414,7 +415,8 @@ test_that("endpoints fail when given args via dots", {
     pvt_twitter(
       auth = "yourkey",
       locations = "CA",
-      date_range = epirange(201501, 202001)
+      time_type = "week",
+      time_range = epirange(201501, 202001)
     ),
     regexp = dots_error
   )
