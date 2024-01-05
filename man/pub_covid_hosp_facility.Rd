@@ -6,7 +6,7 @@
 \usage{
 pub_covid_hosp_facility(
   hospital_pks,
-  collection_weeks,
+  collection_weeks = "*",
   ...,
   publication_dates = NULL,
   fetch_args = fetch_args_list()
@@ -15,7 +15,7 @@ pub_covid_hosp_facility(
 \arguments{
 \item{hospital_pks}{character. Facility identifiers.}
 
-\item{collection_weeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{collection_weeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 

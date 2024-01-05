@@ -6,7 +6,7 @@
 \usage{
 pub_flusurv(
   locations,
-  epiweeks,
+  epiweeks = "*",
   ...,
   issues = NULL,
   lag = NULL,
@@ -16,7 +16,7 @@ pub_flusurv(
 \arguments{
 \item{locations}{character. Character vector indicating location.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 

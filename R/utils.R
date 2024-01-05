@@ -44,3 +44,20 @@ check_is_cachable <- function(epidata_call, fetch_args) {
   )
   return(is_cachable)
 }
+
+#' helper to convert a date wildcard ("*") to an appropriate epirange
+#'
+#' @keywords internal
+get_wildcard_equivalent_dates <- function(time_value, time_type = c("day", "week")) {
+  time_type <- match.arg(time_type)
+
+  if (identical(time_value, "*")) {
+    if (time_type == "day") {
+      # To get all dates, set start and end dates to extreme values.
+      time_value <- epirange(10000101, 30000101)
+    } else if (time_type == "week") {
+      time_value <- epirange(100001, 300001)
+    }
+  }
+  return(time_value)
+}

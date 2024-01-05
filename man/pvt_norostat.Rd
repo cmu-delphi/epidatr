@@ -4,14 +4,14 @@
 \alias{pvt_norostat}
 \title{CDC NoroSTAT norovirus outbreaks}
 \usage{
-pvt_norostat(auth, locations, epiweeks, fetch_args = fetch_args_list())
+pvt_norostat(auth, locations, epiweeks = "*", fetch_args = fetch_args_list())
 }
 \arguments{
 \item{auth}{string. Your authentication key.}
 
 \item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }

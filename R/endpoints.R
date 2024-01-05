@@ -14,14 +14,20 @@
 #'
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'   See `fetch_args_list()` for details.
 #' @return [`tibble::tibble`]
 #'
 #' @keywords endpoint
 #' @export
-pvt_cdc <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
+pvt_cdc <- function(
+    auth,
+    locations,
+    epiweeks = "*",
+    fetch_args = fetch_args_list()) {
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
+
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
@@ -157,7 +163,7 @@ pub_covid_hosp_facility_lookup <- function(
 #' )
 #' }
 #' @param hospital_pks character. Facility identifiers.
-#' @param collection_weeks [`timeset`]. Epiweeks to fetch.
+#' @param collection_weeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param publication_dates [`timeset`]. Publication dates to fetch.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
@@ -169,11 +175,13 @@ pub_covid_hosp_facility_lookup <- function(
 #
 pub_covid_hosp_facility <- function(
     hospital_pks,
-    collection_weeks,
+    collection_weeks = "*",
     ...,
     publication_dates = NULL,
     fetch_args = fetch_args_list()) {
   rlang::check_dots_empty()
+
+  collection_weeks <- get_wildcard_equivalent_dates(collection_weeks, "week")
 
   assert_character_param("hospital_pks", hospital_pks)
   assert_timeset_param("collection_weeks", collection_weeks)
@@ -516,7 +524,7 @@ pub_covid_hosp_facility <- function(
 #' }
 #'
 #' @param states character. Two letter state abbreviations.
-#' @param dates [`timeset`]. Dates to fetch.
+#' @param dates [`timeset`]. Dates to fetch. Defaults to all ("*") dates.
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param as_of Date. Optionally, the as of date for the issues to fetch. If not
 #'   specified, the most recent data is returned. Mutually exclusive with
@@ -532,7 +540,7 @@ pub_covid_hosp_facility <- function(
 #
 pub_covid_hosp_state_timeseries <- function(
     states,
-    dates,
+    dates = "*",
     ...,
     as_of = NULL,
     issues = NULL,
@@ -549,6 +557,8 @@ pub_covid_hosp_state_timeseries <- function(
   if (sum(!is.null(issues), !is.null(as_of)) > 1) {
     stop("`issues`and `as_of` are mutually exclusive")
   }
+
+  dates <- get_wildcard_equivalent_dates(dates, "day")
 
   assert_character_param("states", states)
   assert_timeset_param("dates", dates)
@@ -925,7 +935,7 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #' @param geo_values character. The geographies to return. "*" fetches
 #'   all. (See:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.)
-#' @param time_values [`timeset`]. Dates to fetch.
+#' @param time_values [`timeset`]. Dates to fetch. Defaults to all ("*") dates.
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param as_of Date. Optionally, the as of date for the issues to fetch. If not
 #'   specified, the most recent data is returned. Mutually exclusive with
@@ -947,8 +957,8 @@ pub_covidcast <- function(
     signals,
     geo_type,
     time_type,
-    geo_values,
-    time_values,
+    geo_values = "*",
+    time_values = "*",
     ...,
     as_of = NULL,
     issues = NULL,
@@ -1036,12 +1046,15 @@ pub_covidcast <- function(
 #' pub_delphi(system = "ec", epiweek = 201501)
 #' }
 #' @param system character. System name to fetch.
-#' @param epiweek [`timeset`]. Epiweeks to fetch.
+#' @param epiweek [`timeset`]. Epiweek to fetch. Does not support multiple dates.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`list`]
 #' @keywords endpoint
 #' @export
-pub_delphi <- function(system, epiweek, fetch_args = fetch_args_list()) {
+pub_delphi <- function(
+    system,
+    epiweek,
+    fetch_args = fetch_args_list()) {
   assert_character_param("system", system)
   assert_timeset_param("epiweek", epiweek, len = 1)
   epiweek <- parse_timeset_input(epiweek)
@@ -1070,12 +1083,17 @@ pub_delphi <- function(system, epiweek, fetch_args = fetch_args_list()) {
 #' )
 #' }
 #' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pub_dengue_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
+pub_dengue_nowcast <- function(
+    locations,
+    epiweeks = "*",
+    fetch_args = fetch_args_list()) {
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
+
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
   epiweeks <- parse_timeset_input(epiweeks)
@@ -1108,12 +1126,19 @@ pub_dengue_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param names character. Names to fetch.
 #' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pvt_dengue_sensors <- function(auth, names, locations, epiweeks, fetch_args = fetch_args_list()) {
+pvt_dengue_sensors <- function(
+    auth,
+    names,
+    locations,
+    epiweeks = "*",
+    fetch_args = fetch_args_list()) {
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
+
   assert_character_param("auth", auth, len = 1)
   assert_character_param("names", names)
   assert_character_param("locations", locations)
@@ -1153,7 +1178,7 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks, fetch_args = fe
 #' pub_ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001))
 #' }
 #' @param regions character. Regions to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
 #'   most recent issue is returned. Mutually exclusive with `lag`.
@@ -1163,8 +1188,16 @@ pvt_dengue_sensors <- function(auth, names, locations, epiweeks, fetch_args = fe
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pub_ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+pub_ecdc_ili <- function(
+    regions,
+    epiweeks = "*",
+    ...,
+    issues = NULL,
+    lag = NULL,
+    fetch_args = fetch_args_list()) {
   rlang::check_dots_empty()
+
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
@@ -1212,7 +1245,7 @@ pub_ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetc
 #' pub_flusurv(locations = "CA", epiweeks = epirange(201701, 201801))
 #' }
 #' @param locations character. Character vector indicating location.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
 #'   most recent issue is returned. Mutually exclusive with `lag`.
@@ -1222,8 +1255,16 @@ pub_ecdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetc
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pub_flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+pub_flusurv <- function(
+    locations,
+    epiweeks = "*",
+    ...,
+    issues = NULL,
+    lag = NULL,
+    fetch_args = fetch_args_list()) {
   rlang::check_dots_empty()
+
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
@@ -1270,7 +1311,7 @@ pub_flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fet
 #' @param regions character. Regions to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch in the form
 #'   epirange(startweek,endweek), where startweek and endweek are of the form
-#'   YYYYWW (string or numeric).
+#'   YYYYWW (string or numeric). Defaults to all ("*") dates.
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
 #'   most recent issue is returned. Mutually exclusive with `lag`.
@@ -1280,8 +1321,16 @@ pub_flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fet
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pub_fluview_clinical <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+pub_fluview_clinical <- function(
+    regions,
+    epiweeks = "*",
+    ...,
+    issues = NULL,
+    lag = NULL,
+    fetch_args = fetch_args_list()) {
   rlang::check_dots_empty()
+
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
@@ -1367,7 +1416,7 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 #'   on. Full list link below.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch in the form
 #'   `epirange(startweek, endweek)`, where startweek and endweek are of the form
-#'   YYYYWW (string or numeric).
+#'   YYYYWW (string or numeric). Defaults to all ("*") dates.
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
 #'   most recent issue is returned. Mutually exclusive with `lag`.
@@ -1381,13 +1430,15 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 #' @export
 pub_fluview <- function(
     regions,
-    epiweeks,
+    epiweeks = "*",
     ...,
     issues = NULL,
     lag = NULL,
     auth = NULL,
     fetch_args = fetch_args_list()) {
   rlang::check_dots_empty()
+
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
@@ -1451,13 +1502,18 @@ pub_fluview <- function(
 #' pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
 #' }
 #' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`] Epiweeks to fetch.
+#' @param epiweeks [`timeset`] Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pub_gft <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
+pub_gft <- function(
+    locations,
+    epiweeks = "*",
+    fetch_args = fetch_args_list()) {
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
+
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
   epiweeks <- parse_timeset_input(epiweeks)
@@ -1491,13 +1547,20 @@ pub_gft <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param query string. The query to be fetched.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pvt_ght <- function(auth, locations, epiweeks, query, fetch_args = fetch_args_list()) {
+pvt_ght <- function(
+    auth,
+    locations,
+    epiweeks = "*",
+    query,
+    fetch_args = fetch_args_list()) {
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
+
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
@@ -1529,7 +1592,7 @@ pvt_ght <- function(auth, locations, epiweeks, query, fetch_args = fetch_args_li
 #' pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
 #' }
 #' @param regions character. Regions to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
 #'   most recent issue is returned. Mutually exclusive with `lag`.
@@ -1539,8 +1602,16 @@ pvt_ght <- function(auth, locations, epiweeks, query, fetch_args = fetch_args_li
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pub_kcdc_ili <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+pub_kcdc_ili <- function(
+    regions,
+    epiweeks = "*",
+    ...,
+    issues = NULL,
+    lag = NULL,
+    fetch_args = fetch_args_list()) {
   rlang::check_dots_empty()
+
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
@@ -1626,13 +1697,18 @@ pub_meta <- function(fetch_args = fetch_args_list()) {
 #' pub_nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301))
 #' }
 #' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #'
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pub_nidss_dengue <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
+pub_nidss_dengue <- function(
+    locations,
+    epiweeks = "*",
+    fetch_args = fetch_args_list()) {
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
+
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
   epiweeks <- parse_timeset_input(epiweeks)
@@ -1661,7 +1737,7 @@ pub_nidss_dengue <- function(locations, epiweeks, fetch_args = fetch_args_list()
 #' pub_nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601))
 #' }
 #' @param regions character. Regions to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
 #'   most recent issue is returned. Mutually exclusive with `lag`.
@@ -1671,8 +1747,16 @@ pub_nidss_dengue <- function(locations, epiweeks, fetch_args = fetch_args_list()
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pub_nidss_flu <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+pub_nidss_flu <- function(
+    regions,
+    epiweeks = "*",
+    ...,
+    issues = NULL,
+    lag = NULL,
+    fetch_args = fetch_args_list()) {
   rlang::check_dots_empty()
+
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
@@ -1725,12 +1809,18 @@ pub_nidss_flu <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fet
 #' }
 #' @param auth string. Your authentication key.
 #' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pvt_norostat <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
+pvt_norostat <- function(
+    auth,
+    locations,
+    epiweeks = "*",
+    fetch_args = fetch_args_list()) {
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
+
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations, len = 1)
   assert_timeset_param("epiweeks", epiweeks)
@@ -1765,12 +1855,17 @@ pvt_norostat <- function(auth, locations, epiweeks, fetch_args = fetch_args_list
 #' pub_nowcast(locations = "ca", epiweeks = epirange(201201, 201301))
 #' }
 #' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pub_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
+pub_nowcast <- function(
+    locations,
+    epiweeks = "*",
+    fetch_args = fetch_args_list()) {
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
+
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
   epiweeks <- parse_timeset_input(epiweeks)
@@ -1796,7 +1891,7 @@ pub_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 #' pub_paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501))
 #' }
 #' @param regions character. Regions to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
 #'   most recent issue is returned. Mutually exclusive with `lag`.
@@ -1806,8 +1901,16 @@ pub_nowcast <- function(locations, epiweeks, fetch_args = fetch_args_list()) {
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pub_paho_dengue <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, fetch_args = fetch_args_list()) {
+pub_paho_dengue <- function(
+    regions,
+    epiweeks = "*",
+    ...,
+    issues = NULL,
+    lag = NULL,
+    fetch_args = fetch_args_list()) {
   rlang::check_dots_empty()
+
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
@@ -1856,12 +1959,18 @@ pub_paho_dengue <- function(regions, epiweeks, ..., issues = NULL, lag = NULL, f
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pvt_quidel <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
+pvt_quidel <- function(
+    auth,
+    locations,
+    epiweeks = "*",
+    fetch_args = fetch_args_list()) {
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
+
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
   assert_timeset_param("epiweeks", epiweeks)
@@ -1909,12 +2018,19 @@ pvt_quidel <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param names character. Sensor names to fetch.
 #' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pvt_sensors <- function(auth, names, locations, epiweeks, fetch_args = fetch_args_list()) {
+pvt_sensors <- function(
+    auth,
+    names,
+    locations,
+    epiweeks = "*",
+    fetch_args = fetch_args_list()) {
+  epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
+
   assert_character_param("auth", auth, len = 1)
   assert_character_param("names", names)
   assert_character_param("locations", locations)
@@ -1963,7 +2079,13 @@ pvt_sensors <- function(auth, names, locations, epiweeks, fetch_args = fetch_arg
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
-pvt_twitter <- function(auth, locations, ..., dates = NULL, epiweeks = NULL, fetch_args = fetch_args_list()) {
+pvt_twitter <- function(
+    auth,
+    locations,
+    ...,
+    dates = NULL,
+    epiweeks = NULL,
+    fetch_args = fetch_args_list()) {
   rlang::check_dots_empty()
 
   assert_character_param("auth", auth, len = 1)

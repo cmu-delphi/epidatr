@@ -4,7 +4,13 @@
 \alias{pvt_sensors}
 \title{Influenza and dengue digital surveillance sensors}
 \usage{
-pvt_sensors(auth, names, locations, epiweeks, fetch_args = fetch_args_list())
+pvt_sensors(
+  auth,
+  names,
+  locations,
+  epiweeks = "*",
+  fetch_args = fetch_args_list()
+)
 }
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
@@ -13,7 +19,7 @@ pvt_sensors(auth, names, locations, epiweeks, fetch_args = fetch_args_list())
 
 \item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }

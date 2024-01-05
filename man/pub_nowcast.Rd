@@ -4,12 +4,12 @@
 \alias{pub_nowcast}
 \title{Delphi's ILI Nearby nowcasts}
 \usage{
-pub_nowcast(locations, epiweeks, fetch_args = fetch_args_list())
+pub_nowcast(locations, epiweeks = "*", fetch_args = fetch_args_list())
 }
 \arguments{
 \item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }

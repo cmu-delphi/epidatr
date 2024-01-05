@@ -6,7 +6,7 @@
 \usage{
 pub_kcdc_ili(
   regions,
-  epiweeks,
+  epiweeks = "*",
   ...,
   issues = NULL,
   lag = NULL,
@@ -16,7 +16,7 @@ pub_kcdc_ili(
 \arguments{
 \item{regions}{character. Regions to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 

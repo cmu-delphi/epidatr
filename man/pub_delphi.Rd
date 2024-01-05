@@ -9,7 +9,7 @@ pub_delphi(system, epiweek, fetch_args = fetch_args_list())
 \arguments{
 \item{system}{character. System name to fetch.}
 
-\item{epiweek}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweek}{\code{\link{timeset}}. Epiweek to fetch. Does not support multiple dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }

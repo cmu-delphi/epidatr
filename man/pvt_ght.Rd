@@ -4,14 +4,14 @@
 \alias{pvt_ght}
 \title{Google Health Trends health topics search volume}
 \usage{
-pvt_ght(auth, locations, epiweeks, query, fetch_args = fetch_args_list())
+pvt_ght(auth, locations, epiweeks = "*", query, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
 
 \item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{query}{string. The query to be fetched.}
 
