@@ -175,7 +175,7 @@ pub_covid_hosp_facility_lookup <- function(
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #'
-#' @importFrom checkmate test_class
+#' @importFrom checkmate test_class test_integerish test_character
 #'
 #' @seealso [`pub_covid_hosp_facility()`], [`epirange()`]
 #' @keywords endpoint
@@ -200,8 +200,19 @@ pub_covid_hosp_facility <- function(
   # Confusingly, the endpoint expects `collection_weeks` to be in day format,
   # but correspond to epiweeks. Allow `collection_weeks` to be provided in
   # either day or week format.
-  if (test_class(collection_weeks, "EpiRange")) {
-    collection_weeks <- convert_epirange_format(collection_weeks, to_type = "day")
+  coercion_msg <- c(
+    "`collection_weeks` is in week format but `pub_covid_hosp_facility`
+       expects day format; dates will be converted to day format but may not
+       correspond exactly to desired time range"
+  )
+  if (test_class(collection_weeks, "EpiRange") && nchar(collection_weeks$from) == 6) {
+    cli::cli_warn(coercion_msg, class = "epidatr__epirange_week_coercion")
+    collection_weeks <- reformat_epirange(collection_weeks, to_type = "day")
+    # Single week date.
+  } else if ((test_integerish(collection_weeks) || test_character(collection_weeks)) &&
+    nchar(collection_weeks) == 6) {
+    cli::cli_warn(coercion_msg, class = "epidatr__single_week_coercion")
+    collection_weeks <- parse_api_week(collection_weeks)
   }
 
   create_epidata_call(

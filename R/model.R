@@ -64,30 +64,17 @@ epirange <- function(from, to) {
 #' helper to reformat an epirange from week to day or vice versa
 #'
 #' @keywords internal
-convert_epirange_format <- function(epirange, to_type = c("day", "week")) {
+reformat_epirange <- function(epirange, to_type = c("day", "week")) {
   to_type <- match.arg(to_type)
 
-  # Day format
-  if (nchar(epirange$from) == 8) {
-    if (to_type == "week") {
-      from_components <- MMWRweek::MMWRweek(as.Date(as.character(epirange$from), "%Y%m%d"))
-      to_components <- MMWRweek::MMWRweek(as.Date(as.character(epirange$to), "%Y%m%d"))
-
-      epirange$from <- as.numeric(paste0(
-        from_components$MMWRyear,
-        formatC(from_components$MMWRweek, width = 2, flag = 0)
-      ))
-      epirange$to <- as.numeric(paste0(
-        to_components$MMWRyear,
-        formatC(to_components$MMWRweek, width = 2, flag = 0)
-      ))
-    }
-  # Week format
-  } else {
-    if (to_type == "day") {
-      epirange$from <- parse_api_week(epirange$from)
-      epirange$to <- parse_api_week(epirange$to)
-    }
+  # Day format -> week
+  if (nchar(epirange$from) == 8 && to_type == "week") {
+    epirange$from <- date_to_epiweek(epirange$from)
+    epirange$to <- date_to_epiweek(epirange$to)
+    # Week format -> day
+  } else if (nchar(epirange$from) == 6 && to_type == "day") {
+    epirange$from <- parse_api_week(epirange$from)
+    epirange$to <- parse_api_week(epirange$to)
   }
 
   return(epirange)
@@ -201,6 +188,20 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
     }
   }
   df
+}
+
+#' Converts a date (integer or character) to an epiweek
+#' @param value date (integer or character, with format YYYYMMDD) to be converted to an epiweek
+#' @return an integer representing an epiweek, in the format YYYYWW
+#' @importFrom MMWRweek MMWRweek
+#' @keywords internal
+date_to_epiweek <- function(value) {
+  date_components <- MMWRweek::MMWRweek(as.Date(as.character(value), "%Y%m%d"))
+  as.numeric(paste0(
+    date_components$MMWRyear,
+    # Pad with zeroes up to 2 digits (x -> 0x)
+    formatC(date_components$MMWRweek, width = 2, flag = 0)
+  ))
 }
 
 #' @keywords internal
