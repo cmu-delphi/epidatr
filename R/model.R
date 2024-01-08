@@ -69,12 +69,14 @@ reformat_epirange <- function(epirange, to_type = c("day", "week")) {
 
   # Day format -> week
   if (nchar(epirange$from) == 8 && to_type == "week") {
-    epirange$from <- date_to_epiweek(epirange$from)
-    epirange$to <- date_to_epiweek(epirange$to)
+    return(
+      epirange(date_to_epiweek(epirange$from), date_to_epiweek(epirange$to))
+    )
     # Week format -> day
   } else if (nchar(epirange$from) == 6 && to_type == "day") {
-    epirange$from <- parse_api_week(epirange$from)
-    epirange$to <- parse_api_week(epirange$to)
+    return(
+      epirange(parse_api_week(epirange$from), parse_api_week(epirange$to))
+    )
   }
 
   return(epirange)

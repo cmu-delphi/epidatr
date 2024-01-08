@@ -64,3 +64,27 @@ test_that("check_is_cachable can handle both str and date inputs of various leng
   epidata_call$params$issues <- epirange(as.Date("2022-01-01"), as.Date("2022-02-01"))
   expect_no_error(check_is_cachable(epidata_call, fetch_args))
 })
+
+test_that("get_wildcard_equivalent_dates works in basic cases", {
+  # Week date
+  result <- get_wildcard_equivalent_dates(epirange(202002, 202013), "week")
+  expect_identical(result, epirange(202002, 202013))
+
+  result <- get_wildcard_equivalent_dates(epirange("202002", "202013"), "week")
+  expect_identical(result, epirange("202002", "202013"))
+
+  # Week wildcard
+  result <- get_wildcard_equivalent_dates("*", "week")
+  expect_identical(result, epirange(100001, 300001))
+
+  # Day date
+  result <- get_wildcard_equivalent_dates(epirange(20200201, 20201031), "day")
+  expect_identical(result, epirange(20200201, 20201031))
+
+  result <- get_wildcard_equivalent_dates(epirange("20200201", "20201031"), "day")
+  expect_identical(result, epirange("20200201", "20201031"))
+
+  # Day wildcard
+  result <- get_wildcard_equivalent_dates("*", "day")
+  expect_identical(result, epirange(10000101, 30000101))
+})
