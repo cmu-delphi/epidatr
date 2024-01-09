@@ -14,7 +14,6 @@ pub_fluview_meta(fetch_args = fetch_args_list())
 }
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html}
-Returns information about the fluview endpoint.
 }
 \examples{
 \dontrun{

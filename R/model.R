@@ -61,7 +61,7 @@ epirange <- function(from, to) {
   structure(list(from = from, to = to), class = "EpiRange")
 }
 
-#' helper to reformat an epirange from week to day or vice versa
+#' helper to convert an epirange from week to day or vice versa
 #'
 #' @keywords internal
 reformat_epirange <- function(epirange, to_type = c("day", "week")) {
@@ -80,6 +80,28 @@ reformat_epirange <- function(epirange, to_type = c("day", "week")) {
   }
 
   return(epirange)
+}
+
+#' @export
+print.EpiRange <- function(x, ...) {
+  if (nchar(x$from) == 8) {
+    date_type <- "Days" # nolint: object_usage_linter
+    x$from <- as.Date(as.character(x$from), "%Y%m%d")
+    x$to <- as.Date(as.character(x$to), "%Y%m%d")
+  } else if (nchar(x$from) == 6) {
+    date_type <- "Epiweeks" # nolint: object_usage_linter
+    x$from <- paste0(
+      substr(x$from, 1, 4), "w", substr(x$from, 5, 6)
+    )
+    x$to <- paste0(
+      substr(x$to, 1, 4), "w", substr(x$to, 5, 6)
+    )
+  }
+
+  cli::cli_h1("<EpiRange> object:")
+  cli::cli_bullets(
+    "{date_type} from {x$from} to {x$to}"
+  )
 }
 
 #' Timeset formats for specifying dates
@@ -105,7 +127,6 @@ reformat_epirange <- function(epirange, to_type = c("day", "week")) {
 #'
 #' @name timeset
 NULL
-
 
 create_epidata_field_info <- function(name,
                                       type,
@@ -135,6 +156,13 @@ create_epidata_field_info <- function(name,
     ),
     class = "EpidataFieldInfo"
   )
+}
+
+#' @export
+print.EpidataFieldInfo <- function(x, ...) {
+  cli::cli_h1("<EpidataFieldInfo> object:")
+  # Print all non-class fields.
+  cli::cli_dl(x[attr(x, "names")])
 }
 
 parse_value <- function(info, value, disable_date_parsing = FALSE) {

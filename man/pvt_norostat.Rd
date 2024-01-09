@@ -23,8 +23,8 @@ This is point data only, and does not include minima or maxima.
 
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/norostat.html}
 
-This is the documentation of the API for accessing the NoroSTAT (norostat)
-endpoint of the Delphi’s epidemiological data.
+This is the documentation of the API for accessing the NoroSTAT endpoint of
+the Delphi’s epidemiological data.
 }
 \examples{
 \dontrun{

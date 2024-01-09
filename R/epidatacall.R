@@ -121,7 +121,6 @@ request_arguments <- function(epidata_call, format_type, fields = NULL) {
 
 #' @export
 print.epidata_call <- function(x, ...) {
-  stopifnot(inherits(x, "epidata_call"))
   cli::cli_h1("<epidata_call> object:")
   cli::cli_bullets(c(
     "*" = "Pipe this object into `fetch()` to actually fetch the data",
@@ -198,12 +197,20 @@ fetch_args_list <- function(
   )
 }
 
+#' @export
+print.fetch_args <- function(x, ...) {
+  cli::cli_h1("<fetch_args> object:")
+  # Print all non-class fields.
+  cli::cli_dl(x[attr(x, "names")])
+}
+
 #' Fetches the data
 #'
 #' @details
-#' `fetch` usually returns the data in tibble format, but a few of the endpoints
-#' only support the JSON classic format (delphi, pvt_meta_norostat, and meta).
-#' In that case a JSON-like nested list structure is returned instead.
+#' `fetch` usually returns the data in tibble format, but a few of the
+#' endpoints only support the JSON classic format (`pub_delphi`,
+#' `pvt_meta_norostat`, and `pub_meta`). In that case a
+#' JSON-like nested list structure is returned instead.
 #'
 #' @rdname epidata_call
 #' @param epidata_call an instance of `epidata_call`

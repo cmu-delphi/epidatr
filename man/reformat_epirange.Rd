@@ -2,11 +2,11 @@
 % Please edit documentation in R/model.R
 \name{reformat_epirange}
 \alias{reformat_epirange}
-\title{helper to reformat an epirange from week to day or vice versa}
+\title{helper to convert an epirange from week to day or vice versa}
 \usage{
 reformat_epirange(epirange, to_type = c("day", "week"))
 }
 \description{
-helper to reformat an epirange from week to day or vice versa
+helper to convert an epirange from week to day or vice versa
 }
 \keyword{internal}
