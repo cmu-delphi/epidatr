@@ -209,8 +209,10 @@ pub_covid_hosp_facility <- function(
     cli::cli_warn(coercion_msg, class = "epidatr__epirange_week_coercion")
     collection_weeks <- reformat_epirange(collection_weeks, to_type = "day")
     # Single week date.
-  } else if ((test_integerish(collection_weeks) || test_character(collection_weeks)) &&
-    nchar(collection_weeks) == 6) {
+  } else if (
+    (test_integerish(collection_weeks) || test_character(collection_weeks)) &&
+      nchar(collection_weeks) == 6
+  ) {
     cli::cli_warn(coercion_msg, class = "epidatr__single_week_coercion")
     collection_weeks <- parse_api_week(collection_weeks)
   }
