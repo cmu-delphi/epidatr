@@ -147,6 +147,183 @@ test_that("basic_epidata_call", {
   ) %>% request_url())
 })
 
+test_that("endoints accept wildcard for date parameter", {
+  expect_no_error(call <- pvt_cdc(
+    auth = "yourkey",
+    "fl,ca",
+    "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pub_covid_hosp_facility(
+    hospital_pks = "100075",
+    collection_weeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$collection_weeks$from, 10000101)
+  expect_identical(call$params$collection_weeks$to, 30000101)
+
+  expect_no_error(call <- pub_covid_hosp_state_timeseries(
+    states = "fl",
+    dates = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$dates$from, 10000101)
+  expect_identical(call$params$dates$to, 30000101)
+
+  expect_no_error(call <- pub_covidcast(
+    source = "jhu-csse",
+    signals = "confirmed_7dav_incidence_prop",
+    time_type = "day",
+    geo_type = "state",
+    time_values = "*",
+    geo_values = "ca,fl",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$time_values, "*")
+
+  expect_no_error(call <- pub_dengue_nowcast(
+    locations = "ca",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pvt_dengue_sensors(
+    auth = "yourkey",
+    names = "ght",
+    locations = "ag",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pub_ecdc_ili(
+    regions = "austria",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pub_flusurv(
+    locations = "CA",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pub_fluview_clinical(
+    regions = "nat",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pub_fluview(
+    regions = "nat",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pub_gft(
+    locations = "hhs1",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pvt_ght(
+    auth = "yourkey",
+    locations = "ca",
+    epiweeks = "*",
+    query = "how to get over the flu",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pub_kcdc_ili(
+    regions = "ROK",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pub_nidss_dengue(
+    locations = "taipei",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pub_nidss_flu(
+    regions = "taipei",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pvt_norostat(
+    auth = "yourkey",
+    locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pub_nowcast(
+    locations = "ca",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pub_paho_dengue(
+    regions = "ca",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pvt_quidel(
+    auth = "yourkey",
+    locations = "hhs1",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pvt_sensors(
+    auth = "yourkey",
+    names = "sar3",
+    locations = "nat",
+    epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+})
+
 test_that("endpoints fail when given args via dots", {
   dots_error <- "`...` must be empty"
 
