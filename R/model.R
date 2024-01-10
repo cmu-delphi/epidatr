@@ -156,7 +156,8 @@ parse_value <- function(info, value, disable_date_parsing = FALSE) {
   } else if (info$type == "bool") {
     return(as.logical(value))
   } else if (info$type == "int") {
-    return(as.integer(value))
+    # Int doesn't have enough capacity to store some weekly `pub_wiki` values.
+    return(as.double(value))
   } else if (info$type == "float") {
     return(as.double(value))
   } else if (info$type == "categorical") {
