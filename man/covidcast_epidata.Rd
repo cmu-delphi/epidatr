@@ -69,7 +69,7 @@ the \code{pub_covidcast()} function. Simply use the \verb{$call} attribute of th
 #> 4 pa        smoothed_~ fb-su~ state    day       2021-04-08        NA 2021-04-13
 #> 5 pa        smoothed_~ fb-su~ state    day       2021-04-09        NA 2021-04-14
 #> 6 pa        smoothed_~ fb-su~ state    day       2021-04-10        NA 2021-04-15
-#> # i 7 more variables: lag <int>, missing_value <int>, missing_stderr <int>,
-#> #   missing_sample_size <int>, value <dbl>, stderr <dbl>, sample_size <dbl>
+#> # i 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 }\if{html}{\out{</div>}}
 }
