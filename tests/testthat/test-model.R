@@ -113,7 +113,6 @@ test_that("parse_data_frame warns when df contains int values with decimal compo
   result <- parse_data_frame(epidata_call, mock_df)
   expect_type(result$lag, "double")
 
-
   # Replace int fields with decimal
   mock_df$lag <- 4.3
 
