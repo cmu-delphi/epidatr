@@ -8,8 +8,8 @@ pvt_twitter(
   auth,
   locations,
   ...,
-  dates = NULL,
-  epiweeks = NULL,
+  time_type = c("day", "week"),
+  time_values = "*",
   fetch_args = fetch_args_list()
 )
 }
@@ -20,10 +20,11 @@ pvt_twitter(
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
-\item{dates}{\code{\link{timeset}}. Dates to fetch. Mutually exclusive with \code{epiweeks}.}
+\item{time_type}{string. The temporal resolution of the data (either "day" or
+"week", depending on signal).}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Mutually exclusive with
-\code{dates}.}
+\item{time_values}{\code{\link{timeset}}. Dates or epiweeks to fetch. Defaults to all
+("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
@@ -42,7 +43,8 @@ Delphi’s epidemiological data. Sourced from
 pvt_twitter(
   auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
   locations = "CA",
-  epiweeks = epirange(201501, 202001)
+  time_type = "week",
+  time_values = epirange(201501, 202001)
 )
 }
 }

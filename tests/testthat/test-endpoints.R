@@ -137,12 +137,27 @@ test_that("basic_epidata_call", {
   expect_no_error(pvt_twitter(
     auth = "yourkey",
     locations = "CA",
-    epiweeks = epirange(201501, 202001),
+    time_type = "week",
+    time_values = epirange(201501, 202001),
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ) %>% request_url())
+  expect_no_error(pvt_twitter(
+    auth = "yourkey",
+    locations = "CA",
+    time_type = "day",
+    time_values = epirange(20150101, 20200101),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
   expect_no_error(pub_wiki(
     articles = "avian_influenza",
-    epiweeks = epirange(201501, 202001),
+    time_type = "week",
+    time_values = epirange(201501, 202001),
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ) %>% request_url())
+  expect_no_error(pub_wiki(
+    articles = "avian_influenza",
+    time_type = "day",
+    time_values = epirange(20150101, 20200101),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
 })
@@ -322,6 +337,44 @@ test_that("endoints accept wildcard for date parameter", {
   ))
   expect_identical(call$params$epiweeks$from, 100001)
   expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pvt_twitter(
+    auth = "yourkey",
+    locations = "CA",
+    time_type = "week",
+    time_values = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pvt_twitter(
+    auth = "yourkey",
+    locations = "CA",
+    time_type = "day",
+    time_values = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$dates$from, 10000101)
+  expect_identical(call$params$dates$to, 30000101)
+
+  expect_no_error(call <- pub_wiki(
+    articles = "avian_influenza",
+    time_type = "week",
+    time_values = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$epiweeks$from, 100001)
+  expect_identical(call$params$epiweeks$to, 300001)
+
+  expect_no_error(call <- pub_wiki(
+    articles = "avian_influenza",
+    time_type = "day",
+    time_values = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_identical(call$params$dates$from, 10000101)
+  expect_identical(call$params$dates$to, 30000101)
 })
 
 test_that("endpoints fail when given args via dots", {
@@ -413,13 +466,15 @@ test_that("endpoints fail when given args via dots", {
     pvt_twitter(
       auth = "yourkey",
       locations = "CA",
-      date_range = epirange(201501, 202001)
+      time_type = "week",
+      time_range = epirange(201501, 202001)
     ),
     regexp = dots_error
   )
   expect_error(
     pub_wiki(
       articles = "avian_influenza",
+      time_type = "week",
       date_range = epirange(201501, 202001)
     ),
     regexp = dots_error

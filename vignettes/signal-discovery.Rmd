@@ -282,7 +282,12 @@ pub_paho_dengue(regions = "ca", epiweeks = epirange(200201, 202319))
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
 
 ```{r, eval = FALSE}
-pub_wiki(language = "en", articles = "influenza", epiweeks = epirange(202001, 202319))
+pub_wiki(
+  language = "en",
+  articles = "influenza",
+  time_type = "week",
+  time_values = epirange(202001, 202319)
+)
 ```
 
 ### Private methods
@@ -373,7 +378,8 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/twitter.html>
 pvt_twitter(
   auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
   locations = "nat",
-  epiweeks = epirange(200301, 202105)
+  time_type = "week",
+  time_values = epirange(200301, 202105)
 )
 ```
 
