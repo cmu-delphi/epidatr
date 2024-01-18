@@ -8,7 +8,7 @@ pvt_dengue_sensors(
   auth,
   names,
   locations,
-  epiweeks,
+  epiweeks = "*",
   fetch_args = fetch_args_list()
 )
 }
@@ -19,7 +19,7 @@ pvt_dengue_sensors(
 
 \item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }

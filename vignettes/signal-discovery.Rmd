@@ -31,9 +31,9 @@ The site also includes a search tool if you have a keyword (e.g. "Taiwan") in mi
 
 ## Signal metadata
 
-Some endpoints have partner metadata available that, depending on
-the endpoint, provides information about the signals that are available, what
-time ranges they are available for, and when they have been updated.
+Some endpoints have partner metadata available that provides information about
+the signals that are available, for example, what time ranges they are
+available for, and when they have been updated.
 
 ```{r, echo = FALSE}
 suppressMessages(invisible(capture.output(endpts <- avail_endpoints())))
@@ -282,13 +282,22 @@ pub_paho_dengue(regions = "ca", epiweeks = epirange(200201, 202319))
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
 
 ```{r, eval = FALSE}
-pub_wiki(language = "en", articles = "influenza", epiweeks = epirange(202001, 202319))
+pub_wiki(
+  language = "en",
+  articles = "influenza",
+  time_type = "week",
+  time_values = epirange(202001, 202319)
+)
 ```
 
 ### Private methods
 
 These require private access keys to use (separate from the Delphi Epidata API key).
 To actually run these locally, you will need to store these secrets in your `.Reviron` file, or set them as environmental variables.
+
+<details id="private-endpoints">
+
+<summary>Usage of private endpoints</summary>
 
 #### CDC
 
@@ -369,6 +378,9 @@ API docs: <https://cmu-delphi.github.io/delphi-epidata/api/twitter.html>
 pvt_twitter(
   auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
   locations = "nat",
-  epiweeks = epirange(200301, 202105)
+  time_type = "week",
+  time_values = epirange(200301, 202105)
 )
 ```
+
+</details>

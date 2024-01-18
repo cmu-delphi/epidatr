@@ -6,7 +6,7 @@
 \usage{
 pub_covid_hosp_state_timeseries(
   states,
-  dates,
+  dates = "*",
   ...,
   as_of = NULL,
   issues = NULL,
@@ -16,7 +16,7 @@ pub_covid_hosp_state_timeseries(
 \arguments{
 \item{states}{character. Two letter state abbreviations.}
 
-\item{dates}{\code{\link{timeset}}. Dates to fetch.}
+\item{dates}{\code{\link{timeset}}. Dates to fetch. Defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 

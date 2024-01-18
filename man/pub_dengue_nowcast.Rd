@@ -4,12 +4,12 @@
 \alias{pub_dengue_nowcast}
 \title{Delphi's PAHO dengue nowcasts (North and South America)}
 \usage{
-pub_dengue_nowcast(locations, epiweeks, fetch_args = fetch_args_list())
+pub_dengue_nowcast(locations, epiweeks = "*", fetch_args = fetch_args_list())
 }
 \arguments{
 \item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }

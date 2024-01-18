@@ -61,6 +61,27 @@ epirange <- function(from, to) {
   structure(list(from = from, to = to), class = "EpiRange")
 }
 
+#' helper to convert an epirange from week to day or vice versa
+#'
+#' @keywords internal
+reformat_epirange <- function(epirange, to_type = c("day", "week")) {
+  to_type <- match.arg(to_type)
+
+  # Day format -> week
+  if (nchar(epirange$from) == 8 && to_type == "week") {
+    return(
+      epirange(date_to_epiweek(epirange$from), date_to_epiweek(epirange$to))
+    )
+    # Week format -> day
+  } else if (nchar(epirange$from) == 6 && to_type == "day") {
+    return(
+      epirange(parse_api_week(epirange$from), parse_api_week(epirange$to))
+    )
+  }
+
+  return(epirange)
+}
+
 #' @export
 print.EpiRange <- function(x, ...) {
   if (nchar(x$from) == 8) {
@@ -209,6 +230,20 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
     }
   }
   df
+}
+
+#' Converts a date (integer or character) to an epiweek
+#' @param value date (integer or character, with format YYYYMMDD) to be converted to an epiweek
+#' @return an integer representing an epiweek, in the format YYYYWW
+#' @importFrom MMWRweek MMWRweek
+#' @keywords internal
+date_to_epiweek <- function(value) {
+  date_components <- MMWRweek::MMWRweek(as.Date(as.character(value), "%Y%m%d"))
+  as.numeric(paste0(
+    date_components$MMWRyear,
+    # Pad with zeroes up to 2 digits (x -> 0x)
+    formatC(date_components$MMWRweek, width = 2, flag = 0)
+  ))
 }
 
 #' @keywords internal
