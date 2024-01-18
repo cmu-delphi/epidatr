@@ -64,6 +64,9 @@
     <loc>/dev/reference/covidcast_epidata.html</loc>
   </url>
   <url>
+    <loc>/dev/reference/date_to_epiweek.html</loc>
+  </url>
+  <url>
     <loc>/dev/reference/disable_cache.html</loc>
   </url>
   <url>
@@ -95,6 +98,9 @@
   </url>
   <url>
     <loc>/dev/reference/get_api_key.html</loc>
+  </url>
+  <url>
+    <loc>/dev/reference/get_wildcard_equivalent_dates.html</loc>
   </url>
   <url>
     <loc>/dev/reference/index.html</loc>
@@ -188,6 +194,9 @@
   </url>
   <url>
     <loc>/dev/reference/pvt_twitter.html</loc>
+  </url>
+  <url>
+    <loc>/dev/reference/reformat_epirange.html</loc>
   </url>
   <url>
     <loc>/dev/reference/request_impl.html</loc>

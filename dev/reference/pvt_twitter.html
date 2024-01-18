@@ -74,8 +74,8 @@ Delphi’s epidemiological data. Sourced from
 <span>  <span class="va">auth</span>,</span>
 <span>  <span class="va">locations</span>,</span>
 <span>  <span class="va">...</span>,</span>
-<span>  dates <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  epiweeks <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  time_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"day"</span>, <span class="st">"week"</span><span class="op">)</span>,</span>
+<span>  time_values <span class="op">=</span> <span class="st">"*"</span>,</span>
 <span>  fetch_args <span class="op">=</span> <span class="fu"><a href="fetch_args_list.html">fetch_args_list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -94,13 +94,14 @@ Delphi’s epidemiological data. Sourced from
 <dd><p>not used for values, forces later arguments to bind by name</p></dd>
 
 
-<dt>dates</dt>
-<dd><p><code><a href="timeset.html">timeset</a></code>. Dates to fetch. Mutually exclusive with <code>epiweeks</code>.</p></dd>
+<dt>time_type</dt>
+<dd><p>string. The temporal resolution of the data (either "day" or
+"week", depending on signal).</p></dd>
 
 
-<dt>epiweeks</dt>
-<dd><p><code><a href="timeset.html">timeset</a></code>. Epiweeks to fetch. Mutually exclusive with
-<code>dates</code>.</p></dd>
+<dt>time_values</dt>
+<dd><p><code><a href="timeset.html">timeset</a></code>. Dates or epiweeks to fetch. Defaults to all
+("*") dates.</p></dd>
 
 
 <dt>fetch_args</dt>
@@ -122,7 +123,8 @@ Delphi’s epidemiological data. Sourced from
 <span class="r-in"><span><span class="fu">pvt_twitter</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_TWITTER"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  locations <span class="op">=</span> <span class="st">"CA"</span>,</span></span>
-<span class="r-in"><span>  epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201501</span>, <span class="fl">202001</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  time_type <span class="op">=</span> <span class="st">"week"</span>,</span></span>
+<span class="r-in"><span>  time_values <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201501</span>, <span class="fl">202001</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>

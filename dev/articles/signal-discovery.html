@@ -103,10 +103,9 @@ diseases</a>. The site also includes a search tool if you have a keyword
 <div class="section level2">
 <h2 id="signal-metadata">Signal metadata<a class="anchor" aria-label="anchor" href="#signal-metadata"></a>
 </h2>
-<p>Some endpoints have partner metadata available that, depending on the
-endpoint, provides information about the signals that are available,
-what time ranges they are available for, and when they have been
-updated.</p>
+<p>Some endpoints have partner metadata available that provides
+information about the signals that are available, for example, what time
+ranges they are available for, and when they have been updated.</p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Endpoint</th>
@@ -664,7 +663,12 @@ time and geo fields:</p>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/wiki.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/wiki.html</a></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_wiki.html">pub_wiki</a></span><span class="op">(</span>language <span class="op">=</span> <span class="st">"en"</span>, articles <span class="op">=</span> <span class="st">"influenza"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202001</span>, <span class="fl">202319</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_wiki.html">pub_wiki</a></span><span class="op">(</span></span>
+<span>  language <span class="op">=</span> <span class="st">"en"</span>,</span>
+<span>  articles <span class="op">=</span> <span class="st">"influenza"</span>,</span>
+<span>  time_type <span class="op">=</span> <span class="st">"week"</span>,</span>
+<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202001</span>, <span class="fl">202319</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -674,7 +678,9 @@ time and geo fields:</p>
 Epidata API key). To actually run these locally, you will need to store
 these secrets in your <code>.Reviron</code> file, or set them as
 environmental variables.</p>
-<div class="section level4">
+<details id="private-endpoints"><summary>
+Usage of private endpoints
+</summary><div class="section level4">
 <h4 id="cdc">CDC<a class="anchor" aria-label="anchor" href="#cdc"></a>
 </h4>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/cdc.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/cdc.html</a></p>
@@ -746,9 +752,12 @@ environmental variables.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_twitter.html">pvt_twitter</a></span><span class="op">(</span></span>
 <span>  auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_TWITTER"</span><span class="op">)</span>,</span>
 <span>  locations <span class="op">=</span> <span class="st">"nat"</span>,</span>
-<span>  epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200301</span>, <span class="fl">202105</span><span class="op">)</span></span>
+<span>  time_type <span class="op">=</span> <span class="st">"week"</span>,</span>
+<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200301</span>, <span class="fl">202105</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+
 </div>
+</details>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
