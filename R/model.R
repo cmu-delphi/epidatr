@@ -156,7 +156,19 @@ parse_value <- function(info, value, disable_date_parsing = FALSE) {
   } else if (info$type == "bool") {
     return(as.logical(value))
   } else if (info$type == "int") {
-    return(as.integer(value))
+    # Int doesn't have enough capacity to store some weekly `pub_wiki` values.
+    value <- as.double(value)
+    if (any(value != round(value))) {
+      cli::cli_warn(
+        c(
+          "Values in {info$name} were expected to be integers but contain a decimal component",
+          "i" = "Decimal components are returned as-is"
+        ),
+        class = "epidatr__int_nonzero_decimal_digits"
+      )
+    }
+
+    return(value)
   } else if (info$type == "float") {
     return(as.double(value))
   } else if (info$type == "categorical") {

@@ -100,6 +100,29 @@ test_that("parse_data_frame warns when df contains fields not listed in meta", {
   expect_no_warning(parse_data_frame(epidata_call, mock_df))
 })
 
+test_that("parse_data_frame warns when df contains int values with decimal component", {
+  epidata_call <- pub_flusurv(
+    locations = "ca",
+    epiweeks = 202001,
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  # see generate_test_data.R
+  mock_df <- as.data.frame(readr::read_rds(testthat::test_path("data/flusurv-epiweeks.rds")))
+
+  # Int fields are returned as double
+  result <- parse_data_frame(epidata_call, mock_df)
+  expect_type(result$lag, "double")
+
+  # Replace int fields with decimal
+  mock_df$lag <- 4.3
+
+  # Warning when int values have a decimal component
+  expect_warning(
+    parse_data_frame(epidata_call, mock_df),
+    class = "epidatr__int_nonzero_decimal_digits"
+  )
+})
+
 test_that("parse_api_date accepts str and int input", {
   expect_identical(parse_api_date("20200101"), as.Date("2020-01-01"))
   expect_identical(parse_api_date(20200101), as.Date("2020-01-01"))
