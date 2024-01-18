@@ -20,6 +20,7 @@
 - `get_api_key` no longer reads from R options and only uses environment variables (#217).
 - Fix documentation related to CRAN submission.
 - Fix some errors from passing "" as a key.
+- `pvt_twitter` and `pub_wiki` now use `time_type` and `time_values` args instead of mutually exclusive `dates` and `epiweeks` (#236). This matches the interface of the `pub_covidcast` endpoint.
 
 # epidatr 1.0.0
 
