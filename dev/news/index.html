@@ -84,6 +84,7 @@
 <li>
 <code>pvt_twitter</code> and <code>pub_wiki</code> now use <code>time_type</code> and <code>time_values</code> args instead of mutually exclusive <code>dates</code> and <code>epiweeks</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/236" class="external-link">#236</a>). This matches the interface of the <code>pub_covidcast</code> endpoint.</li>
 <li>All endpoints now support the use of “*” as a wildcard to fetch all dates or epiweeks (<a href="https://github.com/cmu-delphi/epidatr/issues/234" class="external-link">#234</a>).</li>
+<li>Fixed bug with NAs when parsing ints (<a href="https://github.com/cmu-delphi/epidatr/issues/243" class="external-link">#243</a>).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="epidatr-100">epidatr 1.0.0<a class="anchor" aria-label="anchor" href="#epidatr-100"></a></h2><p class="text-muted">CRAN release: 2023-09-19</p>
