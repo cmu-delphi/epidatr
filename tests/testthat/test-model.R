@@ -123,6 +123,17 @@ test_that("parse_data_frame warns when df contains int values with decimal compo
   )
 })
 
+test_that("parse_value can handle NA/NULL values in an int field", {
+  info <- create_epidata_field_info(
+    name = "test",
+    type = "int"
+  )
+  expect_warning(
+    parse_value(info, c(1, 1.5, NA, NULL)),
+    class = "epidatr__int_nonzero_decimal_digits"
+  )
+})
+
 test_that("parse_api_date accepts str and int input", {
   expect_identical(parse_api_date("20200101"), as.Date("2020-01-01"))
   expect_identical(parse_api_date(20200101), as.Date("2020-01-01"))

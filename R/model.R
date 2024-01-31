@@ -179,7 +179,7 @@ parse_value <- function(info, value, disable_date_parsing = FALSE) {
   } else if (info$type == "int") {
     # Int doesn't have enough capacity to store some weekly `pub_wiki` values.
     value <- as.double(value)
-    if (any(value != round(value))) {
+    if (any(na.omit(value != round(value)))) {
       cli::cli_warn(
         c(
           "Values in {info$name} were expected to be integers but contain a decimal component",
