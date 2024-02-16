@@ -12,51 +12,100 @@ Actions](https://github.com/cmu-delphi/epidatr/workflows/ci/badge.svg)](https://
 [![codecov](https://codecov.io/gh/dsweber2/epidatr/branch/dev/graph/badge.svg?token=jVHL9eHZNZ)](https://app.codecov.io/gh/dsweber2/epidatr)
 <!-- badges: end -->
 
-The [Delphi `epidatr` package](https://cmu-delphi.github.io/epidatr/) is
-an R front-end for the [Delphi Epidata
-API](https://cmu-delphi.github.io/delphi-epidata/), which provides
-real-time access to epidemiological surveillance data for influenza,
-COVID-19, and other diseases. `epidatr` is built and maintained by the
-Carnegie Mellon University [Delphi research
-group](https://delphi.cmu.edu/).
+The [Delphi Epidata API](https://cmu-delphi.github.io/delphi-epidata/)
+provides real-time access to epidemiological surveillance data for
+influenza, COVID-19, and other diseases from both official government
+sources such as the [Centers for Disease Control and Prevention
+(CDC)](https://www.cdc.gov/datastatistics/index.html), private partners
+such as [Facebook (now
+Meta)](https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/)
+and [Change Healthcare](https://www.changehealthcare.com/), and other
+public datasets like [Google
+Trends](https://console.cloud.google.com/marketplace/product/bigquery-public-datasets/covid19-search-trends).
+It is built and maintained by the Carnegie Mellon University [Delphi
+Research Group](https://delphi.cmu.edu/).
 
-Data is available for the United States and a handful of other countries
-at various geographical resolutions, both from official government
-sources such as the [US Center for Disease Control
-(CDC)](https://www.cdc.gov/datastatistics/index.html), and private
-partners such as
-[Facebook](https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/)
-and [Change Healthcare](https://www.changehealthcare.com/). The API
-stores a historical record of all data, including corrections and
-updates, which is particularly useful for accurately backtesting
-forecasting models.
-
-`epidatr` is designed to streamline the downloading and usage of data
-from the Epidata API. The package provides a simple R interface to the
+This package is designed to streamline the downloading and usage of data
+from the Delphi Epidata API. It provides a simple R interface to the
 API, including functions for downloading data, parsing the results, and
-converting the data into a tidy format. We also provide the
-[epiprocess](https://github.com/cmu-delphi/epiprocess) package for
-downstream data processing and
-[epipredict](https://github.com/cmu-delphi/epipredict) for modeling.
+converting the data into a tidy format. The API stores a historical
+record of all data, including corrections and updates, which is
+particularly useful for accurately backtesting forecasting models. We
+also provide packages for downstream data processing
+([epiprocess](https://github.com/cmu-delphi/epiprocess)) and modeling
+([epipredict](https://github.com/cmu-delphi/epipredict)).
 
-Consult the [Epidata API
-documentation](https://cmu-delphi.github.io/delphi-epidata/) for details
-on the data included in the API, API key registration, licensing, and
-how to cite this data in your work. The documentation lists all the data
-sources and signals available through this API for
-[COVID-19](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html)
-and for [other
-diseases](https://cmu-delphi.github.io/delphi-epidata/api/README.html#source-specific-parameters).
+## Usage
 
-**To get started** using this package, view the Getting Started guide at
-`vignette("epidatr")`.
+``` r
+library(epidatr)
+# Obtain the smoothed covid-like illness (CLI) signal from Delphi's US COVID-19
+# Trends and Impact Survey (CTIS), in partnership with Facebook, as it was on
+# April 10, 2021 for the US at the national level
+epidata <- pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "nation",
+  time_type = "day",
+  geo_values = "us",
+  time_values = epirange(20210101, 20210601),
+  as_of = 20210601
+)
+epidata
+#> # A tibble: 151 × 15
+#>    geo_value signal    source geo_type time_type time_value direction issue     
+#>    <chr>     <chr>     <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#>  1 us        smoothed… fb-su… nation   day       2021-01-01        NA 2021-01-06
+#>  2 us        smoothed… fb-su… nation   day       2021-01-02        NA 2021-01-07
+#>  3 us        smoothed… fb-su… nation   day       2021-01-03        NA 2021-01-08
+#>  4 us        smoothed… fb-su… nation   day       2021-01-04        NA 2021-01-09
+#>  5 us        smoothed… fb-su… nation   day       2021-01-05        NA 2021-01-10
+#>  6 us        smoothed… fb-su… nation   day       2021-01-06        NA 2021-01-29
+#>  7 us        smoothed… fb-su… nation   day       2021-01-07        NA 2021-01-29
+#>  8 us        smoothed… fb-su… nation   day       2021-01-08        NA 2021-01-29
+#>  9 us        smoothed… fb-su… nation   day       2021-01-09        NA 2021-01-29
+#> 10 us        smoothed… fb-su… nation   day       2021-01-10        NA 2021-01-29
+#> # ℹ 141 more rows
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
+```
 
-## For users of the `covidcast` R package
+## Installation
 
-`epidatr` is a complete rewrite of the [`covidcast`
+Installing the package is straightforward.
+
+``` r
+# Install the CRAN version
+pak::pkg_install("epidatr")
+# Install the development version from the GitHub dev branch
+pak::pkg_install("cmu-delphi/epidatr@dev")
+```
+
+### API Keys
+
+The Delphi API requires a (free) API key for full functionality. To
+generate your key, register for a pseudo-anonymous account
+[here](https://api.delphi.cmu.edu/epidata/admin/registration_form) and
+see more discussion on the [general API
+website](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html).
+The `epidatr` client will automatically look for this key in the
+environment variable `DELPHI_EPIDATA_KEY`. We recommend storing your key
+in your `.Renviron` file, which R will read by default.
+
+Note that for the time being, the private endpoints (i.e. those prefixed
+with `pvt`) will require a separate key that needs to be passed as an
+argument.
+
+## For users of the covidcast R package
+
+The `covidcast` package is deprecated and will no longer be updated. The
+`epidatr` package is a complete rewrite of the [`covidcast`
 package](https://cmu-delphi.github.io/covidcast/covidcastR/), with a
-focus on speed, reliability, and ease of use. The `covidcast` package is
-deprecated and will no longer be updated.
+focus on speed, reliability, and ease of use. It also supports more
+endpoints and data sources than `covidcast`. When migrating from that
+package, you will need to use the
+[`pub_covidcast`](https://cmu-delphi.github.io/epidatr/reference/pub_covidcast.html)
+function in `epidatr`.
 
 ## Get updates
 
