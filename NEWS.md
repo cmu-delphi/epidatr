@@ -1,4 +1,4 @@
-# epidatr 1.0.0.9000
+# epidatr 1.1.0
 
 - Function reference now displays commonly-used functions first (#205).
 - Endpoints now fail when passed misspelled arguments (#187, #201).
