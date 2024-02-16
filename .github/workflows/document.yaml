@@ -33,6 +33,9 @@ jobs:
         run: roxygen2::roxygenise()
         shell: Rscript {0}
 
+      - name: Build README.md from README.Rmd
+        run: Rscript -e 'devtools::build_readme()'
+
       - name: Commit and push changes
         run: |
           git config --local user.name "$GITHUB_ACTOR"
