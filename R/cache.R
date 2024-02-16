@@ -154,7 +154,6 @@ set_cache <- function(cache_dir = NULL,
     }
   }
 
-
   if (!cache_usable) {
     print(glue::glue(
       "The directory at {cache_dir} is not accessible; check permissions and/or use a different ",
@@ -168,6 +167,13 @@ set_cache <- function(cache_dir = NULL,
       logfile = file.path(cache_dir, logfile)
     )
   }
+
+  cli::cli_inform(c(
+    "!" = "epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not intended).",
+    "i" = "The cache directory is {cache_dir}.",
+    "i" = "The cache will be cleared after {days} days and will be pruned if it exceeds {max_size} MB.",
+    "i" = "The log of cache transactions is stored at {file.path(cache_dir, logfile)}."
+  ))
 }
 
 #' Manually reset the cache, deleting all currently saved data and starting afresh
