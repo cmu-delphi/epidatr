@@ -35,6 +35,7 @@ Imports:
     MMWRweek,
     purrr,
     openssl,
+    rappdirs,
     readr,
     tibble,
     usethis,
