@@ -1,7 +1,7 @@
 Package: epidatr
 Type: Package
 Title: Client for Delphi's 'Epidata' API
-Version: 1.0.0.9000
+Version: 1.0.1
 Date: 2023-12-07
 Authors@R:
   c(
