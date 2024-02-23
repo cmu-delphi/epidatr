@@ -19,7 +19,10 @@ devtools::check() # check package for errors
 
 ## Developing the documentation site
 
-Our CI is setup to build the [main documentation site](https://cmu-delphi.github.io/epidatr/) off of the `main` branch, while the [`dev` version of the site](https://cmu-delphi.github.io/epidatr/dev) is built off the `dev` branch.
+Our CI builds two version of the documentation:
+
+- https://cmu-delphi.github.io/epidatr/ from the `main` branch and
+- https://cmu-delphi.github.io/epidatr/dev from the `dev` branch.
 
 The documentation site can be previewed locally by running in R:
 
@@ -28,7 +31,8 @@ The documentation site can be previewed locally by running in R:
 pkgdown::build_site(preview=TRUE)
 ```
 
-If the above does not open a browser, you can try using a Python server from the command line:
+If the above does not open a browser, you can try using a Python server from the
+command line:
 
 ```bash
 R -e 'devtools::document()'
@@ -38,19 +42,7 @@ python -m http.server -d docs
 
 ## Versioning
 
-Please follow the guidelines in the PR template document (reproduced here):
-
-- [ ] Make sure this PR is against "dev", not "main".
-- [ ] Request a review from one of the current epiprocess main reviewers:
-      brookslogan, nmdefries.
-- [ ] Makes sure to bump the version number in `DESCRIPTION` and `NEWS.md`.
-      Always increment the patch version number (the third number), unless you are
-      making a release PR from dev to main, in which case increment the minor
-      version number (the second number).
-- [ ] Describe changes made in NEWS.md, making sure breaking changes
-      (backwards-incompatible changes to the documented interface) are noted.
-      Collect the changes under the next release number (e.g. if you are on
-      0.7.2, then write your changes under the 0.8 heading).
+Please follow the guidelines in the [PR template document](.github/pull_request_template.md).
 
 ## Release process
 
