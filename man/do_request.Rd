@@ -4,7 +4,7 @@
 \alias{do_request}
 \title{performs the request}
 \usage{
-do_request(url, params, timeout_seconds = 30)
+do_request(url, params, timeout_seconds)
 }
 \description{
 You can test the authentication headers like so:

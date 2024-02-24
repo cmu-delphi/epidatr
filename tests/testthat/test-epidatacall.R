@@ -10,7 +10,11 @@ test_that("request_impl http errors", {
     # see generate_test_data.R
     do_request = function(...) readRDS(testthat::test_path("data/test-http401.rds")),
   )
-  expect_error(response <- epidata_call %>% request_impl("csv"), class = "http_401")
+  expect_error(
+    response <- epidata_call %>%
+      request_impl("csv", timeout_seconds = 30, fields = NULL),
+    class = "http_401"
+  )
 
   # should give a 500 error (the afhsb endpoint is removed)
 
@@ -18,7 +22,11 @@ test_that("request_impl http errors", {
   local_mocked_bindings(
     do_request = function(...) readRDS(testthat::test_path("data/test-http500.rds"))
   )
-  expect_error(response <- epidata_call %>% request_impl("csv"), class = "http_500")
+  expect_error(
+    response <- epidata_call %>%
+      request_impl("csv", timeout_seconds = 30, fields = NULL),
+    class = "http_500"
+  )
 })
 
 test_that("fetch_args", {
@@ -30,7 +38,7 @@ test_that("fetch_args", {
         disable_date_parsing = FALSE,
         disable_data_frame_parsing = FALSE,
         return_empty = FALSE,
-        timeout_seconds = 30,
+        timeout_seconds = 15 * 60,
         base_url = NULL,
         dry_run = FALSE,
         debug = FALSE,

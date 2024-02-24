@@ -11,7 +11,7 @@ fetch_args_list(
   disable_date_parsing = FALSE,
   disable_data_frame_parsing = FALSE,
   return_empty = FALSE,
-  timeout_seconds = 30,
+  timeout_seconds = 15 * 60,
   base_url = NULL,
   dry_run = FALSE,
   debug = FALSE,
