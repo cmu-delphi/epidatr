@@ -116,7 +116,7 @@ call."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathj
     
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -231,9 +231,9 @@ call.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>cache_dir</dt>
 <dd><p>the directory in which the cache is stored. By default, this
-is <code><a href="https://rdrr.io/r/tools/userdir.html" class="external-link">tools::R_user_dir()</a></code> if on R 4.0+, but must be specified for earlier
-versions of R. The path can be either relative or absolute. The
-environmental variable is <code>EPIDATR_CACHE_DIR</code>.</p></dd>
+is <code>rappdirs::user_cache_dir("R", version = "epidatr")</code>. The path can be
+either relative or absolute. The environmental variable is
+<code>EPIDATR_CACHE_DIR</code>.</p></dd>
 
 
 <dt>days</dt>
@@ -280,6 +280,12 @@ environment</p>
 <span class="r-in"><span>  max_size <span class="op">=</span> <span class="fl">512</span>,</span></span>
 <span class="r-in"><span>  logfile <span class="op">=</span> <span class="st">"logs.txt"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   intended).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache directory is /tmp/RtmpxIl2Em.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache will be cleared after 14 days and will be pruned if it exceeds 512</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   MB.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The log of cache transactions is stored at /tmp/RtmpxIl2Em/logs.txt.</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

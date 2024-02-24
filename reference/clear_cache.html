@@ -16,7 +16,7 @@ defaults will be used."><!-- mathjax --><script src="https://cdnjs.cloudflare.co
     
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,9 +78,9 @@ defaults will be used.</p>
     <dl><dt>...</dt>
 <dd><p>Arguments passed on to <code><a href="set_cache.html">set_cache</a></code></p><dl><dt><code>cache_dir</code></dt>
 <dd><p>the directory in which the cache is stored. By default, this
-is <code><a href="https://rdrr.io/r/tools/userdir.html" class="external-link">tools::R_user_dir()</a></code> if on R 4.0+, but must be specified for earlier
-versions of R. The path can be either relative or absolute. The
-environmental variable is <code>EPIDATR_CACHE_DIR</code>.</p></dd>
+is <code>rappdirs::user_cache_dir("R", version = "epidatr")</code>. The path can be
+either relative or absolute. The environmental variable is
+<code>EPIDATR_CACHE_DIR</code>.</p></dd>
 
     <dt><code>days</code></dt>
 <dd><p>the maximum length of time in days to keep any particular cached
