@@ -26,8 +26,12 @@ jobs:
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::roxygen2
-          needs: roxygen2
+          extra-packages: |
+            any::devtools
+            any::roxygen2
+          needs: |
+            devtools
+            roxygen2
 
       - name: Document
         run: roxygen2::roxygenise()

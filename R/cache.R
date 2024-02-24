@@ -76,9 +76,9 @@ cache_environ$epidatr_cache <- NULL
 #' )
 #'
 #' @param cache_dir the directory in which the cache is stored. By default, this
-#'   is `tools::R_user_dir()` if on R 4.0+, but must be specified for earlier
-#'   versions of R. The path can be either relative or absolute. The
-#'   environmental variable is `EPIDATR_CACHE_DIR`.
+#'   is `rappdirs::user_cache_dir("R", version = "epidatr")`. The path can be
+#'   either relative or absolute. The environmental variable is
+#'   `EPIDATR_CACHE_DIR`.
 #' @param days the maximum length of time in days to keep any particular cached
 #'   call. By default this is `1`. The environmental variable is
 #'   `EPIDATR_CACHE_MAX_AGE_DAYS`.
@@ -103,8 +103,8 @@ set_cache <- function(cache_dir = NULL,
                       max_size = NULL,
                       logfile = NULL,
                       confirm = TRUE) {
-  if (is.null(cache_dir) && sessionInfo()$R.version$major >= 4) {
-    cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR", unset = tools::R_user_dir("epidatr"))
+  if (is.null(cache_dir)) {
+    cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR", unset = rappdirs::user_cache_dir("R", version = "epidatr"))
   } else if (is.null(cache_dir)) {
     # earlier version, so no tools
     cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR")
@@ -154,7 +154,6 @@ set_cache <- function(cache_dir = NULL,
     }
   }
 
-
   if (!cache_usable) {
     print(glue::glue(
       "The directory at {cache_dir} is not accessible; check permissions and/or use a different ",
@@ -168,6 +167,13 @@ set_cache <- function(cache_dir = NULL,
       logfile = file.path(cache_dir, logfile)
     )
   }
+
+  cli::cli_inform(c(
+    "!" = "epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not intended).",
+    "i" = "The cache directory is {cache_dir}.",
+    "i" = "The cache will be cleared after {days} days and will be pruned if it exceeds {max_size} MB.",
+    "i" = "The log of cache transactions is stored at {file.path(cache_dir, logfile)}."
+  ))
 }
 
 #' Manually reset the cache, deleting all currently saved data and starting afresh

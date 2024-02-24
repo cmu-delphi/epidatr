@@ -23,6 +23,7 @@
 - `pvt_twitter` and `pub_wiki` now use `time_type` and `time_values` args instead of mutually exclusive `dates` and `epiweeks` (#236). This matches the interface of the `pub_covidcast` endpoint.
 - All endpoints now support the use of "\*" as a wildcard to fetch all dates or epiweeks (#234).
 - Fixed bug with NAs when parsing ints (#243).
+- Updated the default `timeout_seconds` to 15 minutes to allow large queries by default.
 
 # epidatr 1.0.0
 

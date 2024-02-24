@@ -89,7 +89,7 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
 }
 
 #' @importFrom checkmate test_class test_list
-request_arguments <- function(epidata_call, format_type, fields = NULL) {
+request_arguments <- function(epidata_call, format_type, fields) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(format_type %in% c("json", "csv", "classic"))
   stopifnot(is.null(fields) || is.character(fields))
@@ -164,7 +164,7 @@ fetch_args_list <- function(
     disable_date_parsing = FALSE,
     disable_data_frame_parsing = FALSE,
     return_empty = FALSE,
-    timeout_seconds = 30,
+    timeout_seconds = 15 * 60,
     base_url = NULL,
     dry_run = FALSE,
     debug = FALSE,
@@ -288,7 +288,7 @@ fetch_classic <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
 
-  response_content <- request_impl(epidata_call, "classic", fetch_args$fields, fetch_args$timeout_seconds) %>%
+  response_content <- request_impl(epidata_call, "classic", fetch_args$timeout_seconds, fetch_args$fields) %>%
     httr::content(as = "text", encoding = "UTF-8") %>%
     jsonlite::fromJSON(simplifyDataFrame = !fetch_args$disable_data_frame_parsing)
 
@@ -318,7 +318,7 @@ fetch_debug <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
 
-  response <- request_impl(epidata_call, fetch_args$format_type, fetch_args$fields, fetch_args$timeout_seconds)
+  response <- request_impl(epidata_call, fetch_args$format_type, fetch_args$timeout_seconds, fetch_args$fields)
   content <- httr::content(response, "text", encoding = "UTF-8")
   content
 }
@@ -366,7 +366,7 @@ with_base_url <- function(epidata_call, base_url) {
 #' @importFrom httr stop_for_status content http_type
 #' @importFrom xml2 read_html xml_find_all xml_text
 #' @keywords internal
-request_impl <- function(epidata_call, format_type, fields = NULL, timeout_seconds = 30) {
+request_impl <- function(epidata_call, format_type, timeout_seconds, fields) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(format_type %in% c("json", "csv", "classic"))
 
