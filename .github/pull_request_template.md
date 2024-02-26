@@ -4,8 +4,8 @@ Please:
 
 - [ ] Make sure this PR is against "dev", not "main" (unless this is a release
       PR).
-- [ ] Request a review from one of the current epiprocess main reviewers:
-      brookslogan, nmdefries.
+- [ ] Request a review from one of the current epidatr main reviewers:
+      brookslogan, dshemetov, nmdefries, dsweber2.
 - [ ] Makes sure to bump the version number in `DESCRIPTION`. Always increment
       the patch version number (the third number), unless you are making a
       release PR from dev to main, in which case increment the minor version
