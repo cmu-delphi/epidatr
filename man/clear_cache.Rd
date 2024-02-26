@@ -25,6 +25,8 @@ cache directory. By default, it is \code{"logfile.txt"}. The environmental
 variable is \code{EPIDATR_CACHE_LOGFILE}.}
     \item{\code{confirm}}{whether to confirm directory creation. default is \code{TRUE};
 should only be set in non-interactive scripts}
+    \item{\code{startup}}{indicates whether the function is being called on
+startup. Affects suppressability of the messages. Default is \code{FALSE}.}
   }}
 
 \item{disable}{instead of setting a new cache, disable caching entirely;
