@@ -168,13 +168,13 @@ set_cache <- function(cache_dir = NULL,
     )
   }
 
+  # this is effectively a startup message, and for some reason, cli_inform doesn't support start suppression, so we're on our own
+  # https://github.com/r-lib/cli/issues/589 when this closes we can go back.
+  msg <-"{cli::symbol$warn} epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not intended).
+   {cli::symbol$info} The cache directory is {cache_dir}.
+   {cli::symbol$info} The cache will be cleared after {days} day{ifelse(days>1,'s','')} and will be pruned if it exceeds {max_size} MB.
+   {cli::symbol$info} The log of cache transactions is stored at {file.path(cache_dir, logfile)}."
   rlang::inform(cli::format_inline(msg), class = "packageStartupMessage")
-  cli::cli_inform(c(
-    "!" = "epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not intended).",
-    "i" = "The cache directory is {cache_dir}.",
-    "i" = "The cache will be cleared after {days} day{ifelse(days>1,'s','')} and will be pruned if it exceeds {max_size} MB.",
-    "i" = "The log of cache transactions is stored at {file.path(cache_dir, logfile)}."
-  ))
 }
 
 #' Manually reset the cache, deleting all currently saved data and starting afresh
