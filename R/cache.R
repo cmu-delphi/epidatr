@@ -168,10 +168,11 @@ set_cache <- function(cache_dir = NULL,
     )
   }
 
+  rlang::inform(cli::format_inline(msg), class = "packageStartupMessage")
   cli::cli_inform(c(
     "!" = "epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not intended).",
     "i" = "The cache directory is {cache_dir}.",
-    "i" = "The cache will be cleared after {days} days and will be pruned if it exceeds {max_size} MB.",
+    "i" = "The cache will be cleared after {days} day{ifelse(days>1,'s','')} and will be pruned if it exceeds {max_size} MB.",
     "i" = "The log of cache transactions is stored at {file.path(cache_dir, logfile)}."
   ))
 }
