@@ -116,7 +116,7 @@ call."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathj
     
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -223,7 +223,8 @@ call.</p>
 <span>  days <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  max_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  logfile <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  confirm <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  confirm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  startup <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -258,6 +259,11 @@ variable is <code>EPIDATR_CACHE_LOGFILE</code>.</p></dd>
 <dd><p>whether to confirm directory creation. default is <code>TRUE</code>;
 should only be set in non-interactive scripts</p></dd>
 
+
+<dt>startup</dt>
+<dd><p>indicates whether the function is being called on
+startup. Affects suppressability of the messages. Default is <code>FALSE</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -282,10 +288,10 @@ environment</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   intended).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache directory is /tmp/RtmpxIl2Em.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache directory is /tmp/RtmpCOZshH.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache will be cleared after 14 days and will be pruned if it exceeds 512</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   MB.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The log of cache transactions is stored at /tmp/RtmpxIl2Em/logs.txt.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The log of cache transactions is stored at /tmp/RtmpCOZshH/logs.txt.</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
