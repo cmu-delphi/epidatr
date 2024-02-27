@@ -56,7 +56,7 @@ If you want to extend it, add to the `release_bullets` function in [utils.R](htt
 devtools::check(".", manual = TRUE, env_vars =c(NOT_CRAN = "false"))
 ```
 
-Aim for 10/10, no notes.
+Aim for 10/10, no notes. Generally, follow the issue. `revdep_check` is likely to fail but doesn't seem to be terribly important. So for now ignore it.
 
 When this has gone smoothly enough, release to CRAN via
 ```R
