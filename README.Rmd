@@ -45,6 +45,12 @@ forecasting models. We also provide packages for downstream data processing
 
 ## Usage
 
+```{r, echo=FALSE}
+# This is so that if you have USE_EPIDATR_CACHE=TRUE in your .Renviron, the
+# startup message does not get included in the README.md when you build this.
+suppressPackageStartupMessages(library(epidatr))
+```
+
 ```{r}
 library(epidatr)
 # Obtain the smoothed covid-like illness (CLI) signal from Delphi's US COVID-19
