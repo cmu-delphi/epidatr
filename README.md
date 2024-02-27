@@ -39,13 +39,6 @@ also provide packages for downstream data processing
 
 ``` r
 library(epidatr)
-#> ! epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not
-#>   intended).
-#> ℹ The cache directory is /fasterHome/workingDataDir/epidatr.
-#> ℹ The cache will be cleared after 1 day and will be pruned if it exceeds 1024
-#>   MB.
-#> ℹ The log of cache transactions is stored at
-#>   /fasterHome/workingDataDir/epidatr/logfile.txt.
 # Obtain the smoothed covid-like illness (CLI) signal from Delphi's US COVID-19
 # Trends and Impact Survey (CTIS), in partnership with Facebook, as it was on
 # April 10, 2021 for the US at the national level
