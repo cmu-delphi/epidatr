@@ -165,6 +165,7 @@ print.EpidataFieldInfo <- function(x, ...) {
   cli::cli_dl(x[attr(x, "names")])
 }
 
+#' @importFrom stats na.omit
 parse_value <- function(info, value, disable_date_parsing = FALSE) {
   stopifnot(inherits(info, "EpidataFieldInfo"))
 

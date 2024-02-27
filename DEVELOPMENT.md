@@ -45,5 +45,20 @@ python -m http.server -d docs
 Please follow the guidelines in the [PR template document](.github/pull_request_template.md).
 
 ## Release process
+First, there's a handy function that makes a github issue; for example, at the time of writing we were doing:
+```R
+usethis::use_release_issue(version = "1.0.2")
+```
+If you want to extend it, add to the `release_bullets` function in [utils.R](https://github.com/cmu-delphi/epidatr/blob/dev/R/utils.R).
+ First, make sure that all the checks pass
 
-TBD
+```R
+devtools::check(".", manual = TRUE, env_vars =c(NOT_CRAN = "false"))
+```
+
+Aim for 10/10, no notes. Generally, follow the issue. `revdep_check` is likely to fail but doesn't seem to be terribly important. So for now ignore it.
+
+When this has gone smoothly enough, release to CRAN via
+```R
+devtools::release(check = TRUE)
+```

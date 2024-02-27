@@ -112,6 +112,6 @@ See also the [Terms of Use](https://delphi.cmu.edu/covidcast/terms-of-use/), not
 
 
 [mit-image]: https://img.shields.io/badge/License-MIT-yellow.svg
-[mit-url]: https://opensource.org/license/mit/
+[mit-url]: https://opensource.org/license/mit
 [github-actions-image]: https://github.com/cmu-delphi/epidatr/workflows/ci/badge.svg
 [github-actions-url]: https://github.com/cmu-delphi/epidatr/actions

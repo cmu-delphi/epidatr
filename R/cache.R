@@ -90,6 +90,8 @@ cache_environ$epidatr_cache <- NULL
 #'   variable is `EPIDATR_CACHE_LOGFILE`.
 #' @param confirm whether to confirm directory creation. default is `TRUE`;
 #'   should only be set in non-interactive scripts
+#' @param startup indicates whether the function is being called on
+#'   startup. Affects suppressability of the messages. Default is `FALSE`.
 #' @return [`NULL`] no return value, all effects are stored in the package
 #'         environment
 #' @seealso [`clear_cache`] to delete the old cache while making a new one,
@@ -102,7 +104,8 @@ set_cache <- function(cache_dir = NULL,
                       days = NULL,
                       max_size = NULL,
                       logfile = NULL,
-                      confirm = TRUE) {
+                      confirm = TRUE,
+                      startup = FALSE) {
   if (is.null(cache_dir)) {
     cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR", unset = rappdirs::user_cache_dir("R", version = "epidatr"))
   } else if (is.null(cache_dir)) {
@@ -171,9 +174,10 @@ set_cache <- function(cache_dir = NULL,
   cli::cli_inform(c(
     "!" = "epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not intended).",
     "i" = "The cache directory is {cache_dir}.",
-    "i" = "The cache will be cleared after {days} days and will be pruned if it exceeds {max_size} MB.",
+    "i" = "The cache will be cleared after {days} day{ifelse(days>1,'s','')}
+           and will be pruned if it exceeds {max_size} MB.",
     "i" = "The log of cache transactions is stored at {file.path(cache_dir, logfile)}."
-  ))
+  ), class = if (startup) "packageStartupMessage" else NULL)
 }
 
 #' Manually reset the cache, deleting all currently saved data and starting afresh

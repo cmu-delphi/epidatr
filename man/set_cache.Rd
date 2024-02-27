@@ -9,7 +9,8 @@ set_cache(
   days = NULL,
   max_size = NULL,
   logfile = NULL,
-  confirm = TRUE
+  confirm = TRUE,
+  startup = FALSE
 )
 }
 \arguments{
@@ -32,6 +33,9 @@ variable is \code{EPIDATR_CACHE_LOGFILE}.}
 
 \item{confirm}{whether to confirm directory creation. default is \code{TRUE};
 should only be set in non-interactive scripts}
+
+\item{startup}{indicates whether the function is being called on
+startup. Affects suppressability of the messages. Default is \code{FALSE}.}
 }
 \value{
 \code{\link{NULL}} no return value, all effects are stored in the package
