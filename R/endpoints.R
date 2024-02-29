@@ -1051,8 +1051,14 @@ pub_covidcast <- function(
           c("day", "week")
       ),
       create_epidata_field_info("geo_value", "text"),
-      create_epidata_field_info("time_value", switch(time_type, day = "date", week = "epiweek")),
-      create_epidata_field_info("issue", switch(time_type, day = "date", week = "epiweek")),
+      create_epidata_field_info("time_value", switch(time_type,
+        day = "date",
+        week = "epiweek"
+      )),
+      create_epidata_field_info("issue", switch(time_type,
+        day = "date",
+        week = "epiweek"
+      )),
       create_epidata_field_info("lag", "int"),
       create_epidata_field_info("value", "float"),
       create_epidata_field_info("stderr", "float"),
