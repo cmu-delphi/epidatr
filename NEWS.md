@@ -1,4 +1,4 @@
-# epidatr 1.2.0
+# epidatr 1.1.1
 
 ## Changes
 
