@@ -65,6 +65,33 @@ test_that("check_is_cachable can handle both str and date inputs of various leng
   expect_no_error(check_is_cachable(epidata_call, fetch_args))
 })
 
+test_that("check_is_recent can handle both str and date inputs of various lengths", {
+  # NULL
+  as_of <- NULL
+  expect_no_error(result <- check_is_recent(as_of, 10))
+  expect_identical(result, FALSE)
+
+  # as_of single string
+  as_of <- "2022-01-01"
+  expect_no_error(result <- check_is_recent(as_of, 10))
+  expect_identical(result, FALSE)
+
+  # as_of string vector
+  as_of <- c("2022-01-01", "3000-01-02", "3000-01-03")
+  expect_no_error(result <- check_is_recent(as_of, 10))
+  expect_identical(result, TRUE)
+
+  # as_of single date
+  as_of <- as.Date("2022-01-01")
+  expect_no_error(result <- check_is_recent(as_of, 10))
+  expect_identical(result, FALSE)
+
+  # as_of date vector
+  as_of <- as.Date(c("2022-01-01", "3000-01-02", "3000-01-03"))
+  expect_no_error(result <- check_is_recent(as_of, 10))
+  expect_identical(result, TRUE)
+})
+
 test_that("get_wildcard_equivalent_dates works in basic cases", {
   # Week date
   result <- get_wildcard_equivalent_dates(epirange(202002, 202013), "week")

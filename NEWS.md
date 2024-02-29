@@ -1,3 +1,13 @@
+# epidatr 1.1.1
+
+## Changes
+
+## Features
+
+## Patches
+- Fixed failure when passing `as_of` values in `Date` format to
+  `pub_covidcast` while caching is enabled (#259)
+
 # epidatr 1.1.0
 
 ## Changes
