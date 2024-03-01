@@ -1025,6 +1025,13 @@ pub_covidcast <- function(
   as_of <- parse_timeset_input(as_of)
   issues <- parse_timeset_input(issues)
 
+  if (source == "nchs-mortality" && time_type != "week") {
+    cli::cli_abort(
+      "{source} data is only available at the week level",
+      class = "epidatr__nchs_week_only"
+    )
+  }
+
   create_epidata_call(
     "covidcast/",
     list(
