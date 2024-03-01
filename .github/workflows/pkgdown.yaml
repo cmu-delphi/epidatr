@@ -49,7 +49,7 @@ jobs:
           }
           library(pkgdown)
           pkg <-  as_pkgdown(".", override = list(destination = ifelse(mode_ref == "release", "docs", "docs/dev"), PKGDOWN_DEV_MODE = mode_ref))
-          cli::cli_rule("Cleaning files from odl site")
+          cli::cli_rule("Cleaning files from old site")
           clean_site(pkg)
           build_site(pkg, preview = FALSE, install = FALSE, new_process = FALSE)
           build_github_pages(pkg)
