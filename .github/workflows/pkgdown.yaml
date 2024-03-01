@@ -48,7 +48,7 @@ jobs:
               mode_ref <- ifelse("${{ github.ref_name }}" == "main", "release", "devel")
           }
           library(pkgdown)
-          pkg <-  as_pkgdown(".", overide = list(destination = ifelse(mode_ref == "release", "docs", "docs/dev"), PKGDOWN_DEV_MODE = mode_ref))
+          pkg <-  as_pkgdown(".", override = list(destination = ifelse(mode_ref == "release", "docs", "docs/dev"), PKGDOWN_DEV_MODE = mode_ref))
           cli::cli_rule("Cleaning files from odl site")
           clean_site(pkg)
           build_site(pkg, preview = FALSE, install = FALSE, new_process = FALSE)
