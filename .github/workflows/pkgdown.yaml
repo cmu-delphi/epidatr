@@ -35,7 +35,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::pkgdown, local::.
+          extra-packages: any::pkgdown, local::., any::cli
           needs: website
 
       - name: Build site
@@ -45,11 +45,10 @@ jobs:
           } else {
               mode_ref <- ifelse("${{ github.ref_name }}" == "main", "release", "devel")
           }
-          library(pkgdown)
-          pkg <-  as_pkgdown(".", override = list(destination = ifelse(mode_ref == "release", "docs", "docs/dev"), PKGDOWN_DEV_MODE = mode_ref))
-          cli::cli_rule("Cleaning files from old site")
-          clean_site(pkg)
-          build_site(pkg, preview = FALSE, install = FALSE, new_process = FALSE)
+          pkg <- pkgdown::as_pkgdown(".", override = list(destination = ifelse(mode_ref == "release", "docs", "docs/dev"), PKGDOWN_DEV_MODE = mode_ref))
+          cli::cli_rule("Cleaning files from old site...")
+          pkgdown::clean_site(pkg)
+          pkgdown::build_site(pkg, preview = FALSE, install = FALSE, new_process = FALSE)
           pkgdown:::build_github_pages(pkg)
         shell: Rscript {0}
 
