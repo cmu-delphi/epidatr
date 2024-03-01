@@ -52,7 +52,7 @@ jobs:
           cli::cli_rule("Cleaning files from old site")
           clean_site(pkg)
           build_site(pkg, preview = FALSE, install = FALSE, new_process = FALSE)
-          build_github_pages(pkg)
+          pkgdown:::build_github_pages(pkg)
         shell: Rscript {0}
 
       - name: Deploy to GitHub pages 🚀
