@@ -72,5 +72,3 @@ get_wildcard_equivalent_dates <- function(time_value, time_type = c("day", "week
 release_bullets <- function() {
   c("merge to main", "don't use_version('patch') in the next section", "`use_version('patch')` is redundant because we do this in PRs","`use_dev_version` is also redundant.")
 }
-
-pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, override=list(PKGDOWN_DEV_MODE=mode_ref))
