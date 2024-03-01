@@ -70,5 +70,5 @@ get_wildcard_equivalent_dates <- function(time_value, time_type = c("day", "week
 #' inserts each string as a bullet at the end of the "Prepare for release" section
 #' @keywords internal
 release_bullets <- function() {
-  c("merge to main", "don't use_version('patch') in the next section", "`use_version('patch')` is redundant because we do this in PRs","`use_dev_version` is also redundant.")
+  c("merge to main", "don't use_version('patch') in the next section", "`use_version('patch')` is redundant because we do this in PRs", "`use_dev_version` is also redundant.")
 }
