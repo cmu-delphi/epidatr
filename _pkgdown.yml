@@ -1,5 +1,7 @@
 # Colors should stay consistent across epipredict & epidatr, using Carnegie
 # Red https://www.cmu.edu/brand/brand-guidelines/visual-identity/colors.html
+development:
+  mode: devel
 template:
   bootstrap: 5
   bootswatch: cosmo
