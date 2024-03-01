@@ -43,11 +43,16 @@ jobs:
           DELPHI_EPIDATA_KEY: ${{ secrets.SECRET_EPIDATR_GHACTIONS_DELPHI_EPIDATA_KEY }}
         run: |
           if (startsWith("${{ github.event_name }}", "pull_request")) {
-              mode <- ifelse("${{ github.base_ref }}" == "main", "release", "devel")
+              mode_ref <- ifelse("${{ github.base_ref }}" == "main", "release", "devel")
           } else {
-              mode <- ifelse("${{ github.ref_name }}" == "main", "release", "devel")
+              mode_ref <- ifelse("${{ github.ref_name }}" == "main", "release", "devel")
           }
-          pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE, override=list(PKGDOWN_DEV_MODE=mode))
+          library(pkgdown)
+          pkg <-  as_pkgdown(".", overide = list(destination = ifelse(mode_ref == "release", "docs", "docs/dev", PKGDOWN_DEV_MODE = mode_ref)))
+          cli::cli_rule("Cleaning files from odl site")
+          clean_site(pkg)
+          build_site(pkg, preview = FALSE, install = FALSE, new_process = FALSE)
+          build_github_pages(pkg)
         shell: Rscript {0}
 
       - name: Deploy to GitHub pages 🚀
