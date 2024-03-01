@@ -23,7 +23,7 @@ jobs:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      DELPHI_EPIDATA_KEY: ${{ secrets.DELPHI_GITHUB_ACTIONS_EPIDATA_API_KEY }}
+      DELPHI_EPIDATA_KEY: ${{ secrets.SECRET_EPIDATR_GHACTIONS_DELPHI_EPIDATA_KEY }}
     steps:
       - uses: actions/checkout@v3
 
@@ -39,8 +39,6 @@ jobs:
           needs: website
 
       - name: Build site
-        env:
-          DELPHI_EPIDATA_KEY: ${{ secrets.SECRET_EPIDATR_GHACTIONS_DELPHI_EPIDATA_KEY }}
         run: |
           if (startsWith("${{ github.event_name }}", "pull_request")) {
               mode_ref <- ifelse("${{ github.base_ref }}" == "main", "release", "devel")
