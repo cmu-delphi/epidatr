@@ -1,7 +1,14 @@
 # Colors should stay consistent across epipredict & epidatr, using Carnegie
 # Red https://www.cmu.edu/brand/brand-guidelines/visual-identity/colors.html
+
+# This is to give a default value to the `mode` parameter in the
+# `pkgdown::build_site` function. This is useful when building the site locally,
+# as it will default to `devel` mode. In practice, this should all be handled
+# dynamically by the CI/CD pipeline.
 development:
   mode: devel
+  version_label: success
+
 template:
   bootstrap: 5
   bootswatch: cosmo
