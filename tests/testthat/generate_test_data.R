@@ -4,7 +4,8 @@ epidata_call %>%
 
 url <- full_url(epidata_call)
 params <- request_arguments(epidata_call, "csv", NULL)
-result <- do_request(url, params) %>% readr::write_rds(testthat::test_path("data/test-http401.rds"))
+result <- do_request(url, params, timeout_seconds = 10 * 60) %>%
+  readr::write_rds(testthat::test_path("data/test-http401.rds"))
 
 epidata_call <- pvt_afhsb(
   auth = Sys.getenv("SECRET_API_AUTH_AFHSB"),
@@ -14,7 +15,8 @@ epidata_call <- pvt_afhsb(
 )
 url <- full_url(epidata_call)
 params <- request_arguments(epidata_call, "csv", NULL)
-response <- do_request(url, params) %>% readr::write_rds(testthat::test_path("data/test-http500.rds"))
+response <- do_request(url, params, timeout_seconds = 10 * 60) %>%
+  readr::write_rds(testthat::test_path("data/test-http500.rds"))
 
 epidata_call %>%
   fetch_debug(format_type = "classic") %>%
@@ -33,5 +35,5 @@ response <- httr::RETRY("GET",
   query = list(),
   terminate_on = c(400, 401, 403, 405, 414, 500),
   http_headers,
-  httr::authenticate("epidata", get_auth_key())
+  httr::authenticate("epidata", get_api_key())
 ) %>% readr::write_rds(testthat::test_path("data/test-do_request-httpbin.rds"))

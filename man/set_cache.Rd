@@ -9,14 +9,15 @@ set_cache(
   days = NULL,
   max_size = NULL,
   logfile = NULL,
-  confirm = TRUE
+  confirm = TRUE,
+  startup = FALSE
 )
 }
 \arguments{
 \item{cache_dir}{the directory in which the cache is stored. By default, this
-is \code{tools::R_user_dir()} if on R 4.0+, but must be specified for earlier
-versions of R. The path can be either relative or absolute. The
-environmental variable is \code{EPIDATR_CACHE_DIR}.}
+is \code{rappdirs::user_cache_dir("R", version = "epidatr")}. The path can be
+either relative or absolute. The environmental variable is
+\code{EPIDATR_CACHE_DIR}.}
 
 \item{days}{the maximum length of time in days to keep any particular cached
 call. By default this is \code{1}. The environmental variable is
@@ -32,6 +33,9 @@ variable is \code{EPIDATR_CACHE_LOGFILE}.}
 
 \item{confirm}{whether to confirm directory creation. default is \code{TRUE};
 should only be set in non-interactive scripts}
+
+\item{startup}{indicates whether the function is being called on
+startup. Affects suppressability of the messages. Default is \code{FALSE}.}
 }
 \value{
 \code{\link{NULL}} no return value, all effects are stored in the package
@@ -64,7 +68,7 @@ An important feature of the caching in this package is that only calls which
 specify either \code{issues} before a certain date, or \code{as_of} before a certain
 date will actually cache. For example the call
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{covidcast(
+\if{html}{\out{<div class="sourceCode">}}\preformatted{pub_covidcast(
   source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
   geo_type = "state",
@@ -77,7 +81,7 @@ date will actually cache. For example the call
 \emph{won't} cache, since it is possible for the cache to be invalidated by new
 releases with no warning. On the other hand, the call
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{covidcast(
+\if{html}{\out{<div class="sourceCode">}}\preformatted{pub_covidcast(
   source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
   geo_type = "state",

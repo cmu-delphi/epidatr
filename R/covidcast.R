@@ -127,7 +127,7 @@ print.covidcast_data_source <- function(x, ...) {
 #' ```
 #'
 #' These objects can be used directly to fetch data, without requiring us to use
-#' the `covidcast()` function. Simply use the `$call` attribute of the object:
+#' the `pub_covidcast()` function. Simply use the `$call` attribute of the object:
 #'
 #' ```{r}
 #' epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa",

@@ -2,15 +2,15 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_covidcast}
 \alias{pub_covidcast}
-\title{COVID data via the covidcast endpoint}
+\title{Various COVID and flu signals via the COVIDcast endpoint}
 \usage{
 pub_covidcast(
   source,
   signals,
   geo_type,
   time_type,
-  geo_values,
-  time_values,
+  geo_values = "*",
+  time_values = "*",
   ...,
   as_of = NULL,
   issues = NULL,
@@ -35,7 +35,7 @@ pub_covidcast(
 all. (See:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.)}
 
-\item{time_values}{\code{\link{timeset}}. Dates to fetch.}
+\item{time_values}{\code{\link{timeset}}. Dates to fetch. Defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 

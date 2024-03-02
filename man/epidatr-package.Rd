@@ -8,6 +8,13 @@
 \description{
 The Delphi 'Epidata' API provides real-time access to epidemiological surveillance data for influenza, 'COVID-19', and other diseases for the USA at various geographical resolutions, both from official government sources such as the Center for Disease Control (CDC) and Google Trends and private partners such as Facebook and Change 'Healthcare'. It is built and maintained by the Carnegie Mellon University Delphi research group. To cite this API: David C. Farrow, Logan C. Brooks, Aaron 'Rumack', Ryan J. 'Tibshirani', 'Roni' 'Rosenfeld' (2015). Delphi 'Epidata' API. \url{https://github.com/cmu-delphi/delphi-epidata}.
 }
+\section{Package options}{
+
+
+The \code{delphi.epidata.key} option specifies the API key to be used when making
+requests to the Epidata API.
+}
+
 \seealso{
 Useful links:
 \itemize{

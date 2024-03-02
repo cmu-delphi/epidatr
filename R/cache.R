@@ -34,7 +34,7 @@ cache_environ$epidatr_cache <- NULL
 #'   specify either `issues` before a certain date, or `as_of` before a certain
 #'   date will actually cache. For example the call
 #' ```
-#' covidcast(
+#' pub_covidcast(
 #'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
 #'   geo_type = "state",
@@ -46,7 +46,7 @@ cache_environ$epidatr_cache <- NULL
 #' *won't* cache, since it is possible for the cache to be invalidated by new
 #'   releases with no warning. On the other hand, the call
 #' ```
-#' covidcast(
+#' pub_covidcast(
 #'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
 #'   geo_type = "state",
@@ -76,9 +76,9 @@ cache_environ$epidatr_cache <- NULL
 #' )
 #'
 #' @param cache_dir the directory in which the cache is stored. By default, this
-#'   is `tools::R_user_dir()` if on R 4.0+, but must be specified for earlier
-#'   versions of R. The path can be either relative or absolute. The
-#'   environmental variable is `EPIDATR_CACHE_DIR`.
+#'   is `rappdirs::user_cache_dir("R", version = "epidatr")`. The path can be
+#'   either relative or absolute. The environmental variable is
+#'   `EPIDATR_CACHE_DIR`.
 #' @param days the maximum length of time in days to keep any particular cached
 #'   call. By default this is `1`. The environmental variable is
 #'   `EPIDATR_CACHE_MAX_AGE_DAYS`.
@@ -90,6 +90,8 @@ cache_environ$epidatr_cache <- NULL
 #'   variable is `EPIDATR_CACHE_LOGFILE`.
 #' @param confirm whether to confirm directory creation. default is `TRUE`;
 #'   should only be set in non-interactive scripts
+#' @param startup indicates whether the function is being called on
+#'   startup. Affects suppressability of the messages. Default is `FALSE`.
 #' @return [`NULL`] no return value, all effects are stored in the package
 #'         environment
 #' @seealso [`clear_cache`] to delete the old cache while making a new one,
@@ -102,9 +104,10 @@ set_cache <- function(cache_dir = NULL,
                       days = NULL,
                       max_size = NULL,
                       logfile = NULL,
-                      confirm = TRUE) {
-  if (is.null(cache_dir) && sessionInfo()$R.version$major >= 4) {
-    cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR", unset = tools::R_user_dir("epidatr"))
+                      confirm = TRUE,
+                      startup = FALSE) {
+  if (is.null(cache_dir)) {
+    cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR", unset = rappdirs::user_cache_dir("R", version = "epidatr"))
   } else if (is.null(cache_dir)) {
     # earlier version, so no tools
     cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR")
@@ -154,7 +157,6 @@ set_cache <- function(cache_dir = NULL,
     }
   }
 
-
   if (!cache_usable) {
     print(glue::glue(
       "The directory at {cache_dir} is not accessible; check permissions and/or use a different ",
@@ -163,11 +165,19 @@ set_cache <- function(cache_dir = NULL,
   } else if (cache_exists) {
     cache_environ$epidatr_cache <- cachem::cache_disk(
       dir = cache_dir,
-      max_size = as.integer(max_size * 1024^2),
+      max_size = max_size * 1024^2,
       max_age = days * 24 * 60 * 60,
       logfile = file.path(cache_dir, logfile)
     )
   }
+
+  cli::cli_inform(c(
+    "!" = "epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not intended).",
+    "i" = "The cache directory is {cache_dir}.",
+    "i" = "The cache will be cleared after {days} day{ifelse(days>1,'s','')}
+           and will be pruned if it exceeds {max_size} MB.",
+    "i" = "The log of cache transactions is stored at {file.path(cache_dir, logfile)}."
+  ), class = if (startup) "packageStartupMessage" else NULL)
 }
 
 #' Manually reset the cache, deleting all currently saved data and starting afresh
@@ -185,7 +195,7 @@ set_cache <- function(cache_dir = NULL,
 #'   [`disable_cache`] to only disable without deleting, and [`cache_info`]
 #' @export
 #' @import cachem
-clear_cache <- function(disable = FALSE, ...) {
+clear_cache <- function(..., disable = FALSE) {
   if (any(!is.na(cache_environ$epidatr_cache))) {
     cache_environ$epidatr_cache$destroy()
   }
@@ -252,12 +262,12 @@ cache_epidata_call <- function(epidata_call, fetch_args = fetch_args_list()) {
     if (as_of_recent || issues_recent) {
       cli::cli_warn(
         c(
-          "using cached results with `as_of` within the past week (or the future!).",
-          "This will likely result in an invalid cache. Consider\n",
-          "1. disabling the cache for this session with `disable_cache` or permanently with environmental ",
-          "variable `EPIDATR_USE_CACHE=FALSE`\n",
-          "2. setting `EPIDATR_CACHE_MAX_AGE_DAYS={Sys.getenv('EPIDATR_CACHE_MAX_AGE_DAYS', unset = 1)}`",
-          " to e.g. `3/24` (3 hours)."
+          "Using cached results with `as_of` within the past week (or the future!).
+          This will likely result in an invalid cache. Consider",
+          "i" = "disabling the cache for this session with `disable_cache` or
+          permanently with environmental variable `EPIDATR_USE_CACHE=FALSE`",
+          "i" = "setting `EPIDATR_CACHE_MAX_AGE_DAYS={Sys.getenv('EPIDATR_CACHE_MAX_AGE_DAYS
+          ', unset = 1)}` to e.g. `3/24` (3 hours)."
         ),
         .frequency = "regularly",
         .frequency_id = "cache timing issues",
@@ -267,8 +277,8 @@ cache_epidata_call <- function(epidata_call, fetch_args = fetch_args_list()) {
     if (!is.key_missing(cached)) {
       cli::cli_warn(
         c(
-          "loading from the cache at {cache_environ$epidatr_cache$info()$dir}; ",
-          "see {cache_environ$epidatr_cache$info()$logfile} for more details."
+          "Loading from the cache at {cache_environ$epidatr_cache$info()$dir};
+          see {cache_environ$epidatr_cache$info()$logfile} for more details."
         ),
         .frequency = "regularly",
         .frequency_id = "using the cache",
@@ -277,7 +287,6 @@ cache_epidata_call <- function(epidata_call, fetch_args = fetch_args_list()) {
       return(cached[[1]])
     }
   }
-  'which was saved on {format(cached[[2]],"%A %B %d, %Y")}, which took {round(cached[[3]][[3]], digits=5)} seconds.'
   # need to actually get the data, since its either not in the cache or we're not caching
   runtime <- system.time(if (epidata_call$only_supports_classic) {
     fetched <- fetch_classic(epidata_call, fetch_args)

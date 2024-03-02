@@ -2,16 +2,17 @@
 % Please edit documentation in R/model.R
 \name{epirange}
 \alias{epirange}
-\title{EpiRange}
+\title{Specify a range of days or weeks for API requests}
 \usage{
 epirange(from, to)
 }
 \arguments{
-\item{from}{A \code{Date}, integer-like value, or integer-like string that takes the
-form YYYYMMDD for dates or YYYYWW for epiweeks.}
+\item{from}{The first date to request. Can be specified as a \code{Date} or as an
+integer or integer-like string in the format YYYYMMDD for dates or YYYYWW
+for epiweeks.}
 
-\item{to}{A \code{Date}, integer-like value, or integer-like string that takes the
-form YYYYMMDD for dates or YYYYWW for epiweeks.}
+\item{to}{The final date to request (inclusive), specified the same way as
+\code{from}.}
 }
 \value{
 An \code{EpiRange} object.

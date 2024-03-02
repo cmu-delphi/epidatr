@@ -2,13 +2,13 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_wiki}
 \alias{pub_wiki}
-\title{Wikipedia access data}
+\title{Wikipedia webpage counts by article}
 \usage{
 pub_wiki(
   articles,
   ...,
-  dates = NULL,
-  epiweeks = NULL,
+  time_type = c("day", "week"),
+  time_values = "*",
   hours = NULL,
   language = "en",
   fetch_args = fetch_args_list()
@@ -19,10 +19,11 @@ pub_wiki(
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
-\item{dates}{\code{\link{timeset}}. Dates to fetch. Mutually exclusive with \code{epiweeks}.}
+\item{time_type}{string. The temporal resolution of the data (either "day" or
+"week", depending on signal).}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Mutually exclusive with
-\code{dates}.}
+\item{time_values}{\code{\link{timeset}}. Dates or epiweeks to fetch. Defaults to all
+("*") dates.}
 
 \item{hours}{integer. Optionally, the hours to fetch.}
 
@@ -46,7 +47,11 @@ Number of page visits for selected English, Influenza-related wikipedia articles
 }
 \examples{
 \dontrun{
-pub_wiki(articles = "avian_influenza", epiweeks = epirange(201501, 201601))
+pub_wiki(
+  articles = "avian_influenza",
+  time_type = "week",
+  time_values = epirange(201501, 201601)
+)
 }
 }
 \keyword{endpoint}

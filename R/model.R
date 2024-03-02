@@ -1,12 +1,12 @@
-#' EpiRange
+#' Specify a range of days or weeks for API requests
 #'
-#' @description
 #' Specify a date range (in days or epiweeks) for an API request.
 #'
-#' @param from A `Date`, integer-like value, or integer-like string that takes the
-#'   form YYYYMMDD for dates or YYYYWW for epiweeks.
-#' @param to A `Date`, integer-like value, or integer-like string that takes the
-#'  form YYYYMMDD for dates or YYYYWW for epiweeks.
+#' @param from The first date to request. Can be specified as a `Date` or as an
+#'   integer or integer-like string in the format YYYYMMDD for dates or YYYYWW
+#'   for epiweeks.
+#' @param to The final date to request (inclusive), specified the same way as
+#'   `from`.
 #' @return An `EpiRange` object.
 #' @importFrom checkmate check_integerish check_character check_date assert
 #'
@@ -61,33 +61,72 @@ epirange <- function(from, to) {
   structure(list(from = from, to = to), class = "EpiRange")
 }
 
-
-#' Timeset
+#' helper to convert an epirange from week to day or vice versa
 #'
-#' @description
+#' @keywords internal
+reformat_epirange <- function(epirange, to_type = c("day", "week")) {
+  to_type <- match.arg(to_type)
+
+  # Day format -> week
+  if (nchar(epirange$from) == 8 && to_type == "week") {
+    return(
+      epirange(date_to_epiweek(epirange$from), date_to_epiweek(epirange$to))
+    )
+    # Week format -> day
+  } else if (nchar(epirange$from) == 6 && to_type == "day") {
+    return(
+      epirange(parse_api_week(epirange$from), parse_api_week(epirange$to))
+    )
+  }
+
+  return(epirange)
+}
+
+#' @export
+print.EpiRange <- function(x, ...) {
+  if (nchar(x$from) == 8) {
+    date_type <- "Days" # nolint: object_usage_linter
+    x$from <- as.Date(as.character(x$from), "%Y%m%d")
+    x$to <- as.Date(as.character(x$to), "%Y%m%d")
+  } else if (nchar(x$from) == 6) {
+    date_type <- "Epiweeks" # nolint: object_usage_linter
+    x$from <- paste0(
+      substr(x$from, 1, 4), "w", substr(x$from, 5, 6)
+    )
+    x$to <- paste0(
+      substr(x$to, 1, 4), "w", substr(x$to, 5, 6)
+    )
+  }
+
+  cli::cli_h1("<EpiRange> object:")
+  cli::cli_bullets(
+    "{date_type} from {x$from} to {x$to}"
+  )
+}
+
+#' Timeset formats for specifying dates
+#'
 #' Many API calls accept timesets to specify the time ranges of data being
 #' requested. Timesets can be specified with `epirange()`, as `Date` objects, or
 #' with wildcards.
 #'
-#' Timesets are not special R types; the term simply describes any value that
-#' would be accepted by epidatr to specify the time value of an epidata query.
-#' The allowed values are:
+#' Timesets are not special R types; the term simply describes any value that is
+#' accepted by epidatr to specify the time value of an epidata query:
 #'
-#' - Dates: `Date` instances, integer-like values, or integer-like strings that
-#'   take the form YYYYMMDD.
-#' - Epiweeks: Integer-like values or integer-like strings that take the form
-#'   YYYYWW.
+#' - Dates: `Date` instances.
+#' - Date strings or integers: Strings or integers in the format YYYYMMDD.
+#' - Epiweeks: Strings or integers in the format YYYYWW, where WW is the epiweek
+#'   number.
 #' - EpiRanges: A range returned by `epirange()`, or a list of multiple ranges.
-#' - Wildcard: The string `"*"`, which request all available time values.
+#' - Wildcard: The string `"*"`, which requests all available time values.
 #'
-#' Please refer to the specific endpoint documentation for guidance on using
-#' dates vs weeks. Most endpoints support only one or the other. Some (less
-#' commonly used) endpoints may not accept the `"*"` wildcard, but this can be
-#' simulated with a large `epirange()`.
+#' Refer to the specific endpoint documentation for guidance on using dates vs
+#' weeks. Most endpoints support only one or the other. Some (less commonly
+#' used) endpoints may not accept the `"*"` wildcard, but this can be simulated
+#' with a large `epirange()`.
 #'
 #' @name timeset
 NULL
-
 
 create_epidata_field_info <- function(name,
                                       type,
@@ -119,19 +158,39 @@ create_epidata_field_info <- function(name,
   )
 }
 
+#' @export
+print.EpidataFieldInfo <- function(x, ...) {
+  cli::cli_h1("<EpidataFieldInfo> object:")
+  # Print all non-class fields.
+  cli::cli_dl(x[attr(x, "names")])
+}
+
+#' @importFrom stats na.omit
 parse_value <- function(info, value, disable_date_parsing = FALSE) {
   stopifnot(inherits(info, "EpidataFieldInfo"))
 
   if (is.null(value)) {
     return(value)
-  } else if (info$type == "date" && !disable_date_parsing) {
+  } else if (info$type == "date" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_date(value))
-  } else if (info$type == "epiweek" && !disable_date_parsing) {
+  } else if (info$type == "epiweek" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_week(value))
   } else if (info$type == "bool") {
     return(as.logical(value))
   } else if (info$type == "int") {
-    return(as.integer(value))
+    # Int doesn't have enough capacity to store some weekly `pub_wiki` values.
+    value <- as.double(value)
+    if (any(na.omit(value != round(value)))) {
+      cli::cli_warn(
+        c(
+          "Values in {info$name} were expected to be integers but contain a decimal component",
+          "i" = "Decimal components are returned as-is"
+        ),
+        class = "epidatr__int_nonzero_decimal_digits"
+      )
+    }
+
+    return(value)
   } else if (info$type == "float") {
     return(as.double(value))
   } else if (info$type == "categorical") {
@@ -140,13 +199,30 @@ parse_value <- function(info, value, disable_date_parsing = FALSE) {
   value
 }
 
+#' @importFrom purrr map_chr
 parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   meta <- epidata_call$meta
   df <- as.data.frame(df)
+
   if (length(meta) == 0) {
     return(df)
   }
+
+  meta_field_names <- map_chr(meta, "name")
+  missing_fields <- setdiff(names(df), meta_field_names)
+  if (
+    length(missing_fields) != 0
+  ) {
+    cli::cli_warn(
+      c(
+        "Not all return columns are specified as expected epidata fields",
+        "i" = "Unspecified fields {missing_fields} may need to be manually converted to more appropriate classes"
+      ),
+      class = "epidatr__missing_meta_fields"
+    )
+  }
+
   columns <- colnames(df)
   for (i in seq_len(length(meta))) {
     info <- meta[[i]]
@@ -157,9 +233,23 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
   df
 }
 
+#' Converts a date (integer or character) to an epiweek
+#' @param value date (integer or character, with format YYYYMMDD) to be converted to an epiweek
+#' @return an integer representing an epiweek, in the format YYYYWW
+#' @importFrom MMWRweek MMWRweek
+#' @keywords internal
+date_to_epiweek <- function(value) {
+  date_components <- MMWRweek::MMWRweek(as.Date(as.character(value), "%Y%m%d"))
+  as.numeric(paste0(
+    date_components$MMWRyear,
+    # Pad with zeroes up to 2 digits (x -> 0x)
+    formatC(date_components$MMWRweek, width = 2, flag = 0)
+  ))
+}
+
 #' @keywords internal
 parse_api_date <- function(value) {
-  as.Date(as.character(value), format = "%Y%m%d")
+  as.Date(as.character(value), tryFormats = c("%Y%m%d", "%Y-%m-%d"))
 }
 
 #' parse_api_week converts an integer to a date

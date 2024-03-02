@@ -2,11 +2,11 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_fluview_clinical}
 \alias{pub_fluview_clinical}
-\title{FluView virological data from clinical labs}
+\title{CDC FluView flu tests from clinical labs}
 \usage{
 pub_fluview_clinical(
   regions,
-  epiweeks,
+  epiweeks = "*",
   ...,
   issues = NULL,
   lag = NULL,
@@ -18,7 +18,7 @@ pub_fluview_clinical(
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch in the form
 epirange(startweek,endweek), where startweek and endweek are of the form
-YYYYWW (string or numeric).}
+YYYYWW (string or numeric). Defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 

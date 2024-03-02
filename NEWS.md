@@ -1,3 +1,43 @@
+# epidatr 1.1.1
+
+## Changes
+
+## Features
+
+## Patches
+- Fixed failure when passing `as_of` values in `Date` format to
+  `pub_covidcast` while caching is enabled (#259)
+
+# epidatr 1.1.0
+
+## Changes
+- `pub_covid_hosp_state_timeseries` now supports use of the `as_of` parameter (#209).
+- `release_date` and `latest_update` fields are now parsed as `Date`, rather
+  than as text. This change impacts several endpoints.
+- `get_auth_key` renamed to `get_api_key` (#181).
+- `get_api_key` no longer reads from R options and only uses environment variables (#217).
+- `pvt_twitter` and `pub_wiki` now use `time_type` and `time_values` args instead of mutually exclusive `dates` and `epiweeks` (#236). This matches the interface of the `pub_covidcast` endpoint.
+- Updated the default `timeout_seconds` to 15 minutes to allow large queries by default.
+## Features
+- Function reference now displays commonly-used functions first (#205).
+- Support `Date` objects passed to version arguments `as_of` and `issues` in
+  endpoints (#192, #194).
+- `clear_cache` now handles positional arguments just like `set_cache` (#197).
+- `set_api_key` now available to help persist API key environment variables (#181, #217).
+- All endpoints now support the use of "\*" as a wildcard to fetch all dates or epiweeks (#234).
+## Patches
+- Endpoints now fail when passed misspelled arguments (#187, #201).
+- `pub_fluview_meta` fixed to `fetch` the response automatically.
+- `pub_covid_hosp_state_timeseries` now correctly parses the `issue` field,
+  instead of returning a missing value (#202).
+- In `pub_fluview_meta`, `latest_issue` field is now parsed as epiweek, rather
+  than being parsed as `Date` and returning a missing value.
+- `set_cache` cache size no longer runs into integer overflow (#189).
+- Improve line-wrapping of warning messages (#191).
+- Fix documentation related to CRAN submission.
+- Fix some errors from passing "" as a key.
+- Fixed bug with NAs when parsing ints (#243).
+
 # epidatr 1.0.0
 
 - Add `set_cache` and other caching functions.

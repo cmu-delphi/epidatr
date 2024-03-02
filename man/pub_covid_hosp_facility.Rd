@@ -2,11 +2,11 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_covid_hosp_facility}
 \alias{pub_covid_hosp_facility}
-\title{COVID hospitalization data for specific facilities}
+\title{COVID hospitalizations by facility}
 \usage{
 pub_covid_hosp_facility(
   hospital_pks,
-  collection_weeks,
+  collection_weeks = "*",
   ...,
   publication_dates = NULL,
   fetch_args = fetch_args_list()
@@ -15,7 +15,8 @@ pub_covid_hosp_facility(
 \arguments{
 \item{hospital_pks}{character. Facility identifiers.}
 
-\item{collection_weeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{collection_weeks}{\code{\link{timeset}}. Dates (corresponding to epiweeks) to
+fetch. Defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
@@ -44,6 +45,11 @@ report annually.
 pub_covid_hosp_facility(
   hospital_pks = "100075",
   collection_weeks = epirange(20200101, 20200501)
+)
+
+pub_covid_hosp_facility(
+  hospital_pks = "100075",
+  collection_weeks = epirange(202001, 202005)
 )
 }
 }

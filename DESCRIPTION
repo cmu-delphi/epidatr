@@ -1,9 +1,8 @@
 Package: epidatr
 Type: Package
 Title: Client for Delphi's 'Epidata' API
-Version: 1.0.0
-Date: 2023-09-11
-Authors@R: 
+Version: 1.1.1
+Authors@R:
   c(
     person("Logan", "Brooks", email = "lcbrooks@andrew.cmu.edu", role = c("aut")),
     person("Dmitry", "Shemetov", email = "dshemeto@andrew.cmu.edu", role = c("aut")),
@@ -35,14 +34,18 @@ Imports:
     MMWRweek,
     purrr,
     openssl,
+    rappdirs,
     readr,
     tibble,
+    usethis,
     xml2
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests:
     dplyr,
     ggplot2,
     knitr,
+    maps,
+    mapproj,
     rmarkdown,
     rlang,
     testthat (>= 3.1.5),
@@ -50,7 +53,7 @@ Suggests:
 VignetteBuilder: knitr
 Language: en-US
 Config/testthat/edition: 3
-Collate: 
+Collate:
     'auth.R'
     'avail_endpoints.R'
     'cache.R'

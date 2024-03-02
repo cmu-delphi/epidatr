@@ -2,16 +2,16 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_cdc}
 \alias{pvt_cdc}
-\title{CDC page hits}
+\title{CDC total and by topic webpage visits}
 \usage{
-pvt_cdc(auth, locations, epiweeks, fetch_args = fetch_args_list())
+pvt_cdc(auth, locations, epiweeks = "*", fetch_args = fetch_args_list())
 }
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
 
 \item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.
 See \code{fetch_args_list()} for details.}

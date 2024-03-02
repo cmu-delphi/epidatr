@@ -2,14 +2,14 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_nidss_dengue}
 \alias{pub_nidss_dengue}
-\title{NIDSS dengue data}
+\title{NIDSS dengue cases (Taiwan)}
 \usage{
-pub_nidss_dengue(locations, epiweeks, fetch_args = fetch_args_list())
+pub_nidss_dengue(locations, epiweeks = "*", fetch_args = fetch_args_list())
 }
 \arguments{
 \item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }

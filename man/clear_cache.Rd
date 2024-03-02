@@ -4,19 +4,16 @@
 \alias{clear_cache}
 \title{Manually reset the cache, deleting all currently saved data and starting afresh}
 \usage{
-clear_cache(disable = FALSE, ...)
+clear_cache(..., disable = FALSE)
 }
 \arguments{
-\item{disable}{instead of setting a new cache, disable caching entirely;
-defaults to \code{FALSE}}
-
 \item{...}{
   Arguments passed on to \code{\link[=set_cache]{set_cache}}
   \describe{
     \item{\code{cache_dir}}{the directory in which the cache is stored. By default, this
-is \code{tools::R_user_dir()} if on R 4.0+, but must be specified for earlier
-versions of R. The path can be either relative or absolute. The
-environmental variable is \code{EPIDATR_CACHE_DIR}.}
+is \code{rappdirs::user_cache_dir("R", version = "epidatr")}. The path can be
+either relative or absolute. The environmental variable is
+\code{EPIDATR_CACHE_DIR}.}
     \item{\code{days}}{the maximum length of time in days to keep any particular cached
 call. By default this is \code{1}. The environmental variable is
 \code{EPIDATR_CACHE_MAX_AGE_DAYS}.}
@@ -28,7 +25,12 @@ cache directory. By default, it is \code{"logfile.txt"}. The environmental
 variable is \code{EPIDATR_CACHE_LOGFILE}.}
     \item{\code{confirm}}{whether to confirm directory creation. default is \code{TRUE};
 should only be set in non-interactive scripts}
+    \item{\code{startup}}{indicates whether the function is being called on
+startup. Affects suppressability of the messages. Default is \code{FALSE}.}
   }}
+
+\item{disable}{instead of setting a new cache, disable caching entirely;
+defaults to \code{FALSE}}
 }
 \value{
 \code{\link{NULL}} no return value, all effects are stored in the package

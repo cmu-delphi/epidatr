@@ -10,6 +10,7 @@ on:
         "**.[rR]nw",
         "**.[rR]profile",
       ]
+    workflow_dispatch:
 
 name: Style
 
