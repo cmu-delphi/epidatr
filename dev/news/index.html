@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-success me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.1</small>
+    <small class="nav-text text-success me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,8 @@
 </div>
 <div class="section level3">
 <h3 id="patches-1-1-1">Patches<a class="anchor" aria-label="anchor" href="#patches-1-1-1"></a></h3>
-<ul><li>Fixed failure when passing <code>as_of</code> values in <code>Date</code> format to <code>pub_covidcast</code> while caching is enabled (<a href="https://github.com/cmu-delphi/epidatr/issues/259" class="external-link">#259</a>)</li>
+<ul><li>Fix failure when passing <code>as_of</code> values in <code>Date</code> format to <code>pub_covidcast</code> while caching is enabled (<a href="https://github.com/cmu-delphi/epidatr/issues/259" class="external-link">#259</a>).</li>
+<li>For <code>pub_covidcast</code> data source <code>nchs-mortality</code>, parse dates as <code>epiweek</code> and expect <code>epiweek</code> inputs from user (<a href="https://github.com/cmu-delphi/epidatr/issues/260" class="external-link">#260</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
