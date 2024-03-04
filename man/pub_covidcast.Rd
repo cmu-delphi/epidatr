@@ -31,9 +31,9 @@ pub_covidcast(
 \item{time_type}{string. The temporal resolution of the data (either "day" or
 "week", depending on signal).}
 
-\item{geo_values}{character. The geographies to return. "*" fetches
-all. (See:
-\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.)}
+\item{geo_values}{character. The geographies to return. Defaults to all
+("*") geographies within requested geographic resolution (see:
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.).}
 
 \item{time_values}{\code{\link{timeset}}. Dates to fetch. Defaults to all ("*") dates.}
 

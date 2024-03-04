@@ -961,9 +961,9 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>).
 #' @param time_type string. The temporal resolution of the data (either "day" or
 #' "week", depending on signal).
-#' @param geo_values character. The geographies to return. "*" fetches
-#'   all. (See:
-#'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.)
+#' @param geo_values character. The geographies to return. Defaults to all
+#'  ("*") geographies within requested geographic resolution (see:
+#'  <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.).
 #' @param time_values [`timeset`]. Dates to fetch. Defaults to all ("*") dates.
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param as_of Date. Optionally, the as of date for the issues to fetch. If not
