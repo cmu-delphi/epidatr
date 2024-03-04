@@ -1001,13 +1001,17 @@ pub_covidcast <- function(
       missing(time_type) ||
       missing(geo_type)
   ) {
-    stop(
-      "`source`, `signals`, `time_type`, and `geo_type` are all required"
+    cli::cli_abort(
+      "`source`, `signals`, `time_type`, and `geo_type` are all required",
+      class = "epidatr__pub_covidcast__missing_required_args"
     )
   }
 
   if (sum(!is.null(issues), !is.null(lag), !is.null(as_of)) > 1) {
-    stop("`issues`, `lag`, and `as_of` are mutually exclusive")
+    cli::cli_abort(
+      "`issues`, `lag`, and `as_of` are mutually exclusive",
+      class = "epidatr__pub_covidcast__too_many_issue_params"
+    )
   }
 
   assert_character_param("data_source", source, len = 1)
