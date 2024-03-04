@@ -81,6 +81,9 @@ pak::pkg_install("epidatr")
 pak::pkg_install("cmu-delphi/epidatr@dev")
 ```
 
+Our CRAN listing is
+[here](https://cran.r-project.org/web/packages/epidatr/index.html).
+
 ### API Keys
 
 The Delphi API requires a (free) API key for full functionality. To
