@@ -518,6 +518,17 @@ test_that("pub_covid_hosp_state_timeseries supports versioned queries", {
   expect_identical(epidata_call$params$lag, NULL)
 })
 
+test_that("nchs-mortality call fails if time_type not week", {
+  expect_error(pub_covidcast(
+    source = "nchs-mortality",
+    signals = "signal",
+    time_type = "day",
+    geo_type = "state",
+    time_values = "*",
+    geo_values = "*"
+  ), class = "epidatr__nchs_week_only")
+})
+
 test_that("pub_covidcast catches missing args for args without defaults", {
   expect_no_error(pub_covidcast(
     source = "jhu-csse",
