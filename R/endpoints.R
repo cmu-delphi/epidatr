@@ -576,9 +576,10 @@ pub_covid_hosp_state_timeseries <- function(
   # Check parameters
   rlang::check_dots_empty()
 
-  if (missing(states) || missing(dates)) {
-    stop(
-      "`states` and `dates` are both required"
+  if (missing(states)) {
+    cli::cli_abort(
+      "`states` is required",
+      class = "epidatr__pub_covid_hosp_state_timeseries__missing_required_args"
     )
   }
 

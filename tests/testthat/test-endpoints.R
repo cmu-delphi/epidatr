@@ -570,3 +570,14 @@ test_that("pub_covidcast catches missing args for args without defaults", {
     class = "epidatr__pub_covidcast__missing_required_args"
   )
 })
+
+test_that("pub_covid_hosp_state_timeseries catches missing args for args without defaults", {
+  expect_no_error(pub_covid_hosp_state_timeseries(
+    states = "fl",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_error(
+    pub_covid_hosp_state_timeseries(),
+    class = "epidatr__pub_covid_hosp_state_timeseries__missing_required_args"
+  )
+})
