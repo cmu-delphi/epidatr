@@ -1025,6 +1025,13 @@ pub_covidcast <- function(
   as_of <- parse_timeset_input(as_of)
   issues <- parse_timeset_input(issues)
 
+  if (source == "nchs-mortality" && time_type != "week") {
+    cli::cli_abort(
+      "{source} data is only available at the week level",
+      class = "epidatr__nchs_week_only"
+    )
+  }
+
   create_epidata_call(
     "covidcast/",
     list(
@@ -1051,8 +1058,14 @@ pub_covidcast <- function(
           c("day", "week")
       ),
       create_epidata_field_info("geo_value", "text"),
-      create_epidata_field_info("time_value", "date"),
-      create_epidata_field_info("issue", "date"),
+      create_epidata_field_info("time_value", switch(time_type,
+        day = "date",
+        week = "epiweek"
+      )),
+      create_epidata_field_info("issue", switch(time_type,
+        day = "date",
+        week = "epiweek"
+      )),
       create_epidata_field_info("lag", "int"),
       create_epidata_field_info("value", "float"),
       create_epidata_field_info("stderr", "float"),

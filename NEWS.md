@@ -5,8 +5,10 @@
 ## Features
 
 ## Patches
-- Fixed failure when passing `as_of` values in `Date` format to
-  `pub_covidcast` while caching is enabled (#259)
+- Fix failure when passing `as_of` values in `Date` format to
+  `pub_covidcast` while caching is enabled (#259).
+- For `pub_covidcast` data source `nchs-mortality`, parse dates as `epiweek`
+  and expect `epiweek` inputs from user (#260).
 
 # epidatr 1.1.0
 
