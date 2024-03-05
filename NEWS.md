@@ -9,6 +9,8 @@
   `pub_covidcast` while caching is enabled (#259).
 - For `pub_covidcast` data source `nchs-mortality`, parse dates as `epiweek`
   and expect `epiweek` inputs from user (#260).
+- Fix failure in `pub_covidcast` when user doesn't pass `geo_values` or
+  `time_values`, even though those arguments have defaults (#268).
 
 # epidatr 1.1.0
 
