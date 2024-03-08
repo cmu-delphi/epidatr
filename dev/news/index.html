@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-success me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.3</small>
+    <small class="nav-text text-success me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.1.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,13 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.0" id="epidatr-120">epidatr 1.2.0<a class="anchor" aria-label="anchor" href="#epidatr-120"></a></h2>
+<div class="section level3">
+<h3 id="changes-1-2-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-2-0"></a></h3>
+<ul><li>Improve handling of the <code>EPIDATR_USE_CACHE</code> environment variable, allowing it to be any value convertable by <code><a href="https://rdrr.io/r/base/logical.html" class="external-link">as.logical()</a></code> and handle the case when it can’t be converted.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.1" id="epidatr-111">epidatr 1.1.1<a class="anchor" aria-label="anchor" href="#epidatr-111"></a></h2><p class="text-muted">CRAN release: 2024-03-04</p>
 <div class="section level3">
 <h3 id="changes-1-1-1">Changes<a class="anchor" aria-label="anchor" href="#changes-1-1-1"></a></h3>
@@ -83,15 +90,21 @@
 <code>get_api_key</code> no longer reads from R options and only uses environment variables (<a href="https://github.com/cmu-delphi/epidatr/issues/217" class="external-link">#217</a>).</li>
 <li>
 <code>pvt_twitter</code> and <code>pub_wiki</code> now use <code>time_type</code> and <code>time_values</code> args instead of mutually exclusive <code>dates</code> and <code>epiweeks</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/236" class="external-link">#236</a>). This matches the interface of the <code>pub_covidcast</code> endpoint.</li>
-<li>Updated the default <code>timeout_seconds</code> to 15 minutes to allow large queries by default. ## Features</li>
-<li>Function reference now displays commonly-used functions first (<a href="https://github.com/cmu-delphi/epidatr/issues/205" class="external-link">#205</a>).</li>
+<li>Updated the default <code>timeout_seconds</code> to 15 minutes to allow large queries by default.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="features-1-1-0">Features<a class="anchor" aria-label="anchor" href="#features-1-1-0"></a></h3>
+<ul><li>Function reference now displays commonly-used functions first (<a href="https://github.com/cmu-delphi/epidatr/issues/205" class="external-link">#205</a>).</li>
 <li>Support <code>Date</code> objects passed to version arguments <code>as_of</code> and <code>issues</code> in endpoints (<a href="https://github.com/cmu-delphi/epidatr/issues/192" class="external-link">#192</a>, <a href="https://github.com/cmu-delphi/epidatr/issues/194" class="external-link">#194</a>).</li>
 <li>
 <code>clear_cache</code> now handles positional arguments just like <code>set_cache</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/197" class="external-link">#197</a>).</li>
 <li>
 <code>set_api_key</code> now available to help persist API key environment variables (<a href="https://github.com/cmu-delphi/epidatr/issues/181" class="external-link">#181</a>, <a href="https://github.com/cmu-delphi/epidatr/issues/217" class="external-link">#217</a>).</li>
-<li>All endpoints now support the use of “*” as a wildcard to fetch all dates or epiweeks (<a href="https://github.com/cmu-delphi/epidatr/issues/234" class="external-link">#234</a>). ## Patches</li>
-<li>Endpoints now fail when passed misspelled arguments (<a href="https://github.com/cmu-delphi/epidatr/issues/187" class="external-link">#187</a>, <a href="https://github.com/cmu-delphi/epidatr/issues/201" class="external-link">#201</a>).</li>
+<li>All endpoints now support the use of “*” as a wildcard to fetch all dates or epiweeks (<a href="https://github.com/cmu-delphi/epidatr/issues/234" class="external-link">#234</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="patches-1-1-0">Patches<a class="anchor" aria-label="anchor" href="#patches-1-1-0"></a></h3>
+<ul><li>Endpoints now fail when passed misspelled arguments (<a href="https://github.com/cmu-delphi/epidatr/issues/187" class="external-link">#187</a>, <a href="https://github.com/cmu-delphi/epidatr/issues/201" class="external-link">#201</a>).</li>
 <li>
 <code>pub_fluview_meta</code> fixed to <code>fetch</code> the response automatically.</li>
 <li>
