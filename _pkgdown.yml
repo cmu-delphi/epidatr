@@ -1,5 +1,6 @@
-# Colors should stay consistent across epipredict & epidatr, using Carnegie
-# Red https://www.cmu.edu/brand/brand-guidelines/visual-identity/colors.html
+# Colors should stay consistent across epipredict, epiprocess, and epidatr,
+# using Carnegie Red
+# https://www.cmu.edu/brand/brand-guidelines/visual-identity/colors.html
 
 # This is to give a default value to the `mode` parameter in the
 # `pkgdown::build_site` function. This is useful when building the site locally,
@@ -15,11 +16,14 @@ template:
   bslib:
     font_scale: 1.0
     primary: "#C41230"
+    success: "#B4D43C"
     link-color: "#C41230"
 
 navbar:
   bg: primary
-  type: dark
+  type: light
+
+url: https://cmu-delphi.github.io/epidatr/
 
 home:
   links:
