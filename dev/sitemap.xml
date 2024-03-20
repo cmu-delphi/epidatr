@@ -1,222 +1,222 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/dev/DEVELOPMENT.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/DEVELOPMENT.html</loc>
   </url>
   <url>
-    <loc>/dev/LICENSE-text.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/dev/LICENSE.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/epidatr.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/articles/epidatr.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/index.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/articles/index.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/signal-discovery.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/versioned-data.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/articles/versioned-data.html</loc>
   </url>
   <url>
-    <loc>/dev/authors.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/authors.html</loc>
   </url>
   <url>
-    <loc>/dev/index.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/index.html</loc>
   </url>
   <url>
-    <loc>/dev/news/index.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/news/index.html</loc>
   </url>
   <url>
-    <loc>/dev/pull_request_template.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/pull_request_template.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/assert_character_param.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_character_param.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/assert_date_param.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_date_param.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/assert_integerish_param.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_integerish_param.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/assert_timeset_param.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_timeset_param.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/avail_endpoints.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/avail_endpoints.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/cache_epidata_call.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/cache_epidata_call.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/cache_info.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/cache_info.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/check_is_cachable.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/check_is_cachable.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/check_is_recent.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/check_is_recent.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/clear_cache.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/clear_cache.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/covidcast_epidata.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/covidcast_epidata.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/date_to_epiweek.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/date_to_epiweek.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/disable_cache.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/disable_cache.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/do_request.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/do_request.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/epidata_call.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/epidatr-package.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/epidatr-package.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/epirange.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/epirange.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/fetch_args_list.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/fetch_classic.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/fetch_classic.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/fetch_tbl.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/fetch_tbl.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/format_item.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/format_item.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/format_list.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/format_list.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/get_api_key.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/get_api_key.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/get_wildcard_equivalent_dates.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/get_wildcard_equivalent_dates.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/index.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/index.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/parse_api_week.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/parse_api_week.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/parse_signal.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/parse_signal.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_covid_hosp_facility.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_covid_hosp_facility_lookup.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility_lookup.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_covid_hosp_state_timeseries.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_state_timeseries.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_covidcast.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_covidcast_meta.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast_meta.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_delphi.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_delphi.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_dengue_nowcast.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_dengue_nowcast.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_ecdc_ili.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_ecdc_ili.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_flusurv.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_fluview.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_fluview_clinical.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview_clinical.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_fluview_meta.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview_meta.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_gft.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_gft.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_kcdc_ili.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_kcdc_ili.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_meta.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_meta.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_nidss_dengue.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_nidss_dengue.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_nidss_flu.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_nidss_flu.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_nowcast.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_nowcast.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_paho_dengue.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_paho_dengue.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pub_wiki.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pub_wiki.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pvt_cdc.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pvt_cdc.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pvt_dengue_sensors.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pvt_dengue_sensors.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pvt_ght.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pvt_ght.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pvt_meta_norostat.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pvt_meta_norostat.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pvt_norostat.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pvt_norostat.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pvt_quidel.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pvt_quidel.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pvt_sensors.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pvt_sensors.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pvt_twitter.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/pvt_twitter.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/reformat_epirange.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/reformat_epirange.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/release_bullets.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/release_bullets.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/request_impl.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/request_impl.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/request_url.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/request_url.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/set_cache.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/set_cache.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/timeset.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/timeset.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/with_base_url.html</loc>
+    <loc>https://cmu-delphi.github.io/epidatr/dev/reference/with_base_url.html</loc>
   </url>
 </urlset>
