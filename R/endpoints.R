@@ -916,6 +916,7 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
       create_epidata_field_info("mean_value", "float"),
       create_epidata_field_info("stdev_value", "float"),
       create_epidata_field_info("last_update", "int"),
+      create_epidata_field_info("min_issue", "date"),
       create_epidata_field_info("max_issue", "date"),
       create_epidata_field_info("min_lag", "int"),
       create_epidata_field_info("max_lag", "int")
