@@ -53,7 +53,7 @@ Open a release issue and then copy and follow this checklist in the issue (modif
 
 - [ ] `git pull` on `dev` branch.
 - [ ] Make sure all changes are committed and pushed.
-- [ ] Check [current CRAN check results](https://cran.rstudio.org/web/checks/check_results_epiprocess.html).
+- [ ] Check [current CRAN check results](https://cran.rstudio.org/web/checks/check_results_epidatr.html).
 - [ ] `devtools::check(".", manual = TRUE, env_vars = c(NOT_CRAN = "false"))`.
   - Aim for 10/10, no notes.
 - [ ] If check works well enough, merge to main. Otherwise open a PR to fix up.
