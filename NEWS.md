@@ -1,3 +1,14 @@
+# epidatr 1.2.0
+
+## Changes
+
+- Improve handling of the `EPIDATR_USE_CACHE` environment variable, allowing it
+  to be any value convertable by `as.logical()` and handle the case when it
+  can't be converted.
+- Support more date formats in function to convert dates to epiweeks. Use `parse_api_date` since it already supports both common formats. #276
+- `EPIDATR_USE_CACHE` only supported exactly "TRUE" before. Now it supports all logical values and includes a warning when any value that can't be converted to logical is provided. #273
+- `missing` doesn't count default values as non-missing. If a user doesn't pass `geo_values` or `time_values` (both of which default to `"*"` in `pub_covidcast`), or `dates` (in `pub_covid_hosp_state_timeseries`), the missing check fails. To avoid this, just don't check missingness of those two arguments.
+
 # epidatr 1.1.1
 
 ## Changes
@@ -5,12 +16,18 @@
 ## Features
 
 ## Patches
-- Fixed failure when passing `as_of` values in `Date` format to
-  `pub_covidcast` while caching is enabled (#259)
+
+- Fix failure when passing `as_of` values in `Date` format to
+  `pub_covidcast` while caching is enabled (#259).
+- For `pub_covidcast` data source `nchs-mortality`, parse dates as `epiweek`
+  and expect `epiweek` inputs from user (#260).
+- Fix failure in `pub_covidcast` when user doesn't pass `geo_values` or
+  `time_values`, even though those arguments have defaults (#268).
 
 # epidatr 1.1.0
 
 ## Changes
+
 - `pub_covid_hosp_state_timeseries` now supports use of the `as_of` parameter (#209).
 - `release_date` and `latest_update` fields are now parsed as `Date`, rather
   than as text. This change impacts several endpoints.
@@ -18,14 +35,18 @@
 - `get_api_key` no longer reads from R options and only uses environment variables (#217).
 - `pvt_twitter` and `pub_wiki` now use `time_type` and `time_values` args instead of mutually exclusive `dates` and `epiweeks` (#236). This matches the interface of the `pub_covidcast` endpoint.
 - Updated the default `timeout_seconds` to 15 minutes to allow large queries by default.
+
 ## Features
+
 - Function reference now displays commonly-used functions first (#205).
 - Support `Date` objects passed to version arguments `as_of` and `issues` in
   endpoints (#192, #194).
 - `clear_cache` now handles positional arguments just like `set_cache` (#197).
 - `set_api_key` now available to help persist API key environment variables (#181, #217).
 - All endpoints now support the use of "\*" as a wildcard to fetch all dates or epiweeks (#234).
+
 ## Patches
+
 - Endpoints now fail when passed misspelled arguments (#187, #201).
 - `pub_fluview_meta` fixed to `fetch` the response automatically.
 - `pub_covid_hosp_state_timeseries` now correctly parses the `issue` field,

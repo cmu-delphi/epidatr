@@ -576,9 +576,10 @@ pub_covid_hosp_state_timeseries <- function(
   # Check parameters
   rlang::check_dots_empty()
 
-  if (missing(states) || missing(dates)) {
-    stop(
-      "`states` and `dates` are both required"
+  if (missing(states)) {
+    cli::cli_abort(
+      "`states` is required",
+      class = "epidatr__pub_covid_hosp_state_timeseries__missing_required_args"
     )
   }
 
@@ -960,9 +961,9 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>).
 #' @param time_type string. The temporal resolution of the data (either "day" or
 #' "week", depending on signal).
-#' @param geo_values character. The geographies to return. "*" fetches
-#'   all. (See:
-#'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.)
+#' @param geo_values character. The geographies to return. Defaults to all
+#'  ("*") geographies within requested geographic resolution (see:
+#'  <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.).
 #' @param time_values [`timeset`]. Dates to fetch. Defaults to all ("*") dates.
 #' @param ... not used for values, forces later arguments to bind by name
 #' @param as_of Date. Optionally, the as of date for the issues to fetch. If not
@@ -999,17 +1000,19 @@ pub_covidcast <- function(
     missing(source) ||
       missing(signals) ||
       missing(time_type) ||
-      missing(geo_type) ||
-      missing(time_values) ||
-      missing(geo_values)
+      missing(geo_type)
   ) {
-    stop(
-      "`source`, `signals`, `time_type`, `geo_type`, `time_values`, and `geo_values` are all required"
+    cli::cli_abort(
+      "`source`, `signals`, `time_type`, and `geo_type` are all required",
+      class = "epidatr__pub_covidcast__missing_required_args"
     )
   }
 
   if (sum(!is.null(issues), !is.null(lag), !is.null(as_of)) > 1) {
-    stop("`issues`, `lag`, and `as_of` are mutually exclusive")
+    cli::cli_abort(
+      "`issues`, `lag`, and `as_of` are mutually exclusive",
+      class = "epidatr__pub_covidcast__too_many_issue_params"
+    )
   }
 
   assert_character_param("data_source", source, len = 1)
@@ -1024,6 +1027,13 @@ pub_covidcast <- function(
   time_values <- parse_timeset_input(time_values)
   as_of <- parse_timeset_input(as_of)
   issues <- parse_timeset_input(issues)
+
+  if (source == "nchs-mortality" && time_type != "week") {
+    cli::cli_abort(
+      "{source} data is only available at the week level",
+      class = "epidatr__nchs_week_only"
+    )
+  }
 
   create_epidata_call(
     "covidcast/",
@@ -1051,8 +1061,14 @@ pub_covidcast <- function(
           c("day", "week")
       ),
       create_epidata_field_info("geo_value", "text"),
-      create_epidata_field_info("time_value", "date"),
-      create_epidata_field_info("issue", "date"),
+      create_epidata_field_info("time_value", switch(time_type,
+        day = "date",
+        week = "epiweek"
+      )),
+      create_epidata_field_info("issue", switch(time_type,
+        day = "date",
+        week = "epiweek"
+      )),
       create_epidata_field_info("lag", "int"),
       create_epidata_field_info("value", "float"),
       create_epidata_field_info("stderr", "float"),

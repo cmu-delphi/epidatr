@@ -18,7 +18,7 @@ test_set_cache <- function(cache_dir = new_temp_dir,
 }
 
 test_that("cache set as expected", {
-  test_set_cache()
+  expect_message(test_set_cache())
   if (grepl("/", as.character(new_temp_dir))) {
     # this is what check produces
     expect_equal(cache_info()$dir, normalizePath(new_temp_dir))
@@ -38,7 +38,7 @@ test_that("cache set as expected", {
 
 # use an existing example to save, then load and compare the values
 test_that("cache saves & loads", {
-  test_set_cache()
+  expect_message(test_set_cache())
   epidata_call <- pub_covidcast(
     source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
@@ -128,7 +128,7 @@ test_that("check_is_cachable", {
       expect_false(check_is_cachable(epidata_call, fetch_args))
     }
   }
-  test_set_cache()
+  expect_message(test_set_cache())
   check_fun(expected_result = FALSE) # doesn't specify issues or as_of
   check_fun(as_of = "2020-01-01", expected_result = TRUE) # valid as_of
   check_fun(issues = "2020-01-01", expected_result = TRUE) # valid issues
@@ -178,14 +178,14 @@ test_that("check_is_cachable", {
   # cases where the cache isn't active
   disable_cache()
   check_fun(as_of = "2020-01-01", expected_result = FALSE)
-  test_set_cache()
+  expect_message(test_set_cache())
   cache_environ$epidatr_cache <- NULL
   check_fun(as_of = "2020-01-01", expected_result = FALSE)
-  test_set_cache()
+  expect_message(test_set_cache())
   check_fun(as_of = "2020-01-01", expected_result = TRUE)
 })
 
-test_set_cache()
+expect_message(test_set_cache())
 cache_environ$epidatr_cache$prune()
 clear_cache(disable = TRUE)
 rm(new_temp_dir)

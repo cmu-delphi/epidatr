@@ -37,6 +37,7 @@ Authors:
 
 Other contributors:
 \itemize{
+  \item Nat DeFries [contributor]
   \item Alex Reinhart [contributor]
   \item Daniel McDonald [contributor]
   \item Kean Ming Tan [contributor]

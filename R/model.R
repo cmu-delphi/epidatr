@@ -239,7 +239,7 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
 #' @importFrom MMWRweek MMWRweek
 #' @keywords internal
 date_to_epiweek <- function(value) {
-  date_components <- MMWRweek::MMWRweek(as.Date(as.character(value), "%Y%m%d"))
+  date_components <- MMWRweek::MMWRweek(parse_api_date(value))
   as.numeric(paste0(
     date_components$MMWRyear,
     # Pad with zeroes up to 2 digits (x -> 0x)
