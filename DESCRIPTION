@@ -40,7 +40,7 @@ Imports:
     tibble,
     usethis,
     xml2
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Suggests:
     dplyr,
     ggplot2,
