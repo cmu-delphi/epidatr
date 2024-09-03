@@ -163,10 +163,9 @@ pub_covid_hosp_facility_lookup <- function(
 #' )
 #' 
 #' pub_covid_hosp_facility(
-#'   hospital_pks = "100075",
-#'   collection_weeks = epirange(202001, 202005)
+#'   hospital_pks = "050063",
+#'   collection_weeks = epirange(20240101, 20240301)
 #' )
-#' TODO no results, and `collection_weeks` is in week format but `pub_covid_hosp_facility` expects day format
 #' }
 #' @param hospital_pks character. Facility identifiers.
 #' @param collection_weeks [`timeset`]. Dates (corresponding to epiweeks) to
@@ -1849,10 +1848,9 @@ pub_nidss_flu <- function(
 #' \dontrun{
 #' pvt_norostat(
 #'   auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"),
-#'   locations = "1",
+#'   locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
 #'   epiweeks = 201233
 #' )
-#' TODO warning no results
 #' }
 #' @param auth string. Your authentication key.
 #' @param locations character. Locations to fetch.
