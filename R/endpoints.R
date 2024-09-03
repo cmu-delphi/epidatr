@@ -161,11 +161,12 @@ pub_covid_hosp_facility_lookup <- function(
 #'   hospital_pks = "100075",
 #'   collection_weeks = epirange(20200101, 20200501)
 #' )
-#'
+#' 
 #' pub_covid_hosp_facility(
 #'   hospital_pks = "100075",
 #'   collection_weeks = epirange(202001, 202005)
 #' )
+#' TODO no results, and `collection_weeks` is in week format but `pub_covid_hosp_facility` expects day format
 #' }
 #' @param hospital_pks character. Facility identifiers.
 #' @param collection_weeks [`timeset`]. Dates (corresponding to epiweeks) to
@@ -1851,6 +1852,7 @@ pub_nidss_flu <- function(
 #'   locations = "1",
 #'   epiweeks = 201233
 #' )
+#' TODO warning no results
 #' }
 #' @param auth string. Your authentication key.
 #' @param locations character. Locations to fetch.
