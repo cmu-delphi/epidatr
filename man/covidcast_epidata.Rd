@@ -27,7 +27,7 @@ an object containing fields for every signal:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata <- covidcast_epidata()
 epidata$signals
-#> # A tibble: 443 x 3
+#> # A tibble: 451 x 3
 #>    source        signal                        short_description                
 #>    <chr>         <chr>                         <chr>                            
 #>  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~
@@ -40,7 +40,7 @@ epidata$signals
 #>  8 covid-act-now pcr_specimen_total_tests      Total number of PCR specimens te~
 #>  9 doctor-visits smoothed_cli                  Percentage of daily doctor visit~
 #> 10 doctor-visits smoothed_adj_cli              Percentage of daily doctor visit~
-#> # i 433 more rows
+#> # i 441 more rows
 }\if{html}{\out{</div>}}
 
 If you use an editor that supports tab completion, such as RStudio, type
