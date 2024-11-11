@@ -1,27 +1,13 @@
-# Colors should stay consistent across epipredict, epiprocess, and epidatr,
-# using Carnegie Red
-# https://www.cmu.edu/brand/brand-guidelines/visual-identity/colors.html
-
 # This is to give a default value to the `mode` parameter in the
 # `pkgdown::build_site` function. This is useful when building the site locally,
 # as it will default to `devel` mode. In practice, this should all be handled
 # dynamically by the CI/CD pipeline.
 development:
   mode: devel
-  version_label: success
+  version_label: danger
 
 template:
-  bootstrap: 5
-  bootswatch: cosmo
-  bslib:
-    font_scale: 1.0
-    primary: "#C41230"
-    success: "#B4D43C"
-    link-color: "#C41230"
-
-navbar:
-  bg: primary
-  type: light
+  package: delphidocs
 
 url: https://cmu-delphi.github.io/epidatr/
 
@@ -29,16 +15,17 @@ home:
   links:
     - text: Get the Python client
       href: https://github.com/cmu-delphi/epidatpy/
-    - text: View the Delphi Website
-      href: https://delphi.cmu.edu/
-    - text: Introduction to Delphi's Tooling Work
-      href: https://cmu-delphi.github.io/delphi-tooling-book/
-    - text: The epiprocess R package
-      href: https://cmu-delphi.github.io/epiprocess/
-    - text: The epipredict R package
-      href: https://cmu-delphi.github.io/epipredict/
-    - text: The epidatasets R package
-      href: https://cmu-delphi.github.io/epidatasets/
+  sidebar:
+    structure: [links, license, community, citation, authors, related, dev]
+    components:
+      related:
+        title: Delphi packages and resources
+        text: |
+          * [The epiprocess R package](https://cmu-delphi.github.io/epiprocess/)
+          * [The epipredict R package](https://cmu-delphi.github.io/epipredict/)
+          * [The epidatasets R package](https://cmu-delphi.github.io/epidatasets/)
+          * [Introduction to Delphi's Tooling Work](https://cmu-delphi.github.io/delphi-tooling-book/)
+
 
 reference:
   - title: Data source and signal discovery
