@@ -4,7 +4,6 @@
 # dynamically by the CI/CD pipeline.
 development:
   mode: devel
-  version_label: danger
 
 template:
   package: delphidocs
