@@ -117,7 +117,9 @@ pub_covidcast(
 )
 ```
 
-We can fetch a subset of states by listing out the desired locations:
+Alternatively, we can fetch the full time series for a subset of states by 
+listing out the desired locations in the `geo_value` argument and using `*`
+in the `time_values` argument:
 
 ```{r, eval = FALSE}
 # Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
@@ -128,24 +130,8 @@ pub_covidcast(
   geo_type = "state",
   time_type = "day",
   geo_values = c("pa", "ca", "fl"),
-  time_values = epirange(20210105, 20210410)
+  time_values = "*"
 )
-```
-
-We can also request data for a single location at a time, via the `geo_values` argument.
-
-```{r}
-# Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
-# signal from the COVID-19 Trends and Impact survey for Pennsylvania
-epidata <- pub_covidcast(
-  source = "fb-survey",
-  signals = "smoothed_cli",
-  geo_type = "state",
-  time_type = "day",
-  geo_values = "pa",
-  time_values = epirange(20210105, 20210410)
-)
-knitr::kable(head(epidata))
 ```
 
 ## Getting versioned data
