@@ -8,7 +8,9 @@
 <title>Client for Delphis Epidata' API • epidatr</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Open_Sans-0.4.9/font.css" rel="stylesheet">
+<link href="deps/Source_Serif_Pro-0.4.9/font.css" rel="stylesheet">
+<link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Client for Delphis Epidata' API">
 <meta name="description" content="The Delphi Epidata API provides real-time access to epidemiological surveillance data for influenza, COVID-19, and other diseases for the USA at various geographical resolutions, both from official government sources such as the Center for Disease Control (CDC) and Google Trends and private partners such as Facebook and Change Healthcare. It is built and maintained by the Carnegie Mellon University Delphi research group. To cite this API: David C. Farrow, Logan C. Brooks, Aaron Rumack, Ryan J. Tibshirani, Roni Rosenfeld (2015). Delphi Epidata API. &lt;https://github.com/cmu-delphi/delphi-epidata&gt;.">
@@ -19,11 +21,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="index.html">epidatr</a>
 
-    <small class="nav-text text-success me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,13 +43,13 @@
     <li><a class="dropdown-item" href="articles/versioned-data.html">Understanding and accessing versioned data</a></li>
   </ul>
 </li>
-<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/cmu-delphi/epidatr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 </div>
 
@@ -60,7 +62,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Delphi Epidata API</a> provides real-time access to epidemiological surveillance data for influenza, COVID-19, and other diseases from both official government sources such as the <a href="https://archive.cdc.gov/" class="external-link">Centers for Disease Control and Prevention (CDC)</a>, private partners such as <a href="https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/" class="external-link">Facebook (now Meta)</a> and <a href="https://www.changehealthcare.com/" class="external-link">Change Healthcare</a>, and other public datasets like <a href="https://console.cloud.google.com/marketplace/product/bigquery-public-datasets/covid19-search-trends" class="external-link">Google Trends</a>. It is built and maintained by the Carnegie Mellon University <a href="https://delphi.cmu.edu/" class="external-link">Delphi Research Group</a>.</p>
+<p>The <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Delphi Epidata API</a> provides real-time access to epidemiological surveillance data for influenza, COVID-19, and other diseases from both official government sources such as the <a href="https://www.cdc.gov/" class="external-link">Centers for Disease Control and Prevention (CDC)</a>, private partners such as <a href="https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/" class="external-link">Facebook (now Meta)</a> and <a href="https://www.changehealthcare.com/" class="external-link">Change Healthcare</a>, and other public datasets like <a href="https://console.cloud.google.com/marketplace/product/bigquery-public-datasets/covid19-search-trends" class="external-link">Google Trends</a>. It is built and maintained by the Carnegie Mellon University <a href="https://delphi.cmu.edu/" class="external-link">Delphi Research Group</a>.</p>
 <p>This package is designed to streamline the downloading and usage of data from the Delphi Epidata API. It provides a simple R interface to the API, including functions for downloading data, parsing the results, and converting the data into a tidy format. The API stores a historical record of all data, including corrections and updates, which is particularly useful for accurately backtesting forecasting models. We also provide packages for downstream data processing (<a href="https://github.com/cmu-delphi/epiprocess" class="external-link">epiprocess</a>) and modeling (<a href="https://github.com/cmu-delphi/epipredict" class="external-link">epipredict</a>).</p>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -106,7 +108,7 @@
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"epidatr"</span><span class="op">)</span></span>
 <span><span class="co"># Install the development version from the GitHub dev branch</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"cmu-delphi/epidatr@dev"</span><span class="op">)</span></span></code></pre></div>
-<p>Our CRAN listing is <a href="https://CRAN.R-project.org/package=epidatr" class="external-link">here</a>.</p>
+<p>Our CRAN listing is <a href="https://CRAN.R-project.org/package=epidatr/index.html" class="external-link">here</a>.</p>
 <div class="section level3">
 <h3 id="api-keys">API Keys<a class="anchor" aria-label="anchor" href="#api-keys"></a>
 </h3>
@@ -139,11 +141,6 @@
 <li><a href="https://github.com/cmu-delphi/epidatr/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/cmu-delphi/epidatr/issues" class="external-link">Report a bug</a></li>
 <li><a href="https://github.com/cmu-delphi/epidatpy/" class="external-link">Get the Python client</a></li>
-<li><a href="https://delphi.cmu.edu/" class="external-link">View the Delphi Website</a></li>
-<li><a href="https://cmu-delphi.github.io/delphi-tooling-book/" class="external-link">Introduction to Delphi's Tooling Work</a></li>
-<li><a href="https://cmu-delphi.github.io/epiprocess/" class="external-link">The epiprocess R package</a></li>
-<li><a href="https://cmu-delphi.github.io/epipredict/" class="external-link">The epipredict R package</a></li>
-<li><a href="https://cmu-delphi.github.io/epidatasets/" class="external-link">The epidatasets R package</a></li>
 </ul>
 </div>
 
@@ -174,6 +171,18 @@
 </ul>
 </div>
 
+<div class="delphi-packages-and-resources">
+<h2 data-toc-skip>Delphi packages and resources</h2>
+<ul class="list-unstyled">
+<li><ul>
+<li><a href="https://cmu-delphi.github.io/epiprocess/" class="external-link">The epiprocess R package</a></li>
+<li><a href="https://cmu-delphi.github.io/epipredict/" class="external-link">The epipredict R package</a></li>
+<li><a href="https://cmu-delphi.github.io/epidatasets/" class="external-link">The epidatasets R package</a></li>
+<li><a href="https://cmu-delphi.github.io/delphi-tooling-book/" class="external-link">Introduction to Delphi’s Tooling Work</a></li>
+</ul></li>
+</ul>
+</div>
+
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
@@ -188,11 +197,11 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Logan Brooks, Dmitry Shemetov, Samuel Gratzl, David Weber.</p>
+  <p><a href="https://delphi.cmu.edu/about/" class="external-link">About Delphi</a> • <a href="https://delphi.cmu.edu/epidemic-signals/terms-of-use/" class="external-link">Terms of Use</a> • <a href="https://docs.google.com/forms/u/1/d/e/1FAIpQLScqgT1fKZr5VWBfsaSp-DNaN03aV6EoZU4YljIzHJ1Wl_zmtg/viewform" class="external-link">Contact Us</a> • <a href="https://github.com/cmu-delphi/" class="external-link">Delphi GitHub</a> • <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Epidata API</a></p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>epidatr</p>
 </div>
 
     </footer>
