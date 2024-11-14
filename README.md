@@ -16,8 +16,7 @@ The [Delphi Epidata API](https://cmu-delphi.github.io/delphi-epidata/)
 provides real-time access to epidemiological surveillance data for
 influenza, COVID-19, and other diseases from both official government
 sources such as the [Centers for Disease Control and Prevention
-(CDC)](https://data.cdc.gov/), private partners
-such as [Facebook (now
+(CDC)](https://www.cdc.gov/), private partners such as [Facebook (now
 Meta)](https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/)
 and [Change Healthcare](https://www.changehealthcare.com/), and other
 public datasets like [Google

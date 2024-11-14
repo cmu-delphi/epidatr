@@ -16,7 +16,6 @@ env
 /doc/
 /Meta/
 .secrets
-epidatr.Rproj
 renv.lock
 renv/
 .Rprofile
