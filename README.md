@@ -16,7 +16,7 @@ The [Delphi Epidata API](https://cmu-delphi.github.io/delphi-epidata/)
 provides real-time access to epidemiological surveillance data for
 influenza, COVID-19, and other diseases from both official government
 sources such as the [Centers for Disease Control and Prevention
-(CDC)](https://archive.cdc.gov/), private partners
+(CDC)](https://www.cdc.gov/datastatistics/index.html), private partners
 such as [Facebook (now
 Meta)](https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/)
 and [Change Healthcare](https://www.changehealthcare.com/), and other
@@ -82,7 +82,7 @@ pak::pkg_install("cmu-delphi/epidatr@dev")
 ```
 
 Our CRAN listing is
-[here](https://CRAN.R-project.org/package=epidatr).
+[here](https://cran.r-project.org/web/packages/epidatr/index.html).
 
 ### API Keys
 
