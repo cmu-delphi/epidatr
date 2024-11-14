@@ -26,7 +26,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       DELPHI_EPIDATA_KEY: ${{ secrets.SECRET_EPIDATR_GHACTIONS_DELPHI_EPIDATA_KEY }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -50,9 +50,9 @@ jobs:
         run: |
           target_ref <- "${{ github.event_name == 'pull_request' && github.base_ref || github.ref }}"
           override <- if (target_ref == "main" || target_ref == "refs/heads/main") {
-            list(development = list(mode = "release", version_label = "light"))
+            list(development = list(mode = "release"))
           } else if (target_ref == "dev" || target_ref == "refs/heads/dev") {
-            list(development = list(mode = "devel", version_label = "success"))
+            list(development = list(mode = "devel"))
           } else {
             stop("Unexpected target_ref: ", target_ref)
           }
@@ -65,7 +65,7 @@ jobs:
 
       - name: Deploy to GitHub pages 🚀
         if: github.event_name != 'pull_request'
-        uses: JamesIves/github-pages-deploy-action@v4.4.1
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           clean: false
           branch: gh-pages
