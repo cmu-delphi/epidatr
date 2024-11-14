@@ -163,8 +163,8 @@ pub_covid_hosp_facility_lookup <- function(
 #' )
 #'
 #' pub_covid_hosp_facility(
-#'   hospital_pks = "100075",
-#'   collection_weeks = epirange(202001, 202005)
+#'   hospital_pks = "050063",
+#'   collection_weeks = epirange(20240101, 20240301)
 #' )
 #' }
 #' @param hospital_pks character. Facility identifiers.
@@ -1848,7 +1848,7 @@ pub_nidss_flu <- function(
 #' \dontrun{
 #' pvt_norostat(
 #'   auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"),
-#'   locations = "1",
+#'   locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
 #'   epiweeks = 201233
 #' )
 #' }

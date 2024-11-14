@@ -48,8 +48,8 @@ pub_covid_hosp_facility(
 )
 
 pub_covid_hosp_facility(
-  hospital_pks = "100075",
-  collection_weeks = epirange(202001, 202005)
+  hospital_pks = "050063",
+  collection_weeks = epirange(20240101, 20240301)
 )
 }
 }
