@@ -30,26 +30,6 @@ check_is_recent <- function(dates, max_age) {
   (!is.null(dates) && any(dates >= threshold))
 }
 
-#' helper that checks whether a call is actually cachable
-#'
-#' @keywords internal
-check_is_cachable <- function(epidata_call, fetch_args) {
-  as_of_cachable <- (!is.null(epidata_call$params$as_of) && !identical(epidata_call$params$as_of, "*"))
-  issues_cachable <- (!is.null(epidata_call$params$issues) && all(!identical(epidata_call$params$issues, "*")))
-  is_cachable <- (
-    !is.null(cache_environ$epidatr_cache) &&
-      (as_of_cachable || issues_cachable) &&
-      !(fetch_args$dry_run) &&
-      is.null(fetch_args$base_url) &&
-      !fetch_args$debug &&
-      fetch_args$format_type == "json" &&
-      is.null(fetch_args$fields) &&
-      !fetch_args$disable_date_parsing &&
-      !fetch_args$disable_data_frame_parsing
-  )
-  return(is_cachable)
-}
-
 #' helper to convert a date wildcard ("*") to an appropriate epirange
 #'
 #' @keywords internal
