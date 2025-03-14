@@ -27,7 +27,14 @@ an object containing fields for every signal:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata <- covidcast_epidata()
 epidata$signals
-#> # A tibble: 451 x 3
+#> Warning: Automatic coercion from logical to character was deprecated in purrr 1.0.0.
+#> i Please use an explicit call to `as.character()` within `map_chr()` instead.
+#> i The deprecated feature was likely used in the epidatr package.
+#>   Please report the issue at <https://github.com/cmu-delphi/epidatr/issues>.
+#> This warning is displayed once every 8 hours.
+#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+#> generated.
+#> # A tibble: 468 x 3
 #>    source        signal                        short_description                
 #>    <chr>         <chr>                         <chr>                            
 #>  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~
@@ -36,11 +43,11 @@ epidata$signals
 #>  4 chng          smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits    
 #>  5 chng          smoothed_outpatient_flu       Estimated percentage of outpatie~
 #>  6 chng          smoothed_adj_outpatient_flu   Estimated percentage of outpatie~
-#>  7 covid-act-now pcr_specimen_positivity_rate  Proportion of PCR specimens test~
-#>  8 covid-act-now pcr_specimen_total_tests      Total number of PCR specimens te~
-#>  9 doctor-visits smoothed_cli                  Percentage of daily doctor visit~
-#> 10 doctor-visits smoothed_adj_cli              Percentage of daily doctor visit~
-#> # i 441 more rows
+#>  7 chng          7dav_inpatient_covid          Ratio of inpatient hospitalizati~
+#>  8 chng          7dav_outpatient_covid         Ratio of outpatient doctor visit~
+#>  9 covid-act-now pcr_specimen_positivity_rate  Proportion of PCR specimens test~
+#> 10 covid-act-now pcr_specimen_total_tests      Total number of PCR specimens te~
+#> # i 458 more rows
 }\if{html}{\out{</div>}}
 
 If you use an editor that supports tab completion, such as RStudio, type
