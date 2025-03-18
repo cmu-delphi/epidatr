@@ -45,6 +45,7 @@ Imports:
     purrr,
     rappdirs,
     readr,
+    rlang,
     tibble,
     usethis,
     xml2
@@ -54,7 +55,6 @@ Suggests:
     knitr,
     mapproj,
     maps,
-    rlang,
     rmarkdown,
     testthat (>= 3.1.5),
     withr
