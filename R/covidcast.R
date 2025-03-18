@@ -69,14 +69,18 @@ parse_source <- function(source, base_url) {
 #' @export
 as_tibble.covidcast_data_signal_list <- function(x, ...) {
   tib <- list()
-  fields <- c(
-    "source", "signal", "name", "active", "short_description",
+  chr_fields <- c(
+    "source", "signal", "name", "short_description",
     "description", "time_type", "time_label", "value_label",
     "format", "category", "high_values_are"
   )
-  for (field in fields) {
+  for (field in chr_fields ) {
     tib[[field]] <- unname(map_chr(x, field, .default = ""))
   }
+  lgl_fields <- c("active")
+  for (field in lgl_fields ) {
+    tib[[field]] <- unname(map_lgl(x, field, .default = ""))
+  }  
   as_tibble(tib)
 }
 
