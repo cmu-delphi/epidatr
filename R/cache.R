@@ -170,7 +170,7 @@ set_cache <- function(cache_dir = NULL,
       max_age = days * 24 * 60 * 60,
       logfile = file.path(cache_dir, logfile)
     )
-    cache_environ$cache_args <- list2(
+    cache_environ$cache_args <- list(
       cache_dir = cache_dir,
       days = days,
       max_size = max_size,
@@ -202,6 +202,7 @@ set_cache <- function(cache_dir = NULL,
 #'   [`disable_cache`] to only disable without deleting, and [`cache_info`]
 #' @export
 #' @import cachem
+#' @importFrom rlang dots_list inject
 clear_cache <- function(..., disable = FALSE) {
   if (any(!is.na(cache_environ$epidatr_cache))) {
     cache_environ$epidatr_cache$destroy()
@@ -210,7 +211,7 @@ clear_cache <- function(..., disable = FALSE) {
   } else {
     recovered_args <- list()
   }
-  args <- rlang::dots_list(
+  args <- dots_list(
     ...,
     confirm = FALSE,
     !!!recovered_args,
@@ -220,7 +221,7 @@ clear_cache <- function(..., disable = FALSE) {
   if (disable) {
     cache_environ$epidatr_cache <- NULL
   } else {
-    rlang::inject(set_cache(!!!args))
+    inject(set_cache(!!!args))
   }
 }
 
