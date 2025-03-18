@@ -1,7 +1,7 @@
 Type: Package
 Package: epidatr
 Title: Client for Delphi's 'Epidata' API
-Version: 1.2.0
+Version: 1.2.1
 Authors@R: c(
     person("Logan", "Brooks", , "lcbrooks@andrew.cmu.edu", role = "aut"),
     person("Dmitry", "Shemetov", , "dshemeto@andrew.cmu.edu", role = "aut"),

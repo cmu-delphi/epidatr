@@ -1,3 +1,7 @@
+# epidatr 1.2.1
+## Patches
+- Fix so that `covidcast_epidata()` will still print if fields are missing.
+
 # epidatr 1.2.0
 
 ## Changes
