@@ -154,6 +154,8 @@ print.epidata_call <- function(x, ...) {
 #' @param debug if `TRUE`, return the raw response from the API
 #' @param format_type the format to request from the API, one of classic, json,
 #'   csv; this is only used by `fetch_debug`, and by default is `"json"`
+#' @param refresh_cache if `TRUE`, ignore the cache, fetch the data from the
+#' API, and update the cache, if it is enabled
 #' @return A `fetch_args` object containing all the specified options
 #' @export
 #' @aliases fetch_args
@@ -168,7 +170,8 @@ fetch_args_list <- function(
     base_url = NULL,
     dry_run = FALSE,
     debug = FALSE,
-    format_type = c("json", "classic", "csv")) {
+    format_type = c("json", "classic", "csv"),
+    refresh_cache = FALSE) {
   rlang::check_dots_empty()
 
   assert_character(fields, null.ok = TRUE, any.missing = FALSE)
@@ -180,6 +183,7 @@ fetch_args_list <- function(
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
   assert_logical(debug, null.ok = FALSE, len = 1L, any.missing = FALSE)
   format_type <- match.arg(format_type)
+  assert_logical(refresh_cache, null.ok = FALSE, len = 1L, any.missing = FALSE)
 
   structure(
     list(
@@ -191,7 +195,8 @@ fetch_args_list <- function(
       base_url = base_url,
       dry_run = dry_run,
       debug = debug,
-      format_type = format_type
+      format_type = format_type,
+      refresh_cache = refresh_cache
     ),
     class = "fetch_args"
   )
@@ -219,6 +224,9 @@ print.fetch_args <- function(x, ...) {
 #' - For `fetch`: a tibble or a JSON-like list
 #' @export
 #' @include cache.R
+#' @importFrom openssl md5
+#' @importFrom cachem is.key_missing
+#' @importFrom tibble tibble as_tibble
 #'
 fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(epidata_call, "epidata_call"))
@@ -228,48 +236,49 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     epidata_call <- with_base_url(epidata_call, fetch_args$base_url)
   }
 
+  # Just display the epidata_call object, don't fetch the data
   if (fetch_args$dry_run) {
     return(epidata_call)
   }
 
+  # Just display the raw response from the API, don't parse
   if (fetch_args$debug) {
     return(fetch_debug(epidata_call, fetch_args))
   }
 
-  cache_epidata_call(epidata_call, fetch_args = fetch_args)
-}
+  # Check if the data is cachable
+  is_cachable <- check_is_cachable(epidata_call, fetch_args)
+  if (is_cachable) {
+    check_for_cache_warnings(epidata_call, fetch_args)
 
-#' Fetches the data and returns a tibble
-#' @rdname fetch_tbl
-#'
-#' @param epidata_call an instance of `epidata_call`
-#' @param fetch_args a `fetch_args` object
-#' @importFrom readr read_csv
-#' @importFrom httr stop_for_status content
-#' @importFrom tibble as_tibble tibble
-#' @return
-#' - For `fetch_tbl`: a [`tibble::tibble`]
-#' @keywords internal
-fetch_tbl <- function(epidata_call, fetch_args = fetch_args_list()) {
-  stopifnot(inherits(epidata_call, "epidata_call"))
-  stopifnot(inherits(fetch_args, "fetch_args"))
-
-  if (epidata_call$only_supports_classic) {
-    cli::cli_abort(
-      c(
-        "This endpoint only supports the classic message format, due to non-standard behavior.
-        Use fetch_classic instead."
-      ),
-      epidata_call = epidata_call,
-      class = "only_supports_classic_format"
-    )
+    # Check if the data is in the cache
+    target <- request_url(epidata_call)
+    hashed <- md5(target)
+    cached <- cache_environ$epidatr_cache$get(hashed)
+    if (!is.key_missing(cached)) {
+      return(cached[[1]]) # extract `fetched` from `fetch()`, no metadata
+    }
   }
 
-  response_content <- fetch_classic(epidata_call, fetch_args = fetch_args)
-  if (fetch_args$return_empty && length(response_content) == 0) {
-    return(tibble())
+  # Need to actually get the data, since its either not in the cache or we're not caching
+  runtime <- system.time(if (epidata_call$only_supports_classic) {
+    fetch_args[["disable_data_frame_parsing"]] <- TRUE
+    fetched <- fetch_classic(epidata_call, fetch_args)
+  } else {
+    response_content <- fetch_classic(epidata_call, fetch_args = fetch_args)
+    if (fetch_args$return_empty && length(response_content) == 0) {
+      fetched <- tibble()
+    } else {
+      fetched <- parse_data_frame(epidata_call, response_content, fetch_args$disable_date_parsing) %>% as_tibble()
+    }
+  })
+
+  # Add it to the cache if appropriate
+  if (is_cachable || (fetch_args$refresh_cache && is_cache_enabled())) {
+    cache_environ$epidatr_cache$set(hashed, list(fetched, Sys.time(), runtime))
   }
-  return(parse_data_frame(epidata_call, response_content, fetch_args$disable_date_parsing) %>% as_tibble())
+
+  return(fetched)
 }
 
 #' Fetches the data, raises on epidata errors, and returns the results as a
@@ -303,6 +312,7 @@ fetch_classic <- function(epidata_call, fetch_args = fetch_args_list()) {
       )
     }
   }
+
   if (response_content$message != "success") {
     cli::cli_warn(
       c(
@@ -311,6 +321,7 @@ fetch_classic <- function(epidata_call, fetch_args = fetch_args_list()) {
       class = "epidata_warning"
     )
   }
+
   return(response_content$epidata)
 }
 

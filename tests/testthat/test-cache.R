@@ -1,7 +1,3 @@
-test_that("basic cache setup", {
-  expect_true(is.null(cache_environ$epidatr_cache))
-})
-
 new_temp_dir <- tempdir()
 test_set_cache <- function(cache_dir = new_temp_dir,
                            days = 1,
@@ -17,8 +13,17 @@ test_set_cache <- function(cache_dir = new_temp_dir,
   )
 }
 
+test_that("basic cache setup", {
+  # Should be off at the start
+  expect_true(!is_cache_enabled())
+})
+
 test_that("cache set as expected", {
+  # Setup a new cache
   expect_message(test_set_cache())
+  # Delete cache files after the test
+  withr::defer(clear_cache(disable = TRUE))
+
   if (grepl("/", as.character(new_temp_dir))) {
     # this is what check produces
     expect_equal(cache_info()$dir, normalizePath(new_temp_dir))
@@ -33,12 +38,15 @@ test_that("cache set as expected", {
   expect_equal(cache_info()$logfile, file.path(new_temp_dir, "logfile.txt"))
   expect_equal(cache_info()$evict, "lru")
   expect_equal(cache_info()$max_n, Inf)
-  disable_cache()
 })
 
 # use an existing example to save, then load and compare the values
 test_that("cache saves & loads", {
+  # Setup a new cache
   expect_message(test_set_cache())
+  # Delete cache files after the test
+  withr::defer(clear_cache(disable = TRUE))
+
   epidata_call <- pub_covidcast(
     source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
@@ -49,23 +57,25 @@ test_that("cache saves & loads", {
     as_of = "2022-01-01",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
+  httr_content_called_count <- 0
   local_mocked_bindings(
     request_impl = function(...) NULL,
     .package = "epidatr"
   )
   local_mocked_bindings(
     # see generate_test_data.R
-    content = function(...) readRDS(testthat::test_path("data/test-classic.rds")),
+    content = function(...) {
+      httr_content_called_count <<- httr_content_called_count + 1
+      readRDS(testthat::test_path("data/test-classic.rds"))
+    },
     .package = "httr"
   )
-  # testing the cache_info
 
   first_call <- epidata_call %>% fetch()
-  # compare cached call w/non cached (and make sure it's fetching from the cache)
-  rlang::reset_warning_verbosity("using the cache")
-  expect_warning(cache_call <- epidata_call %>% fetch(), class = "cache_access")
-  rlang::reset_warning_verbosity("using the cache")
+  cache_call <- epidata_call %>% fetch()
+  expect_equal(httr_content_called_count, 1)
   expect_equal(first_call, cache_call)
+
   # and compare directly with the file saved
   # the request url hashed here is "https://api.delphi.cmu.edu/epidata/covidcast/?data_source=jhu-csse&signals=
   # confirmed_7dav_incidence_prop&geo_type=state&time_type=day&geo_values=ca%2Cfl&time_values=20200601-20200801
@@ -73,6 +83,19 @@ test_that("cache saves & loads", {
   request_hash <- "01479468989102176d7cb70374f18f1f.rds"
   direct_from_cache <- readRDS(file.path(new_temp_dir, request_hash))
   expect_equal(first_call, direct_from_cache[[1]])
+
+  # Test the empty return branch
+  expect_message(clear_cache())
+  local_mocked_bindings(
+    # see generate_test_data.R
+    content = function(...) {
+      httr_content_called_count <<- httr_content_called_count + 1
+      '{"epidata":[],"result":-2,"message":"no results"}'
+    },
+    .package = "httr"
+  )
+  expect_warning(empty_call <- epidata_call %>% fetch())
+  expect_equal(empty_call, tibble())
 })
 
 test_that("check_is_recent", {
@@ -111,6 +134,11 @@ test_that("check_is_recent", {
 })
 
 test_that("check_is_cachable", {
+  # Setup a new cache
+  expect_message(test_set_cache())
+  # Delete cache files after the test
+  withr::defer(clear_cache(disable = TRUE))
+
   check_fun <- function(..., fetch_args = fetch_args_list(), expected_result) {
     epidata_call <- pub_covidcast(
       source = "jhu-csse",
@@ -128,13 +156,14 @@ test_that("check_is_cachable", {
       expect_false(check_is_cachable(epidata_call, fetch_args))
     }
   }
-  expect_message(test_set_cache())
   check_fun(expected_result = FALSE) # doesn't specify issues or as_of
   check_fun(as_of = "2020-01-01", expected_result = TRUE) # valid as_of
   check_fun(issues = "2020-01-01", expected_result = TRUE) # valid issues
   check_fun(issues = epirange("2020-01-01", "2020-03-01"), expected_result = TRUE) # valid issues
   check_fun(as_of = "*", expected_result = FALSE) # invalid as_of
   check_fun(issues = "*", expected_result = FALSE) # invalid issues
+  # refresh_cache works
+  check_fun(as_of = "2020-01-01", fetch_args = fetch_args_list(refresh_cache = TRUE), expected_result = FALSE)
 
   # any odd fetch args mean don't use the cache
   check_fun(
@@ -183,13 +212,4 @@ test_that("check_is_cachable", {
   check_fun(as_of = "2020-01-01", expected_result = FALSE)
   expect_message(test_set_cache())
   check_fun(as_of = "2020-01-01", expected_result = TRUE)
-})
-
-expect_message(test_set_cache())
-cache_environ$epidatr_cache$prune()
-clear_cache(disable = TRUE)
-rm(new_temp_dir)
-
-test_that("cache teardown", {
-  expect_true(is.null(cache_environ$epidatr_cache))
 })

@@ -30,7 +30,7 @@ URL: https://cmu-delphi.github.io/epidatr/,
     https://cmu-delphi.github.io/delphi-epidata/,
     https://github.com/cmu-delphi/epidatr
 BugReports: https://github.com/cmu-delphi/epidatr/issues
-Depends: 
+Depends:
     R (>= 3.5.0)
 Imports:
     cachem,
@@ -58,9 +58,9 @@ Suggests:
     rmarkdown,
     testthat (>= 3.1.5),
     withr
-VignetteBuilder: 
+VignetteBuilder:
     knitr
-Remotes: 
+Remotes:
     cmu-delphi/delphidocs
 Config/Needs/website: cmu-delphi/delphidocs
 Config/testthat/edition: 3
