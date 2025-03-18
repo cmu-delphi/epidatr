@@ -61,7 +61,8 @@ makes calls to the Epidata API.</p>
 <span>  base_url <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  dry_run <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  debug <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  format_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"json"</span>, <span class="st">"classic"</span>, <span class="st">"csv"</span><span class="op">)</span></span>
+<span>  format_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"json"</span>, <span class="st">"classic"</span>, <span class="st">"csv"</span><span class="op">)</span>,</span>
+<span>  refresh_cache <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -117,6 +118,11 @@ base URL <code>"https://api.delphi.cmu.edu/epidata/"</code></p></dd>
 <dt id="arg-format-type">format_type<a class="anchor" aria-label="anchor" href="#arg-format-type"></a></dt>
 <dd><p>the format to request from the API, one of classic, json,
 csv; this is only used by <code>fetch_debug</code>, and by default is <code>"json"</code></p></dd>
+
+
+<dt id="arg-refresh-cache">refresh_cache<a class="anchor" aria-label="anchor" href="#arg-refresh-cache"></a></dt>
+<dd><p>if <code>TRUE</code>, ignore the cache, fetch the data from the
+API, and update the cache, if it is enabled</p></dd>
 
 </dl></div>
     <div class="section level2">

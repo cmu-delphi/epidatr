@@ -55,6 +55,8 @@
 <code>EPIDATR_USE_CACHE</code> only supported exactly “TRUE” before. Now it supports all logical values and includes a warning when any value that can’t be converted to logical is provided. <a href="https://github.com/cmu-delphi/epidatr/issues/273" class="external-link">#273</a></li>
 <li>
 <code>missing</code> doesn’t count default values as non-missing. If a user doesn’t pass <code>geo_values</code> or <code>time_values</code> (both of which default to <code>"*"</code> in <code>pub_covidcast</code>), or <code>dates</code> (in <code>pub_covid_hosp_state_timeseries</code>), the missing check fails. To avoid this, just don’t check missingness of those two arguments.</li>
+<li>
+<code>fetch_args_list</code> now has an <code>refresh_cache</code> argument, which is <code>FALSE</code> by default.</li>
 </ul></div>
 </div>
     <div class="section level2">
