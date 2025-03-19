@@ -175,7 +175,7 @@ ggplot(epidata, aes(x = time_value, y = value)) +
   )
 ```
 
-`ggplot2` can also be used to [create choropleths](https://r-graphics.org/recipe-miscgraph-choropleth).
+`ggplot2` can also be used to [create choropleths](https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html).
 
 
 ```{r, class.source = "fold-hide", out.height="65%"}
