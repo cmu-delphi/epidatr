@@ -42,7 +42,8 @@ test_that("fetch_args", {
         base_url = NULL,
         dry_run = FALSE,
         debug = FALSE,
-        format_type = "json"
+        format_type = "json",
+        refresh_cache = FALSE
       ),
       class = "fetch_args"
     )
@@ -57,7 +58,8 @@ test_that("fetch_args", {
       base_url = "https://example.com",
       dry_run = TRUE,
       debug = TRUE,
-      format_type = "classic"
+      format_type = "classic",
+      refresh_cache = TRUE
     ),
     structure(
       list(
@@ -69,14 +71,16 @@ test_that("fetch_args", {
         base_url = "https://example.com",
         dry_run = TRUE,
         debug = TRUE,
-        format_type = "classic"
+        format_type = "classic",
+        refresh_cache = TRUE
       ),
       class = "fetch_args"
     )
   )
 })
 
-test_that("fetch and fetch_tbl", {
+test_that("fetch non-classic works", {
+  # only_supports_classic is FALSE
   epidata_call <- pub_covidcast(
     source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
@@ -95,22 +99,20 @@ test_that("fetch and fetch_tbl", {
     content = function(...) readRDS(testthat::test_path("data/test-classic.rds")),
     .package = "httr"
   )
-
-  tbl_out <- epidata_call %>% fetch_tbl()
-  out <- epidata_call %>% fetch()
-  expect_identical(out, tbl_out)
-
   local_mocked_bindings(
     # see generate_test_data.R
     content = function(...) readRDS(testthat::test_path("data/test-narrower-fields.rds")),
     .package = "httr"
   )
+
   # testing that the fields fill as expected
+  out <- epidata_call %>% fetch()
   res <- epidata_call %>% fetch(fetch_args_list(fields = c("time_value", "value")))
-  expect_equal(res, tbl_out[c("time_value", "value")])
+  expect_equal(res, out[c("time_value", "value")])
 })
 
-test_that("fetch_tbl warns on non-success", {
+test_that("fetch non-classic passes along api warnings", {
+  # only_supports_classic is FALSE
   epidata_call <- pub_covidcast(
     source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
@@ -142,14 +144,14 @@ test_that("fetch_tbl warns on non-success", {
     .package = "jsonlite"
   )
 
-  expect_warning(epidata_call %>% fetch_tbl(),
+  expect_warning(epidata_call %>% fetch(),
     regexp = paste0("epidata warning: `", artificial_warning, "`"),
     fixed = TRUE
   )
 })
 
-test_that("classic only fetch", {
-  # delphi is an example endpoint that only suports the classic call
+test_that("fetch classic works", {
+  # only_supports_classic is TRUE
   epidata_call <- pub_delphi(
     system = "ec",
     epiweek = 201501,
@@ -160,13 +162,10 @@ test_that("classic only fetch", {
     content = function(...) readRDS(testthat::test_path("data/test-classic-only.rds")),
     .package = "httr"
   )
-  # make sure that fetch actually uses the classic method on endpoints that only support the classic
-  fetch_out <- epidata_call %>% fetch()
-  fetch_classic_out <- epidata_call %>% fetch_classic()
-  expect_identical(fetch_out, fetch_classic_out)
 
-  # making sure that fetch_tbl and throws the expected error on classic only
-  expect_error(epidata_call %>% fetch_tbl(), class = "only_supports_classic_format")
+  # make sure the return from this is a list
+  fetch_out <- epidata_call %>% fetch()
+  expect_true(inherits(fetch_out, "list"))
 })
 
 test_that("create_epidata_call basic behavior", {

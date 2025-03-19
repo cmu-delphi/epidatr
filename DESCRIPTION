@@ -1,7 +1,7 @@
 Type: Package
 Package: epidatr
 Title: Client for Delphi's 'Epidata' API
-Version: 1.2.0
+Version: 1.2.1
 Authors@R: c(
     person("Logan", "Brooks", , "lcbrooks@andrew.cmu.edu", role = "aut"),
     person("Dmitry", "Shemetov", , "dshemeto@andrew.cmu.edu", role = "aut"),
@@ -30,7 +30,7 @@ URL: https://cmu-delphi.github.io/epidatr/,
     https://cmu-delphi.github.io/delphi-epidata/,
     https://github.com/cmu-delphi/epidatr
 BugReports: https://github.com/cmu-delphi/epidatr/issues
-Depends: 
+Depends:
     R (>= 3.5.0)
 Imports:
     cachem,
@@ -45,6 +45,7 @@ Imports:
     purrr,
     rappdirs,
     readr,
+    rlang,
     tibble,
     usethis,
     xml2
@@ -54,13 +55,12 @@ Suggests:
     knitr,
     mapproj,
     maps,
-    rlang,
     rmarkdown,
     testthat (>= 3.1.5),
     withr
-VignetteBuilder: 
+VignetteBuilder:
     knitr
-Remotes: 
+Remotes:
     cmu-delphi/delphidocs
 Config/Needs/website: cmu-delphi/delphidocs
 Config/testthat/edition: 3

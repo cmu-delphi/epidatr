@@ -38,9 +38,9 @@ environment
 }
 \description{
 Deletes the current cache and resets a new cache. Deletes local data! If you
-are using a session unique cache, you will have to pass the arguments you
-used for \code{set_cache} earlier, otherwise the system-wide \code{.Renviron}-based
-defaults will be used.
+are using a session unique cache, the previous settings will be reused. If
+you pass in new \code{set_cache} arguments, they will take precedence over the
+previous settings.
 }
 \seealso{
 \code{\link{set_cache}} to start a new cache (and general caching info),

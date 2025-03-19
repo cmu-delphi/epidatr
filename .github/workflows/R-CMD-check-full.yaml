@@ -19,21 +19,26 @@ jobs:
       fail-fast: false
       matrix:
         config:
+          # Mac latest release
           - { os: macos-latest, r: "release" }
+          # Oldest R version we claim to support
+          - { os: macos-latest, r: "3.5" }
 
+          # Windows latest release
           - { os: windows-latest, r: "release" }
-          # Use 3.6 to trigger usage of RTools35
-          - { os: windows-latest, r: "3.6" }
+          # Use 3.5 to trigger usage of RTools35
+          - { os: windows-latest, r: "3.5" }
           # use 4.1 to check with rtools40's older compiler
           - { os: windows-latest, r: "4.1" }
 
+          # Ubuntu latest release
           - { os: ubuntu-latest, r: "devel", http-user-agent: "release" }
           - { os: ubuntu-latest, r: "release" }
           - { os: ubuntu-latest, r: "oldrel-1" }
           - { os: ubuntu-latest, r: "oldrel-2" }
           - { os: ubuntu-latest, r: "oldrel-3" }
           - { os: ubuntu-latest, r: "oldrel-4" }
-          # The oldest version of R we claim to support
+          # Oldest R version we claim to support
           - { os: ubuntu-latest, r: "3.5" }
 
     env:

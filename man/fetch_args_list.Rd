@@ -15,7 +15,8 @@ fetch_args_list(
   base_url = NULL,
   dry_run = FALSE,
   debug = FALSE,
-  format_type = c("json", "classic", "csv")
+  format_type = c("json", "classic", "csv"),
+  refresh_cache = FALSE
 )
 }
 \arguments{
@@ -48,6 +49,9 @@ base URL \code{"https://api.delphi.cmu.edu/epidata/"}}
 
 \item{format_type}{the format to request from the API, one of classic, json,
 csv; this is only used by \code{fetch_debug}, and by default is \code{"json"}}
+
+\item{refresh_cache}{if \code{TRUE}, ignore the cache, fetch the data from the
+API, and update the cache, if it is enabled}
 }
 \value{
 A \code{fetch_args} object containing all the specified options

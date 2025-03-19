@@ -1,3 +1,7 @@
+# epidatr 1.2.1
+## Patches
+- Fix so that `covidcast_epidata()` will still print if fields are missing.
+
 # epidatr 1.2.0
 
 ## Changes
@@ -8,6 +12,7 @@
 - Support more date formats in function to convert dates to epiweeks. Use `parse_api_date` since it already supports both common formats. #276
 - `EPIDATR_USE_CACHE` only supported exactly "TRUE" before. Now it supports all logical values and includes a warning when any value that can't be converted to logical is provided. #273
 - `missing` doesn't count default values as non-missing. If a user doesn't pass `geo_values` or `time_values` (both of which default to `"*"` in `pub_covidcast`), or `dates` (in `pub_covid_hosp_state_timeseries`), the missing check fails. To avoid this, just don't check missingness of those two arguments.
+- `fetch_args_list` now has an `refresh_cache` argument, which is `FALSE` by default.
 
 # epidatr 1.1.1
 
