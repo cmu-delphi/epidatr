@@ -15,8 +15,8 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/assert_integerish_param.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/assert_timeset_param.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/avail_endpoints.html</loc></url>
-<url><loc>https://cmu-delphi.github.io/epidatr/reference/cache_epidata_call.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/cache_info.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/reference/check_for_cache_warnings.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/check_is_cachable.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/check_is_recent.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/clear_cache.html</loc></url>
@@ -29,12 +29,12 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/epirange.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/fetch_classic.html</loc></url>
-<url><loc>https://cmu-delphi.github.io/epidatr/reference/fetch_tbl.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/format_item.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/format_list.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/get_api_key.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/get_wildcard_equivalent_dates.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/index.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/reference/is_cache_enabled.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/parse_api_week.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/parse_signal.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/pub_covid_hosp_facility.html</loc></url>
