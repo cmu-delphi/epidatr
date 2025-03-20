@@ -44,7 +44,6 @@ Imports:
     openssl,
     purrr,
     rappdirs,
-    readr,
     rlang,
     tibble,
     usethis,
@@ -55,6 +54,7 @@ Suggests:
     knitr,
     mapproj,
     maps,
+    readr,
     rmarkdown,
     testthat (>= 3.1.5),
     withr
