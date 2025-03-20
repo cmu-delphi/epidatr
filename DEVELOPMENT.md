@@ -73,6 +73,7 @@ Open a release issue and then copy and follow this checklist in the issue (modif
 
 Submit to CRAN:
 
+- [ ] remove `Remotes` from the `DESCRIPTION`, as CRAN doesn't support it.
 - [ ] `devtools::submit_cran()`.
 - [ ] Maintainer approves email.
 
