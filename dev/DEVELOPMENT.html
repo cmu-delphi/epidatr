@@ -108,7 +108,8 @@
 <li><label><input type="checkbox">Update <code>cran-comments.md</code></label></li>
 <li><label><input type="checkbox">PR with any changes (and go through the list again) into <code>dev</code> and run through the list again.</label></li>
 </ul><p>Submit to CRAN:</p>
-<ul class="task-list"><li><label><input type="checkbox"><code><a href="https://devtools.r-lib.org/reference/submit_cran.html" class="external-link">devtools::submit_cran()</a></code>.</label></li>
+<ul class="task-list"><li><label><input type="checkbox">remove <code>Remotes</code> from the <code>DESCRIPTION</code>, as CRAN doesn’t support it.</label></li>
+<li><label><input type="checkbox"><code><a href="https://devtools.r-lib.org/reference/submit_cran.html" class="external-link">devtools::submit_cran()</a></code>.</label></li>
 <li><label><input type="checkbox">Maintainer approves email.</label></li>
 </ul><p>Wait for CRAN…</p>
 <ul class="task-list"><li><label><input type="checkbox">If accepted <span class="emoji" data-emoji="tada">🎉</span>, move to next steps. If rejected, fix and resubmit.</label></li>
