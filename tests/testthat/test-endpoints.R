@@ -127,6 +127,12 @@ test_that("basic_epidata_call", {
     epiweeks = epirange(201201, 202001),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
+  expect_no_error(pub_rvdss(
+    geo_type = "nation",
+    time_values = epirange(20200601, 20200801),
+    geo_values = "ca",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ) %>% request_url())
   expect_no_error(pvt_sensors(
     auth = "yourkey",
     names = "sar3",
@@ -325,6 +331,13 @@ test_that("endoints accept wildcard for date parameter", {
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
+  expect_no_error(call <- pub_rvdss(
+    geo_type = "province",
+    time_values = "*",
+    geo_values = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+
   expect_identical(call$params$epiweeks$from, 100001)
   expect_identical(call$params$epiweeks$to, 300001)
 

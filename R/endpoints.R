@@ -2036,6 +2036,155 @@ pvt_quidel <- function(
   ) %>% fetch(fetch_args = fetch_args)
 }
 
+#' Canadian respiratory virus surveillance report
+#'
+#' @description
+#' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/rvdss.html>
+#'
+#' Data is weekly.
+#'
+#' @examples
+#' \dontrun{
+#' pub_rvdss(
+#'   geo_type = "province",
+#'   geo_values = c("yu", "on"),
+#'   time_values = epirange(20200601, 20200801)
+#' )
+#' pub_rvdss(
+#'   geo_type = "province",
+#'   geo_values = "*",
+#'   time_values = epirange(20200601, 20200801)
+#' )
+#' }
+#'
+#' @param geo_type string. The geographic resolution of the data. Levels available:
+#'    "nation", "region", "province", "lab".
+#' @param geo_values character. The geographies to return. Defaults to all
+#'  ("*") geographies within requested geographic resolution. "nation" and "province"
+#'  locations use standard 2-letter abbreviations (e.g. "on"). Available regions are
+#'  "atlantic", "bc", "on", "prairies", "qc", and "territories." "lab"s are full
+#'  facility names.
+#' @param time_values [`timeset`]. Dates to fetch. Defaults to all ("*") dates.
+#' @param ... not used for values, forces later arguments to bind by name
+#' @param as_of Date. Optionally, the as of date for the issues to fetch. If not
+#'   specified, the most recent data is returned. Mutually exclusive with
+#'   `issues` or `lag`.
+#' @param issues [`timeset`]. Optionally, the issue of the data to fetch. If not
+#'   specified, the most recent issue is returned. Mutually exclusive with
+#'   `as_of` or `lag`.
+#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @return [`tibble::tibble`]
+#'
+#' @seealso [pub_covidcast_meta()], [covidcast_epidata()], [epirange()]
+#' @keywords endpoint
+#' @export
+pub_rvdss <- function(
+    geo_type,
+    geo_values = "*",
+    time_values = "*",
+    ...,
+    as_of = NULL,
+    issues = NULL,
+    fetch_args = fetch_args_list()) {
+  rlang::check_dots_empty()
+
+  # Check parameters
+  if (missing(geo_type)) {
+    cli::cli_abort(
+      "`geo_type` is required",
+      class = "epidatr__pub_rvdss__missing_required_args"
+    )
+  }
+
+  if (sum(!is.null(issues), !is.null(as_of)) > 1) {
+    cli::cli_abort(
+      "`issues` and `as_of` are mutually exclusive",
+      class = "epidatr__pub_rvdss__too_many_issue_params"
+    )
+  }
+
+  assert_character_param("geo_type", geo_type, len = 1)
+  assert_timeset_param("time_values", time_values)
+  assert_character_param("geo_values", geo_values)
+  assert_date_param("as_of", as_of, len = 1, required = FALSE)
+  assert_timeset_param("issues", issues, required = FALSE)
+  time_values <- parse_timeset_input(time_values)
+  as_of <- parse_timeset_input(as_of)
+  issues <- parse_timeset_input(issues)
+
+  create_epidata_call(
+    "covidcast/",
+    list(
+      geo_type = geo_type,
+      geo_values = geo_values,
+      time_values = time_values,
+      as_of = as_of,
+      issues = issues
+    ),
+    list(
+      # descriptive fields
+      create_epidata_field_info(
+        "geo_type",
+        "categorical",
+        categories = c("nation", "region", "province", "lab")
+      ),
+      create_epidata_field_info("geo_value", "text"),
+      create_epidata_field_info("region", "text"),
+      create_epidata_field_info(
+        "time_type",
+        "categorical",
+        categories = c("week")
+      ),
+      create_epidata_field_info("epiweek", "epiweek"), # Stored as an int in YYYYWW format
+      create_epidata_field_info("time_value", "epiweek"), # Stored as a date
+      create_epidata_field_info("issue", "epiweek"), # Stored as a date
+      create_epidata_field_info("week", "int"),
+      create_epidata_field_info("weekorder", "int"),
+      create_epidata_field_info("year", "int"),
+
+      # value fields
+      create_epidata_field_info("adv_pct_positive", "float"),
+      create_epidata_field_info("adv_positive_tests", "float"),
+      create_epidata_field_info("adv_tests", "float"),
+      create_epidata_field_info("evrv_pct_positive", "float"),
+      create_epidata_field_info("evrv_positive_tests", "float"),
+      create_epidata_field_info("evrv_tests", "float"),
+      create_epidata_field_info("flu_pct_positive", "float"),
+      create_epidata_field_info("flu_positive_tests", "float"),
+      create_epidata_field_info("flu_tests", "float"),
+      create_epidata_field_info("flua_pct_positive", "float"),
+      create_epidata_field_info("flua_positive_tests", "float"),
+      create_epidata_field_info("flua_tests", "float"),
+      create_epidata_field_info("fluah1n1pdm09_positive_tests", "float"),
+      create_epidata_field_info("fluah3_positive_tests", "float"),
+      create_epidata_field_info("fluauns_positive_tests", "float"),
+      create_epidata_field_info("flub_pct_positive", "float"),
+      create_epidata_field_info("flub_positive_tests", "float"),
+      create_epidata_field_info("flub_tests", "float"),
+      create_epidata_field_info("hcov_pct_positive", "float"),
+      create_epidata_field_info("hcov_positive_tests", "float"),
+      create_epidata_field_info("hcov_tests", "float"),
+      create_epidata_field_info("hmpv_pct_positive", "float"),
+      create_epidata_field_info("hmpv_positive_tests", "float"),
+      create_epidata_field_info("hmpv_tests", "float"),
+      create_epidata_field_info("hpiv1_positive_tests", "float"),
+      create_epidata_field_info("hpiv2_positive_tests", "float"),
+      create_epidata_field_info("hpiv3_positive_tests", "float"),
+      create_epidata_field_info("hpiv4_positive_tests", "float"),
+      create_epidata_field_info("hpiv_pct_positive", "float"),
+      create_epidata_field_info("hpiv_positive_tests", "float"),
+      create_epidata_field_info("hpiv_tests", "float"),
+      create_epidata_field_info("hpivother_positive_tests", "float"),
+      create_epidata_field_info("rsv_pct_positive", "float"),
+      create_epidata_field_info("rsv_positive_tests", "float"),
+      create_epidata_field_info("rsv_tests", "float"),
+      create_epidata_field_info("sarscov2_pct_positive", "float"),
+      create_epidata_field_info("sarscov2_positive_tests", "float"),
+      create_epidata_field_info("sarscov2_tests", "float")
+    )
+  ) %>% fetch(fetch_args = fetch_args)
+}
+
 #' Influenza and dengue digital surveillance sensors
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
