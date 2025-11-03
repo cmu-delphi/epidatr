@@ -1837,6 +1837,8 @@ pub_nidss_flu <- function(
 
 #' CDC NoroSTAT norovirus outbreaks
 #' @description
+#' \strong{This endpoind is currently inactive in the Epidata API.}
+#'
 #' This is point data only, and does not include minima or maxima.
 #'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
@@ -1853,7 +1855,8 @@ pub_nidss_flu <- function(
 #' )
 #' }
 #' @param auth string. Your authentication key.
-#' @param locations character. Locations to fetch.
+#' @param locations character. Locations to fetch. Only full state names are
+#' permitted in the list.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
