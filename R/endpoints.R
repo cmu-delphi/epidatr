@@ -3,6 +3,7 @@
 #' @description This is a central text for parameter documentation
 #'
 #' @name .epidatr_shared_params
+#' @keywords internal
 #'
 #' @param auth string. Your restricted access key (not the same as API key).
 #' @param locations character. Vector of locations to fetch.
