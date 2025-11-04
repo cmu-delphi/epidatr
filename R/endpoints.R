@@ -1015,6 +1015,9 @@ pub_flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fet
       create_epidata_field_info("rate_age_12t17", "float"),
       create_epidata_field_info("rate_age_lt18", "float"),
       create_epidata_field_info("rate_age_gte18", "float"),
+      create_epidata_field_info("rate_age_0tlt1", "float"),
+      create_epidata_field_info("rate_age_1t4", "float"),
+      create_epidata_field_info("rate_age_gte75", "float"),
       create_epidata_field_info("rate_race_white", "float"),
       create_epidata_field_info("rate_race_black", "float"),
       create_epidata_field_info("rate_race_hisp", "float"),
@@ -1022,6 +1025,8 @@ pub_flusurv <- function(locations, epiweeks, ..., issues = NULL, lag = NULL, fet
       create_epidata_field_info("rate_race_natamer", "float"),
       create_epidata_field_info("rate_sex_male", "float"),
       create_epidata_field_info("rate_sex_female", "float"),
+      create_epidata_field_info("rate_flu_a", "float"),
+      create_epidata_field_info("rate_flu_b", "float"),
       create_epidata_field_info("season", "text")
     )
   ) %>% fetch(fetch_args = fetch_args)
