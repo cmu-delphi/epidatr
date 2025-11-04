@@ -14,19 +14,20 @@ pub_flusurv(
 )
 }
 \arguments{
-\item{locations}{character. Character vector indicating location.}
+\item{locations}{character. Vector of locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
-\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
-most recent issue is returned. Mutually exclusive with \code{lag}.}
+\item{issues}{\code{\link{timeset}}. Optionally, the issue(s) of the
+data to fetch. See the "Data Versioning" section for details.}
 
-\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
-the most recent issue is returned. Mutually exclusive with \code{issues}.}
+\item{lag}{integer. Optionally, the lag of the issues to fetch.
+See the "Data Versioning" section for details.}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -43,6 +44,20 @@ See also \url{https://gis.cdc.gov/GRASP/Fluview/FluHospRates.html}.
 The list of location argument can be found in
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt}.
 }
+\section{Data Versioning}{
+
+Several endpoints support retrieving historical versions of the data.
+The following parameters control this and are mutually exclusive (only
+one can be provided at a time).
+\itemize{
+\item \code{as_of}: (Date) Retrieve the data as it was on this date.
+\item \code{issues}: \code{\link{timeset}} Retrieve data from a
+specific issue date or range.
+\item \code{lag}: (integer) Retrieve data with a specific lag from
+its issue date.
+}
+}
+
 \examples{
 \dontrun{
 pub_flusurv(locations = "CA", epiweeks = epirange(201701, 201801))

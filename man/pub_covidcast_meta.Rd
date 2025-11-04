@@ -7,7 +7,8 @@
 pub_covidcast_meta(fetch_args = fetch_args_list())
 }
 \arguments{
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}

@@ -14,19 +14,20 @@ pvt_twitter(
 )
 }
 \arguments{
-\item{auth}{string. Restricted access key (not the same as API key).}
+\item{auth}{string. Your restricted access key (not the same as API key).}
 
-\item{locations}{character. Locations to fetch.}
+\item{locations}{character. Vector of locations to fetch.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
 \item{time_type}{string. The temporal resolution of the data (either "day" or
 "week", depending on signal).}
 
-\item{time_values}{\code{\link{timeset}}. Dates or epiweeks to fetch. Defaults to all
-("*") dates.}
+\item{time_values}{\code{\link{timeset}}. Dates or epiweeks to fetch.
+Supports \code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}

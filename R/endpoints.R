@@ -1,3 +1,46 @@
+#' @title Shared Documentation for epidatr Parameters
+#'
+#' @description This is a central text for parameter documentation
+#'
+#' @name .epidatr_shared_params
+#'
+#' @param auth string. Your restricted access key (not the same as API key).
+#' @param locations character. Vector of locations to fetch.
+#' @param states character. Two letter state abbreviations.
+#' @param regions character. Vector of regions to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Supports
+#' @param time_type string. The temporal resolution of the data (either "day" or
+#'  "week", depending on signal).
+#' @param names character. Names to fetch.
+#'   [`epirange()`] and defaults to all ("*") dates.
+#' @param dates [`timeset`]. Dates to fetch. Supports
+#'   [`epirange()`] and defaults to all ("*") dates.
+#' @param time_values [`timeset`]. Dates or epiweeks to fetch.
+#'   Supports [`epirange()`] and defaults to all ("*") dates.
+#' @param as_of Date. Optionally, the as-of date for the issues to fetch.
+#'   See the "Data Versioning" section for details.
+#' @param issues [`timeset`]. Optionally, the issue(s) of the
+#'   data to fetch. See the "Data Versioning" section for details.
+#' @param lag integer. Optionally, the lag of the issues to fetch.
+#'   See the "Data Versioning" section for details.
+#' @param fetch_args [`fetch_args`]. Additional arguments to pass
+#'   to `fetch()`. See `fetch_args_list()` for details.
+#' @param ... not used for values, forces later arguments to bind by name
+#'
+#' @section Data Versioning:
+#' Several endpoints support retrieving historical versions of the data.
+#' The following parameters control this and are mutually exclusive (only
+#' one can be provided at a time).
+#' \itemize{
+#'   \item \code{as_of}: (Date) Retrieve the data as it was on this date.
+#'   \item \code{issues}: [`timeset`] Retrieve data from a
+#'     specific issue date or range.
+#'   \item \code{lag}: (integer) Retrieve data with a specific lag from
+#'     its issue date.
+#' }
+NULL
+
+
 #' CDC total and by topic webpage visits
 #'
 #' @description
@@ -12,11 +55,7 @@
 #' )
 #' }
 #'
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#'   See `fetch_args_list()` for details.
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
 #'
 #' @keywords endpoint
@@ -75,13 +114,12 @@ pvt_cdc <- function(
 #' pub_covid_hosp_facility_lookup(state = "fl")
 #' pub_covid_hosp_facility_lookup(city = "southlake")
 #' }
-#' @param ... not used for values, forces later arguments to bind by name
+#' @inheritParams .epidatr_shared_params
 #' @param state string. A two-letter character state abbreviation.
 #' @param ccn string. A facility CMS certification number.
 #' @param city string. A city name.
 #' @param zip string. A 5-digit zip code.
 #' @param fips_code string. A 5-digit fips county code, zero-padded.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #'
 #' @seealso [`pub_covid_hosp_facility()`]
@@ -167,12 +205,11 @@ pub_covid_hosp_facility_lookup <- function(
 #'   collection_weeks = epirange(20240101, 20240301)
 #' )
 #' }
+#' @inheritParams .epidatr_shared_params
 #' @param hospital_pks character. Facility identifiers.
 #' @param collection_weeks [`timeset`]. Dates (corresponding to epiweeks) to
 #'  fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
 #' @param publication_dates [`timeset`]. Publication dates to fetch.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #'
 #' @importFrom checkmate test_class test_integerish test_character
@@ -551,16 +588,10 @@ pub_covid_hosp_facility <- function(
 #' )
 #' }
 #'
-#' @param states character. Two letter state abbreviations.
-#' @param dates [`timeset`]. Dates to fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param as_of Date. Optionally, the as of date for the issues to fetch. If not
-#'   specified, the most recent data is returned. Mutually exclusive with
-#'   `issues`.
-#' @param issues [`timeset`]. Optionally, the issue of the data to fetch. If not
-#'   specified, the most recent issue is returned. Mutually exclusive with
-#'   `as_of` or `lag`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
 #' @return [`tibble::tibble`]
 #'
 #' @keywords endpoint
@@ -880,7 +911,7 @@ pub_covid_hosp_state_timeseries <- function(
 #' the API, along with basic summary statistics such as the dates they are
 #' available, the geographic levels at which they are reported, and etc.
 #'
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #'
 #' @return [`tibble::tibble`]
 #'
@@ -953,30 +984,19 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #' )
 #' }
 #'
+#' @inheritParams .epidatr_shared_params
 #' @param source string. The data source to query (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>).
 #' @param signals string. The signals to query from a specific source (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>).
 #' @param geo_type string. The geographic resolution of the data (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>).
-#' @param time_type string. The temporal resolution of the data (either "day" or
-#' "week", depending on signal).
 #' @param geo_values character. The geographies to return. Defaults to all
 #'  ("*") geographies within requested geographic resolution (see:
 #'  <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.).
-#' @param time_values [`timeset`]. Dates to fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param as_of Date. Optionally, the as of date for the issues to fetch. If not
-#'   specified, the most recent data is returned. Mutually exclusive with
-#'   `issues` or `lag`.
-#' @param issues [`timeset`]. Optionally, the issue of the data to fetch. If not
-#'   specified, the most recent issue is returned. Mutually exclusive with
-#'   `as_of` or `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `as_of` or
-#'   `issues`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
 #'
 #' @seealso [pub_covidcast_meta()], [covidcast_epidata()], [epirange()]
 #' @keywords endpoint
@@ -1089,10 +1109,10 @@ pub_covidcast <- function(
 #' \dontrun{
 #' pub_delphi(system = "ec", epiweek = 201501)
 #' }
+#' @inheritParams .epidatr_shared_params
 #' @param system character. System name to fetch.
 #' @param epiweek [`timeset`]. Epiweek to fetch. Does not support multiple dates.
 #'  Make separate calls to fetch data for multiple epiweeks.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`list`]
 #' @keywords endpoint
 #' @export
@@ -1127,9 +1147,7 @@ pub_delphi <- function(
 #'   epiweeks = epirange(201401, 202301)
 #' )
 #' }
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
@@ -1168,11 +1186,7 @@ pub_dengue_nowcast <- function(
 #'   epiweeks = epirange(201501, 202001)
 #' )
 #' }
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param names character. Names to fetch.
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
@@ -1222,15 +1236,11 @@ pvt_dengue_sensors <- function(
 #' \dontrun{
 #' pub_ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001))
 #' }
-#' @param regions character. Regions to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#'   most recent issue is returned. Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `issues`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
 #' @keywords endpoint
 #' @export
 pub_ecdc_ili <- function(
@@ -1289,15 +1299,11 @@ pub_ecdc_ili <- function(
 #' \dontrun{
 #' pub_flusurv(locations = "CA", epiweeks = epirange(201701, 201801))
 #' }
-#' @param locations character. Character vector indicating location.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#'   most recent issue is returned. Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `issues`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
 #' @keywords endpoint
 #' @export
 pub_flusurv <- function(
@@ -1353,17 +1359,14 @@ pub_flusurv <- function(
 #' \dontrun{
 #' pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
 #' }
-#' @param regions character. Regions to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch in the form
-#'   epirange(startweek,endweek), where startweek and endweek are of the form
-#'   YYYYWW (string or numeric). Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#'   most recent issue is returned. Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `issues`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
+#' @param regions character. Locations to fetch. Can be any string IDs in
+#'   national, HHS region, census division, most states and territories, and so
+#'   on. Full list link below.
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
 #' @keywords endpoint
 #' @export
 pub_fluview_clinical <- function(
@@ -1420,7 +1423,7 @@ pub_fluview_clinical <- function(
 #' pub_fluview_meta()
 #' }
 #'
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #'
 #' @return [`tibble::tibble`]
 #' @seealso [`pub_fluview()`]
@@ -1456,21 +1459,12 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 #' \dontrun{
 #' pub_fluview(regions = "nat", epiweeks = epirange(201201, 202005))
 #' }
-#' @param regions character. Locations to fetch. Can be any string IDs in
-#'   national, HHS region, census division, most states and territories, and so
-#'   on. Full list link below.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch in the form
-#'   `epirange(startweek, endweek)`, where startweek and endweek are of the form
-#'   YYYYWW (string or numeric). Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#'   most recent issue is returned. Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `issues`.
-#' @param auth string. Optionally, restricted access key (not the same as API
-#' key).
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
+#' @inheritParams pub_fluview_clinical
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
 #' @keywords endpoint
 #' @export
 pub_fluview <- function(
@@ -1546,9 +1540,7 @@ pub_fluview <- function(
 #' \dontrun{
 #' pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
 #' }
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`] Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #'
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
@@ -1590,11 +1582,8 @@ pub_gft <- function(
 #'   query = "how to get over the flu"
 #' )
 #' }
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
+#' @inheritParams .epidatr_shared_params
 #' @param query string. The query to be fetched.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
@@ -1636,15 +1625,11 @@ pvt_ght <- function(
 #' \dontrun{
 #' pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
 #' }
-#' @param regions character. Regions to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#'   most recent issue is returned. Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `issues`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
 #' @keywords endpoint
 #' @export
 pub_kcdc_ili <- function(
@@ -1695,8 +1680,7 @@ pub_kcdc_ili <- function(
 #' \dontrun{
 #' pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
 #' }
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #' @return [`list`]
 #' @seealso [`pvt_norostat()`]
 #' @keywords endpoint
@@ -1715,7 +1699,7 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta.html>
 #'
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #'
 #' @return [`list`]
 #' @keywords endpoint
@@ -1741,9 +1725,7 @@ pub_meta <- function(fetch_args = fetch_args_list()) {
 #' \dontrun{
 #' pub_nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301))
 #' }
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #'
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
@@ -1781,15 +1763,11 @@ pub_nidss_dengue <- function(
 #' \dontrun{
 #' pub_nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601))
 #' }
-#' @param regions character. Regions to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#'   most recent issue is returned. Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `issues`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
 #' @keywords endpoint
 #' @export
 pub_nidss_flu <- function(
@@ -1854,11 +1832,9 @@ pub_nidss_flu <- function(
 #'   epiweeks = 201233
 #' )
 #' }
-#' @param auth string. Your authentication key.
+#' @inheritParams .epidatr_shared_params
 #' @param locations character. Locations to fetch. Only full state names are
 #' permitted in the list.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
@@ -1902,9 +1878,7 @@ pvt_norostat <- function(
 #' \dontrun{
 #' pub_nowcast(locations = "ca", epiweeks = epirange(201201, 201301))
 #' }
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
@@ -1938,15 +1912,11 @@ pub_nowcast <- function(
 #' \dontrun{
 #' pub_paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501))
 #' }
-#' @param regions character. Regions to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#'   most recent issue is returned. Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `issues`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
 #' @keywords endpoint
 #' @export
 pub_paho_dengue <- function(
@@ -2005,10 +1975,7 @@ pub_paho_dengue <- function(
 #'   locations = "hhs1"
 #' )
 #' }
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
@@ -2063,11 +2030,7 @@ pvt_quidel <- function(
 #'   epiweeks = epirange(201501, 202001)
 #' )
 #' }
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param names character. Sensor names to fetch.
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
@@ -2119,14 +2082,7 @@ pvt_sensors <- function(
 #'   time_values = epirange(201501, 202001)
 #' )
 #' }
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param locations character. Locations to fetch.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param time_type string. The temporal resolution of the data (either "day" or
-#'  "week", depending on signal).
-#' @param time_values [`timeset`]. Dates or epiweeks to fetch. Defaults to all
-#'  ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
@@ -2202,15 +2158,10 @@ pvt_twitter <- function(
 #'   time_values = epirange(201501, 201601)
 #' )
 #' }
+#' @inheritParams .epidatr_shared_params
 #' @param articles character. Articles to fetch.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param time_type string. The temporal resolution of the data (either "day" or
-#'  "week", depending on signal).
-#' @param time_values [`timeset`]. Dates or epiweeks to fetch. Defaults to all
-#'  ("*") dates.
 #' @param language string. Language to fetch.
 #' @param hours integer. Optionally, the hours to fetch.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export

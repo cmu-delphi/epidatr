@@ -35,23 +35,22 @@ pub_covidcast(
 ("*") geographies within requested geographic resolution (see:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.).}
 
-\item{time_values}{\code{\link{timeset}}. Dates to fetch. Defaults to all ("*") dates.}
+\item{time_values}{\code{\link{timeset}}. Dates or epiweeks to fetch.
+Supports \code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
-\item{as_of}{Date. Optionally, the as of date for the issues to fetch. If not
-specified, the most recent data is returned. Mutually exclusive with
-\code{issues} or \code{lag}.}
+\item{as_of}{Date. Optionally, the as-of date for the issues to fetch.
+See the "Data Versioning" section for details.}
 
-\item{issues}{\code{\link{timeset}}. Optionally, the issue of the data to fetch. If not
-specified, the most recent issue is returned. Mutually exclusive with
-\code{as_of} or \code{lag}.}
+\item{issues}{\code{\link{timeset}}. Optionally, the issue(s) of the
+data to fetch. See the "Data Versioning" section for details.}
 
-\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
-the most recent issue is returned. Mutually exclusive with \code{as_of} or
-\code{issues}.}
+\item{lag}{integer. Optionally, the lag of the issues to fetch.
+See the "Data Versioning" section for details.}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -63,6 +62,20 @@ The primary endpoint for fetching COVID-19 data, providing access to a wide
 variety of signals from a wide variety of sources. See the API documentation
 link above for more. Delphi's \href{https://delphi.cmu.edu/covidcast/}{COVIDcast public dashboard} is powered by this endpoint.
 }
+\section{Data Versioning}{
+
+Several endpoints support retrieving historical versions of the data.
+The following parameters control this and are mutually exclusive (only
+one can be provided at a time).
+\itemize{
+\item \code{as_of}: (Date) Retrieve the data as it was on this date.
+\item \code{issues}: \code{\link{timeset}} Retrieve data from a
+specific issue date or range.
+\item \code{lag}: (integer) Retrieve data with a specific lag from
+its issue date.
+}
+}
+
 \examples{
 \dontrun{
 pub_covidcast(
