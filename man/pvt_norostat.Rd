@@ -9,8 +9,9 @@ pvt_norostat(auth, locations, epiweeks = "*", fetch_args = fetch_args_list())
 \arguments{
 \item{auth}{string. Your restricted access key (not the same as API key).}
 
-\item{locations}{character. Locations to fetch. Only full state names are
-permitted in the list.}
+\item{locations}{character. Locations to fetch. Only a specific list of
+full state names are permitted. See the \code{locations} column in the
+output of \code{pvt_meta_norostat()} for the allowed values.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports}
 
@@ -21,8 +22,6 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 \code{\link[tibble:tibble]{tibble::tibble}}
 }
 \description{
-\strong{This endpoind is currently inactive in the Epidata API.}
-
 This is point data only, and does not include minima or maxima.
 
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/norostat.html}

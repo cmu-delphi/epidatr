@@ -1833,8 +1833,6 @@ pub_nidss_flu <- function(
 
 #' CDC NoroSTAT norovirus outbreaks
 #' @description
-#' \strong{This endpoind is currently inactive in the Epidata API.}
-#'
 #' This is point data only, and does not include minima or maxima.
 #'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
@@ -1851,8 +1849,9 @@ pub_nidss_flu <- function(
 #' )
 #' }
 #' @inheritParams .epidatr_shared_params
-#' @param locations character. Locations to fetch. Only full state names are
-#' permitted in the list.
+#' @param locations character. Locations to fetch. Only a specific list of
+#' full state names are permitted. See the `locations` column in the
+#' output of `pvt_meta_norostat()` for the allowed values.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
