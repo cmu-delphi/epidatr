@@ -61,10 +61,11 @@ NULL
 #' @keywords endpoint
 #' @export
 pvt_cdc <- function(
-    auth,
-    locations,
-    epiweeks = "*",
-    fetch_args = fetch_args_list()) {
+  auth,
+  locations,
+  epiweeks = "*",
+  fetch_args = fetch_args_list()
+) {
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -126,13 +127,14 @@ pvt_cdc <- function(
 #' @keywords endpoint
 #' @export
 pub_covid_hosp_facility_lookup <- function(
-    ...,
-    state = NULL,
-    ccn = NULL,
-    city = NULL,
-    zip = NULL,
-    fips_code = NULL,
-    fetch_args = fetch_args_list()) {
+  ...,
+  state = NULL,
+  ccn = NULL,
+  city = NULL,
+  zip = NULL,
+  fips_code = NULL,
+  fetch_args = fetch_args_list()
+) {
   rlang::check_dots_empty()
 
   assert_character_param("state", state, len = 1, required = FALSE)
@@ -219,11 +221,12 @@ pub_covid_hosp_facility_lookup <- function(
 #' @export
 #
 pub_covid_hosp_facility <- function(
-    hospital_pks,
-    collection_weeks = "*",
-    ...,
-    publication_dates = NULL,
-    fetch_args = fetch_args_list()) {
+  hospital_pks,
+  collection_weeks = "*",
+  ...,
+  publication_dates = NULL,
+  fetch_args = fetch_args_list()
+) {
   rlang::check_dots_empty()
 
   collection_weeks <- get_wildcard_equivalent_dates(collection_weeks, "day")
@@ -598,12 +601,13 @@ pub_covid_hosp_facility <- function(
 #' @export
 #
 pub_covid_hosp_state_timeseries <- function(
-    states,
-    dates = "*",
-    ...,
-    as_of = NULL,
-    issues = NULL,
-    fetch_args = fetch_args_list()) {
+  states,
+  dates = "*",
+  ...,
+  as_of = NULL,
+  issues = NULL,
+  fetch_args = fetch_args_list()
+) {
   # Check parameters
   rlang::check_dots_empty()
 
@@ -1002,17 +1006,18 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #' @keywords endpoint
 #' @export
 pub_covidcast <- function(
-    source,
-    signals,
-    geo_type,
-    time_type,
-    geo_values = "*",
-    time_values = "*",
-    ...,
-    as_of = NULL,
-    issues = NULL,
-    lag = NULL,
-    fetch_args = fetch_args_list()) {
+  source,
+  signals,
+  geo_type,
+  time_type,
+  geo_values = "*",
+  time_values = "*",
+  ...,
+  as_of = NULL,
+  issues = NULL,
+  lag = NULL,
+  fetch_args = fetch_args_list()
+) {
   rlang::check_dots_empty()
 
   # Check parameters
@@ -1117,9 +1122,10 @@ pub_covidcast <- function(
 #' @keywords endpoint
 #' @export
 pub_delphi <- function(
-    system,
-    epiweek,
-    fetch_args = fetch_args_list()) {
+  system,
+  epiweek,
+  fetch_args = fetch_args_list()
+) {
   assert_character_param("system", system)
   assert_timeset_param("epiweek", epiweek, len = 1)
   epiweek <- parse_timeset_input(epiweek)
@@ -1152,9 +1158,10 @@ pub_delphi <- function(
 #' @keywords endpoint
 #' @export
 pub_dengue_nowcast <- function(
-    locations,
-    epiweeks = "*",
-    fetch_args = fetch_args_list()) {
+  locations,
+  epiweeks = "*",
+  fetch_args = fetch_args_list()
+) {
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
@@ -1191,11 +1198,12 @@ pub_dengue_nowcast <- function(
 #' @keywords endpoint
 #' @export
 pvt_dengue_sensors <- function(
-    auth,
-    names,
-    locations,
-    epiweeks = "*",
-    fetch_args = fetch_args_list()) {
+  auth,
+  names,
+  locations,
+  epiweeks = "*",
+  fetch_args = fetch_args_list()
+) {
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -1244,12 +1252,13 @@ pvt_dengue_sensors <- function(
 #' @keywords endpoint
 #' @export
 pub_ecdc_ili <- function(
-    regions,
-    epiweeks = "*",
-    ...,
-    issues = NULL,
-    lag = NULL,
-    fetch_args = fetch_args_list()) {
+  regions,
+  epiweeks = "*",
+  ...,
+  issues = NULL,
+  lag = NULL,
+  fetch_args = fetch_args_list()
+) {
   rlang::check_dots_empty()
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
@@ -1307,12 +1316,13 @@ pub_ecdc_ili <- function(
 #' @keywords endpoint
 #' @export
 pub_flusurv <- function(
-    locations,
-    epiweeks = "*",
-    ...,
-    issues = NULL,
-    lag = NULL,
-    fetch_args = fetch_args_list()) {
+  locations,
+  epiweeks = "*",
+  ...,
+  issues = NULL,
+  lag = NULL,
+  fetch_args = fetch_args_list()
+) {
   rlang::check_dots_empty()
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
@@ -1370,12 +1380,13 @@ pub_flusurv <- function(
 #' @keywords endpoint
 #' @export
 pub_fluview_clinical <- function(
-    regions,
-    epiweeks = "*",
-    ...,
-    issues = NULL,
-    lag = NULL,
-    fetch_args = fetch_args_list()) {
+  regions,
+  epiweeks = "*",
+  ...,
+  issues = NULL,
+  lag = NULL,
+  fetch_args = fetch_args_list()
+) {
   rlang::check_dots_empty()
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
@@ -1468,13 +1479,14 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 #' @keywords endpoint
 #' @export
 pub_fluview <- function(
-    regions,
-    epiweeks = "*",
-    ...,
-    issues = NULL,
-    lag = NULL,
-    auth = NULL,
-    fetch_args = fetch_args_list()) {
+  regions,
+  epiweeks = "*",
+  ...,
+  issues = NULL,
+  lag = NULL,
+  auth = NULL,
+  fetch_args = fetch_args_list()
+) {
   rlang::check_dots_empty()
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
@@ -1546,9 +1558,10 @@ pub_fluview <- function(
 #' @keywords endpoint
 #' @export
 pub_gft <- function(
-    locations,
-    epiweeks = "*",
-    fetch_args = fetch_args_list()) {
+  locations,
+  epiweeks = "*",
+  fetch_args = fetch_args_list()
+) {
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
@@ -1588,11 +1601,12 @@ pub_gft <- function(
 #' @keywords endpoint
 #' @export
 pvt_ght <- function(
-    auth,
-    locations,
-    epiweeks = "*",
-    query,
-    fetch_args = fetch_args_list()) {
+  auth,
+  locations,
+  epiweeks = "*",
+  query,
+  fetch_args = fetch_args_list()
+) {
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -1633,12 +1647,13 @@ pvt_ght <- function(
 #' @keywords endpoint
 #' @export
 pub_kcdc_ili <- function(
-    regions,
-    epiweeks = "*",
-    ...,
-    issues = NULL,
-    lag = NULL,
-    fetch_args = fetch_args_list()) {
+  regions,
+  epiweeks = "*",
+  ...,
+  issues = NULL,
+  lag = NULL,
+  fetch_args = fetch_args_list()
+) {
   rlang::check_dots_empty()
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
@@ -1731,9 +1746,10 @@ pub_meta <- function(fetch_args = fetch_args_list()) {
 #' @keywords endpoint
 #' @export
 pub_nidss_dengue <- function(
-    locations,
-    epiweeks = "*",
-    fetch_args = fetch_args_list()) {
+  locations,
+  epiweeks = "*",
+  fetch_args = fetch_args_list()
+) {
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
@@ -1771,12 +1787,13 @@ pub_nidss_dengue <- function(
 #' @keywords endpoint
 #' @export
 pub_nidss_flu <- function(
-    regions,
-    epiweeks = "*",
-    ...,
-    issues = NULL,
-    lag = NULL,
-    fetch_args = fetch_args_list()) {
+  regions,
+  epiweeks = "*",
+  ...,
+  issues = NULL,
+  lag = NULL,
+  fetch_args = fetch_args_list()
+) {
   rlang::check_dots_empty()
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
@@ -1839,10 +1856,11 @@ pub_nidss_flu <- function(
 #' @keywords endpoint
 #' @export
 pvt_norostat <- function(
-    auth,
-    locations,
-    epiweeks = "*",
-    fetch_args = fetch_args_list()) {
+  auth,
+  locations,
+  epiweeks = "*",
+  fetch_args = fetch_args_list()
+) {
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -1883,9 +1901,10 @@ pvt_norostat <- function(
 #' @keywords endpoint
 #' @export
 pub_nowcast <- function(
-    locations,
-    epiweeks = "*",
-    fetch_args = fetch_args_list()) {
+  locations,
+  epiweeks = "*",
+  fetch_args = fetch_args_list()
+) {
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
@@ -1920,12 +1939,13 @@ pub_nowcast <- function(
 #' @keywords endpoint
 #' @export
 pub_paho_dengue <- function(
-    regions,
-    epiweeks = "*",
-    ...,
-    issues = NULL,
-    lag = NULL,
-    fetch_args = fetch_args_list()) {
+  regions,
+  epiweeks = "*",
+  ...,
+  issues = NULL,
+  lag = NULL,
+  fetch_args = fetch_args_list()
+) {
   rlang::check_dots_empty()
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
@@ -1980,10 +2000,11 @@ pub_paho_dengue <- function(
 #' @keywords endpoint
 #' @export
 pvt_quidel <- function(
-    auth,
-    locations,
-    epiweeks = "*",
-    fetch_args = fetch_args_list()) {
+  auth,
+  locations,
+  epiweeks = "*",
+  fetch_args = fetch_args_list()
+) {
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -2035,11 +2056,12 @@ pvt_quidel <- function(
 #' @keywords endpoint
 #' @export
 pvt_sensors <- function(
-    auth,
-    names,
-    locations,
-    epiweeks = "*",
-    fetch_args = fetch_args_list()) {
+  auth,
+  names,
+  locations,
+  epiweeks = "*",
+  fetch_args = fetch_args_list()
+) {
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -2087,12 +2109,13 @@ pvt_sensors <- function(
 #' @keywords endpoint
 #' @export
 pvt_twitter <- function(
-    auth,
-    locations,
-    ...,
-    time_type = c("day", "week"),
-    time_values = "*",
-    fetch_args = fetch_args_list()) {
+  auth,
+  locations,
+  ...,
+  time_type = c("day", "week"),
+  time_values = "*",
+  fetch_args = fetch_args_list()
+) {
   rlang::check_dots_empty()
 
   time_type <- match.arg(time_type)
@@ -2166,13 +2189,14 @@ pvt_twitter <- function(
 #' @keywords endpoint
 #' @export
 pub_wiki <- function(
-    articles,
-    ...,
-    time_type = c("day", "week"),
-    time_values = "*",
-    hours = NULL,
-    language = "en",
-    fetch_args = fetch_args_list()) {
+  articles,
+  ...,
+  time_type = c("day", "week"),
+  time_values = "*",
+  hours = NULL,
+  language = "en",
+  fetch_args = fetch_args_list()
+) {
   rlang::check_dots_empty()
 
   time_type <- match.arg(time_type)
