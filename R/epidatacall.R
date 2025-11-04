@@ -140,16 +140,17 @@ print.epidata_call <- function(x, ...) {
 #' @importFrom checkmate assert_character assert_logical assert_numeric
 #'
 fetch_args_list <- function(
-    ...,
-    fields = NULL,
-    disable_date_parsing = FALSE,
-    disable_data_frame_parsing = FALSE,
-    return_empty = FALSE,
-    timeout_seconds = 30,
-    base_url = NULL,
-    dry_run = FALSE,
-    debug = FALSE,
-    format_type = "json") {
+  ...,
+  fields = NULL,
+  disable_date_parsing = FALSE,
+  disable_data_frame_parsing = FALSE,
+  return_empty = FALSE,
+  timeout_seconds = 30,
+  base_url = NULL,
+  dry_run = FALSE,
+  debug = FALSE,
+  format_type = "json"
+) {
   assert_character(fields, null.ok = TRUE, any.missing = FALSE)
   assert_logical(disable_date_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_logical(disable_data_frame_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)

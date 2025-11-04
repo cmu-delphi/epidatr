@@ -82,13 +82,14 @@ pvt_cdc <- function(auth, locations, epiweeks, fetch_args = fetch_args_list()) {
 #' @keywords endpoint
 #' @export
 pub_covid_hosp_facility_lookup <- function(
-    ...,
-    state = NULL,
-    ccn = NULL,
-    city = NULL,
-    zip = NULL,
-    fips_code = NULL,
-    fetch_args = fetch_args_list()) {
+  ...,
+  state = NULL,
+  ccn = NULL,
+  city = NULL,
+  zip = NULL,
+  fips_code = NULL,
+  fetch_args = fetch_args_list()
+) {
   assert_character_param("state", state, len = 1, required = FALSE)
   assert_character_param("ccn", ccn, len = 1, required = FALSE)
   assert_character_param("city", city, len = 1, required = FALSE)
@@ -166,11 +167,12 @@ pub_covid_hosp_facility_lookup <- function(
 #' @export
 #
 pub_covid_hosp_facility <- function(
-    hospital_pks,
-    collection_weeks,
-    ...,
-    publication_dates = NULL,
-    fetch_args = fetch_args_list()) {
+  hospital_pks,
+  collection_weeks,
+  ...,
+  publication_dates = NULL,
+  fetch_args = fetch_args_list()
+) {
   assert_character_param("hospital_pks", hospital_pks)
   assert_timeset_param("collection_weeks", collection_weeks)
   assert_timeset_param("publication_dates", publication_dates, required = FALSE)
@@ -700,17 +702,18 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #' @keywords endpoint
 #' @export
 pub_covidcast <- function(
-    source,
-    signals,
-    geo_type,
-    time_type,
-    geo_values,
-    time_values,
-    ...,
-    as_of = NULL,
-    issues = NULL,
-    lag = NULL,
-    fetch_args = fetch_args_list()) {
+  source,
+  signals,
+  geo_type,
+  time_type,
+  geo_values,
+  time_values,
+  ...,
+  as_of = NULL,
+  issues = NULL,
+  lag = NULL,
+  fetch_args = fetch_args_list()
+) {
   # Check parameters
   if (
     missing(source) ||
@@ -1150,13 +1153,14 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 #' @keywords endpoint
 #' @export
 pub_fluview <- function(
-    regions,
-    epiweeks,
-    ...,
-    issues = NULL,
-    lag = NULL,
-    auth = NULL,
-    fetch_args = fetch_args_list()) {
+  regions,
+  epiweeks,
+  ...,
+  issues = NULL,
+  lag = NULL,
+  auth = NULL,
+  fetch_args = fetch_args_list()
+) {
   assert_character_param("regions", regions)
   assert_timeset_param("epiweeks", epiweeks)
   assert_timeset_param("issues", issues, required = FALSE)
@@ -1783,13 +1787,14 @@ pvt_twitter <- function(auth, locations, ..., dates = NULL, epiweeks = NULL, fet
 #' @keywords endpoint
 #' @export
 pub_wiki <- function(
-    articles,
-    ...,
-    dates = NULL,
-    epiweeks = NULL,
-    hours = NULL,
-    language = "en",
-    fetch_args = fetch_args_list()) {
+  articles,
+  ...,
+  dates = NULL,
+  epiweeks = NULL,
+  hours = NULL,
+  language = "en",
+  fetch_args = fetch_args_list()
+) {
   assert_character_param("articles", articles)
   assert_timeset_param("dates", dates, required = FALSE)
   assert_timeset_param("epiweeks", epiweeks, required = FALSE)
