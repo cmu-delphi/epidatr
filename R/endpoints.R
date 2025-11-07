@@ -1368,9 +1368,12 @@ pub_flusurv <- function(
 #'  pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
 #'
 #' @inheritParams .epidatr_shared_params
-#' @param regions character. Locations to fetch. Can be any string IDs in
-#'   national, HHS region, census division, most states and territories, and so
-#'   on. Full list link below.
+#' @param regions character. Vector of location IDs to fetch.  Can be
+#'   "nat" for national, "hhs1"--"hhs10" for HHS Regions, "cen1"--"cen9" for
+#'   census divisions, lowercase two-letter state or territory abbreviations
+#'   for most states and territories,"jfk" for New York City, or "ny_minus_jfk"
+#'   for upstate New York. Full list of locations is available
+#'   [here](https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt).
 #' @return [`tibble::tibble`]
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
@@ -1468,8 +1471,8 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 #'
 #' pub_fluview(regions = "nat", epiweeks = epirange(201201, 202005))
 #'
-#' @inheritParams .epidatr_shared_params
 #' @inheritParams pub_fluview_clinical
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning

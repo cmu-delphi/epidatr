@@ -15,7 +15,12 @@ pub_fluview(
 )
 }
 \arguments{
-\item{regions}{character. Vector of regions to fetch.}
+\item{regions}{character. Vector of location IDs to fetch.  Can be
+"nat" for national, "hhs1"--"hhs10" for HHS Regions, "cen1"--"cen9" for
+census divisions, lowercase two-letter state or territory abbreviations
+for most states and territories,"jfk" for New York City, or "ny_minus_jfk"
+for upstate New York. Full list of locations is available
+\href{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt}{here}.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
 \code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
