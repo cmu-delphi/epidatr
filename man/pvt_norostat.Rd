@@ -30,12 +30,13 @@ This is the documentation of the API for accessing the NoroSTAT endpoint of
 the Delphi’s epidemiological data.
 }
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("SECRET_API_AUTH_NOROSTAT") != "") withAutoprint(\{ # examplesIf}
+
 pvt_norostat(
   auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"),
   locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
   epiweeks = 201233
 )
-}
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

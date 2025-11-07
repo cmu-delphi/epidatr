@@ -57,7 +57,8 @@ Suggests:
     readr,
     rmarkdown,
     testthat (>= 3.1.5),
-    withr
+    withr,
+    curl
 VignetteBuilder:
     knitr
 Remotes:

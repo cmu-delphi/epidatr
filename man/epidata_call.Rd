@@ -60,7 +60,9 @@ endpoints only support the JSON classic format (\code{pub_delphi},
 JSON-like nested list structure is returned instead.
 }
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+library(magrittr)
+
 call <- pub_covidcast(
   source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
@@ -71,6 +73,5 @@ call <- pub_covidcast(
   fetch_args = fetch_args_list(dry_run = TRUE)
 )
 call \%>\% fetch()
-}
-
+\dontshow{\}) # examplesIf}
 }

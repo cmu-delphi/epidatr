@@ -22,10 +22,10 @@ the API, along with basic summary statistics such as the dates they are
 available, the geographic levels at which they are reported, and etc.
 }
 \examples{
-\dontrun{
-pub_covidcast_meta()
-}
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
+pub_covidcast_meta()
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=pub_covidcast]{pub_covidcast()}},\code{\link[=covidcast_epidata]{covidcast_epidata()}}

@@ -23,13 +23,12 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/cdc.html}
 }
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("SECRET_API_AUTH_CDC") != "") withAutoprint(\{ # examplesIf}
 pvt_cdc(
   auth = Sys.getenv("SECRET_API_AUTH_CDC"),
   locations = "fl,ca",
   epirange(201501, 201601)
 )
-}
-
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

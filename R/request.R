@@ -8,8 +8,8 @@ join_url <- function(url, endpoint) {
 #' performs the request
 #'
 #' You can test the authentication headers like so:
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' response <- httr::RETRY(
 #'   "GET", "https://httpbin.org/headers",
 #'   httr::authenticate("epidata", "fake_key")
@@ -18,7 +18,7 @@ join_url <- function(url, endpoint) {
 #'   "Basic ",
 #'   base64enc::base64encode(charToRaw("epidata:fake_key"))
 #' )
-#' }
+#'
 #'
 #' @importFrom httr RETRY
 #' @keywords internal

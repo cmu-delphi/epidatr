@@ -77,7 +77,8 @@ its issue date.
 }
 
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
 pub_covidcast(
   source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
@@ -94,8 +95,7 @@ pub_covidcast(
   geo_values = "*",
   time_values = epirange(20200601, 20200801)
 )
-}
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=pub_covidcast_meta]{pub_covidcast_meta()}}, \code{\link[=covidcast_epidata]{covidcast_epidata()}}, \code{\link[=epirange]{epirange()}}
