@@ -2,9 +2,15 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_sensors}
 \alias{pvt_sensors}
-\title{Digital surveillance sensors}
+\title{Influenza and dengue digital surveillance sensors}
 \usage{
-pvt_sensors(auth, names, locations, epiweeks, fetch_args = fetch_args_list())
+pvt_sensors(
+  auth,
+  names,
+  locations,
+  epiweeks = "*",
+  fetch_args = fetch_args_list()
+)
 }
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
@@ -13,7 +19,7 @@ pvt_sensors(auth, names, locations, epiweeks, fetch_args = fetch_args_list())
 
 \item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
@@ -24,7 +30,7 @@ pvt_sensors(auth, names, locations, epiweeks, fetch_args = fetch_args_list())
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/sensors.html}
 
 This is the documentation of the API for accessing the Digital Surveillance
-Sensors (sensors) endpoint of the Delphi’s epidemiological Note: this
+Sensors endpoint of the Delphi’s epidemiological. Note: this
 repository was built to support modeling and forecasting efforts
 surrounding seasonal influenza (and dengue). In the current COVID-19
 pandemic, syndromic surveillance data, like ILI data (influenza-like

@@ -11,9 +11,9 @@ clear_cache(..., disable = FALSE)
   Arguments passed on to \code{\link[=set_cache]{set_cache}}
   \describe{
     \item{\code{cache_dir}}{the directory in which the cache is stored. By default, this
-is \code{tools::R_user_dir()} if on R 4.0+, but must be specified for earlier
-versions of R. The path can be either relative or absolute. The
-environmental variable is \code{EPIDATR_CACHE_DIR}.}
+is \code{rappdirs::user_cache_dir("R", version = "epidatr")}. The path can be
+either relative or absolute. The environmental variable is
+\code{EPIDATR_CACHE_DIR}.}
     \item{\code{days}}{the maximum length of time in days to keep any particular cached
 call. By default this is \code{1}. The environmental variable is
 \code{EPIDATR_CACHE_MAX_AGE_DAYS}.}
@@ -25,6 +25,8 @@ cache directory. By default, it is \code{"logfile.txt"}. The environmental
 variable is \code{EPIDATR_CACHE_LOGFILE}.}
     \item{\code{confirm}}{whether to confirm directory creation. default is \code{TRUE};
 should only be set in non-interactive scripts}
+    \item{\code{startup}}{indicates whether the function is being called on
+startup. Affects suppressability of the messages. Default is \code{FALSE}.}
   }}
 
 \item{disable}{instead of setting a new cache, disable caching entirely;
@@ -36,9 +38,9 @@ environment
 }
 \description{
 Deletes the current cache and resets a new cache. Deletes local data! If you
-are using a session unique cache, you will have to pass the arguments you
-used for \code{set_cache} earlier, otherwise the system-wide \code{.Renviron}-based
-defaults will be used.
+are using a session unique cache, the previous settings will be reused. If
+you pass in new \code{set_cache} arguments, they will take precedence over the
+previous settings.
 }
 \seealso{
 \code{\link{set_cache}} to start a new cache (and general caching info),

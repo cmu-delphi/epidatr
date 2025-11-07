@@ -4,14 +4,14 @@
 \alias{pvt_quidel}
 \title{Quidel COVID-19 and influenza testing data}
 \usage{
-pvt_quidel(auth, locations, epiweeks, fetch_args = fetch_args_list())
+pvt_quidel(auth, locations, epiweeks = "*", fetch_args = fetch_args_list())
 }
 \arguments{
 \item{auth}{string. Restricted access key (not the same as API key).}
 
 \item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }

@@ -2,17 +2,19 @@
 % Please edit documentation in R/avail_endpoints.R
 \name{avail_endpoints}
 \alias{avail_endpoints}
-\title{List all available endpoints.}
+\title{List all available Epidata API endpoints}
 \usage{
 avail_endpoints()
 }
 \value{
-A \code{\link[tibble:tibble]{tibble::tibble}}.
+A \code{\link[tibble:tibble]{tibble::tibble}} of endpoints, with two columns:
+\item{Endpoint}{Name of the function for accessing this API endpoint.}
+\item{Description}{One-sentence description of the data available at the
+endpoint.}
 }
 \description{
-A function that prints a tibble with two columns: \code{Endpoint} contains the
-function for accessing the Delphi Epidata API endpoint along with a
-\code{Description}.
+Fetches a data frame of all Epidata API endpoints that can be accessed using
+this package, with a brief description.
 }
 \examples{
 avail_endpoints()

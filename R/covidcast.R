@@ -69,18 +69,18 @@ parse_source <- function(source, base_url) {
 #' @export
 as_tibble.covidcast_data_signal_list <- function(x, ...) {
   tib <- list()
-  tib$source <- unname(map_chr(x, "source"))
-  tib$signal <- unname(map_chr(x, "signal"))
-  tib$name <- unname(map_chr(x, "name"))
-  tib$active <- unname(map_lgl(x, "active"))
-  tib$short_description <- unname(map_chr(x, "short_description"))
-  tib$description <- unname(map_chr(x, "description"))
-  tib$time_type <- unname(map_chr(x, "time_type"))
-  tib$time_label <- unname(map_chr(x, "time_label"))
-  tib$value_label <- unname(map_chr(x, "value_label"))
-  tib$format <- unname(map_chr(x, "format"))
-  tib$category <- unname(map_chr(x, "category"))
-  tib$high_values_are <- unname(map_chr(x, "high_values_are"))
+  chr_fields <- c(
+    "source", "signal", "name", "short_description",
+    "description", "time_type", "time_label", "value_label",
+    "format", "category", "high_values_are"
+  )
+  for (field in chr_fields) {
+    tib[[field]] <- unname(map_chr(x, field, .default = ""))
+  }
+  lgl_fields <- c("active")
+  for (field in lgl_fields) {
+    tib[[field]] <- unname(map_lgl(x, field, .default = ""))
+  }
   as_tibble(tib)
 }
 
@@ -127,7 +127,7 @@ print.covidcast_data_source <- function(x, ...) {
 #' ```
 #'
 #' These objects can be used directly to fetch data, without requiring us to use
-#' the `covidcast()` function. Simply use the `$call` attribute of the object:
+#' the `pub_covidcast()` function. Simply use the `$call` attribute of the object:
 #'
 #' ```{r}
 #' epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa",
@@ -184,11 +184,10 @@ covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) 
 #' @export
 as_tibble.covidcast_data_source_list <- function(x, ...) {
   tib <- list()
-  tib$source <- unname(map_chr(x, "source"))
-  tib$name <- unname(map_chr(x, "name"))
-  tib$description <- unname(map_chr(x, "description"))
-  tib$reference_signal <- unname(map_chr(x, "reference_signal"))
-  tib$license <- unname(map_chr(x, "license"))
+  fields <- c("source", "name", "description", "reference_signal", "license")
+  for (field in fields) {
+    tib[[field]] <- unname(map_chr(x, field, .default = ""))
+  }
   as_tibble(tib)
 }
 

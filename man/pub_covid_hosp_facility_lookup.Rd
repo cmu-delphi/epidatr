@@ -2,7 +2,7 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_covid_hosp_facility_lookup}
 \alias{pub_covid_hosp_facility_lookup}
-\title{COVID hospitalization facility identifiers}
+\title{Helper for finding COVID hospitalization facilities}
 \usage{
 pub_covid_hosp_facility_lookup(
   ...,

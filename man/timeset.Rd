@@ -2,26 +2,26 @@
 % Please edit documentation in R/model.R
 \name{timeset}
 \alias{timeset}
-\title{Timeset}
+\title{Timeset formats for specifying dates}
 \description{
 Many API calls accept timesets to specify the time ranges of data being
 requested. Timesets can be specified with \code{epirange()}, as \code{Date} objects, or
 with wildcards.
-
-Timesets are not special R types; the term simply describes any value that
-would be accepted by epidatr to specify the time value of an epidata query.
-The allowed values are:
+}
+\details{
+Timesets are not special R types; the term simply describes any value that is
+accepted by epidatr to specify the time value of an epidata query:
 \itemize{
-\item Dates: \code{Date} instances, integer-like values, or integer-like strings that
-take the form YYYYMMDD.
-\item Epiweeks: Integer-like values or integer-like strings that take the form
-YYYYWW.
+\item Dates: \code{Date} instances.
+\item Date strings or integers: Strings or integers in the format YYYYMMDD.
+\item Epiweeks: Strings or integers in the format YYYYWW, where WW is the epiweek
+number.
 \item EpiRanges: A range returned by \code{epirange()}, or a list of multiple ranges.
-\item Wildcard: The string \code{"*"}, which request all available time values.
+\item Wildcard: The string \code{"*"}, which requests all available time values.
 }
 
-Please refer to the specific endpoint documentation for guidance on using
-dates vs weeks. Most endpoints support only one or the other. Some (less
-commonly used) endpoints may not accept the \code{"*"} wildcard, but this can be
-simulated with a large \code{epirange()}.
+Refer to the specific endpoint documentation for guidance on using dates vs
+weeks. Most endpoints support only one or the other. Some (less commonly
+used) endpoints may not accept the \code{"*"} wildcard, but this can be simulated
+with a large \code{epirange()}.
 }

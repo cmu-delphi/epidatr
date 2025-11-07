@@ -5,7 +5,7 @@
 \title{Makes a request to the API and returns the response, catching
 HTTP errors and forwarding the HTTP body in R errors}
 \usage{
-request_impl(epidata_call, format_type, fields = NULL, timeout_seconds = 30)
+request_impl(epidata_call, format_type, timeout_seconds, fields)
 }
 \description{
 Makes a request to the API and returns the response, catching

@@ -2,14 +2,15 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_delphi}
 \alias{pub_delphi}
-\title{Delphi's ILINet forecasts}
+\title{Delphi's ILINet outpatient doctor visits forecasts}
 \usage{
 pub_delphi(system, epiweek, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{system}{character. System name to fetch.}
 
-\item{epiweek}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweek}{\code{\link{timeset}}. Epiweek to fetch. Does not support multiple dates.
+Make separate calls to fetch data for multiple epiweeks.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }

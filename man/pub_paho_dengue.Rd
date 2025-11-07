@@ -2,11 +2,11 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_paho_dengue}
 \alias{pub_paho_dengue}
-\title{PAHO Dengue data}
+\title{PAHO dengue data (North and South America)}
 \usage{
 pub_paho_dengue(
   regions,
-  epiweeks,
+  epiweeks = "*",
   ...,
   issues = NULL,
   lag = NULL,
@@ -16,7 +16,7 @@ pub_paho_dengue(
 \arguments{
 \item{regions}{character. Regions to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 

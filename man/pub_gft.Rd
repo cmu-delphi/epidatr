@@ -2,14 +2,14 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_gft}
 \alias{pub_gft}
-\title{Google Flu Trends data}
+\title{Google Flu Trends flu search volume}
 \usage{
-pub_gft(locations, epiweeks, fetch_args = fetch_args_list())
+pub_gft(locations, epiweeks = "*", fetch_args = fetch_args_list())
 }
 \arguments{
 \item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}} Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}} Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }

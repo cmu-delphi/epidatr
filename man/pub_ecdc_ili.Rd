@@ -2,11 +2,11 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_ecdc_ili}
 \alias{pub_ecdc_ili}
-\title{ECDC ILI data}
+\title{ECDC ILI incidence (Europe)}
 \usage{
 pub_ecdc_ili(
   regions,
-  epiweeks,
+  epiweeks = "*",
   ...,
   issues = NULL,
   lag = NULL,
@@ -16,7 +16,7 @@ pub_ecdc_ili(
 \arguments{
 \item{regions}{character. Regions to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 

@@ -2,12 +2,13 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_covid_hosp_state_timeseries}
 \alias{pub_covid_hosp_state_timeseries}
-\title{COVID Hospitalization Data by State}
+\title{COVID hospitalizations by state}
 \usage{
 pub_covid_hosp_state_timeseries(
   states,
-  dates,
+  dates = "*",
   ...,
+  as_of = NULL,
   issues = NULL,
   fetch_args = fetch_args_list()
 )
@@ -15,12 +16,17 @@ pub_covid_hosp_state_timeseries(
 \arguments{
 \item{states}{character. Two letter state abbreviations.}
 
-\item{dates}{\code{\link{timeset}}. Dates to fetch.}
+\item{dates}{\code{\link{timeset}}. Dates to fetch. Defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
-\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
-most recent issue is returned.}
+\item{as_of}{Date. Optionally, the as of date for the issues to fetch. If not
+specified, the most recent data is returned. Mutually exclusive with
+\code{issues}.}
+
+\item{issues}{\code{\link{timeset}}. Optionally, the issue of the data to fetch. If not
+specified, the most recent issue is returned. Mutually exclusive with
+\code{as_of} or \code{lag}.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }

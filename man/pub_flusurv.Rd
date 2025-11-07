@@ -2,11 +2,11 @@
 % Please edit documentation in R/endpoints.R
 \name{pub_flusurv}
 \alias{pub_flusurv}
-\title{FluSurv hospitalization data}
+\title{CDC FluSurv flu hospitalizations}
 \usage{
 pub_flusurv(
   locations,
-  epiweeks,
+  epiweeks = "*",
   ...,
   issues = NULL,
   lag = NULL,
@@ -16,7 +16,7 @@ pub_flusurv(
 \arguments{
 \item{locations}{character. Character vector indicating location.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
@@ -34,7 +34,7 @@ the most recent issue is returned. Mutually exclusive with \code{issues}.}
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html}.
 
-Obtain information on flu hospitalization rates from the Center of Disease
+Obtain information on influenza hospitalization rates from the Center of Disease
 Control.
 
 See also \url{https://gis.cdc.gov/GRASP/Fluview/FluHospRates.html}.

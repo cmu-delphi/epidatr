@@ -27,7 +27,7 @@ an object containing fields for every signal:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata <- covidcast_epidata()
 epidata$signals
-#> # A tibble: 508 x 3
+#> # A tibble: 468 x 3
 #>    source        signal                        short_description                
 #>    <chr>         <chr>                         <chr>                            
 #>  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~
@@ -40,7 +40,7 @@ epidata$signals
 #>  8 chng          7dav_outpatient_covid         Ratio of outpatient doctor visit~
 #>  9 covid-act-now pcr_specimen_positivity_rate  Proportion of PCR specimens test~
 #> 10 covid-act-now pcr_specimen_total_tests      Total number of PCR specimens te~
-#> # i 498 more rows
+#> # i 458 more rows
 }\if{html}{\out{</div>}}
 
 If you use an editor that supports tab completion, such as RStudio, type
@@ -56,7 +56,7 @@ to access them we rely on the backtick operator:
 }\if{html}{\out{</div>}}
 
 These objects can be used directly to fetch data, without requiring us to use
-the \code{covidcast()} function. Simply use the \verb{$call} attribute of the object:
+the \code{pub_covidcast()} function. Simply use the \verb{$call} attribute of the object:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa",
                                               epirange(20210405, 20210410))
@@ -69,7 +69,7 @@ the \code{covidcast()} function. Simply use the \verb{$call} attribute of the ob
 #> 4 pa        smoothed_~ fb-su~ state    day       2021-04-08        NA 2021-04-13
 #> 5 pa        smoothed_~ fb-su~ state    day       2021-04-09        NA 2021-04-14
 #> 6 pa        smoothed_~ fb-su~ state    day       2021-04-10        NA 2021-04-15
-#> # i 7 more variables: lag <int>, missing_value <int>, missing_stderr <int>,
-#> #   missing_sample_size <int>, value <dbl>, stderr <dbl>, sample_size <dbl>
+#> # i 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 }\if{html}{\out{</div>}}
 }

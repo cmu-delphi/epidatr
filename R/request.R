@@ -22,7 +22,7 @@ join_url <- function(url, endpoint) {
 #'
 #' @importFrom httr RETRY
 #' @keywords internal
-do_request <- function(url, params, timeout_seconds = 30) {
+do_request <- function(url, params, timeout_seconds) {
   # don't retry in case of certain status codes
   key <- get_api_key()
   if (key != "") {

@@ -2,13 +2,13 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_dengue_sensors}
 \alias{pvt_dengue_sensors}
-\title{Dengue digital surveillance sensors in PAHO member countries}
+\title{PAHO dengue digital surveillance sensors (North and South America)}
 \usage{
 pvt_dengue_sensors(
   auth,
   names,
   locations,
-  epiweeks,
+  epiweeks = "*",
   fetch_args = fetch_args_list()
 )
 }
@@ -19,7 +19,7 @@ pvt_dengue_sensors(
 
 \item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }

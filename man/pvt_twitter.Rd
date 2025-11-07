@@ -2,14 +2,14 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_twitter}
 \alias{pvt_twitter}
-\title{HealthTweets data}
+\title{HealthTweets total and influenza-related tweets}
 \usage{
 pvt_twitter(
   auth,
   locations,
   ...,
-  dates = NULL,
-  epiweeks = NULL,
+  time_type = c("day", "week"),
+  time_values = "*",
   fetch_args = fetch_args_list()
 )
 }
@@ -20,10 +20,11 @@ pvt_twitter(
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
-\item{dates}{\code{\link{timeset}}. Dates to fetch. Mutually exclusive with \code{epiweeks}.}
+\item{time_type}{string. The temporal resolution of the data (either "day" or
+"week", depending on signal).}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Mutually exclusive with
-\code{dates}.}
+\item{time_values}{\code{\link{timeset}}. Dates or epiweeks to fetch. Defaults to all
+("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
@@ -33,15 +34,17 @@ pvt_twitter(
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/twitter.html}
 
-This is the API documentation for accessing the Twitter Stream (twitter) endpoint of Delphi’s epidemiological data.
-Sourced from \href{http://www.healthtweets.org/}{Healthtweets}
+This is the API documentation for accessing the Twitter Stream endpoint of
+Delphi’s epidemiological data. Sourced from
+\href{http://www.healthtweets.org/}{Healthtweets}
 }
 \examples{
 \dontrun{
 pvt_twitter(
   auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
   locations = "CA",
-  epiweeks = epirange(201501, 202001)
+  time_type = "week",
+  time_values = epirange(201501, 202001)
 )
 }
 }

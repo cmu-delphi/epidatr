@@ -2,16 +2,16 @@
 % Please edit documentation in R/endpoints.R
 \name{pvt_norostat}
 \alias{pvt_norostat}
-\title{NoroSTAT data (point data, no min/max)}
+\title{CDC NoroSTAT norovirus outbreaks}
 \usage{
-pvt_norostat(auth, locations, epiweeks, fetch_args = fetch_args_list())
+pvt_norostat(auth, locations, epiweeks = "*", fetch_args = fetch_args_list())
 }
 \arguments{
 \item{auth}{string. Your authentication key.}
 
 \item{locations}{character. Locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
 }
@@ -19,16 +19,18 @@ pvt_norostat(auth, locations, epiweeks, fetch_args = fetch_args_list())
 \code{\link[tibble:tibble]{tibble::tibble}}
 }
 \description{
+This is point data only, and does not include minima or maxima.
+
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/norostat.html}
 
-This is the documentation of the API for accessing the NoroSTAT (norostat)
-endpoint of the Delphi’s epidemiological data.
+This is the documentation of the API for accessing the NoroSTAT endpoint of
+the Delphi’s epidemiological data.
 }
 \examples{
 \dontrun{
 pvt_norostat(
   auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"),
-  locations = "1",
+  locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
   epiweeks = 201233
 )
 }
