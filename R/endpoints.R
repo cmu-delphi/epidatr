@@ -590,7 +590,6 @@ pub_covid_hosp_facility <- function(
 #'   dates = epirange(20200101, 20200501)
 #' )
 #'
-#'
 #' @inheritParams .epidatr_shared_params
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
@@ -1365,7 +1364,7 @@ pub_flusurv <- function(
 #'
 #' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
 #'
-#'  pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
+#' pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param regions character. Vector of location IDs to fetch.  Can be
@@ -1433,7 +1432,6 @@ pub_fluview_clinical <- function(
 #' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
 #'
 #' pub_fluview_meta()
-#'
 #'
 #' @inheritParams .epidatr_shared_params
 #'

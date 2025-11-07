@@ -19,7 +19,6 @@ join_url <- function(url, endpoint) {
 #'   base64enc::base64encode(charToRaw("epidata:fake_key"))
 #' )
 #'
-#'
 #' @importFrom httr RETRY
 #' @keywords internal
 do_request <- function(url, params, timeout_seconds) {
