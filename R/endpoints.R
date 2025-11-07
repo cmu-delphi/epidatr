@@ -10,6 +10,7 @@
 #' @param states character. Two letter state abbreviations.
 #' @param regions character. Vector of regions to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch. Supports
+#'   [`epirange()`] and defaults to all ("*") dates.
 #' @param time_type string. The temporal resolution of the data (either "day" or
 #'  "week", depending on signal).
 #' @param names character. Names to fetch.

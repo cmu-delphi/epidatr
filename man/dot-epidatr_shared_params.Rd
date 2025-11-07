@@ -12,7 +12,8 @@
 
 \item{regions}{character. Vector of regions to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
 
 \item{time_type}{string. The temporal resolution of the data (either "day" or
 "week", depending on signal).}

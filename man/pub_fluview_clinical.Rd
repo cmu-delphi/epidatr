@@ -18,7 +18,8 @@ pub_fluview_clinical(
 national, HHS region, census division, most states and territories, and so
 on. Full list link below.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 

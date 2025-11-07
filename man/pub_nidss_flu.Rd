@@ -16,7 +16,8 @@ pub_nidss_flu(
 \arguments{
 \item{regions}{character. Vector of regions to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 

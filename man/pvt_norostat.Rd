@@ -13,7 +13,8 @@ pvt_norostat(auth, locations, epiweeks = "*", fetch_args = fetch_args_list())
 full state names are permitted. See the \code{locations} column in the
 output of \code{pvt_meta_norostat()} for the allowed values.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}

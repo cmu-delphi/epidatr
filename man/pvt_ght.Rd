@@ -11,7 +11,8 @@ pvt_ght(auth, locations, epiweeks = "*", query, fetch_args = fetch_args_list())
 
 \item{locations}{character. Vector of locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
 
 \item{query}{string. The query to be fetched.}
 
