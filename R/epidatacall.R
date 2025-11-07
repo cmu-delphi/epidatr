@@ -161,17 +161,18 @@ print.epidata_call <- function(x, ...) {
 #' @aliases fetch_args
 #' @importFrom checkmate assert_character assert_logical assert_numeric
 fetch_args_list <- function(
-    ...,
-    fields = NULL,
-    disable_date_parsing = FALSE,
-    disable_data_frame_parsing = FALSE,
-    return_empty = FALSE,
-    timeout_seconds = 15 * 60,
-    base_url = NULL,
-    dry_run = FALSE,
-    debug = FALSE,
-    format_type = c("json", "classic", "csv"),
-    refresh_cache = FALSE) {
+  ...,
+  fields = NULL,
+  disable_date_parsing = FALSE,
+  disable_data_frame_parsing = FALSE,
+  return_empty = FALSE,
+  timeout_seconds = 15 * 60,
+  base_url = NULL,
+  dry_run = FALSE,
+  debug = FALSE,
+  format_type = c("json", "classic", "csv"),
+  refresh_cache = FALSE
+) {
   rlang::check_dots_empty()
 
   assert_character(fields, null.ok = TRUE, any.missing = FALSE)
