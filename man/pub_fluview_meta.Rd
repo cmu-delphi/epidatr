@@ -20,7 +20,6 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
 pub_fluview_meta()
-
 \dontshow{\}) # examplesIf}
 }
 \seealso{

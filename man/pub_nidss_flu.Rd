@@ -51,6 +51,8 @@ specific issue date or range.
 \item \code{lag}: (integer) Retrieve data with a specific lag from
 its issue date.
 }
+See \code{vignette("versioned-data")} for details and more ways to specify
+versioned data.
 }
 
 \examples{

@@ -56,6 +56,8 @@ specific issue date or range.
 \item \code{lag}: (integer) Retrieve data with a specific lag from
 its issue date.
 }
+See \code{vignette("versioned-data")} for details and more ways to specify
+versioned data.
 }
 
 \examples{
@@ -65,7 +67,6 @@ pub_covid_hosp_state_timeseries(
   states = "fl",
   dates = epirange(20200101, 20200501)
 )
-
 \dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

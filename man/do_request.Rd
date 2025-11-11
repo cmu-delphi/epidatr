@@ -20,7 +20,6 @@ content(response)$headers$Authorization == paste0(
   "Basic ",
   base64enc::base64encode(charToRaw("epidata:fake_key"))
 )
-
 \dontshow{\}) # examplesIf}
 }
 \keyword{internal}

@@ -53,12 +53,14 @@ specific issue date or range.
 \item \code{lag}: (integer) Retrieve data with a specific lag from
 its issue date.
 }
+See \code{vignette("versioned-data")} for details and more ways to specify
+versioned data.
 }
 
 \examples{
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
- pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
+pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
 \dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}
