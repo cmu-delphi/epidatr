@@ -5,6 +5,13 @@ on:
     branches: [main, dev]
   pull_request:
     branches: [main, dev]
+    paths:
+      - '**.R'
+      - '**.Rmd'
+      - DESCRIPTION
+      - NAMESPACE
+      - man/**
+      - R/**
   workflow_dispatch:
 
 name: lint

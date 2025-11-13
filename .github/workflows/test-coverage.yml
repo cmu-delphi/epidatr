@@ -5,7 +5,14 @@ on:
   push:
     branches: [main, dev]
   pull_request:
-
+    paths:
+      - '**.R'
+      - '**.Rmd'
+      - DESCRIPTION
+      - NAMESPACE
+      - man/**
+      - R/**
+      - tests/**
 name: test-coverage
 
 jobs:
