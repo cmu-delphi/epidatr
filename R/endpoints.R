@@ -1040,6 +1040,17 @@ pub_covidcast <- function(
     )
   }
 
+  if (source == "nssp" && time_type != "week") {
+    cli::cli_abort(
+      "{source} data is only available at the week level",
+      class = "epidatr__nchs_week_only"
+    )
+  }
+
+  # TODO: This should probably be done in the create_epidata_call function. But
+  # this is a quick fix for now.
+  checkmate::assert_subset(time_type, c("day", "week"))
+
   create_epidata_call(
     "covidcast/",
     list(
