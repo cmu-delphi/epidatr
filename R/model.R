@@ -132,21 +132,18 @@ create_epidata_field_info <- function(name,
                                       type,
                                       description = "",
                                       categories = c()) {
-  stopifnot(is.character(name) && length(name) == 1)
-  stopifnot(
-    is.character(type) &&
-      length(type) == 1 &&
-      type %in% c(
-        "text",
-        "int",
-        "float",
-        "date",
-        "epiweek",
-        "categorical",
-        "bool"
-      )
-  )
-  stopifnot(is.character(description) && length(description) == 1)
+  checkmate::assert_character(name, len = 1)
+  checkmate::assert_character(type, len = 1)
+  checkmate::assert_subset(type, c(
+    "text",
+    "int",
+    "float",
+    "date",
+    "epiweek",
+    "categorical",
+    "bool"
+  ))
+  checkmate::assert_character(description, len = 1)
   structure(
     list(
       name = name,

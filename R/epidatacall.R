@@ -44,11 +44,11 @@
 #' @importFrom purrr map_chr map_lgl
 create_epidata_call <- function(endpoint, params, meta = NULL,
                                 only_supports_classic = FALSE) {
-  stopifnot(is.character(endpoint), length(endpoint) == 1)
-  stopifnot(is.list(params))
-  stopifnot(is.null(meta) || is.list(meta))
-  stopifnot(all(map_lgl(meta, ~ inherits(.x, "EpidataFieldInfo"))))
-  stopifnot(is.logical(only_supports_classic), length(only_supports_classic) == 1)
+  checkmate::assert_character(endpoint, len = 1)
+  checkmate::assert_list(params)
+  checkmate::assert_list(meta, null.ok = TRUE)
+  checkmate::assert_logical(only_supports_classic, len = 1)
+  checkmate::assert_true(all(map_lgl(meta, ~ inherits(.x, "EpidataFieldInfo"))))
 
   if (length(unique(meta)) != length(meta)) {
     cli::cli_abort(
@@ -72,6 +72,15 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
       class = "epidatr__duplicate_meta_names"
     )
   }
+
+  # TODO: Something like this in the future? We set up the categories
+  # but we don't actually validate them yet?
+  # for (field in names(params)) {
+  #   value <- params[[field]]
+  #   if (meta[[field]]$type == "categorical") {
+  #     checkmate::assert_subset(value, meta[[field]]$categories)
+  #   }
+  # }
 
   if (is.null(meta)) {
     meta <- list()
