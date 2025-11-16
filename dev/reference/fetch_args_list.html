@@ -11,7 +11,7 @@ makes calls to the Epidata API."><meta name="robots" content="noindex"></head><b
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.1</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,8 @@ makes calls to the Epidata API.</p>
 <span>  dry_run <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  debug <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  format_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"json"</span>, <span class="st">"classic"</span>, <span class="st">"csv"</span><span class="op">)</span>,</span>
-<span>  refresh_cache <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  refresh_cache <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  reference_week_day <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -123,6 +124,12 @@ csv; this is only used by <code>fetch_debug</code>, and by default is <code>"jso
 <dt id="arg-refresh-cache">refresh_cache<a class="anchor" aria-label="anchor" href="#arg-refresh-cache"></a></dt>
 <dd><p>if <code>TRUE</code>, ignore the cache, fetch the data from the
 API, and update the cache, if it is enabled</p></dd>
+
+
+<dt id="arg-reference-week-day">reference_week_day<a class="anchor" aria-label="anchor" href="#arg-reference-week-day"></a></dt>
+<dd><p>the day of the week to use as the reference day
+when parsing epiweeks to dates (happens if <code>disable_date_parsing</code> is <code>FALSE</code>)
+Defaults to 1 Sunday (the first day of the week).</p></dd>
 
 </dl></div>
     <div class="section level2">

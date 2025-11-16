@@ -19,7 +19,8 @@ fetch_args_list(
   dry_run = FALSE,
   debug = FALSE,
   format_type = c("json", "classic", "csv"),
-  refresh_cache = FALSE
+  refresh_cache = FALSE,
+  reference_week_day = 1
 )
 ```
 
@@ -77,6 +78,12 @@ fetch_args_list(
 
   if `TRUE`, ignore the cache, fetch the data from the API, and update
   the cache, if it is enabled
+
+- reference_week_day:
+
+  the day of the week to use as the reference day when parsing epiweeks
+  to dates (happens if `disable_date_parsing` is `FALSE`) Defaults to 1
+  Sunday (the first day of the week).
 
 ## Value
 
