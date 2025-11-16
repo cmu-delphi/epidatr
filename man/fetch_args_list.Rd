@@ -16,7 +16,8 @@ fetch_args_list(
   dry_run = FALSE,
   debug = FALSE,
   format_type = c("json", "classic", "csv"),
-  refresh_cache = FALSE
+  refresh_cache = FALSE,
+  reference_week_day = 1
 )
 }
 \arguments{
@@ -52,6 +53,10 @@ csv; this is only used by \code{fetch_debug}, and by default is \code{"json"}}
 
 \item{refresh_cache}{if \code{TRUE}, ignore the cache, fetch the data from the
 API, and update the cache, if it is enabled}
+
+\item{reference_week_day}{the day of the week to use as the reference day
+when parsing epiweeks to dates (happens if \code{disable_date_parsing} is \code{FALSE})
+Defaults to 1 Sunday (the first day of the week).}
 }
 \value{
 A \code{fetch_args} object containing all the specified options

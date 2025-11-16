@@ -910,17 +910,17 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
       create_epidata_field_info(
         "geo_type",
         "categorical",
-        categories = c("nation", "msa", "hrr", "hhs", "state", "county", "dma")
+        categories = c("nation", "msa", "hrr", "hhs", "state", "county", "dma", "hsa_nci")
       ),
-      create_epidata_field_info("min_time", "date"),
-      create_epidata_field_info("max_time", "date"),
+      create_epidata_field_info("min_time", "int"),
+      create_epidata_field_info("max_time", "int"),
       create_epidata_field_info("num_locations", "int"),
       create_epidata_field_info("min_value", "float"),
       create_epidata_field_info("max_value", "float"),
       create_epidata_field_info("mean_value", "float"),
       create_epidata_field_info("stdev_value", "float"),
       create_epidata_field_info("last_update", "int"),
-      create_epidata_field_info("max_issue", "date"),
+      create_epidata_field_info("max_issue", "int"),
       create_epidata_field_info("min_lag", "int"),
       create_epidata_field_info("max_lag", "int")
     )
@@ -1040,6 +1040,17 @@ pub_covidcast <- function(
     )
   }
 
+  if (source == "nssp" && time_type != "week") {
+    cli::cli_abort(
+      "{source} data is only available at the week level",
+      class = "epidatr__nchs_week_only"
+    )
+  }
+
+  # TODO: This should probably be done in the create_epidata_call function. But
+  # this is a quick fix for now.
+  checkmate::assert_subset(time_type, c("day", "week"))
+
   create_epidata_call(
     "covidcast/",
     list(
@@ -1059,7 +1070,7 @@ pub_covidcast <- function(
       create_epidata_field_info(
         "geo_type",
         "categorical",
-        categories = c("nation", "msa", "hrr", "hhs", "state", "county")
+        categories = c("nation", "msa", "hrr", "hhs", "state", "county", "dma", "hsa_nci")
       ),
       create_epidata_field_info("time_type", "categorical",
         categories =
