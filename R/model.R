@@ -256,7 +256,7 @@ parse_api_date <- function(value) {
 
 #' parse_api_week converts an integer to a date
 #' @param value value to be converted to an epiweek
-#' @param reference_week_day the day of the week to use as the reference day. Defaults to Saturday.
+#' @param reference_week_day the day of the week to use as the reference day. Defaults to Sunday.
 #' @return a date
 #' @importFrom MMWRweek MMWRweek2Date
 #' @keywords internal
