@@ -73,14 +73,9 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
     )
   }
 
-  # TODO: Something like this in the future? We set up the categories
+  # TODO: Check the categories in the future? We set up the categories
   # but we don't actually validate them yet?
-  # for (field in names(params)) {
-  #   value <- params[[field]]
-  #   if (meta[[field]]$type == "categorical") {
-  #     checkmate::assert_subset(value, meta[[field]]$categories)
-  #   }
-  # }
+  # use checkmate::assert_subset or something like that
 
   if (is.null(meta)) {
     meta <- list()
@@ -285,7 +280,12 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     if (fetch_args$return_empty && length(response_content) == 0) {
       fetched <- tibble()
     } else {
-      fetched <- parse_data_frame(epidata_call, response_content, fetch_args$disable_date_parsing, fetch_args$reference_week_day) %>% as_tibble()
+      fetched <- parse_data_frame(
+        epidata_call,
+        response_content,
+        fetch_args$disable_date_parsing,
+        fetch_args$reference_week_day
+      ) %>% as_tibble()
     }
   })
 

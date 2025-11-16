@@ -224,7 +224,12 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE, ref
   for (i in seq_len(length(meta))) {
     info <- meta[[i]]
     if (info$name %in% columns) {
-      df[[info$name]] <- parse_value(info, df[[info$name]], disable_date_parsing = disable_date_parsing, reference_week_day = reference_week_day)
+      df[[info$name]] <- parse_value(
+        info,
+        df[[info$name]],
+        disable_date_parsing = disable_date_parsing,
+        reference_week_day = reference_week_day
+      )
     }
   }
   df
