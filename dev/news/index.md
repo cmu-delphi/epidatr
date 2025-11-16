@@ -18,6 +18,7 @@
 - `pub_covidcast_meta` now returns `min_time`, `max_time`, `max_issue`
   as integers rather than Dates. Because these fields can mix YYYYMMDD
   and YYYYWW values, we recommend you parse them yourself.
+- add new fields for `flusurv` endpoint.
 
 ## epidatr 1.2.1
 
