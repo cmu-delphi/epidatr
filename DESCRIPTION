@@ -60,8 +60,6 @@ Suggests:
     withr
 VignetteBuilder:
     knitr
-Remotes:
-    cmu-delphi/delphidocs
 Config/Needs/website: cmu-delphi/delphidocs
 Config/testthat/edition: 3
 Encoding: UTF-8

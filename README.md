@@ -18,8 +18,8 @@ influenza, COVID-19, and other diseases from both official government
 sources such as the [Centers for Disease Control and Prevention
 (CDC)](https://www.cdc.gov/), private partners such as [Facebook (now
 Meta)](https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/)
-and [Change Healthcare](https://www.changehealthcare.com/), and other
-public datasets like [Google
+and [Change Healthcare](https://business.optum.com/en/?src=chc), and
+other public datasets like [Google
 Trends](https://console.cloud.google.com/marketplace/product/bigquery-public-datasets/covid19-search-trends).
 It is built and maintained by the Carnegie Mellon University [Delphi
 Research Group](https://delphi.cmu.edu/).
