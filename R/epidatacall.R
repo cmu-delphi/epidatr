@@ -44,11 +44,11 @@
 #' @importFrom purrr map_chr map_lgl
 create_epidata_call <- function(endpoint, params, meta = NULL,
                                 only_supports_classic = FALSE) {
-  stopifnot(is.character(endpoint), length(endpoint) == 1)
-  stopifnot(is.list(params))
-  stopifnot(is.null(meta) || is.list(meta))
-  stopifnot(all(map_lgl(meta, ~ inherits(.x, "EpidataFieldInfo"))))
-  stopifnot(is.logical(only_supports_classic), length(only_supports_classic) == 1)
+  checkmate::assert_character(endpoint, len = 1)
+  checkmate::assert_list(params)
+  checkmate::assert_list(meta, null.ok = TRUE)
+  checkmate::assert_logical(only_supports_classic, len = 1)
+  checkmate::assert_true(all(map_lgl(meta, ~ inherits(.x, "EpidataFieldInfo"))))
 
   if (length(unique(meta)) != length(meta)) {
     cli::cli_abort(
@@ -72,6 +72,10 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
       class = "epidatr__duplicate_meta_names"
     )
   }
+
+  # TODO: Check the categories in the future? We set up the categories
+  # but we don't actually validate them yet?
+  # use checkmate::assert_subset or something like that
 
   if (is.null(meta)) {
     meta <- list()
@@ -155,23 +159,28 @@ print.epidata_call <- function(x, ...) {
 #' @param format_type the format to request from the API, one of classic, json,
 #'   csv; this is only used by `fetch_debug`, and by default is `"json"`
 #' @param refresh_cache if `TRUE`, ignore the cache, fetch the data from the
-#' API, and update the cache, if it is enabled
+#'   API, and update the cache, if it is enabled
+#' @param reference_week_day the day of the week to use as the reference day
+#'   when parsing epiweeks to dates (happens if `disable_date_parsing` is `FALSE`)
+#'   Defaults to 1 Sunday (the first day of the week).
 #' @return A `fetch_args` object containing all the specified options
 #' @export
 #' @aliases fetch_args
 #' @importFrom checkmate assert_character assert_logical assert_numeric
 fetch_args_list <- function(
-    ...,
-    fields = NULL,
-    disable_date_parsing = FALSE,
-    disable_data_frame_parsing = FALSE,
-    return_empty = FALSE,
-    timeout_seconds = 15 * 60,
-    base_url = NULL,
-    dry_run = FALSE,
-    debug = FALSE,
-    format_type = c("json", "classic", "csv"),
-    refresh_cache = FALSE) {
+  ...,
+  fields = NULL,
+  disable_date_parsing = FALSE,
+  disable_data_frame_parsing = FALSE,
+  return_empty = FALSE,
+  timeout_seconds = 15 * 60,
+  base_url = NULL,
+  dry_run = FALSE,
+  debug = FALSE,
+  format_type = c("json", "classic", "csv"),
+  refresh_cache = FALSE,
+  reference_week_day = 1
+) {
   rlang::check_dots_empty()
 
   assert_character(fields, null.ok = TRUE, any.missing = FALSE)
@@ -184,6 +193,7 @@ fetch_args_list <- function(
   assert_logical(debug, null.ok = FALSE, len = 1L, any.missing = FALSE)
   format_type <- match.arg(format_type)
   assert_logical(refresh_cache, null.ok = FALSE, len = 1L, any.missing = FALSE)
+  assert_numeric(reference_week_day, null.ok = FALSE, len = 1L, any.missing = FALSE)
 
   structure(
     list(
@@ -196,7 +206,8 @@ fetch_args_list <- function(
       dry_run = dry_run,
       debug = debug,
       format_type = format_type,
-      refresh_cache = refresh_cache
+      refresh_cache = refresh_cache,
+      reference_week_day = reference_week_day
     ),
     class = "fetch_args"
   )
@@ -269,7 +280,12 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     if (fetch_args$return_empty && length(response_content) == 0) {
       fetched <- tibble()
     } else {
-      fetched <- parse_data_frame(epidata_call, response_content, fetch_args$disable_date_parsing) %>% as_tibble()
+      fetched <- parse_data_frame(
+        epidata_call,
+        response_content,
+        fetch_args$disable_date_parsing,
+        fetch_args$reference_week_day
+      ) %>% as_tibble()
     }
   })
 

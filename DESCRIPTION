@@ -1,7 +1,7 @@
 Type: Package
 Package: epidatr
 Title: Client for Delphi's 'Epidata' API
-Version: 1.2.1
+Version: 1.2.2
 Authors@R: c(
     person("Logan", "Brooks", , "lcbrooks@andrew.cmu.edu", role = "aut"),
     person("Dmitry", "Shemetov", , "dshemeto@andrew.cmu.edu", role = "aut"),
@@ -68,7 +68,7 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Collate:
     'auth.R'
     'avail_endpoints.R'

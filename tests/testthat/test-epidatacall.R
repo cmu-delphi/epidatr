@@ -43,7 +43,8 @@ test_that("fetch_args", {
         dry_run = FALSE,
         debug = FALSE,
         format_type = "json",
-        refresh_cache = FALSE
+        refresh_cache = FALSE,
+        reference_week_day = 1
       ),
       class = "fetch_args"
     )
@@ -59,7 +60,8 @@ test_that("fetch_args", {
       dry_run = TRUE,
       debug = TRUE,
       format_type = "classic",
-      refresh_cache = TRUE
+      refresh_cache = TRUE,
+      reference_week_day = 1
     ),
     structure(
       list(
@@ -72,7 +74,8 @@ test_that("fetch_args", {
         dry_run = TRUE,
         debug = TRUE,
         format_type = "classic",
-        refresh_cache = TRUE
+        refresh_cache = TRUE,
+        reference_week_day = 1
       ),
       class = "fetch_args"
     )

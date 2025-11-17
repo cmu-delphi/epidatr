@@ -4,10 +4,12 @@
 \alias{parse_api_week}
 \title{parse_api_week converts an integer to a date}
 \usage{
-parse_api_week(value)
+parse_api_week(value, reference_week_day = 1)
 }
 \arguments{
 \item{value}{value to be converted to an epiweek}
+
+\item{reference_week_day}{the day of the week to use as the reference day. Defaults to Sunday.}
 }
 \value{
 a date

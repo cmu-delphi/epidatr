@@ -132,21 +132,18 @@ create_epidata_field_info <- function(name,
                                       type,
                                       description = "",
                                       categories = c()) {
-  stopifnot(is.character(name) && length(name) == 1)
-  stopifnot(
-    is.character(type) &&
-      length(type) == 1 &&
-      type %in% c(
-        "text",
-        "int",
-        "float",
-        "date",
-        "epiweek",
-        "categorical",
-        "bool"
-      )
-  )
-  stopifnot(is.character(description) && length(description) == 1)
+  checkmate::assert_character(name, len = 1)
+  checkmate::assert_character(type, len = 1)
+  checkmate::assert_subset(type, c(
+    "text",
+    "int",
+    "float",
+    "date",
+    "epiweek",
+    "categorical",
+    "bool"
+  ))
+  checkmate::assert_character(description, len = 1)
   structure(
     list(
       name = name,
@@ -166,7 +163,7 @@ print.EpidataFieldInfo <- function(x, ...) {
 }
 
 #' @importFrom stats na.omit
-parse_value <- function(info, value, disable_date_parsing = FALSE) {
+parse_value <- function(info, value, disable_date_parsing = FALSE, reference_week_day = 1) {
   stopifnot(inherits(info, "EpidataFieldInfo"))
 
   if (is.null(value)) {
@@ -174,7 +171,7 @@ parse_value <- function(info, value, disable_date_parsing = FALSE) {
   } else if (info$type == "date" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_date(value))
   } else if (info$type == "epiweek" && !disable_date_parsing && !inherits(value, "Date")) {
-    return(parse_api_week(value))
+    return(parse_api_week(value, reference_week_day = reference_week_day))
   } else if (info$type == "bool") {
     return(as.logical(value))
   } else if (info$type == "int") {
@@ -200,7 +197,7 @@ parse_value <- function(info, value, disable_date_parsing = FALSE) {
 }
 
 #' @importFrom purrr map_chr
-parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
+parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE, reference_week_day = 1) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   meta <- epidata_call$meta
   df <- as.data.frame(df)
@@ -227,7 +224,12 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE) {
   for (i in seq_len(length(meta))) {
     info <- meta[[i]]
     if (info$name %in% columns) {
-      df[[info$name]] <- parse_value(info, df[[info$name]], disable_date_parsing = disable_date_parsing)
+      df[[info$name]] <- parse_value(
+        info,
+        df[[info$name]],
+        disable_date_parsing = disable_date_parsing,
+        reference_week_day = reference_week_day
+      )
     }
   }
   df
@@ -254,14 +256,15 @@ parse_api_date <- function(value) {
 
 #' parse_api_week converts an integer to a date
 #' @param value value to be converted to an epiweek
+#' @param reference_week_day the day of the week to use as the reference day. Defaults to Sunday.
 #' @return a date
 #' @importFrom MMWRweek MMWRweek2Date
 #' @keywords internal
-parse_api_week <- function(value) {
+parse_api_week <- function(value, reference_week_day = 1) {
   v <- as.integer(value)
   years <- floor(v / 100)
   weeks <- v - (years * 100)
-  MMWRweek::MMWRweek2Date(years, weeks)
+  MMWRweek::MMWRweek2Date(years, weeks, MMWRday = reference_week_day)
 }
 
 #' @importFrom checkmate test_character test_class test_date test_integerish test_list
