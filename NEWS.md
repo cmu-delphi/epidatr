@@ -1,3 +1,11 @@
+
+
+# epidatr 1.2.3
+
+## Changes
+
+- Make sure `*_meta` functions bypass the cache by default.
+
 # epidatr 1.2.2
 
 ## Changes
