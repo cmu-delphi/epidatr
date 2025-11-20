@@ -885,6 +885,8 @@ pub_covid_hosp_state_timeseries <- function(
 #' available, the geographic levels at which they are reported, and etc.
 #'
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'   By default, the cache is refreshed (since we anticipate the user will want
+#'   to see the latest metadata).
 #'
 #' @return [`tibble::tibble`]
 #'
@@ -896,7 +898,7 @@ pub_covid_hosp_state_timeseries <- function(
 #' @seealso [pub_covidcast()],[covidcast_epidata()]
 #' @keywords endpoint
 #' @export
-pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
+pub_covidcast_meta <- function(fetch_args = fetch_args_list(refresh_cache=TRUE)) {
   create_epidata_call(
     "covidcast_meta/",
     list(),
@@ -1466,12 +1468,13 @@ pub_fluview_clinical <- function(
 #' }
 #'
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' Set `refresh_cache=TRUE` to force a refresh of the cache.
 #'
 #' @return [`tibble::tibble`]
 #' @seealso [`pub_fluview()`]
 #' @keywords endpoint
 #' @export
-pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
+pub_fluview_meta <- function(fetch_args = fetch_args_list(refresh_cache=TRUE)) {
   create_epidata_call(
     "fluview_meta/",
     list(),
@@ -1746,11 +1749,12 @@ pub_kcdc_ili <- function(
 #' }
 #' @param auth string. Restricted access key (not the same as API key).
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' Set `refresh_cache=TRUE` to force a refresh of the cache.
 #' @return [`list`]
 #' @seealso [`pvt_norostat()`]
 #' @keywords endpoint
 #' @export
-pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
+pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list(refresh_cache=TRUE)) {
   assert_character_param("auth", auth, len = 1)
 
   create_epidata_call(
@@ -1765,11 +1769,12 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta.html>
 #'
 #' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' Set `refresh_cache=TRUE` to force a refresh of the cache.
 #'
 #' @return [`list`]
 #' @keywords endpoint
 #' @export
-pub_meta <- function(fetch_args = fetch_args_list()) {
+pub_meta <- function(fetch_args = fetch_args_list(refresh_cache=TRUE)) {
   create_epidata_call("meta/", list(), only_supports_classic = TRUE) %>% fetch(fetch_args = fetch_args)
 }
 
