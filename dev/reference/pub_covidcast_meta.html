@@ -15,7 +15,7 @@ available, the geographic levels at which they are reported, and etc."><meta nam
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.2</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,8 @@ available, the geographic levels at which they are reported, and etc.</p>
 
 
 <dl><dt id="arg-fetch-args">fetch_args<a class="anchor" aria-label="anchor" href="#arg-fetch-args"></a></dt>
-<dd><p><code><a href="fetch_args_list.html">fetch_args</a></code>. Additional arguments to pass to <code><a href="epidata_call.html">fetch()</a></code>.</p></dd>
+<dd><p><code><a href="fetch_args_list.html">fetch_args</a></code>. Additional arguments to pass
+to <code><a href="epidata_call.html">fetch()</a></code>. See <code><a href="fetch_args_list.html">fetch_args_list()</a></code> for details.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -79,10 +80,25 @@ available, the geographic levels at which they are reported, and etc.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">pub_covidcast_meta</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,666 × 15</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    data_source         signal time_type geo_type min_time max_time num_locations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> beta_google_sympto… s01_r… day       county   20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029          <span style="text-decoration: underline;">2</span>718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> beta_google_sympto… s01_r… day       state    20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> beta_google_sympto… s01_r… day       hrr      20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029           299</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> beta_google_sympto… s01_r… day       msa      20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029           380</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> beta_google_sympto… s01_s… day       county   20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029          <span style="text-decoration: underline;">2</span>718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> beta_google_sympto… s01_s… day       state    20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> beta_google_sympto… s01_s… day       hrr      20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029           299</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> beta_google_sympto… s01_s… day       msa      20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029           380</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> beta_google_sympto… s02_r… day       county   20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029          <span style="text-decoration: underline;">2</span>718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> beta_google_sympto… s02_r… day       state    20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,656 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 8 more variables: min_value &lt;dbl&gt;, max_value &lt;dbl&gt;, mean_value &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   stdev_value &lt;dbl&gt;, last_update &lt;dbl&gt;, max_issue &lt;dbl&gt;, min_lag &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   max_lag &lt;dbl&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

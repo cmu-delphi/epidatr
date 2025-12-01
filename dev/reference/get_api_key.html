@@ -9,7 +9,7 @@ key, requests may be subject to rate limits and other limitations."><meta name="
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.2</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,12 +65,15 @@ without one, there are <a href="https://cmu-delphi.github.io/delphi-epidata/api/
 including a rate limit. If you regularly request large amounts of data,
 please consider <a href="https://api.delphi.cmu.edu/epidata/admin/registration_form" class="external-link">registering for an API key</a>.</p>
 <p>API keys are strings read from the environment variable <code>DELPHI_EPIDATA_KEY</code>.
-We recommend setting your key with <code>save_api_key()</code>, which will modify an
-applicable <code>.Renviron</code> file, which will be read in automatically when you
-start future R sessions (see <code><a href="https://rdrr.io/r/base/Startup.html" class="external-link">?Startup</a></code> for details on
-<code>.Renviron</code> files). Alternatively, you can modify the environment variable at
-the command line before/while launching R, or inside an R session with
-<code><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv()</a></code>, but these will not persist across sessions.</p>
+We recommend setting your key with <code>save_api_key()</code>, which will open your
+<code>.Renviron</code> file in a text editor. You will need to write
+<code>DELPHI_EPIDATA_KEY=yourkeyhere</code> (without quotes) in the file and save it.
+Once the <code>.Renviron</code> file has been saved as instructed, it will be read
+automatically when you start future R sessions
+(see <code><a href="https://rdrr.io/r/base/Startup.html" class="external-link">?Startup</a></code> for details on <code>.Renviron</code> files).
+Alternatively, you can modify the environment variable at the command line
+before/while launching R, or inside an R session with <code><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv()</a></code>,
+but these will not persist across sessions.</p>
 <p>Once an API key is set, it is automatically used for all requests made by
 functions in this package.</p>
     </div>

@@ -74,7 +74,8 @@ list structure is returned instead.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+library(magrittr)
+
 call <- pub_covidcast(
   source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
@@ -85,5 +86,20 @@ call <- pub_covidcast(
   fetch_args = fetch_args_list(dry_run = TRUE)
 )
 call %>% fetch()
-} # }
+#> # A tibble: 124 × 15
+#>    geo_value signal    source geo_type time_type time_value direction issue     
+#>    <chr>     <chr>     <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#>  1 ca        confirme… jhu-c… state    day       2020-06-01        NA 2023-03-10
+#>  2 fl        confirme… jhu-c… state    day       2020-06-01        NA 2023-03-03
+#>  3 ca        confirme… jhu-c… state    day       2020-06-02        NA 2023-03-10
+#>  4 fl        confirme… jhu-c… state    day       2020-06-02        NA 2023-03-03
+#>  5 ca        confirme… jhu-c… state    day       2020-06-03        NA 2023-03-10
+#>  6 fl        confirme… jhu-c… state    day       2020-06-03        NA 2023-03-03
+#>  7 ca        confirme… jhu-c… state    day       2020-06-04        NA 2023-03-10
+#>  8 fl        confirme… jhu-c… state    day       2020-06-04        NA 2023-03-03
+#>  9 ca        confirme… jhu-c… state    day       2020-06-05        NA 2023-03-10
+#> 10 fl        confirme… jhu-c… state    day       2020-06-05        NA 2023-03-03
+#> # ℹ 114 more rows
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```

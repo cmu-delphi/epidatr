@@ -1,6 +1,21 @@
 # Changelog
 
+## epidatr 1.3.0
+
+### Changes
+
+- Improve documentation, including descriptions for
+  [`save_api_key()`](https://cmu-delphi.github.io/epidatr/dev/reference/get_api_key.md)
+  and endpoint parameters, and standardize parameter information
+  ([\#324](https://github.com/cmu-delphi/epidatr/issues/324)).
+
+### Features
+
+### Patches
+
 ## epidatr 1.2.2
+
+CRAN release: 2025-11-17
 
 ### Changes
 

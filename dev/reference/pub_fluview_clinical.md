@@ -20,14 +20,21 @@ pub_fluview_clinical(
 
 - regions:
 
-  character. Regions to fetch.
+  character. Vector of location IDs to fetch. Can be "nat" for national,
+  "hhs1"–"hhs10" for HHS Regions, "cen1"–"cen9" for census divisions,
+  lowercase two-letter state or territory abbreviations for most states
+  and territories,"jfk" for New York City, or "ny_minus_jfk" for upstate
+  New York. Full list of locations is available
+  [here](https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt).
 
 - epiweeks:
 
   [`timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md).
-  Epiweeks to fetch in the form epirange(startweek,endweek), where
-  startweek and endweek are of the form YYYYWW (string or numeric).
-  Defaults to all ("\*") dates.
+  Epiweeks to fetch. Supports
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+  and defaults to all ("\*") dates. Format as
+  `epirange(startweek, endweek)`, where startweek and endweek are of the
+  form YYYYWW (string or numeric).
 
 - ...:
 
@@ -36,28 +43,70 @@ pub_fluview_clinical(
 - issues:
 
   [`timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md).
-  Optionally, the issues to fetch. If not set, the most recent issue is
-  returned. Mutually exclusive with `lag`.
+  Optionally, the issue(s) of the data to fetch. See the "Data
+  Versioning" section for details.
 
 - lag:
 
-  integer. Optionally, the lag of the issues to fetch. If not set, the
-  most recent issue is returned. Mutually exclusive with `issues`.
+  integer. Optionally, the lag of the issues to fetch. See the "Data
+  Versioning" section for details.
 
 - fetch_args:
 
   [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
+  See
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
+  for details.
 
 ## Value
 
 [`tibble::tibble`](https://tibble.tidyverse.org/reference/tibble.html)
 
+## Data Versioning
+
+Several endpoints support retrieving historical versions of the data.
+The following parameters control this and are mutually exclusive (only
+one can be provided at a time).
+
+- `as_of`: (Date) Retrieve the data as it was on this date.
+
+- `issues`:
+  [`timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md)
+  Retrieve data from a specific issue date or range of dates.
+
+- `lag`: (integer) Retrieve data with a specific lag from its issue
+  date.
+
+If none of these is specified, the most recent version of the data is
+returned.
+
+See
+[`vignette("versioned-data")`](https://cmu-delphi.github.io/epidatr/dev/articles/versioned-data.md)
+for details and more ways to specify versioned data.
+
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
 pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
-} # }
+#> # A tibble: 14 × 11
+#>    release_date region issue      epiweek      lag total_specimens total_a
+#>    <date>       <chr>  <date>     <date>     <dbl>           <dbl>   <dbl>
+#>  1 2018-10-08   nat    2018-09-23 2016-10-02   103           13380     120
+#>  2 2018-10-08   nat    2018-09-23 2016-10-09   102           14053     108
+#>  3 2018-10-08   nat    2018-09-23 2016-10-16   101           15110     115
+#>  4 2018-10-08   nat    2018-09-23 2016-10-23   100           15312     143
+#>  5 2018-10-08   nat    2018-09-23 2016-10-30    99           16652     201
+#>  6 2018-10-08   nat    2018-09-23 2016-11-06    98           17811     271
+#>  7 2018-10-08   nat    2018-09-23 2016-11-13    97           18948     347
+#>  8 2018-10-08   nat    2018-09-23 2016-11-20    96           18520     451
+#>  9 2018-10-08   nat    2018-09-23 2016-11-27    95           21542     532
+#> 10 2018-10-08   nat    2018-09-23 2016-12-04    94           20564     696
+#> 11 2018-10-08   nat    2018-09-23 2016-12-11    93           23476    1359
+#> 12 2018-10-08   nat    2018-09-23 2016-12-18    92           26775    2556
+#> 13 2018-10-08   nat    2018-09-23 2016-12-25    91           33273    4270
+#> 14 2018-10-08   nat    2018-09-23 2017-01-01    90           35028    4288
+#> # ℹ 4 more variables: total_b <dbl>, percent_positive <dbl>, percent_a <dbl>,
+#> #   percent_b <dbl>
 ```

@@ -47,7 +47,9 @@ pub_wiki(
 - time_values:
 
   [`timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md).
-  Dates or epiweeks to fetch. Defaults to all ("\*") dates.
+  Dates or epiweeks to fetch. Supports
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+  and defaults to all ("\*") dates.
 
 - hours:
 
@@ -62,6 +64,9 @@ pub_wiki(
   [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
+  See
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
+  for details.
 
 ## Value
 
@@ -70,11 +75,23 @@ pub_wiki(
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
 pub_wiki(
   articles = "avian_influenza",
   time_type = "week",
   time_values = epirange(201501, 201601)
 )
-} # }
+#> # A tibble: 53 × 6
+#>    article         count      total  hour epiweek    value
+#>    <chr>           <dbl>      <dbl> <dbl> <date>     <dbl>
+#>  1 avian_influenza  4687 1422164068    -1 2015-01-04  3.30
+#>  2 avian_influenza  5467 1348289071    -1 2015-01-11  4.05
+#>  3 avian_influenza  7090 1402471472    -1 2015-01-18  5.06
+#>  4 avian_influenza  6088 1401781736    -1 2015-01-25  4.34
+#>  5 avian_influenza  5325 1390433062    -1 2015-02-01  3.83
+#>  6 avian_influenza  4501 1396774810    -1 2015-02-08  3.22
+#>  7 avian_influenza  4671 1373094504    -1 2015-02-15  3.40
+#>  8 avian_influenza  5108 1443965380    -1 2015-02-22  3.54
+#>  9 avian_influenza  4298 1466819824    -1 2015-03-01  2.93
+#> 10 avian_influenza  4889 1424146607    -1 2015-03-08  3.43
+#> # ℹ 43 more rows
 ```

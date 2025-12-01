@@ -23,11 +23,11 @@ pvt_twitter(
 
 - auth:
 
-  string. Restricted access key (not the same as API key).
+  string. Your restricted access key (not the same as API key).
 
 - locations:
 
-  character. Locations to fetch.
+  character. List of locations to fetch.
 
 - ...:
 
@@ -41,13 +41,18 @@ pvt_twitter(
 - time_values:
 
   [`timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md).
-  Dates or epiweeks to fetch. Defaults to all ("\*") dates.
+  Dates or epiweeks to fetch. Supports
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+  and defaults to all ("\*") dates.
 
 - fetch_args:
 
   [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
+  See
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
+  for details.
 
 ## Value
 
@@ -56,12 +61,13 @@ pvt_twitter(
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # curl::has_internet() && Sys.getenv("SECRET_API_AUTH_TWITTER") != ""
+
 pvt_twitter(
   auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
   locations = "CA",
   time_type = "week",
   time_values = epirange(201501, 202001)
 )
-} # }
+}
 ```

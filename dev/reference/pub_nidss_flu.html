@@ -11,7 +11,7 @@ Infectious Disease Statistical System."><meta name="robots" content="noindex"></
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.2</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,11 +66,14 @@ Infectious Disease Statistical System.</p>
 
 
 <dl><dt id="arg-regions">regions<a class="anchor" aria-label="anchor" href="#arg-regions"></a></dt>
-<dd><p>character. Regions to fetch.</p></dd>
+<dd><p>character. List of regions to fetch.</p></dd>
 
 
 <dt id="arg-epiweeks">epiweeks<a class="anchor" aria-label="anchor" href="#arg-epiweeks"></a></dt>
-<dd><p><code><a href="timeset.html">timeset</a></code>. Epiweeks to fetch. Defaults to all ("*") dates.</p></dd>
+<dd><p><code><a href="timeset.html">timeset</a></code>. Epiweeks to fetch. Supports
+<code><a href="epirange.html">epirange()</a></code> and defaults to all ("*") dates. Format as
+<code>epirange(startweek, endweek)</code>, where startweek and endweek are of the form
+YYYYWW (string or numeric).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -78,29 +81,59 @@ Infectious Disease Statistical System.</p>
 
 
 <dt id="arg-issues">issues<a class="anchor" aria-label="anchor" href="#arg-issues"></a></dt>
-<dd><p><code><a href="timeset.html">timeset</a></code>. Optionally, the issues to fetch. If not set, the
-most recent issue is returned. Mutually exclusive with <code>lag</code>.</p></dd>
+<dd><p><code><a href="timeset.html">timeset</a></code>. Optionally, the issue(s) of the
+data to fetch. See the "Data Versioning" section for details.</p></dd>
 
 
 <dt id="arg-lag">lag<a class="anchor" aria-label="anchor" href="#arg-lag"></a></dt>
-<dd><p>integer. Optionally, the lag of the issues to fetch. If not set,
-the most recent issue is returned. Mutually exclusive with <code>issues</code>.</p></dd>
+<dd><p>integer. Optionally, the lag of the issues to fetch.
+See the "Data Versioning" section for details.</p></dd>
 
 
 <dt id="arg-fetch-args">fetch_args<a class="anchor" aria-label="anchor" href="#arg-fetch-args"></a></dt>
-<dd><p><code><a href="fetch_args_list.html">fetch_args</a></code>. Additional arguments to pass to <code><a href="epidata_call.html">fetch()</a></code>.</p></dd>
+<dd><p><code><a href="fetch_args_list.html">fetch_args</a></code>. Additional arguments to pass
+to <code><a href="epidata_call.html">fetch()</a></code>. See <code><a href="fetch_args_list.html">fetch_args_list()</a></code> for details.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p><code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble::tibble</a></code></p>
     </div>
+    <div class="section level2">
+    <h2 id="data-versioning">Data Versioning<a class="anchor" aria-label="anchor" href="#data-versioning"></a></h2>
+
+
+<p>Several endpoints support retrieving historical versions of the data.
+The following parameters control this and are mutually exclusive (only
+one can be provided at a time).</p><ul><li><p><code>as_of</code>: (Date) Retrieve the data as it was on this date.</p></li>
+<li><p><code>issues</code>: <code><a href="timeset.html">timeset</a></code> Retrieve data from a
+specific issue date or range of dates.</p></li>
+<li><p><code>lag</code>: (integer) Retrieve data with a specific lag from
+its issue date.</p></li>
+</ul><p>If none of these is specified, the most recent version of the data is
+returned.</p>
+<p>See <code><a href="../articles/versioned-data.html">vignette("versioned-data")</a></code> for details and more ways to specify
+versioned data.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">pub_nidss_flu</span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"taipei"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201501</span>, <span class="fl">201601</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 53 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    release_date region issue      epiweek      lag visits   ili</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2016-01-05   Taipei 2015-12-27 2015-01-04    51  <span style="text-decoration: underline;">16</span>698  0.96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2016-01-12   Taipei 2016-01-03 2015-01-11    51  <span style="text-decoration: underline;">17</span>146  1.03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2016-01-19   Taipei 2016-01-10 2015-01-18    51  <span style="text-decoration: underline;">17</span>817  1.07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2016-01-26   Taipei 2016-01-17 2015-01-25    51  <span style="text-decoration: underline;">18</span>168  1.13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2016-02-02   Taipei 2016-01-24 2015-02-01    51  <span style="text-decoration: underline;">18</span>321  1.11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2016-02-02   Taipei 2016-01-24 2015-02-08    50  <span style="text-decoration: underline;">19</span>799  1.08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2016-02-02   Taipei 2016-01-24 2015-02-15    49  <span style="text-decoration: underline;">11</span>879  1.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2016-02-02   Taipei 2016-01-24 2015-02-22    48  <span style="text-decoration: underline;">17</span>397  1.19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2016-02-02   Taipei 2016-01-24 2015-03-01    47  <span style="text-decoration: underline;">17</span>849  1.07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2016-02-02   Taipei 2016-01-24 2015-03-08    46  <span style="text-decoration: underline;">17</span>441  1.08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 43 more rows</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

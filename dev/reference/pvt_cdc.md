@@ -12,16 +12,20 @@ pvt_cdc(auth, locations, epiweeks = "*", fetch_args = fetch_args_list())
 
 - auth:
 
-  string. Restricted access key (not the same as API key).
+  string. Your restricted access key (not the same as API key).
 
 - locations:
 
-  character. Locations to fetch.
+  character. List of locations to fetch.
 
 - epiweeks:
 
   [`timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md).
-  Epiweeks to fetch. Defaults to all ("\*") dates.
+  Epiweeks to fetch. Supports
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+  and defaults to all ("\*") dates. Format as
+  `epirange(startweek, endweek)`, where startweek and endweek are of the
+  form YYYYWW (string or numeric).
 
 - fetch_args:
 
@@ -39,11 +43,11 @@ pvt_cdc(auth, locations, epiweeks = "*", fetch_args = fetch_args_list())
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # curl::has_internet() && Sys.getenv("SECRET_API_AUTH_CDC") != ""
 pvt_cdc(
   auth = Sys.getenv("SECRET_API_AUTH_CDC"),
   locations = "fl,ca",
   epirange(201501, 201601)
 )
-} # }
+}
 ```

@@ -15,7 +15,7 @@ https://gis.cdc.gov/grasp/fluview/fluportaldashboard.html."><meta name="robots" 
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.2</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,15 +73,19 @@ Outpatient Influenza-like Illness Surveillance Network (ILINet).</p>
 
 
 <dl><dt id="arg-regions">regions<a class="anchor" aria-label="anchor" href="#arg-regions"></a></dt>
-<dd><p>character. Locations to fetch. Can be any string IDs in
-national, HHS region, census division, most states and territories, and so
-on. Full list link below.</p></dd>
+<dd><p>character. Vector of location IDs to fetch.  Can be
+"nat" for national, "hhs1"–"hhs10" for HHS Regions, "cen1"–"cen9" for
+census divisions, lowercase two-letter state or territory abbreviations
+for most states and territories,"jfk" for New York City, or "ny_minus_jfk"
+for upstate New York. Full list of locations is available
+<a href="https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt" class="external-link">here</a>.</p></dd>
 
 
 <dt id="arg-epiweeks">epiweeks<a class="anchor" aria-label="anchor" href="#arg-epiweeks"></a></dt>
-<dd><p><code><a href="timeset.html">timeset</a></code>. Epiweeks to fetch in the form
+<dd><p><code><a href="timeset.html">timeset</a></code>. Epiweeks to fetch. Supports
+<code><a href="epirange.html">epirange()</a></code> and defaults to all ("*") dates. Format as
 <code>epirange(startweek, endweek)</code>, where startweek and endweek are of the form
-YYYYWW (string or numeric). Defaults to all ("*") dates.</p></dd>
+YYYYWW (string or numeric).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -89,22 +93,22 @@ YYYYWW (string or numeric). Defaults to all ("*") dates.</p></dd>
 
 
 <dt id="arg-issues">issues<a class="anchor" aria-label="anchor" href="#arg-issues"></a></dt>
-<dd><p><code><a href="timeset.html">timeset</a></code>. Optionally, the issues to fetch. If not set, the
-most recent issue is returned. Mutually exclusive with <code>lag</code>.</p></dd>
+<dd><p><code><a href="timeset.html">timeset</a></code>. Optionally, the issue(s) of the
+data to fetch. See the "Data Versioning" section for details.</p></dd>
 
 
 <dt id="arg-lag">lag<a class="anchor" aria-label="anchor" href="#arg-lag"></a></dt>
-<dd><p>integer. Optionally, the lag of the issues to fetch. If not set,
-the most recent issue is returned. Mutually exclusive with <code>issues</code>.</p></dd>
+<dd><p>integer. Optionally, the lag of the issues to fetch.
+See the "Data Versioning" section for details.</p></dd>
 
 
 <dt id="arg-auth">auth<a class="anchor" aria-label="anchor" href="#arg-auth"></a></dt>
-<dd><p>string. Optionally, restricted access key (not the same as API
-key).</p></dd>
+<dd><p>string. Your restricted access key (not the same as API key).</p></dd>
 
 
 <dt id="arg-fetch-args">fetch_args<a class="anchor" aria-label="anchor" href="#arg-fetch-args"></a></dt>
-<dd><p><code><a href="fetch_args_list.html">fetch_args</a></code>. Additional arguments to pass to <code><a href="epidata_call.html">fetch()</a></code>.</p></dd>
+<dd><p><code><a href="fetch_args_list.html">fetch_args</a></code>. Additional arguments to pass
+to <code><a href="epidata_call.html">fetch()</a></code>. See <code><a href="fetch_args_list.html">fetch_args_list()</a></code> for details.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -116,12 +120,44 @@ key).</p></dd>
     <p>The full list of location inputs can be accessed at
 <a href="https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py" class="external-link">https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py</a>.</p>
     </div>
+    <div class="section level2">
+    <h2 id="data-versioning">Data Versioning<a class="anchor" aria-label="anchor" href="#data-versioning"></a></h2>
+
+
+<p>Several endpoints support retrieving historical versions of the data.
+The following parameters control this and are mutually exclusive (only
+one can be provided at a time).</p><ul><li><p><code>as_of</code>: (Date) Retrieve the data as it was on this date.</p></li>
+<li><p><code>issues</code>: <code><a href="timeset.html">timeset</a></code> Retrieve data from a
+specific issue date or range of dates.</p></li>
+<li><p><code>lag</code>: (integer) Retrieve data with a specific lag from
+its issue date.</p></li>
+</ul><p>If none of these is specified, the most recent version of the data is
+returned.</p>
+<p>See <code><a href="../articles/versioned-data.html">vignette("versioned-data")</a></code> for details and more ways to specify
+versioned data.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">pub_fluview</span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"nat"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201201</span>, <span class="fl">202005</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 422 × 16</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    release_date region issue      epiweek      lag num_ili num_patients</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2017-10-24   nat    2017-10-01 2012-01-01   300   <span style="text-decoration: underline;">11</span>992       <span style="text-decoration: underline;">678</span>631</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2017-10-24   nat    2017-10-01 2012-01-08   299   <span style="text-decoration: underline;">11</span>543       <span style="text-decoration: underline;">747</span>894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2017-10-24   nat    2017-10-01 2012-01-15   298   <span style="text-decoration: underline;">11</span>939       <span style="text-decoration: underline;">724</span>623</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2017-10-24   nat    2017-10-01 2012-01-22   297   <span style="text-decoration: underline;">13</span>209       <span style="text-decoration: underline;">784</span>244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2017-10-24   nat    2017-10-01 2012-01-29   296   <span style="text-decoration: underline;">14</span>448       <span style="text-decoration: underline;">775</span>298</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2017-10-24   nat    2017-10-01 2012-02-05   295   <span style="text-decoration: underline;">14</span>624       <span style="text-decoration: underline;">784</span>516</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2017-10-24   nat    2017-10-01 2012-02-12   294   <span style="text-decoration: underline;">15</span>929       <span style="text-decoration: underline;">789</span>193</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2017-10-24   nat    2017-10-01 2012-02-19   293   <span style="text-decoration: underline;">16</span>137       <span style="text-decoration: underline;">767</span>022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2017-10-24   nat    2017-10-01 2012-02-26   292   <span style="text-decoration: underline;">16</span>518       <span style="text-decoration: underline;">788</span>242</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2017-10-24   nat    2017-10-01 2012-03-04   291   <span style="text-decoration: underline;">15</span>763       <span style="text-decoration: underline;">749</span>198</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 412 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 9 more variables: num_providers &lt;dbl&gt;, num_age_0 &lt;dbl&gt;, num_age_1 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   num_age_2 &lt;dbl&gt;, num_age_3 &lt;dbl&gt;, num_age_4 &lt;dbl&gt;, num_age_5 &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   wili &lt;dbl&gt;, ili &lt;dbl&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

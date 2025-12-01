@@ -47,6 +47,9 @@ pub_covid_hosp_facility(
   [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
+  See
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
+  for details.
 
 ## Value
 
@@ -65,15 +68,52 @@ annually.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
 pub_covid_hosp_facility(
   hospital_pks = "100075",
   collection_weeks = epirange(20200101, 20200501)
 )
+#> # A tibble: 12 × 113
+#>    hospital_pk state ccn    hospital_name   address city  zip   hospital_subtype
+#>    <chr>       <chr> <chr>  <chr>           <chr>   <chr> <chr> <chr>           
+#>  1 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      
+#>  2 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      
+#>  3 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      
+#>  4 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      
+#>  5 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      
+#>  6 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      
+#>  7 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      
+#>  8 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      
+#>  9 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      
+#> 10 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      
+#> 11 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      
+#> 12 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      
+#> # ℹ 105 more variables: fips_code <chr>, geocoded_hospital_address <chr>,
+#> #   hhs_ids <chr>, publication_date <date>, collection_week <date>,
+#> #   is_metro_micro <lgl>, total_beds_7_day_sum <dbl>,
+#> #   all_adult_hospital_beds_7_day_sum <dbl>,
+#> #   all_adult_hospital_inpatient_beds_7_day_sum <dbl>,
+#> #   inpatient_beds_used_7_day_sum <dbl>,
+#> #   all_adult_hospital_inpatient_bed_occupied_7_day_sum <dbl>, …
 
 pub_covid_hosp_facility(
   hospital_pks = "050063",
   collection_weeks = epirange(20240101, 20240301)
 )
-} # }
+#> # A tibble: 7 × 113
+#>   hospital_pk state ccn    hospital_name    address city  zip   hospital_subtype
+#>   <chr>       <chr> <chr>  <chr>            <chr>   <chr> <chr> <chr>           
+#> 1 050063      CA    050063 HOLLYWOOD PRESB… 1300 N… LOS … 90027 Short Term      
+#> 2 050063      CA    050063 HOLLYWOOD PRESB… 1300 N… LOS … 90027 Short Term      
+#> 3 050063      CA    050063 HOLLYWOOD PRESB… 1300 N… LOS … 90027 Short Term      
+#> 4 050063      CA    050063 HOLLYWOOD PRESB… 1300 N… LOS … 90027 Short Term      
+#> 5 050063      CA    050063 HOLLYWOOD PRESB… 1300 N… LOS … 90027 Short Term      
+#> 6 050063      CA    050063 HOLLYWOOD PRESB… 1300 N… LOS … 90027 Short Term      
+#> 7 050063      CA    050063 HOLLYWOOD PRESB… 1300 N… LOS … 90027 Short Term      
+#> # ℹ 105 more variables: fips_code <chr>, geocoded_hospital_address <chr>,
+#> #   hhs_ids <chr>, publication_date <date>, collection_week <date>,
+#> #   is_metro_micro <lgl>, total_beds_7_day_sum <dbl>,
+#> #   all_adult_hospital_beds_7_day_sum <dbl>,
+#> #   all_adult_hospital_inpatient_beds_7_day_sum <dbl>,
+#> #   inpatient_beds_used_7_day_sum <dbl>,
+#> #   all_adult_hospital_inpatient_bed_occupied_7_day_sum <dbl>, …
 ```

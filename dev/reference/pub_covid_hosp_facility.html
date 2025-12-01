@@ -17,7 +17,7 @@ used to look up facility identifiers in a variety of ways."><meta name="robots" 
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.2</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +91,8 @@ fetch. Defaults to all ("*") dates.</p></dd>
 
 
 <dt id="arg-fetch-args">fetch_args<a class="anchor" aria-label="anchor" href="#arg-fetch-args"></a></dt>
-<dd><p><code><a href="fetch_args_list.html">fetch_args</a></code>. Additional arguments to pass to <code><a href="epidata_call.html">fetch()</a></code>.</p></dd>
+<dd><p><code><a href="fetch_args_list.html">fetch_args</a></code>. Additional arguments to pass
+to <code><a href="epidata_call.html">fetch()</a></code>. See <code><a href="fetch_args_list.html">fetch_args_list()</a></code> for details.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -110,17 +111,55 @@ report annually.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">pub_covid_hosp_facility</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  hospital_pks <span class="op">=</span> <span class="st">"100075"</span>,</span></span>
 <span class="r-in"><span>  collection_weeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20200101</span>, <span class="fl">20200501</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 113</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    hospital_pk state ccn    hospital_name   address city  zip   hospital_subtype</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 100075      FL    100075 ST JOSEPHS HOS… 3001 W… TAMPA 33677 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 105 more variables: fips_code &lt;chr&gt;, geocoded_hospital_address &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   hhs_ids &lt;chr&gt;, publication_date &lt;date&gt;, collection_week &lt;date&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   is_metro_micro &lt;lgl&gt;, total_beds_7_day_sum &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   all_adult_hospital_beds_7_day_sum &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   all_adult_hospital_inpatient_beds_7_day_sum &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   inpatient_beds_used_7_day_sum &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   all_adult_hospital_inpatient_bed_occupied_7_day_sum &lt;dbl&gt;, …</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">pub_covid_hosp_facility</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  hospital_pks <span class="op">=</span> <span class="st">"050063"</span>,</span></span>
 <span class="r-in"><span>  collection_weeks <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20240101</span>, <span class="fl">20240301</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 7 × 113</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   hospital_pk state ccn    hospital_name    address city  zip   hospital_subtype</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 050063      CA    050063 HOLLYWOOD PRESB… 1300 N… LOS … 90027 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 050063      CA    050063 HOLLYWOOD PRESB… 1300 N… LOS … 90027 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 050063      CA    050063 HOLLYWOOD PRESB… 1300 N… LOS … 90027 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 050063      CA    050063 HOLLYWOOD PRESB… 1300 N… LOS … 90027 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 050063      CA    050063 HOLLYWOOD PRESB… 1300 N… LOS … 90027 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> 050063      CA    050063 HOLLYWOOD PRESB… 1300 N… LOS … 90027 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> 050063      CA    050063 HOLLYWOOD PRESB… 1300 N… LOS … 90027 Short Term      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 105 more variables: fips_code &lt;chr&gt;, geocoded_hospital_address &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   hhs_ids &lt;chr&gt;, publication_date &lt;date&gt;, collection_week &lt;date&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   is_metro_micro &lt;lgl&gt;, total_beds_7_day_sum &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   all_adult_hospital_beds_7_day_sum &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   all_adult_hospital_inpatient_beds_7_day_sum &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   inpatient_beds_used_7_day_sum &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   all_adult_hospital_inpatient_bed_occupied_7_day_sum &lt;dbl&gt;, …</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

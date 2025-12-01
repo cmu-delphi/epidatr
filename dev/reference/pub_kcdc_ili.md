@@ -20,12 +20,16 @@ pub_kcdc_ili(
 
 - regions:
 
-  character. Regions to fetch.
+  character. List of regions to fetch.
 
 - epiweeks:
 
   [`timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md).
-  Epiweeks to fetch. Defaults to all ("\*") dates.
+  Epiweeks to fetch. Supports
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+  and defaults to all ("\*") dates. Format as
+  `epirange(startweek, endweek)`, where startweek and endweek are of the
+  form YYYYWW (string or numeric).
 
 - ...:
 
@@ -34,28 +38,55 @@ pub_kcdc_ili(
 - issues:
 
   [`timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md).
-  Optionally, the issues to fetch. If not set, the most recent issue is
-  returned. Mutually exclusive with `lag`.
+  Optionally, the issue(s) of the data to fetch. See the "Data
+  Versioning" section for details.
 
 - lag:
 
-  integer. Optionally, the lag of the issues to fetch. If not set, the
-  most recent issue is returned. Mutually exclusive with `issues`.
+  integer. Optionally, the lag of the issues to fetch. See the "Data
+  Versioning" section for details.
 
 - fetch_args:
 
   [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
+  See
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
+  for details.
 
 ## Value
 
 [`tibble::tibble`](https://tibble.tidyverse.org/reference/tibble.html)
 
+## Data Versioning
+
+Several endpoints support retrieving historical versions of the data.
+The following parameters control this and are mutually exclusive (only
+one can be provided at a time).
+
+- `as_of`: (Date) Retrieve the data as it was on this date.
+
+- `issues`:
+  [`timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md)
+  Retrieve data from a specific issue date or range of dates.
+
+- `lag`: (integer) Retrieve data with a specific lag from its issue
+  date.
+
+If none of these is specified, the most recent version of the data is
+returned.
+
+See
+[`vignette("versioned-data")`](https://cmu-delphi.github.io/epidatr/dev/articles/versioned-data.md)
+for details and more ways to specify versioned data.
+
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
 pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
-} # }
+#> # A tibble: 1 × 6
+#>   release_date region issue      epiweek      lag   ili
+#>   <date>       <chr>  <date>     <date>     <dbl> <dbl>
+#> 1 2020-11-03   ROK    2020-11-01 2004-09-05   843   0.6
 ```

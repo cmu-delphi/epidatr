@@ -15,16 +15,20 @@ pvt_ght(auth, locations, epiweeks = "*", query, fetch_args = fetch_args_list())
 
 - auth:
 
-  string. Restricted access key (not the same as API key).
+  string. Your restricted access key (not the same as API key).
 
 - locations:
 
-  character. Locations to fetch.
+  character. List of locations to fetch.
 
 - epiweeks:
 
   [`timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md).
-  Epiweeks to fetch. Defaults to all ("\*") dates.
+  Epiweeks to fetch. Supports
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+  and defaults to all ("\*") dates. Format as
+  `epirange(startweek, endweek)`, where startweek and endweek are of the
+  form YYYYWW (string or numeric).
 
 - query:
 
@@ -35,6 +39,9 @@ pvt_ght(auth, locations, epiweeks = "*", query, fetch_args = fetch_args_list())
   [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
+  See
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
+  for details.
 
 ## Value
 
@@ -43,12 +50,13 @@ pvt_ght(auth, locations, epiweeks = "*", query, fetch_args = fetch_args_list())
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # curl::has_internet() && Sys.getenv("SECRET_API_AUTH_GHT") != ""
+
 pvt_ght(
   auth = Sys.getenv("SECRET_API_AUTH_GHT"),
   locations = "ma",
   epiweeks = epirange(199301, 202304),
   query = "how to get over the flu"
 )
-} # }
+}
 ```

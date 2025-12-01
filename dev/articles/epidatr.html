@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.2</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -329,8 +329,9 @@ states by listing out the desired locations in the
 </h2>
 <p>The Epidata API stores a historical record of all data, including
 corrections and updates, which is particularly useful for accurately
-backtesting forecasting models. To fetch versioned data, we can use the
-<code>as_of</code> argument.</p>
+backtesting forecasting models. To retrieve versioned data, we can use
+the <code>as_of</code> argument, which fetches the data as it was known
+on a specific date.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Obtain the smoothed covid-like illness (CLI) signal from the COVID-19</span></span>
 <span><span class="co"># Trends and Impact survey for Pennsylvania as it was on 2021-06-01</span></span>
@@ -343,6 +344,35 @@ backtesting forecasting models. To fetch versioned data, we can use the
 <span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210105</span>, <span class="fl">20210410</span><span class="op">)</span>,</span>
 <span>  as_of <span class="op">=</span> <span class="st">"2021-06-01"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>We can also request all versions of the data issued within a specific
+time range using the <code>issues</code> argument. <code>issues</code>
+can also take a single date.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># See how the estimate for a SINGLE day (March 1, 2021) evolved</span></span>
+<span><span class="co"># by fetching all issues reported between March and April 2021.</span></span>
+<span><span class="fu"><a href="../reference/pub_covidcast.html">pub_covidcast</a></span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
+<span>  signals <span class="op">=</span> <span class="st">"smoothed_cli"</span>,</span>
+<span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
+<span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
+<span>  geo_values <span class="op">=</span> <span class="st">"pa"</span>,</span>
+<span>  time_values <span class="op">=</span> <span class="st">"2021-03-01"</span>,</span>
+<span>  issues <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2021-03-01"</span>, <span class="st">"2021-04-30"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Finally, we can use the <code>lag</code> argument to request only
+data that was reported a certain number of days after the event.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Fetch survey data for January 2021, but ONLY include data</span></span>
+<span><span class="co"># that was issued exactly 2 days after it was collected.</span></span>
+<span><span class="fu"><a href="../reference/pub_covidcast.html">pub_covidcast</a></span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
+<span>  signals <span class="op">=</span> <span class="st">"smoothed_cli"</span>,</span>
+<span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
+<span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
+<span>  geo_values <span class="op">=</span> <span class="st">"pa"</span>,</span>
+<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210101</span>, <span class="fl">20210131</span><span class="op">)</span>,</span>
+<span>  lag <span class="op">=</span> <span class="fl">2</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>See <code><a href="../articles/versioned-data.html">vignette("versioned-data")</a></code> for details and more ways
 to specify versioned data.</p>
 </div>
@@ -351,7 +381,7 @@ to specify versioned data.</p>
 </h2>
 <p>Because the output data is in a standard <code>tibble</code> format,
 we can easily plot it using <code>ggplot2</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">epidata</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time_value</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -361,10 +391,10 @@ we can easily plot it using <code>ggplot2</code>:</p>
 <span>    x <span class="op">=</span> <span class="st">"Date"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"CLI"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="epidatr_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="700" height="65%"></p>
+<p><img src="epidatr_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="700" height="65%"></p>
 <p><code>ggplot2</code> can also be used to <a href="https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html" class="external-link">create
 choropleths</a>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/adeckmyn/maps" class="external-link">maps</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Obtain the most up-to-date version of the smoothed covid-like illness (CLI)</span></span>
@@ -404,7 +434,7 @@ choropleths</a>.</p>
 <span>    x <span class="op">=</span> <span class="st">"Longitude"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Latitude"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="epidatr_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="700" height="65%"></p>
+<p><img src="epidatr_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="700" height="65%"></p>
 </div>
 <div class="section level2">
 <h2 id="finding-locations-of-interest">Finding locations of interest<a class="anchor" aria-label="anchor" href="#finding-locations-of-interest"></a>
@@ -450,7 +480,7 @@ and for <a href="https://cmu-delphi.github.io/delphi-epidata/api/README.html#sou
 diseases</a>.</p>
 <p>You can also use the <code><a href="../reference/avail_endpoints.html">avail_endpoints()</a></code> function to get a
 table of endpoint functions:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/avail_endpoints.html">avail_endpoints</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Data is available for the US only, unless otherwise specified</span></span></code></pre>
 <table class="table">

@@ -19,26 +19,33 @@ pvt_dengue_sensors(
 
 - auth:
 
-  string. Restricted access key (not the same as API key).
+  string. Your restricted access key (not the same as API key).
 
 - names:
 
-  character. Names to fetch.
+  character. Sensor names to fetch.
 
 - locations:
 
-  character. Locations to fetch.
+  character. List of locations to fetch.
 
 - epiweeks:
 
   [`timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md).
-  Epiweeks to fetch. Defaults to all ("\*") dates.
+  Epiweeks to fetch. Supports
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+  and defaults to all ("\*") dates. Format as
+  `epirange(startweek, endweek)`, where startweek and endweek are of the
+  form YYYYWW (string or numeric).
 
 - fetch_args:
 
   [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
+  See
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
+  for details.
 
 ## Value
 
@@ -47,12 +54,13 @@ pvt_dengue_sensors(
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+if (FALSE) { # curl::has_internet() && Sys.getenv("SECRET_API_AUTH_SENSORS") != ""
+
 pvt_dengue_sensors(
   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
   names = "ght",
   locations = "ag",
   epiweeks = epirange(201501, 202001)
 )
-} # }
+}
 ```

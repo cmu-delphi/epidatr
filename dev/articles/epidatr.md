@@ -147,8 +147,9 @@ pub_covidcast(
 
 The Epidata API stores a historical record of all data, including
 corrections and updates, which is particularly useful for accurately
-backtesting forecasting models. To fetch versioned data, we can use the
-`as_of` argument.
+backtesting forecasting models. To retrieve versioned data, we can use
+the `as_of` argument, which fetches the data as it was known on a
+specific date.
 
 ``` r
 # Obtain the smoothed covid-like illness (CLI) signal from the COVID-19
@@ -161,6 +162,41 @@ pub_covidcast(
   geo_values = "pa",
   time_values = epirange(20210105, 20210410),
   as_of = "2021-06-01"
+)
+```
+
+We can also request all versions of the data issued within a specific
+time range using the `issues` argument. `issues` can also take a single
+date.
+
+``` r
+# See how the estimate for a SINGLE day (March 1, 2021) evolved
+# by fetching all issues reported between March and April 2021.
+pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = "pa",
+  time_values = "2021-03-01",
+  issues = epirange("2021-03-01", "2021-04-30")
+)
+```
+
+Finally, we can use the `lag` argument to request only data that was
+reported a certain number of days after the event.
+
+``` r
+# Fetch survey data for January 2021, but ONLY include data
+# that was issued exactly 2 days after it was collected.
+pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = "pa",
+  time_values = epirange(20210101, 20210131),
+  lag = 2
 )
 ```
 
@@ -185,7 +221,7 @@ ggplot(epidata, aes(x = time_value, y = value)) +
   )
 ```
 
-![](epidatr_files/figure-html/unnamed-chunk-6-1.png)
+![](epidatr_files/figure-html/unnamed-chunk-8-1.png)
 
 `ggplot2` can also be used to [create
 choropleths](https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html).
@@ -232,7 +268,7 @@ ggplot(cli_states, aes(x = long, y = lat, group = group, fill = value)) +
   )
 ```
 
-![](epidatr_files/figure-html/unnamed-chunk-7-1.png)
+![](epidatr_files/figure-html/unnamed-chunk-9-1.png)
 
 ## Finding locations of interest
 
