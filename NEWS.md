@@ -1,3 +1,14 @@
+# epidatr 1.3.0
+
+## Changes
+
+- Improve documentation, including descriptions for `save_api_key()` and endpoint parameters (#324).
+
+## Features
+
+## Patches
+
+
 # epidatr 1.2.2
 
 ## Changes
@@ -14,7 +25,7 @@
   integers rather than Dates. Because these fields can mix YYYYMMDD and YYYYWW
   values, we recommend you parse them yourself.
 - add new fields for `flusurv` endpoint.
-  
+
 # epidatr 1.2.1
 
 ## Patches
