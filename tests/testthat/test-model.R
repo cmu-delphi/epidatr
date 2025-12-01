@@ -148,6 +148,12 @@ test_that("parse_api_date handles missing values appropriately", {
   expect_identical(parse_api_date(NA), as.Date(NA))
 })
 
+test_that("parse_api_week returns the expected day of the week", {
+  expect_identical(parse_api_week(202005) %>% weekdays(), "Sunday")
+  expect_identical(parse_api_week(202005, 4) %>% weekdays(), "Wednesday")
+  expect_identical(parse_api_week(202005, 7) %>% weekdays(), "Saturday")
+})
+
 test_that("date_to_epiweek accepts str and int input", {
   expect_identical(date_to_epiweek("20200101"), 202001)
   expect_identical(date_to_epiweek(20200101), 202001)

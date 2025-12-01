@@ -941,17 +941,17 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
       create_epidata_field_info(
         "geo_type",
         "categorical",
-        categories = c("nation", "msa", "hrr", "hhs", "state", "county", "dma")
+        categories = c("nation", "msa", "hrr", "hhs", "state", "county", "dma", "hsa_nci")
       ),
-      create_epidata_field_info("min_time", "date"),
-      create_epidata_field_info("max_time", "date"),
+      create_epidata_field_info("min_time", "int"),
+      create_epidata_field_info("max_time", "int"),
       create_epidata_field_info("num_locations", "int"),
       create_epidata_field_info("min_value", "float"),
       create_epidata_field_info("max_value", "float"),
       create_epidata_field_info("mean_value", "float"),
       create_epidata_field_info("stdev_value", "float"),
       create_epidata_field_info("last_update", "int"),
-      create_epidata_field_info("max_issue", "date"),
+      create_epidata_field_info("max_issue", "int"),
       create_epidata_field_info("min_lag", "int"),
       create_epidata_field_info("max_lag", "int")
     )
@@ -1059,6 +1059,17 @@ pub_covidcast <- function(
     )
   }
 
+  if (source == "nssp" && time_type != "week") {
+    cli::cli_abort(
+      "{source} data is only available at the week level",
+      class = "epidatr__nchs_week_only"
+    )
+  }
+
+  # TODO: This should probably be done in the create_epidata_call function. But
+  # this is a quick fix for now.
+  checkmate::assert_subset(time_type, c("day", "week"))
+
   create_epidata_call(
     "covidcast/",
     list(
@@ -1078,7 +1089,7 @@ pub_covidcast <- function(
       create_epidata_field_info(
         "geo_type",
         "categorical",
-        categories = c("nation", "msa", "hrr", "hhs", "state", "county")
+        categories = c("nation", "msa", "hrr", "hhs", "state", "county", "dma", "hsa_nci")
       ),
       create_epidata_field_info("time_type", "categorical",
         categories =
@@ -1355,7 +1366,30 @@ pub_flusurv <- function(
       create_epidata_field_info("rate_age_2", "float"),
       create_epidata_field_info("rate_age_3", "float"),
       create_epidata_field_info("rate_age_4", "float"),
-      create_epidata_field_info("rate_overall", "float")
+      create_epidata_field_info("rate_overall", "float"),
+      create_epidata_field_info("rate_age_5", "float"),
+      create_epidata_field_info("rate_age_6", "float"),
+      create_epidata_field_info("rate_age_7", "float"),
+      create_epidata_field_info("rate_age_18t29", "float"),
+      create_epidata_field_info("rate_age_30t39", "float"),
+      create_epidata_field_info("rate_age_40t49", "float"),
+      create_epidata_field_info("rate_age_5t11", "float"),
+      create_epidata_field_info("rate_age_12t17", "float"),
+      create_epidata_field_info("rate_age_lt18", "float"),
+      create_epidata_field_info("rate_age_gte18", "float"),
+      create_epidata_field_info("rate_age_0tlt1", "float"),
+      create_epidata_field_info("rate_age_1t4", "float"),
+      create_epidata_field_info("rate_age_gte75", "float"),
+      create_epidata_field_info("rate_race_white", "float"),
+      create_epidata_field_info("rate_race_black", "float"),
+      create_epidata_field_info("rate_race_hisp", "float"),
+      create_epidata_field_info("rate_race_asian", "float"),
+      create_epidata_field_info("rate_race_natamer", "float"),
+      create_epidata_field_info("rate_sex_male", "float"),
+      create_epidata_field_info("rate_sex_female", "float"),
+      create_epidata_field_info("rate_flu_a", "float"),
+      create_epidata_field_info("rate_flu_b", "float"),
+      create_epidata_field_info("season", "text")
     )
   ) %>% fetch(fetch_args = fetch_args)
 }

@@ -8,6 +8,14 @@ on:
     branches: [main, dev]
   pull_request:
     branches: [main, dev]
+    paths:
+      - '**.R'
+      - '**.Rmd'
+      - DESCRIPTION
+      - NAMESPACE
+      - man/**
+      - R/**
+      - _pkgdown.yml
   release:
     types: [published]
   workflow_dispatch:

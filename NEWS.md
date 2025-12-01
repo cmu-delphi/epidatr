@@ -1,4 +1,22 @@
+# epidatr 1.2.2
+
+## Changes
+
+- Add `reference_week_day` argument to `fetch_args_list` and `fetch` functions.
+
+## Patches
+
+- Validate that `time_type` is one of "day" or "week" in `pub_covidcast`.
+- Validate that `time_type` is "week" when source is "nssp" in `pub_covidcast`.
+- Allow `hsa_nci` as a `geo_type` in `pub_covidcast`.
+- Allow `hsa_nci` as a `geo_type` in `pub_covidcast_meta`.
+- `pub_covidcast_meta` now returns `min_time`, `max_time`, `max_issue` as
+  integers rather than Dates. Because these fields can mix YYYYMMDD and YYYYWW
+  values, we recommend you parse them yourself.
+- add new fields for `flusurv` endpoint.
+  
 # epidatr 1.2.1
+
 ## Patches
 - Fix so that `covidcast_epidata()` will still print if fields are missing.
 
