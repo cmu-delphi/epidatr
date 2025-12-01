@@ -6,15 +6,16 @@
 #' @keywords internal
 #'
 #' @param auth string. Your restricted access key (not the same as API key).
-#' @param locations character. Vector of locations to fetch.
-#' @param states character. Two letter state abbreviations.
-#' @param regions character. Vector of regions to fetch.
+#' @param locations character. List of locations to fetch.
+#' @param states character. List of states to fetch, formatted as two letter state abbreviations.
+#' @param regions character. List of regions to fetch.
 #' @param epiweeks [`timeset`]. Epiweeks to fetch. Supports
-#'   [`epirange()`] and defaults to all ("*") dates.
+#'  [`epirange()`] and defaults to all ("*") dates. Format as
+#'  `epirange(startweek, endweek)`, where startweek and endweek are of the form
+#'  YYYYWW (string or numeric).
 #' @param time_type string. The temporal resolution of the data (either "day" or
 #'  "week", depending on signal).
-#' @param names character. Names to fetch.
-#'   [`epirange()`] and defaults to all ("*") dates.
+#' @param names character. Sensor names to fetch.
 #' @param dates [`timeset`]. Dates to fetch. Supports
 #'   [`epirange()`] and defaults to all ("*") dates.
 #' @param time_values [`timeset`]. Dates or epiweeks to fetch.
@@ -36,10 +37,14 @@
 #' \itemize{
 #'   \item \code{as_of}: (Date) Retrieve the data as it was on this date.
 #'   \item \code{issues}: [`timeset`] Retrieve data from a
-#'     specific issue date or range.
+#'     specific issue date or range of dates.
 #'   \item \code{lag}: (integer) Retrieve data with a specific lag from
 #'     its issue date.
 #' }
+#'
+#' If none of these is specified, the most recent version of the data is
+#' returned.
+#'
 #' See `vignette("versioned-data")` for details and more ways to specify
 #' versioned data.
 NULL
@@ -1316,7 +1321,7 @@ pub_ecdc_ili <- function(
 #'
 #' @examples
 #' \dontrun{
-#' pub_flusurv(locations = "CA", epiweeks = epirange(201701, 201801))
+#' pub_flusurv(locations = "ca", epiweeks = epirange(201701, 201801))
 #' }
 #' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]

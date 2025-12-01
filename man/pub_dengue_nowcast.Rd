@@ -7,10 +7,12 @@
 pub_dengue_nowcast(locations, epiweeks = "*", fetch_args = fetch_args_list())
 }
 \arguments{
-\item{locations}{character. Vector of locations to fetch.}
+\item{locations}{character. List of locations to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
-\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}

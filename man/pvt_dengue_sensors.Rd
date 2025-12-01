@@ -15,13 +15,14 @@ pvt_dengue_sensors(
 \arguments{
 \item{auth}{string. Your restricted access key (not the same as API key).}
 
-\item{names}{character. Names to fetch.
-\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
+\item{names}{character. Sensor names to fetch.}
 
-\item{locations}{character. Vector of locations to fetch.}
+\item{locations}{character. List of locations to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
-\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
 \item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}

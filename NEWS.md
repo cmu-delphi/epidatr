@@ -2,7 +2,7 @@
 
 ## Changes
 
-- Improve documentation, including descriptions for `save_api_key()` and endpoint parameters (#324).
+- Improve documentation, including descriptions for `save_api_key()` and endpoint parameters, and standardize parameter information (#324).
 
 ## Features
 

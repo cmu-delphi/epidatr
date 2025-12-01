@@ -14,7 +14,7 @@ pub_covid_hosp_state_timeseries(
 )
 }
 \arguments{
-\item{states}{character. Two letter state abbreviations.}
+\item{states}{character. List of states to fetch, formatted as two letter state abbreviations.}
 
 \item{dates}{\code{\link{timeset}}. Dates to fetch. Supports
 \code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
@@ -52,10 +52,14 @@ one can be provided at a time).
 \itemize{
 \item \code{as_of}: (Date) Retrieve the data as it was on this date.
 \item \code{issues}: \code{\link{timeset}} Retrieve data from a
-specific issue date or range.
+specific issue date or range of dates.
 \item \code{lag}: (integer) Retrieve data with a specific lag from
 its issue date.
 }
+
+If none of these is specified, the most recent version of the data is
+returned.
+
 See \code{vignette("versioned-data")} for details and more ways to specify
 versioned data.
 }

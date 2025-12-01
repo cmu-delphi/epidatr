@@ -16,7 +16,7 @@ pvt_twitter(
 \arguments{
 \item{auth}{string. Your restricted access key (not the same as API key).}
 
-\item{locations}{character. Vector of locations to fetch.}
+\item{locations}{character. List of locations to fetch.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 

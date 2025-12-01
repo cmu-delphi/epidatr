@@ -117,7 +117,7 @@ pub_covidcast(
 )
 ```
 
-Alternatively, we can fetch the full time series for a subset of states by 
+Alternatively, we can fetch the full time series for a subset of states by
 listing out the desired locations in the `geo_value` argument and using `*`
 in the `time_values` argument:
 
@@ -139,7 +139,7 @@ pub_covidcast(
 The Epidata API stores a historical record of all data, including corrections
 and updates, which is particularly useful for accurately backtesting
 forecasting models. To retrieve versioned data, we can use the `as_of`
-argument, which fetch the data as it was known on a specific date. 
+argument, which fetches the data as it was known on a specific date.
 
 ```{r, eval = FALSE}
 # Obtain the smoothed covid-like illness (CLI) signal from the COVID-19
@@ -155,7 +155,7 @@ pub_covidcast(
 )
 ```
 
-We can also request all versions of the data issued within a specific time period using the `issues` argument.
+We can also request all versions of the data issued within a specific time range using the `issues` argument. `issues` can also take a single date.
 
 ```{r, eval = FALSE}
 # See how the estimate for a SINGLE day (March 1, 2021) evolved

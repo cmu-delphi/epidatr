@@ -9,10 +9,12 @@ pvt_ght(auth, locations, epiweeks = "*", query, fetch_args = fetch_args_list())
 \arguments{
 \item{auth}{string. Your restricted access key (not the same as API key).}
 
-\item{locations}{character. Vector of locations to fetch.}
+\item{locations}{character. List of locations to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
-\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
 \item{query}{string. The query to be fetched.}
 

@@ -14,10 +14,12 @@ pub_flusurv(
 )
 }
 \arguments{
-\item{locations}{character. Vector of locations to fetch.}
+\item{locations}{character. List of locations to fetch.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
-\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
@@ -53,17 +55,21 @@ one can be provided at a time).
 \itemize{
 \item \code{as_of}: (Date) Retrieve the data as it was on this date.
 \item \code{issues}: \code{\link{timeset}} Retrieve data from a
-specific issue date or range.
+specific issue date or range of dates.
 \item \code{lag}: (integer) Retrieve data with a specific lag from
 its issue date.
 }
+
+If none of these is specified, the most recent version of the data is
+returned.
+
 See \code{vignette("versioned-data")} for details and more ways to specify
 versioned data.
 }
 
 \examples{
 \dontrun{
-pub_flusurv(locations = "CA", epiweeks = epirange(201701, 201801))
+pub_flusurv(locations = "ca", epiweeks = epirange(201701, 201801))
 }
 }
 \keyword{endpoint}
