@@ -16,7 +16,7 @@ response <- httr::RETRY(
   "GET", "https://httpbin.org/headers",
   httr::authenticate("epidata", "fake_key")
 )
-content(response)$headers$Authorization == paste0(
+httr::content(response)$headers$Authorization == paste0(
   "Basic ",
   base64enc::base64encode(charToRaw("epidata:fake_key"))
 )

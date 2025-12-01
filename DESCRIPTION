@@ -58,6 +58,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.1.5),
     withr,
+    base64enc,
     curl
 VignetteBuilder:
     knitr
