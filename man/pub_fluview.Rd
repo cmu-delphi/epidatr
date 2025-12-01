@@ -15,26 +15,30 @@ pub_fluview(
 )
 }
 \arguments{
-\item{regions}{character. Locations to fetch. Can be any string IDs in
-national, HHS region, census division, most states and territories, and so
-on. Full list link below.}
+\item{regions}{character. Vector of location IDs to fetch.  Can be
+"nat" for national, "hhs1"--"hhs10" for HHS Regions, "cen1"--"cen9" for
+census divisions, lowercase two-letter state or territory abbreviations
+for most states and territories,"jfk" for New York City, or "ny_minus_jfk"
+for upstate New York. Full list of locations is available
+\href{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt}{here}.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch in the form
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
 \code{epirange(startweek, endweek)}, where startweek and endweek are of the form
-YYYYWW (string or numeric). Defaults to all ("*") dates.}
+YYYYWW (string or numeric).}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
-\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
-most recent issue is returned. Mutually exclusive with \code{lag}.}
+\item{issues}{\code{\link{timeset}}. Optionally, the issue(s) of the
+data to fetch. See the "Data Versioning" section for details.}
 
-\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
-the most recent issue is returned. Mutually exclusive with \code{issues}.}
+\item{lag}{integer. Optionally, the lag of the issues to fetch.
+See the "Data Versioning" section for details.}
 
-\item{auth}{string. Optionally, restricted access key (not the same as API
-key).}
+\item{auth}{string. Your restricted access key (not the same as API key).}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -52,9 +56,30 @@ more information on ILINet, see
 The full list of location inputs can be accessed at
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
 }
-\examples{
-\dontrun{
-pub_fluview(regions = "nat", epiweeks = epirange(201201, 202005))
+\section{Data Versioning}{
+
+Several endpoints support retrieving historical versions of the data.
+The following parameters control this and are mutually exclusive (only
+one can be provided at a time).
+\itemize{
+\item \code{as_of}: (Date) Retrieve the data as it was on this date.
+\item \code{issues}: \code{\link{timeset}} Retrieve data from a
+specific issue date or range of dates.
+\item \code{lag}: (integer) Retrieve data with a specific lag from
+its issue date.
 }
+
+If none of these is specified, the most recent version of the data is
+returned.
+
+See \code{vignette("versioned-data")} for details and more ways to specify
+versioned data.
+}
+
+\examples{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
+pub_fluview(regions = "nat", epiweeks = epirange(201201, 202005))
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

@@ -10,16 +10,16 @@ do_request(url, params, timeout_seconds)
 You can test the authentication headers like so:
 }
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
 response <- httr::RETRY(
   "GET", "https://httpbin.org/headers",
   httr::authenticate("epidata", "fake_key")
 )
-content(response)$headers$Authorization == paste0(
+httr::content(response)$headers$Authorization == paste0(
   "Basic ",
   base64enc::base64encode(charToRaw("epidata:fake_key"))
 )
-}
-
+\dontshow{\}) # examplesIf}
 }
 \keyword{internal}

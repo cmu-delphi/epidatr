@@ -13,15 +13,19 @@ pvt_dengue_sensors(
 )
 }
 \arguments{
-\item{auth}{string. Restricted access key (not the same as API key).}
+\item{auth}{string. Your restricted access key (not the same as API key).}
 
-\item{names}{character. Names to fetch.}
+\item{names}{character. Sensor names to fetch.}
 
-\item{locations}{character. Locations to fetch.}
+\item{locations}{character. List of locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -30,13 +34,14 @@ pvt_dengue_sensors(
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html}
 }
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("SECRET_API_AUTH_SENSORS") != "") withAutoprint(\{ # examplesIf}
+
 pvt_dengue_sensors(
   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
   names = "ght",
   locations = "ag",
   epiweeks = epirange(201501, 202001)
 )
-}
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

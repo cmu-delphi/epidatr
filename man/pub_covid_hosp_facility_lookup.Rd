@@ -27,7 +27,8 @@ pub_covid_hosp_facility_lookup(
 
 \item{fips_code}{string. A 5-digit fips county code, zero-padded.}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -45,10 +46,11 @@ Only one location argument needs to be specified.
 Combinations of the arguments are not currently supported.
 }
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
 pub_covid_hosp_facility_lookup(state = "fl")
 pub_covid_hosp_facility_lookup(city = "southlake")
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=pub_covid_hosp_facility]{pub_covid_hosp_facility()}}

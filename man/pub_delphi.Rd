@@ -12,7 +12,8 @@ pub_delphi(system, epiweek, fetch_args = fetch_args_list())
 \item{epiweek}{\code{\link{timeset}}. Epiweek to fetch. Does not support multiple dates.
 Make separate calls to fetch data for multiple epiweeks.}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link{list}}

@@ -11,12 +11,15 @@
 #' key](https://api.delphi.cmu.edu/epidata/admin/registration_form).
 #'
 #' API keys are strings read from the environment variable `DELPHI_EPIDATA_KEY`.
-#' We recommend setting your key with `save_api_key()`, which will modify an
-#' applicable `.Renviron` file, which will be read in automatically when you
-#' start future R sessions (see [`?Startup`][base::Startup] for details on
-#' `.Renviron` files). Alternatively, you can modify the environment variable at
-#' the command line before/while launching R, or inside an R session with
-#' [`Sys.setenv()`], but these will not persist across sessions.
+#' We recommend setting your key with `save_api_key()`, which will open your
+#' `.Renviron` file in a text editor. You will need to write
+#' `DELPHI_EPIDATA_KEY=yourkeyhere` (without quotes) in the file and save it.
+#' Once the `.Renviron` file has been saved as instructed, it will be read
+#' automatically when you start future R sessions
+#' (see [`?Startup`][base::Startup] for details on `.Renviron` files).
+#' Alternatively, you can modify the environment variable at the command line
+#' before/while launching R, or inside an R session with [`Sys.setenv()`],
+#' but these will not persist across sessions.
 #'
 #' Once an API key is set, it is automatically used for all requests made by
 #' functions in this package.

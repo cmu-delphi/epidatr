@@ -7,11 +7,15 @@
 pub_gft(locations, epiweeks = "*", fetch_args = fetch_args_list())
 }
 \arguments{
-\item{locations}{character. Locations to fetch.}
+\item{locations}{character. List of locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}} Epiweeks to fetch. Defaults to all ("*") dates.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -31,8 +35,9 @@ and
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt}.
 }
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
 pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
-}
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

@@ -7,15 +7,19 @@
 pvt_ght(auth, locations, epiweeks = "*", query, fetch_args = fetch_args_list())
 }
 \arguments{
-\item{auth}{string. Restricted access key (not the same as API key).}
+\item{auth}{string. Your restricted access key (not the same as API key).}
 
-\item{locations}{character. Locations to fetch.}
+\item{locations}{character. List of locations to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
 \item{query}{string. The query to be fetched.}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -26,13 +30,14 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/ght.html}
 Estimate of influenza activity based on volume of certain search queries. …
 }
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("SECRET_API_AUTH_GHT") != "") withAutoprint(\{ # examplesIf}
+
 pvt_ght(
   auth = Sys.getenv("SECRET_API_AUTH_GHT"),
   locations = "ma",
   epiweeks = epirange(199301, 202304),
   query = "how to get over the flu"
 )
-}
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

@@ -14,19 +14,23 @@ pub_nidss_flu(
 )
 }
 \arguments{
-\item{regions}{character. Regions to fetch.}
+\item{regions}{character. List of regions to fetch.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
-\item{issues}{\code{\link{timeset}}. Optionally, the issues to fetch. If not set, the
-most recent issue is returned. Mutually exclusive with \code{lag}.}
+\item{issues}{\code{\link{timeset}}. Optionally, the issue(s) of the
+data to fetch. See the "Data Versioning" section for details.}
 
-\item{lag}{integer. Optionally, the lag of the issues to fetch. If not set,
-the most recent issue is returned. Mutually exclusive with \code{issues}.}
+\item{lag}{integer. Optionally, the lag of the issues to fetch.
+See the "Data Versioning" section for details.}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -37,9 +41,30 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html}
 Obtains information on outpatient inluenza-like-illness from Taiwan National
 Infectious Disease Statistical System.
 }
-\examples{
-\dontrun{
-pub_nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601))
+\section{Data Versioning}{
+
+Several endpoints support retrieving historical versions of the data.
+The following parameters control this and are mutually exclusive (only
+one can be provided at a time).
+\itemize{
+\item \code{as_of}: (Date) Retrieve the data as it was on this date.
+\item \code{issues}: \code{\link{timeset}} Retrieve data from a
+specific issue date or range of dates.
+\item \code{lag}: (integer) Retrieve data with a specific lag from
+its issue date.
 }
+
+If none of these is specified, the most recent version of the data is
+returned.
+
+See \code{vignette("versioned-data")} for details and more ways to specify
+versioned data.
+}
+
+\examples{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
+pub_nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601))
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

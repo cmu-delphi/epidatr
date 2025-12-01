@@ -22,14 +22,15 @@ pub_wiki(
 \item{time_type}{string. The temporal resolution of the data (either "day" or
 "week", depending on signal).}
 
-\item{time_values}{\code{\link{timeset}}. Dates or epiweeks to fetch. Defaults to all
-("*") dates.}
+\item{time_values}{\code{\link{timeset}}. Dates or epiweeks to fetch.
+Supports \code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
 
 \item{hours}{integer. Optionally, the hours to fetch.}
 
 \item{language}{string. Language to fetch.}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -46,12 +47,13 @@ Number of page visits for selected English, Influenza-related wikipedia articles
 }
 }
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
 pub_wiki(
   articles = "avian_influenza",
   time_type = "week",
   time_values = epirange(201501, 201601)
 )
-}
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

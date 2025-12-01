@@ -19,8 +19,9 @@
 #'   `request_url` (for debugging):  outputs the request URL from which data
 #'   would be fetched (note additional parameters below)
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#' library(magrittr)
+#'
 #' call <- pub_covidcast(
 #'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
@@ -31,7 +32,6 @@
 #'   fetch_args = fetch_args_list(dry_run = TRUE)
 #' )
 #' call %>% fetch()
-#' }
 #'
 #' @param endpoint the epidata endpoint to call
 #' @param params the parameters to pass to the epidata endpoint

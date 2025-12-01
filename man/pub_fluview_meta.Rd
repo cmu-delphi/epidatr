@@ -7,7 +7,8 @@
 pub_fluview_meta(fetch_args = fetch_args_list())
 }
 \arguments{
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -16,10 +17,10 @@ pub_fluview_meta(fetch_args = fetch_args_list())
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html}
 }
 \examples{
-\dontrun{
-pub_fluview_meta()
-}
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
+pub_fluview_meta()
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=pub_fluview]{pub_fluview()}}
