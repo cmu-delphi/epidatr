@@ -9,6 +9,12 @@
 ## Patches
 
 
+# epidatr 1.2.4
+
+## Patches
+
+- Extend `check_is_recent` to support numeric date formats (#320).
+
 # epidatr 1.2.2
 
 ## Changes
