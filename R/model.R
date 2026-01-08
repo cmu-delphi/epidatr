@@ -139,6 +139,7 @@ create_epidata_field_info <- function(name,
     "int",
     "float",
     "date",
+    "datetime",
     "epiweek",
     "categorical",
     "bool"
@@ -170,6 +171,8 @@ parse_value <- function(info, value, disable_date_parsing = FALSE, reference_wee
     return(value)
   } else if (info$type == "date" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_date(value))
+  } else if (info$type == "datetime" && !disable_date_parsing && !inherits(value, "POSIXt")) {
+    return(parse_api_datetime(value))
   } else if (info$type == "epiweek" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_week(value, reference_week_day = reference_week_day))
   } else if (info$type == "bool") {
@@ -251,7 +254,22 @@ date_to_epiweek <- function(value) {
 
 #' @keywords internal
 parse_api_date <- function(value) {
-  as.Date(as.character(value), tryFormats = c("%Y%m%d", "%Y-%m-%d"))
+  value_char <- as.character(value)
+  formats <- c("%Y%m%d", "%Y-%m-%d", "%m%d%Y")
+  res <- as.Date(rep(NA, length(value_char)))
+
+  for (fmt in formats) {
+    is_missing <- is.na(res) & !is.na(value_char)
+    if (!any(is_missing)) break
+    attempt <- suppressWarnings(as.Date(value_char[is_missing], format = fmt))
+    res[is_missing] <- attempt
+  }
+  res
+}
+
+#' @keywords internal
+parse_api_datetime <- function(value) {
+  as.POSIXct(as.numeric(value), origin = "1970-01-01")
 }
 
 #' parse_api_week converts an integer to a date
