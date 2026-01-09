@@ -90,6 +90,21 @@ test_that("check_is_recent can handle both str and date inputs of various length
   as_of <- as.Date(c("2022-01-01", "3000-01-02", "3000-01-03"))
   expect_no_error(result <- check_is_recent(as_of, 10))
   expect_identical(result, TRUE)
+
+  # as_of numeric epiweek
+  # Recent epiweek (2 days ago)
+  recent_epiweek <- date_to_epiweek(Sys.Date() - 2)
+  expect_true(check_is_recent(recent_epiweek, 7))
+  # Old epiweek (14 days ago)
+  old_epiweek <- date_to_epiweek(Sys.Date() - 14)
+  expect_false(check_is_recent(old_epiweek, 7))
+
+  # Recent integer date
+  recent_int_date <- as.numeric(format(Sys.Date() - 2, "%Y%m%d"))
+  expect_true(check_is_recent(recent_int_date, 7))
+  # Old integer date
+  old_int_date <- as.numeric(format(Sys.Date() - 14, "%Y%m%d"))
+  expect_false(check_is_recent(old_int_date, 7))
 })
 
 test_that("get_wildcard_equivalent_dates works in basic cases", {
