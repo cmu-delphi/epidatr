@@ -183,6 +183,49 @@ test_that("parse_api_datetime handles missing values appropriately", {
   expect_identical(parse_api_datetime(NA), as.POSIXct(NA))
 })
 
+test_that("parse_api_datetime works on string inputs", {
+  # Standard format
+  val_str <- "2020-06-20 19:52:59"
+  expected <- as.POSIXct("2020-06-20 19:52:59")
+  expect_equal(parse_api_datetime(val_str), expected)
+
+  # Date only
+  val_date <- "2020-06-20"
+  expected_date <- as.POSIXct("2020-06-20", tz = "")
+  expect_equal(parse_api_datetime(val_date), as.POSIXct("2020-06-20"))
+})
+
+test_that("parse_api_datetime works on mixed inputs", {
+  # Numeric timestamp and string
+
+  val_num <- 1592707979
+  val_str <- "2020-06-20 19:52:59"
+
+  vals <- c(as.character(val_num), val_str)
+  res <- parse_api_datetime(vals)
+  expect_s3_class(res, "POSIXct")
+  expect_equal(length(res), 2)
+  expect_false(any(is.na(res)))
+})
+
+test_that("parse_api_datetime works on extra string formats", {
+  val_slash <- "2020/06/20 19:52:59"
+  expected <- as.POSIXct("2020-06-20 19:52:59")
+  expect_equal(parse_api_datetime(val_slash), expected)
+
+  val_compact <- "20200620 19:52:59"
+  expect_equal(parse_api_datetime(val_compact), expected)
+})
+
+test_that("parse_api_datetime works on slash date and compact date", {
+  val_date_slash <- "2020/06/20"
+  expected <- as.POSIXct("2020-06-20")
+  expect_equal(parse_api_datetime(val_date_slash), expected)
+
+  val_date_compact <- "20200620"
+  expect_equal(parse_api_datetime(val_date_compact), expected)
+})
+
 test_that("parse_api_week returns the expected day of the week", {
   expect_identical(parse_api_week(202005) %>% weekdays(), "Sunday")
   expect_identical(parse_api_week(202005, 4) %>% weekdays(), "Wednesday")
@@ -231,4 +274,15 @@ test_that("reformat_epirange works in basic cases", {
 
   result <- reformat_epirange(epirange("20200201", "20201031"), "day")
   expect_identical(result, epirange("20200201", "20201031"))
+})
+test_that("parse_api_datetime handles numeric compact datetime", {
+    # 20200620195259
+    # If treated as timestamp: ~600,000 years in future
+    # Should be treated as 2020-06-20 19:52:59
+    val_compact_num <- 20200620195259
+    val_compact_str <- "20200620195259"
+    expected <- as.POSIXct("2020-06-20 19:52:59")
+
+    expect_equal(parse_api_datetime(val_compact_num), expected)
+    expect_equal(parse_api_datetime(val_compact_str), expected)
 })
