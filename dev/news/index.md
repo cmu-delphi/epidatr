@@ -13,6 +13,13 @@
 
 ### Patches
 
+## epidatr 1.2.4
+
+### Patches
+
+- Extend `check_is_recent` to support numeric date formats
+  ([\#320](https://github.com/cmu-delphi/epidatr/issues/320)).
+
 ## epidatr 1.2.2
 
 CRAN release: 2025-11-17
