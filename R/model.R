@@ -258,6 +258,9 @@ parse_api_date <- function(value) {
   formats <- c("%Y%m%d", "%Y-%m-%d", "%m%d%Y")
   res <- as.Date(rep(NA, length(value_char)))
 
+  # as.Date(..., tryFormats = ...) assumes that all elements in value share the
+  # same format, which can lead to NA or errors. This implementation does not
+  # assume that all elements share the same format.
   for (fmt in formats) {
     is_missing <- is.na(res) & !is.na(value_char)
     if (!any(is_missing)) break
