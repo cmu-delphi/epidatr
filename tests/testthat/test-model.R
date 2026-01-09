@@ -226,6 +226,19 @@ test_that("parse_api_datetime works on slash date and compact date", {
   expect_equal(parse_api_datetime(val_date_compact), expected)
 })
 
+test_that("parse_api_datetime handles numeric compact datetime", {
+  # 20200620195259
+  # If treated as timestamp: ~600,000 years in future
+  # Should be treated as 2020-06-20 19:52:59
+  val_compact_num <- 20200620195259
+  val_compact_str <- "20200620195259"
+  expected <- as.POSIXct("2020-06-20 19:52:59")
+
+  expect_equal(parse_api_datetime(val_compact_num), expected)
+  expect_equal(parse_api_datetime(val_compact_str), expected)
+})
+
+
 test_that("parse_api_week returns the expected day of the week", {
   expect_identical(parse_api_week(202005) %>% weekdays(), "Sunday")
   expect_identical(parse_api_week(202005, 4) %>% weekdays(), "Wednesday")
@@ -274,15 +287,4 @@ test_that("reformat_epirange works in basic cases", {
 
   result <- reformat_epirange(epirange("20200201", "20201031"), "day")
   expect_identical(result, epirange("20200201", "20201031"))
-})
-test_that("parse_api_datetime handles numeric compact datetime", {
-    # 20200620195259
-    # If treated as timestamp: ~600,000 years in future
-    # Should be treated as 2020-06-20 19:52:59
-    val_compact_num <- 20200620195259
-    val_compact_str <- "20200620195259"
-    expected <- as.POSIXct("2020-06-20 19:52:59")
-
-    expect_equal(parse_api_datetime(val_compact_num), expected)
-    expect_equal(parse_api_datetime(val_compact_str), expected)
 })
