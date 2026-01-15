@@ -172,7 +172,7 @@ parse_value <- function(info, value, disable_date_parsing = FALSE, reference_wee
   } else if (info$type == "date" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_date(value))
   } else if (info$type == "datetime" && !disable_date_parsing && !inherits(value, "POSIXt")) {
-    return(parse_api_datetime(value))
+    return(parse_api_timestamp_to_datetime(value))
   } else if (info$type == "epiweek" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_week(value, reference_week_day = reference_week_day))
   } else if (info$type == "bool") {
@@ -271,45 +271,8 @@ parse_api_date <- function(value) {
 }
 
 #' @keywords internal
-parse_api_datetime <- function(value) {
-  # Try basic numeric timestamp parsing first
-  val_num <- suppressWarnings(as.numeric(value))
-  res <- as.POSIXct(rep(NA, length(value)))
-
-  # timestamps (seconds) for recent years are > 1e9.
-  # YYYYMMDD dates are ~ 2e7 (20 million).
-  # YYYYMMDDHHMMSS dates are ~ 2e13.
-  # We'll use 1e8 and 1e11 as safe thresholds to distinguish timestamps.
-  is_timestamp <- !is.na(val_num) & val_num > 1e8 & val_num < 1e11
-  if (any(is_timestamp)) {
-    res[is_timestamp] <- as.POSIXct(val_num[is_timestamp], origin = "1970-01-01")
-  }
-
-  # try parsing if as.POSIXct(..., origin = "1970-01-01") failed for some inputs
-  if (any(is.na(res) & !is.na(value))) {
-    value_char <- as.character(value)
-    # Common formats
-    formats <- c(
-      "%Y-%m-%d %H:%M:%S",
-      "%Y/%m/%d %H:%M:%S",
-      "%Y%m%d %H:%M:%S",
-      "%Y%m%d%H%M%S",
-      "%Y-%m-%d",
-      "%Y/%m/%d",
-      "%Y%m%d"
-    )
-    # as.POSIXct(..., format = ...) assumes that all elements in value share the
-    # same format, which can lead to NA or errors. This implementation does not
-    # assume that all elements share the same format.
-    for (fmt in formats) {
-      is_missing <- is.na(res) & !is.na(value_char)
-      if (!any(is_missing)) break
-
-      attempt <- suppressWarnings(as.POSIXct(value_char[is_missing], format = fmt))
-      res[is_missing] <- attempt
-    }
-  }
-  res
+parse_api_timestamp_to_datetime <- function(value) {
+  as.POSIXct(as.numeric(value), origin = "1970-01-01")
 }
 
 #' parse_api_week converts an integer to a date
