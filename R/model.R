@@ -128,6 +128,10 @@ print.EpiRange <- function(x, ...) {
 #' @name timeset
 NULL
 
+#' Add metadata to an epidata_field
+#' 
+#' This function annotates the type of the returned API field. This is used
+#' by `parse_value` downstream to determine how to convert the returned data.
 create_epidata_field_info <- function(name,
                                       type,
                                       description = "",
@@ -139,7 +143,7 @@ create_epidata_field_info <- function(name,
     "int",
     "float",
     "date",
-    "datetime",
+    "timestamp",
     "epiweek",
     "categorical",
     "bool"
@@ -163,6 +167,10 @@ print.EpidataFieldInfo <- function(x, ...) {
   cli::cli_dl(x[attr(x, "names")])
 }
 
+#' Parse data returned by the API
+#' 
+#' This function uses the metadata annotations to determine how to parse the incoming data.
+#' The data annotation refers to the received API type, rather than the target R type.
 #' @importFrom stats na.omit
 parse_value <- function(info, value, disable_date_parsing = FALSE, reference_week_day = 1) {
   stopifnot(inherits(info, "EpidataFieldInfo"))
