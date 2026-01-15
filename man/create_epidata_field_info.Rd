@@ -6,7 +6,17 @@
 \usage{
 create_epidata_field_info(name, type, description = "", categories = c())
 }
+\arguments{
+\item{name}{The name of the field.}
+
+\item{type}{The type of the field ("text", "int", "float", etc.).}
+
+\item{description}{A description of the field's content.}
+
+\item{categories}{Categories for the field, if applicable.}
+}
 \description{
 This function annotates the type of the returned API field. This is used
 by \code{parse_value} downstream to determine how to convert the returned data.
 }
+\keyword{internal}

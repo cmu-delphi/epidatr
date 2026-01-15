@@ -132,6 +132,12 @@ NULL
 #'
 #' This function annotates the type of the returned API field. This is used
 #' by `parse_value` downstream to determine how to convert the returned data.
+#'
+#' @param name The name of the field.
+#' @param type The type of the field ("text", "int", "float", etc.).
+#' @param description A description of the field's content.
+#' @param categories Categories for the field, if applicable.
+#' @keywords internal
 create_epidata_field_info <- function(name,
                                       type,
                                       description = "",
@@ -171,6 +177,13 @@ print.EpidataFieldInfo <- function(x, ...) {
 #'
 #' This function uses the metadata annotations to determine how to parse the incoming data.
 #' The data annotation refers to the received API type, rather than the target R type.
+#'
+#' @param info The `EpidataFieldInfo` object for the field.
+#' @param value The value to parse.
+#' @param disable_date_parsing If TRUE, disable automatic date parsing.
+#' @param reference_week_day The reference day for epiweek conversion (default 1).
+#' @return The parsed value.
+#' @keywords internal
 #' @importFrom stats na.omit
 parse_value <- function(info, value, disable_date_parsing = FALSE, reference_week_day = 1) {
   stopifnot(inherits(info, "EpidataFieldInfo"))
