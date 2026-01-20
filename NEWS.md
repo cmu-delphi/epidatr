@@ -8,6 +8,9 @@
 
 ## Patches
 
+- `last_update` in `pub_covidcast_meta` is now returned as a `POSIXct` object instead of an integer.
+- Improved efficiency of date parsing for API responses.
+
 
 # epidatr 1.2.4
 
