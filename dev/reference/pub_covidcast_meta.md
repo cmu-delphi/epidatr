@@ -52,6 +52,6 @@ pub_covidcast_meta()
 #> 10 beta_google_sympto… s02_r… day       state    20250919 20251029            51
 #> # ℹ 2,692 more rows
 #> # ℹ 8 more variables: min_value <dbl>, max_value <dbl>, mean_value <dbl>,
-#> #   stdev_value <dbl>, last_update <dbl>, max_issue <dbl>, min_lag <dbl>,
+#> #   stdev_value <dbl>, last_update <dttm>, max_issue <dbl>, min_lag <dbl>,
 #> #   max_lag <dbl>
 ```

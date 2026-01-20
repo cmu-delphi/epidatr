@@ -137,8 +137,8 @@ set_cache(
 )
 #> ! epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not
 #>   intended).
-#> ℹ The cache directory is /tmp/RtmpotaL1h.
+#> ℹ The cache directory is /tmp/Rtmpi05xTi.
 #> ℹ The cache will be cleared after 14 days and will be pruned if it exceeds 512
 #>   MB.
-#> ℹ The log of cache transactions is stored at /tmp/RtmpotaL1h/logs.txt.
+#> ℹ The log of cache transactions is stored at /tmp/Rtmpi05xTi/logs.txt.
 ```
