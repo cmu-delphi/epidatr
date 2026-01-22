@@ -80,8 +80,17 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
   if (is.null(meta)) {
     meta <- list()
   }
+  # Format the parameters before passing them to httr2::req_url_query
+  # This is necessary because httr2::req_url_query does not support EpiRange objects
+  formatted_params <- format_params_for_api(params)
+
+  r <- httr2::request(global_base_url) |>
+    httr2::req_url_path_append(endpoint) |>
+    httr2::req_url_query(!!!formatted_params)
+
   structure(
     list(
+      request = r,
       endpoint = endpoint,
       params = params,
       base_url = global_base_url,
@@ -90,6 +99,19 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
     ),
     class = "epidata_call"
   )
+}
+
+#' @importFrom checkmate test_class test_list
+format_params_for_api <- function(params) {
+  lapply(params, function(v) {
+    if (test_class(v, "EpiRange")) {
+      format_item(v)
+    } else if (test_list(v)) {
+      format_list(v)
+    } else {
+      format_item(v)
+    }
+  })
 }
 
 #' @importFrom checkmate test_class test_list
@@ -128,7 +150,7 @@ print.epidata_call <- function(x, ...) {
   cli::cli_h1("<epidata_call> object:")
   cli::cli_bullets(c(
     "*" = "Pipe this object into `fetch()` to actually fetch the data",
-    "*" = paste0("Request URL: ", request_url(x))
+    "*" = paste0("Request URL: ", x$request$url)
   ))
 }
 
