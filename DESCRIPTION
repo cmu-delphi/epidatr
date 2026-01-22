@@ -38,6 +38,7 @@ Imports:
     cli,
     glue,
     httr,
+    httr2,
     jsonlite,
     magrittr,
     MMWRweek,
