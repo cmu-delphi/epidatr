@@ -439,7 +439,7 @@ request_impl <- function(epidata_call, format_type, timeout_seconds, fields) {
         "//p"
       )))
     }
-    httr2::resp_check_status(response)
+    httr2::resp_check_status(response, info = msg)
   }
 
   response
