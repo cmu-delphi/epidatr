@@ -81,7 +81,7 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
     meta <- list()
   }
   # Format the parameters before passing them to httr2::req_url_query
-  # This is necessary because httr2::req_url_query does not support EpiRange objects
+  # This is necessary because httr2::req_url_query expects atomic vector
   formatted_params <- format_params_for_api(params)
 
   r <- httr2::request(global_base_url) |>
@@ -91,9 +91,7 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
   structure(
     list(
       request = r,
-      endpoint = endpoint,
-      params = params,
-      base_url = global_base_url,
+      base_url = global_base_url, # TODO: remove ...
       meta = meta,
       only_supports_classic = only_supports_classic
     ),
@@ -115,7 +113,7 @@ format_params_for_api <- function(params) {
 }
 
 #' @importFrom checkmate test_class test_list
-request_arguments <- function(epidata_call, format_type, fields) {
+extra_arguments <- function(epidata_call, format_type, fields) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(format_type %in% c("json", "csv", "classic"))
   stopifnot(is.null(fields) || is.character(fields))
@@ -127,22 +125,11 @@ request_arguments <- function(epidata_call, format_type, fields) {
   if (!is.null(fields)) {
     extra_params[["fields"]] <- fields
   }
-  all_params <- c(epidata_call$params, extra_params)
 
-  formatted_params <- list()
-  for (name in names(all_params)) {
-    v <- all_params[[name]]
-    if (!is.null(v)) {
-      if (test_class(v, "EpiRange")) {
-        formatted_params[[name]] <- format_item(v)
-      } else if (test_list(v)) {
-        formatted_params[[name]] <- format_list(v)
-      } else {
-        formatted_params[[name]] <- format_item(v)
-      }
-    }
-  }
-  formatted_params
+  epidata_call$request <- epidata_call$request %>%
+    httr2::req_url_query(!!!extra_params)
+
+  epidata_call
 }
 
 #' @export
@@ -285,7 +272,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     check_for_cache_warnings(epidata_call, fetch_args)
 
     # Check if the data is in the cache
-    target <- request_url(epidata_call)
+    target <- epidata_call$request
     hashed <- md5(target)
     cached <- cache_environ$epidatr_cache$get(hashed)
     if (!is.key_missing(cached)) {
@@ -336,7 +323,7 @@ fetch_classic <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(fetch_args, "fetch_args"))
 
   response_content <- request_impl(epidata_call, "classic", fetch_args$timeout_seconds, fetch_args$fields) %>%
-    httr::content(as = "text", encoding = "UTF-8") %>%
+    httr2::resp_body_string(encoding = "UTF-8") %>%
     jsonlite::fromJSON(simplifyDataFrame = !fetch_args$disable_data_frame_parsing)
 
   # success is 1, no results is -2, truncated is 2, -1 is generic error
@@ -368,14 +355,10 @@ fetch_debug <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(fetch_args, "fetch_args"))
 
   response <- request_impl(epidata_call, fetch_args$format_type, fetch_args$timeout_seconds, fetch_args$fields)
-  content <- httr::content(response, "text", encoding = "UTF-8")
+  content <- httr2::resp_body_string(response, encoding = "UTF-8")
   content
 }
 
-full_url <- function(epidata_call) {
-  stopifnot(inherits(epidata_call, "epidata_call"))
-  join_url(epidata_call$base_url, epidata_call$endpoint)
-}
 
 #' Returns the full request url for the given epidata_call
 #' @rdname request_url
@@ -392,8 +375,23 @@ full_url <- function(epidata_call) {
 #' @keywords internal
 request_url <- function(epidata_call, format_type = "classic", fields = NULL) {
   stopifnot(inherits(epidata_call, "epidata_call"))
-  url <- full_url(epidata_call)
-  params <- request_arguments(epidata_call, format_type, fields)
+
+  # Reconstruct URL from components
+  url <- paste0(epidata_call$base_url, epidata_call$endpoint)
+
+  # Get formatted params
+  params <- format_params_for_api(epidata_call$params)
+
+  if (format_type != "classic") params[["format"]] <- format_type
+  if (!is.null(fields)) {
+    if (is.character(fields) && length(fields) > 1) {
+      params[["fields"]] <- paste(fields, collapse = ",")
+    } else {
+      params[["fields"]] <- fields
+    }
+  }
+
+  # Use httr::modify_url to build the final string properly
   httr::modify_url(url, query = params)
 }
 
@@ -406,6 +404,26 @@ request_url <- function(epidata_call, format_type = "classic", fields = NULL) {
 with_base_url <- function(epidata_call, base_url) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.character(base_url), length(base_url) == 1)
+
+  # Parse current URL
+  current_parsed <- httr2::url_parse(epidata_call$request$url)
+  old_base_parsed <- httr2::url_parse(epidata_call$base_url)
+
+  # Extract endpoint path relative to the old base URL
+  endpoint_path <- sub(
+    pattern = paste0("^", old_base_parsed$path),
+    replacement = "",
+    x = current_parsed$path
+  )
+  # Remove leading slash if present to avoid double slashes
+  endpoint_path <- sub("^/", "", endpoint_path)
+
+  # Rebuild request with new base_url, preserved endpoint, and original query params
+  epidata_call$request <- epidata_call$request %>%
+    httr2::req_url(base_url) %>%
+    httr2::req_url_path_append(endpoint_path) %>%
+    httr2::req_url_query(!!!current_parsed$query)
+
   epidata_call$base_url <- base_url
   epidata_call
 }
@@ -419,21 +437,20 @@ request_impl <- function(epidata_call, format_type, timeout_seconds, fields) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(format_type %in% c("json", "csv", "classic"))
 
-  url <- full_url(epidata_call)
-  params <- request_arguments(epidata_call, format_type, fields)
-  response <- do_request(url, params, timeout_seconds)
+  epidata_call <- extra_arguments(epidata_call, format_type, fields)
+  response <- do_request(epidata_call, timeout_seconds)
 
-  if (response$status_code != 200) {
+  if (httr2::resp_is_error(response)) {
     # 500, 429, 401 are possible
     msg <- "fetch data from API"
-    if (httr::http_type(response) == "text/html") {
+    if (httr2::resp_content_type(response) == "text/html") {
       # grab the error information out of the returned HTML document
       msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
-        xml2::read_html(content(response, "text")),
+        xml2::read_html(httr2::resp_body_string(response)),
         "//p"
       )))
     }
-    httr::stop_for_status(response, task = msg)
+    httr2::resp_check_status(response)
   }
 
   response
