@@ -86,12 +86,12 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
 
   r <- httr2::request(global_base_url) |>
     httr2::req_url_path_append(endpoint) |>
-    httr2::req_url_query(!!!formatted_params)
+    httr2::req_url_query(!!!formatted_params, .multi = "comma")
 
   structure(
     list(
       request = r,
-      base_url = global_base_url, # TODO: remove ...
+      base_url = global_base_url,
       meta = meta,
       only_supports_classic = only_supports_classic
     ),
@@ -101,6 +101,9 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
 
 #' @importFrom checkmate test_class test_list
 format_params_for_api <- function(params) {
+  # Remove NULL components
+  params <- params[!vapply(params, is.null, logical(1))]
+
   lapply(params, function(v) {
     if (test_class(v, "EpiRange")) {
       format_item(v)
@@ -127,7 +130,7 @@ extra_arguments <- function(epidata_call, format_type, fields) {
   }
 
   epidata_call$request <- epidata_call$request %>%
-    httr2::req_url_query(!!!extra_params)
+    httr2::req_url_query(!!!extra_params, .multi = "comma")
 
   epidata_call
 }
@@ -272,7 +275,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     check_for_cache_warnings(epidata_call, fetch_args)
 
     # Check if the data is in the cache
-    target <- epidata_call$request
+    target <- request_url(epidata_call, fetch_args$format_type, fetch_args$fields)
     hashed <- md5(target)
     cached <- cache_environ$epidatr_cache$get(hashed)
     if (!is.key_missing(cached)) {
@@ -376,23 +379,9 @@ fetch_debug <- function(epidata_call, fetch_args = fetch_args_list()) {
 request_url <- function(epidata_call, format_type = "classic", fields = NULL) {
   stopifnot(inherits(epidata_call, "epidata_call"))
 
-  # Reconstruct URL from components
-  url <- paste0(epidata_call$base_url, epidata_call$endpoint)
+  epidata_call <- extra_arguments(epidata_call, format_type, fields)
 
-  # Get formatted params
-  params <- format_params_for_api(epidata_call$params)
-
-  if (format_type != "classic") params[["format"]] <- format_type
-  if (!is.null(fields)) {
-    if (is.character(fields) && length(fields) > 1) {
-      params[["fields"]] <- paste(fields, collapse = ",")
-    } else {
-      params[["fields"]] <- fields
-    }
-  }
-
-  # Use httr::modify_url to build the final string properly
-  httr::modify_url(url, query = params)
+  epidata_call$request$url
 }
 
 #' `epidata_call` object using a different base URL
@@ -422,7 +411,7 @@ with_base_url <- function(epidata_call, base_url) {
   epidata_call$request <- epidata_call$request %>%
     httr2::req_url(base_url) %>%
     httr2::req_url_path_append(endpoint_path) %>%
-    httr2::req_url_query(!!!current_parsed$query)
+    httr2::req_url_query(!!!current_parsed$query, .multi = "comma")
 
   epidata_call$base_url <- base_url
   epidata_call
@@ -443,7 +432,7 @@ request_impl <- function(epidata_call, format_type, timeout_seconds, fields) {
   if (httr2::resp_is_error(response)) {
     # 500, 429, 401 are possible
     msg <- "fetch data from API"
-    if (httr2::resp_content_type(response) == "text/html") {
+    if (identical(httr2::resp_content_type(response), "text/html")) {
       # grab the error information out of the returned HTML document
       msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
         xml2::read_html(httr2::resp_body_string(response)),
