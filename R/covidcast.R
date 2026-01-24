@@ -135,18 +135,17 @@ print.covidcast_data_source <- function(x, ...) {
 #' ```
 #' @param base_url optional alternative API base url
 #' @param timeout_seconds the maximum amount of time to wait for a response
-#' @importFrom httr stop_for_status content http_type
 #' @importFrom jsonlite fromJSON
 #' @importFrom xml2 read_html xml_find_all xml_text
 #' @return An instance of `covidcast_epidata`
 #' @export
 covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) {
-  request <- httr2::request(base_url) |>
-    httr2::req_url_path_append("covidcast/meta") |>
+  request <- httr2::request(base_url) %>%
+    httr2::req_url_path_append("covidcast/meta") %>%
     httr2::req_timeout(timeout_seconds)
 
-  response <- request |>
-    httr2::req_error(is_error = function(resp) FALSE) |>
+  response <- request %>%
+    httr2::req_error(is_error = function(resp) FALSE) %>%
     httr2::req_perform()
 
   if (httr2::resp_is_error(response)) {

@@ -84,8 +84,8 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
   # This is necessary because httr2::req_url_query expects atomic vector
   formatted_params <- format_params_for_api(params)
 
-  r <- httr2::request(global_base_url) |>
-    httr2::req_url_path_append(endpoint) |>
+  r <- httr2::request(global_base_url) %>%
+    httr2::req_url_path_append(endpoint) %>%
     httr2::req_url_query(!!!formatted_params, .multi = "comma")
 
   structure(
@@ -316,7 +316,6 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 #'
 #' @param epidata_call an instance of `epidata_call`
 #' @param fetch_args a `fetch_args` object
-#' @importFrom httr stop_for_status content http_error
 #' @importFrom jsonlite fromJSON
 #' @return
 #' - For `fetch_classic`: a JSON-like list
@@ -372,7 +371,6 @@ fetch_debug <- function(epidata_call, fetch_args = fetch_args_list()) {
 #'   fields (default) e.g. c("time_value", "value") to return only the
 #'   time_value and value fields or c("-direction") to return everything except
 #'   the direction field
-#' @importFrom httr modify_url
 #' @return
 #' - For `request_url`: string containing the URL
 #' @keywords internal
@@ -419,7 +417,6 @@ with_base_url <- function(epidata_call, base_url) {
 
 #' Makes a request to the API and returns the response, catching
 #' HTTP errors and forwarding the HTTP body in R errors
-#' @importFrom httr stop_for_status content http_type
 #' @importFrom xml2 read_html xml_find_all xml_text
 #' @keywords internal
 request_impl <- function(epidata_call, format_type, timeout_seconds, fields) {

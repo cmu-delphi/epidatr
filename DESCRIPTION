@@ -37,7 +37,6 @@ Imports:
     checkmate,
     cli,
     glue,
-    httr,
     httr2,
     jsonlite,
     magrittr,
