@@ -62,13 +62,13 @@ the \code{pub_covidcast()} function. Simply use the \verb{$call} attribute of th
                                               epirange(20210405, 20210410))
 #> Waiting 4s for retry backoff =======>-----------------------
 #> Waiting 4s for retry backoff ========>----------------------
-#> Waiting 4s for retry backoff =========>---------------------
+#> Waiting 4s for retry backoff ==========>--------------------
 #> Waiting 4s for retry backoff ===========>-------------------
-#> Waiting 4s for retry backoff ============>------------------
-#> Waiting 4s for retry backoff ==============>----------------
+#> Waiting 4s for retry backoff =============>-----------------
+#> Waiting 4s for retry backoff ===============>---------------
 #> Waiting 4s for retry backoff ================>--------------
-#> Waiting 4s for retry backoff =================>-------------
-#> Waiting 4s for retry backoff ===================>-----------
+#> Waiting 4s for retry backoff ==================>------------
+#> Waiting 4s for retry backoff ====================>----------
 #> Waiting 4s for retry backoff =====================>---------
 #> Waiting 4s for retry backoff ======================>--------
 #> Waiting 4s for retry backoff ========================>------
