@@ -1,6 +1,8 @@
 #' performs the request
 #'
-#' @importFrom httr2 req_perform req_timeout req_headers req_user_agent req_retry req_error req_auth_basic resp_status req_method req_body_form req_url req_url_query
+#' @importFrom httr2 req_perform req_timeout req_headers req_user_agent req_retry
+#' @importFrom httr2 req_error req_auth_basic resp_status req_method
+#' @importFrom httr2 req_body_form req_url req_url_query
 #' @keywords internal
 do_request <- function(epidata_call, timeout_seconds) {
   req <- epidata_call$request %>%
