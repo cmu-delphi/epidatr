@@ -184,8 +184,6 @@ test_that("parse_api_timestamp_to_datetime handles missing values appropriately"
 })
 
 
-
-
 test_that("parse_api_week returns the expected day of the week", {
   expect_identical(parse_api_week(202005) %>% weekdays(), "Sunday")
   expect_identical(parse_api_week(202005, 4) %>% weekdays(), "Wednesday")

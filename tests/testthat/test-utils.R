@@ -42,10 +42,22 @@ test_that("check_is_cachable can handle both str and date inputs of various leng
   expect_no_error(check_is_cachable(create_epidata_call("e", list(issues = as.Date("2022-01-01"))), fetch_args))
 
   # issues date vector
-  expect_no_error(check_is_cachable(create_epidata_call("e", list(issues = c(as.Date("2022-01-01"), as.Date("2022-02-01")))), fetch_args))
+  expect_no_error(check_is_cachable(
+    create_epidata_call(
+      "e",
+      list(issues = c(as.Date("2022-01-01"), as.Date("2022-02-01")))
+    ),
+    fetch_args
+  ))
 
   # issues epirange
-  expect_no_error(check_is_cachable(create_epidata_call("e", list(issues = epirange(as.Date("2022-01-01"), as.Date("2022-02-01")))), fetch_args))
+  expect_no_error(check_is_cachable(
+    create_epidata_call(
+      "e",
+      list(issues = epirange(as.Date("2022-01-01"), as.Date("2022-02-01")))
+    ),
+    fetch_args
+  ))
 })
 
 test_that("check_is_recent can handle both str and date inputs of various lengths", {
