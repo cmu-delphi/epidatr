@@ -432,7 +432,7 @@ request_impl <- function(epidata_call, format_type, timeout_seconds, fields) {
   if (httr2::resp_is_error(response)) {
     # 500, 429, 401 are possible
     msg <- "fetch data from API"
-    if (identical(httr2::resp_content_type(response), "text/html")) {
+    if (identical(httr2::resp_content_type(response), "text/html") && httr2::resp_has_body(response)) {
       # grab the error information out of the returned HTML document
       msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
         xml2::read_html(httr2::resp_body_string(response)),

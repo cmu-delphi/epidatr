@@ -23,9 +23,12 @@ test_that("covidcast", {
 test_that("http errors", {
   # see generate_test_data.R
   local_mocked_bindings(
-    do_request = function(...) readRDS(testthat::test_path("data/test-do_request-httpbin.rds"))
+    req_perform = function(...) {
+      to_httr2_response(readRDS(testthat::test_path("data/test-do_request-httpbin.rds")))
+    },
+    .package = "httr2"
   )
-  expect_error(epidatr::covidcast_epidata(), class = "http_400")
+  expect_error(epidatr::covidcast_epidata(), class = "httr2_http_400")
 })
 
 

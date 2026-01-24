@@ -141,23 +141,28 @@ print.covidcast_data_source <- function(x, ...) {
 #' @return An instance of `covidcast_epidata`
 #' @export
 covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) {
-  url <- join_url(base_url, "covidcast/meta")
-  response <- do_request(url, list(), timeout_seconds)
+  request <- httr2::request(base_url) |>
+    httr2::req_url_path_append("covidcast/meta") |>
+    httr2::req_timeout(timeout_seconds)
 
-  if (response$status_code != 200) {
+  response <- request |>
+    httr2::req_error(is_error = function(resp) FALSE) |>
+    httr2::req_perform()
+
+  if (httr2::resp_is_error(response)) {
     # 500, 429, 401 are possible
     msg <- "fetch data from API"
-    if (httr::http_type(response) == "text/html" && length(response$content) > 0) {
+    if (identical(httr2::resp_content_type(response), "text/html") && httr2::resp_has_body(response)) {
       # grab the error information out of the returned HTML document
       msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
-        xml2::read_html(httr::content(response, "text")),
+        xml2::read_html(httr2::resp_body_string(response)),
         "//p"
       )))
     }
-    httr::stop_for_status(response, task = msg)
+    httr2::resp_check_status(response, info = msg)
   }
 
-  response_content <- httr::content(response, "text", encoding = "UTF-8")
+  response_content <- httr2::resp_body_string(response, encoding = "UTF-8")
   response_content <- jsonlite::fromJSON(response_content, simplifyVector = FALSE)
 
   sources <- do.call(c, lapply(response_content, parse_source, base_url = base_url))
