@@ -64,7 +64,9 @@ NULL
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. List of locations to fetch.
-#'   See [US Regions and States codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states)
+#'   See \href{
+#'     https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states
+#'   }{US Regions and States codes}
 #'   for details.
 #' @return [`tibble::tibble`]
 #'
@@ -1139,7 +1141,9 @@ pub_covidcast <- function(
 #' }
 #' @inheritParams .epidatr_shared_params
 #' @param system character. System name to fetch.
-#'   See the [available forecasting systems](https://cmu-delphi.github.io/delphi-epidata/api/delphi.html#forecasting-systems)
+#'   See the \href{
+#'     https://cmu-delphi.github.io/delphi-epidata/api/delphi.html#forecasting-systems
+#'   }{available forecasting systems}
 #'   for details.
 #' @param epiweek [`timeset`]. Epiweek to fetch. Does not support multiple dates.
 #'  Make separate calls to fetch data for multiple epiweeks.
@@ -1180,7 +1184,9 @@ pub_delphi <- function(
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. List of locations to fetch.
-#'   See the [codes for countries and territories in the Americas](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas).
+#'   See the \href{
+#'     https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas
+#'   }{codes for countries and territories in the Americas}.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
@@ -1222,7 +1228,9 @@ pub_dengue_nowcast <- function(
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. List of locations to fetch.
-#'   See the [codes for countries and territories in the Americas](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas).
+#'   See the \href{
+#'     https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas
+#'   }{codes for countries and territories in the Americas}.
 #' @param names character. List of sensor names to fetch.
 #'   See the [available sensors](https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html#available-sensors).
 #' @return [`tibble::tibble`]
@@ -1277,7 +1285,9 @@ pvt_dengue_sensors <- function(
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param regions character. List of regions to fetch.
-#'   See the [codes for European countries](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#european-countries).
+#'   See the \href{
+#'     https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#european-countries
+#'   }{codes for European countries}.
 #' @return [`tibble::tibble`]
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
@@ -1659,7 +1669,9 @@ pub_gft <- function(
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. List of locations to fetch.
-#'   See [geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states-and-territories)
+#'   See \href{
+#'     https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states-and-territories
+#'   }{geographic codes}
 #'   for details.
 #' @param query string. The query to be fetched.
 #' @return [`tibble::tibble`]
@@ -1706,7 +1718,9 @@ pvt_ght <- function(
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param regions character. List of regions to fetch.
-#'   See [South Korea's geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#republic-of-korea)
+#'   See \href{
+#'     https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#republic-of-korea
+#'   }{South Korea's geographic codes}
 #'   for details.
 #' @return [`tibble::tibble`]
 #'
@@ -2006,7 +2020,9 @@ pub_nowcast <- function(
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param regions character. List of regions to fetch.
-#'   See [Americas' geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas)
+#'   See \href{
+#'     https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas
+#'   }{Americas' geographic codes}
 #'   for details.
 #' @return [`tibble::tibble`]
 #'
@@ -2135,7 +2151,9 @@ pvt_quidel <- function(
 #'   See the [data sources available](https://cmu-delphi.github.io/delphi-epidata/api/sensors.html#data-sources)
 #'   for details.
 #' @param locations character. List of locations to fetch.
-#'   See the codes of the [US regions and states](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states)
+#'   See the codes of the \href{
+#'     https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states
+#'   }{US regions and states}
 #'   for details.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
@@ -2191,7 +2209,9 @@ pvt_sensors <- function(
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. List of locations to fetch.
-#'   See the codes of the [US regions and states](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states)
+#'   See the codes of the \href{
+#'     https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states
+#'   }{US regions and states}
 #'   for details.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint

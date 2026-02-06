@@ -19,7 +19,8 @@ pub_fluview_clinical(
 census divisions, lowercase two-letter state or territory abbreviations
 for most states and territories,"jfk" for New York City, or "ny_minus_jfk"
 for upstate New York. Full list of locations is available
-\href{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt}{here}.}
+\href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states}{here}
+and \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#fluview-cities}{here}.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
 \code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as

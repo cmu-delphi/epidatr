@@ -14,7 +14,9 @@ pub_covid_hosp_state_timeseries(
 )
 }
 \arguments{
-\item{states}{character. List of states to fetch, formatted as two letter state abbreviations.}
+\item{states}{character. Two-letter state abbreviations.
+See \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states}{US states codes}
+for details.}
 
 \item{dates}{\code{\link{timeset}}. Dates to fetch. Supports
 \code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
