@@ -15,7 +15,9 @@ pub_wiki(
 )
 }
 \arguments{
-\item{articles}{character. Articles to fetch.}
+\item{articles}{character. Articles to fetch.
+See \href{https://cmu-delphi.github.io/delphi-epidata/api/wiki.html#available-articles}{available articles}
+for details.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 

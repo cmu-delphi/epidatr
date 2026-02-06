@@ -15,9 +15,13 @@ pvt_sensors(
 \arguments{
 \item{auth}{string. Your restricted access key (not the same as API key).}
 
-\item{names}{character. Sensor names to fetch.}
+\item{names}{character. List of sensor names to fetch.
+See the \href{https://cmu-delphi.github.io/delphi-epidata/api/sensors.html#data-sources}{data sources available}
+for details.}
 
-\item{locations}{character. List of locations to fetch.}
+\item{locations}{character. List of locations to fetch.
+See the codes of the \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states}{US regions and states} # nolint
+for details.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
 \code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
