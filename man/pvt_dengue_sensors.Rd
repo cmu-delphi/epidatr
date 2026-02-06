@@ -19,9 +19,7 @@ pvt_dengue_sensors(
 See the \href{https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html#available-sensors}{available sensors}.}
 
 \item{locations}{character. List of locations to fetch.
-See the \href{
-https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas
-}{codes for countries and territories in the Americas}.}
+See the \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas}{codes for countries and territories in the Americas}. # nolint}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
 \code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as

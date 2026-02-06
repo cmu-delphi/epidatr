@@ -8,9 +8,7 @@ pub_delphi(system, epiweek, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{system}{character. System name to fetch.
-See the \href{
-https://cmu-delphi.github.io/delphi-epidata/api/delphi.html#forecasting-systems
-}{available forecasting systems}
+See the \href{https://cmu-delphi.github.io/delphi-epidata/api/delphi.html#forecasting-systems}{available forecasting systems} # nolint
 for details.}
 
 \item{epiweek}{\code{\link{timeset}}. Epiweek to fetch. Does not support multiple dates.

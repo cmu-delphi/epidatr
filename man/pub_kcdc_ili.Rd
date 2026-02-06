@@ -15,9 +15,7 @@ pub_kcdc_ili(
 }
 \arguments{
 \item{regions}{character. List of regions to fetch.
-See \href{
-https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#republic-of-korea
-}{South Korea's geographic codes}
+See \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#republic-of-korea}{South Korea's geographic codes} # nolint
 for details.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports

@@ -8,9 +8,7 @@ pub_dengue_nowcast(locations, epiweeks = "*", fetch_args = fetch_args_list())
 }
 \arguments{
 \item{locations}{character. List of locations to fetch.
-See the \href{
-https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas
-}{codes for countries and territories in the Americas}.}
+See the \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas}{codes for countries and territories in the Americas}. # nolint}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
 \code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as

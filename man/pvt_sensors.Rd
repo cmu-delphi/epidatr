@@ -20,9 +20,7 @@ See the \href{https://cmu-delphi.github.io/delphi-epidata/api/sensors.html#data-
 for details.}
 
 \item{locations}{character. List of locations to fetch.
-See the codes of the \href{
-https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states
-}{US regions and states}
+See the codes of the \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states}{US regions and states} # nolint
 for details.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports

@@ -10,9 +10,7 @@ pvt_ght(auth, locations, epiweeks = "*", query, fetch_args = fetch_args_list())
 \item{auth}{string. Your restricted access key (not the same as API key).}
 
 \item{locations}{character. List of locations to fetch.
-See \href{
-https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states-and-territories
-}{geographic codes}
+See \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states-and-territories}{geographic codes} # nolint
 for details.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports

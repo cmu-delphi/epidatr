@@ -17,9 +17,7 @@ pvt_twitter(
 \item{auth}{string. Your restricted access key (not the same as API key).}
 
 \item{locations}{character. List of locations to fetch.
-See the codes of the \href{
-https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states
-}{US regions and states}
+See the codes of the \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states}{US regions and states} # nolint
 for details.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
