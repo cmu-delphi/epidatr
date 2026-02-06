@@ -19,7 +19,9 @@ pvt_ght(auth, locations, epiweeks = "*", query, fetch_args = fetch_args_list())
 
 - locations:
 
-  character. List of locations to fetch.
+  character. List of locations to fetch. See [geographic
+  codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states-and-territories)
+  \# nolint for details.
 
 - epiweeks:
 

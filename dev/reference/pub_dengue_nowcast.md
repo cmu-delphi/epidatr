@@ -13,7 +13,10 @@ pub_dengue_nowcast(locations, epiweeks = "*", fetch_args = fetch_args_list())
 
 - locations:
 
-  character. List of locations to fetch.
+  character. List of locations to fetch. See the [codes for countries
+  and territories in the
+  Americas](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas).
+  \# nolint
 
 - epiweeks:
 

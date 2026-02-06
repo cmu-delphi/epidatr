@@ -24,8 +24,9 @@ pub_covid_hosp_state_timeseries(
 
 - states:
 
-  character. List of states to fetch, formatted as two letter state
-  abbreviations.
+  character. Two-letter state abbreviations. See [US states
+  codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states)
+  for details.
 
 - dates:
 

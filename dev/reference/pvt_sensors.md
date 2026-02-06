@@ -34,11 +34,16 @@ pvt_sensors(
 
 - names:
 
-  character. Sensor names to fetch.
+  character. List of sensor names to fetch. See the [data sources
+  available](https://cmu-delphi.github.io/delphi-epidata/api/sensors.html#data-sources)
+  for details.
 
 - locations:
 
-  character. List of locations to fetch.
+  character. List of locations to fetch. See the codes of the [US
+  regions and
+  states](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states)
+  \# nolint for details.
 
 - epiweeks:
 

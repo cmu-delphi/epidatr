@@ -30,7 +30,9 @@ pub_covid_hosp_facility_lookup(
 
 - state:
 
-  string. A two-letter character state abbreviation.
+  string. A two-letter character state abbreviation. See [US states
+  codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states)
+  for details.
 
 - ccn:
 

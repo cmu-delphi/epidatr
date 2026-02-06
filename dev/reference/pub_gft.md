@@ -43,10 +43,10 @@ pub_gft(locations, epiweeks = "*", fetch_args = fetch_args_list())
 
 Google has discontinued Flu Trends and this is now a static endpoint.
 Possibile input for locations can be found in
-<https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt>,
-<https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/states.txt>,
+<https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#hhs-regions>,
+<https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states>,
 and
-<https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt>.
+<https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#selected-us-cities>.
 
 ## Examples
 

@@ -20,7 +20,9 @@ pub_kcdc_ili(
 
 - regions:
 
-  character. List of regions to fetch.
+  character. List of regions to fetch. See [South Korea's geographic
+  codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#republic-of-korea)
+  \# nolint for details.
 
 - epiweeks:
 

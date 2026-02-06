@@ -18,7 +18,9 @@ pvt_quidel(auth, locations, epiweeks = "*", fetch_args = fetch_args_list())
 
 - locations:
 
-  character. List of locations to fetch.
+  character. List of locations to fetch. See [HHS regions'
+  codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#hhs-regions)
+  for details.
 
 - epiweeks:
 

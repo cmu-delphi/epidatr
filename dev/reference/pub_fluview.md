@@ -32,7 +32,9 @@ pub_fluview(
   lowercase two-letter state or territory abbreviations for most states
   and territories,"jfk" for New York City, or "ny_minus_jfk" for upstate
   New York. Full list of locations is available
-  [here](https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt).
+  [here](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states)
+  and
+  [here](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#fluview-cities).
 
 - epiweeks:
 

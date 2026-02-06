@@ -37,7 +37,7 @@ pub_covidcast_meta(fetch_args = fetch_args_list())
 
 ``` r
 pub_covidcast_meta()
-#> # A tibble: 2,702 × 15
+#> # A tibble: 2,898 × 15
 #>    data_source         signal time_type geo_type min_time max_time num_locations
 #>    <chr>               <chr>  <fct>     <fct>       <dbl>    <dbl>         <dbl>
 #>  1 beta_google_sympto… s01_r… day       county   20250919 20251029          2718
@@ -50,7 +50,7 @@ pub_covidcast_meta()
 #>  8 beta_google_sympto… s01_s… day       msa      20250925 20251029           380
 #>  9 beta_google_sympto… s02_r… day       county   20250919 20251029          2718
 #> 10 beta_google_sympto… s02_r… day       state    20250919 20251029            51
-#> # ℹ 2,692 more rows
+#> # ℹ 2,888 more rows
 #> # ℹ 8 more variables: min_value <dbl>, max_value <dbl>, mean_value <dbl>,
 #> #   stdev_value <dbl>, last_update <dttm>, max_issue <dbl>, min_lag <dbl>,
 #> #   max_lag <dbl>

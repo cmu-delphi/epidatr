@@ -43,7 +43,9 @@ pub_nowcast(locations, epiweeks = "*", fetch_args = fetch_args_list())
 ## Details
 
 The full list of location inputs can be accessed at
-<https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
+<https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states>
+and
+<https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#fluview-cities>.
 
 ## Examples
 

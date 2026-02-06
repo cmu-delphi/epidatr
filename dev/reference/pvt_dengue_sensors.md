@@ -23,11 +23,15 @@ pvt_dengue_sensors(
 
 - names:
 
-  character. Sensor names to fetch.
+  character. List of sensor names to fetch. See the [available
+  sensors](https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html#available-sensors).
 
 - locations:
 
-  character. List of locations to fetch.
+  character. List of locations to fetch. See the [codes for countries
+  and territories in the
+  Americas](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas).
+  \# nolint
 
 - epiweeks:
 

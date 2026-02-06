@@ -27,7 +27,10 @@ pvt_twitter(
 
 - locations:
 
-  character. List of locations to fetch.
+  character. List of locations to fetch. See the codes of the [US
+  regions and
+  states](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states)
+  \# nolint for details.
 
 - ...:
 

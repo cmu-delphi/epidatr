@@ -12,7 +12,9 @@ pub_delphi(system, epiweek, fetch_args = fetch_args_list())
 
 - system:
 
-  character. System name to fetch.
+  character. System name to fetch. See the [available forecasting
+  systems](https://cmu-delphi.github.io/delphi-epidata/api/delphi.html#forecasting-systems)
+  \# nolint for details.
 
 - epiweek:
 

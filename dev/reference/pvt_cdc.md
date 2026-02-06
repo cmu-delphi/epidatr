@@ -16,7 +16,9 @@ pvt_cdc(auth, locations, epiweeks = "*", fetch_args = fetch_args_list())
 
 - locations:
 
-  character. List of locations to fetch.
+  character. List of locations to fetch. See [US Regions and States
+  codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states)
+  \# nolint for details.
 
 - epiweeks:
 

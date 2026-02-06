@@ -33,7 +33,9 @@ pub_wiki(
 
 - articles:
 
-  character. Articles to fetch.
+  character. Articles to fetch. See [available
+  articles](https://cmu-delphi.github.io/delphi-epidata/api/wiki.html#available-articles)
+  for details.
 
 - ...:
 

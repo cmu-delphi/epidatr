@@ -23,7 +23,9 @@ pub_ecdc_ili(
 
 - regions:
 
-  character. List of regions to fetch.
+  character. List of regions to fetch. See the [codes for European
+  countries](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#european-countries).
+  \# nolint
 
 - epiweeks:
 

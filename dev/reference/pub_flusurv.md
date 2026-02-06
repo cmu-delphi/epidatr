@@ -25,7 +25,9 @@ pub_flusurv(
 
 - locations:
 
-  character. List of locations to fetch.
+  character. List of locations to fetch. See [geographic
+  codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#flusurv-locations)
+  for details.
 
 - epiweeks:
 

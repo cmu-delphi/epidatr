@@ -23,7 +23,9 @@ pub_nidss_flu(
 
 - regions:
 
-  character. List of regions to fetch.
+  character. List of regions to fetch. See [Taiwan's geographic
+  codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#nidss)
+  for details.
 
 - epiweeks:
 

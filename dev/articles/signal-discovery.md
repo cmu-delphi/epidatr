@@ -120,14 +120,14 @@ be able to browse the list of data sources.
 
 ``` r
 covid_sources$signals
-#> # A tibble: 508 × 3
+#> # A tibble: 520 × 3
 #>   source signal                        short_description                        
 #>   <chr>  <chr>                         <chr>                                    
 #> 1 chng   smoothed_outpatient_cli       Estimated percentage of outpatient docto…
 #> 2 chng   smoothed_adj_outpatient_cli   Estimated percentage of outpatient docto…
 #> 3 chng   smoothed_outpatient_covid     COVID-Confirmed Doctor Visits            
 #> 4 chng   smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits            
-#> # ℹ 504 more rows
+#> # ℹ 516 more rows
 ```
 
 If you use an editor that supports tab completion, type

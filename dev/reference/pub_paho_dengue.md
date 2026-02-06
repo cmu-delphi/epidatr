@@ -20,7 +20,9 @@ pub_paho_dengue(
 
 - regions:
 
-  character. List of regions to fetch.
+  character. List of regions to fetch. See [Americas' geographic
+  codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas)
+  \# nolint for details.
 
 - epiweeks:
 
