@@ -63,6 +63,9 @@ NULL
 #' )
 #'
 #' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See [US Regions and States codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states)
+#'   for details.
 #' @return [`tibble::tibble`]
 #'
 #' @keywords endpoint
@@ -124,6 +127,8 @@ pvt_cdc <- function(
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param state string. A two-letter character state abbreviation.
+#'   See [US states codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states)
+#'   for details.
 #' @param ccn string. A facility CMS certification number.
 #' @param city string. A city name.
 #' @param zip string. A 5-digit zip code.
@@ -598,6 +603,9 @@ pub_covid_hosp_facility <- function(
 #' )
 #'
 #' @inheritParams .epidatr_shared_params
+#' @param states character. Two-letter state abbreviations.
+#'   See [US states codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states)
+#'   for details.
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
 #'
@@ -1131,6 +1139,8 @@ pub_covidcast <- function(
 #' }
 #' @inheritParams .epidatr_shared_params
 #' @param system character. System name to fetch.
+#'   See the [available forecasting systems](https://cmu-delphi.github.io/delphi-epidata/api/delphi.html#forecasting-systems)
+#'   for details.
 #' @param epiweek [`timeset`]. Epiweek to fetch. Does not support multiple dates.
 #'  Make separate calls to fetch data for multiple epiweeks.
 #' @return [`list`]
@@ -1169,6 +1179,8 @@ pub_delphi <- function(
 #' )
 #'
 #' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See the [codes for countries and territories in the Americas](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas).
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
@@ -1209,6 +1221,10 @@ pub_dengue_nowcast <- function(
 #' )
 #'
 #' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See the [codes for countries and territories in the Americas](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas).
+#' @param names character. List of sensor names to fetch.
+#'   See the [available sensors](https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html#available-sensors).
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
@@ -1260,6 +1276,8 @@ pvt_dengue_sensors <- function(
 #' pub_ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001))
 #'
 #' @inheritParams .epidatr_shared_params
+#' @param regions character. List of regions to fetch.
+#'   See the [codes for European countries](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#european-countries).
 #' @return [`tibble::tibble`]
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
@@ -1324,6 +1342,9 @@ pub_ecdc_ili <- function(
 #' pub_flusurv(locations = "ca", epiweeks = epirange(201701, 201801))
 #' }
 #' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See [geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#flusurv-locations)
+#'   for details.
 #' @return [`tibble::tibble`]
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
@@ -1413,7 +1434,8 @@ pub_flusurv <- function(
 #'   census divisions, lowercase two-letter state or territory abbreviations
 #'   for most states and territories,"jfk" for New York City, or "ny_minus_jfk"
 #'   for upstate New York. Full list of locations is available
-#'   [here](https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt).
+#'   [here](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states)
+#'   and [here](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#fluview-cities).
 #' @return [`tibble::tibble`]
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
@@ -1583,10 +1605,10 @@ pub_fluview <- function(
 #'
 #' @details Google has discontinued Flu Trends and this is now a static
 #'   endpoint. Possibile input for locations can be found in
-#'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt>,
-#'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/states.txt>,
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#hhs-regions>,
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states>,
 #'   and
-#'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt>.
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#selected-us-cities>.
 #'
 #' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
 #'
@@ -1636,6 +1658,9 @@ pub_gft <- function(
 #' )
 #'
 #' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See [geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states-and-territories)
+#'   for details.
 #' @param query string. The query to be fetched.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
@@ -1680,6 +1705,9 @@ pvt_ght <- function(
 #' pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
 #'
 #' @inheritParams .epidatr_shared_params
+#' @param regions character. List of regions to fetch.
+#'   See [South Korea's geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#republic-of-korea)
+#'   for details.
 #' @return [`tibble::tibble`]
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
@@ -1781,6 +1809,9 @@ pub_meta <- function(fetch_args = fetch_args_list()) {
 #' pub_nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301))
 #'
 #' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See [Taiwan's geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#nidss)
+#'   for details.
 #'
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
@@ -1820,6 +1851,9 @@ pub_nidss_dengue <- function(
 #' pub_nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601))
 #'
 #' @inheritParams .epidatr_shared_params
+#' @param regions character. List of regions to fetch.
+#'   See [Taiwan's geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#nidss)
+#'   for details.
 #' @return [`tibble::tibble`]
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
@@ -1929,8 +1963,8 @@ pvt_norostat <- function(
 #' Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's
 #'
 #' @details The full list of location inputs can be accessed at
-#' <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
-#'
+#' <https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states>
+#' and <https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#fluview-cities>.
 #' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
 #'
 #' pub_nowcast(locations = "ca", epiweeks = epirange(201201, 201301))
@@ -1971,6 +2005,9 @@ pub_nowcast <- function(
 #' pub_paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501))
 #'
 #' @inheritParams .epidatr_shared_params
+#' @param regions character. List of regions to fetch.
+#'   See [Americas' geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas)
+#'   for details.
 #' @return [`tibble::tibble`]
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
@@ -2035,6 +2072,9 @@ pub_paho_dengue <- function(
 #' )
 #'
 #' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See [HHS regions' codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#hhs-regions)
+#'   for details.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
@@ -2091,6 +2131,12 @@ pvt_quidel <- function(
 #' )
 #'
 #' @inheritParams .epidatr_shared_params
+#' @param names character. List of sensor names to fetch.
+#'   See the [data sources available](https://cmu-delphi.github.io/delphi-epidata/api/sensors.html#data-sources)
+#'   for details.
+#' @param locations character. List of locations to fetch.
+#'   See the codes of the [US regions and states](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states)
+#'   for details.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
@@ -2144,6 +2190,9 @@ pvt_sensors <- function(
 #' )
 #'
 #' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See the codes of the [US regions and states](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states)
+#'   for details.
 #' @return [`tibble::tibble`]
 #' @keywords endpoint
 #' @export
@@ -2222,6 +2271,8 @@ pvt_twitter <- function(
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param articles character. Articles to fetch.
+#'   See [available articles](https://cmu-delphi.github.io/delphi-epidata/api/wiki.html#available-articles)
+#'   for details.
 #' @param language string. Language to fetch.
 #' @param hours integer. Optionally, the hours to fetch.
 #' @return [`tibble::tibble`]
