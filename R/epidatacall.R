@@ -387,32 +387,26 @@ request_url <- function(epidata_call, format_type = "classic", fields = NULL) {
 #' @param epidata_call an instance of `epidata_call`
 #' @param base_url base URL to use
 #' @return an `epidata_call` object
+#' @importFrom httr2 url_modify url_parse
+#' @importFrom stringr str_split
 #' @keywords internal
 with_base_url <- function(epidata_call, base_url) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.character(base_url), length(base_url) == 1)
 
-  # Parse current URL
-  current_parsed <- httr2::url_parse(epidata_call$request$url)
-  old_base_parsed <- httr2::url_parse(epidata_call$base_url)
+  # Extract http or https from base_url
+  out <- stringr::str_split(base_url, "://")
+  if (length(out[[1]]) == 2) {
+    new_scheme <- out[[1]][1]
+    new_hostname <- out[[1]][2]
+  } else {
+    new_scheme <- "https"
+    new_hostname <- out[[1]][1]
+  }
 
-  # Extract endpoint path relative to the old base URL
-  endpoint_path <- sub(
-    pattern = paste0("^", old_base_parsed$path),
-    replacement = "",
-    x = current_parsed$path
-  )
-  # Remove leading slash if present to avoid double slashes
-  endpoint_path <- sub("^/", "", endpoint_path)
-
-  # Rebuild request with new base_url, preserved endpoint, and original query params
-  epidata_call$request <- epidata_call$request %>%
-    httr2::req_url(base_url) %>%
-    httr2::req_url_path_append(endpoint_path) %>%
-    httr2::req_url_query(!!!current_parsed$query, .multi = "comma")
-
-  epidata_call$base_url <- base_url
-  epidata_call
+  epidata_call$request$url %>%
+    httr2::url_modify(scheme = new_scheme, hostname=new_hostname) %>%
+    httr2::url_parse()
 }
 
 #' Makes a request to the API and returns the response, catching
