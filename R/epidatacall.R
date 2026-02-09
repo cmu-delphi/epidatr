@@ -143,8 +143,6 @@ print.epidata_call <- function(x, ...) {
 #'   base URL `"https://api.delphi.cmu.edu/epidata/"`
 #' @param dry_run if `TRUE`, skip the call to the API and instead return the
 #'   `epidata_call` object (useful for debugging)
-#' @param format_type the format to request from the API, one of classic, json,
-#'   csv; default is `"json"`
 #' @param refresh_cache if `TRUE`, ignore the cache, fetch the data from the
 #'   API, and update the cache, if it is enabled
 #' @param reference_week_day the day of the week to use as the reference day
@@ -163,7 +161,6 @@ fetch_args_list <- function(
   timeout_seconds = 15 * 60,
   base_url = NULL,
   dry_run = FALSE,
-  format_type = c("json", "classic", "csv"),
   refresh_cache = FALSE,
   reference_week_day = 1
 ) {
@@ -176,7 +173,6 @@ fetch_args_list <- function(
   assert_numeric(timeout_seconds, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
-  format_type <- match.arg(format_type)
   assert_logical(refresh_cache, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_numeric(reference_week_day, null.ok = FALSE, len = 1L, any.missing = FALSE)
 
@@ -189,7 +185,6 @@ fetch_args_list <- function(
       timeout_seconds = timeout_seconds,
       base_url = base_url,
       dry_run = dry_run,
-      format_type = format_type,
       refresh_cache = refresh_cache,
       reference_week_day = reference_week_day
     ),
@@ -235,7 +230,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     check_for_cache_warnings(epidata_call, fetch_args)
 
     # Check if the data is in the cache
-    target <- request_url(epidata_call, fetch_args$format_type, fetch_args$fields)
+    target <- request_url(epidata_call, "json", fetch_args$fields)
     hashed <- md5(target)
     cached <- cache_environ$epidatr_cache$get(hashed)
     if (!is.key_missing(cached)) {

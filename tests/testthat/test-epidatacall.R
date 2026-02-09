@@ -43,7 +43,6 @@ test_that("fetch_args", {
         timeout_seconds = 15 * 60,
         base_url = NULL,
         dry_run = FALSE,
-        format_type = "json",
         refresh_cache = FALSE,
         reference_week_day = 1
       ),
@@ -59,7 +58,6 @@ test_that("fetch_args", {
       timeout_seconds = 10,
       base_url = "https://example.com",
       dry_run = TRUE,
-      format_type = "classic",
       refresh_cache = TRUE,
       reference_week_day = 1
     ),
@@ -72,7 +70,6 @@ test_that("fetch_args", {
         timeout_seconds = 10,
         base_url = "https://example.com",
         dry_run = TRUE,
-        format_type = "classic",
         refresh_cache = TRUE,
         reference_week_day = 1
       ),
