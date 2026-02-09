@@ -5,7 +5,7 @@
 \title{Fetches the data, raises on epidata errors, and returns the results as a
 JSON-like list}
 \usage{
-fetch_classic(epidata_call, fetch_args = fetch_args_list())
+fetch_classic(epidata_call, fetch_args = fetch_args_list(), simplify = TRUE)
 }
 \arguments{
 \item{epidata_call}{an instance of \code{epidata_call}}

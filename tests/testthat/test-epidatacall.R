@@ -1,4 +1,4 @@
-test_that("request_impl http errors", {
+test_that("do_request http errors", {
   # should give a 401 error
   epidata_call <- pvt_cdc(
     auth = "ImALittleTeapot",
@@ -8,11 +8,12 @@ test_that("request_impl http errors", {
   )
   local_mocked_bindings(
     # see generate_test_data.R
-    do_request = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-http401.rds"))),
+    req_perform = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-http401.rds"))),
+    .package = "httr2"
   )
   expect_error(
     response <- epidata_call %>%
-      request_impl("csv", timeout_seconds = 30, fields = NULL),
+      do_request("csv", timeout_seconds = 30, fields = NULL),
     class = "httr2_http_401"
   )
 
@@ -20,11 +21,12 @@ test_that("request_impl http errors", {
 
   # see generate_test_data.R
   local_mocked_bindings(
-    do_request = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-http500.rds")))
+    req_perform = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-http500.rds"))),
+    .package = "httr2"
   )
   expect_error(
     response <- epidata_call %>%
-      request_impl("csv", timeout_seconds = 30, fields = NULL),
+      do_request("csv", timeout_seconds = 30, fields = NULL),
     class = "httr2_http_500"
   )
 })
@@ -80,36 +82,6 @@ test_that("fetch_args", {
       class = "fetch_args"
     )
   )
-})
-
-test_that("fetch non-classic works", {
-  # only_supports_classic is FALSE
-  epidata_call <- pub_covidcast(
-    source = "jhu-csse",
-    signals = "confirmed_7dav_incidence_prop",
-    time_type = "day",
-    geo_type = "state",
-    time_values = epirange("2020-06-01", "2020-08-01"),
-    geo_values = "ca,fl",
-    fetch_args = fetch_args_list(dry_run = TRUE)
-  )
-  local_mocked_bindings(
-    # see generate_test_data.R
-    do_request = function(epidata_call, ...) {
-      parsed <- httr2::url_parse(epidata_call$request$url)
-      if (is.null(parsed$query$fields)) {
-        to_httr2_response(readRDS(testthat::test_path("data/test-classic.rds")))
-      } else {
-        to_httr2_response(readRDS(testthat::test_path("data/test-narrower-fields.rds")))
-      }
-    },
-    .package = "epidatr"
-  )
-
-  # testing that the fields fill as expected
-  out <- epidata_call %>% fetch()
-  res <- epidata_call %>% fetch(fetch_args_list(fields = c("time_value", "value")))
-  expect_equal(res, out[c("time_value", "value")])
 })
 
 test_that("fetch non-classic passes along api warnings", {

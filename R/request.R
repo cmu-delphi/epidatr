@@ -3,16 +3,25 @@
 #' @importFrom httr2 req_perform req_timeout req_headers req_user_agent req_retry
 #' @importFrom httr2 req_error req_auth_basic resp_status req_method
 #' @importFrom httr2 req_body_form req_url req_url_query
+#' @importFrom xml2 read_html xml_find_all xml_text
 #' @keywords internal
-do_request <- function(epidata_call, timeout_seconds, http_method = c("GET", "POST")) {
+do_request <- function(epidata_call, format_type, timeout_seconds, fields,
+                       http_method = c("GET", "POST")) {
+  stopifnot(inherits(epidata_call, "epidata_call"))
+  stopifnot(format_type %in% c("json", "csv", "classic"))
   http_method <- rlang::arg_match(http_method)
+
+  # Add any extra arguments to the request, such as fields to include in the response or format type.
+  epidata_call <- extra_arguments(epidata_call, format_type, fields)
   req <- epidata_call$request
 
+  # Add API key if it exists in environment variable
   key <- get_api_key()
   if (key != "") {
     req <- req %>% httr2::req_auth_basic("epidata", key)
   }
 
+  # Prepare the request with user agent, headers, timeout, and retry logic.
   req <- req %>%
     httr2::req_user_agent(paste0(
       "epidatr/",
@@ -30,8 +39,10 @@ do_request <- function(epidata_call, timeout_seconds, http_method = c("GET", "PO
     httr2::req_method(http_method) %>%
     httr2::req_error(is_error = function(resp) FALSE)
 
+  # Do the request.
   res <- httr2::req_perform(req)
 
+  # Fall back to POST if the request is too long for GET (414 URI Too Long).
   if (httr2::resp_status(res) == 414) {
     # 414 URI Too Long - Switch to POST
     query <- httr2::url_parse(httr2::req_url(req))$query
@@ -41,6 +52,21 @@ do_request <- function(epidata_call, timeout_seconds, http_method = c("GET", "PO
       httr2::req_body_form(!!!query)
 
     res <- httr2::req_perform(req_post)
+  }
+
+  # If there is an error, extract the message from the API into the error
+  # message if possible.
+  if (httr2::resp_is_error(res)) {
+    # 500, 429, 401 are possible
+    msg <- "fetch data from API"
+    if (identical(httr2::resp_content_type(res), "text/html") && httr2::resp_has_body(res)) {
+      # grab the error information out of the returned HTML document
+      msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
+        xml2::read_html(httr2::resp_body_string(res)),
+        "//p"
+      )))
+    }
+    httr2::resp_check_status(res, info = msg)
   }
 
   res

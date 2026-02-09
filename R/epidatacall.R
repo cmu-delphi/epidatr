@@ -284,12 +284,15 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
   }
 
   # Need to actually get the data, since its either not in the cache or we're not caching
-  runtime <- system.time(if (epidata_call$only_supports_classic) {
-    fetch_args[["disable_data_frame_parsing"]] <- TRUE
-    fetched <- fetch_classic(epidata_call, fetch_args)
-  } else {
-    response_content <- fetch_classic(epidata_call, fetch_args = fetch_args)
-    if (fetch_args$return_empty && length(response_content) == 0) {
+  runtime <- system.time({
+    response_content <- fetch_classic(
+      epidata_call, fetch_args,
+      simplify = !epidata_call$only_supports_classic
+    )
+
+    if (epidata_call$only_supports_classic) {
+      fetched <- response_content
+    } else if (fetch_args$return_empty && length(response_content) == 0) {
       fetched <- tibble()
     } else {
       fetched <- parse_data_frame(
@@ -297,7 +300,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
         response_content,
         fetch_args$disable_date_parsing,
         fetch_args$reference_week_day
-      ) %>% as_tibble()
+      ) |> as_tibble()
     }
   })
 
@@ -320,13 +323,13 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 #' @return
 #' - For `fetch_classic`: a JSON-like list
 #' @keywords internal
-fetch_classic <- function(epidata_call, fetch_args = fetch_args_list()) {
+fetch_classic <- function(epidata_call, fetch_args = fetch_args_list(), simplify = TRUE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
 
-  response_content <- request_impl(epidata_call, "classic", fetch_args$timeout_seconds, fetch_args$fields) %>%
+  response_content <- do_request(epidata_call, "classic", fetch_args$timeout_seconds, fetch_args$fields) %>%
     httr2::resp_body_string(encoding = "UTF-8") %>%
-    jsonlite::fromJSON(simplifyDataFrame = !fetch_args$disable_data_frame_parsing)
+    jsonlite::fromJSON(simplifyDataFrame = simplify)
 
   # success is 1, no results is -2, truncated is 2, -1 is generic error
   if (response_content$result != 1) {
@@ -356,7 +359,7 @@ fetch_debug <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
 
-  response <- request_impl(epidata_call, fetch_args$format_type, fetch_args$timeout_seconds, fetch_args$fields)
+  response <- do_request(epidata_call, fetch_args$format_type, fetch_args$timeout_seconds, fetch_args$fields)
   content <- httr2::resp_body_string(response, encoding = "UTF-8")
   content
 }
@@ -407,31 +410,4 @@ with_base_url <- function(epidata_call, base_url) {
   epidata_call$request$url %>%
     httr2::url_modify(scheme = new_scheme, hostname=new_hostname) %>%
     httr2::url_parse()
-}
-
-#' Makes a request to the API and returns the response, catching
-#' HTTP errors and forwarding the HTTP body in R errors
-#' @importFrom xml2 read_html xml_find_all xml_text
-#' @keywords internal
-request_impl <- function(epidata_call, format_type, timeout_seconds, fields) {
-  stopifnot(inherits(epidata_call, "epidata_call"))
-  stopifnot(format_type %in% c("json", "csv", "classic"))
-
-  epidata_call <- extra_arguments(epidata_call, format_type, fields)
-  response <- do_request(epidata_call, timeout_seconds)
-
-  if (httr2::resp_is_error(response)) {
-    # 500, 429, 401 are possible
-    msg <- "fetch data from API"
-    if (identical(httr2::resp_content_type(response), "text/html") && httr2::resp_has_body(response)) {
-      # grab the error information out of the returned HTML document
-      msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
-        xml2::read_html(httr2::resp_body_string(response)),
-        "//p"
-      )))
-    }
-    httr2::resp_check_status(response, info = msg)
-  }
-
-  response
 }
