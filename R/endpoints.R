@@ -1160,7 +1160,7 @@ pub_delphi <- function(
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("json", "text")
     )
-  ) %>% fetch_classic(fetch_args = fetch_args, simplify = FALSE)
+  ) %>% request_epidata(fetch_args = fetch_args, simplify = FALSE)
 }
 
 #' Delphi's PAHO dengue nowcasts (North and South America)
@@ -1761,7 +1761,7 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
   create_epidata_call(
     "meta_norostat/",
     list(auth = auth)
-  ) %>% fetch_classic(fetch_args = fetch_args, simplify = FALSE)
+  ) %>% request_epidata(fetch_args = fetch_args, simplify = FALSE)
 }
 
 #' Metadata for the Delphi Epidata API
@@ -1774,7 +1774,7 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 #' @keywords endpoint
 #' @export
 pub_meta <- function(fetch_args = fetch_args_list()) {
-  create_epidata_call("meta/", list()) %>% fetch_classic(fetch_args = fetch_args, simplify = FALSE)
+  create_epidata_call("meta/", list()) %>% request_epidata(fetch_args = fetch_args, simplify = FALSE)
 }
 
 #' NIDSS dengue cases (Taiwan)

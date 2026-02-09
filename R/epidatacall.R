@@ -272,7 +272,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
   }
 
   runtime <- system.time({
-    response_content <- fetch_classic(epidata_call, fetch_args)
+    response_content <- request_epidata(epidata_call, fetch_args)
 
     if (fetch_args$return_empty && length(response_content) == 0) {
       fetched <- tibble()
@@ -294,18 +294,19 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
   return(fetched)
 }
 
-#' Fetches the data, raises on epidata errors, and returns the results as a
-#' JSON-like list
+#' Fetches the data.
 #'
-#' @rdname fetch_classic
+#' Raises on errors from the API. Returns JSON.
+#'
+#' @rdname request_epidata
 #'
 #' @param epidata_call an instance of `epidata_call`
 #' @param fetch_args a `fetch_args` object
 #' @importFrom jsonlite fromJSON
 #' @return
-#' - For `fetch_classic`: a JSON-like list
+#' - For `request_epidata`: a JSON-like list
 #' @keywords internal
-fetch_classic <- function(epidata_call, fetch_args = fetch_args_list(), simplify = TRUE) {
+request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simplify = TRUE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
 
@@ -321,7 +322,8 @@ fetch_classic <- function(epidata_call, fetch_args = fetch_args_list(), simplify
     httr2::resp_body_string(encoding = "UTF-8") %>%
     jsonlite::fromJSON(simplifyDataFrame = simplify)
 
-  # success is 1, no results is -2, truncated is 2, -1 is generic error
+  # Handle the case when there is an API error. Grab that messge. Success is 1,
+  # no results is -2, truncated is 2, -1 is generic error.
   if (response_content$result != 1) {
     if ((response_content$result != -2) && !(fetch_args$return_empty)) {
       cli::cli_abort(

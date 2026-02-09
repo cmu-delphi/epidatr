@@ -126,7 +126,7 @@ test_that("fetch classic works", {
     .package = "epidatr"
   )
 
-  # pub_delphi calls fetch_classic directly; make sure the return is a list
+  # pub_delphi calls request_epidata directly; make sure the return is a list
   fetch_out <- pub_delphi(
     system = "ec",
     epiweek = 201501

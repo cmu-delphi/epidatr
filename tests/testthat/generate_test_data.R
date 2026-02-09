@@ -1,7 +1,7 @@
 library(httr2)
 
 epidata_call %>%
-  fetch_classic() %>%
+  request_epidata() %>%
   readr::write_rds(testthat::test_path("data/flusurv-epiweeks.rds"))
 
 url <- full_url(epidata_call)
