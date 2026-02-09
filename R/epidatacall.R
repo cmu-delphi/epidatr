@@ -36,18 +36,15 @@
 #' @param endpoint the epidata endpoint to call
 #' @param params the parameters to pass to the epidata endpoint
 #' @param meta meta data to attach to the epidata call
-#' @param only_supports_classic if true only classic format is supported
 #'
 #' @return
 #' - For `create_epidata_call`: an `epidata_call` object
 #'
 #' @importFrom purrr map_chr map_lgl
-create_epidata_call <- function(endpoint, params, meta = NULL,
-                                only_supports_classic = FALSE) {
+create_epidata_call <- function(endpoint, params, meta = NULL) {
   checkmate::assert_character(endpoint, len = 1)
   checkmate::assert_list(params)
   checkmate::assert_list(meta, null.ok = TRUE)
-  checkmate::assert_logical(only_supports_classic, len = 1)
   checkmate::assert_true(all(map_lgl(meta, ~ inherits(.x, "EpidataFieldInfo"))))
 
   if (length(unique(meta)) != length(meta)) {
@@ -92,8 +89,7 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
     list(
       request = r,
       base_url = global_base_url,
-      meta = meta,
-      only_supports_classic = only_supports_classic
+      meta = meta
     ),
     class = "epidata_call"
   )
@@ -234,17 +230,11 @@ print.fetch_args <- function(x, ...) {
 
 #' Fetches the data
 #'
-#' @details
-#' `fetch` usually returns the data in tibble format, but a few of the
-#' endpoints only support the JSON classic format (`pub_delphi`,
-#' `pvt_meta_norostat`, and `pub_meta`). In that case a
-#' JSON-like nested list structure is returned instead.
-#'
 #' @rdname epidata_call
 #' @param epidata_call an instance of `epidata_call`
 #' @param fetch_args a `fetch_args` object
 #' @return
-#' - For `fetch`: a tibble or a JSON-like list
+#' - For `fetch`: a tibble
 #' @export
 #' @include cache.R
 #' @importFrom openssl md5
@@ -259,12 +249,10 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     epidata_call <- with_base_url(epidata_call, fetch_args$base_url)
   }
 
-  # Just display the epidata_call object, don't fetch the data
   if (fetch_args$dry_run) {
     return(epidata_call)
   }
 
-  # Just display the raw response from the API, don't parse
   if (fetch_args$debug) {
     return(fetch_debug(epidata_call, fetch_args))
   }
@@ -279,20 +267,14 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     hashed <- md5(target)
     cached <- cache_environ$epidatr_cache$get(hashed)
     if (!is.key_missing(cached)) {
-      return(cached[[1]]) # extract `fetched` from `fetch()`, no metadata
+      return(cached[[1]])
     }
   }
 
-  # Need to actually get the data, since its either not in the cache or we're not caching
   runtime <- system.time({
-    response_content <- fetch_classic(
-      epidata_call, fetch_args,
-      simplify = !epidata_call$only_supports_classic
-    )
+    response_content <- fetch_classic(epidata_call, fetch_args)
 
-    if (epidata_call$only_supports_classic) {
-      fetched <- response_content
-    } else if (fetch_args$return_empty && length(response_content) == 0) {
+    if (fetch_args$return_empty && length(response_content) == 0) {
       fetched <- tibble()
     } else {
       fetched <- parse_data_frame(
@@ -326,6 +308,14 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 fetch_classic <- function(epidata_call, fetch_args = fetch_args_list(), simplify = TRUE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
+
+  if (!is.null(fetch_args$base_url)) {
+    epidata_call <- with_base_url(epidata_call, fetch_args$base_url)
+  }
+
+  if (fetch_args$dry_run) {
+    return(epidata_call)
+  }
 
   response_content <- do_request(epidata_call, "classic", fetch_args$timeout_seconds, fetch_args$fields) %>%
     httr2::resp_body_string(encoding = "UTF-8") %>%

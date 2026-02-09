@@ -85,7 +85,6 @@ test_that("fetch_args", {
 })
 
 test_that("fetch non-classic passes along api warnings", {
-  # only_supports_classic is FALSE
   epidata_call <- pub_covidcast(
     source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
@@ -121,20 +120,17 @@ test_that("fetch non-classic passes along api warnings", {
 })
 
 test_that("fetch classic works", {
-  # only_supports_classic is TRUE
-  epidata_call <- pub_delphi(
-    system = "ec",
-    epiweek = 201501,
-    fetch_args = fetch_args_list(dry_run = TRUE)
-  )
   local_mocked_bindings(
     # see generate_test_data.R
     do_request = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-classic-only.rds"))),
     .package = "epidatr"
   )
 
-  # make sure the return from this is a list
-  fetch_out <- epidata_call %>% fetch()
+  # pub_delphi calls fetch_classic directly; make sure the return is a list
+  fetch_out <- pub_delphi(
+    system = "ec",
+    epiweek = 201501
+  )
   expect_true(inherits(fetch_out, "list"))
 })
 
@@ -158,8 +154,7 @@ test_that("create_epidata_call basic behavior", {
   expected <- list(
     request = r,
     base_url = base_url,
-    meta = meta,
-    only_supports_classic = FALSE
+    meta = meta
   )
   class(expected) <- "epidata_call"
   expect_identical(create_epidata_call(endpoint, params, meta = meta), expected)
