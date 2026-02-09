@@ -140,26 +140,9 @@ print.covidcast_data_source <- function(x, ...) {
 #' @return An instance of `covidcast_epidata`
 #' @export
 covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) {
-  request <- httr2::request(base_url) %>%
-    httr2::req_url_path_append("covidcast/meta") %>%
-    httr2::req_timeout(timeout_seconds)
-
-  response <- request %>%
-    httr2::req_error(is_error = function(resp) FALSE) %>%
-    httr2::req_perform()
-
-  if (httr2::resp_is_error(response)) {
-    # 500, 429, 401 are possible
-    msg <- "fetch data from API"
-    if (identical(httr2::resp_content_type(response), "text/html") && httr2::resp_has_body(response)) {
-      # grab the error information out of the returned HTML document
-      msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
-        xml2::read_html(httr2::resp_body_string(response)),
-        "//p"
-      )))
-    }
-    httr2::resp_check_status(response, info = msg)
-  }
+  # covidcast_meta and covidcast/meta are two different endpoints...
+  response <- create_epidata_call("covidcast/meta", list()) %>%
+    request_impl(format_type = "json", timeout_seconds = timeout_seconds, fields = NULL)
 
   response_content <- httr2::resp_body_string(response, encoding = "UTF-8")
   response_content <- jsonlite::fromJSON(response_content, simplifyVector = FALSE)
