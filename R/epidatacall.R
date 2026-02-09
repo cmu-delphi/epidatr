@@ -318,31 +318,9 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
     return(epidata_call)
   }
 
-  response_content <- do_request(epidata_call, "classic", fetch_args$timeout_seconds, fetch_args$fields) %>%
-    httr2::resp_body_string(encoding = "UTF-8") %>%
-    jsonlite::fromJSON(simplifyDataFrame = simplify)
-
-  # Handle the case when there is an API error. Grab that messge. Success is 1,
-  # no results is -2, truncated is 2, -1 is generic error.
-  if (response_content$result != 1) {
-    if ((response_content$result != -2) && !(fetch_args$return_empty)) {
-      cli::cli_abort(
-        c(
-          "epidata error: {.code {response_content$message}}"
-        ),
-        class = "epidata_error"
-      )
-    }
-  }
-
-  if (response_content$message != "success") {
-    cli::cli_warn(
-      c(
-        "epidata warning: {.code {response_content$message}}"
-      ),
-      class = "epidata_warning"
-    )
-  }
+  body <- do_request(epidata_call, "classic", fetch_args$timeout_seconds, fetch_args$fields)
+  response_content <- jsonlite::fromJSON(body, simplifyDataFrame = simplify)
+  check_epidata_result(response_content, allow_empty = fetch_args$return_empty)
 
   return(response_content$epidata)
 }
@@ -351,9 +329,7 @@ fetch_debug <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
 
-  response <- do_request(epidata_call, fetch_args$format_type, fetch_args$timeout_seconds, fetch_args$fields)
-  content <- httr2::resp_body_string(response, encoding = "UTF-8")
-  content
+  do_request(epidata_call, fetch_args$format_type, fetch_args$timeout_seconds, fetch_args$fields)
 }
 
 

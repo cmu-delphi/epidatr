@@ -140,11 +140,10 @@ print.covidcast_data_source <- function(x, ...) {
 #' @export
 covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) {
   # covidcast_meta and covidcast/meta are two different endpoints...
-  response <- create_epidata_call("covidcast/meta", list()) %>%
+  body <- create_epidata_call("covidcast/meta", list()) %>%
     do_request(format_type = "json", timeout_seconds = timeout_seconds, fields = NULL)
 
-  response_content <- httr2::resp_body_string(response, encoding = "UTF-8")
-  response_content <- jsonlite::fromJSON(response_content, simplifyVector = FALSE)
+  response_content <- jsonlite::fromJSON(body, simplifyVector = FALSE)
 
   sources <- do.call(c, lapply(response_content, parse_source, base_url = base_url))
   class(sources) <- c("covidcast_data_source_list", class(sources))

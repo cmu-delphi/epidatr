@@ -105,10 +105,7 @@ test_that("fetch non-classic passes along api warnings", {
     `[[<-`("message", artificial_warning)
   local_mocked_bindings(
     do_request = function(...) {
-      create_mock_response(
-        body = jsonlite::toJSON(debug_triplet),
-        url = "https://example.com"
-      )
+      as.character(jsonlite::toJSON(debug_triplet))
     },
     .package = "epidatr"
   )
@@ -122,7 +119,7 @@ test_that("fetch non-classic passes along api warnings", {
 test_that("fetch classic works", {
   local_mocked_bindings(
     # see generate_test_data.R
-    do_request = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-classic-only.rds"))),
+    do_request = function(...) mock_body_string(readRDS(testthat::test_path("data/test-classic-only.rds"))),
     .package = "epidatr"
   )
 

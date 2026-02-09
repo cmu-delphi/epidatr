@@ -1,4 +1,16 @@
-#' performs the request
+#' Performs an API request and returns the response body as a string.
+#'
+#' Handles authentication, retries, 414 URI Too Long fallback to POST,
+#' HTTP errors, and API-level errors. The API returns errors as JSON
+#' regardless of the requested format, so for non-classic formats we
+#' sniff the body for a JSON error response.
+#'
+#' @param epidata_call an instance of `epidata_call`
+#' @param format_type format to request, one of "json", "csv", "classic"
+#' @param timeout_seconds the maximum time to wait for a response
+#' @param fields fields to include in the response, or NULL for all
+#' @param http_method HTTP method to use
+#' @return the response body as a string
 #'
 #' @importFrom httr2 req_perform req_timeout req_headers req_user_agent req_retry
 #' @importFrom httr2 req_error req_auth_basic resp_status req_method
@@ -69,5 +81,38 @@ do_request <- function(epidata_call, format_type, timeout_seconds, fields,
     httr2::resp_check_status(res, info = msg)
   }
 
-  res
+  body <- httr2::resp_body_string(res, encoding = "UTF-8")
+
+  # The API returns errors as JSON regardless of requested format. If we asked
+  # for non-classic (e.g. CSV) but got JSON back, it's an error response.
+  if (format_type != "classic" && startsWith(body, "{")) {
+    parsed <- jsonlite::fromJSON(body)
+    check_epidata_result(parsed)
+  }
+
+  body
+}
+
+#' Check an API response for epidata-level errors and warnings.
+#'
+#' @param response_content parsed JSON response with `result` and `message` fields
+#' @param allow_empty if TRUE, suppress errors for "no results" (result == -2)
+#' @keywords internal
+check_epidata_result <- function(response_content, allow_empty = FALSE) {
+  # success is 1, no results is -2, truncated is 2, -1 is generic error
+  if (response_content$result != 1) {
+    if ((response_content$result != -2) && !allow_empty) {
+      cli::cli_abort(
+        "epidata error: {.code {response_content$message}}",
+        class = "epidata_error"
+      )
+    }
+  }
+
+  if (response_content$message != "success") {
+    cli::cli_warn(
+      "epidata warning: {.code {response_content$message}}",
+      class = "epidata_warning"
+    )
+  }
 }
