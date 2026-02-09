@@ -308,34 +308,3 @@ parse_api_week <- function(value, reference_week_day = 1) {
   weeks <- v - (years * 100)
   MMWRweek::MMWRweek2Date(years, weeks, MMWRday = reference_week_day)
 }
-
-#' @importFrom checkmate test_character test_class test_date test_integerish test_list
-#' @keywords internal
-parse_timeset_input <- function(value) {
-  if (is.null(value)) {
-    return(NULL)
-  } else if (test_date(value)) {
-    return(value)
-  } else if (test_integerish(value)) {
-    if (all(nchar(value) %in% c(6, 8))) {
-      return(value)
-    } else {
-      stop(paste0("Invalid timeset input: ", value))
-    }
-  } else if (test_character(value)) {
-    if (identical(value, "*")) {
-      return(value)
-    } else if (all(nchar(value) %in% c(6, 8))) {
-      return(value)
-    } else if (all(nchar(value) == 10)) {
-      value <- as.Date(value, format = "%Y-%m-%d")
-      return(format(value, format = "%Y%m%d"))
-    } else {
-      stop(paste0("Invalid timeset input: ", value))
-    }
-  } else if (test_class(value, "EpiRange")) {
-    return(value)
-  } else {
-    stop(paste0("Invalid timeset input: ", value))
-  }
-}

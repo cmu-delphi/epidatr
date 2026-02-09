@@ -53,3 +53,48 @@ assert_timeset_param <- function(name, value, len = NULL, required = TRUE) {
     .var.name = name
   )
 }
+
+#' @importFrom checkmate test_character test_class test_date test_integerish test_list
+#' @keywords internal
+parse_timeset_input <- function(value) {
+  if (is.null(value)) {
+    return(NULL)
+  } else if (test_date(value)) {
+    return(value)
+  } else if (test_integerish(value)) {
+    if (all(nchar(value) %in% c(6, 8))) {
+      return(value)
+    } else {
+      stop(paste0("Invalid timeset input: ", value))
+    }
+  } else if (test_character(value)) {
+    if (identical(value, "*")) {
+      return(value)
+    } else if (all(nchar(value) %in% c(6, 8))) {
+      return(value)
+    } else if (all(nchar(value) == 10)) {
+      value <- as.Date(value, format = "%Y-%m-%d")
+      return(format(value, format = "%Y%m%d"))
+    } else {
+      stop(paste0("Invalid timeset input: ", value))
+    }
+  } else if (test_class(value, "EpiRange")) {
+    return(value)
+  } else {
+    stop(paste0("Invalid timeset input: ", value))
+  }
+}
+
+#' Validate and parse a timeset parameter
+#' @keywords internal
+validate_timeset_input <- function(name, value, len = NULL, required = TRUE) {
+  assert_timeset_param(name, value, len = len, required = required)
+  parse_timeset_input(value)
+}
+
+#' Validate and parse a date parameter
+#' @keywords internal
+validate_date_input <- function(name, value, len = NULL, required = TRUE) {
+  assert_date_param(name, value, len = len, required = required)
+  parse_timeset_input(value)
+}

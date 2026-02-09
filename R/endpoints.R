@@ -79,8 +79,7 @@ pvt_cdc <- function(
 
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "cdc/",
@@ -243,10 +242,8 @@ pub_covid_hosp_facility <- function(
   collection_weeks <- get_wildcard_equivalent_dates(collection_weeks, "day")
 
   assert_character_param("hospital_pks", hospital_pks)
-  assert_timeset_param("collection_weeks", collection_weeks)
-  assert_timeset_param("publication_dates", publication_dates, required = FALSE)
-  collection_weeks <- parse_timeset_input(collection_weeks)
-  publication_dates <- parse_timeset_input(publication_dates)
+  collection_weeks <- validate_timeset_input("collection_weeks", collection_weeks)
+  publication_dates <- validate_timeset_input("publication_dates", publication_dates, required = FALSE)
 
   # Confusingly, the endpoint expects `collection_weeks` to be in day format,
   # but correspond to epiweeks. Allow `collection_weeks` to be provided in
@@ -636,13 +633,9 @@ pub_covid_hosp_state_timeseries <- function(
   dates <- get_wildcard_equivalent_dates(dates, "day")
 
   assert_character_param("states", states)
-  assert_timeset_param("dates", dates)
-  assert_date_param("as_of", as_of, len = 1, required = FALSE)
-  assert_timeset_param("issues", issues, required = FALSE)
-
-  dates <- parse_timeset_input(dates)
-  issues <- parse_timeset_input(issues)
-  as_of <- parse_timeset_input(as_of)
+  dates <- validate_timeset_input("dates", dates)
+  as_of <- validate_date_input("as_of", as_of, len = 1, required = FALSE)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
 
   create_epidata_call(
     "covid_hosp_state_timeseries/",
@@ -1055,14 +1048,11 @@ pub_covidcast <- function(
   assert_character_param("signals", signals)
   assert_character_param("time_type", time_type, len = 1)
   assert_character_param("geo_type", geo_type, len = 1)
-  assert_timeset_param("time_values", time_values)
+  time_values <- validate_timeset_input("time_values", time_values)
   assert_character_param("geo_values", geo_values)
-  assert_date_param("as_of", as_of, len = 1, required = FALSE)
-  assert_timeset_param("issues", issues, required = FALSE)
+  as_of <- validate_date_input("as_of", as_of, len = 1, required = FALSE)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  time_values <- parse_timeset_input(time_values)
-  as_of <- parse_timeset_input(as_of)
-  issues <- parse_timeset_input(issues)
 
   if (source == "nchs-mortality" && time_type != "week") {
     cli::cli_abort(
@@ -1149,8 +1139,7 @@ pub_delphi <- function(
   fetch_args = fetch_args_list()
 ) {
   assert_character_param("system", system)
-  assert_timeset_param("epiweek", epiweek, len = 1)
-  epiweek <- parse_timeset_input(epiweek)
+  epiweek <- validate_timeset_input("epiweek", epiweek, len = 1)
 
   create_epidata_call(
     "delphi/",
@@ -1187,8 +1176,7 @@ pub_dengue_nowcast <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "dengue_nowcast/",
@@ -1232,8 +1220,7 @@ pvt_dengue_sensors <- function(
   assert_character_param("auth", auth, len = 1)
   assert_character_param("names", names)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "dengue_sensors/",
@@ -1288,11 +1275,9 @@ pub_ecdc_ili <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1352,11 +1337,9 @@ pub_flusurv <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1443,11 +1426,9 @@ pub_fluview_clinical <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1544,12 +1525,10 @@ pub_fluview <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
   assert_character_param("auth", auth, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!is.null(issues) && !is.null(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1618,8 +1597,7 @@ pub_gft <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "gft/",
@@ -1665,9 +1643,8 @@ pvt_ght <- function(
 
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
   assert_character_param("query", query, len = 1)
-  epiweeks <- parse_timeset_input(epiweeks)
 
   create_epidata_call(
     "ght/",
@@ -1714,11 +1691,9 @@ pub_kcdc_ili <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1808,8 +1783,7 @@ pub_nidss_dengue <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "nidss_dengue/",
@@ -1855,11 +1829,9 @@ pub_nidss_flu <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!is.null(issues) && !is.null(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1921,8 +1893,7 @@ pvt_norostat <- function(
 
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations, len = 1)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "norostat/",
@@ -1965,8 +1936,7 @@ pub_nowcast <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "nowcast/",
@@ -2009,11 +1979,9 @@ pub_paho_dengue <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   create_epidata_call(
     "paho_dengue/",
@@ -2068,8 +2036,7 @@ pvt_quidel <- function(
 
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "quidel/",
@@ -2127,8 +2094,7 @@ pvt_sensors <- function(
   assert_character_param("auth", auth, len = 1)
   assert_character_param("names", names)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "sensors/",
@@ -2193,11 +2159,9 @@ pvt_twitter <- function(
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
   assert_character_param("time_type", time_type, len = 1)
-  assert_timeset_param("time_values", time_values)
-  assert_timeset_param("dates", dates, required = FALSE)
-  assert_timeset_param("epiweeks", epiweeks, required = FALSE)
-  dates <- parse_timeset_input(dates)
-  epiweeks <- parse_timeset_input(epiweeks)
+  time_values <- validate_timeset_input("time_values", time_values)
+  dates <- validate_timeset_input("dates", dates, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks, required = FALSE)
 
   time_field <- if (!is.null(dates)) {
     create_epidata_field_info("date", "date")
@@ -2274,13 +2238,11 @@ pub_wiki <- function(
 
   assert_character_param("articles", articles)
   assert_character_param("time_type", time_type, len = 1)
-  assert_timeset_param("time_values", time_values)
-  assert_timeset_param("dates", dates, required = FALSE)
-  assert_timeset_param("epiweeks", epiweeks, required = FALSE)
+  time_values <- validate_timeset_input("time_values", time_values)
+  dates <- validate_timeset_input("dates", dates, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks, required = FALSE)
   assert_integerish_param("hours", hours, required = FALSE)
   assert_character_param("language", language, len = 1, required = FALSE)
-  dates <- parse_timeset_input(dates)
-  epiweeks <- parse_timeset_input(epiweeks)
 
   time_field <- if (!is.null(dates)) {
     create_epidata_field_info("date", "date")
