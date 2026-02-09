@@ -21,15 +21,15 @@ response <- do_request(url, params, timeout_seconds = 10 * 60) %>%
   readr::write_rds(testthat::test_path("data/test-http500.rds"))
 
 epidata_call %>%
-  fetch_debug(format_type = "classic") %>%
+  do_request(format_type = "classic") %>%
   readr::write_rds(testthat::test_path("data/test-classic.rds"))
 
 epidata_call %>%
-  fetch_debug(format_type = "classic", fields = c("time_value", "value")) %>%
+  do_request(format_type = "classic", fields = c("time_value", "value")) %>%
   readr::write_rds(testthat::test_path("data/test-narrower-fields.rds"))
 
 epidata_call %>%
-  fetch_debug(format_type = "classic") %>%
+  do_request(format_type = "classic") %>%
   readr::write_rds(testthat::test_path("data/test-classic-only.rds"))
 
 request("https://httpbin.org/status/400") |>

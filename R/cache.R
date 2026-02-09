@@ -311,8 +311,6 @@ check_is_cachable <- function(epidata_call, fetch_args) {
       !fetch_args$dry_run &&
       # Base url should be null
       is.null(fetch_args$base_url) &&
-      # Don't cache debug calls
-      !fetch_args$debug &&
       # Format type should be json
       fetch_args$format_type == "json" &&
       # Fields should be null

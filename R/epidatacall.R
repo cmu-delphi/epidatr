@@ -15,10 +15,6 @@
 #'   e.g., [`pub_covidcast`], to generate an `epidata_call` for the data of
 #'   interest.
 #'
-#' There are some other functions available for debugging and advanced usage: -
-#'   `request_url` (for debugging):  outputs the request URL from which data
-#'   would be fetched (note additional parameters below)
-#'
 #' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
 #' library(magrittr)
 #'
@@ -147,9 +143,8 @@ print.epidata_call <- function(x, ...) {
 #'   base URL `"https://api.delphi.cmu.edu/epidata/"`
 #' @param dry_run if `TRUE`, skip the call to the API and instead return the
 #'   `epidata_call` object (useful for debugging)
-#' @param debug if `TRUE`, return the raw response from the API
 #' @param format_type the format to request from the API, one of classic, json,
-#'   csv; this is only used by `fetch_debug`, and by default is `"json"`
+#'   csv; default is `"json"`
 #' @param refresh_cache if `TRUE`, ignore the cache, fetch the data from the
 #'   API, and update the cache, if it is enabled
 #' @param reference_week_day the day of the week to use as the reference day
@@ -168,7 +163,6 @@ fetch_args_list <- function(
   timeout_seconds = 15 * 60,
   base_url = NULL,
   dry_run = FALSE,
-  debug = FALSE,
   format_type = c("json", "classic", "csv"),
   refresh_cache = FALSE,
   reference_week_day = 1
@@ -182,7 +176,6 @@ fetch_args_list <- function(
   assert_numeric(timeout_seconds, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
-  assert_logical(debug, null.ok = FALSE, len = 1L, any.missing = FALSE)
   format_type <- match.arg(format_type)
   assert_logical(refresh_cache, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_numeric(reference_week_day, null.ok = FALSE, len = 1L, any.missing = FALSE)
@@ -196,7 +189,6 @@ fetch_args_list <- function(
       timeout_seconds = timeout_seconds,
       base_url = base_url,
       dry_run = dry_run,
-      debug = debug,
       format_type = format_type,
       refresh_cache = refresh_cache,
       reference_week_day = reference_week_day
@@ -235,10 +227,6 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 
   if (fetch_args$dry_run) {
     return(epidata_call)
-  }
-
-  if (fetch_args$debug) {
-    return(fetch_debug(epidata_call, fetch_args))
   }
 
   # If cacheable and the value is in cache, return the cached value.
@@ -309,14 +297,6 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
 
   return(response_content$epidata)
 }
-
-fetch_debug <- function(epidata_call, fetch_args = fetch_args_list()) {
-  stopifnot(inherits(epidata_call, "epidata_call"))
-  stopifnot(inherits(fetch_args, "fetch_args"))
-
-  do_request(epidata_call, fetch_args$format_type, fetch_args$timeout_seconds, fetch_args$fields)
-}
-
 
 #' Returns the full request url for the given epidata_call
 #' @rdname request_url

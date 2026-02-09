@@ -189,11 +189,6 @@ test_that("check_is_cachable", {
   )
   check_fun(
     as_of = "2020-01-01",
-    fetch_args = fetch_args_list(debug = TRUE),
-    expected_result = FALSE
-  )
-  check_fun(
-    as_of = "2020-01-01",
     fetch_args = fetch_args_list(format_type = "csv"),
     expected_result = FALSE
   )
