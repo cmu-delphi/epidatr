@@ -30,7 +30,7 @@ Data provided by Quidel Corp., which contains flu lab test results.
 \examples{
 \dontrun{
 pvt_quidel(
-  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
+  auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"),
   epiweeks = epirange(201201, 202001),
   locations = "hhs1"
 )

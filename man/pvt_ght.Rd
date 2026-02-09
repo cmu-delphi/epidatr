@@ -32,7 +32,7 @@ Estimate of influenza activity based on volume of certain search queries. …
 \examples{
 \dontrun{
 pvt_ght(
-  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
+  auth = Sys.getenv("SECRET_API_AUTH_GHT"),
   locations = "ma",
   epiweeks = epirange(199301, 202304),
   query = "how to get over the flu"

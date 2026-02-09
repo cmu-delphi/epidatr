@@ -26,23 +26,14 @@ The \code{covidcast_epidata()} function fetches a list of all signals, and retur
 an object containing fields for every signal:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata <- covidcast_epidata()
-#>
-Waiting 3s for retry backoff ==========>-------------------- �[K
+#> 
+Waiting 3s for retry backoff ============>------------------ �[K
 
 Waiting 3s for
-#> retry backoff ============>------------------ �[K
+#> retry backoff ==============>---------------- �[K
 
 Waiting 3s for retry backoff
-#> ==============>---------------- �[K
-
-Waiting 3s for retry backoff
-#> ======================>-------- �[K
-
-Waiting 3s for retry backoff
-#> =======================>------- �[K
-
-Waiting 3s for retry backoff
-#> ==========================>---- �[K
+#> =========================>----- �[K
 
 Waiting 3s for retry backoff
 #> ============================>-- �[K
@@ -53,12 +44,12 @@ Waiting 3s for retry backoff
 �[K
 epidata$signals
 #> # A tibble: 538 x 3
-#>    source        signal                        short_description
-#>    <chr>         <chr>                         <chr>
+#>    source        signal                        short_description                
+#>    <chr>         <chr>                         <chr>                            
 #>  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~
 #>  2 chng          smoothed_adj_outpatient_cli   Estimated percentage of outpatie~
-#>  3 chng          smoothed_outpatient_covid     COVID-Confirmed Doctor Visits
-#>  4 chng          smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits
+#>  3 chng          smoothed_outpatient_covid     COVID-Confirmed Doctor Visits    
+#>  4 chng          smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits    
 #>  5 chng          smoothed_outpatient_flu       Estimated percentage of outpatie~
 #>  6 chng          smoothed_adj_outpatient_flu   Estimated percentage of outpatie~
 #>  7 chng          7dav_inpatient_covid          Ratio of inpatient hospitalizati~
@@ -74,39 +65,27 @@ to type the name of signals and have the autocomplete feature select them
 from the list for you. Note that some signal names have dashes in them, so
 to access them we rely on the backtick operator:
 
-\if{html}{\out{<div class="sourceCode {r}">}}\preformatted{epidata$signals$`fb-survey:smoothed_cli`
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata$signals$`fb-survey:smoothed_cli`
+#> [1] "COVID-Like Symptoms (Unweighted 7-day average)"
+#> [1] "fb-survey:smoothed_cli"
+#> [1] "Estimated percentage of people with COVID-like illness "
 }\if{html}{\out{</div>}}
 
 These objects can be used directly to fetch data, without requiring us to use
 the \code{pub_covidcast()} function. Simply use the \verb{$call} attribute of the object:
 
-\if{html}{\out{<div class="sourceCode {r}">}}\preformatted{epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa",
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa",
                                               epirange(20210405, 20210410))
-#>
-Waiting 3s for retry backoff ===========>------------------- �[K
+#> 
+Waiting 2s for retry backoff ==============>---------------- �[K
 
-Waiting 3s for
-#> retry backoff ============>------------------ �[K
-
-Waiting 3s for retry backoff
-#> ===============>--------------- �[K
-
-Waiting 3s for retry backoff
-#> =======================>------- �[K
-
-Waiting 3s for retry backoff
-#> ==========================>---- �[K
-
-Waiting 3s for retry backoff
-#> ============================>-- �[K
-
-Waiting 3s for retry backoff
-#> =============================>- �[K
+Waiting 2s for
+#> retry backoff =============================>- �[K
 
 �[K
 #> # A tibble: 6 x 15
-#>   geo_value signal     source geo_type time_type time_value direction issue
-#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>
+#>   geo_value signal     source geo_type time_type time_value direction issue     
+#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
 #> 1 pa        smoothed_~ fb-su~ state    day       2021-04-05        NA 2021-04-10
 #> 2 pa        smoothed_~ fb-su~ state    day       2021-04-06        NA 2021-04-11
 #> 3 pa        smoothed_~ fb-su~ state    day       2021-04-07        NA 2021-04-12

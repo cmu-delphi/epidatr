@@ -14,8 +14,6 @@ fetch_args_list(
   timeout_seconds = 15 * 60,
   base_url = NULL,
   dry_run = FALSE,
-  debug = FALSE,
-  format_type = c("json", "classic", "csv"),
   refresh_cache = FALSE,
   reference_week_day = 1
 )
@@ -45,11 +43,6 @@ base URL \code{"https://api.delphi.cmu.edu/epidata/"}}
 
 \item{dry_run}{if \code{TRUE}, skip the call to the API and instead return the
 \code{epidata_call} object (useful for debugging)}
-
-\item{debug}{if \code{TRUE}, return the raw response from the API}
-
-\item{format_type}{the format to request from the API, one of classic, json,
-csv; this is only used by \code{fetch_debug}, and by default is \code{"json"}}
 
 \item{refresh_cache}{if \code{TRUE}, ignore the cache, fetch the data from the
 API, and update the cache, if it is enabled}
