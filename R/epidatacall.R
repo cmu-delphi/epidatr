@@ -257,7 +257,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     return(fetch_debug(epidata_call, fetch_args))
   }
 
-  # Check if the data is cachable
+  # If cacheable and the value is in cache, return the cached value.
   is_cachable <- check_is_cachable(epidata_call, fetch_args)
   if (is_cachable) {
     check_for_cache_warnings(epidata_call, fetch_args)
@@ -271,6 +271,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     }
   }
 
+  # Otherwise fetch the data from the API.
   runtime <- system.time({
     response_content <- request_epidata(epidata_call, fetch_args)
 
@@ -286,8 +287,8 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     }
   })
 
-  # Add it to the cache if appropriate
-  if (is_cachable || (fetch_args$refresh_cache && is_cache_enabled())) {
+  # Add to cache if appropriate.
+  if (is_cachable || fetch_args$refresh_cache) {
     cache_environ$epidatr_cache$set(hashed, list(fetched, Sys.time(), runtime))
   }
 
