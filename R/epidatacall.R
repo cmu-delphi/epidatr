@@ -96,22 +96,6 @@ create_epidata_call <- function(endpoint, params, meta = NULL) {
 }
 
 #' @importFrom checkmate test_class test_list
-format_params_for_api <- function(params) {
-  # Remove NULL components
-  params <- params[!vapply(params, is.null, logical(1))]
-
-  lapply(params, function(v) {
-    if (test_class(v, "EpiRange")) {
-      format_item(v)
-    } else if (test_list(v)) {
-      format_list(v)
-    } else {
-      format_item(v)
-    }
-  })
-}
-
-#' @importFrom checkmate test_class test_list
 extra_arguments <- function(epidata_call, format_type, fields) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(format_type %in% c("json", "csv", "classic"))

@@ -266,6 +266,24 @@ is_cache_enabled <- function() {
   !is.null(cache_environ$epidatr_cache)
 }
 
+#' helper that checks whether a call is a somewhat dangerous cache
+#'
+#' @keywords internal
+check_is_recent <- function(dates, max_age) {
+  if (inherits(dates, "Date")) {
+    threshold <- Sys.Date() - max_age
+  } else if (is.numeric(dates) && all(nchar(dates) == 6)) {
+    # Convert threshold to epiweek
+    threshold <- date_to_epiweek(Sys.Date() - max_age)
+  } else if (is.numeric(dates)) {
+    # If inputs are numerics, compare as YYYYMMDD
+    threshold <- as.numeric(format(Sys.Date() - max_age, format = "%Y%m%d"))
+  } else {
+    threshold <- format(Sys.Date() - max_age, format = "%Y%m%d")
+  }
+  (!is.null(dates) && any(dates >= threshold))
+}
+
 #' Helper that checks whether a call is actually cachable
 #'
 #' The cacheable endpoints are those with `as_of` or `issues` parameters:

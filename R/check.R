@@ -98,3 +98,57 @@ validate_date_input <- function(name, value, len = NULL, required = TRUE) {
   assert_date_param(name, value, len = len, required = required)
   parse_timeset_input(value)
 }
+
+#' Helper function to cast values, non-list vectors, and/or EpiRanges to strings
+#'
+#' @keywords internal
+format_item <- function(value) {
+  if (inherits(value, "EpiRange")) {
+    paste0(toString(value$from), "-", toString(value$to))
+  } else if (inherits(value, "Date")) {
+    paste(format(value, "%Y%m%d"), collapse = ",")
+  } else {
+    paste(value, collapse = ",")
+  }
+}
+
+#' Helper function to build a list of values and/or ranges
+#'
+#' @keywords internal
+format_list <- function(values) {
+  paste(vapply(values, format_item, character(1L)), collapse = ",")
+}
+
+#' @importFrom checkmate test_class test_list
+#' @keywords internal
+format_params_for_api <- function(params) {
+  # Remove NULL components
+  params <- params[!vapply(params, is.null, logical(1))]
+
+  lapply(params, function(v) {
+    if (test_class(v, "EpiRange")) {
+      format_item(v)
+    } else if (test_list(v)) {
+      format_list(v)
+    } else {
+      format_item(v)
+    }
+  })
+}
+
+#' helper to convert a date wildcard ("*") to an appropriate epirange
+#'
+#' @keywords internal
+get_wildcard_equivalent_dates <- function(time_value, time_type = c("day", "week")) {
+  time_type <- match.arg(time_type)
+
+  if (identical(time_value, "*")) {
+    if (time_type == "day") {
+      # To get all dates, set start and end dates to extreme values.
+      time_value <- epirange(10000101, 30000101)
+    } else if (time_type == "week") {
+      time_value <- epirange(100001, 300001)
+    }
+  }
+  return(time_value)
+}
