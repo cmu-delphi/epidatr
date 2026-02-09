@@ -47,13 +47,13 @@ Number of page visits for selected English, Influenza-related wikipedia articles
 }
 }
 \examples{
-\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
-
+\dontrun{
 pub_wiki(
   articles = "avian_influenza",
   time_type = "week",
   time_values = epirange(201501, 201601)
 )
-\dontshow{\}) # examplesIf}
+}
+
 }
 \keyword{endpoint}

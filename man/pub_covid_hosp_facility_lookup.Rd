@@ -46,11 +46,11 @@ Only one location argument needs to be specified.
 Combinations of the arguments are not currently supported.
 }
 \examples{
-\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
-
+\dontrun{
 pub_covid_hosp_facility_lookup(state = "fl")
 pub_covid_hosp_facility_lookup(city = "southlake")
-\dontshow{\}) # examplesIf}
+}
+
 }
 \seealso{
 \code{\link[=pub_covid_hosp_facility]{pub_covid_hosp_facility()}}

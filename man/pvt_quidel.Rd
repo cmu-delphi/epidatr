@@ -28,13 +28,13 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/quidel.html}
 Data provided by Quidel Corp., which contains flu lab test results.
 }
 \examples{
-\dontshow{if (curl::has_internet() && Sys.getenv("SECRET_API_AUTH_QUIDEL") != "") withAutoprint(\{ # examplesIf}
-
+\dontrun{
 pvt_quidel(
-  auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   epiweeks = epirange(201201, 202001),
   locations = "hhs1"
 )
-\dontshow{\}) # examplesIf}
+}
+
 }
 \keyword{endpoint}

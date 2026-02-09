@@ -42,8 +42,7 @@ Starting October 1, 2022, some facilities are only required to
 report annually.
 }
 \examples{
-\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
-
+\dontrun{
 pub_covid_hosp_facility(
   hospital_pks = "100075",
   collection_weeks = epirange(20200101, 20200501)
@@ -53,7 +52,8 @@ pub_covid_hosp_facility(
   hospital_pks = "050063",
   collection_weeks = epirange(20240101, 20240301)
 )
-\dontshow{\}) # examplesIf}
+}
+
 }
 \seealso{
 \code{\link[=pub_covid_hosp_facility]{pub_covid_hosp_facility()}}, \code{\link[=epirange]{epirange()}}

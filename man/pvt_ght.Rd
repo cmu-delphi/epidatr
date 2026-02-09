@@ -30,14 +30,14 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/ght.html}
 Estimate of influenza activity based on volume of certain search queries. …
 }
 \examples{
-\dontshow{if (curl::has_internet() && Sys.getenv("SECRET_API_AUTH_GHT") != "") withAutoprint(\{ # examplesIf}
-
+\dontrun{
 pvt_ght(
-  auth = Sys.getenv("SECRET_API_AUTH_GHT"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   locations = "ma",
   epiweeks = epirange(199301, 202304),
   query = "how to get over the flu"
 )
-\dontshow{\}) # examplesIf}
+}
+
 }
 \keyword{endpoint}

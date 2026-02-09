@@ -65,12 +65,12 @@ versioned data.
 }
 
 \examples{
-\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
-
+\dontrun{
 pub_covid_hosp_state_timeseries(
   states = "fl",
   dates = epirange(20200101, 20200501)
 )
-\dontshow{\}) # examplesIf}
+}
+
 }
 \keyword{endpoint}

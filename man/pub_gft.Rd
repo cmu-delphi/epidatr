@@ -35,9 +35,9 @@ and
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt}.
 }
 \examples{
-\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
-
+\dontrun{
 pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
-\dontshow{\}) # examplesIf}
+}
+
 }
 \keyword{endpoint}

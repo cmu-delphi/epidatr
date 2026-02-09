@@ -33,9 +33,9 @@ and
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt}.
 }
 \examples{
-\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
-
+\dontrun{
 pub_nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301))
-\dontshow{\}) # examplesIf}
+}
+
 }
 \keyword{endpoint}
