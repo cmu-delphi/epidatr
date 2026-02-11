@@ -4,7 +4,7 @@
 \alias{do_request}
 \title{performs the request}
 \usage{
-do_request(epidata_call, timeout_seconds)
+do_request(epidata_call, timeout_seconds, http_method = c("GET", "POST"))
 }
 \description{
 performs the request
