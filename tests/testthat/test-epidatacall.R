@@ -240,14 +240,16 @@ test_that("with_base_url works as expected", {
   new_call <- with_base_url(epidata_call, new_url)
 
   expect_s3_class(new_call, "epidata_call")
-  expect_match(new_call$request$url, "^https://example.com")
+  expect_match(new_call$request$url, "^https://example.com/covidcast")
+  expect_equal(new_call$base_url, "https://example.com/")
 
   # Replacement with path
   new_url_path <- "https://example.com/api.php"
   new_call_path <- with_base_url(epidata_call, new_url_path)
 
   expect_s3_class(new_call_path, "epidata_call")
-  expect_match(new_call_path$request$url, "^https://example.com/api.php")
+  expect_match(new_call_path$request$url, "^https://example.com/api.php/covidcast")
+  expect_equal(new_call_path$base_url, "https://example.com/api.php/")
   # Ensure query params are preserved (rough check)
   expect_match(new_call_path$request$url, "data_source=jhu-csse")
 })
