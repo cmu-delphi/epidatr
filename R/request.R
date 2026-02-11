@@ -4,9 +4,20 @@
 #' @importFrom httr2 req_error req_auth_basic resp_status req_method
 #' @importFrom httr2 req_body_form req_url req_url_query
 #' @keywords internal
-do_request <- function(epidata_call, timeout_seconds) {
-  req <- epidata_call$request %>%
-    httr2::req_user_agent(paste0("epidatr/", utils::packageVersion("epidatr"))) %>%
+do_request <- function(epidata_call, timeout_seconds, http_method = c("GET", "POST")) {
+  http_method <- rlang::arg_match(http_method)
+  req <- epidata_call$request
+
+  key <- get_api_key()
+  if (key != "") {
+    req <- req %>% httr2::req_auth_basic("epidata", key)
+  }
+
+  req <- req %>%
+    httr2::req_user_agent(paste0(
+      "epidatr/",
+      utils::packageVersion("epidatr")
+    )) %>%
     httr2::req_headers(!!!http_headers) %>%
     httr2::req_timeout(timeout_seconds) %>%
     httr2::req_retry(
@@ -15,12 +26,9 @@ do_request <- function(epidata_call, timeout_seconds) {
         !httr2::resp_status(resp) %in% c(400, 401, 403, 405, 414, 500)
       }
     ) %>%
+    # Use requested method.
+    httr2::req_method(http_method) %>%
     httr2::req_error(is_error = function(resp) FALSE)
-
-  key <- get_api_key()
-  if (key != "") {
-    req <- req %>% httr2::req_auth_basic("epidata", key)
-  }
 
   res <- httr2::req_perform(req)
 
