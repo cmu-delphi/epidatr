@@ -394,19 +394,20 @@ with_base_url <- function(epidata_call, base_url) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.character(base_url), length(base_url) == 1)
 
-  # Extract http or https from base_url
-  out <- stringr::str_split(base_url, "://")
-  if (length(out[[1]]) == 2) {
-    new_scheme <- out[[1]][1]
-    new_hostname <- out[[1]][2]
-  } else {
-    new_scheme <- "https"
-    new_hostname <- out[[1]][1]
+  old_base_url <- epidata_call$base_url
+  if (endsWith(old_base_url, "/") && !endsWith(base_url, "/")) {
+    base_url <- paste0(base_url, "/")
   }
 
-  epidata_call$request$url %>%
-    httr2::url_modify(scheme = new_scheme, hostname=new_hostname) %>%
-    httr2::url_parse()
+  epidata_call$request$url <- sub(
+    old_base_url,
+    base_url,
+    epidata_call$request$url,
+    fixed = TRUE
+  )
+  epidata_call$base_url <- base_url
+
+  epidata_call
 }
 
 #' Makes a request to the API and returns the response, catching
