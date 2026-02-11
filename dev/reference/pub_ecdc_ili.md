@@ -95,6 +95,9 @@ for details and more ways to specify versioned data.
 
 ``` r
 pub_ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001))
+#> Waiting 3s for retry backoff ■■■■■■■■■■■                     
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■         
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 28 × 6
 #>    release_date region  issue      epiweek      lag incidence_rate
 #>    <date>       <chr>   <date>     <date>     <dbl>          <dbl>

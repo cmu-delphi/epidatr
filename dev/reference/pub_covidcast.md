@@ -134,6 +134,8 @@ pub_covidcast(
   geo_values = c("ca", "fl"),
   time_values = epirange(20200601, 20200801)
 )
+#> Waiting 3s for retry backoff ■■■■■■■■■■                      
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 124 × 15
 #>    geo_value signal    source geo_type time_type time_value direction issue     
 #>    <chr>     <chr>     <chr>  <fct>    <fct>     <date>         <dbl> <date>    
@@ -158,6 +160,9 @@ pub_covidcast(
   geo_values = "*",
   time_values = epirange(20200601, 20200801)
 )
+#> Waiting 4s for retry backoff ■■■■■■■■■■                      
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■                  
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 3,472 × 15
 #>    geo_value signal    source geo_type time_type time_value direction issue     
 #>    <chr>     <chr>     <chr>  <fct>    <fct>     <date>         <dbl> <date>    

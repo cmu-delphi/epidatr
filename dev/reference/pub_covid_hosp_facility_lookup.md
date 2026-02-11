@@ -76,6 +76,8 @@ arguments are not currently supported.
 
 ``` r
 pub_covid_hosp_facility_lookup(state = "fl")
+#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■                 
+#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 236 × 10
 #>    hospital_pk state ccn    hospital_name   address city  zip   hospital_subtype
 #>    <chr>       <chr> <chr>  <chr>           <chr>   <chr> <chr> <chr>           

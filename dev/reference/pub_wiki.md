@@ -82,6 +82,8 @@ pub_wiki(
   time_type = "week",
   time_values = epirange(201501, 201601)
 )
+#> Waiting 3s for retry backoff ■■■■■■■■■■                      
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 53 × 6
 #>    article         count      total  hour epiweek    value
 #>    <chr>           <dbl>      <dbl> <dbl> <date>     <dbl>

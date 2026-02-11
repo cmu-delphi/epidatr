@@ -97,6 +97,8 @@ pub_covid_hosp_state_timeseries(
   states = "fl",
   dates = epirange(20200101, 20200501)
 )
+#> Waiting 4s for retry backoff ■■■■■■■■■■                      
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 51 × 118
 #>    state geocoded_state issue      date       critical_staffing_shortage_today…¹
 #>    <chr> <lgl>          <date>     <date>     <lgl>                             

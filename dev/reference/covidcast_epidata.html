@@ -38,6 +38,22 @@ These objects can be used directly to fetch data, without requiring us to use
 the pub_covidcast() function. Simply use the $call attribute of the object:
 epidata$signals$`fb-survey:smoothed_cli`$call(&quot;state&quot;, &quot;pa&quot;,
                                               epirange(20210405, 20210410))
+#&amp;gt; Waiting 4s for retry backoff =======&amp;gt;-----------------------
+#&amp;gt; Waiting 4s for retry backoff ========&amp;gt;----------------------
+#&amp;gt; Waiting 4s for retry backoff ==========&amp;gt;--------------------
+#&amp;gt; Waiting 4s for retry backoff ===========&amp;gt;-------------------
+#&amp;gt; Waiting 4s for retry backoff =============&amp;gt;-----------------
+#&amp;gt; Waiting 4s for retry backoff ===============&amp;gt;---------------
+#&amp;gt; Waiting 4s for retry backoff ================&amp;gt;--------------
+#&amp;gt; Waiting 4s for retry backoff ==================&amp;gt;------------
+#&amp;gt; Waiting 4s for retry backoff ====================&amp;gt;----------
+#&amp;gt; Waiting 4s for retry backoff =====================&amp;gt;---------
+#&amp;gt; Waiting 4s for retry backoff ======================&amp;gt;--------
+#&amp;gt; Waiting 4s for retry backoff ========================&amp;gt;------
+#&amp;gt; Waiting 4s for retry backoff ==========================&amp;gt;----
+#&amp;gt; Waiting 4s for retry backoff ===========================&amp;gt;---
+#&amp;gt; Waiting 4s for retry backoff =============================&amp;gt;-
+#&amp;gt; Waiting 4s for retry backoff ==============================&amp;gt;
 #&amp;gt; # A tibble: 6 x 15
 #&amp;gt;   geo_value signal     source geo_type time_type time_value direction issue
 #&amp;gt;   &amp;lt;chr&amp;gt;     &amp;lt;chr&amp;gt;      &amp;lt;chr&amp;gt;  &amp;lt;fct&amp;gt;    &amp;lt;fct&amp;gt;     &amp;lt;date&amp;gt;         &amp;lt;dbl&amp;gt; &amp;lt;date&amp;gt;
@@ -88,6 +104,22 @@ These objects can be used directly to fetch data, without requiring us to use
 the pub_covidcast() function. Simply use the $call attribute of the object:
 epidata$signals$`fb-survey:smoothed_cli`$call(&quot;state&quot;, &quot;pa&quot;,
                                               epirange(20210405, 20210410))
+#&amp;gt; Waiting 4s for retry backoff =======&amp;gt;-----------------------
+#&amp;gt; Waiting 4s for retry backoff ========&amp;gt;----------------------
+#&amp;gt; Waiting 4s for retry backoff ==========&amp;gt;--------------------
+#&amp;gt; Waiting 4s for retry backoff ===========&amp;gt;-------------------
+#&amp;gt; Waiting 4s for retry backoff =============&amp;gt;-----------------
+#&amp;gt; Waiting 4s for retry backoff ===============&amp;gt;---------------
+#&amp;gt; Waiting 4s for retry backoff ================&amp;gt;--------------
+#&amp;gt; Waiting 4s for retry backoff ==================&amp;gt;------------
+#&amp;gt; Waiting 4s for retry backoff ====================&amp;gt;----------
+#&amp;gt; Waiting 4s for retry backoff =====================&amp;gt;---------
+#&amp;gt; Waiting 4s for retry backoff ======================&amp;gt;--------
+#&amp;gt; Waiting 4s for retry backoff ========================&amp;gt;------
+#&amp;gt; Waiting 4s for retry backoff ==========================&amp;gt;----
+#&amp;gt; Waiting 4s for retry backoff ===========================&amp;gt;---
+#&amp;gt; Waiting 4s for retry backoff =============================&amp;gt;-
+#&amp;gt; Waiting 4s for retry backoff ==============================&amp;gt;
 #&amp;gt; # A tibble: 6 x 15
 #&amp;gt;   geo_value signal     source geo_type time_type time_value direction issue
 #&amp;gt;   &amp;lt;chr&amp;gt;     &amp;lt;chr&amp;gt;      &amp;lt;chr&amp;gt;  &amp;lt;fct&amp;gt;    &amp;lt;fct&amp;gt;     &amp;lt;date&amp;gt;         &amp;lt;dbl&amp;gt; &amp;lt;date&amp;gt;
@@ -177,6 +209,22 @@ to access them we rely on the backtick operator:</p>
 the <code><a href="pub_covidcast.html">pub_covidcast()</a></code> function. Simply use the <code>$call</code> attribute of the object:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">epidata</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">`fb-survey:smoothed_cli`</span><span class="op">$</span><span class="fu">call</span><span class="op">(</span><span class="st">"state"</span>, <span class="st">"pa"</span>,</span>
 <span>                                              <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff =======&gt;-----------------------</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff ========&gt;----------------------</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff ==========&gt;--------------------</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff ===========&gt;-------------------</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff =============&gt;-----------------</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff ===============&gt;---------------</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff ================&gt;--------------</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff ==================&gt;------------</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff ====================&gt;----------</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff =====================&gt;---------</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff ======================&gt;--------</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff ========================&gt;------</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff ==========================&gt;----</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff ===========================&gt;---</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff =============================&gt;-</span></span>
+<span><span class="co">#&gt; Waiting 4s for retry backoff ==============================&gt;</span></span>
 <span><span class="co">#&gt; # A tibble: 6 x 15</span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;</span></span>

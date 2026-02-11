@@ -43,6 +43,9 @@ epidata <- pub_covidcast(
   geo_values = "pa",
   as_of = "2020-05-07"
 )
+#> Waiting 4s for retry backoff ■■■■■■■■■                       
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 knitr::kable(epidata)
 ```
 
@@ -92,6 +95,8 @@ epidata <- pub_covidcast(
   geo_values = "pa",
   issues = epirange("2020-05-01", "2020-05-15")
 )
+#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■                 
+#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 knitr::kable(epidata)
 ```
 
@@ -143,6 +148,9 @@ epidata <- pub_covidcast(
   geo_values = "pa",
   lag = 7
 )
+#> Waiting 4s for retry backoff ■■■■■■■■■                       
+#> Waiting 4s for retry backoff ■■■■■■■■■■■                     
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
 knitr::kable(epidata)
 ```
 
@@ -170,6 +178,8 @@ epidata <- pub_covidcast(
   geo_values = "pa",
   issues = epirange("2020-05-09", "2020-05-15")
 )
+#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■                 
+#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 knitr::kable(epidata)
 ```
 

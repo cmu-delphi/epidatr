@@ -16,6 +16,7 @@
 - `last_update` in `pub_covidcast_meta` is now returned as a `POSIXct`
   object instead of an integer.
 - Improved efficiency of date parsing for API responses.
+- Migrate HTTP requests from `httr` to `httr2`.
 
 ## epidatr 1.2.4
 

@@ -86,6 +86,9 @@ call <- pub_covidcast(
   fetch_args = fetch_args_list(dry_run = TRUE)
 )
 call %>% fetch()
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■                    
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■       
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 124 × 15
 #>    geo_value signal    source geo_type time_type time_value direction issue     
 #>    <chr>     <chr>     <chr>  <fct>    <fct>     <date>         <dbl> <date>    

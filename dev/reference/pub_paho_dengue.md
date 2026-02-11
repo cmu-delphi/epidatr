@@ -87,6 +87,9 @@ for details and more ways to specify versioned data.
 
 ``` r
 pub_paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501))
+#> Waiting 4s for retry backoff ■■■■■■■■■                       
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■      
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 54 × 11
 #>    release_date region serotype issue      epiweek      lag total_pop num_dengue
 #>    <date>       <chr>  <chr>    <date>     <date>     <dbl>     <dbl>      <dbl>

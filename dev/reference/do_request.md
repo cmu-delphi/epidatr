@@ -1,23 +1,9 @@
 # performs the request
 
-You can test the authentication headers like so:
+performs the request
 
 ## Usage
 
 ``` r
-do_request(url, params, timeout_seconds)
-```
-
-## Examples
-
-``` r
-response <- httr::RETRY(
-  "GET", "https://httpbin.org/headers",
-  httr::authenticate("epidata", "fake_key")
-)
-httr::content(response)$headers$Authorization == paste0(
-  "Basic ",
-  base64enc::base64encode(charToRaw("epidata:fake_key"))
-)
-#> [1] TRUE
+do_request(epidata_call, timeout_seconds, http_method = c("GET", "POST"))
 ```

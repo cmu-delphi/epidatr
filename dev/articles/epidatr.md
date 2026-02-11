@@ -84,6 +84,9 @@ epidata <- pub_covidcast(
   geo_values = "us",
   time_values = epirange(20210105, 20210410)
 )
+#> Waiting 4s for retry backoff ■■■■■■■■■                       
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■      
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 knitr::kable(head(epidata))
 ```
 

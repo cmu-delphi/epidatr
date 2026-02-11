@@ -86,6 +86,9 @@ data sources and signals:
 
 ``` r
 covid_sources <- covidcast_epidata()
+#> Waiting 4s for retry backoff ■■■■■■■■■                       
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■    
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 head(covid_sources$sources, n = 2)
 #> $chng
 #> [1] "Change Healthcare"
@@ -190,6 +193,8 @@ pub_covidcast(
   time_values = epirange(20201221, 20201225),
   geo_values = "06059"
 )
+#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■                 
+#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
 #> # A tibble: 5 × 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     
 #>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
@@ -213,6 +218,9 @@ pub_covidcast(
   time_values = epirange(20201221, 20201225),
   geo_values = "*"
 )
+#> Waiting 4s for retry backoff ■■■■■■■■■                       
+#> Waiting 4s for retry backoff ■■■■■■■■■                       
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
 #> # A tibble: 2,025 × 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     
 #>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    

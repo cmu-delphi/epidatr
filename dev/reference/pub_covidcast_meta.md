@@ -37,6 +37,9 @@ pub_covidcast_meta(fetch_args = fetch_args_list())
 
 ``` r
 pub_covidcast_meta()
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■                    
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■                  
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 2,898 × 15
 #>    data_source         signal time_type geo_type min_time max_time num_locations
 #>    <chr>               <chr>  <fct>     <fct>       <dbl>    <dbl>         <dbl>
