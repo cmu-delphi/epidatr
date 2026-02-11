@@ -281,8 +281,9 @@ is_cache_enabled <- function() {
 #'
 #' @keywords internal
 check_is_cachable <- function(epidata_call, fetch_args) {
-  as_of_cachable <- !is.null(epidata_call$params$as_of) && !identical(epidata_call$params$as_of, "*")
-  issues_cachable <- !is.null(epidata_call$params$issues) && !identical(epidata_call$params$issues, "*")
+  params <- httr2::url_parse(epidata_call$request$url)$query
+  as_of_cachable <- !is.null(params$as_of) && !identical(params$as_of, "*")
+  issues_cachable <- !is.null(params$issues) && !identical(params$issues, "*")
   is_cachable <- (
     # Cache should be enabled
     is_cache_enabled() &&

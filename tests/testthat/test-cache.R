@@ -59,16 +59,11 @@ test_that("cache saves & loads", {
   )
   httr_content_called_count <- 0
   local_mocked_bindings(
-    request_impl = function(...) NULL,
-    .package = "epidatr"
-  )
-  local_mocked_bindings(
-    # see generate_test_data.R
-    content = function(...) {
+    do_request = function(...) {
       httr_content_called_count <<- httr_content_called_count + 1
-      readRDS(testthat::test_path("data/test-classic.rds"))
+      to_httr2_response(readRDS(testthat::test_path("data/test-classic.rds")))
     },
-    .package = "httr"
+    .package = "epidatr"
   )
 
   first_call <- epidata_call %>% fetch()
@@ -80,19 +75,21 @@ test_that("cache saves & loads", {
   # the request url hashed here is "https://api.delphi.cmu.edu/epidata/covidcast/?data_source=jhu-csse&signals=
   # confirmed_7dav_incidence_prop&geo_type=state&time_type=day&geo_values=ca%2Cfl&time_values=20200601-20200801
   # &as_of=20220101"
-  request_hash <- "01479468989102176d7cb70374f18f1f.rds"
+  request_hash <- paste0(openssl::md5(request_url(epidata_call, format_type = "json")), ".rds")
   direct_from_cache <- readRDS(file.path(new_temp_dir, request_hash))
   expect_equal(first_call, direct_from_cache[[1]])
 
   # Test the empty return branch
   expect_message(clear_cache())
   local_mocked_bindings(
-    # see generate_test_data.R
-    content = function(...) {
+    do_request = function(...) {
       httr_content_called_count <<- httr_content_called_count + 1
-      '{"epidata":[],"result":-2,"message":"no results"}'
+      create_mock_response(
+        body = '{"epidata":[],"result":-2,"message":"no results"}',
+        url = "https://example.com"
+      )
     },
-    .package = "httr"
+    .package = "epidatr"
   )
   expect_warning(empty_call <- epidata_call %>% fetch())
   expect_equal(empty_call, tibble())

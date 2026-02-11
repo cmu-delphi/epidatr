@@ -1,66 +1,47 @@
-join_url <- function(url, endpoint) {
-  if (!endsWith(url, "/")) {
-    url <- paste0(url, "/")
-  }
-  paste0(url, endpoint)
-}
-
 #' performs the request
 #'
-#' You can test the authentication headers like so:
-#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
-#'
-#' response <- httr::RETRY(
-#'   "GET", "https://httpbin.org/headers",
-#'   httr::authenticate("epidata", "fake_key")
-#' )
-#' httr::content(response)$headers$Authorization == paste0(
-#'   "Basic ",
-#'   base64enc::base64encode(charToRaw("epidata:fake_key"))
-#' )
-#'
-#' @importFrom httr RETRY
+#' @importFrom httr2 req_perform req_timeout req_headers req_user_agent req_retry
+#' @importFrom httr2 req_error req_auth_basic resp_status req_method
+#' @importFrom httr2 req_body_form req_url req_url_query
 #' @keywords internal
-do_request <- function(url, params, timeout_seconds) {
-  # don't retry in case of certain status codes
+do_request <- function(epidata_call, timeout_seconds, http_method = c("GET", "POST")) {
+  http_method <- rlang::arg_match(http_method)
+  req <- epidata_call$request
+
   key <- get_api_key()
   if (key != "") {
-    res <- httr::RETRY("GET",
-      url = url,
-      query = params,
-      terminate_on = c(400, 401, 403, 405, 414, 500),
-      http_headers,
-      httr::authenticate("epidata", get_api_key()),
-      httr::timeout(timeout_seconds)
-    )
-  } else {
-    res <- httr::RETRY("GET",
-      url = url,
-      query = params,
-      terminate_on = c(400, 401, 403, 405, 414, 500),
-      http_headers,
-      httr::timeout(timeout_seconds)
-    )
+    req <- req %>% httr2::req_auth_basic("epidata", key)
   }
-  if (res$status_code == 414) {
-    if (key != "") {
-      res <- httr::RETRY("POST",
-        url = url,
-        body = params,
-        encode = "form",
-        terminate_on = c(400, 401, 403, 405, 414, 500),
-        http_headers,
-        httr::authenticate("epidata", get_api_key())
-      )
-    } else {
-      res <- httr::RETRY("POST",
-        url = url,
-        body = params,
-        encode = "form",
-        terminate_on = c(400, 401, 403, 405, 414, 500),
-        http_headers
-      )
-    }
+
+  req <- req %>%
+    httr2::req_user_agent(paste0(
+      "epidatr/",
+      utils::packageVersion("epidatr")
+    )) %>%
+    httr2::req_headers(!!!http_headers) %>%
+    httr2::req_timeout(timeout_seconds) %>%
+    httr2::req_retry(
+      max_tries = 3,
+      is_transient = function(resp) {
+        !httr2::resp_status(resp) %in% c(400, 401, 403, 405, 414, 500)
+      }
+    ) %>%
+    # Use requested method.
+    httr2::req_method(http_method) %>%
+    httr2::req_error(is_error = function(resp) FALSE)
+
+  res <- httr2::req_perform(req)
+
+  if (httr2::resp_status(res) == 414) {
+    # 414 URI Too Long - Switch to POST
+    query <- httr2::url_parse(httr2::req_url(req))$query
+    req_post <- req %>%
+      httr2::req_url_query() %>%
+      httr2::req_method("POST") %>%
+      httr2::req_body_form(!!!query)
+
+    res <- httr2::req_perform(req_post)
   }
+
   res
 }

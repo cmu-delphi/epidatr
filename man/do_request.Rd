@@ -4,22 +4,9 @@
 \alias{do_request}
 \title{performs the request}
 \usage{
-do_request(url, params, timeout_seconds)
+do_request(epidata_call, timeout_seconds, http_method = c("GET", "POST"))
 }
 \description{
-You can test the authentication headers like so:
-}
-\examples{
-\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
-
-response <- httr::RETRY(
-  "GET", "https://httpbin.org/headers",
-  httr::authenticate("epidata", "fake_key")
-)
-httr::content(response)$headers$Authorization == paste0(
-  "Basic ",
-  base64enc::base64encode(charToRaw("epidata:fake_key"))
-)
-\dontshow{\}) # examplesIf}
+performs the request
 }
 \keyword{internal}

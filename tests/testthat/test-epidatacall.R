@@ -8,24 +8,24 @@ test_that("request_impl http errors", {
   )
   local_mocked_bindings(
     # see generate_test_data.R
-    do_request = function(...) readRDS(testthat::test_path("data/test-http401.rds")),
+    do_request = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-http401.rds"))),
   )
   expect_error(
     response <- epidata_call %>%
       request_impl("csv", timeout_seconds = 30, fields = NULL),
-    class = "http_401"
+    class = "httr2_http_401"
   )
 
   # should give a 500 error (the afhsb endpoint is removed)
 
   # see generate_test_data.R
   local_mocked_bindings(
-    do_request = function(...) readRDS(testthat::test_path("data/test-http500.rds"))
+    do_request = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-http500.rds")))
   )
   expect_error(
     response <- epidata_call %>%
       request_impl("csv", timeout_seconds = 30, fields = NULL),
-    class = "http_500"
+    class = "httr2_http_500"
   )
 })
 
@@ -94,18 +94,16 @@ test_that("fetch non-classic works", {
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   local_mocked_bindings(
-    request_impl = function(...) NULL,
+    # see generate_test_data.R
+    do_request = function(epidata_call, ...) {
+      parsed <- httr2::url_parse(epidata_call$request$url)
+      if (is.null(parsed$query$fields)) {
+        to_httr2_response(readRDS(testthat::test_path("data/test-classic.rds")))
+      } else {
+        to_httr2_response(readRDS(testthat::test_path("data/test-narrower-fields.rds")))
+      }
+    },
     .package = "epidatr"
-  )
-  local_mocked_bindings(
-    # see generate_test_data.R
-    content = function(...) readRDS(testthat::test_path("data/test-classic.rds")),
-    .package = "httr"
-  )
-  local_mocked_bindings(
-    # see generate_test_data.R
-    content = function(...) readRDS(testthat::test_path("data/test-narrower-fields.rds")),
-    .package = "httr"
   )
 
   # testing that the fields fill as expected
@@ -126,25 +124,22 @@ test_that("fetch non-classic passes along api warnings", {
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
 
-  local_mocked_bindings(
-    request_impl = function(...) NULL,
-    .package = "epidatr"
-  )
-  local_mocked_bindings(
-    content = function(...) NULL,
-    .package = "httr"
-  )
   artificial_warning <- paste0(
     "* This is a warning with a leading asterisk and {braces}",
     " to make sure we don't have bulleting/glue bugs."
   )
-  debug_triplet <- readRDS(testthat::test_path("data/test-classic.rds")) %>%
+  resp <- to_httr2_response(readRDS(testthat::test_path("data/test-classic.rds")))
+  debug_triplet <- httr2::resp_body_string(resp) %>%
     jsonlite::fromJSON() %>%
     `[[<-`("message", artificial_warning)
   local_mocked_bindings(
-    # see generate_test_data.R
-    fromJSON = function(...) debug_triplet,
-    .package = "jsonlite"
+    do_request = function(...) {
+      create_mock_response(
+        body = jsonlite::toJSON(debug_triplet),
+        url = "https://example.com"
+      )
+    },
+    .package = "epidatr"
   )
 
   expect_warning(epidata_call %>% fetch(),
@@ -162,8 +157,8 @@ test_that("fetch classic works", {
   )
   local_mocked_bindings(
     # see generate_test_data.R
-    content = function(...) readRDS(testthat::test_path("data/test-classic-only.rds")),
-    .package = "httr"
+    do_request = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-classic-only.rds"))),
+    .package = "epidatr"
   )
 
   # make sure the return from this is a list
@@ -173,6 +168,7 @@ test_that("fetch classic works", {
 
 test_that("create_epidata_call basic behavior", {
   endpoint <- "endpoint"
+  base_url <- "https://api.delphi.cmu.edu/epidata/"
   params <- list()
 
   # Success
@@ -180,10 +176,16 @@ test_that("create_epidata_call basic behavior", {
     create_epidata_field_info("time_value", "date"),
     create_epidata_field_info("value", "float")
   )
+
+  formatted_params <- format_params_for_api(params)
+
+  r <- httr2::request(global_base_url) |>
+    httr2::req_url_path_append(endpoint) |>
+    httr2::req_url_query(!!!formatted_params)
+
   expected <- list(
-    endpoint = endpoint,
-    params = params,
-    base_url = "https://api.delphi.cmu.edu/epidata/",
+    request = r,
+    base_url = base_url,
     meta = meta,
     only_supports_classic = FALSE
   )
@@ -219,4 +221,35 @@ test_that("create_epidata_call fails when meta arg contains duplicates", {
     create_epidata_call(endpoint, params, meta = meta),
     class = "epidatr__duplicate_meta_entries"
   )
+})
+
+test_that("with_base_url works as expected", {
+  # Create a dummy epidata_call
+  epidata_call <- pub_covidcast(
+    source = "jhu-csse",
+    signals = "confirmed_7dav_incidence_prop",
+    time_type = "day",
+    geo_type = "state",
+    time_values = epirange(20200601, 20200801),
+    geo_values = "ca",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+
+  # Basic replacement
+  new_url <- "https://example.com"
+  new_call <- with_base_url(epidata_call, new_url)
+
+  expect_s3_class(new_call, "epidata_call")
+  expect_match(new_call$request$url, "^https://example.com/covidcast")
+  expect_equal(new_call$base_url, "https://example.com/")
+
+  # Replacement with path
+  new_url_path <- "https://example.com/api.php"
+  new_call_path <- with_base_url(epidata_call, new_url_path)
+
+  expect_s3_class(new_call_path, "epidata_call")
+  expect_match(new_call_path$request$url, "^https://example.com/api.php/covidcast")
+  expect_equal(new_call_path$base_url, "https://example.com/api.php/")
+  # Ensure query params are preserved (rough check)
+  expect_match(new_call_path$request$url, "data_source=jhu-csse")
 })

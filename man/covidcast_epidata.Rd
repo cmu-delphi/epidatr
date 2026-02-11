@@ -60,6 +60,22 @@ the \code{pub_covidcast()} function. Simply use the \verb{$call} attribute of th
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa",
                                               epirange(20210405, 20210410))
+#> Waiting 4s for retry backoff =======>-----------------------
+#> Waiting 4s for retry backoff ========>----------------------
+#> Waiting 4s for retry backoff ==========>--------------------
+#> Waiting 4s for retry backoff ===========>-------------------
+#> Waiting 4s for retry backoff =============>-----------------
+#> Waiting 4s for retry backoff ===============>---------------
+#> Waiting 4s for retry backoff ================>--------------
+#> Waiting 4s for retry backoff ==================>------------
+#> Waiting 4s for retry backoff ====================>----------
+#> Waiting 4s for retry backoff =====================>---------
+#> Waiting 4s for retry backoff ======================>--------
+#> Waiting 4s for retry backoff ========================>------
+#> Waiting 4s for retry backoff ==========================>----
+#> Waiting 4s for retry backoff ===========================>---
+#> Waiting 4s for retry backoff =============================>-
+#> Waiting 4s for retry backoff ==============================>
 #> # A tibble: 6 x 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     
 #>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    

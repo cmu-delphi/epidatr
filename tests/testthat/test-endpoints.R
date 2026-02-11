@@ -169,27 +169,21 @@ test_that("endoints accept wildcard for date parameter", {
     "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
-
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pub_covid_hosp_facility(
     hospital_pks = "100075",
     collection_weeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$collection_weeks$from, 10000101)
-  expect_identical(call$params$collection_weeks$to, 30000101)
+  expect_match(call$request$url, "collection_weeks=10000101-30000101")
 
   expect_no_error(call <- pub_covid_hosp_state_timeseries(
     states = "fl",
     dates = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$dates$from, 10000101)
-  expect_identical(call$params$dates$to, 30000101)
+  expect_match(call$request$url, "dates=10000101-30000101")
 
   expect_no_error(call <- pub_covidcast(
     source = "jhu-csse",
@@ -200,15 +194,14 @@ test_that("endoints accept wildcard for date parameter", {
     geo_values = "ca,fl",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$time_values, "*")
+  expect_match(call$request$url, "time_values=%2A")
 
   expect_no_error(call <- pub_dengue_nowcast(
     locations = "ca",
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pvt_dengue_sensors(
     auth = "yourkey",
@@ -217,48 +210,42 @@ test_that("endoints accept wildcard for date parameter", {
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pub_ecdc_ili(
     regions = "austria",
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pub_flusurv(
     locations = "CA",
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pub_fluview_clinical(
     regions = "nat",
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pub_fluview(
     regions = "nat",
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pub_gft(
     locations = "hhs1",
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pvt_ght(
     auth = "yourkey",
@@ -267,32 +254,28 @@ test_that("endoints accept wildcard for date parameter", {
     query = "how to get over the flu",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pub_kcdc_ili(
     regions = "ROK",
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pub_nidss_dengue(
     locations = "taipei",
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pub_nidss_flu(
     regions = "taipei",
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pvt_norostat(
     auth = "yourkey",
@@ -300,24 +283,21 @@ test_that("endoints accept wildcard for date parameter", {
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pub_nowcast(
     locations = "ca",
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pub_paho_dengue(
     regions = "ca",
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pvt_quidel(
     auth = "yourkey",
@@ -325,8 +305,7 @@ test_that("endoints accept wildcard for date parameter", {
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pvt_sensors(
     auth = "yourkey",
@@ -335,8 +314,7 @@ test_that("endoints accept wildcard for date parameter", {
     epiweeks = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pvt_twitter(
     auth = "yourkey",
@@ -345,8 +323,7 @@ test_that("endoints accept wildcard for date parameter", {
     time_values = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pvt_twitter(
     auth = "yourkey",
@@ -355,8 +332,7 @@ test_that("endoints accept wildcard for date parameter", {
     time_values = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$dates$from, 10000101)
-  expect_identical(call$params$dates$to, 30000101)
+  expect_match(call$request$url, "dates=10000101-30000101")
 
   expect_no_error(call <- pub_wiki(
     articles = "avian_influenza",
@@ -364,8 +340,7 @@ test_that("endoints accept wildcard for date parameter", {
     time_values = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$epiweeks$from, 100001)
-  expect_identical(call$params$epiweeks$to, 300001)
+  expect_match(call$request$url, "epiweeks=100001-300001")
 
   expect_no_error(call <- pub_wiki(
     articles = "avian_influenza",
@@ -373,8 +348,7 @@ test_that("endoints accept wildcard for date parameter", {
     time_values = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ))
-  expect_identical(call$params$dates$from, 10000101)
-  expect_identical(call$params$dates$to, 30000101)
+  expect_match(call$request$url, "dates=10000101-30000101")
 })
 
 test_that("endpoints fail when given args via dots", {
@@ -495,10 +469,9 @@ test_that("pub_covid_hosp_state_timeseries supports versioned queries", {
       dry_run = TRUE
     )
   )
-  expect_identical(epidata_call$params$issues, 20220101)
-  expect_identical(epidata_call$params$as_of, NULL)
-  # COVID hosp state timeseries server code doesn't support `lag`
-  expect_identical(epidata_call$params$lag, NULL)
+  expect_match(epidata_call$request$url, "issues=20220101")
+  expect_no_match(epidata_call$request$url, "as_of=")
+  expect_no_match(epidata_call$request$url, "lag=")
 
   epidata_call <- pub_covid_hosp_state_timeseries(
     "ut", epirange(12340101, 34560101),
@@ -513,9 +486,9 @@ test_that("pub_covid_hosp_state_timeseries supports versioned queries", {
       dry_run = TRUE
     )
   )
-  expect_identical(epidata_call$params$issues, NULL)
-  expect_identical(epidata_call$params$as_of, 20220101)
-  expect_identical(epidata_call$params$lag, NULL)
+  expect_no_match(epidata_call$request$url, "issues=")
+  expect_match(epidata_call$request$url, "as_of=20220101")
+  expect_no_match(epidata_call$request$url, "lag=")
 })
 
 test_that("nchs-mortality call fails if time_type not week", {
