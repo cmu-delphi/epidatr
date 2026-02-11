@@ -387,8 +387,6 @@ request_url <- function(epidata_call, format_type = "classic", fields = NULL) {
 #' @param epidata_call an instance of `epidata_call`
 #' @param base_url base URL to use
 #' @return an `epidata_call` object
-#' @importFrom httr2 url_modify url_parse
-#' @importFrom stringr str_split
 #' @keywords internal
 with_base_url <- function(epidata_call, base_url) {
   stopifnot(inherits(epidata_call, "epidata_call"))
