@@ -29,10 +29,10 @@ queries from Google.
 \details{
 Google has discontinued Flu Trends and this is now a static
 endpoint. Possibile input for locations can be found in
-\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt},
-\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/states.txt},
+\url{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#hhs-regions},
+\url{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states},
 and
-\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt}.
+\url{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#selected-us-cities}.
 }
 \examples{
 \dontrun{

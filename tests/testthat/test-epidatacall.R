@@ -180,3 +180,34 @@ test_that("create_epidata_call fails when meta arg contains duplicates", {
     class = "epidatr__duplicate_meta_entries"
   )
 })
+
+test_that("with_base_url works as expected", {
+  # Create a dummy epidata_call
+  epidata_call <- pub_covidcast(
+    source = "jhu-csse",
+    signals = "confirmed_7dav_incidence_prop",
+    time_type = "day",
+    geo_type = "state",
+    time_values = epirange(20200601, 20200801),
+    geo_values = "ca",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+
+  # Basic replacement
+  new_url <- "https://example.com"
+  new_call <- with_base_url(epidata_call, new_url)
+
+  expect_s3_class(new_call, "epidata_call")
+  expect_match(new_call$request$url, "^https://example.com/covidcast")
+  expect_equal(new_call$base_url, "https://example.com/")
+
+  # Replacement with path
+  new_url_path <- "https://example.com/api.php"
+  new_call_path <- with_base_url(epidata_call, new_url_path)
+
+  expect_s3_class(new_call_path, "epidata_call")
+  expect_match(new_call_path$request$url, "^https://example.com/api.php/covidcast")
+  expect_equal(new_call_path$base_url, "https://example.com/api.php/")
+  # Ensure query params are preserved (rough check)
+  expect_match(new_call_path$request$url, "data_source=jhu-csse")
+})

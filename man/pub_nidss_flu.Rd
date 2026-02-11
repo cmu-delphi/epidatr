@@ -14,7 +14,9 @@ pub_nidss_flu(
 )
 }
 \arguments{
-\item{regions}{character. List of regions to fetch.}
+\item{regions}{character. List of regions to fetch.
+See \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#nidss}{Taiwan's geographic codes}
+for details.}
 
 \item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
 \code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as

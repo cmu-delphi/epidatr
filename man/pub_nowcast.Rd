@@ -27,7 +27,8 @@ Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's
 }
 \details{
 The full list of location inputs can be accessed at
-\url{https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py}.
+\url{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states}
+and \url{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#fluview-cities}.
 }
 \examples{
 \dontrun{

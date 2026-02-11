@@ -59,6 +59,7 @@ Suggests:
     testthat (>= 3.1.5),
     withr,
     base64enc,
+    httr,
     curl
 VignetteBuilder:
     knitr

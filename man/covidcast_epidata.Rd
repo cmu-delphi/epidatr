@@ -43,7 +43,7 @@ Waiting 3s for retry backoff
 
 �[K
 epidata$signals
-#> # A tibble: 538 x 3
+#> # A tibble: 520 x 3
 #>    source        signal                        short_description                
 #>    <chr>         <chr>                         <chr>                            
 #>  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~

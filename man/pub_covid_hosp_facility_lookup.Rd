@@ -17,7 +17,9 @@ pub_covid_hosp_facility_lookup(
 \arguments{
 \item{...}{not used for values, forces later arguments to bind by name}
 
-\item{state}{string. A two-letter character state abbreviation.}
+\item{state}{string. A two-letter character state abbreviation.
+See \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states}{US states codes}
+for details.}
 
 \item{ccn}{string. A facility CMS certification number.}
 
