@@ -56,7 +56,6 @@ test_that("fetch_args", {
     cran = TRUE
   )
 })
-
 test_that("fetch respects the fields parameter", {
   epidata_call <- pub_covidcast(
     source = "jhu-csse", signals = "sig", geo_type = "state", time_type = "day",
@@ -88,7 +87,6 @@ test_that("fetch respects the fields parameter", {
   expect_equal(names(res), "value")
   expect_equal(res$value, 10)
 })
-
 test_that("fetch non-classic passes along api warnings", {
   epidata_call <- pub_covidcast(
     source = "jhu-csse",
