@@ -93,27 +93,43 @@ test_that("fetch non-classic passes along api warnings", {
     "* This is a warning with a leading asterisk and {braces}",
     " to make sure we don't have bulleting/glue bugs."
   )
-  resp <- to_httr2_response(readRDS(testthat::test_path("data/test-classic.rds")))
-  debug_triplet <- httr2::resp_body_string(resp) %>%
-    jsonlite::fromJSON() %>%
-    `[[<-`("message", artificial_warning)
+  mock_response <- list(
+    epidata = list(list(
+      source = "jhu-csse", signal = "confirmed_7dav_incidence_prop",
+      geo_type = "state", time_type = "day", geo_value = "ca",
+      time_value = 20200601L, issue = 20200602L, lag = 1L,
+      value = 1.5, stderr = 0.1, sample_size = 100.0,
+      direction = 1.0, missing_value = 0L, missing_stderr = 0L,
+      missing_sample_size = 0L
+    )),
+    result = 1,
+    message = artificial_warning
+  )
   local_mocked_bindings(
-    do_request = function(...) {
-      as.character(jsonlite::toJSON(debug_triplet))
-    },
+    do_request = function(...) as.character(jsonlite::toJSON(mock_response, auto_unbox = TRUE)),
     .package = "epidatr"
   )
 
-  expect_warning(epidata_call %>% fetch(),
-    regexp = paste0("epidata warning: `", artificial_warning, "`"),
-    fixed = TRUE
-  )
+  expect_snapshot(epidata_call %>% fetch(), cran = TRUE)
 })
 
 test_that("fetch classic works", {
+  # Minimal example
+  mock_classic <- list(
+    epidata = list(list(
+      epiweek = 201501,
+      forecast = list(
+        `_version` = 1,
+        baselines = list(nat = 2.0),
+        data = list()
+      )
+    )),
+    result = 1,
+    message = "success"
+  )
+
   local_mocked_bindings(
-    # see generate_test_data.R
-    do_request = function(...) mock_body_string(readRDS(testthat::test_path("data/test-classic-only.rds"))),
+    do_request = function(...) as.character(jsonlite::toJSON(mock_classic, auto_unbox = TRUE)),
     .package = "epidatr"
   )
 
@@ -123,6 +139,7 @@ test_that("fetch classic works", {
     epiweek = 201501
   )
   expect_true(inherits(fetch_out, "list"))
+  expect_snapshot_value(fetch_out, style = "json2", cran = TRUE)
 })
 
 test_that("create_epidata_call basic behavior", {

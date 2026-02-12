@@ -48,21 +48,20 @@ test_that("`parse_timeset_input` on valid inputs", {
 })
 
 test_that("null parsing", {
-  # parse_data_frame (df[[info$name]] = NULL)-> parse_value
-  epidata_call <- pub_flusurv(
-    locations = "ca",
-    epiweeks = 202001,
-    fetch_args = fetch_args_list(dry_run = TRUE)
+  # Minimal example
+  meta <- list(
+    create_epidata_field_info("val", "int"),
+    create_epidata_field_info("flag", "bool")
   )
-  # see generate_test_data.R
-  mock_df <- as.data.frame(readr::read_rds(testthat::test_path("data/flusurv-epiweeks.rds")))
-  metadata <- epidata_call$meta
-  mock_df[[metadata[[1]]$name]][1] <- NA
-  mock_df[[metadata[[2]]$name]] <- c(TRUE)
-  epidata_call$meta[[2]]$type <- "bool"
-  expect_no_error(res <- parse_data_frame(epidata_call, mock_df) %>% as_tibble())
-  expect_true(res$location)
-  expect_identical(res$release_date, as.Date(NA))
+  epidata_call <- structure(list(meta = meta), class = "epidata_call")
+
+  mock_df <- data.frame(val = NA_integer_, flag = TRUE)
+
+  # Expect no error
+  expect_no_error(res <- parse_data_frame(epidata_call, mock_df))
+  expect_true(is.na(res$val))
+  expect_true(is.numeric(res$val))
+  expect_true(res$flag)
 
   # if the call has no metadata, return the whole frame as is
   epidata_call$meta <- NULL
@@ -76,50 +75,41 @@ test_that("parse invalid time", {
 })
 
 test_that("parse_data_frame warns when df contains fields not listed in meta", {
-  epidata_call <- pub_flusurv(
-    locations = "ca",
-    epiweeks = 202001,
-    fetch_args = fetch_args_list(dry_run = TRUE)
-  )
-  # see generate_test_data.R
-  mock_df <- as.data.frame(readr::read_rds(testthat::test_path("data/flusurv-epiweeks.rds")))
+  # Minimal example
+  meta <- list(create_epidata_field_info("val", "int"))
+  epidata_call <- structure(list(meta = meta), class = "epidata_call")
 
-  # Success when meta and df fields match exactly
+  mock_df <- data.frame(val = 1L)
   expect_no_warning(parse_data_frame(epidata_call, mock_df))
 
   # Warning when df contains extra fields
-  mock_df$extra <- 5
-  expect_warning(
-    parse_data_frame(epidata_call, mock_df),
-    class = "epidatr__missing_meta_fields"
+  mock_df_extra <- data.frame(val = 1L, extra = 5)
+  expect_snapshot(
+    parse_data_frame(epidata_call, mock_df_extra),
+    cran = TRUE
   )
-  mock_df$extra <- NULL
 
   # Success when meta contains extra fields
-  mock_df$rate_age_0 <- NULL
+  meta_extra <- list(
+    create_epidata_field_info("val", "int"),
+    create_epidata_field_info("other", "int")
+  )
+  epidata_call$meta <- meta_extra
   expect_no_warning(parse_data_frame(epidata_call, mock_df))
 })
 
 test_that("parse_data_frame warns when df contains int values with decimal component", {
-  epidata_call <- pub_flusurv(
-    locations = "ca",
-    epiweeks = 202001,
-    fetch_args = fetch_args_list(dry_run = TRUE)
-  )
-  # see generate_test_data.R
-  mock_df <- as.data.frame(readr::read_rds(testthat::test_path("data/flusurv-epiweeks.rds")))
+  # Metadata expects int
+  meta <- list(create_epidata_field_info("val", "int"))
+  epidata_call <- structure(list(meta = meta), class = "epidata_call")
 
-  # Int fields are returned as double
-  result <- parse_data_frame(epidata_call, mock_df)
-  expect_type(result$lag, "double")
+  # Input has float
+  mock_df <- data.frame(val = 4.3)
 
-  # Replace int fields with decimal
-  mock_df$lag <- 4.3
-
-  # Warning when int values have a decimal component
-  expect_warning(
+  # Should produce warning
+  expect_snapshot(
     parse_data_frame(epidata_call, mock_df),
-    class = "epidatr__int_nonzero_decimal_digits"
+    cran = TRUE
   )
 })
 

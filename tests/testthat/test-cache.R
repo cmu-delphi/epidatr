@@ -57,11 +57,28 @@ test_that("cache saves & loads", {
     as_of = "2022-01-01",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
+  # Minimal covidcast-shaped response
+  mock_response <- list(
+    epidata = list(list(
+      source = "jhu-csse",
+      signal = "confirmed_7dav_incidence_prop",
+      geo_type = "state",
+      time_type = "day",
+      geo_value = "ca",
+      time_value = 20200601,
+      issue = 20200602,
+      lag = 1,
+      value = 1.5
+    )),
+    result = 1,
+    message = "success"
+  )
+
   httr_content_called_count <- 0
   local_mocked_bindings(
     do_request = function(...) {
       httr_content_called_count <<- httr_content_called_count + 1
-      mock_body_string(readRDS(testthat::test_path("data/test-classic.rds")))
+      as.character(jsonlite::toJSON(mock_response, auto_unbox = TRUE))
     },
     .package = "epidatr"
   )
