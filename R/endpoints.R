@@ -1,3 +1,7 @@
+# The individual endpoint functions live in this file. Each function creates and
+# `epidata_call` object and then calls `fetch()` on it. The endpoint functions
+# are the main user-facing functions in this package.
+
 #' @title Shared Documentation for epidatr Parameters
 #'
 #' @description This is a central text for parameter documentation

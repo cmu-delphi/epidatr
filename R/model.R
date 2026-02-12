@@ -1,3 +1,7 @@
+# A collection of helper data structures that hold smaller components of API
+# requests, such as EpiRanges (which represent date or week ranges) and
+# EpidataFieldInfo (which represent metadata about API fields).
+
 #' Specify a range of days or weeks for API requests
 #'
 #' Specify a date range (in days or epiweeks) for an API request.

@@ -1,3 +1,6 @@
+# Functions for the covidcast_epidata() helper, which provides auto-complete for
+# COVIDcast signals.
+
 #' turn a signal into a callable
 #' @param signal the signal of interest
 #' @param base_url the base url

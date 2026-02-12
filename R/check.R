@@ -1,3 +1,5 @@
+# Validation functions for user input.
+
 #' Allows character vectors
 #' @importFrom checkmate assert_character assert_integerish
 #' @keywords internal

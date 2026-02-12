@@ -1,3 +1,7 @@
+# Functions for creating and handling `epidata_call` objects, which represent
+# API calls to the Epidata API. The `fetch()` function is used to execute an
+# `epidata_call` and return the data.
+
 #' An abstraction that holds information needed to make an epidata request
 #' @rdname epidata_call
 #' @aliases epidata_call

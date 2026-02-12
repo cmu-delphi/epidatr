@@ -1,3 +1,5 @@
+# Functions for performing the HTTP part of the API request.
+
 #' Performs an API request and returns the response body as a string.
 #'
 #' Handles authentication, retries, 414 URI Too Long fallback to POST,
