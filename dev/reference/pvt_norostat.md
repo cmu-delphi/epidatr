@@ -52,12 +52,11 @@ pvt_norostat(auth, locations, epiweeks = "*", fetch_args = fetch_args_list())
 ## Examples
 
 ``` r
-if (FALSE) { # curl::has_internet() && Sys.getenv("SECRET_API_AUTH_NOROSTAT") != ""
-
+if (FALSE) { # \dontrun{
 pvt_norostat(
-  auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
   epiweeks = 201233
 )
-}
+} # }
 ```

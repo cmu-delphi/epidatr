@@ -96,7 +96,25 @@ for details and more ways to specify versioned data.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
 pub_flusurv(locations = "ca", epiweeks = epirange(201701, 201801))
-} # }
+#> # A tibble: 31 × 34
+#>    release_date location season  issue      epiweek      lag rate_age_0
+#>    <date>       <chr>    <chr>   <date>     <date>     <dbl>      <dbl>
+#>  1 2025-11-03   CA       2016-17 2025-09-14 2017-01-01   454        3.4
+#>  2 2025-11-03   CA       2016-17 2025-09-14 2017-01-08   453        2.9
+#>  3 2025-11-03   CA       2016-17 2025-09-14 2017-01-15   452        3.4
+#>  4 2025-11-03   CA       2016-17 2025-09-14 2017-01-22   451        2  
+#>  5 2025-11-03   CA       2016-17 2025-09-14 2017-01-29   450        2  
+#>  6 2025-11-03   CA       2016-17 2025-09-14 2017-02-05   449        2  
+#>  7 2025-11-03   CA       2016-17 2025-09-14 2017-02-12   448        2  
+#>  8 2025-11-03   CA       2016-17 2025-09-14 2017-02-19   447        0.5
+#>  9 2025-11-03   CA       2016-17 2025-09-14 2017-02-26   446        2  
+#> 10 2025-11-03   CA       2016-17 2025-09-14 2017-03-05   445        0.5
+#> # ℹ 21 more rows
+#> # ℹ 27 more variables: rate_age_1 <dbl>, rate_age_2 <dbl>, rate_age_3 <dbl>,
+#> #   rate_age_4 <dbl>, rate_overall <dbl>, rate_age_5 <dbl>, rate_age_6 <dbl>,
+#> #   rate_age_7 <dbl>, rate_age_18t29 <dbl>, rate_age_30t39 <dbl>,
+#> #   rate_age_40t49 <dbl>, rate_age_5t11 <dbl>, rate_age_12t17 <dbl>,
+#> #   rate_age_lt18 <dbl>, rate_age_gte18 <dbl>, rate_age_1t4 <dbl>,
+#> #   rate_age_gte75 <dbl>, rate_age_0tlt1 <dbl>, rate_race_white <dbl>, …
 ```

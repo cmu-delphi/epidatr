@@ -70,13 +70,12 @@ pvt_sensors(
 ## Examples
 
 ``` r
-if (FALSE) { # curl::has_internet() && Sys.getenv("SECRET_API_AUTH_SENSORS") != ""
-
+if (FALSE) { # \dontrun{
 pvt_sensors(
-  auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   names = "sar3",
   locations = "nat",
   epiweeks = epirange(201501, 202001)
 )
-}
+} # }
 ```

@@ -90,9 +90,8 @@ for details and more ways to specify versioned data.
 
 ``` r
 pub_nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601))
-#> Waiting 4s for retry backoff ■■■■■■■■                        
-#> Waiting 4s for retry backoff ■■■■■■■■■■                      
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
+#> Waiting 3s for retry backoff ■■■■■■■■■■■                     
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 53 × 7
 #>    release_date region issue      epiweek      lag visits   ili
 #>    <date>       <chr>  <date>     <date>     <dbl>  <dbl> <dbl>

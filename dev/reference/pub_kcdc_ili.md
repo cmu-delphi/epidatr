@@ -87,8 +87,8 @@ for details and more ways to specify versioned data.
 
 ``` r
 pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
-#> Waiting 3s for retry backoff ■■■■■■■■■■■                     
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■■                   
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
 #> # A tibble: 1 × 6
 #>   release_date region issue      epiweek      lag   ili
 #>   <date>       <chr>  <date>     <date>     <dbl> <dbl>

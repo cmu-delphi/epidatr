@@ -45,11 +45,11 @@ pvt_cdc(auth, locations, epiweeks = "*", fetch_args = fetch_args_list())
 ## Examples
 
 ``` r
-if (FALSE) { # curl::has_internet() && Sys.getenv("SECRET_API_AUTH_CDC") != ""
+if (FALSE) { # \dontrun{
 pvt_cdc(
-  auth = Sys.getenv("SECRET_API_AUTH_CDC"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   locations = "fl,ca",
   epirange(201501, 201601)
 )
-}
+} # }
 ```

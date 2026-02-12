@@ -51,6 +51,9 @@ and
 
 ``` r
 pub_nowcast(locations = "ca", epiweeks = epirange(201201, 201301))
+#> Waiting 4s for retry backoff ■■■■■■■■■                       
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■                    
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 53 × 4
 #>    location epiweek    value   std
 #>    <chr>    <date>     <dbl> <dbl>

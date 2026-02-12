@@ -36,6 +36,6 @@ pvt_meta_norostat(auth, fetch_args = fetch_args_list())
 
 ``` r
 if (FALSE) { # \dontrun{
-pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
+pvt_meta_norostat(auth = Sys.getenv("DELPHI_EPIDATA_KEY"),)
 } # }
 ```

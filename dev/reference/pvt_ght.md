@@ -52,13 +52,12 @@ pvt_ght(auth, locations, epiweeks = "*", query, fetch_args = fetch_args_list())
 ## Examples
 
 ``` r
-if (FALSE) { # curl::has_internet() && Sys.getenv("SECRET_API_AUTH_GHT") != ""
-
+if (FALSE) { # \dontrun{
 pvt_ght(
-  auth = Sys.getenv("SECRET_API_AUTH_GHT"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   locations = "ma",
   epiweeks = epirange(199301, 202304),
   query = "how to get over the flu"
 )
-}
+} # }
 ```

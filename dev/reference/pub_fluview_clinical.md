@@ -92,6 +92,8 @@ for details and more ways to specify versioned data.
 
 ``` r
 pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■                  
+#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 14 × 11
 #>    release_date region issue      epiweek      lag total_specimens total_a
 #>    <date>       <chr>  <date>     <date>     <dbl>           <dbl>   <dbl>

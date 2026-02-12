@@ -108,8 +108,8 @@ for details and more ways to specify versioned data.
 
 ``` r
 pub_fluview(regions = "nat", epiweeks = epirange(201201, 202005))
-#> Waiting 4s for retry backoff ■■■■■■■■■                       
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■            
+#> Waiting 4s for retry backoff ■■■■■■■■                        
+#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■             
 #> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 422 × 16
 #>    release_date region issue      epiweek      lag num_ili num_patients

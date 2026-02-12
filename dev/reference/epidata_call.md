@@ -10,12 +10,7 @@ few non-COVIDCAST endpoints will return a JSON-like list instead.
 ## Usage
 
 ``` r
-create_epidata_call(
-  endpoint,
-  params,
-  meta = NULL,
-  only_supports_classic = FALSE
-)
+create_epidata_call(endpoint, params, meta = NULL)
 
 fetch(epidata_call, fetch_args = fetch_args_list())
 ```
@@ -34,10 +29,6 @@ fetch(epidata_call, fetch_args = fetch_args_list())
 
   meta data to attach to the epidata call
 
-- only_supports_classic:
-
-  if true only classic format is supported
-
 - epidata_call:
 
   an instance of `epidata_call`
@@ -52,7 +43,7 @@ fetch(epidata_call, fetch_args = fetch_args_list())
 
 &nbsp;
 
-- For `fetch`: a tibble or a JSON-like list
+- For `fetch`: a tibble
 
 ## Details
 
@@ -61,15 +52,6 @@ you should not need to use it directly; instead, use an endpoint
 function, e.g.,
 [`pub_covidcast`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md),
 to generate an `epidata_call` for the data of interest.
-
-There are some other functions available for debugging and advanced
-usage: - `request_url` (for debugging): outputs the request URL from
-which data would be fetched (note additional parameters below)
-
-`fetch` usually returns the data in tibble format, but a few of the
-endpoints only support the JSON classic format (`pub_delphi`,
-`pvt_meta_norostat`, and `pub_meta`). In that case a JSON-like nested
-list structure is returned instead.
 
 ## Examples
 

@@ -49,8 +49,6 @@ pub_dengue_nowcast(
 )
 #> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■                 
 #> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
-#> Waiting 4s for retry backoff ■■■■■■■■■■■                     
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 320 × 4
 #>    location epiweek    value   std
 #>    <chr>    <date>     <dbl> <dbl>

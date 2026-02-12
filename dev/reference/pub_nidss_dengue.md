@@ -53,8 +53,8 @@ and
 
 ``` r
 pub_nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301))
-#> Waiting 4s for retry backoff ■■■■■■■■                        
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
+#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■                 
+#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 53 × 3
 #>    location epiweek    count
 #>    <chr>    <date>     <dbl>

@@ -58,13 +58,12 @@ pvt_dengue_sensors(
 ## Examples
 
 ``` r
-if (FALSE) { # curl::has_internet() && Sys.getenv("SECRET_API_AUTH_SENSORS") != ""
-
+if (FALSE) { # \dontrun{
 pvt_dengue_sensors(
-  auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   names = "ght",
   locations = "ag",
   epiweeks = epirange(201501, 202001)
 )
-}
+} # }
 ```

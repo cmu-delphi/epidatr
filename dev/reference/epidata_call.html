@@ -57,12 +57,7 @@ instead.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">create_epidata_call</span><span class="op">(</span></span>
-<span>  <span class="va">endpoint</span>,</span>
-<span>  <span class="va">params</span>,</span>
-<span>  meta <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  only_supports_classic <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">create_epidata_call</span><span class="op">(</span><span class="va">endpoint</span>, <span class="va">params</span>, meta <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">fetch</span><span class="op">(</span><span class="va">epidata_call</span>, fetch_args <span class="op">=</span> <span class="fu"><a href="fetch_args_list.html">fetch_args_list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -83,10 +78,6 @@ instead.</p>
 <dd><p>meta data to attach to the epidata call</p></dd>
 
 
-<dt id="arg-only-supports-classic">only_supports_classic<a class="anchor" aria-label="anchor" href="#arg-only-supports-classic"></a></dt>
-<dd><p>if true only classic format is supported</p></dd>
-
-
 <dt id="arg-epidata-call">epidata_call<a class="anchor" aria-label="anchor" href="#arg-epidata-call"></a></dt>
 <dd><p>an instance of <code>epidata_call</code></p></dd>
 
@@ -99,7 +90,7 @@ instead.</p>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
 
 <ul><li><p>For <code>create_epidata_call</code>: an <code>epidata_call</code> object</p></li>
-</ul><ul><li><p>For <code>fetch</code>: a tibble or a JSON-like list</p></li>
+</ul><ul><li><p>For <code>fetch</code>: a tibble</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -107,13 +98,6 @@ instead.</p>
 should not need to use it directly; instead, use an endpoint function,
 e.g., <code><a href="pub_covidcast.html">pub_covidcast</a></code>, to generate an <code>epidata_call</code> for the data of
 interest.</p>
-<p>There are some other functions available for debugging and advanced usage: -
-<code>request_url</code> (for debugging):  outputs the request URL from which data
-would be fetched (note additional parameters below)</p>
-<p><code>fetch</code> usually returns the data in tibble format, but a few of the
-endpoints only support the JSON classic format (<code>pub_delphi</code>,
-<code>pvt_meta_norostat</code>, and <code>pub_meta</code>). In that case a
-JSON-like nested list structure is returned instead.</p>
     </div>
 
     <div class="section level2">

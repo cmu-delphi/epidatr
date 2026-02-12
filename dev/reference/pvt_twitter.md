@@ -64,13 +64,12 @@ pvt_twitter(
 ## Examples
 
 ``` r
-if (FALSE) { # curl::has_internet() && Sys.getenv("SECRET_API_AUTH_TWITTER") != ""
-
+if (FALSE) { # \dontrun{
 pvt_twitter(
-  auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   locations = "CA",
   time_type = "week",
   time_values = epirange(201501, 202001)
 )
-}
+} # }
 ```

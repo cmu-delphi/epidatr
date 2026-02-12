@@ -47,12 +47,11 @@ pvt_quidel(auth, locations, epiweeks = "*", fetch_args = fetch_args_list())
 ## Examples
 
 ``` r
-if (FALSE) { # curl::has_internet() && Sys.getenv("SECRET_API_AUTH_QUIDEL") != ""
-
+if (FALSE) { # \dontrun{
 pvt_quidel(
-  auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   epiweeks = epirange(201201, 202001),
   locations = "hhs1"
 )
-}
+} # }
 ```
