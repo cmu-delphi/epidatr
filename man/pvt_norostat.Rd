@@ -35,7 +35,7 @@ the Delphi’s epidemiological data.
 \examples{
 \dontrun{
 pvt_norostat(
-  auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
   epiweeks = 201233
 )

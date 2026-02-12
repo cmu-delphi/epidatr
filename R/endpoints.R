@@ -58,7 +58,7 @@ NULL
 #' @examples
 #' \dontrun{
 #' pvt_cdc(
-#'   auth = Sys.getenv("SECRET_API_AUTH_CDC"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   locations = "fl,ca",
 #'   epirange(201501, 201601)
 #' )
@@ -121,11 +121,10 @@ pvt_cdc <- function(
 #' @details Only one location argument needs to be specified.
 #' Combinations of the arguments are not currently supported.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_covid_hosp_facility_lookup(state = "fl")
 #' pub_covid_hosp_facility_lookup(city = "southlake")
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param state string. A two-letter character state abbreviation.
@@ -209,8 +208,8 @@ pub_covid_hosp_facility_lookup <- function(
 #' @details Starting October 1, 2022, some facilities are only required to
 #' report annually.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_covid_hosp_facility(
 #'   hospital_pks = "100075",
 #'   collection_weeks = epirange(20200101, 20200501)
@@ -220,7 +219,6 @@ pub_covid_hosp_facility_lookup <- function(
 #'   hospital_pks = "050063",
 #'   collection_weeks = epirange(20240101, 20240301)
 #' )
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param hospital_pks character. Facility identifiers.
@@ -596,13 +594,12 @@ pub_covid_hosp_facility <- function(
 #' @details Starting October 1, 2022, some facilities are only required to
 #' report annually.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_covid_hosp_state_timeseries(
 #'   states = "fl",
 #'   dates = epirange(20200101, 20200501)
 #' )
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param states character. Two-letter state abbreviations.
@@ -931,10 +928,10 @@ pub_covid_hosp_state_timeseries <- function(
 #'
 #' @return [`tibble::tibble`]
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_covidcast_meta()
-#' }
+#'
 #'
 #' @seealso [pub_covidcast()],[covidcast_epidata()]
 #' @keywords endpoint
@@ -980,8 +977,8 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #' link above for more. Delphi's [COVIDcast public
 #' dashboard](https://delphi.cmu.edu/covidcast/) is powered by this endpoint.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_covidcast(
 #'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
@@ -998,7 +995,6 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #'   geo_values = "*",
 #'   time_values = epirange(20200601, 20200801)
 #' )
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param source string. The data source to query (see:
@@ -1130,10 +1126,10 @@ pub_covidcast <- function(
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/delphi.html>
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_delphi(system = "ec", epiweek = 201501)
-#' }
+#'
 #' @inheritParams .epidatr_shared_params
 #' @param system character. System name to fetch.
 #'   See the [available forecasting systems](https://cmu-delphi.github.io/delphi-epidata/api/delphi.html#forecasting-systems) # nolint
@@ -1166,13 +1162,12 @@ pub_delphi <- function(
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html>
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_dengue_nowcast(
 #'   locations = "pr",
 #'   epiweeks = epirange(201401, 202301)
 #' )
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. List of locations to fetch.
@@ -1209,7 +1204,7 @@ pub_dengue_nowcast <- function(
 #' @examples
 #' \dontrun{
 #' pvt_dengue_sensors(
-#'   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   names = "ght",
 #'   locations = "ag",
 #'   epiweeks = epirange(201501, 202001)
@@ -1266,10 +1261,9 @@ pvt_dengue_sensors <- function(
 #' @details The list of location argument can be found in
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/ecdc_regions.txt>.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001))
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param regions character. List of regions to fetch.
@@ -1331,10 +1325,10 @@ pub_ecdc_ili <- function(
 #' @details The list of location argument can be found in
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt>.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_flusurv(locations = "ca", epiweeks = epirange(201701, 201801))
-#' }
+#'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. List of locations to fetch.
 #'   See [geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#flusurv-locations)
@@ -1416,10 +1410,9 @@ pub_flusurv <- function(
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html>
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param regions character. Vector of location IDs to fetch.  Can be
@@ -1483,10 +1476,9 @@ pub_fluview_clinical <- function(
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_fluview_meta()
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #'
@@ -1520,10 +1512,9 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 #' @details The full list of location inputs can be accessed at
 #'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_fluview(regions = "nat", epiweeks = epirange(201201, 202005))
-#' }
 #'
 #' @inheritParams pub_fluview_clinical
 #' @inheritParams .epidatr_shared_params
@@ -1601,10 +1592,9 @@ pub_fluview <- function(
 #'   and
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#selected-us-cities>.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #'
@@ -1642,7 +1632,7 @@ pub_gft <- function(
 #' @examples
 #' \dontrun{
 #' pvt_ght(
-#'   auth = Sys.getenv("SECRET_API_AUTH_GHT"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   locations = "ma",
 #'   epiweeks = epirange(199301, 202304),
 #'   query = "how to get over the flu"
@@ -1691,10 +1681,9 @@ pvt_ght <- function(
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html>
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param regions character. List of regions to fetch.
@@ -1751,7 +1740,7 @@ pub_kcdc_ili <- function(
 #'
 #' @examples
 #' \dontrun{
-#' pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
+#' pvt_meta_norostat(auth = Sys.getenv("DELPHI_EPIDATA_KEY"),)
 #' }
 #' @inheritParams .epidatr_shared_params
 #' @return [`list`]
@@ -1793,10 +1782,9 @@ pub_meta <- function(fetch_args = fetch_args_list()) {
 #' and
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt>.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301))
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. List of locations to fetch.
@@ -1835,10 +1823,9 @@ pub_nidss_dengue <- function(
 #' Infectious Disease Statistical System.
 #'
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601))
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param regions character. List of regions to fetch.
@@ -1904,7 +1891,7 @@ pub_nidss_flu <- function(
 #' @examples
 #' \dontrun{
 #' pvt_norostat(
-#'   auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
 #'   epiweeks = 201233
 #' )
@@ -1956,7 +1943,6 @@ pvt_norostat <- function(
 #' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
 #'
 #' pub_nowcast(locations = "ca", epiweeks = epirange(201201, 201301))
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
@@ -1988,10 +1974,9 @@ pub_nowcast <- function(
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html>
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501))
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param regions character. List of regions to fetch.
@@ -2053,7 +2038,7 @@ pub_paho_dengue <- function(
 #' @examples
 #' \dontrun{
 #' pvt_quidel(
-#'   auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   epiweeks = epirange(201201, 202001),
 #'   locations = "hhs1"
 #' )
@@ -2111,7 +2096,7 @@ pvt_quidel <- function(
 #' @examples
 #' \dontrun{
 #' pvt_sensors(
-#'   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   names = "sar3",
 #'   locations = "nat",
 #'   epiweeks = epirange(201501, 202001)
@@ -2170,7 +2155,7 @@ pvt_sensors <- function(
 #' @examples
 #' \dontrun{
 #' pvt_twitter(
-#'   auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   locations = "CA",
 #'   time_type = "week",
 #'   time_values = epirange(201501, 202001)
@@ -2247,14 +2232,13 @@ pvt_twitter <- function(
 #' * Other resolution: By article (54)
 #' * Open access
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_wiki(
 #'   articles = "avian_influenza",
 #'   time_type = "week",
 #'   time_values = epirange(201501, 201601)
 #' )
-#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param articles character. Articles to fetch.

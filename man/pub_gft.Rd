@@ -35,9 +35,9 @@ and
 \url{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#selected-us-cities}.
 }
 \examples{
-\dontrun{
-pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
-}
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
+pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

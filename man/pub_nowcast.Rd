@@ -31,9 +31,9 @@ The full list of location inputs can be accessed at
 and \url{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#fluview-cities}.
 }
 \examples{
-\dontrun{
-pub_nowcast(locations = "ca", epiweeks = epirange(201201, 201301))
-}
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
+pub_nowcast(locations = "ca", epiweeks = epirange(201201, 201301))
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

@@ -67,9 +67,9 @@ versioned data.
 }
 
 \examples{
-\dontrun{
-pub_ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001))
-}
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
+pub_ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001))
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

@@ -27,23 +27,54 @@ an object containing fields for every signal:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata <- covidcast_epidata()
 #> 
-Waiting 3s for retry backoff ============>------------------ �[K
+Waiting 2s for retry backoff ==============>---------------- �[K
 
-Waiting 3s for
-#> retry backoff ==============>---------------- �[K
+Waiting 2s for
+#> retry backoff =============================>- �[K
 
-Waiting 3s for retry backoff
-#> =========================>----- �[K
+�[K
+Waiting 4s for retry backoff
+#> ========>---------------------- �[K
 
-Waiting 3s for retry backoff
+Waiting 4s for retry backoff
+#> =========>--------------------- �[K
+
+Waiting 4s for retry backoff
+#> ===========>------------------- �[K
+
+Waiting 4s for retry backoff
+#> ============>------------------ �[K
+
+Waiting 4s for retry backoff
+#> =============>----------------- �[K
+
+Waiting 4s for retry backoff
+#> =================>------------- �[K
+
+Waiting 4s for retry backoff
+#> ===================>----------- �[K
+
+Waiting 4s for retry backoff
+#> =====================>--------- �[K
+
+Waiting 4s for retry backoff
+#> ======================>-------- �[K
+
+Waiting 4s for retry backoff
+#> ========================>------ �[K
+
+Waiting 4s for retry backoff
+#> ==========================>---- �[K
+
+Waiting 4s for retry backoff
 #> ============================>-- �[K
 
-Waiting 3s for retry backoff
-#> =============================>- �[K
+Waiting 4s for retry backoff
+#> ==============================> �[K
 
 �[K
 epidata$signals
-#> # A tibble: 520 x 3
+#> # A tibble: 538 x 3
 #>    source        signal                        short_description                
 #>    <chr>         <chr>                         <chr>                            
 #>  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~
@@ -81,6 +112,37 @@ Waiting 2s for retry backoff ==============>---------------- �[K
 
 Waiting 2s for
 #> retry backoff =============================>- �[K
+
+�[K
+Waiting 3s for retry backoff
+#> =========>--------------------- �[K
+
+Waiting 3s for retry backoff
+#> ==========>-------------------- �[K
+
+Waiting 3s for retry backoff
+#> =============>----------------- �[K
+
+Waiting 3s for retry backoff
+#> ===============>--------------- �[K
+
+Waiting 3s for retry backoff
+#> ====================>---------- �[K
+
+Waiting 3s for retry backoff
+#> =====================>--------- �[K
+
+Waiting 3s for retry backoff
+#> =======================>------- �[K
+
+Waiting 3s for retry backoff
+#> =========================>----- �[K
+
+Waiting 3s for retry backoff
+#> ===========================>--- �[K
+
+Waiting 3s for retry backoff
+#> =============================>- �[K
 
 �[K
 #> # A tibble: 6 x 15

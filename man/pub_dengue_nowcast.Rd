@@ -25,12 +25,12 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html}
 }
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
 pub_dengue_nowcast(
   locations = "pr",
   epiweeks = epirange(201401, 202301)
 )
-}
-
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

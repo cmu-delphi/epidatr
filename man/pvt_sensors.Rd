@@ -51,7 +51,7 @@ NOT designed to track ILI during the COVID-19 pandemic.
 \examples{
 \dontrun{
 pvt_sensors(
-  auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   names = "sar3",
   locations = "nat",
   epiweeks = epirange(201501, 202001)

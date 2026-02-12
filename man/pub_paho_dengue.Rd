@@ -61,9 +61,9 @@ versioned data.
 }
 
 \examples{
-\dontrun{
-pub_paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501))
-}
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
+pub_paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501))
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

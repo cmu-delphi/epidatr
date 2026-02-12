@@ -38,7 +38,7 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.ht
 \examples{
 \dontrun{
 pvt_dengue_sensors(
-  auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   names = "ght",
   locations = "ag",
   epiweeks = epirange(201501, 202001)

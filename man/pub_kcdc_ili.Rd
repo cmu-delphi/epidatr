@@ -61,9 +61,9 @@ versioned data.
 }
 
 \examples{
-\dontrun{
-pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
-}
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
+pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}
