@@ -14,6 +14,8 @@ fetch_args_list(
   timeout_seconds = 15 * 60,
   base_url = NULL,
   dry_run = FALSE,
+  debug = lifecycle::deprecated(),
+  format_type = lifecycle::deprecated(),
   refresh_cache = FALSE,
   reference_week_day = 1
 )
@@ -43,6 +45,10 @@ base URL \code{"https://api.delphi.cmu.edu/epidata/"}}
 
 \item{dry_run}{if \code{TRUE}, skip the call to the API and instead return the
 \code{epidata_call} object (useful for debugging)}
+
+\item{debug}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} No longer supported. Use \code{dry_run = TRUE} instead.}
+
+\item{format_type}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Now managed internally.}
 
 \item{refresh_cache}{if \code{TRUE}, ignore the cache, fetch the data from the
 API, and update the cache, if it is enabled}
