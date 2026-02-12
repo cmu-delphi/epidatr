@@ -7,49 +7,40 @@ test_that("do_request http errors", {
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   local_mocked_bindings(
-    # see generate_test_data.R
-    req_perform = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-http401.rds"))),
+    req_perform = function(...) {
+      create_mock_response(
+        "<p>API key does not exist.</p>",
+        status_code = 401L,
+        headers = list("content-type" = "text/html")
+      )
+    },
     .package = "httr2"
   )
   expect_error(
-    response <- epidata_call %>%
-      do_request("csv", timeout_seconds = 30, fields = NULL),
+    epidata_call %>% do_request("csv", timeout_seconds = 30, fields = NULL),
     class = "httr2_http_401"
   )
 
   # should give a 500 error (the afhsb endpoint is removed)
 
-  # see generate_test_data.R
   local_mocked_bindings(
-    req_perform = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-http500.rds"))),
+    req_perform = function(...) {
+      create_mock_response(
+        '{"epidata": [], "message": "database error", "result": -1}',
+        status_code = 500L
+      )
+    },
     .package = "httr2"
   )
   expect_error(
-    response <- epidata_call %>%
-      do_request("csv", timeout_seconds = 30, fields = NULL),
+    epidata_call %>% do_request("csv", timeout_seconds = 30, fields = NULL),
     class = "httr2_http_500"
   )
 })
 
 test_that("fetch_args", {
-  expect_identical(
-    fetch_args_list(),
-    structure(
-      list(
-        fields = NULL,
-        disable_date_parsing = FALSE,
-        disable_data_frame_parsing = FALSE,
-        return_empty = FALSE,
-        timeout_seconds = 15 * 60,
-        base_url = NULL,
-        dry_run = FALSE,
-        refresh_cache = FALSE,
-        reference_week_day = 1
-      ),
-      class = "fetch_args"
-    )
-  )
-  expect_identical(
+  expect_snapshot_value(fetch_args_list(), style = "json2", cran = TRUE)
+  expect_snapshot_value(
     fetch_args_list(
       fields = c("a", "b"),
       disable_date_parsing = TRUE,
@@ -61,20 +52,8 @@ test_that("fetch_args", {
       refresh_cache = TRUE,
       reference_week_day = 1
     ),
-    structure(
-      list(
-        fields = c("a", "b"),
-        disable_date_parsing = TRUE,
-        disable_data_frame_parsing = TRUE,
-        return_empty = TRUE,
-        timeout_seconds = 10,
-        base_url = "https://example.com",
-        dry_run = TRUE,
-        refresh_cache = TRUE,
-        reference_week_day = 1
-      ),
-      class = "fetch_args"
-    )
+    style = "json2",
+    cran = TRUE
   )
 })
 
