@@ -166,7 +166,7 @@ fetch_args_list <- function(
   base_url = NULL,
   dry_run = FALSE,
   debug = lifecycle::deprecated(),
-  format_type = lifecycle::deprecated(), 
+  format_type = lifecycle::deprecated(),
   refresh_cache = FALSE,
   reference_week_day = 1
 ) {

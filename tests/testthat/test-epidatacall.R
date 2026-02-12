@@ -83,7 +83,7 @@ test_that("fetch respects the fields parameter", {
     geo_values = "ca", time_values = 20200101,
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
-  
+
   local_mocked_bindings(
     do_request = function(epidata_call, format_type, timeout_seconds, fields, ...) {
       # fields argument was passed down
