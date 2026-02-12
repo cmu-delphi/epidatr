@@ -165,6 +165,8 @@ fetch_args_list <- function(
   timeout_seconds = 15 * 60,
   base_url = NULL,
   dry_run = FALSE,
+  debug = lifecycle::deprecated(),
+  format_type = lifecycle::deprecated(), 
   refresh_cache = FALSE,
   reference_week_day = 1
 ) {
@@ -254,12 +256,12 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
         response_content,
         fetch_args$disable_date_parsing,
         fetch_args$reference_week_day
-      ) |> as_tibble()
+      ) %>% as_tibble()
     }
   })
 
   # Add to cache if appropriate.
-  if (is_cachable || fetch_args$refresh_cache) {
+  if (is_cachable || (fetch_args$refresh_cache && is_cache_enabled())) {
     cache_environ$epidatr_cache$set(hashed, list(fetched, Sys.time(), runtime))
   }
 
