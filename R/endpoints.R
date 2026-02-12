@@ -1744,7 +1744,7 @@ pub_kcdc_ili <- function(
 #'
 #' @examples
 #' \dontrun{
-#' pvt_meta_norostat(auth = Sys.getenv("DELPHI_EPIDATA_KEY"),)
+#' pvt_meta_norostat(auth = Sys.getenv("DELPHI_EPIDATA_KEY"))
 #' }
 #' @inheritParams .epidatr_shared_params
 #' @return [`list`]
