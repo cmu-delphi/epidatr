@@ -1,3 +1,8 @@
+# Extract the body string from a saved test data object (httr response or httr2 response).
+mock_body_string <- function(obj) {
+  httr2::resp_body_string(to_httr2_response(obj), encoding = "UTF-8")
+}
+
 to_httr2_response <- function(obj) {
   if (inherits(obj, "httr2_response")) {
     return(obj)

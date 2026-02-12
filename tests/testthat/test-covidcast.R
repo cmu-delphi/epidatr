@@ -30,9 +30,3 @@ test_that("http errors", {
   )
   expect_error(epidatr::covidcast_epidata(), class = "httr2_http_400")
 })
-
-
-test_that("name completion", {
-  all_names <- names(epidatr::covidcast_epidata()$signals)
-  expect_identical(all_names, all_names)
-})

@@ -6,12 +6,7 @@
 \alias{fetch}
 \title{An abstraction that holds information needed to make an epidata request}
 \usage{
-create_epidata_call(
-  endpoint,
-  params,
-  meta = NULL,
-  only_supports_classic = FALSE
-)
+create_epidata_call(endpoint, params, meta = NULL)
 
 fetch(epidata_call, fetch_args = fetch_args_list())
 }
@@ -21,8 +16,6 @@ fetch(epidata_call, fetch_args = fetch_args_list())
 \item{params}{the parameters to pass to the epidata endpoint}
 
 \item{meta}{meta data to attach to the epidata call}
-
-\item{only_supports_classic}{if true only classic format is supported}
 
 \item{epidata_call}{an instance of \code{epidata_call}}
 
@@ -34,7 +27,7 @@ fetch(epidata_call, fetch_args = fetch_args_list())
 }
 
 \itemize{
-\item For \code{fetch}: a tibble or a JSON-like list
+\item For \code{fetch}: a tibble
 }
 }
 \description{
@@ -49,15 +42,6 @@ instead.
 should not need to use it directly; instead, use an endpoint function,
 e.g., \code{\link{pub_covidcast}}, to generate an \code{epidata_call} for the data of
 interest.
-
-There are some other functions available for debugging and advanced usage: -
-\code{request_url} (for debugging):  outputs the request URL from which data
-would be fetched (note additional parameters below)
-
-\code{fetch} usually returns the data in tibble format, but a few of the
-endpoints only support the JSON classic format (\code{pub_delphi},
-\code{pvt_meta_norostat}, and \code{pub_meta}). In that case a
-JSON-like nested list structure is returned instead.
 }
 \examples{
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}

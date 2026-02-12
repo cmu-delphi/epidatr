@@ -1,5 +1,7 @@
+library(httr2)
+
 epidata_call %>%
-  fetch_classic() %>%
+  request_epidata() %>%
   readr::write_rds(testthat::test_path("data/flusurv-epiweeks.rds"))
 
 url <- full_url(epidata_call)
@@ -19,21 +21,18 @@ response <- do_request(url, params, timeout_seconds = 10 * 60) %>%
   readr::write_rds(testthat::test_path("data/test-http500.rds"))
 
 epidata_call %>%
-  fetch_debug(format_type = "classic") %>%
+  do_request(format_type = "classic") %>%
   readr::write_rds(testthat::test_path("data/test-classic.rds"))
 
 epidata_call %>%
-  fetch_debug(format_type = "classic", fields = c("time_value", "value")) %>%
+  do_request(format_type = "classic", fields = c("time_value", "value")) %>%
   readr::write_rds(testthat::test_path("data/test-narrower-fields.rds"))
 
 epidata_call %>%
-  fetch_debug(format_type = "classic") %>%
+  do_request(format_type = "classic") %>%
   readr::write_rds(testthat::test_path("data/test-classic-only.rds"))
 
-response <- httr::RETRY("GET",
-  url = "https://httpbin.org/status/400",
-  query = list(),
-  terminate_on = c(400, 401, 403, 405, 414, 500),
-  http_headers,
-  httr::authenticate("epidata", get_api_key())
-) %>% readr::write_rds(testthat::test_path("data/test-do_request-httpbin.rds"))
+request("https://httpbin.org/status/400") |>
+  req_error(is_error = \(resp) FALSE) |>
+  req_perform() |>
+  readr::write_rds(testthat::test_path("data/test-do_request-httpbin.rds"))

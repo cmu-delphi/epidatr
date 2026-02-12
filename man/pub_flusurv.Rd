@@ -70,8 +70,9 @@ versioned data.
 }
 
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
 pub_flusurv(locations = "ca", epiweeks = epirange(201701, 201801))
-}
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

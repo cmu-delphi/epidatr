@@ -1,3 +1,7 @@
+# The individual endpoint functions live in this file. Each function creates and
+# `epidata_call` object and then calls `fetch()` on it. The endpoint functions
+# are the main user-facing functions in this package.
+
 #' @title Shared Documentation for epidatr Parameters
 #'
 #' @description This is a central text for parameter documentation
@@ -55,12 +59,14 @@ NULL
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/cdc.html>
 #'
-#' @examplesIf curl::has_internet() && Sys.getenv("SECRET_API_AUTH_CDC") != ""
+#' @examples
+#' \dontrun{
 #' pvt_cdc(
-#'   auth = Sys.getenv("SECRET_API_AUTH_CDC"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   locations = "fl,ca",
 #'   epirange(201501, 201601)
 #' )
+#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. List of locations to fetch.
@@ -80,8 +86,7 @@ pvt_cdc <- function(
 
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "cdc/",
@@ -244,10 +249,8 @@ pub_covid_hosp_facility <- function(
   collection_weeks <- get_wildcard_equivalent_dates(collection_weeks, "day")
 
   assert_character_param("hospital_pks", hospital_pks)
-  assert_timeset_param("collection_weeks", collection_weeks)
-  assert_timeset_param("publication_dates", publication_dates, required = FALSE)
-  collection_weeks <- parse_timeset_input(collection_weeks)
-  publication_dates <- parse_timeset_input(publication_dates)
+  collection_weeks <- validate_timeset_input("collection_weeks", collection_weeks)
+  publication_dates <- validate_timeset_input("publication_dates", publication_dates, required = FALSE)
 
   # Confusingly, the endpoint expects `collection_weeks` to be in day format,
   # but correspond to epiweeks. Allow `collection_weeks` to be provided in
@@ -639,13 +642,9 @@ pub_covid_hosp_state_timeseries <- function(
   dates <- get_wildcard_equivalent_dates(dates, "day")
 
   assert_character_param("states", states)
-  assert_timeset_param("dates", dates)
-  assert_date_param("as_of", as_of, len = 1, required = FALSE)
-  assert_timeset_param("issues", issues, required = FALSE)
-
-  dates <- parse_timeset_input(dates)
-  issues <- parse_timeset_input(issues)
-  as_of <- parse_timeset_input(as_of)
+  dates <- validate_timeset_input("dates", dates)
+  as_of <- validate_date_input("as_of", as_of, len = 1, required = FALSE)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
 
   create_epidata_call(
     "covid_hosp_state_timeseries/",
@@ -937,6 +936,7 @@ pub_covid_hosp_state_timeseries <- function(
 #'
 #' pub_covidcast_meta()
 #'
+#'
 #' @seealso [pub_covidcast()],[covidcast_epidata()]
 #' @keywords endpoint
 #' @export
@@ -1056,14 +1056,11 @@ pub_covidcast <- function(
   assert_character_param("signals", signals)
   assert_character_param("time_type", time_type, len = 1)
   assert_character_param("geo_type", geo_type, len = 1)
-  assert_timeset_param("time_values", time_values)
+  time_values <- validate_timeset_input("time_values", time_values)
   assert_character_param("geo_values", geo_values)
-  assert_date_param("as_of", as_of, len = 1, required = FALSE)
-  assert_timeset_param("issues", issues, required = FALSE)
+  as_of <- validate_date_input("as_of", as_of, len = 1, required = FALSE)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  time_values <- parse_timeset_input(time_values)
-  as_of <- parse_timeset_input(as_of)
-  issues <- parse_timeset_input(issues)
 
   if (source == "nchs-mortality" && time_type != "week") {
     cli::cli_abort(
@@ -1133,10 +1130,10 @@ pub_covidcast <- function(
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/delphi.html>
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_delphi(system = "ec", epiweek = 201501)
-#' }
+#'
 #' @inheritParams .epidatr_shared_params
 #' @param system character. System name to fetch.
 #'   See the [available forecasting systems](https://cmu-delphi.github.io/delphi-epidata/api/delphi.html#forecasting-systems) # nolint
@@ -1152,8 +1149,7 @@ pub_delphi <- function(
   fetch_args = fetch_args_list()
 ) {
   assert_character_param("system", system)
-  assert_timeset_param("epiweek", epiweek, len = 1)
-  epiweek <- parse_timeset_input(epiweek)
+  epiweek <- validate_timeset_input("epiweek", epiweek, len = 1)
 
   create_epidata_call(
     "delphi/",
@@ -1162,9 +1158,8 @@ pub_delphi <- function(
       create_epidata_field_info("system", "text"),
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("json", "text")
-    ),
-    only_supports_classic = TRUE
-  ) %>% fetch(fetch_args = fetch_args)
+    )
+  ) %>% request_epidata(fetch_args = fetch_args, simplify = FALSE)
 }
 
 #' Delphi's PAHO dengue nowcasts (North and South America)
@@ -1192,8 +1187,7 @@ pub_dengue_nowcast <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "dengue_nowcast/",
@@ -1211,14 +1205,15 @@ pub_dengue_nowcast <- function(
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html>
 #'
-#' @examplesIf curl::has_internet() && Sys.getenv("SECRET_API_AUTH_SENSORS") != ""
-#'
+#' @examples
+#' \dontrun{
 #' pvt_dengue_sensors(
-#'   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   names = "ght",
 #'   locations = "ag",
 #'   epiweeks = epirange(201501, 202001)
 #' )
+#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. List of locations to fetch.
@@ -1240,8 +1235,7 @@ pvt_dengue_sensors <- function(
   assert_character_param("auth", auth, len = 1)
   assert_character_param("names", names)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "dengue_sensors/",
@@ -1297,11 +1291,9 @@ pub_ecdc_ili <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1337,10 +1329,10 @@ pub_ecdc_ili <- function(
 #' @details The list of location argument can be found in
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt>.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_flusurv(locations = "ca", epiweeks = epirange(201701, 201801))
-#' }
+#'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. List of locations to fetch.
 #'   See [geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#flusurv-locations)
@@ -1364,11 +1356,9 @@ pub_flusurv <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1455,11 +1445,9 @@ pub_fluview_clinical <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1554,12 +1542,10 @@ pub_fluview <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
   assert_character_param("auth", auth, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!is.null(issues) && !is.null(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1627,8 +1613,7 @@ pub_gft <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "gft/",
@@ -1648,14 +1633,15 @@ pub_gft <- function(
 #'
 #' Estimate of influenza activity based on volume of certain search queries. …
 #'
-#' @examplesIf curl::has_internet() && Sys.getenv("SECRET_API_AUTH_GHT") != ""
-#'
+#' @examples
+#' \dontrun{
 #' pvt_ght(
-#'   auth = Sys.getenv("SECRET_API_AUTH_GHT"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   locations = "ma",
 #'   epiweeks = epirange(199301, 202304),
 #'   query = "how to get over the flu"
 #' )
+#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. List of locations to fetch.
@@ -1676,9 +1662,8 @@ pvt_ght <- function(
 
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
   assert_character_param("query", query, len = 1)
-  epiweeks <- parse_timeset_input(epiweeks)
 
   create_epidata_call(
     "ght/",
@@ -1727,11 +1712,9 @@ pub_kcdc_ili <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1761,7 +1744,7 @@ pub_kcdc_ili <- function(
 #'
 #' @examples
 #' \dontrun{
-#' pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
+#' pvt_meta_norostat(auth = Sys.getenv("DELPHI_EPIDATA_KEY"))
 #' }
 #' @inheritParams .epidatr_shared_params
 #' @return [`list`]
@@ -1773,9 +1756,8 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 
   create_epidata_call(
     "meta_norostat/",
-    list(auth = auth),
-    only_supports_classic = TRUE
-  ) %>% fetch(fetch_args = fetch_args)
+    list(auth = auth)
+  ) %>% request_epidata(fetch_args = fetch_args, simplify = FALSE)
 }
 
 #' Metadata for the Delphi Epidata API
@@ -1788,7 +1770,7 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 #' @keywords endpoint
 #' @export
 pub_meta <- function(fetch_args = fetch_args_list()) {
-  create_epidata_call("meta/", list(), only_supports_classic = TRUE) %>% fetch(fetch_args = fetch_args)
+  create_epidata_call("meta/", list()) %>% request_epidata(fetch_args = fetch_args, simplify = FALSE)
 }
 
 #' NIDSS dengue cases (Taiwan)
@@ -1824,8 +1806,7 @@ pub_nidss_dengue <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "nidss_dengue/",
@@ -1873,11 +1854,9 @@ pub_nidss_flu <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!is.null(issues) && !is.null(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1913,13 +1892,14 @@ pub_nidss_flu <- function(
 #' This is the documentation of the API for accessing the NoroSTAT endpoint of
 #'   the Delphi’s epidemiological data.
 #'
-#' @examplesIf curl::has_internet() && Sys.getenv("SECRET_API_AUTH_NOROSTAT") != ""
-#'
+#' @examples
+#' \dontrun{
 #' pvt_norostat(
-#'   auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
 #'   epiweeks = 201233
 #' )
+#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. Locations to fetch. Only a specific list of
@@ -1938,8 +1918,7 @@ pvt_norostat <- function(
 
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations, len = 1)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "norostat/",
@@ -1981,8 +1960,7 @@ pub_nowcast <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "nowcast/",
@@ -2027,11 +2005,9 @@ pub_paho_dengue <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   create_epidata_call(
     "paho_dengue/",
@@ -2063,13 +2039,14 @@ pub_paho_dengue <- function(
 #'
 #' Data provided by Quidel Corp., which contains flu lab test results.
 #'
-#' @examplesIf curl::has_internet() && Sys.getenv("SECRET_API_AUTH_QUIDEL") != ""
-#'
+#' @examples
+#' \dontrun{
 #' pvt_quidel(
-#'   auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   epiweeks = epirange(201201, 202001),
 #'   locations = "hhs1"
 #' )
+#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. List of locations to fetch.
@@ -2088,8 +2065,7 @@ pvt_quidel <- function(
 
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "quidel/",
@@ -2121,14 +2097,15 @@ pvt_quidel <- function(
 #'   these were designed to track ILI as driven by seasonal influenza, and were
 #'   NOT designed to track ILI during the COVID-19 pandemic.
 #'
-#' @examplesIf curl::has_internet() && Sys.getenv("SECRET_API_AUTH_SENSORS") != ""
-#'
+#' @examples
+#' \dontrun{
 #' pvt_sensors(
-#'   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   names = "sar3",
 #'   locations = "nat",
 #'   epiweeks = epirange(201501, 202001)
 #' )
+#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param names character. List of sensor names to fetch.
@@ -2152,8 +2129,7 @@ pvt_sensors <- function(
   assert_character_param("auth", auth, len = 1)
   assert_character_param("names", names)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "sensors/",
@@ -2180,14 +2156,15 @@ pvt_sensors <- function(
 #' Delphi’s epidemiological data. Sourced from
 #' [Healthtweets](http://www.healthtweets.org/)
 #'
-#' @examplesIf curl::has_internet() && Sys.getenv("SECRET_API_AUTH_TWITTER") != ""
-#'
+#' @examples
+#' \dontrun{
 #' pvt_twitter(
-#'   auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   locations = "CA",
 #'   time_type = "week",
 #'   time_values = epirange(201501, 202001)
 #' )
+#' }
 #'
 #' @inheritParams .epidatr_shared_params
 #' @param locations character. List of locations to fetch.
@@ -2220,11 +2197,9 @@ pvt_twitter <- function(
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
   assert_character_param("time_type", time_type, len = 1)
-  assert_timeset_param("time_values", time_values)
-  assert_timeset_param("dates", dates, required = FALSE)
-  assert_timeset_param("epiweeks", epiweeks, required = FALSE)
-  dates <- parse_timeset_input(dates)
-  epiweeks <- parse_timeset_input(epiweeks)
+  time_values <- validate_timeset_input("time_values", time_values)
+  dates <- validate_timeset_input("dates", dates, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks, required = FALSE)
 
   time_field <- if (!is.null(dates)) {
     create_epidata_field_info("date", "date")
@@ -2302,13 +2277,11 @@ pub_wiki <- function(
 
   assert_character_param("articles", articles)
   assert_character_param("time_type", time_type, len = 1)
-  assert_timeset_param("time_values", time_values)
-  assert_timeset_param("dates", dates, required = FALSE)
-  assert_timeset_param("epiweeks", epiweeks, required = FALSE)
+  time_values <- validate_timeset_input("time_values", time_values)
+  dates <- validate_timeset_input("dates", dates, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks, required = FALSE)
   assert_integerish_param("hours", hours, required = FALSE)
   assert_character_param("language", language, len = 1, required = FALSE)
-  dates <- parse_timeset_input(dates)
-  epiweeks <- parse_timeset_input(epiweeks)
 
   time_field <- if (!is.null(dates)) {
     create_epidata_field_info("date", "date")

@@ -1,57 +1,4 @@
-#' Helper function to cast values, non-list vectors, and/or EpiRanges to strings
-#'
-#' @keywords internal
-format_item <- function(value) {
-  if (inherits(value, "EpiRange")) {
-    paste0(toString(value$from), "-", toString(value$to))
-  } else if (inherits(value, "Date")) {
-    paste(format(value, "%Y%m%d"), collapse = ",")
-  } else {
-    paste(value, collapse = ",")
-  }
-}
-
-#' Helper function to build a list of values and/or ranges
-#'
-#' @keywords internal
-format_list <- function(values) {
-  paste(vapply(values, format_item, character(1L)), collapse = ",")
-}
-
-#' helper that checks whether a call is a somewhat dangerous cache
-#'
-#' @keywords internal
-check_is_recent <- function(dates, max_age) {
-  if (inherits(dates, "Date")) {
-    threshold <- Sys.Date() - max_age
-  } else if (is.numeric(dates) && all(nchar(dates) == 6)) {
-    # Convert threshold to epiweek
-    threshold <- date_to_epiweek(Sys.Date() - max_age)
-  } else if (is.numeric(dates)) {
-    # If inputs are numerics, compare as YYYYMMDD
-    threshold <- as.numeric(format(Sys.Date() - max_age, format = "%Y%m%d"))
-  } else {
-    threshold <- format(Sys.Date() - max_age, format = "%Y%m%d")
-  }
-  (!is.null(dates) && any(dates >= threshold))
-}
-
-#' helper to convert a date wildcard ("*") to an appropriate epirange
-#'
-#' @keywords internal
-get_wildcard_equivalent_dates <- function(time_value, time_type = c("day", "week")) {
-  time_type <- match.arg(time_type)
-
-  if (identical(time_value, "*")) {
-    if (time_type == "day") {
-      # To get all dates, set start and end dates to extreme values.
-      time_value <- epirange(10000101, 30000101)
-    } else if (time_type == "week") {
-      time_value <- epirange(100001, 300001)
-    }
-  }
-  return(time_value)
-}
+# Miscellaneous helper functions that don't fit into the other files.
 
 #' inserts each string as a bullet at the end of the "Prepare for release" section
 #' @keywords internal
@@ -62,4 +9,32 @@ release_bullets <- function() {
     "`use_version('patch')` is redundant because we do this in PRs",
     "`use_dev_version` is also redundant."
   )
+}
+
+#' List all available Epidata API endpoints
+#'
+#' @description
+#' Fetches a data frame of all Epidata API endpoints that can be accessed using
+#' this package, with a brief description.
+#'
+#' @return A [`tibble::tibble`] of endpoints, with two columns:
+#'   \item{Endpoint}{Name of the function for accessing this API endpoint.}
+#'   \item{Description}{One-sentence description of the data available at the
+#'   endpoint.}
+#' @export
+#' @importFrom utils help.search
+#'
+#' @examples
+#' avail_endpoints()
+avail_endpoints <- function() {
+  h <- help.search("endpoint",
+    package = "epidatr", fields = "concept",
+    agrep = FALSE
+  )$matches
+  tib <- tibble::tibble( # printing is much nicer than data.frame
+    Endpoint = paste0(h$Name, "()"),
+    Description = h$Title
+  )
+  cli::cli_inform(c("i" = "Data is available for the US only, unless otherwise specified"))
+  tib %>% print(n = 50)
 }

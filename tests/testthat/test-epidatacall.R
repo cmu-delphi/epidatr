@@ -1,4 +1,4 @@
-test_that("request_impl http errors", {
+test_that("do_request http errors", {
   # should give a 401 error
   epidata_call <- pvt_cdc(
     auth = "ImALittleTeapot",
@@ -8,11 +8,12 @@ test_that("request_impl http errors", {
   )
   local_mocked_bindings(
     # see generate_test_data.R
-    do_request = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-http401.rds"))),
+    req_perform = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-http401.rds"))),
+    .package = "httr2"
   )
   expect_error(
     response <- epidata_call %>%
-      request_impl("csv", timeout_seconds = 30, fields = NULL),
+      do_request("csv", timeout_seconds = 30, fields = NULL),
     class = "httr2_http_401"
   )
 
@@ -20,11 +21,12 @@ test_that("request_impl http errors", {
 
   # see generate_test_data.R
   local_mocked_bindings(
-    do_request = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-http500.rds")))
+    req_perform = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-http500.rds"))),
+    .package = "httr2"
   )
   expect_error(
     response <- epidata_call %>%
-      request_impl("csv", timeout_seconds = 30, fields = NULL),
+      do_request("csv", timeout_seconds = 30, fields = NULL),
     class = "httr2_http_500"
   )
 })
@@ -41,8 +43,6 @@ test_that("fetch_args", {
         timeout_seconds = 15 * 60,
         base_url = NULL,
         dry_run = FALSE,
-        debug = FALSE,
-        format_type = "json",
         refresh_cache = FALSE,
         reference_week_day = 1
       ),
@@ -58,8 +58,6 @@ test_that("fetch_args", {
       timeout_seconds = 10,
       base_url = "https://example.com",
       dry_run = TRUE,
-      debug = TRUE,
-      format_type = "classic",
       refresh_cache = TRUE,
       reference_week_day = 1
     ),
@@ -72,8 +70,6 @@ test_that("fetch_args", {
         timeout_seconds = 10,
         base_url = "https://example.com",
         dry_run = TRUE,
-        debug = TRUE,
-        format_type = "classic",
         refresh_cache = TRUE,
         reference_week_day = 1
       ),
@@ -81,39 +77,38 @@ test_that("fetch_args", {
     )
   )
 })
-
-test_that("fetch non-classic works", {
-  # only_supports_classic is FALSE
+test_that("fetch respects the fields parameter", {
   epidata_call <- pub_covidcast(
-    source = "jhu-csse",
-    signals = "confirmed_7dav_incidence_prop",
-    time_type = "day",
-    geo_type = "state",
-    time_values = epirange("2020-06-01", "2020-08-01"),
-    geo_values = "ca,fl",
+    source = "jhu-csse", signals = "sig", geo_type = "state", time_type = "day",
+    geo_values = "ca", time_values = 20200101,
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
+
   local_mocked_bindings(
-    # see generate_test_data.R
-    do_request = function(epidata_call, ...) {
-      parsed <- httr2::url_parse(epidata_call$request$url)
-      if (is.null(parsed$query$fields)) {
-        to_httr2_response(readRDS(testthat::test_path("data/test-classic.rds")))
-      } else {
-        to_httr2_response(readRDS(testthat::test_path("data/test-narrower-fields.rds")))
-      }
+    do_request = function(epidata_call, format_type, timeout_seconds, fields, ...) {
+      # fields argument was passed down
+      expect_equal(fields, "value")
+
+      epidata_call <- extra_arguments(epidata_call, format_type, fields)
+
+      # Verify that extra_arguments() appends fields to the URL
+      expect_match(epidata_call$request$url, "fields=value")
+
+      jsonlite::toJSON(list(
+        epidata = list(list(value = 10)),
+        result = 1,
+        message = "success"
+      ), auto_unbox = TRUE)
     },
     .package = "epidatr"
   )
 
-  # testing that the fields fill as expected
-  out <- epidata_call %>% fetch()
-  res <- epidata_call %>% fetch(fetch_args_list(fields = c("time_value", "value")))
-  expect_equal(res, out[c("time_value", "value")])
-})
+  res <- fetch(epidata_call, fetch_args = fetch_args_list(fields = "value"))
 
+  expect_equal(names(res), "value")
+  expect_equal(res$value, 10)
+})
 test_that("fetch non-classic passes along api warnings", {
-  # only_supports_classic is FALSE
   epidata_call <- pub_covidcast(
     source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
@@ -134,10 +129,7 @@ test_that("fetch non-classic passes along api warnings", {
     `[[<-`("message", artificial_warning)
   local_mocked_bindings(
     do_request = function(...) {
-      create_mock_response(
-        body = jsonlite::toJSON(debug_triplet),
-        url = "https://example.com"
-      )
+      as.character(jsonlite::toJSON(debug_triplet))
     },
     .package = "epidatr"
   )
@@ -149,20 +141,17 @@ test_that("fetch non-classic passes along api warnings", {
 })
 
 test_that("fetch classic works", {
-  # only_supports_classic is TRUE
-  epidata_call <- pub_delphi(
-    system = "ec",
-    epiweek = 201501,
-    fetch_args = fetch_args_list(dry_run = TRUE)
-  )
   local_mocked_bindings(
     # see generate_test_data.R
-    do_request = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-classic-only.rds"))),
+    do_request = function(...) mock_body_string(readRDS(testthat::test_path("data/test-classic-only.rds"))),
     .package = "epidatr"
   )
 
-  # make sure the return from this is a list
-  fetch_out <- epidata_call %>% fetch()
+  # pub_delphi calls request_epidata directly; make sure the return is a list
+  fetch_out <- pub_delphi(
+    system = "ec",
+    epiweek = 201501
+  )
   expect_true(inherits(fetch_out, "list"))
 })
 
@@ -186,8 +175,7 @@ test_that("create_epidata_call basic behavior", {
   expected <- list(
     request = r,
     base_url = base_url,
-    meta = meta,
-    only_supports_classic = FALSE
+    meta = meta
   )
   class(expected) <- "epidata_call"
   expect_identical(create_epidata_call(endpoint, params, meta = meta), expected)
@@ -252,4 +240,9 @@ test_that("with_base_url works as expected", {
   expect_equal(new_call_path$base_url, "https://example.com/api.php/")
   # Ensure query params are preserved (rough check)
   expect_match(new_call_path$request$url, "data_source=jhu-csse")
+})
+
+test_that("fetch_args_list triggers deprecation warnings for debug and format_type", {
+  expect_warning(fetch_args_list(debug = TRUE), "The `debug` argument is no longer supported")
+  expect_warning(fetch_args_list(format_type = "json"), "The `format_type` argument is now managed internally")
 })

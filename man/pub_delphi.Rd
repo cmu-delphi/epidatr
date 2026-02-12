@@ -24,8 +24,9 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/delphi.html}
 }
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
 pub_delphi(system = "ec", epiweek = 201501)
-}
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

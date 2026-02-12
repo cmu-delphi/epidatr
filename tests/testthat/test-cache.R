@@ -61,7 +61,7 @@ test_that("cache saves & loads", {
   local_mocked_bindings(
     do_request = function(...) {
       httr_content_called_count <<- httr_content_called_count + 1
-      to_httr2_response(readRDS(testthat::test_path("data/test-classic.rds")))
+      mock_body_string(readRDS(testthat::test_path("data/test-classic.rds")))
     },
     .package = "epidatr"
   )
@@ -84,10 +84,7 @@ test_that("cache saves & loads", {
   local_mocked_bindings(
     do_request = function(...) {
       httr_content_called_count <<- httr_content_called_count + 1
-      create_mock_response(
-        body = '{"epidata":[],"result":-2,"message":"no results"}',
-        url = "https://example.com"
-      )
+      '{"epidata":[],"result":-2,"message":"no results"}'
     },
     .package = "epidatr"
   )
@@ -188,16 +185,6 @@ test_that("check_is_cachable", {
   check_fun(
     as_of = "2020-01-01",
     fetch_args = fetch_args_list(dry_run = TRUE),
-    expected_result = FALSE
-  )
-  check_fun(
-    as_of = "2020-01-01",
-    fetch_args = fetch_args_list(debug = TRUE),
-    expected_result = FALSE
-  )
-  check_fun(
-    as_of = "2020-01-01",
-    fetch_args = fetch_args_list(format_type = "csv"),
     expected_result = FALSE
   )
 

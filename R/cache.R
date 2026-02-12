@@ -1,3 +1,5 @@
+# Functions relating output caching for API calls.
+
 # IMPORTANT DEV NOTE: make sure to @include cache.R in the Roxygen docs of any
 # function referencing this environment, so this file is loaded first
 cache_environ <- new.env(parent = emptyenv())
@@ -266,6 +268,24 @@ is_cache_enabled <- function() {
   !is.null(cache_environ$epidatr_cache)
 }
 
+#' helper that checks whether a call is a somewhat dangerous cache
+#'
+#' @keywords internal
+check_is_recent <- function(dates, max_age) {
+  if (inherits(dates, "Date")) {
+    threshold <- Sys.Date() - max_age
+  } else if (is.numeric(dates) && all(nchar(dates) == 6)) {
+    # Convert threshold to epiweek
+    threshold <- date_to_epiweek(Sys.Date() - max_age)
+  } else if (is.numeric(dates)) {
+    # If inputs are numerics, compare as YYYYMMDD
+    threshold <- as.numeric(format(Sys.Date() - max_age, format = "%Y%m%d"))
+  } else {
+    threshold <- format(Sys.Date() - max_age, format = "%Y%m%d")
+  }
+  (!is.null(dates) && any(dates >= threshold))
+}
+
 #' Helper that checks whether a call is actually cachable
 #'
 #' The cacheable endpoints are those with `as_of` or `issues` parameters:
@@ -293,10 +313,6 @@ check_is_cachable <- function(epidata_call, fetch_args) {
       !fetch_args$dry_run &&
       # Base url should be null
       is.null(fetch_args$base_url) &&
-      # Don't cache debug calls
-      !fetch_args$debug &&
-      # Format type should be json
-      fetch_args$format_type == "json" &&
       # Fields should be null
       is.null(fetch_args$fields) &&
       # Disable date parsing should be false

@@ -1,3 +1,6 @@
+# Functions for the covidcast_epidata() helper, which provides auto-complete for
+# COVIDcast signals.
+
 #' turn a signal into a callable
 #' @param signal the signal of interest
 #' @param base_url the base url
@@ -136,16 +139,14 @@ print.covidcast_data_source <- function(x, ...) {
 #' @param base_url optional alternative API base url
 #' @param timeout_seconds the maximum amount of time to wait for a response
 #' @importFrom jsonlite fromJSON
-#' @importFrom xml2 read_html xml_find_all xml_text
 #' @return An instance of `covidcast_epidata`
 #' @export
 covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) {
   # covidcast_meta and covidcast/meta are two different endpoints...
-  response <- create_epidata_call("covidcast/meta", list()) %>%
-    request_impl(format_type = "json", timeout_seconds = timeout_seconds, fields = NULL)
+  body <- create_epidata_call("covidcast/meta", list()) %>%
+    do_request(format_type = "json", timeout_seconds = timeout_seconds, fields = NULL)
 
-  response_content <- httr2::resp_body_string(response, encoding = "UTF-8")
-  response_content <- jsonlite::fromJSON(response_content, simplifyVector = FALSE)
+  response_content <- jsonlite::fromJSON(body, simplifyVector = FALSE)
 
   sources <- do.call(c, lapply(response_content, parse_source, base_url = base_url))
   class(sources) <- c("covidcast_data_source_list", class(sources))

@@ -47,6 +47,7 @@ Imports:
     rlang,
     tibble,
     usethis,
+    lifecycle,
     xml2
 Suggests:
     dplyr,
@@ -74,7 +75,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Collate:
     'auth.R'
-    'avail_endpoints.R'
     'cache.R'
     'check.R'
     'constants.R'
