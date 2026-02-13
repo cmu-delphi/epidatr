@@ -26,55 +26,8 @@ The \code{covidcast_epidata()} function fetches a list of all signals, and retur
 an object containing fields for every signal:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata <- covidcast_epidata()
-#> 
-Waiting 2s for retry backoff ==============>---------------- �[K
-
-Waiting 2s for
-#> retry backoff =============================>- �[K
-
-�[K
-Waiting 4s for retry backoff
-#> ========>---------------------- �[K
-
-Waiting 4s for retry backoff
-#> =========>--------------------- �[K
-
-Waiting 4s for retry backoff
-#> ===========>------------------- �[K
-
-Waiting 4s for retry backoff
-#> ============>------------------ �[K
-
-Waiting 4s for retry backoff
-#> =============>----------------- �[K
-
-Waiting 4s for retry backoff
-#> =================>------------- �[K
-
-Waiting 4s for retry backoff
-#> ===================>----------- �[K
-
-Waiting 4s for retry backoff
-#> =====================>--------- �[K
-
-Waiting 4s for retry backoff
-#> ======================>-------- �[K
-
-Waiting 4s for retry backoff
-#> ========================>------ �[K
-
-Waiting 4s for retry backoff
-#> ==========================>---- �[K
-
-Waiting 4s for retry backoff
-#> ============================>-- �[K
-
-Waiting 4s for retry backoff
-#> ==============================> �[K
-
-�[K
 epidata$signals
-#> # A tibble: 538 x 3
+#> # A tibble: 520 x 3
 #>    source        signal                        short_description                
 #>    <chr>         <chr>                         <chr>                            
 #>  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~
@@ -87,7 +40,7 @@ epidata$signals
 #>  8 chng          7dav_outpatient_covid         Ratio of outpatient doctor visit~
 #>  9 covid-act-now pcr_specimen_positivity_rate  Proportion of PCR specimens test~
 #> 10 covid-act-now pcr_specimen_total_tests      Total number of PCR specimens te~
-#> # i 528 more rows
+#> # i 510 more rows
 }\if{html}{\out{</div>}}
 
 If you use an editor that supports tab completion, such as RStudio, type
@@ -108,35 +61,19 @@ the \code{pub_covidcast()} function. Simply use the \verb{$call} attribute of th
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa",
                                               epirange(20210405, 20210410))
 #> 
-Waiting 2s for retry backoff ==============>---------------- �[K
+Waiting 3s for retry backoff ===========>------------------- �[K
 
-Waiting 2s for
-#> retry backoff =============================>- �[K
-
-�[K
-Waiting 3s for retry backoff
-#> =========>--------------------- �[K
-
-Waiting 3s for retry backoff
-#> ==========>-------------------- �[K
-
-Waiting 3s for retry backoff
-#> =============>----------------- �[K
+Waiting 3s for
+#> retry backoff ============>------------------ �[K
 
 Waiting 3s for retry backoff
 #> ===============>--------------- �[K
 
 Waiting 3s for retry backoff
-#> ====================>---------- �[K
+#> ======================>-------- �[K
 
 Waiting 3s for retry backoff
-#> =====================>--------- �[K
-
-Waiting 3s for retry backoff
-#> =======================>------- �[K
-
-Waiting 3s for retry backoff
-#> =========================>----- �[K
+#> ========================>------ �[K
 
 Waiting 3s for retry backoff
 #> ===========================>--- �[K

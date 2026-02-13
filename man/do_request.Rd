@@ -6,7 +6,7 @@
 \usage{
 do_request(
   epidata_call,
-  format_type,
+  format_type = c("json", "csv", "classic"),
   timeout_seconds,
   fields,
   http_method = c("GET", "POST")

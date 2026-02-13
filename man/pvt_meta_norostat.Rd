@@ -20,7 +20,7 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.htm
 }
 \examples{
 \dontrun{
-pvt_meta_norostat(auth = Sys.getenv("DELPHI_EPIDATA_KEY"),)
+pvt_meta_norostat(auth = Sys.getenv("DELPHI_EPIDATA_KEY"))
 }
 }
 \seealso{

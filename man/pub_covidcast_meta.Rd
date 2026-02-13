@@ -25,7 +25,6 @@ available, the geographic levels at which they are reported, and etc.
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
 pub_covidcast_meta()
-
 \dontshow{\}) # examplesIf}
 }
 \seealso{
