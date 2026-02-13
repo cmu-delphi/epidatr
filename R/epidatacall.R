@@ -278,7 +278,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
         response_content,
         fetch_args$disable_date_parsing,
         fetch_args$reference_week_day
-      ) |> as_tibble()
+      ) %>% as_tibble()
     }
   })
 
