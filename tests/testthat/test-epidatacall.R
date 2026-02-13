@@ -57,6 +57,38 @@ test_that("fetch_args", {
   )
 })
 
+test_that("fetch respects the fields parameter", {
+  epidata_call <- pub_covidcast(
+    source = "jhu-csse", signals = "sig", geo_type = "state", time_type = "day",
+    geo_values = "ca", time_values = 20200101,
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+
+  local_mocked_bindings(
+    do_request = function(epidata_call, format_type, timeout_seconds, fields, ...) {
+      # fields argument was passed down
+      expect_equal(fields, "value")
+
+      epidata_call <- extra_arguments(epidata_call, format_type, fields)
+
+      # Verify that extra_arguments() appends fields to the URL
+      expect_match(epidata_call$request$url, "fields=value")
+
+      jsonlite::toJSON(list(
+        epidata = list(list(value = 10)),
+        result = 1,
+        message = "success"
+      ), auto_unbox = TRUE)
+    },
+    .package = "epidatr"
+  )
+
+  res <- fetch(epidata_call, fetch_args = fetch_args_list(fields = "value"))
+
+  expect_equal(names(res), "value")
+  expect_equal(res$value, 10)
+})
+
 test_that("fetch non-classic passes along api warnings", {
   epidata_call <- pub_covidcast(
     source = "jhu-csse",
