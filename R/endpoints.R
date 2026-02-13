@@ -1,3 +1,7 @@
+# The individual endpoint functions live in this file. Each function creates and
+# `epidata_call` object and then calls `fetch()` on it. The endpoint functions
+# are the main user-facing functions in this package.
+
 #' @title Shared Documentation for epidatr Parameters
 #'
 #' @description This is a central text for parameter documentation
@@ -932,7 +936,6 @@ pub_covid_hosp_state_timeseries <- function(
 #'
 #' pub_covidcast_meta()
 #'
-#'
 #' @seealso [pub_covidcast()],[covidcast_epidata()]
 #' @keywords endpoint
 #' @export
@@ -1740,7 +1743,7 @@ pub_kcdc_ili <- function(
 #'
 #' @examples
 #' \dontrun{
-#' pvt_meta_norostat(auth = Sys.getenv("DELPHI_EPIDATA_KEY"),)
+#' pvt_meta_norostat(auth = Sys.getenv("DELPHI_EPIDATA_KEY"))
 #' }
 #' @inheritParams .epidatr_shared_params
 #' @return [`list`]

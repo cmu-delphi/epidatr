@@ -1,3 +1,5 @@
+# Functions relating output caching for API calls.
+
 # IMPORTANT DEV NOTE: make sure to @include cache.R in the Roxygen docs of any
 # function referencing this environment, so this file is loaded first
 cache_environ <- new.env(parent = emptyenv())

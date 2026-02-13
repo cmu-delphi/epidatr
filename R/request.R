@@ -1,3 +1,5 @@
+# Functions for performing the HTTP part of the API request.
+
 #' Performs an API request and returns the response body as a string.
 #'
 #' Handles authentication, retries, 414 URI Too Long fallback to POST,
@@ -17,10 +19,10 @@
 #' @importFrom httr2 req_body_form req_url req_url_query
 #' @importFrom xml2 read_html xml_find_all xml_text
 #' @keywords internal
-do_request <- function(epidata_call, format_type, timeout_seconds, fields,
+do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), timeout_seconds, fields,
                        http_method = c("GET", "POST")) {
   stopifnot(inherits(epidata_call, "epidata_call"))
-  stopifnot(format_type %in% c("json", "csv", "classic"))
+  format_type <- rlang::arg_match(format_type)
   http_method <- rlang::arg_match(http_method)
 
   # Add any extra arguments to the request, such as fields to include in the response or format type.

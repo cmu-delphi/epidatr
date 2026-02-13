@@ -1,3 +1,7 @@
+# Functions for creating and handling `epidata_call` objects, which represent
+# API calls to the Epidata API. The `fetch()` function is used to execute an
+# `epidata_call` and return the data.
+
 #' An abstraction that holds information needed to make an epidata request
 #' @rdname epidata_call
 #' @aliases epidata_call
@@ -145,6 +149,8 @@ print.epidata_call <- function(x, ...) {
 #'   `epidata_call` object (useful for debugging)
 #' @param refresh_cache if `TRUE`, ignore the cache, fetch the data from the
 #'   API, and update the cache, if it is enabled
+#' @param debug `r lifecycle::badge("deprecated")` No longer supported. Use `dry_run = TRUE` instead.
+#' @param format_type `r lifecycle::badge("deprecated")` Now managed internally.
 #' @param reference_week_day the day of the week to use as the reference day
 #'   when parsing epiweeks to dates (happens if `disable_date_parsing` is `FALSE`)
 #'   Defaults to 1 Sunday (the first day of the week).
@@ -161,9 +167,27 @@ fetch_args_list <- function(
   timeout_seconds = 15 * 60,
   base_url = NULL,
   dry_run = FALSE,
+  debug = lifecycle::deprecated(),
+  format_type = lifecycle::deprecated(),
   refresh_cache = FALSE,
   reference_week_day = 1
 ) {
+  # Deprecation warnings
+  if (lifecycle::is_present(debug)) {
+    lifecycle::deprecate_warn(
+      when = "1.0.0",
+      what = "fetch_args_list(debug)",
+      details = "The `debug` argument is no longer supported. Use `dry_run = TRUE` instead."
+    )
+  }
+  if (lifecycle::is_present(format_type)) {
+    lifecycle::deprecate_warn(
+      when = "1.0.0",
+      what = "fetch_args_list(format_type)",
+      details = "The `format_type` argument is now managed internally to ensure efficient data fetching."
+    )
+  }
+
   rlang::check_dots_empty()
 
   assert_character(fields, null.ok = TRUE, any.missing = FALSE)
@@ -226,12 +250,16 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 
   # If cacheable and the value is in cache, return the cached value.
   is_cachable <- check_is_cachable(epidata_call, fetch_args)
+  should_write_cache <- is_cachable || (fetch_args$refresh_cache && is_cache_enabled())
+
+  if (should_write_cache) {
+    target <- request_url(epidata_call, "json", fetch_args$fields)
+    hashed <- openssl::md5(target)
+  }
+
   if (is_cachable) {
     check_for_cache_warnings(epidata_call, fetch_args)
 
-    # Check if the data is in the cache
-    target <- request_url(epidata_call, "json", fetch_args$fields)
-    hashed <- md5(target)
     cached <- cache_environ$epidatr_cache$get(hashed)
     if (!is.key_missing(cached)) {
       return(cached[[1]])
@@ -255,7 +283,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
   })
 
   # Add to cache if appropriate.
-  if (is_cachable || fetch_args$refresh_cache) {
+  if (should_write_cache) {
     cache_environ$epidatr_cache$set(hashed, list(fetched, Sys.time(), runtime))
   }
 

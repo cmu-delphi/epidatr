@@ -47,6 +47,7 @@ Imports:
     rlang,
     tibble,
     usethis,
+    lifecycle,
     xml2
 Suggests:
     dplyr,

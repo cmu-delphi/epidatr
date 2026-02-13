@@ -207,3 +207,8 @@ test_that("with_base_url works as expected", {
   # Ensure query params are preserved (rough check)
   expect_match(new_call_path$request$url, "data_source=jhu-csse")
 })
+
+test_that("fetch_args_list triggers deprecation warnings for debug and format_type", {
+  expect_warning(fetch_args_list(debug = TRUE), "The `debug` argument is no longer supported")
+  expect_warning(fetch_args_list(format_type = "json"), "The `format_type` argument is now managed internally")
+})

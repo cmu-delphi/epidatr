@@ -1,3 +1,5 @@
+# Miscellaneous helper functions that don't fit into the other files.
+
 #' inserts each string as a bullet at the end of the "Prepare for release" section
 #' @keywords internal
 release_bullets <- function() {
