@@ -2,7 +2,12 @@
 
 ## Changes
 
-- Improve documentation, including descriptions for `save_api_key()` and endpoint parameters, and standardize parameter information (#324).
+- Improve documentation, including descriptions for `save_api_key()` and endpoint parameters, and standardize parameter information (#324 and #334).
+- Modernize internal API architecture by migrating from `httr` to `httr2`.
+- Introduce a centralized validation system in `R/check.R` using `checkmate` to standardize input checking, date parsing, and API parameter formatting.
+- Refactor `epidata_call` and `do_request` to use `httr2` request objects, implement automatic GET-to-POST fallback, and add robust retry logic.
+- Improve file-level documentation by adding summary descriptors at the top of all R source files.
+- Deprecate `debug` and `format_type` arguments in `fetch_args_list()`.
 
 ## Features
 
@@ -11,6 +16,8 @@
 - `last_update` in `pub_covidcast_meta` is now returned as a `POSIXct` object instead of an integer.
 - Improved efficiency of date parsing for API responses.
 - Migrate HTTP requests from `httr` to `httr2`.
+- Update endpoint examples to skip execution when required API keys or internet connectivity are unavailable, ensuring cleaner `R CMD check` results.
+- Add `lifecycle` to `DESCRIPTION` to properly manage function deprecations.
 
 
 # epidatr 1.2.4
