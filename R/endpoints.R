@@ -936,7 +936,6 @@ pub_covid_hosp_state_timeseries <- function(
 #'
 #' pub_covidcast_meta()
 #'
-#'
 #' @seealso [pub_covidcast()],[covidcast_epidata()]
 #' @keywords endpoint
 #' @export
@@ -969,6 +968,30 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
       create_epidata_field_info("max_lag", "int")
     )
   ) %>% fetch(fetch_args = fetch_args)
+}
+
+#' Get cast-API source metadata
+#'
+#' @description
+#' `pub_cast_meta` returns source-level metadata from the cast-API,
+#' including version ranges, time value ranges, and lists of available signals
+#' and geo types.
+#'
+#' @param source string. The data source to query. If NULL, returns metadata
+#'   for all available sources.
+#' @inheritParams fetch_args_list
+#' @return [`tibble::tibble`]
+#' @export
+pub_cast_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
+  if (is.null(fetch_args$base_url)) {
+    fetch_args$base_url <- cast_base_url
+  }
+
+  params <- list()
+  if (!is.null(source)) params$source <- source
+
+  create_epidata_call("metadata/", params) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' Various COVID and flu signals via the COVIDcast endpoint
