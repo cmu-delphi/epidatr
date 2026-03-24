@@ -35,16 +35,17 @@
 #'
 #' @param endpoint the epidata endpoint to call
 #' @param params the parameters to pass to the epidata endpoint
-#' @param meta meta data to attach to the epidata call
+#' @param meta meta data to attach to the epidata call#' @param api_version string. The API version to use. One of "classic" or "cast".
 #'
 #' @return
 #' - For `create_epidata_call`: an `epidata_call` object
 #'
 #' @importFrom purrr map_chr map_lgl
-create_epidata_call <- function(endpoint, params, meta = NULL) {
+create_epidata_call <- function(endpoint, params, meta = NULL, api_version = c("classic", "cast")) {
   checkmate::assert_character(endpoint, len = 1)
   checkmate::assert_list(params)
   checkmate::assert_list(meta, null.ok = TRUE)
+  api_version <- rlang::arg_match(api_version)
   checkmate::assert_true(all(map_lgl(meta, ~ inherits(.x, "EpidataFieldInfo"))))
 
   if (length(unique(meta)) != length(meta)) {
@@ -89,7 +90,8 @@ create_epidata_call <- function(endpoint, params, meta = NULL) {
     list(
       request = r,
       base_url = global_base_url,
-      meta = meta
+      meta = meta,
+      api_version = api_version
     ),
     class = "epidata_call"
   )
@@ -303,6 +305,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 #' - For `request_epidata`: a JSON-like list
 #' @keywords internal
 request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simplify = TRUE) {
+  browser()
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
 
@@ -313,6 +316,7 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
   if (fetch_args$dry_run) {
     return(epidata_call)
   }
+
 
   body <- do_request(epidata_call, "classic", fetch_args$timeout_seconds, fetch_args$fields)
   response_content <- jsonlite::fromJSON(body, simplifyDataFrame = simplify)
