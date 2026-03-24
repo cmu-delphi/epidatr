@@ -32,7 +32,11 @@ do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), 
   # Add API key if it exists in environment variable
   key <- get_api_key()
   if (key != "") {
-    req <- req %>% httr2::req_auth_basic("epidata", key)
+    if (epidata_call$api_version == "cast") {
+      req <- req %>% httr2::req_headers(token = key)
+    } else {
+      req <- req %>% httr2::req_auth_basic("epidata", key)
+    }
   }
 
   # Prepare the request with user agent, headers, timeout, and retry logic.
