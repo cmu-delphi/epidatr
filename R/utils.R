@@ -38,3 +38,23 @@ avail_endpoints <- function() {
   cli::cli_inform(c("i" = "Data is available for the US only, unless otherwise specified"))
   tib %>% print(n = 50)
 }
+
+#' Filter a data frame by a timeset (vector of dates/epiweeks or EpiRange)
+#' @param df data frame to filter
+#' @param column name of the column containing time values
+#' @param timeset the timeset to filter by
+#' @param time_type "day" or "week"
+#' @keywords internal
+filter_by_timeset <- function(df, column, timeset, time_type = c("day", "week")) {
+  if (identical(timeset, "*")) return(df)
+
+  values <- df[[column]]
+
+  if (inherits(timeset, "EpiRange")) {
+    mask <- values >= timeset$from & values <= timeset$to
+  } else {
+    # validate_timeset_input handles most cases
+    mask <- values %in% timeset
+  }
+  df[mask, ]
+}
