@@ -990,7 +990,7 @@ pub_cast_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
   params <- list()
   if (!is.null(source)) params$source <- source
 
-  create_epidata_call("metadata/", params, api_version = "cast") %>%
+  create_epidata_call("metadata/", params, api_version = "cast", response_format = "json") %>%
     fetch(fetch_args = fetch_args)
 }
 

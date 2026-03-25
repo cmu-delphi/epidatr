@@ -35,17 +35,22 @@
 #'
 #' @param endpoint the epidata endpoint to call
 #' @param params the parameters to pass to the epidata endpoint
-#' @param meta meta data to attach to the epidata call#' @param api_version string. The API version to use. One of "classic" or "cast".
+#' @param meta meta data to attach to the epidata call
+#' @param api_version string. The API version to use. One of "classic" or "cast".
+#' @param response_format string. The expected format of the response. One of "classic", "json", or "csv".
 #'
 #' @return
 #' - For `create_epidata_call`: an `epidata_call` object
 #'
 #' @importFrom purrr map_chr map_lgl
-create_epidata_call <- function(endpoint, params, meta = NULL, api_version = c("classic", "cast")) {
+create_epidata_call <- function(endpoint, params, meta = NULL,
+                                api_version = c("classic", "cast"),
+                                response_format = c("classic", "json", "csv")) {
   checkmate::assert_character(endpoint, len = 1)
   checkmate::assert_list(params)
   checkmate::assert_list(meta, null.ok = TRUE)
   api_version <- rlang::arg_match(api_version)
+  response_format <- rlang::arg_match(response_format)
   checkmate::assert_true(all(map_lgl(meta, ~ inherits(.x, "EpidataFieldInfo"))))
 
   if (length(unique(meta)) != length(meta)) {
@@ -91,7 +96,8 @@ create_epidata_call <- function(endpoint, params, meta = NULL, api_version = c("
       request = r,
       base_url = global_base_url,
       meta = meta,
-      api_version = api_version
+      api_version = api_version,
+      response_format = response_format
     ),
     class = "epidata_call"
   )
@@ -273,14 +279,18 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     response_content <- request_epidata(epidata_call, fetch_args)
 
     if (fetch_args$return_empty && length(response_content) == 0) {
-      fetched <- tibble()
+      fetched <- tibble::tibble()
+    } else if (epidata_call$response_format == "json") {
+      # cast-API metadata response can't be flattened into a data frame
+      # by parse_data_frame because it's source-level metadata.
+      fetched <- response_content
     } else {
       fetched <- parse_data_frame(
         epidata_call,
         response_content,
         fetch_args$disable_date_parsing,
         fetch_args$reference_week_day
-      ) %>% as_tibble()
+      ) %>% tibble::as_tibble()
     }
   })
 
@@ -305,7 +315,6 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 #' - For `request_epidata`: a JSON-like list
 #' @keywords internal
 request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simplify = TRUE) {
-  browser()
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
 
@@ -317,12 +326,29 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
     return(epidata_call)
   }
 
+  res <- do_request(
+    epidata_call,
+    format_type = epidata_call$response_format,
+    timeout_seconds = fetch_args$timeout_seconds,
+    fields = fetch_args$fields
+  )
 
-  body <- do_request(epidata_call, "classic", fetch_args$timeout_seconds, fetch_args$fields)
-  response_content <- jsonlite::fromJSON(body, simplifyDataFrame = simplify)
-  check_epidata_result(response_content, allow_empty = fetch_args$return_empty)
+  if (epidata_call$response_format == "csv") {
+    # Parse CSV for data
+    body <- httr2::resp_body_string(res)
+    con <- textConnection(body)
+    on.exit(close(con))
+    return(utils::read.csv(con, stringsAsFactors = FALSE, check.names = FALSE))
+  } else if (epidata_call$response_format == "json") {
+    # Pure JSON (used for cast-API metadata)
+    return(httr2::resp_body_json(res, simplifyDataFrame = simplify))
+  } else {
+    # classic: JSON with result/message wrapper
+    response_content <- httr2::resp_body_json(res, simplifyDataFrame = simplify)
+    check_epidata_result(response_content, allow_empty = fetch_args$return_empty)
 
-  return(response_content$epidata)
+    return(response_content$epidata)
+  }
 }
 
 #' Returns the full request url for the given epidata_call

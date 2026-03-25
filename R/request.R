@@ -12,7 +12,7 @@
 #' @param timeout_seconds the maximum time to wait for a response
 #' @param fields fields to include in the response, or NULL for all
 #' @param http_method HTTP method to use
-#' @return the response body as a string
+#' @return an `httr2_response` object
 #'
 #' @importFrom httr2 req_perform req_timeout req_headers req_user_agent req_retry
 #' @importFrom httr2 req_error req_auth_basic resp_status req_method
@@ -87,16 +87,7 @@ do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), 
     httr2::resp_check_status(res, info = msg)
   }
 
-  body <- httr2::resp_body_string(res, encoding = "UTF-8")
-
-  # The API returns errors as JSON regardless of requested format. If we asked
-  # for non-classic (e.g. CSV) but got JSON back, it's an error response.
-  if (format_type != "classic" && startsWith(body, "{")) {
-    parsed <- jsonlite::fromJSON(body)
-    check_epidata_result(parsed)
-  }
-
-  body
+  res
 }
 
 #' Check an API response for epidata-level errors and warnings.
