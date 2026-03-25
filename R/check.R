@@ -154,3 +154,27 @@ get_wildcard_equivalent_dates <- function(time_value, time_type = c("day", "week
   }
   return(time_value)
 }
+#' Check an API response for epidata-level errors and warnings.
+#'
+#' @param response_content parsed JSON response with `result` and `message` fields
+#' @param allow_empty if TRUE, suppress errors for "no results" (result == -2)
+#' @importFrom cli cli_abort cli_warn
+#' @keywords internal
+check_epidata_result <- function(response_content, allow_empty = FALSE) {
+  # success is 1, no results is -2, truncated is 2, -1 is generic error
+  if (response_content$result != 1) {
+    if ((response_content$result != -2) && !allow_empty) {
+      cli::cli_abort(
+        "epidata error: {.code {response_content$message}}",
+        class = "epidata_error"
+      )
+    }
+  }
+
+  if (response_content$message != "success") {
+    cli::cli_warn(
+      "epidata warning: {.code {response_content$message}}",
+      class = "epidata_warning"
+    )
+  }
+}
