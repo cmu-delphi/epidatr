@@ -1146,7 +1146,7 @@ pub_cast_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
     params = list(source = source),
     api_version = "cast",
     response_format = "json"
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>% request_epidata(fetch_args = fetch_args)
 }
 
 #' Various signals via cast-API
@@ -1254,7 +1254,7 @@ pub_cast <- function(
     }
 
     if (!identical(time_values, "*")) {
-      res <- filter_by_timeset(res, "time_value", parsed_time_values, time_type)
+      res <- filter_by_timeset(res, "time_value", parsed_time_values)
     }
   }
 

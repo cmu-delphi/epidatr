@@ -43,10 +43,11 @@ avail_endpoints <- function() {
 #' @param df data frame to filter
 #' @param column name of the column containing time values
 #' @param timeset the timeset to filter by
-#' @param time_type "day" or "week"
 #' @keywords internal
-filter_by_timeset <- function(df, column, timeset, time_type = c("day", "week")) {
-  if (identical(timeset, "*")) return(df)
+filter_by_timeset <- function(df, column, timeset) {
+  if (identical(timeset, "*")) {
+    return(df)
+  }
 
   values <- df[[column]]
 
