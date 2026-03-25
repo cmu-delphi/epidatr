@@ -281,10 +281,6 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 
     if (fetch_args$return_empty && length(response_content) == 0) {
       fetched <- tibble::tibble()
-    } else if (epidata_call$response_format == "json") {
-      # cast-API metadata response can't be flattened into a data frame
-      # by parse_data_frame because it's source-level metadata.
-      fetched <- response_content
     } else {
       fetched <- parse_data_frame(
         epidata_call,
@@ -335,21 +331,21 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
   )
 
   if (epidata_call$response_format == "csv") {
-    # Parse CSV for data
-    body <- httr2::resp_body_string(res)
-    con <- textConnection(body)
+    con <- textConnection(httr2::resp_body_string(res))
     on.exit(close(con))
     return(utils::read.csv(con, stringsAsFactors = FALSE, check.names = FALSE))
-  } else if (epidata_call$response_format == "json") {
-    # Pure JSON (used for cast-API metadata)
-    return(httr2::resp_body_json(res, simplifyDataFrame = simplify))
-  } else {
-    # classic: JSON with result/message wrapper
-    response_content <- httr2::resp_body_json(res, simplifyDataFrame = simplify)
-    check_epidata_result(response_content, allow_empty = fetch_args$return_empty)
-
-    return(response_content$epidata)
   }
+
+  # JSON parsing (both "json" and "classic")
+  response_content <- httr2::resp_body_json(res, simplifyVector = simplify, simplifyDataFrame = simplify)
+
+  if (epidata_call$response_format == "json") {
+    return(response_content)
+  }
+
+  # classic: JSON with result/message wrapper
+  check_epidata_result(response_content, allow_empty = fetch_args$return_empty)
+  return(response_content$epidata)
 }
 
 #' Returns the full request url for the given epidata_call
