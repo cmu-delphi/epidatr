@@ -970,29 +970,6 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
   ) %>% fetch(fetch_args = fetch_args)
 }
 
-#' Get cast-API source metadata
-#'
-#' @description
-#' `pub_cast_meta` returns source-level metadata from the cast-API,
-#' including version ranges, time value ranges, and lists of available signals
-#' and geo types.
-#'
-#' @param source string. The data source to query. If NULL, returns metadata
-#'   for all available sources.
-#' @inheritParams fetch_args_list
-#' @return [`tibble::tibble`]
-#' @export
-pub_cast_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
-  if (is.null(fetch_args$base_url)) {
-    fetch_args$base_url <- cast_base_url
-  }
-
-  params <- list()
-  if (!is.null(source)) params$source <- source
-
-  create_epidata_call("metadata/", params, api_version = "cast", response_format = "json") %>%
-    fetch(fetch_args = fetch_args)
-}
 
 #' Various COVID and flu signals via the COVIDcast endpoint
 #'
@@ -1147,6 +1124,141 @@ pub_covidcast <- function(
       create_epidata_field_info("missing_sample_size", "int")
     )
   ) %>% fetch(fetch_args = fetch_args)
+}
+
+#' Get cast-API source metadata
+#'
+#' @description
+#' `pub_cast_meta` returns source-level metadata from the cast-API,
+#' including version ranges, time value ranges, and lists of available signals
+#' and geo types.
+#'
+#' @param source string. The data source to query. If NULL, returns metadata
+#'   for all available sources.
+#' @inheritParams fetch_args_list
+#' @return [`tibble::tibble`]
+#' @seealso [pub_cast()], [epirange()]
+#' @keywords endpoint
+#' @export
+pub_cast_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
+  create_epidata_call(
+    endpoint = "metadata/",
+    params = list(source = source),
+    api_version = "cast",
+    response_format = "json"
+  ) %>% fetch(fetch_args = fetch_args)
+}
+
+#' Various signals via cast-API
+#'
+#' @description
+#' `pub_cast` provides access to the cast-API, supporting snapshot and
+#' archive queries for multiple signals simultaneously.
+#'
+#' @inheritParams pub_covidcast
+#' @param signals character vector. The signals to query.
+#' @param as_of Date or string (YYYY-MM-DD or YYYYMMDD). The date to
+#'   snapshot data for. Internally maps to the `snapshot_date` parameter.
+#'   Defaults to NULL (latest available).
+#' @param issues string. A version query (e.g., "<2025-01-01") for the
+#'   archive endpoint. Internally maps to the `version_query` parameter.
+#' @return [`tibble::tibble`]
+#' @seealso [pub_cast_meta()], [epirange()]
+#' @keywords endpoint
+#' @export
+pub_cast <- function(
+  source,
+  signals,
+  geo_type,
+  geo_values = "*",
+  time_values = "*",
+  ...,
+  as_of = NULL,
+  issues = NULL,
+  fetch_args = fetch_args_list()
+) {
+  if (
+    missing(source) ||
+      missing(signals) ||
+      missing(geo_type)
+  ) {
+    cli::cli_abort(
+      "`source`, `signals`, and `geo_type` are all required",
+      class = "epidatr__pub_cast__missing_required_args"
+    )
+  }
+
+  if (!is.null(issues) && !is.null(as_of)) {
+    cli::cli_abort(
+      "`issues` and `as_of` are mutually exclusive",
+      class = "epidatr__pub_cast__too_many_issue_params"
+    )
+  }
+
+  rlang::check_dots_empty()
+
+  # NOTE: lag is not supported by cast-API.
+  # NOTE: time_type is not supported by cast-API.
+
+  assert_character_param("source", source, len = 1)
+  assert_character_param("signals", signals)
+  assert_character_param("geo_type", geo_type, len = 1)
+
+  # Validate and parse date/time inputs
+  parsed_time_values <- validate_timeset_input("time_values", time_values)
+  assert_character_param("geo_values", geo_values)
+  as_of <- validate_date_input("as_of", as_of, len = 1, required = FALSE)
+
+  endpoint <- if (is.null(issues)) "snapshot/" else "archive/"
+
+  res <- create_epidata_call(
+    endpoint = endpoint,
+    params = list(
+      source = source,
+      signal = paste(signals, collapse = ","),
+      geo_type = geo_type,
+      snapshot_date = if (!is.null(as_of)) as.Date(parse_api_date(as_of)),
+      version_query = issues
+    ),
+    meta = list(
+      create_epidata_field_info("signal", "text"),
+      create_epidata_field_info(
+        "geo_type",
+        "categorical",
+        categories = c("nation", "state", "county")
+      ),
+      create_epidata_field_info("geo_value", "text"),
+      create_epidata_field_info("time_value", "date"),
+      create_epidata_field_info("value", "float"),
+      create_epidata_field_info("stderr", "float"),
+      create_epidata_field_info("sample_size", "float"),
+      create_epidata_field_info("missing_value", "int"),
+      create_epidata_field_info("missing_stderr", "int"),
+      create_epidata_field_info("missing_sample_size", "int"),
+      # cast-API additional columns
+      create_epidata_field_info("fill_method", "text"),
+      create_epidata_field_info("report_ts_nominal_start", "date"),
+      create_epidata_field_info("report_ts_nominal_end", "date"),
+      create_epidata_field_info("report_ts_actual", "timestamp"),
+      create_epidata_field_info("is_deleted", "bool"),
+      create_epidata_field_info("pipeline_run_id", "text")
+    ),
+    api_version = "cast",
+    response_format = "csv"
+  ) %>% fetch(fetch_args = fetch_args)
+
+  # Local filtering
+  if (inherits(res, "data.frame")) {
+    if (!identical(geo_values, "*")) {
+      res <- res[res$geo_value %in% geo_values, ]
+    }
+
+    if (!identical(time_values, "*")) {
+      res <- filter_by_timeset(res, "time_value", parsed_time_values, time_type)
+    }
+  }
+
+  return(res)
 }
 
 #' Delphi's ILINet outpatient doctor visits forecasts
