@@ -83,18 +83,19 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
   if (is.null(meta)) {
     meta <- list()
   }
+  base_url <- if (api_version == "cast") cast_base_url else global_base_url
   # Format the parameters before passing them to httr2::req_url_query
   # This is necessary because httr2::req_url_query expects atomic vector
   formatted_params <- format_params_for_api(params)
 
-  r <- httr2::request(global_base_url) %>%
+  r <- httr2::request(base_url) %>%
     httr2::req_url_path_append(endpoint) %>%
     httr2::req_url_query(!!!formatted_params, .multi = "comma")
 
   structure(
     list(
       request = r,
-      base_url = global_base_url,
+      base_url = base_url,
       meta = meta,
       api_version = api_version,
       response_format = response_format
