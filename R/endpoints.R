@@ -1237,10 +1237,10 @@ pub_cast <- function(
       create_epidata_field_info("missing_sample_size", "int"),
       # cast-API additional columns
       create_epidata_field_info("fill_method", "text"),
-      create_epidata_field_info("report_ts_nominal_start", "date"),
-      create_epidata_field_info("report_ts_nominal_end", "date"),
-      create_epidata_field_info("report_ts_actual", "timestamp"),
-      create_epidata_field_info("is_deleted", "bool"),
+      create_epidata_field_info("report_ts_nominal_start", "text"),
+      create_epidata_field_info("report_ts_nominal_end", "text"),
+      create_epidata_field_info("report_ts_actual", "text"),
+      create_epidata_field_info("is_deleted", "text"),
       create_epidata_field_info("pipeline_run_id", "text")
     ),
     api_version = "cast",
