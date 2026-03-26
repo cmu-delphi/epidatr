@@ -138,6 +138,39 @@ format_params_for_api <- function(params) {
   })
 }
 
+#' Helper to format the 'issues' argument for the CAST API version_query
+#' @param issues the issues argument containing operator and date, exact date, or numeric date
+#' @return a formatted version_query string (e.g., "<2025-10-16", "=2025-10-16")
+#' @keywords internal
+validate_version_query <- function(issues) {
+  if (is.null(issues)) {
+    return(NULL)
+  }
+
+  operator <- "="
+  if (is.character(issues) && length(issues) == 1 && grepl("^[<>=]", issues)) {
+    operator <- substr(issues, 1, 1)
+    issues <- substr(issues, 2, nchar(issues))
+  } else if (inherits(issues, "EpiRange")) {
+    operator <- "<"
+    issues <- issues$to
+  }
+
+  # Validate and standardized the date part
+  date_obj <- validate_date_input("issues", issues, len = 1L, required = FALSE)
+  formatted_date <- format(as.Date(parse_api_date(date_obj)), "%Y-%m-%d")
+
+  if (is.na(formatted_date)) {
+    cli::cli_abort(
+      "Invalid `issues` format. Must be a single date, an `EpiRange`, or a character string with an operator (e.g., '<2025-10-16').",
+      class = "epidatr__pub_cast__invalid_version_query"
+    )
+  }
+
+  paste0(operator, formatted_date)
+}
+
+
 #' helper to convert a date wildcard ("*") to an appropriate epirange
 #'
 #' @keywords internal

@@ -1160,8 +1160,11 @@ pub_cast_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #' @param as_of Date or string (YYYY-MM-DD or YYYYMMDD). The date to
 #'   snapshot data for. Internally maps to the `snapshot_date` parameter.
 #'   Defaults to NULL (latest available).
-#' @param issues string. A version query (e.g., "<2025-01-01") for the
-#'   archive endpoint. Internally maps to the `version_query` parameter.
+#' @param issues Date, string, or [`EpiRange`]. A version query for the
+#'   archive endpoint. Supports exact dates (e.g., "2025-10-16"),
+#'   operators (e.g., "<2025-10-16"), or an [`EpiRange`] (the end of the
+#'   range is used as the upper bound, e.g., `<2024-01-05`). Internally
+#'   maps to the `version_query` parameter.
 #' @return [`tibble::tibble`]
 #' @seealso [pub_cast_meta()], [epirange()]
 #' @keywords endpoint
@@ -1208,6 +1211,7 @@ pub_cast <- function(
   parsed_time_values <- validate_timeset_input("time_values", time_values)
   assert_character_param("geo_values", geo_values)
   as_of <- validate_date_input("as_of", as_of, len = 1, required = FALSE)
+  version_query <- validate_version_query(issues)
 
   endpoint <- if (is.null(issues)) "snapshot/" else "archive/"
 
@@ -1218,7 +1222,7 @@ pub_cast <- function(
       signal = paste(signals, collapse = ","),
       geo_type = geo_type,
       snapshot_date = if (!is.null(as_of)) as.Date(parse_api_date(as_of)),
-      version_query = issues
+      version_query = version_query
     ),
     meta = list(
       create_epidata_field_info("signal", "text"),
