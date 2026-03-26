@@ -162,7 +162,10 @@ validate_version_query <- function(issues) {
 
   if (is.na(formatted_date)) {
     cli::cli_abort(
-      "Invalid `issues` format. Must be a single date, an `EpiRange`, or a character string with an operator (e.g., '<2025-10-16').",
+      paste0(
+        "Invalid `issues` format. Must be a single date, an `EpiRange`, ",
+        "or a character string with an operator (e.g., '<2025-10-16')."
+      ),
       class = "epidatr__pub_cast__invalid_version_query"
     )
   }

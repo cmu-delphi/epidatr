@@ -595,7 +595,10 @@ test_that("pub_cast and pub_cast_meta work as expected", {
   res_filtered <- pub_cast(source = "nssp", signals = "sig1", geo_type = "state", geo_values = "ca")
   expect_equal(nrow(res_filtered), 1)
 
-  res_time_filtered <- pub_cast(source = "nssp", signals = "sig1", geo_type = "state", time_values = as.Date("2024-01-01"))
+  res_time_filtered <- pub_cast(
+    source = "nssp", signals = "sig1", geo_type = "state",
+    time_values = as.Date("2024-01-01")
+  )
   expect_equal(nrow(res_time_filtered), 2)
 
   # Test EpiRange mapping in issues
