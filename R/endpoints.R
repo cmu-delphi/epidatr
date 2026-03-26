@@ -1157,9 +1157,9 @@ pub_cast_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #'
 #' @inheritParams pub_covidcast
 #' @param signals character vector. The signals to query.
-#' @param as_of Date or string (YYYY-MM-DD or YYYYMMDD). The date to
-#'   snapshot data for. Internally maps to the `snapshot_date` parameter.
-#'   Defaults to NULL (latest available).
+#' @param as_of Date. Optionally, the as-of date for the issues to fetch.
+#'   See the "Data Versioning" section for details. Internally maps to the
+#'   `snapshot_date` parameter. Defaults to NULL (latest available).
 #' @param issues Date, string, or [`epirange()`]. A version query for the
 #'   archive endpoint. Supports exact dates (e.g., "2025-10-16"),
 #'   operators (e.g., "<2025-10-16"), or an [`epirange()`] (the end of the
@@ -1221,7 +1221,7 @@ pub_cast <- function(
       source = source,
       signal = paste(signals, collapse = ","),
       geo_type = geo_type,
-      snapshot_date = if (!is.null(as_of)) as.Date(parse_api_date(as_of)),
+      snapshot_date = if (!is.null(as_of)) format(as.Date(parse_api_date(as_of)), "%Y-%m-%d"),
       version_query = version_query
     ),
     meta = list(

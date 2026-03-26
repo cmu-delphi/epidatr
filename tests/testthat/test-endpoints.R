@@ -606,6 +606,28 @@ test_that("pub_cast and pub_cast_meta work as expected", {
     issues = epirange("2024-01-01", "2024-01-05")
   )
   expect_s3_class(res_range, "tbl_df")
+
+  # Test issues = "*" mapping in pub_cast
+  call_wildcard <- pub_cast(
+    source = "nssp",
+    signals = "sig1",
+    geo_type = "state",
+    issues = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_match(call_wildcard$request$url, "archive/")
+  expect_no_match(call_wildcard$request$url, "version_query=")
+
+  # Test as_of = "*" mapping in pub_cast
+  call_as_of_wildcard <- pub_cast(
+    source = "nssp",
+    signals = "sig1",
+    geo_type = "state",
+    as_of = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_match(call_as_of_wildcard$request$url, "archive/")
+  expect_no_match(call_as_of_wildcard$request$url, "snapshot_date=")
 })
 
 test_that("pub_cast validations", {

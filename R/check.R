@@ -143,7 +143,7 @@ format_params_for_api <- function(params) {
 #' @return a formatted version_query string (e.g., "<2025-10-16", "=2025-10-16")
 #' @keywords internal
 validate_version_query <- function(issues) {
-  if (is.null(issues)) {
+  if (is.null(issues) || identical(issues, "*")) {
     return(NULL)
   }
 
