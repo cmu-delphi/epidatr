@@ -61,7 +61,7 @@ test_that("cache saves & loads", {
   local_mocked_bindings(
     do_request = function(...) {
       httr_content_called_count <<- httr_content_called_count + 1
-      mock_body_string(readRDS(testthat::test_path("data/test-classic.rds")))
+      to_httr2_response(readRDS(testthat::test_path("data/test-classic.rds")))
     },
     .package = "epidatr"
   )
@@ -84,7 +84,7 @@ test_that("cache saves & loads", {
   local_mocked_bindings(
     do_request = function(...) {
       httr_content_called_count <<- httr_content_called_count + 1
-      '{"epidata":[],"result":-2,"message":"no results"}'
+      to_httr2_response('{"epidata":[],"result":-2,"message":"no results"}')
     },
     .package = "epidatr"
   )

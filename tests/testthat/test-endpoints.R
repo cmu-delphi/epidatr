@@ -160,6 +160,16 @@ test_that("basic_epidata_call", {
     time_values = epirange(20150101, 20200101),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
+  expect_no_error(pub_cast(
+    source = "nssp",
+    signals = "sig1",
+    geo_type = "state",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ) %>% request_url())
+  expect_no_error(pub_cast_meta(
+    source = "nssp",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ) %>% request_url())
 })
 
 test_that("endoints accept wildcard for date parameter", {
@@ -552,5 +562,68 @@ test_that("pub_covid_hosp_state_timeseries catches missing args for args without
   expect_error(
     pub_covid_hosp_state_timeseries(),
     class = "epidatr__pub_covid_hosp_state_timeseries__missing_required_args"
+  )
+})
+
+test_that("pub_cast and pub_cast_meta work as expected", {
+  local_mocked_bindings(
+    do_request = function(epidata_call, format_type, ...) {
+      if (format_type == "json") {
+        expect_match(epidata_call$request$url, "metadata/")
+        json_resp <- list(nssp = list(signals = c("sig1", "sig2"), geo_types = c("state", "nation")))
+        return(to_httr2_response(jsonlite::toJSON(json_resp, auto_unbox = TRUE)))
+      } else {
+        expect_equal(epidata_call$api_version, "cast")
+        csv_data <- "signal,geo_value,time_value,value\nsig1,ca,2024-01-01,10.5\nsig1,fl,2024-01-01,20.0"
+        return(to_httr2_response(csv_data))
+      }
+    },
+    .package = "epidatr"
+  )
+
+  # Test pub_cast_meta
+  res_meta <- pub_cast_meta(source = "nssp")
+  expect_type(res_meta, "list")
+  expect_equal(res_meta$nssp$signals, c("sig1", "sig2"))
+
+  # Test pub_cast basic fetch
+  res <- pub_cast(source = "nssp", signals = "sig1", geo_type = "state")
+  expect_s3_class(res, "tbl_df")
+  expect_equal(nrow(res), 2)
+
+  # Test pub_cast filtering
+  res_filtered <- pub_cast(source = "nssp", signals = "sig1", geo_type = "state", geo_values = "ca")
+  expect_equal(nrow(res_filtered), 1)
+
+  res_time_filtered <- pub_cast(source = "nssp", signals = "sig1", geo_type = "state", time_values = as.Date("2024-01-01"))
+  expect_equal(nrow(res_time_filtered), 2)
+
+  # Test EpiRange mapping in issues
+  res_range <- pub_cast(
+    source = "nssp",
+    signals = "sig1",
+    geo_type = "state",
+    issues = epirange("2024-01-01", "2024-01-05")
+  )
+  expect_s3_class(res_range, "tbl_df")
+})
+
+test_that("pub_cast validations", {
+  # Missing required args
+  expect_error(
+    pub_cast(source = "nssp", signals = "sig1"),
+    class = "epidatr__pub_cast__missing_required_args"
+  )
+
+  # Mutually exclusive as_of and issues
+  expect_error(
+    pub_cast(
+      source = "nssp",
+      signals = "sig1",
+      geo_type = "state",
+      as_of = "2024-01-01",
+      issues = "<2024-01-01"
+    ),
+    class = "epidatr__pub_cast__too_many_issue_params"
   )
 })

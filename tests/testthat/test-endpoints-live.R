@@ -247,3 +247,21 @@ test_that("pub_wiki day", {
   )
   expect_gt(nrow(result), 0)
 })
+
+test_that("pub_cast", {
+  result <- pub_cast(
+    source = "nhsn",
+    signals = "confirmed_admissions_flu_ew",
+    geo_type = "state",
+    fetch_args = fetch_args_list(base_url = "https://delphi.cmu.edu/cast-api/epidata/v2/")
+  )
+  expect_gt(nrow(result), 0)
+})
+
+test_that("pub_cast_meta", {
+  result <- pub_cast_meta(
+    source = "nhsn",
+    fetch_args = fetch_args_list(base_url = "https://delphi.cmu.edu/cast-api/epidata/v2/")
+  )
+  expect_gt(length(result), 0)
+})

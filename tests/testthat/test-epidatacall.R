@@ -94,11 +94,11 @@ test_that("fetch respects the fields parameter", {
       # Verify that extra_arguments() appends fields to the URL
       expect_match(epidata_call$request$url, "fields=value")
 
-      jsonlite::toJSON(list(
+      to_httr2_response(jsonlite::toJSON(list(
         epidata = list(list(value = 10)),
         result = 1,
         message = "success"
-      ), auto_unbox = TRUE)
+      ), auto_unbox = TRUE))
     },
     .package = "epidatr"
   )
@@ -129,7 +129,7 @@ test_that("fetch non-classic passes along api warnings", {
     `[[<-`("message", artificial_warning)
   local_mocked_bindings(
     do_request = function(...) {
-      as.character(jsonlite::toJSON(debug_triplet))
+      to_httr2_response(as.character(jsonlite::toJSON(debug_triplet)))
     },
     .package = "epidatr"
   )
@@ -143,7 +143,7 @@ test_that("fetch non-classic passes along api warnings", {
 test_that("fetch classic works", {
   local_mocked_bindings(
     # see generate_test_data.R
-    do_request = function(...) mock_body_string(readRDS(testthat::test_path("data/test-classic-only.rds"))),
+    do_request = function(...) to_httr2_response(readRDS(testthat::test_path("data/test-classic-only.rds"))),
     .package = "epidatr"
   )
 
@@ -175,7 +175,9 @@ test_that("create_epidata_call basic behavior", {
   expected <- list(
     request = r,
     base_url = base_url,
-    meta = meta
+    meta = meta,
+    api_version = "classic",
+    response_format = "classic"
   )
   class(expected) <- "epidata_call"
   expect_identical(create_epidata_call(endpoint, params, meta = meta), expected)

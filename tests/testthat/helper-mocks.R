@@ -14,7 +14,8 @@ to_httr2_response <- function(obj) {
     url = "https://example.com/mocked",
     status_code = 200L,
     headers = list("content-type" = "application/json"),
-    body = raw(0)
+    body = raw(0),
+    cache = new.env(parent = emptyenv())
   )
 
   if (inherits(obj, "response")) { # httr response
@@ -45,7 +46,8 @@ create_mock_response <- function(body,
       url = url,
       status_code = as.integer(status_code),
       headers = headers,
-      body = body
+      body = body,
+      cache = new.env(parent = emptyenv())
     ),
     class = "httr2_response"
   )
