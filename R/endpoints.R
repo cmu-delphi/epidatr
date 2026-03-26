@@ -30,7 +30,7 @@
 #'   data to fetch. See the "Data Versioning" section for details.
 #' @param lag integer. Optionally, the lag of the issues to fetch.
 #'   See the "Data Versioning" section for details.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass
+#' @param fetch_args [`fetch_args_list()`]. Additional arguments to pass
 #'   to `fetch()`. See `fetch_args_list()` for details.
 #' @param ... not used for values, forces later arguments to bind by name
 #'
@@ -1135,7 +1135,7 @@ pub_covidcast <- function(
 #'
 #' @param source string. The data source to query. If NULL, returns metadata
 #'   for all available sources.
-#' @inheritParams fetch_args_list
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
 #' @seealso [pub_cast()], [epirange()]
 #' @keywords endpoint
@@ -1160,9 +1160,9 @@ pub_cast_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #' @param as_of Date or string (YYYY-MM-DD or YYYYMMDD). The date to
 #'   snapshot data for. Internally maps to the `snapshot_date` parameter.
 #'   Defaults to NULL (latest available).
-#' @param issues Date, string, or [`EpiRange`]. A version query for the
+#' @param issues Date, string, or [`epirange()`]. A version query for the
 #'   archive endpoint. Supports exact dates (e.g., "2025-10-16"),
-#'   operators (e.g., "<2025-10-16"), or an [`EpiRange`] (the end of the
+#'   operators (e.g., "<2025-10-16"), or an [`epirange()`] (the end of the
 #'   range is used as the upper bound, e.g., `<2024-01-05`). Internally
 #'   maps to the `version_query` parameter.
 #' @return [`tibble::tibble`]

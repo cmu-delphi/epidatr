@@ -89,4 +89,3 @@ do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), 
 
   res
 }
-

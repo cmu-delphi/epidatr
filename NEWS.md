@@ -6,11 +6,15 @@
 
 ## Features
 
+- New `pub_cast` and `pub_cast_meta` endpoints for accessing the new CAST-API.
+
 ## Patches
 
 - `last_update` in `pub_covidcast_meta` is now returned as a `POSIXct` object instead of an integer.
 - Improved efficiency of date parsing for API responses.
 - Migrate HTTP requests from `httr` to `httr2`.
+- Consistent handling of `httr2` responses in `do_request` and `covidcast_epidata`.
+- Added `validate_version_query` for standardized CAST-API version queries.
 
 
 # epidatr 1.2.4

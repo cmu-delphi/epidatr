@@ -7,7 +7,7 @@
 pub_covidcast_meta(fetch_args = fetch_args_list())
 }
 \arguments{
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+\item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
@@ -25,7 +25,6 @@ available, the geographic levels at which they are reported, and etc.
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
 pub_covidcast_meta()
-
 \dontshow{\}) # examplesIf}
 }
 \seealso{
