@@ -1213,7 +1213,11 @@ pub_cast <- function(
   as_of <- validate_date_input("as_of", as_of, len = 1, required = FALSE)
   version_query <- validate_version_query(issues)
 
-  endpoint <- if (is.null(issues)) "snapshot/" else "archive/"
+  # Determine endpoint and snapshot_date
+  # If issues is provided (including wildcard "*"), use archive endpoint
+  # If as_of is "*", use archive endpoint
+  is_archive <- !is.null(issues) || identical(as_of, "*")
+  endpoint <- if (is_archive) "archive/" else "snapshot/"
 
   res <- create_epidata_call(
     endpoint = endpoint,
@@ -1221,7 +1225,7 @@ pub_cast <- function(
       source = source,
       signal = paste(signals, collapse = ","),
       geo_type = geo_type,
-      snapshot_date = if (!is.null(as_of)) format(as.Date(parse_api_date(as_of)), "%Y-%m-%d"),
+      snapshot_date = if (!is.null(as_of) && !identical(as_of, "*")) format(as.Date(parse_api_date(as_of)), "%Y-%m-%d"),
       version_query = version_query
     ),
     meta = list(
@@ -1259,6 +1263,11 @@ pub_cast <- function(
 
     if (!identical(time_values, "*")) {
       res <- filter_by_timeset(res, "time_value", parsed_time_values)
+    }
+
+    # Add issue column based on report_ts_nominal_start
+    if ("report_ts_nominal_start" %in% names(res)) {
+      res$issue <- as.Date(res$report_ts_nominal_start)
     }
   }
 
