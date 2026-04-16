@@ -928,22 +928,49 @@ pub_covid_hosp_state_timeseries <- function(
 #' the API, along with basic summary statistics such as the dates they are
 #' available, the geographic levels at which they are reported, and etc.
 #'
-#' @inheritParams .epidatr_shared_params
+#' @inheritParams pub_covidcast
 #'
 #' @return [`tibble::tibble`]
 #'
 #' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
 #'
 #' pub_covidcast_meta()
+#' pub_covidcast_meta(source = "chng")
+#' pub_covidcast_meta(source = "chng", signals = "smoothed_cli")
 #'
 #'
 #' @seealso [pub_covidcast()],[covidcast_epidata()]
 #' @keywords endpoint
 #' @export
-pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
+pub_covidcast_meta <- function(
+  source = NULL,
+  signals = NULL,
+  geo_type = NULL,
+  time_type = NULL,
+  ...,
+  fetch_args = fetch_args_list()
+) {
+  assert_character_param("source", source, len = 1, required = FALSE)
+  assert_character_param("signals", signals, required = FALSE)
+  assert_character_param("geo_type", geo_type, required = FALSE)
+  assert_character_param("time_type", time_type, required = FALSE)
+
+  # Combine source and signals for meta endpoint
+  if (!is.null(source) && !is.null(signals)) {
+    api_signals <- paste0(source, ":", signals)
+  } else if (!is.null(source)) {
+    api_signals <- source
+  } else {
+    api_signals <- signals
+  }
+
   create_epidata_call(
     "covidcast_meta/",
-    list(),
+    list(
+      signals = api_signals,
+      time_types = time_type,
+      geo_types = geo_type
+    ),
     list(
       create_epidata_field_info("data_source", "text"),
       create_epidata_field_info("signal", "text"),

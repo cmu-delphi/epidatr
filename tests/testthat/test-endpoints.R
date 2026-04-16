@@ -22,6 +22,43 @@ test_that("basic_epidata_call", {
   expect_no_error(pub_covidcast_meta(
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
+  expect_match(
+    pub_covidcast_meta(
+      source = "chng",
+      fetch_args = fetch_args_list(dry_run = TRUE)
+    ) %>% request_url(),
+    "signals=chng"
+  )
+  expect_match(
+    pub_covidcast_meta(
+      source = "chng",
+      signals = "smoothed_cli",
+      fetch_args = fetch_args_list(dry_run = TRUE)
+    ) %>% request_url(),
+    "signals=chng%3Asmoothed_cli"
+  )
+  expect_match(
+    pub_covidcast_meta(
+      source = "chng",
+      signals = c("s1", "s2"),
+      fetch_args = fetch_args_list(dry_run = TRUE)
+    ) %>% request_url(),
+    "signals=chng%3As1%2Cchng%3As2"
+  )
+  expect_match(
+    pub_covidcast_meta(
+      time_type = "day",
+      fetch_args = fetch_args_list(dry_run = TRUE)
+    ) %>% request_url(),
+    "time_types=day"
+  )
+  expect_match(
+    pub_covidcast_meta(
+      geo_type = "county",
+      fetch_args = fetch_args_list(dry_run = TRUE)
+    ) %>% request_url(),
+    "geo_types=county"
+  )
   expect_no_error(pub_covidcast(
     source = "jhu-csse",
     signals = "confirmed_7dav_incidence_prop",
