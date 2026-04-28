@@ -1160,7 +1160,7 @@ pub_cast_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #' @param as_of Date. Optionally, the as-of date for the issues to fetch.
 #'   See the "Data Versioning" section for details. Internally maps to the
 #'   `snapshot_date` parameter. Defaults to NULL (latest available).
-#' @param issues Date, string, or [`epirange()`]. A version query for the
+#' @param version Date, string, or [`epirange()`]. A version query for the
 #'   archive endpoint. Supports exact dates (e.g., "2025-10-16"),
 #'   operators (e.g., "<2025-10-16"), or an [`epirange()`] (the end of the
 #'   range is used as the upper bound, e.g., `<2024-01-05`). Internally
@@ -1177,7 +1177,7 @@ pub_cast <- function(
   time_values = "*",
   ...,
   as_of = NULL,
-  issues = NULL,
+  version = NULL,
   fetch_args = fetch_args_list()
 ) {
   if (
@@ -1191,9 +1191,9 @@ pub_cast <- function(
     )
   }
 
-  if (!is.null(issues) && !is.null(as_of)) {
+  if (!is.null(version) && !is.null(as_of)) {
     cli::cli_abort(
-      "`issues` and `as_of` are mutually exclusive",
+      "`version` and `as_of` are mutually exclusive",
       class = "epidatr__pub_cast__too_many_issue_params"
     )
   }
@@ -1211,12 +1211,12 @@ pub_cast <- function(
   parsed_time_values <- validate_timeset_input("time_values", time_values)
   assert_character_param("geo_values", geo_values)
   as_of <- validate_date_input("as_of", as_of, len = 1, required = FALSE)
-  version_query <- validate_version_query(issues)
+  version_query <- validate_version_query(version)
 
   # Determine endpoint and snapshot_date
-  # If issues is provided (including wildcard "*"), use archive endpoint
+  # If version is provided (including wildcard "*"), use archive endpoint
   # If as_of is "*", use archive endpoint
-  is_archive <- !is.null(issues) || identical(as_of, "*")
+  is_archive <- !is.null(version) || identical(as_of, "*")
   endpoint <- if (is_archive) "archive/" else "snapshot/"
 
   res <- create_epidata_call(

@@ -601,21 +601,21 @@ test_that("pub_cast and pub_cast_meta work as expected", {
   )
   expect_equal(nrow(res_time_filtered), 2)
 
-  # Test EpiRange mapping in issues
+  # Test EpiRange mapping in version
   res_range <- pub_cast(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
-    issues = epirange("2024-01-01", "2024-01-05")
+    version = epirange("2024-01-01", "2024-01-05")
   )
   expect_s3_class(res_range, "tbl_df")
 
-  # Test issues = "*" mapping in pub_cast
+  # Test version = "*" mapping in pub_cast
   call_wildcard <- pub_cast(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
-    issues = "*",
+    version = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_match(call_wildcard$request$url, "archive/")
@@ -640,14 +640,14 @@ test_that("pub_cast validations", {
     class = "epidatr__pub_cast__missing_required_args"
   )
 
-  # Mutually exclusive as_of and issues
+  # Mutually exclusive as_of and version
   expect_error(
     pub_cast(
       source = "nssp",
       signals = "sig1",
       geo_type = "state",
       as_of = "2024-01-01",
-      issues = "<2024-01-01"
+      version = "<2024-01-01"
     ),
     class = "epidatr__pub_cast__too_many_issue_params"
   )
