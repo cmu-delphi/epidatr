@@ -12,7 +12,7 @@ pub_cast(
   time_values = "*",
   ...,
   as_of = NULL,
-  issues = NULL,
+  version = NULL,
   fetch_args = fetch_args_list()
 )
 }
@@ -34,11 +34,11 @@ Supports \code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
-\item{as_of}{Date or string (YYYY-MM-DD or YYYYMMDD). The date to
-snapshot data for. Internally maps to the \code{snapshot_date} parameter.
-Defaults to NULL (latest available).}
+\item{as_of}{Date. Optionally, the as-of date for the issues to fetch.
+See the "Data Versioning" section for details. Internally maps to the
+\code{snapshot_date} parameter. Defaults to NULL (latest available).}
 
-\item{issues}{Date, string, or \code{\link[=epirange]{epirange()}}. A version query for the
+\item{version}{Date, string, or \code{\link[=epirange]{epirange()}}. A version query for the
 archive endpoint. Supports exact dates (e.g., "2025-10-16"),
 operators (e.g., "<2025-10-16"), or an \code{\link[=epirange]{epirange()}} (the end of the
 range is used as the upper bound, e.g., \verb{<2024-01-05}). Internally
