@@ -152,6 +152,7 @@ validate_version_query <- function(issues) {
     operator <- substr(issues, 1, 1)
     issues <- substr(issues, 2, nchar(issues))
   } else if (inherits(issues, "EpiRange")) {
+    # Lower bound is filtered out locally
     operator <- "<"
     issues <- issues$to
   }

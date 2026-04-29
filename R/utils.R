@@ -52,9 +52,28 @@ filter_by_timeset <- function(df, column, timeset) {
   values <- df[[column]]
 
   if (inherits(timeset, "EpiRange")) {
-    mask <- values >= timeset$from & values <= timeset$to
+    from <- timeset$from
+    to <- timeset$to
+
+    if (inherits(values, "Date")) {
+      if (all(nchar(from) == 8)) {
+        from <- parse_api_date(from)
+        to <- parse_api_date(to)
+      } else if (all(nchar(from) == 6)) {
+        from <- parse_api_week(from)
+        to <- parse_api_week(to)
+      }
+    }
+    mask <- values >= from & values <= to
   } else {
-    # validate_timeset_input handles most cases
+    if (inherits(values, "Date") && !inherits(timeset, "Date")) {
+      # Handle cases where timeset is a vector of integers or strings
+      if (all(nchar(timeset) == 8)) {
+        timeset <- parse_api_date(timeset)
+      } else if (all(nchar(timeset) == 6)) {
+        timeset <- parse_api_week(timeset)
+      }
+    }
     mask <- values %in% timeset
   }
   df[mask, ]

@@ -1141,6 +1141,7 @@ pub_covidcast <- function(
 #' @keywords endpoint
 #' @export
 pub_cast_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
+  checkmate::assert_string(source, null.ok = TRUE)
   create_epidata_call(
     endpoint = "metadata/",
     params = list(source = source),
@@ -1237,14 +1238,22 @@ pub_cast <- function(
       ),
       create_epidata_field_info("geo_value", "text"),
       create_epidata_field_info("time_value", "date"),
+      create_epidata_field_info("version", "date"),
       create_epidata_field_info("value", "float"),
+      # cast-API additional columns
+      create_epidata_field_info("fill_method", "text"),
+      # source-specific extra columns
+      create_epidata_field_info("age_group", "text"),
+      create_epidata_field_info("nwss_source", "text"),
+      create_epidata_field_info("sample_index", "text"),
+      create_epidata_field_info("pcr_target", "text"),
+      # It looks like the next columns are deprecated.
+      # TODO: remove them when it is safe to do so.
       create_epidata_field_info("stderr", "float"),
       create_epidata_field_info("sample_size", "float"),
       create_epidata_field_info("missing_value", "int"),
       create_epidata_field_info("missing_stderr", "int"),
       create_epidata_field_info("missing_sample_size", "int"),
-      # cast-API additional columns
-      create_epidata_field_info("fill_method", "text"),
       create_epidata_field_info("report_ts_nominal_start", "text"),
       create_epidata_field_info("report_ts_nominal_end", "text"),
       create_epidata_field_info("report_ts_actual", "text"),
@@ -1258,16 +1267,24 @@ pub_cast <- function(
   # Local filtering
   if (inherits(res, "data.frame")) {
     if (!identical(geo_values, "*")) {
-      res <- res[res$geo_value %in% geo_values, ]
+      actual_geo_values <- tolower(trimws(unlist(strsplit(geo_values, ","))))
+      res <- res[res$geo_value %in% actual_geo_values, ]
     }
 
     if (!identical(time_values, "*")) {
       res <- filter_by_timeset(res, "time_value", parsed_time_values)
     }
 
+    # This filters the lower bound of the EpiRange
+    # validate_version_query validates the upper bound
+    if (inherits(version, "EpiRange") && "version" %in% names(res)) {
+      res <- filter_by_timeset(res, "version", version)
+    }
+
     # Add issue column based on report_ts_nominal_start
+    # TODO: remove the next line when it is safe to do so.
     if ("report_ts_nominal_start" %in% names(res)) {
-      res$issue <- as.Date(res$report_ts_nominal_start)
+      res$version <- as.Date(res$report_ts_nominal_start)
     }
   }
 

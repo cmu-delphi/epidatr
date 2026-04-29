@@ -631,6 +631,15 @@ test_that("pub_cast and pub_cast_meta work as expected", {
   )
   expect_match(call_as_of_wildcard$request$url, "archive/")
   expect_no_match(call_as_of_wildcard$request$url, "snapshot_date=")
+
+  # Test time_values = epirange(...) mapping in pub_cast
+  res_time_range <- pub_cast(
+    source = "nssp",
+    signals = "sig1",
+    geo_type = "state",
+    time_values = epirange("2024-01-01", "2024-01-01")
+  )
+  expect_equal(nrow(res_time_range), 2)
 })
 
 test_that("pub_cast validations", {
@@ -651,4 +660,40 @@ test_that("pub_cast validations", {
     ),
     class = "epidatr__pub_cast__too_many_issue_params"
   )
+})
+
+test_that("pub_cast local EpiRange filtering for version works", {
+  local_mocked_bindings(
+    do_request = function(epidata_call, ...) {
+      # Return multiple versions
+      csv_data <- paste0(
+        "signal,geo_value,time_value,value,version\n",
+        "sig1,ca,2024-01-01,10.0,2024-01-01\n",
+        "sig1,ca,2024-01-01,11.0,2024-01-02\n",
+        "sig1,ca,2024-01-01,12.0,2024-01-03"
+      )
+      return(to_httr2_response(csv_data))
+    },
+    .package = "epidatr"
+  )
+
+  # Filter with a range that excludes the first and last dates
+  res <- pub_cast(
+    source = "nssp",
+    signals = "sig1",
+    geo_type = "state",
+    version = epirange("2024-01-02", "2024-01-02")
+  )
+  expect_equal(nrow(res), 1)
+  expect_equal(as.character(res$version), "2024-01-02")
+
+  # Filter with a wider range
+  res_wide <- pub_cast(
+    source = "nssp",
+    signals = "sig1",
+    geo_type = "state",
+    version = epirange("2024-01-01", "2024-01-02")
+  )
+  expect_equal(nrow(res_wide), 2)
+  expect_true(all(res_wide$version %in% as.Date(c("2024-01-01", "2024-01-02"))))
 })
