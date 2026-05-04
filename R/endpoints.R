@@ -1141,7 +1141,7 @@ pub_covidcast <- function(
 #' @keywords endpoint
 #' @export
 epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
-  checkmate::assert_string(source, null.ok = TRUE)
+  assert_character_param("source", source, len = 1, required = FALSE)
   create_epidata_call(
     endpoint = "metadata/",
     params = list(source = source),
@@ -1217,12 +1217,12 @@ epidata_snapshot <- function(
   assert_character_param("geo_values", geo_values)
   assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
   assert_date_param("as_of", as_of, len = 1, required = FALSE)
-  # as_of reformating
+  # as_of reformatting
   if (!is.null(as_of)) as_of <- format(parse_api_date(as_of), "%Y-%m-%d")
 
   parsed_time_values <- validate_timeset_input("time_values", time_values)
 
-create_epidata_call(
+  create_epidata_call(
     endpoint = "snapshot/",
     params = list(
       source = source,
@@ -1260,9 +1260,9 @@ epidata_archive <- function(
   geo_type,
   geo_values = "*",
   time_values = "*",
-  version = "*",
   ...,
   fill_method = NULL,
+  version = "*",
   fetch_args = fetch_args_list()
 ) {
   if (missing(source) || missing(signals) || missing(geo_type)) {

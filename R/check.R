@@ -139,7 +139,7 @@ format_params_for_api <- function(params) {
 }
 
 #' Helper to format the 'version' argument for the CAST API version_query
-#' @param version the version argument containing operator and date, exact date, 
+#' @param version the version argument containing operator and date, exact date,
 #' or numeric date
 #' @return a formatted version_query string (e.g., "<2025-10-16", "=2025-10-16")
 #' @keywords internal
@@ -158,9 +158,9 @@ validate_version_query <- function(version) {
     version <- version$to
   }
 
-  # Validate and standardized the date part
-  date_obj <- validate_date_input("version", version, len = 1L, required = FALSE)
-  formatted_date <- format(as.Date(parse_api_date(date_obj)), "%Y-%m-%d")
+  # Validate and standardize the date part
+  assert_date_param("version", version, len = 1L, required = FALSE)
+  formatted_date <- format(parse_api_date(version), "%Y-%m-%d")
 
   if (is.na(formatted_date)) {
     cli::cli_abort(

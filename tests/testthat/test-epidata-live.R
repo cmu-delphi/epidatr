@@ -10,7 +10,7 @@ cast_sources <- c("nssp", "nhsn", "pophive", "nwss")
 
 for (source in cast_sources) {
   test_that(sprintf("test `epidata_meta` for source =%s", source), {
-    
+
     source_meta <- epidata_meta(source = source)[[source]]
     expect_type(source_meta, "list")
     expect_true(length(source_meta$signals) > 0)
@@ -26,7 +26,6 @@ for (source in cast_sources) {
         geo_type = geo_type
       )
       expect_s3_class(snapshot, "tbl_df")
-      # expect_gt(nrow(snapshot), 0)
       expect_s3_class(snapshot$time_value, "Date")
       expect_s3_class(snapshot$version, "Date")
       archive <- epidata_archive(

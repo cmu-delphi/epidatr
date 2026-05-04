@@ -25,9 +25,9 @@ epidata_archive(
   geo_type,
   geo_values = "*",
   time_values = "*",
-  version = "*",
   ...,
   fill_method = NULL,
+  version = "*",
   fetch_args = fetch_args_list()
 )
 
