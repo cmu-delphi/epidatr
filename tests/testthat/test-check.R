@@ -66,10 +66,10 @@ test_that("validate_version_query", {
   # Invalid version queries
   expect_error(
     validate_version_query("not-a-date"),
-    class = "epidatr__pub_cast__invalid_version_query"
+    class = "epidatr__invalid_version_query"
   )
   expect_error(
     validate_version_query("<not-a-date"),
-    class = "epidatr__pub_cast__invalid_version_query"
+    class = "epidatr__invalid_version_query"
   )
 })

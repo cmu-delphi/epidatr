@@ -78,3 +78,22 @@ filter_by_timeset <- function(df, column, timeset) {
   }
   df[mask, ]
 }
+
+#' @keywords internal
+.cast_filter <- function(res, geo_values, time_values, parsed_time_values, version = NULL) {
+  if (!inherits(res, "data.frame")) {
+    return(res)
+  }
+  if (!identical(geo_values, "*")) {
+    actual_geo_values <- tolower(trimws(unlist(strsplit(geo_values, ","))))
+    res <- res[res$geo_value %in% actual_geo_values, ]
+  }
+  if (!identical(time_values, "*")) {
+    res <- filter_by_timeset(res, "time_value", parsed_time_values)
+  }
+  # EpiRange lower bound filter (upper bound handled by validate_version_query)
+  if (inherits(version, "EpiRange") && "version" %in% names(res)) {
+    res <- filter_by_timeset(res, "version", version)
+  }
+  res
+}

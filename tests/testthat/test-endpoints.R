@@ -160,13 +160,13 @@ test_that("basic_epidata_call", {
     time_values = epirange(20150101, 20200101),
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(pub_cast(
+  expect_no_error(epidata_snapshot(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
-  expect_no_error(pub_cast_meta(
+  expect_no_error(epidata_meta(
     source = "nssp",
     fetch_args = fetch_args_list(dry_run = TRUE)
   ) %>% request_url())
@@ -565,7 +565,7 @@ test_that("pub_covid_hosp_state_timeseries catches missing args for args without
   )
 })
 
-test_that("pub_cast and pub_cast_meta work as expected", {
+test_that("epidata* and epidata_meta work as expected", {
   local_mocked_bindings(
     do_request = function(epidata_call, format_type, ...) {
       if (format_type == "json") {
@@ -581,28 +581,28 @@ test_that("pub_cast and pub_cast_meta work as expected", {
     .package = "epidatr"
   )
 
-  # Test pub_cast_meta
-  res_meta <- pub_cast_meta(source = "nssp")
+  # Test epidata_meta
+  res_meta <- epidata_meta(source = "nssp")
   expect_type(res_meta, "list")
   expect_equal(res_meta$nssp$signals, c("sig1", "sig2"))
 
-  # Test pub_cast basic fetch
-  res <- pub_cast(source = "nssp", signals = "sig1", geo_type = "state")
+  # Test epidata_snapshot basic fetch
+  res <- epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state")
   expect_s3_class(res, "tbl_df")
   expect_equal(nrow(res), 2)
 
-  # Test pub_cast filtering
-  res_filtered <- pub_cast(source = "nssp", signals = "sig1", geo_type = "state", geo_values = "ca")
+  # Test epidata_snapshot filtering
+  res_filtered <- epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", geo_values = "ca")
   expect_equal(nrow(res_filtered), 1)
 
-  res_time_filtered <- pub_cast(
+  res_time_filtered <- epidata_snapshot(
     source = "nssp", signals = "sig1", geo_type = "state",
     time_values = as.Date("2024-01-01")
   )
   expect_equal(nrow(res_time_filtered), 2)
 
   # Test EpiRange mapping in version
-  res_range <- pub_cast(
+  res_range <- epidata_archive(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
@@ -610,8 +610,8 @@ test_that("pub_cast and pub_cast_meta work as expected", {
   )
   expect_s3_class(res_range, "tbl_df")
 
-  # Test version = "*" mapping in pub_cast
-  call_wildcard <- pub_cast(
+  # Test version = "*" mapping in epidata
+  call_wildcard <- epidata(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
@@ -621,8 +621,8 @@ test_that("pub_cast and pub_cast_meta work as expected", {
   expect_match(call_wildcard$request$url, "archive/")
   expect_no_match(call_wildcard$request$url, "version_query=")
 
-  # Test as_of = "*" mapping in pub_cast
-  call_as_of_wildcard <- pub_cast(
+  # Test as_of = "*" mapping in epidata
+  call_as_of_wildcard <- epidata(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
@@ -632,8 +632,8 @@ test_that("pub_cast and pub_cast_meta work as expected", {
   expect_match(call_as_of_wildcard$request$url, "archive/")
   expect_no_match(call_as_of_wildcard$request$url, "snapshot_date=")
 
-  # Test time_values = epirange(...) mapping in pub_cast
-  res_time_range <- pub_cast(
+  # Test time_values = epirange(...) mapping in epidata_snapshot
+  res_time_range <- epidata_snapshot(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
@@ -642,27 +642,27 @@ test_that("pub_cast and pub_cast_meta work as expected", {
   expect_equal(nrow(res_time_range), 2)
 })
 
-test_that("pub_cast validations", {
+test_that("epidata_snapshot validations", {
   # Missing required args
   expect_error(
-    pub_cast(source = "nssp", signals = "sig1"),
-    class = "epidatr__pub_cast__missing_required_args"
+    epidata_snapshot(source = "nssp", signals = "sig1"),
+    class = "epidatr__epidata__missing_required_args"
   )
 
   # Mutually exclusive as_of and version
   expect_error(
-    pub_cast(
+    epidata(
       source = "nssp",
       signals = "sig1",
       geo_type = "state",
       as_of = "2024-01-01",
       version = "<2024-01-01"
     ),
-    class = "epidatr__pub_cast__too_many_issue_params"
+    class = "epidatr__epidata__version_and_as_of_exclusive"
   )
 })
 
-test_that("pub_cast local EpiRange filtering for version works", {
+test_that("epidata_archive local EpiRange filtering for version works", {
   local_mocked_bindings(
     do_request = function(epidata_call, ...) {
       # Return multiple versions
@@ -678,7 +678,7 @@ test_that("pub_cast local EpiRange filtering for version works", {
   )
 
   # Filter with a range that excludes the first and last dates
-  res <- pub_cast(
+  res <- epidata_archive(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
@@ -688,7 +688,7 @@ test_that("pub_cast local EpiRange filtering for version works", {
   expect_equal(as.character(res$version), "2024-01-02")
 
   # Filter with a wider range
-  res_wide <- pub_cast(
+  res_wide <- epidata_archive(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
