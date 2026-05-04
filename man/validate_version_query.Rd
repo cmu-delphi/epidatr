@@ -2,17 +2,18 @@
 % Please edit documentation in R/check.R
 \name{validate_version_query}
 \alias{validate_version_query}
-\title{Helper to format the 'issues' argument for the CAST API version_query}
+\title{Helper to format the 'version' argument for the CAST API version_query}
 \usage{
-validate_version_query(issues)
+validate_version_query(version)
 }
 \arguments{
-\item{issues}{the issues argument containing operator and date, exact date, or numeric date}
+\item{version}{the version argument containing operator and date, exact date,
+or numeric date}
 }
 \value{
 a formatted version_query string (e.g., "<2025-10-16", "=2025-10-16")
 }
 \description{
-Helper to format the 'issues' argument for the CAST API version_query
+Helper to format the 'version' argument for the CAST API version_query
 }
 \keyword{internal}
