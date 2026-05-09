@@ -58,6 +58,7 @@ Suggests:
     maps,
     rmarkdown,
     testthat (>= 3.1.5),
+    tictoc,
     withr,
     base64enc,
     httr,
