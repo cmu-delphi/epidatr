@@ -6,6 +6,8 @@ format:
 	Rscript -e "styler::style_pkg()"
 test:
 	Rscript -e "devtools::test()"
+test-live:
+	EPIDATR_LIVE_TEST=1 Rscript -e "devtools::test()"
 coverage:
 	Rscript -e "print(covr::package_coverage())"
 coverage-report:
