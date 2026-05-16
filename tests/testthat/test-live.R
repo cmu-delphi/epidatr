@@ -341,47 +341,52 @@ test_that("pub_wiki day wildcard", {
   expect_gt(nrow(result), 0)
 })
 
-# ---- pub_cast (legacy cast endpoints, overlaps with epidata_* below — see TODO) ----
-test_that("pub_cast", {
-  skip_unless_live()
-  result <- pub_cast(
-    source = "nhsn", signals = "confirmed_admissions_flu_ew", geo_type = "state",
-    fetch_args = fetch_args_list(base_url = "https://delphi.cmu.edu/cast-api/epidata/v2/")
-  )
-  expect_gt(nrow(result), 0)
-})
-test_that("pub_cast_meta", {
-  skip_unless_live()
-  result <- pub_cast_meta(
-    source = "nhsn",
-    fetch_args = fetch_args_list(base_url = "https://delphi.cmu.edu/cast-api/epidata/v2/")
-  )
-  expect_gt(length(result), 0)
-})
-
 # ---- epidata_* (cast API) ----
-cast_sources <- c("nssp", "nhsn", "pophive", "nwss")
-for (src in cast_sources) {
+# TODO: Happy to add more, this is a starting point.
+cast_queries <- tibble::tribble(
+  ~source,    ~signal,    ~geo_type,
+  "nssp",     "pct_ed_visits_influenza",         "state",
+  "nssp",     "pct_ed_visits_influenza",         "hhs",
+  # TODO: Ignore county until row limits are in-place server side.
+  # "nssp",     "pct_ed_visits_influenza",         "county",
+  # TODO: Nhsn is currently without data.
+  # "nhsn",     "confirmed_admissions_flu_ew",         "state",
+  # "nhsn",     "confirmed_admissions_flu_ew",         "hhs",
+  # "nhsn",     "confirmed_admissions_flu_ew",         "national",
+  "pophive",  "flu_pct_ed",         "state",
+  "pophive",  "flu_pct_ed",         "hhs",
+  "pophive",  "flu_n_ed",         "state",
+  "pophive",  "flu_n_ed",         "hhs",
+  "pophive",  "flu_n_ed",         "nation",
+  "nwss",     "covid_avg_conc",         "sewershed",
+)
+
+test_that("epidata_meta returns signals + geo_types for each cast source", {
+  skip_unless_live()
+  for (src in unique(cast_queries$source)) {
+    source_meta <- epidata_meta(source = src)[[src]]
+    expect_type(source_meta, "list")
+    expect_true(length(source_meta$signals) > 0)
+    expect_true(length(source_meta$geo_types) > 0)
+  }
+})
+
+for (i in seq_len(nrow(cast_queries))) {
   local({
-    src <- src
-    test_that(sprintf("epidata_meta + epidata_snapshot + epidata_archive for source=%s", src), {
+    row <- cast_queries[i, ]
+    test_that(sprintf("epidata_snapshot + epidata_archive for source=%s signal=%s geo_type=%s",
+                      row$source, row$signal, row$geo_type), {
       skip_unless_live()
-      source_meta <- epidata_meta(source = src)[[src]]
-      expect_type(source_meta, "list")
-      expect_true(length(source_meta$signals) > 0)
-      expect_true(length(source_meta$geo_types) > 0)
+      snapshot <- epidata_snapshot(source = row$source, signals = row$signal, geo_type = row$geo_type)
+      expect_s3_class(snapshot, "tbl_df")
+      expect_s3_class(snapshot$time_value, "Date")
+      expect_s3_class(snapshot$version, "Date")
+      expect_gt(nrow(snapshot), 0)
 
-      geo_type <- if ("nation" %in% source_meta$geo_types) "nation" else source_meta$geo_types[[1]]
-      for (signal in source_meta$signals) {
-        snapshot <- epidata_snapshot(source = src, signals = signal, geo_type = geo_type)
-        expect_s3_class(snapshot, "tbl_df")
-        expect_s3_class(snapshot$time_value, "Date")
-        expect_s3_class(snapshot$version, "Date")
-
-        archive <- epidata_archive(source = src, signals = signal, geo_type = geo_type)
-        expect_s3_class(archive, "tbl_df")
-        expect_s3_class(archive$version, "Date")
-      }
+      archive <- epidata_archive(source = row$source, signals = row$signal, geo_type = row$geo_type)
+      expect_s3_class(archive, "tbl_df")
+      expect_s3_class(archive$version, "Date")
+      expect_gt(nrow(archive), 0)
     })
   })
 }
