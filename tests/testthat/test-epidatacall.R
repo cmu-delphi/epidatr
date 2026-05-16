@@ -7,35 +7,26 @@ test_that("fetch surfaces http errors", {
   )
 
   with_mocked_response(
-    testthat::test_path("data/test-http401.rds"),
+    create_mock_response(
+      "<p>API key does not exist.</p>",
+      status_code = 401L,
+      headers = list("content-type" = "text/html")
+    ),
     expect_error(fetch(epidata_call), class = "httr2_http_401")
   )
 
   with_mocked_response(
-    testthat::test_path("data/test-http500.rds"),
+    create_mock_response(
+      '{"epidata": [], "message": "database error", "result": -1}',
+      status_code = 500L
+    ),
     expect_error(fetch(epidata_call), class = "httr2_http_500")
   )
 })
 
 test_that("fetch_args", {
-  expect_identical(
-    fetch_args_list(),
-    structure(
-      list(
-        fields = NULL,
-        disable_date_parsing = FALSE,
-        disable_data_frame_parsing = FALSE,
-        return_empty = FALSE,
-        timeout_seconds = 15 * 60,
-        base_url = NULL,
-        dry_run = FALSE,
-        refresh_cache = FALSE,
-        reference_week_day = 1
-      ),
-      class = "fetch_args"
-    )
-  )
-  expect_identical(
+  expect_snapshot_value(fetch_args_list(), style = "json2", cran = TRUE)
+  expect_snapshot_value(
     fetch_args_list(
       fields = c("a", "b"),
       disable_date_parsing = TRUE,
@@ -47,22 +38,11 @@ test_that("fetch_args", {
       refresh_cache = TRUE,
       reference_week_day = 1
     ),
-    structure(
-      list(
-        fields = c("a", "b"),
-        disable_date_parsing = TRUE,
-        disable_data_frame_parsing = TRUE,
-        return_empty = TRUE,
-        timeout_seconds = 10,
-        base_url = "https://example.com",
-        dry_run = TRUE,
-        refresh_cache = TRUE,
-        reference_week_day = 1
-      ),
-      class = "fetch_args"
-    )
+    style = "json2",
+    cran = TRUE
   )
 })
+
 test_that("fetch respects the fields parameter", {
   epidata_call <- pub_covidcast(
     source = "jhu-csse", signals = "sig", geo_type = "state", time_type = "day",
@@ -87,6 +67,7 @@ test_that("fetch respects the fields parameter", {
   expect_equal(names(res), "value")
   expect_equal(res$value, 10)
 })
+
 test_that("fetch non-classic passes along api warnings", {
   epidata_call <- pub_covidcast(
     source = "jhu-csse",
@@ -102,13 +83,21 @@ test_that("fetch non-classic passes along api warnings", {
     "* This is a warning with a leading asterisk and {braces}",
     " to make sure we don't have bulleting/glue bugs."
   )
-  resp <- to_httr2_response(readRDS(testthat::test_path("data/test-classic.rds")))
-  debug_triplet <- httr2::resp_body_string(resp) %>%
-    jsonlite::fromJSON() %>%
-    `[[<-`("message", artificial_warning)
+  mock_response <- list(
+    epidata = list(list(
+      source = "jhu-csse", signal = "confirmed_7dav_incidence_prop",
+      geo_type = "state", time_type = "day", geo_value = "ca",
+      time_value = 20200601L, issue = 20200602L, lag = 1L,
+      value = 1.5, stderr = 0.1, sample_size = 100.0,
+      direction = 1.0, missing_value = 0L, missing_stderr = 0L,
+      missing_sample_size = 0L
+    )),
+    result = 1,
+    message = artificial_warning
+  )
 
   with_mocked_response(
-    as.character(jsonlite::toJSON(debug_triplet)),
+    as.character(jsonlite::toJSON(mock_response, auto_unbox = TRUE)),
     expect_warning(epidata_call %>% fetch(),
       regexp = paste0("epidata warning: `", artificial_warning, "`"),
       fixed = TRUE
@@ -117,9 +106,22 @@ test_that("fetch non-classic passes along api warnings", {
 })
 
 test_that("fetch classic works", {
+  # pub_delphi uses the classic (non-tabular) response path; verify the return is a list.
+  mock_classic <- list(
+    epidata = list(list(
+      epiweek = 201501,
+      forecast = list(
+        `_version` = 1,
+        baselines = list(nat = 2.0),
+        data = list()
+      )
+    )),
+    result = 1,
+    message = "success"
+  )
+
   with_mocked_response(
-    testthat::test_path("data/test-classic-only.rds"),
-    # pub_delphi calls request_epidata directly; make sure the return is a list
+    as.character(jsonlite::toJSON(mock_classic, auto_unbox = TRUE)),
     fetch_out <- pub_delphi(system = "ec", epiweek = 201501)
   )
   expect_true(inherits(fetch_out, "list"))

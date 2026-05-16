@@ -1,43 +1,28 @@
-# Extract the body string from a saved test data object (httr response or httr2 response).
-mock_body_string <- function(obj) {
-  httr2::resp_body_string(to_httr2_response(obj), encoding = "UTF-8")
-}
-
+# Convert a raw JSON/CSV string (or pass-through an existing httr2_response)
+# into an httr2_response object suitable for mocking req_perform.
 to_httr2_response <- function(obj) {
   if (inherits(obj, "httr2_response")) {
     return(obj)
   }
-
-  # Default structure for httr2_response
-  new_obj <- list(
-    method = "GET",
-    url = "https://example.com/mocked",
-    status_code = 200L,
-    headers = list("content-type" = "application/json"),
-    body = raw(0),
-    cache = new.env(parent = emptyenv())
-  )
-
-  if (inherits(obj, "response")) { # httr response
-    new_obj$url <- obj$url
-    new_obj$status_code <- as.integer(obj$status_code)
-    new_obj$headers <- as.list(obj$headers)
-    new_obj$body <- obj$content
-  } else if (is.character(obj) && length(obj) == 1) { # Raw JSON string
-    new_obj$body <- charToRaw(obj)
-  } else {
+  if (!(is.character(obj) && length(obj) == 1)) {
     stop("Unknown mock object type: ", class(obj)[1])
   }
-
-  structure(new_obj, class = "httr2_response")
+  structure(
+    list(
+      method = "GET",
+      url = "https://example.com/mocked",
+      status_code = 200L,
+      headers = list("content-type" = "application/json"),
+      body = charToRaw(obj),
+      cache = new.env(parent = emptyenv())
+    ),
+    class = "httr2_response"
+  )
 }
 
 # Mock httr2::req_perform to return a fixed response. `response` can be an
-# httr2_response, a raw JSON/CSV string, or a path to an .rds fixture.
+# httr2_response (built via create_mock_response) or a raw JSON/CSV string.
 with_mocked_response <- function(response, code) {
-  if (is.character(response) && length(response) == 1 && file.exists(response)) {
-    response <- readRDS(response)
-  }
   resp <- to_httr2_response(response)
   testthat::local_mocked_bindings(
     req_perform = function(req, ...) resp,
