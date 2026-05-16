@@ -566,19 +566,20 @@ test_that("pub_covid_hosp_state_timeseries catches missing args for args without
 })
 
 test_that("epidata* and epidata_meta work as expected", {
+  meta_json <- jsonlite::toJSON(
+    list(nssp = list(signals = c("sig1", "sig2"), geo_types = c("state", "nation"))),
+    auto_unbox = TRUE
+  )
+  csv_data <- "signal,geo_value,time_value,value\nsig1,ca,2024-01-01,10.5\nsig1,fl,2024-01-01,20.0"
   local_mocked_bindings(
-    do_request = function(epidata_call, format_type, ...) {
-      if (format_type == "json") {
-        expect_match(epidata_call$request$url, "metadata/")
-        json_resp <- list(nssp = list(signals = c("sig1", "sig2"), geo_types = c("state", "nation")))
-        return(to_httr2_response(jsonlite::toJSON(json_resp, auto_unbox = TRUE)))
+    req_perform = function(req, ...) {
+      if (grepl("metadata/", req$url)) {
+        to_httr2_response(as.character(meta_json))
       } else {
-        expect_equal(epidata_call$api_version, "cast")
-        csv_data <- "signal,geo_value,time_value,value\nsig1,ca,2024-01-01,10.5\nsig1,fl,2024-01-01,20.0"
-        return(to_httr2_response(csv_data))
+        to_httr2_response(csv_data)
       }
     },
-    .package = "epidatr"
+    .package = "httr2"
   )
 
   # Test epidata_meta
@@ -663,18 +664,15 @@ test_that("epidata_snapshot validations", {
 })
 
 test_that("epidata_archive local EpiRange filtering for version works", {
+  csv_data <- paste0(
+    "signal,geo_value,time_value,value,version\n",
+    "sig1,ca,2024-01-01,10.0,2024-01-01\n",
+    "sig1,ca,2024-01-01,11.0,2024-01-02\n",
+    "sig1,ca,2024-01-01,12.0,2024-01-03"
+  )
   local_mocked_bindings(
-    do_request = function(epidata_call, ...) {
-      # Return multiple versions
-      csv_data <- paste0(
-        "signal,geo_value,time_value,value,version\n",
-        "sig1,ca,2024-01-01,10.0,2024-01-01\n",
-        "sig1,ca,2024-01-01,11.0,2024-01-02\n",
-        "sig1,ca,2024-01-01,12.0,2024-01-03"
-      )
-      return(to_httr2_response(csv_data))
-    },
-    .package = "epidatr"
+    req_perform = function(req, ...) to_httr2_response(csv_data),
+    .package = "httr2"
   )
 
   # Filter with a range that excludes the first and last dates

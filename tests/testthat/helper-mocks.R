@@ -32,6 +32,32 @@ to_httr2_response <- function(obj) {
   structure(new_obj, class = "httr2_response")
 }
 
+# Mock httr2::req_perform to return a fixed response. `response` can be an
+# httr2_response, a raw JSON/CSV string, or a path to an .rds fixture.
+with_mocked_response <- function(response, code) {
+  if (is.character(response) && length(response) == 1 && file.exists(response)) {
+    response <- readRDS(response)
+  }
+  resp <- to_httr2_response(response)
+  testthat::local_mocked_bindings(
+    req_perform = function(req, ...) resp,
+    .package = "httr2",
+    .env = parent.frame()
+  )
+  force(code)
+}
+
+# Mock httr2::req_perform with a handler that receives the outgoing request,
+# letting tests assert on URL/headers/body and vary the response per call.
+with_mock_perform <- function(handler, code) {
+  testthat::local_mocked_bindings(
+    req_perform = function(req, ...) to_httr2_response(handler(req)),
+    .package = "httr2",
+    .env = parent.frame()
+  )
+  force(code)
+}
+
 create_mock_response <- function(body,
                                  status_code = 200L,
                                  headers = list("content-type" = "application/json"),

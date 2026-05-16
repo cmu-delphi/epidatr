@@ -57,18 +57,19 @@ test_that("cache saves & loads", {
     as_of = "2022-01-01",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
-  httr_content_called_count <- 0
+  perform_count <- 0
+  fixture <- to_httr2_response(readRDS(testthat::test_path("data/test-classic.rds")))
   local_mocked_bindings(
-    do_request = function(...) {
-      httr_content_called_count <<- httr_content_called_count + 1
-      to_httr2_response(readRDS(testthat::test_path("data/test-classic.rds")))
+    req_perform = function(req, ...) {
+      perform_count <<- perform_count + 1
+      fixture
     },
-    .package = "epidatr"
+    .package = "httr2"
   )
 
   first_call <- epidata_call %>% fetch()
   cache_call <- epidata_call %>% fetch()
-  expect_equal(httr_content_called_count, 1)
+  expect_equal(perform_count, 1)
   expect_equal(first_call, cache_call)
 
   # and compare directly with the file saved
@@ -81,12 +82,10 @@ test_that("cache saves & loads", {
 
   # Test the empty return branch
   expect_message(clear_cache())
+  empty_fixture <- to_httr2_response('{"epidata":[],"result":-2,"message":"no results"}')
   local_mocked_bindings(
-    do_request = function(...) {
-      httr_content_called_count <<- httr_content_called_count + 1
-      to_httr2_response('{"epidata":[],"result":-2,"message":"no results"}')
-    },
-    .package = "epidatr"
+    req_perform = function(req, ...) empty_fixture,
+    .package = "httr2"
   )
   expect_warning(empty_call <- epidata_call %>% fetch())
   expect_equal(empty_call, tibble())
