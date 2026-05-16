@@ -2,10 +2,12 @@
 # Use it to make sure that every endpoint returns non-trivial data.
 skip_on_cran()
 skip_if_not(curl::has_internet())
-# Generally we skip this. Run it manually.
-skip()
 
 auth <- Sys.getenv("DELPHI_EPIDATA_KEY")
+if (auth == "") {
+  warning("DELPHI_EPIDATA_KEY not set; skipping live endpoint tests")
+  skip("DELPHI_EPIDATA_KEY not set")
+}
 
 test_that("pvt_cdc", {
   result <- pvt_cdc(

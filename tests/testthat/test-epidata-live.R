@@ -2,11 +2,14 @@
 # provided in cast_sources.
 skip_on_cran()
 skip_if_not(curl::has_internet())
-# Generally we skip this. Run it manually.
-skip()
+
+auth <- Sys.getenv("DELPHI_EPIDATA_KEY")
+if (auth == "") {
+  warning("DELPHI_EPIDATA_KEY not set; skipping live endpoint tests")
+  skip("DELPHI_EPIDATA_KEY not set")
+}
 
 cast_sources <- c("nssp", "nhsn", "pophive", "nwss")
-
 
 for (source in cast_sources) {
   test_that(sprintf("test `epidata_meta` for source =%s", source), {
