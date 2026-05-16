@@ -6,6 +6,10 @@ format:
 	Rscript -e "styler::style_pkg()"
 test:
 	Rscript -e "devtools::test()"
+coverage:
+	Rscript -e "print(covr::package_coverage())"
+coverage-report:
+	Rscript -e "covr::report()"
 document:
 	Rscript -e "devtools::document()"
 build: document

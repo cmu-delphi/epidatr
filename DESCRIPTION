@@ -51,6 +51,7 @@ Imports:
     lifecycle,
     xml2
 Suggests:
+    covr,
     dplyr,
     ggplot2,
     knitr,
