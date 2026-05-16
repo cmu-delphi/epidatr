@@ -265,3 +265,154 @@ test_that("pub_cast_meta", {
   )
   expect_gt(length(result), 0)
 })
+
+# Wildcard ("*") inputs across endpoints. Originally URL-substring checks; kept
+# here so they can be promoted to real network calls as we iterate on the live
+# harness. The expand-to-epirange behavior itself is covered by unit tests in
+# test-utils.R (get_wildcard_equivalent_dates) and test-model.R (reformat_epirange).
+test_that("endpoints accept wildcard for date parameter", {
+  expect_no_error(call <- pvt_cdc(
+    auth = "yourkey", "fl,ca", "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pub_covid_hosp_facility(
+    hospital_pks = "100075", collection_weeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "collection_weeks=10000101-30000101")
+
+  expect_no_error(call <- pub_covid_hosp_state_timeseries(
+    states = "fl", dates = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "dates=10000101-30000101")
+
+  expect_no_error(call <- pub_covidcast(
+    source = "jhu-csse", signals = "confirmed_7dav_incidence_prop",
+    time_type = "day", geo_type = "state", time_values = "*", geo_values = "ca,fl",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "time_values=%2A")
+
+  expect_no_error(call <- pub_dengue_nowcast(
+    locations = "ca", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pvt_dengue_sensors(
+    auth = "yourkey", names = "ght", locations = "ag", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pub_ecdc_ili(
+    regions = "austria", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pub_flusurv(
+    locations = "CA", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pub_fluview_clinical(
+    regions = "nat", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pub_fluview(
+    regions = "nat", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pub_gft(
+    locations = "hhs1", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pvt_ght(
+    auth = "yourkey", locations = "ca", epiweeks = "*", query = "how to get over the flu",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pub_kcdc_ili(
+    regions = "ROK", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pub_nidss_dengue(
+    locations = "taipei", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pub_nidss_flu(
+    regions = "taipei", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pvt_norostat(
+    auth = "yourkey", locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pub_nowcast(
+    locations = "ca", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pub_paho_dengue(
+    regions = "ca", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pvt_quidel(
+    auth = "yourkey", locations = "hhs1", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pvt_sensors(
+    auth = "yourkey", names = "sar3", locations = "nat", epiweeks = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pvt_twitter(
+    auth = "yourkey", locations = "CA", time_type = "week", time_values = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pvt_twitter(
+    auth = "yourkey", locations = "CA", time_type = "day", time_values = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "dates=10000101-30000101")
+
+  expect_no_error(call <- pub_wiki(
+    articles = "avian_influenza", time_type = "week", time_values = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "epiweeks=100001-300001")
+
+  expect_no_error(call <- pub_wiki(
+    articles = "avian_influenza", time_type = "day", time_values = "*",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  ))
+  expect_match(call$request$url, "dates=10000101-30000101")
+})
