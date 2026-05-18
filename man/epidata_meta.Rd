@@ -17,8 +17,8 @@ list
 }
 \description{
 \code{epidata_meta} returns source-level metadata from the cast-API,
-including version ranges, time value ranges, and lists of available signals
-and geo types.
+including \code{report_date} ranges, \code{reference_date} ranges, and lists of
+available signals and geo types.
 }
 \seealso{
 \code{\link[=epidata_snapshot]{epidata_snapshot()}}, \code{\link[=epidata_archive]{epidata_archive()}}, \code{\link[=epidata]{epidata()}}, \code{\link[=epirange]{epirange()}}

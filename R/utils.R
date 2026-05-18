@@ -80,7 +80,7 @@ filter_by_timeset <- function(df, column, timeset) {
 }
 
 #' @keywords internal
-.cast_filter <- function(res, geo_values, time_values, parsed_time_values, version = NULL) {
+.cast_filter <- function(res, geo_values, reference_date, parsed_reference_dates, report_date = NULL) {
   if (!inherits(res, "data.frame")) {
     return(res)
   }
@@ -88,12 +88,12 @@ filter_by_timeset <- function(df, column, timeset) {
     actual_geo_values <- tolower(trimws(unlist(strsplit(geo_values, ","))))
     res <- res[res$geo_value %in% actual_geo_values, ]
   }
-  if (!identical(time_values, "*")) {
-    res <- filter_by_timeset(res, "time_value", parsed_time_values)
+  if (!identical(reference_date, "*")) {
+    res <- filter_by_timeset(res, "reference_date", parsed_reference_dates)
   }
   # EpiRange lower bound filter (upper bound handled by validate_version_query)
-  if (inherits(version, "EpiRange") && "version" %in% names(res)) {
-    res <- filter_by_timeset(res, "version", version)
+  if (inherits(report_date, "EpiRange") && "report_date" %in% names(res)) {
+    res <- filter_by_timeset(res, "report_date", report_date)
   }
   res
 }

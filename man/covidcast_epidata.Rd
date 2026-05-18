@@ -26,21 +26,6 @@ The \code{covidcast_epidata()} function fetches a list of all signals, and retur
 an object containing fields for every signal:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata <- covidcast_epidata()
-#> Waiting 4s for retry backoff =======>-----------------------
-#> Waiting 4s for retry backoff =========>---------------------
-#> Waiting 4s for retry backoff ==========>--------------------
-#> Waiting 4s for retry backoff ============>------------------
-#> Waiting 4s for retry backoff =============>-----------------
-#> Waiting 4s for retry backoff ===============>---------------
-#> Waiting 4s for retry backoff =================>-------------
-#> Waiting 4s for retry backoff ==================>------------
-#> Waiting 4s for retry backoff ====================>----------
-#> Waiting 4s for retry backoff =====================>---------
-#> Waiting 4s for retry backoff =======================>-------
-#> Waiting 4s for retry backoff =========================>-----
-#> Waiting 4s for retry backoff ==========================>----
-#> Waiting 4s for retry backoff ============================>--
-#> Waiting 4s for retry backoff ==============================>
 epidata$signals
 #> # A tibble: 520 x 3
 #>    source        signal                        short_description                
@@ -75,9 +60,6 @@ the \code{pub_covidcast()} function. Simply use the \verb{$call} attribute of th
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa",
                                               epirange(20210405, 20210410))
-#> Waiting 3s for retry backoff =============>-----------------
-#> Waiting 3s for retry backoff ============================>--
-#> Waiting 3s for retry backoff =============================>-
 #> # A tibble: 6 x 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     
 #>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    

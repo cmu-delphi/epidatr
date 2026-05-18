@@ -119,7 +119,7 @@ test_that("epidata* and epidata_meta work as expected", {
     list(nssp = list(signals = c("sig1", "sig2"), geo_types = c("state", "nation"))),
     auto_unbox = TRUE
   )
-  csv_data <- "signal,geo_value,time_value,value\nsig1,ca,2024-01-01,10.5\nsig1,fl,2024-01-01,20.0"
+  csv_data <- "signal,geo_value,reference_date,value\nsig1,ca,2024-01-01,10.5\nsig1,fl,2024-01-01,20.0"
   local_mocked_bindings(
     req_perform = function(req, ...) {
       if (grepl("metadata/", req$url)) {
@@ -147,25 +147,25 @@ test_that("epidata* and epidata_meta work as expected", {
 
   res_time_filtered <- epidata_snapshot(
     source = "nssp", signals = "sig1", geo_type = "state",
-    time_values = as.Date("2024-01-01")
+    reference_date = as.Date("2024-01-01")
   )
   expect_equal(nrow(res_time_filtered), 2)
 
-  # Test EpiRange mapping in version
+  # Test EpiRange mapping in report_date
   res_range <- epidata_archive(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
-    version = epirange("2024-01-01", "2024-01-05")
+    report_date = epirange("2024-01-01", "2024-01-05")
   )
   expect_s3_class(res_range, "tbl_df")
 
-  # Test version = "*" mapping in epidata
+  # Test report_date = "*" mapping in epidata
   call_wildcard <- epidata(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
-    version = "*",
+    report_date = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_match(call_wildcard$request$url, "archive/")
@@ -182,12 +182,12 @@ test_that("epidata* and epidata_meta work as expected", {
   expect_match(call_as_of_wildcard$request$url, "archive/")
   expect_no_match(call_as_of_wildcard$request$url, "snapshot_date=")
 
-  # Test time_values = epirange(...) mapping in epidata_snapshot
+  # Test reference_date = epirange(...) mapping in epidata_snapshot
   res_time_range <- epidata_snapshot(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
-    time_values = epirange("2024-01-01", "2024-01-01")
+    reference_date = epirange("2024-01-01", "2024-01-01")
   )
   expect_equal(nrow(res_time_range), 2)
 })
@@ -199,22 +199,22 @@ test_that("epidata_snapshot validations", {
     class = "epidatr__epidata__missing_required_args"
   )
 
-  # Mutually exclusive as_of and version
+  # Mutually exclusive as_of and report_date
   expect_error(
     epidata(
       source = "nssp",
       signals = "sig1",
       geo_type = "state",
       as_of = "2024-01-01",
-      version = "<2024-01-01"
+      report_date = "<2024-01-01"
     ),
     class = "epidatr__epidata__version_and_as_of_exclusive"
   )
 })
 
-test_that("epidata_archive local EpiRange filtering for version works", {
+test_that("epidata_archive local EpiRange filtering for report_date works", {
   csv_data <- paste0(
-    "signal,geo_value,time_value,value,version\n",
+    "signal,geo_value,reference_date,value,report_date\n",
     "sig1,ca,2024-01-01,10.0,2024-01-01\n",
     "sig1,ca,2024-01-01,11.0,2024-01-02\n",
     "sig1,ca,2024-01-01,12.0,2024-01-03"
@@ -229,18 +229,18 @@ test_that("epidata_archive local EpiRange filtering for version works", {
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
-    version = epirange("2024-01-02", "2024-01-02")
+    report_date = epirange("2024-01-02", "2024-01-02")
   )
   expect_equal(nrow(res), 1)
-  expect_equal(as.character(res$version), "2024-01-02")
+  expect_equal(as.character(res$report_date), "2024-01-02")
 
   # Filter with a wider range
   res_wide <- epidata_archive(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
-    version = epirange("2024-01-01", "2024-01-02")
+    report_date = epirange("2024-01-01", "2024-01-02")
   )
   expect_equal(nrow(res_wide), 2)
-  expect_true(all(res_wide$version %in% as.Date(c("2024-01-01", "2024-01-02"))))
+  expect_true(all(res_wide$report_date %in% as.Date(c("2024-01-01", "2024-01-02"))))
 })
