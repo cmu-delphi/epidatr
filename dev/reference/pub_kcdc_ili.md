@@ -50,7 +50,7 @@ pub_kcdc_ili(
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
   See
@@ -86,9 +86,8 @@ for details and more ways to specify versioned data.
 ## Examples
 
 ``` r
+
 pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■■                   
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
 #> # A tibble: 1 × 6
 #>   release_date region issue      epiweek      lag   ili
 #>   <date>       <chr>  <date>     <date>     <dbl> <dbl>

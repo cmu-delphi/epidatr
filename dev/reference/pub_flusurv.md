@@ -55,7 +55,7 @@ pub_flusurv(
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
   See
@@ -96,6 +96,7 @@ for details and more ways to specify versioned data.
 ## Examples
 
 ``` r
+
 pub_flusurv(locations = "ca", epiweeks = epirange(201701, 201801))
 #> # A tibble: 31 × 34
 #>    release_date location season  issue      epiweek      lag rate_age_0

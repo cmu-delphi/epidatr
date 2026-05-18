@@ -52,7 +52,7 @@ pub_covid_hosp_state_timeseries(
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
   See
@@ -93,12 +93,11 @@ for details and more ways to specify versioned data.
 ## Examples
 
 ``` r
+
 pub_covid_hosp_state_timeseries(
   states = "fl",
   dates = epirange(20200101, 20200501)
 )
-#> Waiting 4s for retry backoff ■■■■■■■■■■                      
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 51 × 118
 #>    state geocoded_state issue      date       critical_staffing_shortage_today…¹
 #>    <chr> <lgl>          <date>     <date>     <lgl>                             

@@ -26,6 +26,7 @@ are available for, and when they have been updated.
 
 | Endpoint             | Description                         |
 |:---------------------|:------------------------------------|
+| epidata_meta()       | Get cast-API source metadata        |
 | pub_covidcast_meta() | Metadata for the COVIDcast endpoint |
 | pub_fluview_meta()   | Metadata for the FluView endpoint   |
 | pub_meta()           | Metadata for the Delphi Epidata API |
@@ -44,39 +45,42 @@ outputs a `tibble` of endpoints and brief descriptions, which explicitly
 state when they cover non-US locations:
 
 ``` r
+
 avail_endpoints()
 ```
 
-| Endpoint                          | Description                                                        |
-|:----------------------------------|:-------------------------------------------------------------------|
-| pub_covid_hosp_facility()         | COVID hospitalizations by facility                                 |
-| pub_covid_hosp_facility_lookup()  | Helper for finding COVID hospitalization facilities                |
-| pub_covid_hosp_state_timeseries() | COVID hospitalizations by state                                    |
-| pub_covidcast()                   | Various COVID and flu signals via the COVIDcast endpoint           |
-| pub_covidcast_meta()              | Metadata for the COVIDcast endpoint                                |
-| pub_delphi()                      | Delphi’s ILINet outpatient doctor visits forecasts                 |
-| pub_dengue_nowcast()              | Delphi’s PAHO dengue nowcasts (North and South America)            |
-| pub_ecdc_ili()                    | ECDC ILI incidence (Europe)                                        |
-| pub_flusurv()                     | CDC FluSurv flu hospitalizations                                   |
-| pub_fluview()                     | CDC FluView ILINet outpatient doctor visits                        |
-| pub_fluview_clinical()            | CDC FluView flu tests from clinical labs                           |
-| pub_fluview_meta()                | Metadata for the FluView endpoint                                  |
-| pub_gft()                         | Google Flu Trends flu search volume                                |
-| pub_kcdc_ili()                    | KCDC ILI incidence (Korea)                                         |
-| pub_meta()                        | Metadata for the Delphi Epidata API                                |
-| pub_nidss_dengue()                | NIDSS dengue cases (Taiwan)                                        |
-| pub_nidss_flu()                   | NIDSS flu doctor visits (Taiwan)                                   |
-| pub_nowcast()                     | Delphi’s ILI Nearby nowcasts                                       |
-| pub_paho_dengue()                 | PAHO dengue data (North and South America)                         |
-| pub_wiki()                        | Wikipedia webpage counts by article                                |
-| pvt_cdc()                         | CDC total and by topic webpage visits                              |
-| pvt_dengue_sensors()              | PAHO dengue digital surveillance sensors (North and South America) |
-| pvt_ght()                         | Google Health Trends health topics search volume                   |
-| pvt_meta_norostat()               | Metadata for the NoroSTAT endpoint                                 |
-| pvt_norostat()                    | CDC NoroSTAT norovirus outbreaks                                   |
-| pvt_quidel()                      | Quidel COVID-19 and influenza testing data                         |
-| pvt_sensors()                     | Influenza and dengue digital surveillance sensors                  |
-| pvt_twitter()                     | HealthTweets total and influenza-related tweets                    |
+| Endpoint | Description |
+|:---|:---|
+| cast_api_queries() | cast-API snapshot and archive queries |
+| epidata_meta() | Get cast-API source metadata |
+| pub_covid_hosp_facility() | COVID hospitalizations by facility |
+| pub_covid_hosp_facility_lookup() | Helper for finding COVID hospitalization facilities |
+| pub_covid_hosp_state_timeseries() | COVID hospitalizations by state |
+| pub_covidcast() | Various COVID and flu signals via the COVIDcast endpoint |
+| pub_covidcast_meta() | Metadata for the COVIDcast endpoint |
+| pub_delphi() | Delphi’s ILINet outpatient doctor visits forecasts |
+| pub_dengue_nowcast() | Delphi’s PAHO dengue nowcasts (North and South America) |
+| pub_ecdc_ili() | ECDC ILI incidence (Europe) |
+| pub_flusurv() | CDC FluSurv flu hospitalizations |
+| pub_fluview() | CDC FluView ILINet outpatient doctor visits |
+| pub_fluview_clinical() | CDC FluView flu tests from clinical labs |
+| pub_fluview_meta() | Metadata for the FluView endpoint |
+| pub_gft() | Google Flu Trends flu search volume |
+| pub_kcdc_ili() | KCDC ILI incidence (Korea) |
+| pub_meta() | Metadata for the Delphi Epidata API |
+| pub_nidss_dengue() | NIDSS dengue cases (Taiwan) |
+| pub_nidss_flu() | NIDSS flu doctor visits (Taiwan) |
+| pub_nowcast() | Delphi’s ILI Nearby nowcasts |
+| pub_paho_dengue() | PAHO dengue data (North and South America) |
+| pub_wiki() | Wikipedia webpage counts by article |
+| pvt_cdc() | CDC total and by topic webpage visits |
+| pvt_dengue_sensors() | PAHO dengue digital surveillance sensors (North and South America) |
+| pvt_ght() | Google Health Trends health topics search volume |
+| pvt_meta_norostat() | Metadata for the NoroSTAT endpoint |
+| pvt_norostat() | CDC NoroSTAT norovirus outbreaks |
+| pvt_quidel() | Quidel COVID-19 and influenza testing data |
+| pvt_sensors() | Influenza and dengue digital surveillance sensors |
+| pvt_twitter() | HealthTweets total and influenza-related tweets |
 
 The
 [`covidcast_epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/covidcast_epidata.md)
@@ -85,10 +89,8 @@ through the COVIDcast endpoint. The function describes all available
 data sources and signals:
 
 ``` r
+
 covid_sources <- covidcast_epidata()
-#> Waiting 4s for retry backoff ■■■■■■■■■                       
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■     
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 head(covid_sources$sources, n = 2)
 #> $chng
 #> [1] "Change Healthcare"
@@ -122,6 +124,7 @@ If you use an editor that supports tab completion, such as RStudio, type
 be able to browse the list of data sources.
 
 ``` r
+
 covid_sources$signals
 #> # A tibble: 520 × 3
 #>   source signal                        short_description                        
@@ -144,6 +147,7 @@ convenience.
 rely on the backtick operator:
 
 ``` r
+
 covid_sources$signals$`fb-survey:smoothed_cli`
 #> [1] "COVID-Like Symptoms (Unweighted 7-day average)"
 #> [1] "fb-survey:smoothed_cli"
@@ -156,20 +160,21 @@ requiring us to use the
 function. Simply use the `$call` attribute of the object:
 
 ``` r
+
 epidata <- covid_sources$signals$`fb-survey:smoothed_cli`$call(
   "state", "pa", epirange(20210405, 20210410)
 )
 knitr::kable(epidata)
 ```
 
-| geo_value | signal       | source    | geo_type | time_type | time_value | direction | issue      | lag | missing_value | missing_stderr | missing_sample_size |     value |    stderr | sample_size |
-|:----------|:-------------|:----------|:---------|:----------|:-----------|----------:|:-----------|----:|--------------:|---------------:|--------------------:|----------:|----------:|------------:|
-| pa        | smoothed_cli | fb-survey | state    | day       | 2021-04-05 |        NA | 2021-04-10 |   5 |             0 |              0 |                   0 | 0.7157576 | 0.0729992 |    10894.01 |
-| pa        | smoothed_cli | fb-survey | state    | day       | 2021-04-06 |        NA | 2021-04-11 |   5 |             0 |              0 |                   0 | 0.6932097 | 0.0708692 |    10862.01 |
-| pa        | smoothed_cli | fb-survey | state    | day       | 2021-04-07 |        NA | 2021-04-12 |   5 |             0 |              0 |                   0 | 0.6859343 | 0.0706536 |    10790.01 |
-| pa        | smoothed_cli | fb-survey | state    | day       | 2021-04-08 |        NA | 2021-04-13 |   5 |             0 |              0 |                   0 | 0.6815110 | 0.0713939 |    10731.00 |
-| pa        | smoothed_cli | fb-survey | state    | day       | 2021-04-09 |        NA | 2021-04-14 |   5 |             0 |              0 |                   0 | 0.7094162 | 0.0721616 |    10590.00 |
-| pa        | smoothed_cli | fb-survey | state    | day       | 2021-04-10 |        NA | 2021-04-15 |   5 |             0 |              0 |                   0 | 0.7762399 | 0.0760370 |    10492.01 |
+| geo_value | signal | source | geo_type | time_type | time_value | direction | issue | lag | missing_value | missing_stderr | missing_sample_size | value | stderr | sample_size |
+|:---|:---|:---|:---|:---|:---|---:|:---|---:|---:|---:|---:|---:|---:|---:|
+| pa | smoothed_cli | fb-survey | state | day | 2021-04-05 | NA | 2021-04-10 | 5 | 0 | 0 | 0 | 0.7157576 | 0.0729992 | 10894.01 |
+| pa | smoothed_cli | fb-survey | state | day | 2021-04-06 | NA | 2021-04-11 | 5 | 0 | 0 | 0 | 0.6932097 | 0.0708692 | 10862.01 |
+| pa | smoothed_cli | fb-survey | state | day | 2021-04-07 | NA | 2021-04-12 | 5 | 0 | 0 | 0 | 0.6859343 | 0.0706536 | 10790.01 |
+| pa | smoothed_cli | fb-survey | state | day | 2021-04-08 | NA | 2021-04-13 | 5 | 0 | 0 | 0 | 0.6815110 | 0.0713939 | 10731.00 |
+| pa | smoothed_cli | fb-survey | state | day | 2021-04-09 | NA | 2021-04-14 | 5 | 0 | 0 | 0 | 0.7094162 | 0.0721616 | 10590.00 |
+| pa | smoothed_cli | fb-survey | state | day | 2021-04-10 | NA | 2021-04-15 | 5 | 0 | 0 | 0 | 0.7762399 | 0.0760370 | 10492.01 |
 
 ## Example Queries
 
@@ -185,6 +190,7 @@ and are discussed in the API docs
 The example below is for Orange County, California.
 
 ``` r
+
 pub_covidcast(
   source = "fb-survey",
   signals = "smoothed_accept_covid_vaccine",
@@ -193,8 +199,6 @@ pub_covidcast(
   time_values = epirange(20201221, 20201225),
   geo_values = "06059"
 )
-#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■                 
-#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 5 × 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     
 #>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
@@ -210,6 +214,7 @@ pub_covidcast(
 The `covidcast` endpoint supports `*` in its time and geo fields:
 
 ``` r
+
 pub_covidcast(
   source = "fb-survey",
   signals = "smoothed_accept_covid_vaccine",
@@ -218,8 +223,6 @@ pub_covidcast(
   time_values = epirange(20201221, 20201225),
   geo_values = "*"
 )
-#> Waiting 4s for retry backoff ■■■■■■■■■                       
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 2,025 × 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     
 #>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
@@ -240,6 +243,7 @@ API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html>
 
 ``` r
+
 pub_covid_hosp_facility_lookup(city = "southlake")
 pub_covid_hosp_facility_lookup(state = "WY")
 # A non-example (there is no city called New York in Wyoming)
@@ -252,6 +256,7 @@ API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
 
 ``` r
+
 pub_covid_hosp_facility(
   hospital_pks = "100075",
   collection_weeks = epirange(20200101, 20200501)
@@ -264,6 +269,7 @@ API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>
 
 ``` r
+
 pub_covid_hosp_state_timeseries(states = "MA", dates = "20200510")
 ```
 
@@ -274,6 +280,7 @@ pub_covid_hosp_state_timeseries(states = "MA", dates = "20200510")
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/delphi.html>
 
 ``` r
+
 del <- pub_delphi(system = "ec", epiweek = 201501)
 names(del[[1L]]$forecast)
 ```
@@ -283,6 +290,7 @@ names(del[[1L]]$forecast)
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>
 
 ``` r
+
 pub_flusurv(locations = "ca", epiweeks = 202001)
 ```
 
@@ -291,6 +299,7 @@ pub_flusurv(locations = "ca", epiweeks = 202001)
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>
 
 ``` r
+
 pub_fluview(regions = "nat", epiweeks = epirange(201201, 202001))
 ```
 
@@ -300,6 +309,7 @@ API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html>
 
 ``` r
+
 pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
 ```
 
@@ -309,6 +319,7 @@ API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
 
 ``` r
+
 pub_fluview_meta()
 ```
 
@@ -317,6 +328,7 @@ pub_fluview_meta()
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/gft.html>
 
 ``` r
+
 pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
 ```
 
@@ -326,6 +338,7 @@ API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>
 
 ``` r
+
 pub_ecdc_ili(regions = "Armenia", epiweeks = 201840)
 ```
 
@@ -335,6 +348,7 @@ API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html>
 
 ``` r
+
 pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
 ```
 
@@ -344,6 +358,7 @@ API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
 
 ``` r
+
 pub_nidss_flu(regions = "taipei", epiweeks = epirange(200901, 201301))
 ```
 
@@ -352,6 +367,7 @@ pub_nidss_flu(regions = "taipei", epiweeks = epirange(200901, 201301))
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>
 
 ``` r
+
 pub_nowcast(locations = "ca", epiweeks = epirange(202201, 202319))
 ```
 
@@ -363,6 +379,7 @@ API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html>
 
 ``` r
+
 pub_dengue_nowcast(locations = "pr", epiweeks = epirange(201401, 202301))
 ```
 
@@ -372,6 +389,7 @@ API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html>
 
 ``` r
+
 pub_nidss_dengue(locations = "taipei", epiweeks = epirange(200301, 201301))
 ```
 
@@ -381,6 +399,7 @@ API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html>
 
 ``` r
+
 pub_paho_dengue(regions = "ca", epiweeks = epirange(200201, 202319))
 ```
 
@@ -391,6 +410,7 @@ pub_paho_dengue(regions = "ca", epiweeks = epirange(200201, 202319))
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
 
 ``` r
+
 pub_wiki(
   language = "en",
   articles = "influenza",
@@ -413,6 +433,7 @@ Usage of private endpoints
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/cdc.html>
 
 ``` r
+
 pvt_cdc(auth = Sys.getenv("SECRET_API_AUTH_CDC"), epiweeks = epirange(202003, 202304), locations = "ma")
 ```
 
@@ -422,6 +443,7 @@ API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html>
 
 ``` r
+
 pvt_dengue_sensors(
   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
   names = "ght",
@@ -435,6 +457,7 @@ pvt_dengue_sensors(
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
 
 ``` r
+
 pvt_ght(
   auth = Sys.getenv("SECRET_API_AUTH_GHT"),
   epiweeks = epirange(199301, 202304),
@@ -449,6 +472,7 @@ API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html>
 
 ``` r
+
 pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
 ```
 
@@ -458,6 +482,7 @@ API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
 
 ``` r
+
 pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "1", epiweeks = 201233)
 ```
 
@@ -466,6 +491,7 @@ pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "1", epi
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/quidel.html>
 
 ``` r
+
 pvt_quidel(auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"), locations = "hhs1", epiweeks = epirange(200301, 202105))
 ```
 
@@ -474,6 +500,7 @@ pvt_quidel(auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"), locations = "hhs1", epiw
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
 
 ``` r
+
 pvt_sensors(
   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
   names = "sar3",
@@ -487,6 +514,7 @@ pvt_sensors(
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/twitter.html>
 
 ``` r
+
 pvt_twitter(
   auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
   locations = "nat",

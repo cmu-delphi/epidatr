@@ -84,7 +84,7 @@ pub_covidcast(
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
   See
@@ -126,6 +126,7 @@ for details and more ways to specify versioned data.
 ## Examples
 
 ``` r
+
 pub_covidcast(
   source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
@@ -134,9 +135,6 @@ pub_covidcast(
   geo_values = c("ca", "fl"),
   time_values = epirange(20200601, 20200801)
 )
-#> Waiting 3s for retry backoff ■■■■■■■■■■                      
-#> Waiting 3s for retry backoff ■■■■■■■■■■■                     
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 124 × 15
 #>    geo_value signal    source geo_type time_type time_value direction issue     
 #>    <chr>     <chr>     <chr>  <fct>    <fct>     <date>         <dbl> <date>    
@@ -161,9 +159,6 @@ pub_covidcast(
   geo_values = "*",
   time_values = epirange(20200601, 20200801)
 )
-#> Waiting 4s for retry backoff ■■■■■■■■■■                      
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■            
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
 #> # A tibble: 3,472 × 15
 #>    geo_value signal    source geo_type time_type time_value direction issue     
 #>    <chr>     <chr>     <chr>  <fct>    <fct>     <date>         <dbl> <date>    

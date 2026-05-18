@@ -3,6 +3,7 @@
 ## Setting up the development environment
 
 ``` r
+
 pak::pkg_install(c('devtools', 'pkgdown', 'styler', 'lintr')) # install dev dependencies
 devtools::install_deps(dependencies = TRUE) # install package dependencies
 devtools::document() # generate package meta data and man files
@@ -12,6 +13,7 @@ devtools::build() # build package
 ## Validating the package
 
 ``` r
+
 styler::style_pkg() # format code
 lintr::lint_package() # lint code
 
@@ -29,6 +31,7 @@ Our CI builds two version of the documentation:
 The documentation site can be previewed locally by running in R:
 
 ``` r
+
 # Should automatically open a browser
 pkgdown::build_site(preview=TRUE)
 ```

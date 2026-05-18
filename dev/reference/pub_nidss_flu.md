@@ -53,7 +53,7 @@ pub_nidss_flu(
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
   See
@@ -89,9 +89,8 @@ for details and more ways to specify versioned data.
 ## Examples
 
 ``` r
+
 pub_nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601))
-#> Waiting 3s for retry backoff ■■■■■■■■■■■                     
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 53 × 7
 #>    release_date region issue      epiweek      lag visits   ili
 #>    <date>       <chr>  <date>     <date>     <dbl>  <dbl> <dbl>

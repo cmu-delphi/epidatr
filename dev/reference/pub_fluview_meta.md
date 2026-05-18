@@ -13,7 +13,7 @@ pub_fluview_meta(fetch_args = fetch_args_list())
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
   See
@@ -31,12 +31,10 @@ pub_fluview_meta(fetch_args = fetch_args_list())
 ## Examples
 
 ``` r
+
 pub_fluview_meta()
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■                  
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■                 
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 1 × 3
 #>   latest_update latest_issue table_rows
 #>   <date>        <date>            <dbl>
-#> 1 2026-02-06    2026-01-25      2676277
+#> 1 2026-05-15    2026-05-03      2753711
 ```

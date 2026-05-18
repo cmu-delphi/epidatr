@@ -63,7 +63,7 @@ pub_wiki(
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
   See
@@ -77,14 +77,12 @@ pub_wiki(
 ## Examples
 
 ``` r
+
 pub_wiki(
   articles = "avian_influenza",
   time_type = "week",
   time_values = epirange(201501, 201601)
 )
-#> Waiting 4s for retry backoff ■■■■■■■■■                       
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■             
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 53 × 6
 #>    article         count      total  hour epiweek    value
 #>    <chr>           <dbl>      <dbl> <dbl> <date>     <dbl>

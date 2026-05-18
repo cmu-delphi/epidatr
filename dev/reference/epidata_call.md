@@ -10,7 +10,13 @@ few non-COVIDCAST endpoints will return a JSON-like list instead.
 ## Usage
 
 ``` r
-create_epidata_call(endpoint, params, meta = NULL)
+create_epidata_call(
+  endpoint,
+  params,
+  meta = NULL,
+  api_version = c("classic", "cast"),
+  response_format = c("classic", "json", "csv")
+)
 
 fetch(epidata_call, fetch_args = fetch_args_list())
 ```
@@ -28,6 +34,15 @@ fetch(epidata_call, fetch_args = fetch_args_list())
 - meta:
 
   meta data to attach to the epidata call
+
+- api_version:
+
+  string. The API version to use. One of "classic" or "cast".
+
+- response_format:
+
+  string. The expected format of the response. One of "classic", "json",
+  or "csv".
 
 - epidata_call:
 
@@ -68,9 +83,6 @@ call <- pub_covidcast(
   fetch_args = fetch_args_list(dry_run = TRUE)
 )
 call %>% fetch()
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■                    
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■       
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 124 × 15
 #>    geo_value signal    source geo_type time_type time_value direction issue     
 #>    <chr>     <chr>     <chr>  <fct>    <fct>     <date>         <dbl> <date>    

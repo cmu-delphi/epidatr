@@ -10,7 +10,7 @@ for a JSON error response.
 ``` r
 do_request(
   epidata_call,
-  format_type,
+  format_type = c("json", "csv", "classic"),
   timeout_seconds,
   fields,
   http_method = c("GET", "POST")
@@ -41,4 +41,4 @@ do_request(
 
 ## Value
 
-the response body as a string
+an `httr2_response` object

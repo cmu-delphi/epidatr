@@ -28,7 +28,7 @@ pub_gft(locations, epiweeks = "*", fetch_args = fetch_args_list())
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
   See
@@ -51,10 +51,8 @@ and
 ## Examples
 
 ``` r
+
 pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
-#> Waiting 3s for retry backoff ■■■■■■■■■■■                     
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■      
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 189 × 3
 #>    location epiweek      num
 #>    <chr>    <date>     <dbl>

@@ -29,7 +29,7 @@ pub_dengue_nowcast(locations, epiweeks = "*", fetch_args = fetch_args_list())
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
   See
@@ -43,12 +43,11 @@ pub_dengue_nowcast(locations, epiweeks = "*", fetch_args = fetch_args_list())
 ## Examples
 
 ``` r
+
 pub_dengue_nowcast(
   locations = "pr",
   epiweeks = epirange(201401, 202301)
 )
-#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■                 
-#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 320 × 4
 #>    location epiweek    value   std
 #>    <chr>    <date>     <dbl> <dbl>

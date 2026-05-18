@@ -53,7 +53,7 @@ pub_ecdc_ili(
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
   See
@@ -94,6 +94,7 @@ for details and more ways to specify versioned data.
 ## Examples
 
 ``` r
+
 pub_ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001))
 #> # A tibble: 28 × 6
 #>    release_date region  issue      epiweek      lag incidence_rate

@@ -52,7 +52,7 @@ pub_covid_hosp_facility_lookup(
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
   See
@@ -75,9 +75,8 @@ arguments are not currently supported.
 ## Examples
 
 ``` r
+
 pub_covid_hosp_facility_lookup(state = "fl")
-#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■                 
-#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 236 × 10
 #>    hospital_pk state ccn    hospital_name   address city  zip   hospital_subtype
 #>    <chr>       <chr> <chr>  <chr>           <chr>   <chr> <chr> <chr>           

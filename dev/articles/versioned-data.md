@@ -34,6 +34,7 @@ First, we can request the data that was available *as of* a specific
 date, using the `as_of` argument:
 
 ``` r
+
 epidata <- pub_covidcast(
   source = "doctor-visits",
   signals = "smoothed_adj_cli",
@@ -43,20 +44,18 @@ epidata <- pub_covidcast(
   geo_values = "pa",
   as_of = "2020-05-07"
 )
-#> Waiting 4s for retry backoff ■■■■■■■■■                       
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■    
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
 knitr::kable(epidata)
 ```
 
-| geo_value | signal           | source        | geo_type | time_type | time_value | direction | issue      | lag | missing_value | missing_stderr | missing_sample_size |    value | stderr | sample_size |
-|:----------|:-----------------|:--------------|:---------|:----------|:-----------|----------:|:-----------|----:|--------------:|---------------:|--------------------:|---------:|-------:|------------:|
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-01 |        NA | 2020-05-07 |   6 |             0 |              5 |                   5 | 2.581509 |     NA |          NA |
+| geo_value | signal | source | geo_type | time_type | time_value | direction | issue | lag | missing_value | missing_stderr | missing_sample_size | value | stderr | sample_size |
+|:---|:---|:---|:---|:---|:---|---:|:---|---:|---:|---:|---:|---:|---:|---:|
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-01 | NA | 2020-05-07 | 6 | 0 | 5 | 5 | 2.581509 | NA | NA |
 
 This shows that an estimate of about 2.3% was issued on May 7. If we
 don’t specify `as_of`, we get the most recent estimate available:
 
 ``` r
+
 epidata <- pub_covidcast(
   source = "doctor-visits",
   signals = "smoothed_adj_cli",
@@ -68,9 +67,9 @@ epidata <- pub_covidcast(
 knitr::kable(epidata)
 ```
 
-| geo_value | signal           | source        | geo_type | time_type | time_value | direction | issue      | lag | missing_value | missing_stderr | missing_sample_size |    value | stderr | sample_size |
-|:----------|:-----------------|:--------------|:---------|:----------|:-----------|----------:|:-----------|----:|--------------:|---------------:|--------------------:|---------:|-------:|------------:|
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-01 |        NA | 2020-07-04 |  64 |             0 |              5 |                   5 | 5.973572 |     NA |          NA |
+| geo_value | signal | source | geo_type | time_type | time_value | direction | issue | lag | missing_value | missing_stderr | missing_sample_size | value | stderr | sample_size |
+|:---|:---|:---|:---|:---|:---|---:|:---|---:|---:|---:|---:|---:|---:|---:|
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-01 | NA | 2020-07-04 | 64 | 0 | 5 | 5 | 5.973572 | NA | NA |
 
 Note the substantial change in the estimate, from less than 3% to almost
 6%, reflecting new data that became available after May 7 about visits
@@ -86,6 +85,7 @@ By using the `issues` argument, we can request all issues in a certain
 time period:
 
 ``` r
+
 epidata <- pub_covidcast(
   source = "doctor-visits",
   signals = "smoothed_adj_cli",
@@ -95,20 +95,18 @@ epidata <- pub_covidcast(
   geo_values = "pa",
   issues = epirange("2020-05-01", "2020-05-15")
 )
-#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■                 
-#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 knitr::kable(epidata)
 ```
 
-| geo_value | signal           | source        | geo_type | time_type | time_value | direction | issue      | lag | missing_value | missing_stderr | missing_sample_size |    value | stderr | sample_size |
-|:----------|:-----------------|:--------------|:---------|:----------|:-----------|----------:|:-----------|----:|--------------:|---------------:|--------------------:|---------:|-------:|------------:|
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-01 |        NA | 2020-05-07 |   6 |             0 |              5 |                   5 | 2.581509 |     NA |          NA |
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-01 |        NA | 2020-05-08 |   7 |             0 |              5 |                   5 | 3.278896 |     NA |          NA |
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-01 |        NA | 2020-05-09 |   8 |             0 |              5 |                   5 | 3.321781 |     NA |          NA |
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-01 |        NA | 2020-05-12 |  11 |             0 |              5 |                   5 | 3.588683 |     NA |          NA |
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-01 |        NA | 2020-05-13 |  12 |             0 |              5 |                   5 | 3.631978 |     NA |          NA |
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-01 |        NA | 2020-05-14 |  13 |             0 |              5 |                   5 | 3.658009 |     NA |          NA |
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-01 |        NA | 2020-05-15 |  14 |             0 |              5 |                   5 | 3.662286 |     NA |          NA |
+| geo_value | signal | source | geo_type | time_type | time_value | direction | issue | lag | missing_value | missing_stderr | missing_sample_size | value | stderr | sample_size |
+|:---|:---|:---|:---|:---|:---|---:|:---|---:|---:|---:|---:|---:|---:|---:|
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-01 | NA | 2020-05-07 | 6 | 0 | 5 | 5 | 2.581509 | NA | NA |
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-01 | NA | 2020-05-08 | 7 | 0 | 5 | 5 | 3.278896 | NA | NA |
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-01 | NA | 2020-05-09 | 8 | 0 | 5 | 5 | 3.321781 | NA | NA |
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-01 | NA | 2020-05-12 | 11 | 0 | 5 | 5 | 3.588683 | NA | NA |
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-01 | NA | 2020-05-13 | 12 | 0 | 5 | 5 | 3.631978 | NA | NA |
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-01 | NA | 2020-05-14 | 13 | 0 | 5 | 5 | 3.658009 | NA | NA |
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-01 | NA | 2020-05-15 | 14 | 0 | 5 | 5 | 3.662286 | NA | NA |
 
 This estimate was clearly updated many times as new data for May 1st
 arrived.
@@ -121,6 +119,7 @@ Note that these results include only data issued or updated between
 The `issues` parameter also accepts a list of dates.
 
 ``` r
+
 pub_covidcast(
   source = "doctor-visits",
   signals = "smoothed_adj_cli",
@@ -139,6 +138,7 @@ with a certain lag. For example, requesting a lag of 7 days fetches only
 data issued exactly 7 days after the corresponding `time_value`:
 
 ``` r
+
 epidata <- pub_covidcast(
   source = "doctor-visits",
   signals = "smoothed_adj_cli",
@@ -148,19 +148,16 @@ epidata <- pub_covidcast(
   geo_values = "pa",
   lag = 7
 )
-#> Waiting 4s for retry backoff ■■■■■■■■■                       
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■                    
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
 knitr::kable(epidata)
 ```
 
-| geo_value | signal           | source        | geo_type | time_type | time_value | direction | issue      | lag | missing_value | missing_stderr | missing_sample_size |    value | stderr | sample_size |
-|:----------|:-----------------|:--------------|:---------|:----------|:-----------|----------:|:-----------|----:|--------------:|---------------:|--------------------:|---------:|-------:|------------:|
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-01 |        NA | 2020-05-08 |   7 |             0 |              5 |                   5 | 3.278896 |     NA |          NA |
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-02 |        NA | 2020-05-09 |   7 |             0 |              5 |                   5 | 3.225292 |     NA |          NA |
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-05 |        NA | 2020-05-12 |   7 |             0 |              5 |                   5 | 2.779908 |     NA |          NA |
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-06 |        NA | 2020-05-13 |   7 |             0 |              5 |                   5 | 2.557698 |     NA |          NA |
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-07 |        NA | 2020-05-14 |   7 |             0 |              5 |                   5 | 2.191677 |     NA |          NA |
+| geo_value | signal | source | geo_type | time_type | time_value | direction | issue | lag | missing_value | missing_stderr | missing_sample_size | value | stderr | sample_size |
+|:---|:---|:---|:---|:---|:---|---:|:---|---:|---:|---:|---:|---:|---:|---:|
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-01 | NA | 2020-05-08 | 7 | 0 | 5 | 5 | 3.278896 | NA | NA |
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-02 | NA | 2020-05-09 | 7 | 0 | 5 | 5 | 3.225292 | NA | NA |
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-05 | NA | 2020-05-12 | 7 | 0 | 5 | 5 | 2.779908 | NA | NA |
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-06 | NA | 2020-05-13 | 7 | 0 | 5 | 5 | 2.557698 | NA | NA |
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-07 | NA | 2020-05-14 | 7 | 0 | 5 | 5 | 2.191677 | NA | NA |
 
 Note that though this query requested all values between 2020-05-01 and
 2020-05-07, May 3rd and May 4th were *not* included in the results set.
@@ -169,6 +166,7 @@ value were issued on May 10th (a 7-day lag), but in fact the value was
 not updated on that day:
 
 ``` r
+
 epidata <- pub_covidcast(
   source = "doctor-visits",
   signals = "smoothed_adj_cli",
@@ -178,15 +176,13 @@ epidata <- pub_covidcast(
   geo_values = "pa",
   issues = epirange("2020-05-09", "2020-05-15")
 )
-#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■                 
-#> Waiting 2s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 knitr::kable(epidata)
 ```
 
-| geo_value | signal           | source        | geo_type | time_type | time_value | direction | issue      | lag | missing_value | missing_stderr | missing_sample_size |    value | stderr | sample_size |
-|:----------|:-----------------|:--------------|:---------|:----------|:-----------|----------:|:-----------|----:|--------------:|---------------:|--------------------:|---------:|-------:|------------:|
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-03 |        NA | 2020-05-09 |   6 |             0 |              5 |                   5 | 2.788618 |     NA |          NA |
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-03 |        NA | 2020-05-12 |   9 |             0 |              5 |                   5 | 3.015368 |     NA |          NA |
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-03 |        NA | 2020-05-13 |  10 |             0 |              5 |                   5 | 3.039310 |     NA |          NA |
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-03 |        NA | 2020-05-14 |  11 |             0 |              5 |                   5 | 3.021245 |     NA |          NA |
-| pa        | smoothed_adj_cli | doctor-visits | state    | day       | 2020-05-03 |        NA | 2020-05-15 |  12 |             0 |              5 |                   5 | 3.048725 |     NA |          NA |
+| geo_value | signal | source | geo_type | time_type | time_value | direction | issue | lag | missing_value | missing_stderr | missing_sample_size | value | stderr | sample_size |
+|:---|:---|:---|:---|:---|:---|---:|:---|---:|---:|---:|---:|---:|---:|---:|
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-03 | NA | 2020-05-09 | 6 | 0 | 5 | 5 | 2.788618 | NA | NA |
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-03 | NA | 2020-05-12 | 9 | 0 | 5 | 5 | 3.015368 | NA | NA |
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-03 | NA | 2020-05-13 | 10 | 0 | 5 | 5 | 3.039310 | NA | NA |
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-03 | NA | 2020-05-14 | 11 | 0 | 5 | 5 | 3.021245 | NA | NA |
+| pa | smoothed_adj_cli | doctor-visits | state | day | 2020-05-03 | NA | 2020-05-15 | 12 | 0 | 5 | 5 | 3.048725 | NA | NA |

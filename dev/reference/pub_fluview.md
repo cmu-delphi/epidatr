@@ -66,7 +66,7 @@ pub_fluview(
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
   See
@@ -107,10 +107,8 @@ for details and more ways to specify versioned data.
 ## Examples
 
 ``` r
+
 pub_fluview(regions = "nat", epiweeks = epirange(201201, 202005))
-#> Waiting 4s for retry backoff ■■■■■■■■                        
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■             
-#> Waiting 4s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 422 × 16
 #>    release_date region issue      epiweek      lag num_ili num_patients
 #>    <date>       <chr>  <date>     <date>     <dbl>   <dbl>        <dbl>

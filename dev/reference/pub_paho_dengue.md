@@ -50,7 +50,7 @@ pub_paho_dengue(
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md).
   See
@@ -86,10 +86,8 @@ for details and more ways to specify versioned data.
 ## Examples
 
 ``` r
+
 pub_paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501))
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■                    
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■                  
-#> Waiting 3s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  
 #> # A tibble: 54 × 11
 #>    release_date region serotype issue      epiweek      lag total_pop num_dengue
 #>    <date>       <chr>  <chr>    <date>     <date>     <dbl>     <dbl>      <dbl>

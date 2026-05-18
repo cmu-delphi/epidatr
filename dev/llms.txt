@@ -25,6 +25,7 @@ also provide packages for downstream data processing
 ## Usage
 
 ``` r
+
 library(epidatr)
 # Obtain the smoothed covid-like illness (CLI) signal from Delphi's US COVID-19
 # Trends and Impact Survey (CTIS), in partnership with Facebook, as it was on
@@ -62,6 +63,7 @@ epidata
 Installing the package is straightforward.
 
 ``` r
+
 # Install the CRAN version
 pak::pkg_install("epidatr")
 # Install the development version from the GitHub dev branch
@@ -150,6 +152,12 @@ Query Delphi Epidata endpoints
   request
 - [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
   : Set custom API request parameters
+- [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+  [`epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+  : cast-API snapshot and archive queries
+- [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)
+  : Get cast-API source metadata
 - [`pub_covid_hosp_facility()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility.md)
   : COVID hospitalizations by facility
 - [`pub_covid_hosp_facility_lookup()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility_lookup.md)
@@ -246,5 +254,7 @@ These endpoints require additional authorization to use
   epidatr](https://cmu-delphi.github.io/epidatr/dev/articles/epidatr.md):
 - [Finding data sources and signals of
   interest](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md):
+- [epidatr v5 API
+  demo](https://cmu-delphi.github.io/epidatr/dev/articles/v5-api-demo.md):
 - [Understanding and accessing versioned
   data](https://cmu-delphi.github.io/epidatr/dev/articles/versioned-data.md):
