@@ -26,21 +26,6 @@ The \code{covidcast_epidata()} function fetches a list of all signals, and retur
 an object containing fields for every signal:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata <- covidcast_epidata()
-#> Waiting 4s for retry backoff =======>-----------------------
-#> Waiting 4s for retry backoff =========>---------------------
-#> Waiting 4s for retry backoff ==========>--------------------
-#> Waiting 4s for retry backoff ============>------------------
-#> Waiting 4s for retry backoff =============>-----------------
-#> Waiting 4s for retry backoff ===============>---------------
-#> Waiting 4s for retry backoff =================>-------------
-#> Waiting 4s for retry backoff ==================>------------
-#> Waiting 4s for retry backoff ====================>----------
-#> Waiting 4s for retry backoff =====================>---------
-#> Waiting 4s for retry backoff =======================>-------
-#> Waiting 4s for retry backoff =========================>-----
-#> Waiting 4s for retry backoff ==========================>----
-#> Waiting 4s for retry backoff ============================>--
-#> Waiting 4s for retry backoff ==============================>
 epidata$signals
 #> # A tibble: 520 x 3
 #>    source        signal                        short_description                

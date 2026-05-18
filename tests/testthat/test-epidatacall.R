@@ -125,6 +125,7 @@ test_that("fetch classic works", {
     fetch_out <- pub_delphi(system = "ec", epiweek = 201501)
   )
   expect_true(inherits(fetch_out, "list"))
+  expect_snapshot_value(fetch_out, style = "json2", cran = TRUE)
 })
 
 test_that("create_epidata_call basic behavior", {
