@@ -38,7 +38,7 @@ See the "Data Versioning" section for details.}
 
 \item{auth}{string. Your restricted access key (not the same as API key).}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+\item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{

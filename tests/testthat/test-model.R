@@ -47,17 +47,14 @@ test_that("`parse_timeset_input` on valid inputs", {
   expect_identical(parse_timeset_input(NULL), NULL)
 })
 
-test_that("null parsing", {
-  # Minimal example
+test_that("parse_data_frame handles NA values and missing meta", {
   meta <- list(
     create_epidata_field_info("val", "int"),
     create_epidata_field_info("flag", "bool")
   )
   epidata_call <- structure(list(meta = meta), class = "epidata_call")
-
   mock_df <- data.frame(val = NA_integer_, flag = TRUE)
 
-  # Expect no error
   expect_no_error(res <- parse_data_frame(epidata_call, mock_df))
   expect_true(is.na(res$val))
   expect_true(is.numeric(res$val))
@@ -75,21 +72,16 @@ test_that("parse invalid time", {
 })
 
 test_that("parse_data_frame warns when df contains fields not listed in meta", {
-  # Minimal example
   meta <- list(create_epidata_field_info("val", "int"))
   epidata_call <- structure(list(meta = meta), class = "epidata_call")
 
   mock_df <- data.frame(val = 1L)
   expect_no_warning(parse_data_frame(epidata_call, mock_df))
 
-  # Warning when df contains extra fields
   mock_df_extra <- data.frame(val = 1L, extra = 5)
-  expect_snapshot(
-    parse_data_frame(epidata_call, mock_df_extra),
-    cran = TRUE
-  )
+  expect_snapshot(parse_data_frame(epidata_call, mock_df_extra), cran = TRUE)
 
-  # Success when meta contains extra fields
+  # Success when meta contains extra fields that aren't in the data
   meta_extra <- list(
     create_epidata_field_info("val", "int"),
     create_epidata_field_info("other", "int")
@@ -99,18 +91,11 @@ test_that("parse_data_frame warns when df contains fields not listed in meta", {
 })
 
 test_that("parse_data_frame warns when df contains int values with decimal component", {
-  # Metadata expects int
   meta <- list(create_epidata_field_info("val", "int"))
   epidata_call <- structure(list(meta = meta), class = "epidata_call")
-
-  # Input has float
   mock_df <- data.frame(val = 4.3)
 
-  # Should produce warning
-  expect_snapshot(
-    parse_data_frame(epidata_call, mock_df),
-    cran = TRUE
-  )
+  expect_snapshot(parse_data_frame(epidata_call, mock_df), cran = TRUE)
 })
 
 test_that("parse_value can handle NA/NULL values in an int field", {

@@ -24,7 +24,7 @@ do_request(
 \item{http_method}{HTTP method to use}
 }
 \value{
-the response body as a string
+an \code{httr2_response} object
 }
 \description{
 Handles authentication, retries, 414 URI Too Long fallback to POST,

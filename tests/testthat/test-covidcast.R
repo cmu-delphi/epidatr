@@ -22,7 +22,9 @@ test_that("covidcast", {
 
 test_that("http errors", {
   local_mocked_bindings(
-    req_perform = function(...) create_mock_response("", status_code = 400L),
+    req_perform = function(...) {
+      create_mock_response("", status_code = 400L, headers = list("content-type" = "text/html"))
+    },
     .package = "httr2"
   )
   expect_error(epidatr::covidcast_epidata(), class = "httr2_http_400")

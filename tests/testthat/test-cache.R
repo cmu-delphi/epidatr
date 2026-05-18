@@ -1,9 +1,11 @@
 new_temp_dir <- tempdir()
-test_set_cache <- function(cache_dir = new_temp_dir,
-                           days = 1,
-                           max_size = 1,
-                           logfile = "logfile.txt",
-                           confirm = FALSE) {
+test_set_cache <- function(
+  cache_dir = new_temp_dir,
+  days = 1,
+  max_size = 1,
+  logfile = "logfile.txt",
+  confirm = FALSE
+) {
   set_cache(
     cache_dir = cache_dir,
     days = days,
@@ -57,7 +59,6 @@ test_that("cache saves & loads", {
     as_of = "2022-01-01",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
-  # Minimal covidcast-shaped response
   mock_response <- list(
     epidata = list(list(
       source = "jhu-csse",
@@ -65,45 +66,57 @@ test_that("cache saves & loads", {
       geo_type = "state",
       time_type = "day",
       geo_value = "ca",
-      time_value = 20200601,
-      issue = 20200602,
-      lag = 1,
-      value = 1.5
+      time_value = 20200601L,
+      issue = 20200602L,
+      lag = 1L,
+      value = 1.5,
+      stderr = 0.1,
+      sample_size = 100.0,
+      direction = 1.0,
+      missing_value = 0L,
+      missing_stderr = 0L,
+      missing_sample_size = 0L
     )),
     result = 1,
     message = "success"
   )
-
-  httr_content_called_count <- 0
+  perform_count <- 0
+  fixture <- to_httr2_response(as.character(jsonlite::toJSON(
+    mock_response,
+    auto_unbox = TRUE
+  )))
   local_mocked_bindings(
-    do_request = function(...) {
-      httr_content_called_count <<- httr_content_called_count + 1
-      as.character(jsonlite::toJSON(mock_response, auto_unbox = TRUE))
+    req_perform = function(req, ...) {
+      perform_count <<- perform_count + 1
+      fixture
     },
-    .package = "epidatr"
+    .package = "httr2"
   )
 
   first_call <- epidata_call %>% fetch()
   cache_call <- epidata_call %>% fetch()
-  expect_equal(httr_content_called_count, 1)
+  expect_equal(perform_count, 1)
   expect_equal(first_call, cache_call)
 
   # and compare directly with the file saved
   # the request url hashed here is "https://api.delphi.cmu.edu/epidata/covidcast/?data_source=jhu-csse&signals=
   # confirmed_7dav_incidence_prop&geo_type=state&time_type=day&geo_values=ca%2Cfl&time_values=20200601-20200801
   # &as_of=20220101"
-  request_hash <- paste0(openssl::md5(request_url(epidata_call, format_type = "json")), ".rds")
+  request_hash <- paste0(
+    openssl::md5(request_url(epidata_call, format_type = "json")),
+    ".rds"
+  )
   direct_from_cache <- readRDS(file.path(new_temp_dir, request_hash))
   expect_equal(first_call, direct_from_cache[[1]])
 
   # Test the empty return branch
   expect_message(clear_cache())
+  empty_fixture <- to_httr2_response(
+    '{"epidata":[],"result":-2,"message":"no results"}'
+  )
   local_mocked_bindings(
-    do_request = function(...) {
-      httr_content_called_count <<- httr_content_called_count + 1
-      '{"epidata":[],"result":-2,"message":"no results"}'
-    },
-    .package = "epidatr"
+    req_perform = function(req, ...) empty_fixture,
+    .package = "httr2"
   )
   expect_warning(empty_call <- epidata_call %>% fetch())
   expect_equal(empty_call, tibble())
@@ -170,11 +183,18 @@ test_that("check_is_cachable", {
   check_fun(expected_result = FALSE) # doesn't specify issues or as_of
   check_fun(as_of = "2020-01-01", expected_result = TRUE) # valid as_of
   check_fun(issues = "2020-01-01", expected_result = TRUE) # valid issues
-  check_fun(issues = epirange("2020-01-01", "2020-03-01"), expected_result = TRUE) # valid issues
+  check_fun(
+    issues = epirange("2020-01-01", "2020-03-01"),
+    expected_result = TRUE
+  ) # valid issues
   check_fun(as_of = "*", expected_result = FALSE) # invalid as_of
   check_fun(issues = "*", expected_result = FALSE) # invalid issues
   # refresh_cache works
-  check_fun(as_of = "2020-01-01", fetch_args = fetch_args_list(refresh_cache = TRUE), expected_result = FALSE)
+  check_fun(
+    as_of = "2020-01-01",
+    fetch_args = fetch_args_list(refresh_cache = TRUE),
+    expected_result = FALSE
+  )
 
   # any odd fetch args mean don't use the cache
   check_fun(

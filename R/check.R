@@ -138,6 +138,44 @@ format_params_for_api <- function(params) {
   })
 }
 
+#' Helper to format the 'version' argument for the CAST API version_query
+#' @param version the version argument containing operator and date, exact date,
+#' or numeric date
+#' @return a formatted version_query string (e.g., "<2025-10-16", "=2025-10-16")
+#' @keywords internal
+validate_version_query <- function(version) {
+  if (is.null(version) || identical(version, "*")) {
+    return(NULL)
+  }
+
+  operator <- "="
+  if (is.character(version) && length(version) == 1 && grepl("^[<>=]", version)) {
+    operator <- substr(version, 1, 1)
+    version <- substr(version, 2, nchar(version))
+  } else if (inherits(version, "EpiRange")) {
+    # Lower bound is filtered out locally
+    operator <- "<"
+    version <- version$to
+  }
+
+  # Validate and standardize the date part
+  assert_date_param("version", version, len = 1L, required = FALSE)
+  formatted_date <- format(parse_api_date(version), "%Y-%m-%d")
+
+  if (is.na(formatted_date)) {
+    cli::cli_abort(
+      paste0(
+        "Invalid `version` format. Must be a single date, an `EpiRange`, ",
+        "or a character string with an operator (e.g., '<2025-10-16')."
+      ),
+      class = "epidatr__invalid_version_query"
+    )
+  }
+
+  paste0(operator, formatted_date)
+}
+
+
 #' helper to convert a date wildcard ("*") to an appropriate epirange
 #'
 #' @keywords internal
@@ -153,4 +191,28 @@ get_wildcard_equivalent_dates <- function(time_value, time_type = c("day", "week
     }
   }
   return(time_value)
+}
+#' Check an API response for epidata-level errors and warnings.
+#'
+#' @param response_content parsed JSON response with `result` and `message` fields
+#' @param allow_empty if TRUE, suppress errors for "no results" (result == -2)
+#' @importFrom cli cli_abort cli_warn
+#' @keywords internal
+check_epidata_result <- function(response_content, allow_empty = FALSE) {
+  # success is 1, no results is -2, truncated is 2, -1 is generic error
+  if (response_content$result != 1) {
+    if ((response_content$result != -2) && !allow_empty) {
+      cli::cli_abort(
+        "epidata error: {.code {response_content$message}}",
+        class = "epidata_error"
+      )
+    }
+  }
+
+  if (response_content$message != "success") {
+    cli::cli_warn(
+      "epidata warning: {.code {response_content$message}}",
+      class = "epidata_warning"
+    )
+  }
 }

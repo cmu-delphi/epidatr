@@ -30,7 +30,7 @@
 #'   data to fetch. See the "Data Versioning" section for details.
 #' @param lag integer. Optionally, the lag of the issues to fetch.
 #'   See the "Data Versioning" section for details.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass
+#' @param fetch_args [`fetch_args_list()`]. Additional arguments to pass
 #'   to `fetch()`. See `fetch_args_list()` for details.
 #' @param ... not used for values, forces later arguments to bind by name
 #'
@@ -970,6 +970,7 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
   ) %>% fetch(fetch_args = fetch_args)
 }
 
+
 #' Various COVID and flu signals via the COVIDcast endpoint
 #'
 #' @description
@@ -1123,6 +1124,232 @@ pub_covidcast <- function(
       create_epidata_field_info("missing_sample_size", "int")
     )
   ) %>% fetch(fetch_args = fetch_args)
+}
+
+#' Get cast-API source metadata
+#'
+#' @description
+#' `epidata_meta` returns source-level metadata from the cast-API,
+#' including version ranges, time value ranges, and lists of available signals
+#' and geo types.
+#'
+#' @param source string. The data source to query.
+#' @inheritParams .epidatr_shared_params
+#' @return list
+#' @seealso [epidata_snapshot()], [epidata_archive()], [epidata()], [epirange()]
+#' @keywords endpoint
+#' @export
+epidata_meta <- function(source, fetch_args = fetch_args_list()) {
+  assert_character_param("source", source, len = 1, required = TRUE)
+  create_epidata_call(
+    endpoint = "metadata/",
+    params = list(source = source),
+    api_version = "cast",
+    response_format = "json"
+  ) %>% request_epidata(fetch_args = fetch_args)
+}
+
+#' cast-API snapshot and archive queries
+#'
+#' @description
+#' - `epidata_snapshot` fetches a snapshot of signals as they appeared at a
+#'   specific date (or the latest available if `as_of` is omitted).
+#' - `epidata_archive` fetches the full version history of signals across all
+#'   available issues.
+#' - `epidata` is a wrapper that routes to one of the above based
+#'   on which versioning argument is supplied.
+#'
+#' @inheritParams pub_covidcast
+#' @param source string. The data source to query (e.g., `"nssp"`, `"nhsn"`).
+#'   Use [epidata_meta()] to discover available sources.
+#' @param signals character vector. One or more signals to query for the given
+#'   source. Use [epidata_meta()] to discover available signals.
+#' @param geo_type string. The geography type to query (e.g., `"state"`,
+#'   `"nation"`, `"county"`). Use [epidata_meta()] to discover available
+#'   geo types for a given source and signal.
+#' @param time_values [`timeset`]. Time values to return. Supports individual
+#'   dates or [`epirange()`]. Defaults to all (`"*"`). Filtered locally after
+#'   the API call.
+#' @param fill_method string. Optional filter to an imputation method.
+#'   The API provides alternatives of the same signal differing in how
+#'   nulls were handled during geographic aggregation: `"source"` means no
+#'   imputation or aggregation (raw source data), `"fill_ave"` fills nulls with
+#'   the average of neighboring values, and `"fill_zero"` fills nulls with zero.
+#'   `NULL` (default) returns all fill methods.
+#' @param as_of Date or `NULL`. The snapshot date; `NULL` returns the latest
+#'   available version. Internally maps to the `snapshot_date` parameter.
+#' @param version Date, string, or [`epirange()`]. A version query for the
+#'   archive endpoint. Supports exact dates (e.g., `"2025-10-16"`),
+#'   operators (e.g., `"<2025-10-16"`), or an [`epirange()`].
+#'   Internally maps to the `version_query` parameter.
+#' @return [`tibble::tibble`]
+#' @seealso [epidata_meta()], [epirange()]
+#' @keywords endpoint
+#' @name cast_api_queries
+NULL
+
+#' @rdname cast_api_queries
+#' @export
+epidata_snapshot <- function(
+  source,
+  signals,
+  geo_type,
+  geo_values = "*",
+  time_values = "*",
+  ...,
+  fill_method = NULL,
+  as_of = NULL,
+  fetch_args = fetch_args_list()
+) {
+  if (missing(source) || missing(signals) || missing(geo_type)) {
+    cli::cli_abort(
+      "`source`, `signals`, and `geo_type` are all required",
+      class = "epidatr__epidata__missing_required_args"
+    )
+  }
+
+  rlang::check_dots_empty()
+
+  assert_character_param("source", source, len = 1)
+  assert_character_param("signals", signals)
+  assert_character_param("geo_type", geo_type, len = 1)
+  assert_character_param("geo_values", geo_values)
+  assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
+  assert_date_param("as_of", as_of, len = 1, required = FALSE)
+  # as_of reformatting
+  if (!is.null(as_of)) as_of <- format(parse_api_date(as_of), "%Y-%m-%d")
+
+  parsed_time_values <- validate_timeset_input("time_values", time_values)
+
+  create_epidata_call(
+    endpoint = "snapshot/",
+    params = list(
+      source = source,
+      signal = paste(signals, collapse = ","),
+      geo_type = geo_type,
+      fill_method = fill_method,
+      snapshot_date = as_of
+    ),
+    meta = list(
+      create_epidata_field_info("signal", "text"),
+      create_epidata_field_info("version", "date"),
+      create_epidata_field_info("geo_type", "text"),
+      create_epidata_field_info("geo_value", "text"),
+      create_epidata_field_info("fill_method", "text"),
+      create_epidata_field_info("time_value", "date"),
+      create_epidata_field_info("value", "float"),
+      # source-specific extra columns
+      create_epidata_field_info("age_group", "text"),     # pophive
+      create_epidata_field_info("nwss_source", "text"),   # nwss
+      create_epidata_field_info("sample_index", "text"),  # nwss
+      create_epidata_field_info("pcr_target", "text")     # nwss
+    ),
+    api_version = "cast",
+    response_format = "csv"
+  ) %>%
+    fetch(fetch_args = fetch_args) %>%
+    .cast_filter(geo_values, time_values, parsed_time_values)
+}
+
+#' @rdname cast_api_queries
+#' @export
+epidata_archive <- function(
+  source,
+  signals,
+  geo_type,
+  geo_values = "*",
+  time_values = "*",
+  ...,
+  fill_method = NULL,
+  version = "*",
+  fetch_args = fetch_args_list()
+) {
+  if (missing(source) || missing(signals) || missing(geo_type)) {
+    cli::cli_abort(
+      "`source`, `signals`, and `geo_type` are all required",
+      class = "epidatr__epidata__missing_required_args"
+    )
+  }
+
+  rlang::check_dots_empty()
+
+  assert_character_param("source", source, len = 1)
+  assert_character_param("signals", signals)
+  assert_character_param("geo_type", geo_type, len = 1)
+  assert_character_param("geo_values", geo_values)
+  assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
+
+  parsed_time_values <- validate_timeset_input("time_values", time_values)
+  version_query <- validate_version_query(version)
+
+  create_epidata_call(
+    endpoint = "archive/",
+    params = list(
+      source = source,
+      signal = paste(signals, collapse = ","),
+      geo_type = geo_type,
+      fill_method = fill_method,
+      version_query = version_query
+    ),
+    meta = list(
+      create_epidata_field_info("signal", "text"),
+      create_epidata_field_info("version", "date"),
+      create_epidata_field_info("geo_type", "text"),
+      create_epidata_field_info("geo_value", "text"),
+      create_epidata_field_info("fill_method", "text"),
+      create_epidata_field_info("time_value", "date"),
+      create_epidata_field_info("value", "float"),
+      # source-specific extra columns
+      create_epidata_field_info("age_group", "text"),     # pophive
+      create_epidata_field_info("nwss_source", "text"),   # nwss
+      create_epidata_field_info("sample_index", "text"),  # nwss
+      create_epidata_field_info("pcr_target", "text")     # nwss
+    ),
+    api_version = "cast",
+    response_format = "csv"
+  ) %>%
+    fetch(fetch_args = fetch_args) %>%
+    .cast_filter(geo_values, time_values, parsed_time_values, version = version)
+}
+
+#' @rdname cast_api_queries
+#' @export
+epidata <- function(
+  source,
+  signals,
+  geo_type,
+  geo_values = "*",
+  time_values = "*",
+  ...,
+  fill_method = NULL,
+  as_of = NULL,
+  version = NULL,
+  fetch_args = fetch_args_list()
+) {
+  if (!is.null(version) && !is.null(as_of)) {
+    cli::cli_abort(
+      "`version` and `as_of` are mutually exclusive",
+      class = "epidatr__epidata__version_and_as_of_exclusive"
+    )
+  }
+
+  if (!is.null(version) || identical(as_of, "*")) {
+    epidata_archive(
+      source = source, signals = signals, geo_type = geo_type,
+      geo_values = geo_values, time_values = time_values,
+      fill_method = fill_method,
+      version = if (!is.null(version)) version else "*",
+      fetch_args = fetch_args
+    )
+  } else {
+    epidata_snapshot(
+      source = source, signals = signals, geo_type = geo_type,
+      geo_values = geo_values, time_values = time_values,
+      fill_method = fill_method,
+      as_of = as_of,
+      fetch_args = fetch_args
+    )
+  }
 }
 
 #' Delphi's ILINet outpatient doctor visits forecasts

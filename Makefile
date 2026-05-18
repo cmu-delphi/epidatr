@@ -6,6 +6,10 @@ format:
 	Rscript -e "styler::style_pkg()"
 test:
 	Rscript -e "devtools::test()"
+test-live:
+	EPIDATR_LIVE_TEST=TRUE Rscript -e "devtools::test(filter = 'live')"
+coverage:
+	Rscript -e "devtools::test_coverage()"
 document:
 	Rscript -e "devtools::document()"
 build: document

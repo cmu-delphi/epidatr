@@ -11,6 +11,7 @@
 
 ## Features
 
+- Added new `epidata`, `epidata_meta`, `epidata_snapshot`, and `epidata_archive` for accessing the Delphi V5 API.
 ## Patches
 
 - `last_update` in `pub_covidcast_meta` is now returned as a `POSIXct` object instead of an integer.

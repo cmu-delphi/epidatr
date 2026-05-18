@@ -1,40 +1,26 @@
-test_that("do_request http errors", {
-  # should give a 401 error
+test_that("fetch surfaces http errors", {
   epidata_call <- pvt_cdc(
     auth = "ImALittleTeapot",
     epiweeks = epirange(202003, 202304),
     locations = "ma",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
-  local_mocked_bindings(
-    req_perform = function(...) {
-      create_mock_response(
-        "<p>API key does not exist.</p>",
-        status_code = 401L,
-        headers = list("content-type" = "text/html")
-      )
-    },
-    .package = "httr2"
-  )
-  expect_error(
-    epidata_call %>% do_request("csv", timeout_seconds = 30, fields = NULL),
-    class = "httr2_http_401"
+
+  with_mocked_response(
+    create_mock_response(
+      "<p>API key does not exist.</p>",
+      status_code = 401L,
+      headers = list("content-type" = "text/html")
+    ),
+    expect_error(fetch(epidata_call), class = "httr2_http_401")
   )
 
-  # should give a 500 error (the afhsb endpoint is removed)
-
-  local_mocked_bindings(
-    req_perform = function(...) {
-      create_mock_response(
-        '{"epidata": [], "message": "database error", "result": -1}',
-        status_code = 500L
-      )
-    },
-    .package = "httr2"
-  )
-  expect_error(
-    epidata_call %>% do_request("csv", timeout_seconds = 30, fields = NULL),
-    class = "httr2_http_500"
+  with_mocked_response(
+    create_mock_response(
+      '{"epidata": [], "message": "database error", "result": -1}',
+      status_code = 500L
+    ),
+    expect_error(fetch(epidata_call), class = "httr2_http_500")
   )
 })
 
@@ -56,6 +42,7 @@ test_that("fetch_args", {
     cran = TRUE
   )
 })
+
 test_that("fetch respects the fields parameter", {
   epidata_call <- pub_covidcast(
     source = "jhu-csse", signals = "sig", geo_type = "state", time_type = "day",
@@ -63,30 +50,24 @@ test_that("fetch respects the fields parameter", {
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
 
-  local_mocked_bindings(
-    do_request = function(epidata_call, format_type, timeout_seconds, fields, ...) {
-      # fields argument was passed down
-      expect_equal(fields, "value")
-
-      epidata_call <- extra_arguments(epidata_call, format_type, fields)
-
-      # Verify that extra_arguments() appends fields to the URL
-      expect_match(epidata_call$request$url, "fields=value")
-
-      jsonlite::toJSON(list(
-        epidata = list(list(value = 10)),
-        result = 1,
-        message = "success"
-      ), auto_unbox = TRUE)
-    },
-    .package = "epidatr"
+  body <- jsonlite::toJSON(
+    list(epidata = list(list(value = 10)), result = 1, message = "success"),
+    auto_unbox = TRUE
   )
 
-  res <- fetch(epidata_call, fetch_args = fetch_args_list(fields = "value"))
+  with_mock_perform(
+    function(req) {
+      # The real outgoing request should carry fields=value, set by extra_arguments().
+      expect_match(req$url, "fields=value")
+      body
+    },
+    res <- fetch(epidata_call, fetch_args = fetch_args_list(fields = "value"))
+  )
 
   expect_equal(names(res), "value")
   expect_equal(res$value, 10)
 })
+
 test_that("fetch non-classic passes along api warnings", {
   epidata_call <- pub_covidcast(
     source = "jhu-csse",
@@ -114,16 +95,18 @@ test_that("fetch non-classic passes along api warnings", {
     result = 1,
     message = artificial_warning
   )
-  local_mocked_bindings(
-    do_request = function(...) as.character(jsonlite::toJSON(mock_response, auto_unbox = TRUE)),
-    .package = "epidatr"
-  )
 
-  expect_snapshot(epidata_call %>% fetch(), cran = TRUE)
+  with_mocked_response(
+    as.character(jsonlite::toJSON(mock_response, auto_unbox = TRUE)),
+    expect_warning(epidata_call %>% fetch(),
+      regexp = paste0("epidata warning: `", artificial_warning, "`"),
+      fixed = TRUE
+    )
+  )
 })
 
 test_that("fetch classic works", {
-  # Minimal example
+  # pub_delphi uses the classic (non-tabular) response path; verify the return is a list.
   mock_classic <- list(
     epidata = list(list(
       epiweek = 201501,
@@ -137,15 +120,9 @@ test_that("fetch classic works", {
     message = "success"
   )
 
-  local_mocked_bindings(
-    do_request = function(...) as.character(jsonlite::toJSON(mock_classic, auto_unbox = TRUE)),
-    .package = "epidatr"
-  )
-
-  # pub_delphi calls request_epidata directly; make sure the return is a list
-  fetch_out <- pub_delphi(
-    system = "ec",
-    epiweek = 201501
+  with_mocked_response(
+    as.character(jsonlite::toJSON(mock_classic, auto_unbox = TRUE)),
+    fetch_out <- pub_delphi(system = "ec", epiweek = 201501)
   )
   expect_true(inherits(fetch_out, "list"))
   expect_snapshot_value(fetch_out, style = "json2", cran = TRUE)
@@ -171,7 +148,9 @@ test_that("create_epidata_call basic behavior", {
   expected <- list(
     request = r,
     base_url = base_url,
-    meta = meta
+    meta = meta,
+    api_version = "classic",
+    response_format = "classic"
   )
   class(expected) <- "epidata_call"
   expect_identical(create_epidata_call(endpoint, params, meta = meta), expected)

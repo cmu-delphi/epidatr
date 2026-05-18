@@ -6,7 +6,13 @@
 \alias{fetch}
 \title{An abstraction that holds information needed to make an epidata request}
 \usage{
-create_epidata_call(endpoint, params, meta = NULL)
+create_epidata_call(
+  endpoint,
+  params,
+  meta = NULL,
+  api_version = c("classic", "cast"),
+  response_format = c("classic", "json", "csv")
+)
 
 fetch(epidata_call, fetch_args = fetch_args_list())
 }
@@ -16,6 +22,10 @@ fetch(epidata_call, fetch_args = fetch_args_list())
 \item{params}{the parameters to pass to the epidata endpoint}
 
 \item{meta}{meta data to attach to the epidata call}
+
+\item{api_version}{string. The API version to use. One of "classic" or "cast".}
+
+\item{response_format}{string. The expected format of the response. One of "classic", "json", or "csv".}
 
 \item{epidata_call}{an instance of \code{epidata_call}}
 

@@ -36,15 +36,21 @@
 #' @param endpoint the epidata endpoint to call
 #' @param params the parameters to pass to the epidata endpoint
 #' @param meta meta data to attach to the epidata call
+#' @param api_version string. The API version to use. One of "classic" or "cast".
+#' @param response_format string. The expected format of the response. One of "classic", "json", or "csv".
 #'
 #' @return
 #' - For `create_epidata_call`: an `epidata_call` object
 #'
 #' @importFrom purrr map_chr map_lgl
-create_epidata_call <- function(endpoint, params, meta = NULL) {
+create_epidata_call <- function(endpoint, params, meta = NULL,
+                                api_version = c("classic", "cast"),
+                                response_format = c("classic", "json", "csv")) {
   checkmate::assert_character(endpoint, len = 1)
   checkmate::assert_list(params)
   checkmate::assert_list(meta, null.ok = TRUE)
+  api_version <- rlang::arg_match(api_version)
+  response_format <- rlang::arg_match(response_format)
   checkmate::assert_true(all(map_lgl(meta, ~ inherits(.x, "EpidataFieldInfo"))))
 
   if (length(unique(meta)) != length(meta)) {
@@ -77,19 +83,22 @@ create_epidata_call <- function(endpoint, params, meta = NULL) {
   if (is.null(meta)) {
     meta <- list()
   }
+  base_url <- if (api_version == "cast") cast_base_url else global_base_url
   # Format the parameters before passing them to httr2::req_url_query
   # This is necessary because httr2::req_url_query expects atomic vector
   formatted_params <- format_params_for_api(params)
 
-  r <- httr2::request(global_base_url) %>%
+  r <- httr2::request(base_url) %>%
     httr2::req_url_path_append(endpoint) %>%
     httr2::req_url_query(!!!formatted_params, .multi = "comma")
 
   structure(
     list(
       request = r,
-      base_url = global_base_url,
-      meta = meta
+      base_url = base_url,
+      meta = meta,
+      api_version = api_version,
+      response_format = response_format
     ),
     class = "epidata_call"
   )
@@ -271,14 +280,14 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     response_content <- request_epidata(epidata_call, fetch_args)
 
     if (fetch_args$return_empty && length(response_content) == 0) {
-      fetched <- tibble()
+      fetched <- tibble::tibble()
     } else {
       fetched <- parse_data_frame(
         epidata_call,
         response_content,
         fetch_args$disable_date_parsing,
         fetch_args$reference_week_day
-      ) %>% as_tibble()
+      ) %>% tibble::as_tibble()
     }
   })
 
@@ -314,10 +323,28 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
     return(epidata_call)
   }
 
-  body <- do_request(epidata_call, "classic", fetch_args$timeout_seconds, fetch_args$fields)
-  response_content <- jsonlite::fromJSON(body, simplifyDataFrame = simplify)
-  check_epidata_result(response_content, allow_empty = fetch_args$return_empty)
+  res <- do_request(
+    epidata_call,
+    format_type = epidata_call$response_format,
+    timeout_seconds = fetch_args$timeout_seconds,
+    fields = fetch_args$fields
+  )
 
+  if (epidata_call$response_format == "csv") {
+    return(readr::read_csv(I(httr2::resp_body_string(res)),
+                           col_types = readr::cols(.default = "c"),
+                           show_col_types = FALSE))
+  }
+
+  # JSON parsing (both "json" and "classic")
+  response_content <- httr2::resp_body_json(res, simplifyVector = simplify, simplifyDataFrame = simplify)
+
+  if (epidata_call$response_format == "json") {
+    return(response_content)
+  }
+
+  # classic: JSON with result/message wrapper
+  check_epidata_result(response_content, allow_empty = fetch_args$return_empty)
   return(response_content$epidata)
 }
 

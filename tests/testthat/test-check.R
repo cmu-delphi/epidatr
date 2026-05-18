@@ -48,3 +48,28 @@ test_that("assert_timeset_param", {
   expect_error(assert_timeset_param("name", list(from = "2020-01-01", to = "2021-01-02")))
   expect_error(assert_timeset_param("name", c(from = "2020-01-01", to = "2021-01-02")))
 })
+
+test_that("validate_version_query", {
+  expect_equal(validate_version_query("2024-01-01"), "=2024-01-01")
+  expect_equal(validate_version_query("20240101"), "=2024-01-01")
+  expect_equal(validate_version_query(20240101), "=2024-01-01")
+  expect_equal(validate_version_query(as.Date("2024-01-01")), "=2024-01-01")
+
+  # Preserves operators
+  expect_equal(validate_version_query("<2024-01-01"), "<2024-01-01")
+  expect_equal(validate_version_query(">2024-01-01"), ">2024-01-01")
+  expect_equal(validate_version_query("=2024-01-01"), "=2024-01-01")
+
+  # EpiRange mapping
+  expect_equal(validate_version_query(epirange("2024-01-01", "2024-01-05")), "<2024-01-05")
+
+  # Invalid version queries
+  expect_error(
+    validate_version_query("not-a-date"),
+    class = "epidatr__invalid_version_query"
+  )
+  expect_error(
+    validate_version_query("<not-a-date"),
+    class = "epidatr__invalid_version_query"
+  )
+})
