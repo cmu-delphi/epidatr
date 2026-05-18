@@ -1195,7 +1195,8 @@ epidata_snapshot <- function(
   signals,
   geo_type,
   geo_values = "*",
-  time_values = "*",
+  reference_times = "*",
+  time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
   as_of = NULL,
@@ -1219,7 +1220,16 @@ epidata_snapshot <- function(
   # as_of reformatting
   if (!is.null(as_of)) as_of <- format(parse_api_date(as_of), "%Y-%m-%d")
 
-  parsed_time_values <- validate_timeset_input("time_values", time_values)
+  if (lifecycle::is_present(time_values)) {
+    lifecycle::deprecate_warn(
+      "0.3.0",
+      "epidata_snapshot(time_values)",
+      details = "The `time_values` argument is deprecated and will be removed in a future version. Use `reference_times` instead."
+    )
+    reference_times <- time_values
+  }
+
+  parsed_reference_times <- validate_timeset_input("reference_times", reference_times)
 
   create_epidata_call(
     endpoint = "snapshot/",
@@ -1232,11 +1242,11 @@ epidata_snapshot <- function(
     ),
     meta = list(
       create_epidata_field_info("signal", "text"),
-      create_epidata_field_info("version", "date"),
+      create_epidata_field_info("reference_times", "date"),
       create_epidata_field_info("geo_type", "text"),
       create_epidata_field_info("geo_value", "text"),
       create_epidata_field_info("fill_method", "text"),
-      create_epidata_field_info("time_value", "date"),
+      create_epidata_field_info("reference_time", "date"),
       create_epidata_field_info("value", "float"),
       # source-specific extra columns
       create_epidata_field_info("age_group", "text"),     # pophive
@@ -1248,7 +1258,7 @@ epidata_snapshot <- function(
     response_format = "csv"
   ) %>%
     fetch(fetch_args = fetch_args) %>%
-    .cast_filter(geo_values, time_values, parsed_time_values)
+    .cast_filter(geo_values, reference_times, parsed_reference_times)
 }
 
 #' @rdname cast_api_queries
@@ -1258,10 +1268,12 @@ epidata_archive <- function(
   signals,
   geo_type,
   geo_values = "*",
-  time_values = "*",
+  reference_times = "*",
+  time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
-  version = "*",
+  report_time = "*",
+  version = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 ) {
   if (missing(source) || missing(signals) || missing(geo_type)) {
@@ -1279,7 +1291,24 @@ epidata_archive <- function(
   assert_character_param("geo_values", geo_values)
   assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
 
-  parsed_time_values <- validate_timeset_input("time_values", time_values)
+  if (lifecycle::is_present(time_values)) {
+    lifecycle::deprecate_warn(
+      "0.3.0",
+      "epidata_archive(time_values)",
+      details = "The `time_values` argument is deprecated and will be removed in a future version. Use `reference_times` instead."
+    )
+    reference_times <- time_values
+  }
+  if (lifecycle::is_present(version)) {
+    lifecycle::deprecate_warn(
+      "0.3.0",
+      "epidata_archive(version)",
+      details = "The `version` argument is deprecated and will be removed in a future version. Use `report_time` instead."
+    )
+    report_time <- version
+  }
+
+  parsed_reference_times <- validate_timeset_input("reference_times", reference_times)
   version_query <- validate_version_query(version)
 
   create_epidata_call(
@@ -1297,7 +1326,7 @@ epidata_archive <- function(
       create_epidata_field_info("geo_type", "text"),
       create_epidata_field_info("geo_value", "text"),
       create_epidata_field_info("fill_method", "text"),
-      create_epidata_field_info("time_value", "date"),
+      create_epidata_field_info("reference_times", "date"),
       create_epidata_field_info("value", "float"),
       # source-specific extra columns
       create_epidata_field_info("age_group", "text"),     # pophive
@@ -1309,7 +1338,7 @@ epidata_archive <- function(
     response_format = "csv"
   ) %>%
     fetch(fetch_args = fetch_args) %>%
-    .cast_filter(geo_values, time_values, parsed_time_values, version = version)
+    .cast_filter(geo_values, reference_times, parsed_reference_times, version = version)
 }
 
 #' @rdname cast_api_queries
