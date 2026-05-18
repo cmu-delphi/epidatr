@@ -21,6 +21,12 @@ Fetch a summary of metadata for all sources and signals that are available in
 the API, along with basic summary statistics such as the dates they are
 available, the geographic levels at which they are reported, and etc.
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 

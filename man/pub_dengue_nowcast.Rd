@@ -24,6 +24,12 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html}
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 

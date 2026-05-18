@@ -47,6 +47,12 @@ facilities of interest. This is a companion endpoint to the
 Only one location argument needs to be specified.
 Combinations of the arguments are not currently supported.
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 

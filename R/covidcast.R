@@ -9,19 +9,9 @@ parse_signal <- function(signal, base_url) {
   class(signal) <- c("covidcast_data_signal", class(signal))
   signal$key <- paste(signal$source, signal$signal, sep = ":")
 
-  #' fetch covidcast data
-  #'
-  #' param data_source data source to fetch
-  #' param signals data source to fetch
-  #' param geo_type geo_type to fetch
-  #' param time_type data source to fetch
-  #' param geo_values data source to fetch
-  #' param time_values data source to fetch
-  #' param as_of data source to fetch
-  #' param issues data source to fetch
-  #' param lag data source to fetch
-  #' return an instance of epidata_call
-  #' keywords internal
+  # Inner callable returned per signal: fetches covidcast data for the bound
+  # source/signal/time_type, taking geo_type, geo_values, time_values, and the
+  # versioning args (as_of, issues, lag). Returns an epidata_call.
   signal$call <- function(geo_type,
                           geo_values,
                           time_values,
