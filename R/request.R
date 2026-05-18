@@ -12,7 +12,7 @@
 #' @param timeout_seconds the maximum time to wait for a response
 #' @param fields fields to include in the response, or NULL for all
 #' @param http_method HTTP method to use
-#' @return the response body as a string
+#' @return an `httr2_response` object
 #'
 #' @importFrom httr2 req_perform req_timeout req_headers req_user_agent req_retry
 #' @importFrom httr2 req_error req_auth_basic resp_status req_method
@@ -32,7 +32,11 @@ do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), 
   # Add API key if it exists in environment variable
   key <- get_api_key()
   if (key != "") {
-    req <- req %>% httr2::req_auth_basic("epidata", key)
+    if (epidata_call$api_version == "cast") {
+      req <- req %>% httr2::req_headers(token = key)
+    } else {
+      req <- req %>% httr2::req_auth_basic("epidata", key)
+    }
   }
 
   # Prepare the request with user agent, headers, timeout, and retry logic.
@@ -46,7 +50,14 @@ do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), 
     httr2::req_retry(
       max_tries = 3,
       is_transient = function(resp) {
-        !httr2::resp_status(resp) %in% c(400, 401, 403, 405, 414, 500)
+        httr2::resp_status(resp) %in% c(
+          429, # Too Many Requests
+          500, # Internal Server Error
+          502, # Bad Gateway
+          503, # Service Unavailable
+          504  # Gateway Timeout
+        )
+
       }
     ) %>%
     # Use requested method.
@@ -83,38 +94,5 @@ do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), 
     httr2::resp_check_status(res, info = msg)
   }
 
-  body <- httr2::resp_body_string(res, encoding = "UTF-8")
-
-  # The API returns errors as JSON regardless of requested format. If we asked
-  # for non-classic (e.g. CSV) but got JSON back, it's an error response.
-  if (format_type != "classic" && startsWith(body, "{")) {
-    parsed <- jsonlite::fromJSON(body)
-    check_epidata_result(parsed)
-  }
-
-  body
-}
-
-#' Check an API response for epidata-level errors and warnings.
-#'
-#' @param response_content parsed JSON response with `result` and `message` fields
-#' @param allow_empty if TRUE, suppress errors for "no results" (result == -2)
-#' @keywords internal
-check_epidata_result <- function(response_content, allow_empty = FALSE) {
-  # success is 1, no results is -2, truncated is 2, -1 is generic error
-  if (response_content$result != 1) {
-    if ((response_content$result != -2) && !allow_empty) {
-      cli::cli_abort(
-        "epidata error: {.code {response_content$message}}",
-        class = "epidata_error"
-      )
-    }
-  }
-
-  if (response_content$message != "success") {
-    cli::cli_warn(
-      "epidata warning: {.code {response_content$message}}",
-      class = "epidata_warning"
-    )
-  }
+  res
 }

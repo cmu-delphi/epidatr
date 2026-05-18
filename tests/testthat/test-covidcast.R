@@ -21,10 +21,9 @@ test_that("covidcast", {
 
 
 test_that("http errors", {
-  # see generate_test_data.R
   local_mocked_bindings(
     req_perform = function(...) {
-      to_httr2_response(readRDS(testthat::test_path("data/test-do_request-httpbin.rds")))
+      create_mock_response("", status_code = 400L, headers = list("content-type" = "text/html"))
     },
     .package = "httr2"
   )

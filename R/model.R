@@ -307,8 +307,23 @@ parse_api_timestamp_to_datetime <- function(value) {
 #' @importFrom MMWRweek MMWRweek2Date
 #' @keywords internal
 parse_api_week <- function(value, reference_week_day = 1) {
+  # Guard against empty input (e.g. header-only CSVs)
+  if (length(value) == 0) {
+    return(as.Date(numeric(0), origin = "1970-01-01"))
+  }
   v <- as.integer(value)
   years <- floor(v / 100)
   weeks <- v - (years * 100)
+  # Guard against NAs
+  if (any(is.na(years)) || any(is.na(weeks))) {
+    # If the input contains NAs or invalid formats,
+    # fall back to returning NA dates.
+    res <- as.Date(rep(NA, length(v)))
+    valid <- !is.na(years) & !is.na(weeks)
+    if (any(valid)) {
+      res[valid] <- MMWRweek::MMWRweek2Date(years[valid], weeks[valid], MMWRday = reference_week_day)
+    }
+    return(res)
+  }
   MMWRweek::MMWRweek2Date(years, weeks, MMWRday = reference_week_day)
 }

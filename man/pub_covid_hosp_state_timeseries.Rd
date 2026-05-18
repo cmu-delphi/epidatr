@@ -29,7 +29,7 @@ See the "Data Versioning" section for details.}
 \item{issues}{\code{\link{timeset}}. Optionally, the issue(s) of the
 data to fetch. See the "Data Versioning" section for details.}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass
+\item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
