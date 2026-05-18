@@ -14,9 +14,7 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
-```{r setup, message = FALSE}
 library(dplyr)
-library(tictoc)
 library(ggplot2)
 library(epidatr)
 ```

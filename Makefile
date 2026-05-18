@@ -7,11 +7,9 @@ format:
 test:
 	Rscript -e "devtools::test()"
 test-live:
-	EPIDATR_LIVE_TEST=1 Rscript -e "devtools::test()"
+	EPIDATR_LIVE_TEST=TRUE Rscript -e "devtools::test(filter = 'live')"
 coverage:
-	Rscript -e "print(covr::package_coverage())"
-coverage-report:
-	Rscript -e "covr::report()"
+	Rscript -e "devtools::test_coverage()"
 document:
 	Rscript -e "devtools::document()"
 build: document

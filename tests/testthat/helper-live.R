@@ -7,7 +7,7 @@
 skip_unless_live <- function() {
   testthat::skip_on_cran()
   if (!isTRUE(as.logical(Sys.getenv("EPIDATR_LIVE_TEST")))) {
-    testthat::skip("set EPIDATR_LIVE_TEST=1 to run live tests")
+    testthat::skip("set EPIDATR_LIVE_TEST=TRUE to run live tests")
   }
   if (!curl::has_internet()) testthat::skip("no internet")
   if (Sys.getenv("DELPHI_EPIDATA_KEY") == "") {

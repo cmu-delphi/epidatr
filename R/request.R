@@ -50,7 +50,14 @@ do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), 
     httr2::req_retry(
       max_tries = 3,
       is_transient = function(resp) {
-        httr2::resp_status(resp) %in% c(400, 401, 403, 405, 414, 500)
+        httr2::resp_status(resp) %in% c(
+          429, # Too Many Requests
+          500, # Internal Server Error
+          502, # Bad Gateway
+          503, # Service Unavailable
+          504  # Gateway Timeout
+        )
+
       }
     ) %>%
     # Use requested method.
