@@ -13,6 +13,7 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 ```
 
+```{r setup, message = FALSE, eval = TRUE}
 library(dplyr)
 library(ggplot2)
 library(epidatr)
