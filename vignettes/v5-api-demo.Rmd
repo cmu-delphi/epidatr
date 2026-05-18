@@ -6,7 +6,6 @@ output:
 vignette: >
   %\VignetteIndexEntry{epidatr v5 API demo}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{tictoc}
   \usepackage[utf8]{inputenc}
 ---
 
