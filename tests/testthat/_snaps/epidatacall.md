@@ -124,3 +124,68 @@
       ]
     }
 
+# fetch classic works
+
+    {
+      "type": "list",
+      "attributes": {},
+      "value": [
+        {
+          "type": "list",
+          "attributes": {
+            "names": {
+              "type": "character",
+              "attributes": {},
+              "value": ["epiweek", "forecast"]
+            }
+          },
+          "value": [
+            {
+              "type": "integer",
+              "attributes": {},
+              "value": [201501]
+            },
+            {
+              "type": "list",
+              "attributes": {
+                "names": {
+                  "type": "character",
+                  "attributes": {},
+                  "value": ["_version", "baselines", "data"]
+                }
+              },
+              "value": [
+                {
+                  "type": "integer",
+                  "attributes": {},
+                  "value": [1]
+                },
+                {
+                  "type": "list",
+                  "attributes": {
+                    "names": {
+                      "type": "character",
+                      "attributes": {},
+                      "value": ["nat"]
+                    }
+                  },
+                  "value": [
+                    {
+                      "type": "integer",
+                      "attributes": {},
+                      "value": [2]
+                    }
+                  ]
+                },
+                {
+                  "type": "list",
+                  "attributes": {},
+                  "value": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+
