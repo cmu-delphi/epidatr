@@ -17,7 +17,7 @@ list
 }
 \description{
 \code{epidata_meta} returns source-level metadata from the cast-API,
-including \code{report_date} ranges, \code{reference_date} ranges, and lists of
+including \code{report_time} ranges, \code{reference_time} ranges, and lists of
 available signals and geo types.
 }
 \seealso{

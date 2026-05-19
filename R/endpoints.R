@@ -1130,7 +1130,7 @@ pub_covidcast <- function(
 #'
 #' @description
 #' `epidata_meta` returns source-level metadata from the cast-API,
-#' including `report_date` ranges, `reference_date` ranges, and lists of
+#' including `report_time` ranges, `reference_time` ranges, and lists of
 #' available signals and geo types.
 #'
 #' @param source string. The data source to query.
@@ -1167,8 +1167,8 @@ epidata_meta <- function(source, fetch_args = fetch_args_list()) {
 #' @param geo_type string. The geography type to query (e.g., `"state"`,
 #'   `"nation"`, `"county"`). Use [epidata_meta()] to discover available
 #'   geo types for a given source and signal.
-#' @param reference_date [`timeset`]. Reference dates to return (filters on the
-#'   `reference_date` column). Supports individual dates or [`epirange()`].
+#' @param reference_time [`timeset`]. Reference time to return (filters on the
+#'   `reference_time` column). Supports individual dates or [`epirange()`].
 #'   Defaults to all (`"*"`). Filtered locally after the API call.
 #' @param fill_method string. Optional filter to an imputation method.
 #'   The API provides alternatives of the same signal differing in how
@@ -1178,8 +1178,8 @@ epidata_meta <- function(source, fetch_args = fetch_args_list()) {
 #'   `NULL` (default) returns all fill methods.
 #' @param as_of Date or `NULL`. The snapshot date; `NULL` returns the latest
 #'   available version. Internally maps to the `snapshot_date` parameter.
-#' @param report_date Date, string, or [`epirange()`]. A query on the
-#'   `report_date` column for the archive endpoint. Supports exact dates (e.g.,
+#' @param report_time Date, string, or [`epirange()`]. A query on the
+#'   `report_time` column for the archive endpoint. Supports exact dates (e.g.,
 #'   `"2025-10-16"`), operators (e.g., `"<2025-10-16"`), or an [`epirange()`].
 #'   Internally maps to the `version_query` API parameter.
 #' @return [`tibble::tibble`]
@@ -1195,7 +1195,7 @@ epidata_snapshot <- function(
   signals,
   geo_type,
   geo_values = "*",
-  reference_date = "*",
+  reference_time = "*",
   ...,
   fill_method = NULL,
   as_of = NULL,
@@ -1219,7 +1219,7 @@ epidata_snapshot <- function(
   # as_of reformatting
   if (!is.null(as_of)) as_of <- format(parse_api_date(as_of), "%Y-%m-%d")
 
-  parsed_reference_dates <- validate_timeset_input("reference_date", reference_date)
+  parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
 
   create_epidata_call(
     endpoint = "snapshot/",
@@ -1232,11 +1232,11 @@ epidata_snapshot <- function(
     ),
     meta = list(
       create_epidata_field_info("signal", "text"),
-      create_epidata_field_info("report_date", "date"),
+      create_epidata_field_info("report_time", "date"),
       create_epidata_field_info("geo_type", "text"),
       create_epidata_field_info("geo_value", "text"),
       create_epidata_field_info("fill_method", "text"),
-      create_epidata_field_info("reference_date", "date"),
+      create_epidata_field_info("reference_time", "date"),
       create_epidata_field_info("value", "float"),
       # source-specific extra columns
       create_epidata_field_info("age_group", "text"),     # pophive
@@ -1248,7 +1248,7 @@ epidata_snapshot <- function(
     response_format = "csv"
   ) %>%
     fetch(fetch_args = fetch_args) %>%
-    .cast_filter(geo_values, reference_date, parsed_reference_dates)
+    .cast_filter(geo_values, reference_time, parsed_reference_times)
 }
 
 #' @rdname cast_api_queries
@@ -1258,10 +1258,10 @@ epidata_archive <- function(
   signals,
   geo_type,
   geo_values = "*",
-  reference_date = "*",
+  reference_time = "*",
   ...,
   fill_method = NULL,
-  report_date = "*",
+  report_time = "*",
   fetch_args = fetch_args_list()
 ) {
   if (missing(source) || missing(signals) || missing(geo_type)) {
@@ -1279,8 +1279,8 @@ epidata_archive <- function(
   assert_character_param("geo_values", geo_values)
   assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
 
-  parsed_reference_dates <- validate_timeset_input("reference_date", reference_date)
-  version_query <- validate_version_query(report_date)
+  parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
+  version_query <- validate_version_query(report_time)
 
   create_epidata_call(
     endpoint = "archive/",
@@ -1293,11 +1293,11 @@ epidata_archive <- function(
     ),
     meta = list(
       create_epidata_field_info("signal", "text"),
-      create_epidata_field_info("report_date", "date"),
+      create_epidata_field_info("report_time", "date"),
       create_epidata_field_info("geo_type", "text"),
       create_epidata_field_info("geo_value", "text"),
       create_epidata_field_info("fill_method", "text"),
-      create_epidata_field_info("reference_date", "date"),
+      create_epidata_field_info("reference_time", "date"),
       create_epidata_field_info("value", "float"),
       # source-specific extra columns
       create_epidata_field_info("age_group", "text"),     # pophive
@@ -1309,7 +1309,7 @@ epidata_archive <- function(
     response_format = "csv"
   ) %>%
     fetch(fetch_args = fetch_args) %>%
-    .cast_filter(geo_values, reference_date, parsed_reference_dates, report_date = report_date)
+    .cast_filter(geo_values, reference_time, parsed_reference_times, report_time = report_time)
 }
 
 #' @rdname cast_api_queries
@@ -1319,32 +1319,32 @@ epidata <- function(
   signals,
   geo_type,
   geo_values = "*",
-  reference_date = "*",
+  reference_time = "*",
   ...,
   fill_method = NULL,
   as_of = NULL,
-  report_date = NULL,
+  report_time = NULL,
   fetch_args = fetch_args_list()
 ) {
-  if (!is.null(report_date) && !is.null(as_of)) {
+  if (!is.null(report_time) && !is.null(as_of)) {
     cli::cli_abort(
-      "`report_date` and `as_of` are mutually exclusive",
+      "`report_time` and `as_of` are mutually exclusive",
       class = "epidatr__epidata__version_and_as_of_exclusive"
     )
   }
 
-  if (!is.null(report_date) || identical(as_of, "*")) {
+  if (!is.null(report_time) || identical(as_of, "*")) {
     epidata_archive(
       source = source, signals = signals, geo_type = geo_type,
-      geo_values = geo_values, reference_date = reference_date,
+      geo_values = geo_values, reference_time = reference_time,
       fill_method = fill_method,
-      report_date = if (!is.null(report_date)) report_date else "*",
+      report_time = if (!is.null(report_time)) report_time else "*",
       fetch_args = fetch_args
     )
   } else {
     epidata_snapshot(
       source = source, signals = signals, geo_type = geo_type,
-      geo_values = geo_values, reference_date = reference_date,
+      geo_values = geo_values, reference_time = reference_time,
       fill_method = fill_method,
       as_of = as_of,
       fetch_args = fetch_args

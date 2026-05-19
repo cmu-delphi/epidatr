@@ -12,7 +12,7 @@ epidata_snapshot(
   signals,
   geo_type,
   geo_values = "*",
-  reference_date = "*",
+  reference_time = "*",
   ...,
   fill_method = NULL,
   as_of = NULL,
@@ -24,10 +24,10 @@ epidata_archive(
   signals,
   geo_type,
   geo_values = "*",
-  reference_date = "*",
+  reference_time = "*",
   ...,
   fill_method = NULL,
-  report_date = "*",
+  report_time = "*",
   fetch_args = fetch_args_list()
 )
 
@@ -36,11 +36,11 @@ epidata(
   signals,
   geo_type,
   geo_values = "*",
-  reference_date = "*",
+  reference_time = "*",
   ...,
   fill_method = NULL,
   as_of = NULL,
-  report_date = NULL,
+  report_time = NULL,
   fetch_args = fetch_args_list()
 )
 }
@@ -59,8 +59,8 @@ geo types for a given source and signal.}
 ("*") geographies within requested geographic resolution (see:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.).}
 
-\item{reference_date}{\code{\link{timeset}}. Reference dates to return (filters on the
-\code{reference_date} column). Supports individual dates or \code{\link[=epirange]{epirange()}}.
+\item{reference_time}{\code{\link{timeset}}. Reference dates to return (filters on the
+\code{reference_time} column). Supports individual dates or \code{\link[=epirange]{epirange()}}.
 Defaults to all (\code{"*"}). Filtered locally after the API call.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
@@ -78,8 +78,8 @@ available version. Internally maps to the \code{snapshot_date} parameter.}
 \item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}
 
-\item{report_date}{Date, string, or \code{\link[=epirange]{epirange()}}. A query on the
-\code{report_date} column for the archive endpoint. Supports exact dates (e.g.,
+\item{report_time}{Date, string, or \code{\link[=epirange]{epirange()}}. A query on the
+\code{report_time} column for the archive endpoint. Supports exact dates (e.g.,
 \code{"2025-10-16"}), operators (e.g., \code{"<2025-10-16"}), or an \code{\link[=epirange]{epirange()}}.
 Internally maps to the \code{version_query} API parameter.}
 }
