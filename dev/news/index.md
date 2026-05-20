@@ -25,19 +25,20 @@
 ### Features
 
 - Added new `epidata`, `epidata_meta`, `epidata_snapshot`, and
-  `epidata_archive` for accessing the Delphi V5 API. \## Patches
+  `epidata_archive` for accessing the Delphi V5 API.
+- [`pub_covidcast_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast_meta.md)
+  gained `signals`, `time_type`, and `geo_type` arguments for
+  server-side filtering of the metadata results.
+
+### Patches
 
 - `last_update` in `pub_covidcast_meta` is now returned as a `POSIXct`
   object instead of an integer.
-
 - Improved efficiency of date parsing for API responses.
-
 - Migrate HTTP requests from `httr` to `httr2`.
-
 - Update endpoint examples to skip execution when required API keys or
   internet connectivity are unavailable, ensuring cleaner `R CMD check`
   results.
-
 - Add `lifecycle` to `DESCRIPTION` to properly manage function
   deprecations.
 

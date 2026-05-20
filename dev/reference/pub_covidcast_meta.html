@@ -3,11 +3,17 @@
 https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html.
 Fetch a summary of metadata for all sources and signals that are available in
 the API, along with basic summary statistics such as the dates they are
-available, the geographic levels at which they are reported, and etc."><meta property="og:description" content="API docs:
+available, the geographic levels at which they are reported, and etc.
+The result can be filtered server-side by passing signals, time_type,
+and/or geo_type. Omitted filters (the default) return metadata for
+everything."><meta property="og:description" content="API docs:
 https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html.
 Fetch a summary of metadata for all sources and signals that are available in
 the API, along with basic summary statistics such as the dates they are
-available, the geographic levels at which they are reported, and etc."><meta name="robots" content="noindex"></head><body>
+available, the geographic levels at which they are reported, and etc.
+The result can be filtered server-side by passing signals, time_type,
+and/or geo_type. Omitted filters (the default) return metadata for
+everything."><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -54,18 +60,44 @@ available, the geographic levels at which they are reported, and etc."><meta nam
 <p>Fetch a summary of metadata for all sources and signals that are available in
 the API, along with basic summary statistics such as the dates they are
 available, the geographic levels at which they are reported, and etc.</p>
+<p>The result can be filtered server-side by passing <code>signals</code>, <code>time_type</code>,
+and/or <code>geo_type</code>. Omitted filters (the default) return metadata for
+everything.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pub_covidcast_meta</span><span class="op">(</span>fetch_args <span class="op">=</span> <span class="fu"><a href="fetch_args_list.html">fetch_args_list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pub_covidcast_meta</span><span class="op">(</span></span>
+<span>  signals <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  time_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  geo_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fetch_args <span class="op">=</span> <span class="fu"><a href="fetch_args_list.html">fetch_args_list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-fetch-args">fetch_args<a class="anchor" aria-label="anchor" href="#arg-fetch-args"></a></dt>
+<dl><dt id="arg-signals">signals<a class="anchor" aria-label="anchor" href="#arg-signals"></a></dt>
+<dd><p>character. Optionally, the signals to return metadata for,
+each formatted as <code>"source:signal"</code> (e.g. <code>"fb-survey:smoothed_cli"</code>).
+Defaults to all signals.</p></dd>
+
+
+<dt id="arg-time-type">time_type<a class="anchor" aria-label="anchor" href="#arg-time-type"></a></dt>
+<dd><p>string. The temporal resolution of the data (either "day" or
+"week", depending on signal).</p></dd>
+
+
+<dt id="arg-geo-type">geo_type<a class="anchor" aria-label="anchor" href="#arg-geo-type"></a></dt>
+<dd><p>string. Optionally, a single geographic resolution to return
+metadata for (see:
+<a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html" class="external-link">https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html</a>).
+Defaults to all geographic resolutions.</p></dd>
+
+
+<dt id="arg-fetch-args">fetch_args<a class="anchor" aria-label="anchor" href="#arg-fetch-args"></a></dt>
 <dd><p><code><a href="fetch_args_list.html">fetch_args_list()</a></code>. Additional arguments to pass
 to <code><a href="epidata_call.html">fetch()</a></code>. See <code><a href="fetch_args_list.html">fetch_args_list()</a></code> for details.</p></dd>
 
@@ -97,6 +129,69 @@ to <code><a href="epidata_call.html">fetch()</a></code>. See <code><a href="fetc
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> beta_google_sympto… s02_r… day       county   20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029          <span style="text-decoration: underline;">2</span>718</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> beta_google_sympto… s02_r… day       state    20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029            51</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,954 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 8 more variables: min_value &lt;dbl&gt;, max_value &lt;dbl&gt;, mean_value &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   stdev_value &lt;dbl&gt;, last_update &lt;dttm&gt;, max_issue &lt;dbl&gt;, min_lag &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   max_lag &lt;dbl&gt;</span></span>
+<span class="r-in"><span><span class="co"># All signals from the Facebook survey data source</span></span></span>
+<span class="r-in"><span><span class="fu">pub_covidcast_meta</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  signals <span class="op">=</span> <span class="st">"fb-survey:*"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,753 × 15</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    data_source signal         time_type geo_type min_time max_time num_locations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> fb-survey   raw_cli        day       county   20<span style="text-decoration: underline;">200</span>406 20<span style="text-decoration: underline;">220</span>625           642</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> fb-survey   raw_cli        day       hrr      20<span style="text-decoration: underline;">200</span>406 20<span style="text-decoration: underline;">220</span>625           306</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> fb-survey   raw_cli        day       msa      20<span style="text-decoration: underline;">200</span>406 20<span style="text-decoration: underline;">220</span>625           342</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> fb-survey   raw_cli        day       nation   20<span style="text-decoration: underline;">200</span>406 20<span style="text-decoration: underline;">220</span>626             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> fb-survey   raw_cli        day       state    20<span style="text-decoration: underline;">200</span>406 20<span style="text-decoration: underline;">220</span>625            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> fb-survey   raw_hh_cmnty_… day       county   20<span style="text-decoration: underline;">200</span>415 20<span style="text-decoration: underline;">220</span>625           351</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> fb-survey   raw_hh_cmnty_… day       hrr      20<span style="text-decoration: underline;">200</span>415 20<span style="text-decoration: underline;">220</span>625           288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> fb-survey   raw_hh_cmnty_… day       msa      20<span style="text-decoration: underline;">200</span>415 20<span style="text-decoration: underline;">220</span>625           215</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> fb-survey   raw_hh_cmnty_… day       nation   20<span style="text-decoration: underline;">200</span>415 20<span style="text-decoration: underline;">220</span>626             1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> fb-survey   raw_hh_cmnty_… day       state    20<span style="text-decoration: underline;">200</span>415 20<span style="text-decoration: underline;">220</span>625            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1,743 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 8 more variables: min_value &lt;dbl&gt;, max_value &lt;dbl&gt;, mean_value &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   stdev_value &lt;dbl&gt;, last_update &lt;dttm&gt;, max_issue &lt;dbl&gt;, min_lag &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   max_lag &lt;dbl&gt;</span></span>
+<span class="r-in"><span><span class="co"># All signals with time_type "day".</span></span></span>
+<span class="r-in"><span><span class="fu">pub_covidcast_meta</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,474 × 15</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    data_source         signal time_type geo_type min_time max_time num_locations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> beta_google_sympto… s01_r… day       county   20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029          <span style="text-decoration: underline;">2</span>718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> beta_google_sympto… s01_r… day       state    20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> beta_google_sympto… s01_r… day       hrr      20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029           299</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> beta_google_sympto… s01_r… day       msa      20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029           380</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> beta_google_sympto… s01_s… day       county   20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029          <span style="text-decoration: underline;">2</span>718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> beta_google_sympto… s01_s… day       state    20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> beta_google_sympto… s01_s… day       hrr      20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029           299</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> beta_google_sympto… s01_s… day       msa      20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029           380</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> beta_google_sympto… s02_r… day       county   20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029          <span style="text-decoration: underline;">2</span>718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> beta_google_sympto… s02_r… day       state    20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,464 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 8 more variables: min_value &lt;dbl&gt;, max_value &lt;dbl&gt;, mean_value &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   stdev_value &lt;dbl&gt;, last_update &lt;dttm&gt;, max_issue &lt;dbl&gt;, min_lag &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   max_lag &lt;dbl&gt;</span></span>
+<span class="r-in"><span><span class="co"># All signals with geo_type "state".</span></span></span>
+<span class="r-in"><span><span class="fu">pub_covidcast_meta</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 622 × 15</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    data_source         signal time_type geo_type min_time max_time num_locations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> beta_google_sympto… s01_r… day       state    20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> beta_google_sympto… s01_s… day       state    20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> beta_google_sympto… s02_r… day       state    20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> beta_google_sympto… s02_s… day       state    20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> beta_google_sympto… s03_r… day       state    20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> beta_google_sympto… s03_s… day       state    20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> beta_google_sympto… s04_r… day       state    20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> beta_google_sympto… s04_s… day       state    20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> beta_google_sympto… s05_r… day       state    20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> beta_google_sympto… s05_s… day       state    20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029            51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 612 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 8 more variables: min_value &lt;dbl&gt;, max_value &lt;dbl&gt;, mean_value &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   stdev_value &lt;dbl&gt;, last_update &lt;dttm&gt;, max_issue &lt;dbl&gt;, min_lag &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   max_lag &lt;dbl&gt;</span></span>

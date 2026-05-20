@@ -52,12 +52,18 @@
 </ul></div>
 <div class="section level3">
 <h3 id="features-1-3-0">Features<a class="anchor" aria-label="anchor" href="#features-1-3-0"></a></h3>
-<ul><li><p>Added new <code>epidata</code>, <code>epidata_meta</code>, <code>epidata_snapshot</code>, and <code>epidata_archive</code> for accessing the Delphi V5 API. ## Patches</p></li>
-<li><p><code>last_update</code> in <code>pub_covidcast_meta</code> is now returned as a <code>POSIXct</code> object instead of an integer.</p></li>
-<li><p>Improved efficiency of date parsing for API responses.</p></li>
-<li><p>Migrate HTTP requests from <code>httr</code> to <code>httr2</code>.</p></li>
-<li><p>Update endpoint examples to skip execution when required API keys or internet connectivity are unavailable, ensuring cleaner <code>R CMD check</code> results.</p></li>
-<li><p>Add <code>lifecycle</code> to <code>DESCRIPTION</code> to properly manage function deprecations.</p></li>
+<ul><li>Added new <code>epidata</code>, <code>epidata_meta</code>, <code>epidata_snapshot</code>, and <code>epidata_archive</code> for accessing the Delphi V5 API.</li>
+<li>
+<code><a href="../reference/pub_covidcast_meta.html">pub_covidcast_meta()</a></code> gained <code>signals</code>, <code>time_type</code>, and <code>geo_type</code> arguments for server-side filtering of the metadata results.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="patches-1-3-0">Patches<a class="anchor" aria-label="anchor" href="#patches-1-3-0"></a></h3>
+<ul><li>
+<code>last_update</code> in <code>pub_covidcast_meta</code> is now returned as a <code>POSIXct</code> object instead of an integer.</li>
+<li>Improved efficiency of date parsing for API responses.</li>
+<li>Migrate HTTP requests from <code>httr</code> to <code>httr2</code>.</li>
+<li>Update endpoint examples to skip execution when required API keys or internet connectivity are unavailable, ensuring cleaner <code>R CMD check</code> results.</li>
+<li>Add <code>lifecycle</code> to <code>DESCRIPTION</code> to properly manage function deprecations.</li>
 </ul></div>
 </div>
     <div class="section level2">
