@@ -74,8 +74,7 @@ If you want to track how data for a specific time period was revised over time, 
 archive_data <- epidata_archive(
   source = "nssp",
   signal = "pct_ed_visits_influenza",
-  geo_type = "state",
-  time_values = epirange(20230101, 20230114)
+  geo_type = "state"
 )
 head(archive_data)
 ```
