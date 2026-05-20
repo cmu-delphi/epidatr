@@ -171,12 +171,12 @@ test_that("epidata* and epidata_meta work as expected", {
   expect_match(call_wildcard$request$url, "archive/")
   expect_no_match(call_wildcard$request$url, "version_query=")
 
-  # Test as_of = "*" mapping in epidata
+  # Test snapshot_date = "*" mapping in epidata routes to archive
   call_as_of_wildcard <- epidata(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
-    as_of = "*",
+    snapshot_date = "*",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_match(call_as_of_wildcard$request$url, "archive/")
@@ -199,13 +199,13 @@ test_that("epidata validations and deprecations", {
     class = "epidatr__epidata__missing_required_args"
   )
 
-  # Mutually exclusive as_of and report_time
+  # Mutually exclusive snapshot_date and report_time
   expect_error(
     epidata(
       source = "nssp",
       signals = "sig1",
       geo_type = "state",
-      as_of = "2024-01-01",
+      snapshot_date = "2024-01-01",
       report_time = "<2024-01-01"
     ),
     class = "epidatr__epidata__version_and_as_of_exclusive"
@@ -232,6 +232,17 @@ test_that("epidata validations and deprecations", {
       fetch_args = fetch_args_list(dry_run = TRUE)
     ),
     regexp = "Use `reference_time` instead"
+  )
+
+  expect_warning(
+    epidata_snapshot(
+      source = "nssp",
+      signals = "sig1",
+      geo_type = "state",
+      as_of = "2024-01-01",
+      fetch_args = fetch_args_list(dry_run = TRUE)
+    ),
+    regexp = "Use `snapshot_date` instead"
   )
 })
 

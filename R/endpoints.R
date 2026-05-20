@@ -1153,7 +1153,7 @@ epidata_meta <- function(source, fetch_args = fetch_args_list()) {
 #'
 #' @description
 #' - `epidata_snapshot` fetches a snapshot of signals as they appeared at a
-#'   specific date (or the latest available if `as_of` is omitted).
+#'   specific date (or the latest available if `snapshot_date` is omitted).
 #' - `epidata_archive` fetches the full version history of signals across all
 #'   available issues.
 #' - `epidata` is a wrapper that routes to one of the above based
@@ -1176,8 +1176,9 @@ epidata_meta <- function(source, fetch_args = fetch_args_list()) {
 #'   imputation or aggregation (raw source data), `"fill_ave"` fills nulls with
 #'   the average of neighboring values, and `"fill_zero"` fills nulls with zero.
 #'   `NULL` (default) returns all fill methods.
-#' @param as_of Date or `NULL`. The snapshot date; `NULL` returns the latest
-#'   available version. Internally maps to the `snapshot_date` parameter.
+#' @param snapshot_date Date or `NULL`. The snapshot date; `NULL` returns the
+#'   latest available version.
+#' @param as_of `r lifecycle::badge("deprecated")` Use `snapshot_date` instead.
 #' @param report_time Date, string, or [`epirange()`]. A query on the
 #'   `report_time` column for the archive endpoint. Supports exact dates (e.g.,
 #'   `"2025-10-16"`), operators (e.g., `"<2025-10-16"`), or an [`epirange()`].
@@ -1187,10 +1188,10 @@ epidata_meta <- function(source, fetch_args = fetch_args_list()) {
 #' @return [`tibble::tibble`]
 #'
 #' @section Data Versioning:
-#' `epidata` supports two mutually exclusive versioning arguments. Pass `as_of`
-#' to retrieve data as it appeared on a specific date, or `report_time` to query
-#' the archive by when data was reported. If neither is supplied, `epidata`
-#' returns the latest available snapshot.
+#' `epidata` supports two mutually exclusive versioning arguments. Pass
+#' `snapshot_date` to retrieve data as it appeared on a specific date, or
+#' `report_time` to query the archive by when data was reported. If neither is
+#' supplied, `epidata` returns the latest available snapshot.
 #'
 #' @seealso [epidata_meta()], [epirange()]
 #' @keywords endpoint
@@ -1208,7 +1209,8 @@ epidata_snapshot <- function(
   time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
-  as_of = NULL,
+  snapshot_date = NULL,
+  as_of = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 ) {
   if (missing(source) || missing(signals) || missing(geo_type)) {
@@ -1220,18 +1222,21 @@ epidata_snapshot <- function(
 
   rlang::check_dots_empty()
 
-  assert_character_param("source", source, len = 1)
-  assert_character_param("signals", signals)
-  assert_character_param("geo_type", geo_type, len = 1)
-  assert_character_param("geo_values", geo_values)
-  assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
-  assert_date_param("as_of", as_of, len = 1, required = FALSE)
-  # as_of reformatting
-  if (!is.null(as_of)) as_of <- format(parse_api_date(as_of), "%Y-%m-%d")
+  if (lifecycle::is_present(as_of)) {
+    lifecycle::deprecate_warn(
+      "1.3.0",
+      "epidata_snapshot(as_of)",
+      details = paste(
+        "The `as_of` argument is deprecated and will be removed in a future version.",
+        "Use `snapshot_date` instead."
+      )
+    )
+    snapshot_date <- as_of
+  }
 
   if (lifecycle::is_present(time_values)) {
     lifecycle::deprecate_warn(
-      "0.3.0",
+      "1.3.0",
       "epidata_snapshot(time_values)",
       details = paste(
         "The `time_values` argument is deprecated and will be removed in a future version.",
@@ -1240,6 +1245,14 @@ epidata_snapshot <- function(
     )
     reference_time <- time_values
   }
+
+  assert_character_param("source", source, len = 1)
+  assert_character_param("signals", signals)
+  assert_character_param("geo_type", geo_type, len = 1)
+  assert_character_param("geo_values", geo_values)
+  assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
+  assert_date_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
+  if (!is.null(snapshot_date)) snapshot_date <- format(parse_api_date(snapshot_date), "%Y-%m-%d")
 
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
 
@@ -1250,7 +1263,7 @@ epidata_snapshot <- function(
       signal = paste(signals, collapse = ","),
       geo_type = geo_type,
       fill_method = fill_method,
-      snapshot_date = as_of
+      snapshot_date = snapshot_date
     ),
     meta = list(
       create_epidata_field_info("signal", "text"),
@@ -1305,7 +1318,7 @@ epidata_archive <- function(
 
   if (lifecycle::is_present(time_values)) {
     lifecycle::deprecate_warn(
-      "0.3.0",
+      "1.3.0",
       "epidata_archive(time_values)",
       details = paste(
         "The `time_values` argument is deprecated and will be removed in a future version.",
@@ -1316,7 +1329,7 @@ epidata_archive <- function(
   }
   if (lifecycle::is_present(issues)) {
     lifecycle::deprecate_warn(
-      "0.3.0",
+      "1.3.0",
       "epidata_archive(issues)",
       details = paste(
         "The `issues` argument is deprecated and will be removed in a future version.",
@@ -1370,19 +1383,22 @@ epidata <- function(
   time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
-  as_of = NULL,
+  snapshot_date = NULL,
+  as_of = lifecycle::deprecated(),
   report_time = NULL,
   issues = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 ) {
-  if ((!is.null(report_time) || lifecycle::is_present(issues)) && !is.null(as_of)) {
+  if ((!is.null(report_time) || lifecycle::is_present(issues)) &&
+        (!is.null(snapshot_date) || lifecycle::is_present(as_of))) {
     cli::cli_abort(
-      "`report_time` and `as_of` are mutually exclusive",
+      "`report_time` and `snapshot_date` are mutually exclusive",
       class = "epidatr__epidata__version_and_as_of_exclusive"
     )
   }
 
-  if (!is.null(report_time) || lifecycle::is_present(issues) || identical(as_of, "*")) {
+  if (!is.null(report_time) || lifecycle::is_present(issues) ||
+        identical(snapshot_date, "*") || identical(as_of, "*")) {
     epidata_archive(
       source = source, signals = signals, geo_type = geo_type,
       geo_values = geo_values, reference_time = reference_time,
@@ -1398,6 +1414,7 @@ epidata <- function(
       geo_values = geo_values, reference_time = reference_time,
       time_values = time_values,
       fill_method = fill_method,
+      snapshot_date = snapshot_date,
       as_of = as_of,
       fetch_args = fetch_args
     )

@@ -16,7 +16,8 @@ epidata_snapshot(
   time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
-  as_of = NULL,
+  snapshot_date = NULL,
+  as_of = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 )
 
@@ -43,7 +44,8 @@ epidata(
   time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
-  as_of = NULL,
+  snapshot_date = NULL,
+  as_of = lifecycle::deprecated(),
   report_time = NULL,
   issues = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
@@ -79,8 +81,10 @@ imputation or aggregation (raw source data), \code{"fill_ave"} fills nulls with
 the average of neighboring values, and \code{"fill_zero"} fills nulls with zero.
 \code{NULL} (default) returns all fill methods.}
 
-\item{as_of}{Date or \code{NULL}. The snapshot date; \code{NULL} returns the latest
-available version. Internally maps to the \code{snapshot_date} parameter.}
+\item{snapshot_date}{Date or \code{NULL}. The snapshot date; \code{NULL} returns the
+latest available version.}
+
+\item{as_of}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{snapshot_date} instead.}
 
 \item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}
@@ -98,7 +102,7 @@ Internally maps to the \code{version_query} API parameter.}
 \description{
 \itemize{
 \item \code{epidata_snapshot} fetches a snapshot of signals as they appeared at a
-specific date (or the latest available if \code{as_of} is omitted).
+specific date (or the latest available if \code{snapshot_date} is omitted).
 \item \code{epidata_archive} fetches the full version history of signals across all
 available issues.
 \item \code{epidata} is a wrapper that routes to one of the above based
@@ -107,10 +111,10 @@ on which versioning argument is supplied.
 }
 \section{Data Versioning}{
 
-\code{epidata} supports two mutually exclusive versioning arguments. Pass \code{as_of}
-to retrieve data as it appeared on a specific date, or \code{report_time} to query
-the archive by when data was reported. If neither is supplied, \code{epidata}
-returns the latest available snapshot.
+\code{epidata} supports two mutually exclusive versioning arguments. Pass
+\code{snapshot_date} to retrieve data as it appeared on a specific date, or
+\code{report_time} to query the archive by when data was reported. If neither is
+supplied, \code{epidata} returns the latest available snapshot.
 }
 
 \seealso{
