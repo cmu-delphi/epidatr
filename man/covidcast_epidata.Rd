@@ -27,7 +27,7 @@ an object containing fields for every signal:
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata <- covidcast_epidata()
 epidata$signals
-#> # A tibble: 520 x 3
+#> # A tibble: 538 x 3
 #>    source        signal                        short_description                
 #>    <chr>         <chr>                         <chr>                            
 #>  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~
@@ -40,7 +40,7 @@ epidata$signals
 #>  8 chng          7dav_outpatient_covid         Ratio of outpatient doctor visit~
 #>  9 covid-act-now pcr_specimen_positivity_rate  Proportion of PCR specimens test~
 #> 10 covid-act-now pcr_specimen_total_tests      Total number of PCR specimens te~
-#> # i 510 more rows
+#> # i 528 more rows
 }\if{html}{\out{</div>}}
 
 If you use an editor that supports tab completion, such as RStudio, type
@@ -60,9 +60,6 @@ the \code{pub_covidcast()} function. Simply use the \verb{$call} attribute of th
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa",
                                               epirange(20210405, 20210410))
-#> Waiting 3s for retry backoff =============>-----------------
-#> Waiting 3s for retry backoff ============================>--
-#> Waiting 3s for retry backoff =============================>-
 #> # A tibble: 6 x 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     
 #>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    

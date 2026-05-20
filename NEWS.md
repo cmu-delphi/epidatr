@@ -12,6 +12,8 @@
 ## Features
 
 - Added new `epidata`, `epidata_meta`, `epidata_snapshot`, and `epidata_archive` for accessing the Delphi V5 API.
+- `pub_covidcast_meta()` gained `signals`, `time_type`, and `geo_type` arguments for server-side filtering of the metadata results.
+
 ## Patches
 
 - `last_update` in `pub_covidcast_meta` is now returned as a `POSIXct` object instead of an integer.
