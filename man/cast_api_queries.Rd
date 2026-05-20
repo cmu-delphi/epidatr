@@ -30,7 +30,7 @@ epidata_archive(
   ...,
   fill_method = NULL,
   report_time = "*",
-  version = lifecycle::deprecated(),
+  issues = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 )
 
@@ -45,7 +45,7 @@ epidata(
   fill_method = NULL,
   as_of = NULL,
   report_time = NULL,
-  version = lifecycle::deprecated(),
+  issues = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 )
 }
@@ -90,7 +90,7 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 \code{"2025-10-16"}), operators (e.g., \code{"<2025-10-16"}), or an \code{\link[=epirange]{epirange()}}.
 Internally maps to the \code{version_query} API parameter.}
 
-\item{version}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{report_time} instead.}
+\item{issues}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{report_time} instead.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -105,6 +105,14 @@ available issues.
 on which versioning argument is supplied.
 }
 }
+\section{Data Versioning}{
+
+\code{epidata} supports two mutually exclusive versioning arguments. Pass \code{as_of}
+to retrieve data as it appeared on a specific date, or \code{report_time} to query
+the archive by when data was reported. If neither is supplied, \code{epidata}
+returns the latest available snapshot.
+}
+
 \seealso{
 \code{\link[=epidata_meta]{epidata_meta()}}, \code{\link[=epirange]{epirange()}}
 }

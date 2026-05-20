@@ -1182,9 +1182,16 @@ epidata_meta <- function(source, fetch_args = fetch_args_list()) {
 #'   `report_time` column for the archive endpoint. Supports exact dates (e.g.,
 #'   `"2025-10-16"`), operators (e.g., `"<2025-10-16"`), or an [`epirange()`].
 #'   Internally maps to the `version_query` API parameter.
-#' @param version `r lifecycle::badge("deprecated")` Use `report_time` instead.
+#' @param issues `r lifecycle::badge("deprecated")` Use `report_time` instead.
 #' @param time_values `r lifecycle::badge("deprecated")` Use `reference_time` instead.
 #' @return [`tibble::tibble`]
+#'
+#' @section Data Versioning:
+#' `epidata` supports two mutually exclusive versioning arguments. Pass `as_of`
+#' to retrieve data as it appeared on a specific date, or `report_time` to query
+#' the archive by when data was reported. If neither is supplied, `epidata`
+#' returns the latest available snapshot.
+#'
 #' @seealso [epidata_meta()], [epirange()]
 #' @keywords endpoint
 #' @name cast_api_queries
@@ -1278,7 +1285,7 @@ epidata_archive <- function(
   ...,
   fill_method = NULL,
   report_time = "*",
-  version = lifecycle::deprecated(),
+  issues = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 ) {
   if (missing(source) || missing(signals) || missing(geo_type)) {
@@ -1307,16 +1314,16 @@ epidata_archive <- function(
     )
     reference_time <- time_values
   }
-  if (lifecycle::is_present(version)) {
+  if (lifecycle::is_present(issues)) {
     lifecycle::deprecate_warn(
       "0.3.0",
-      "epidata_archive(version)",
+      "epidata_archive(issues)",
       details = paste(
-        "The `version` argument is deprecated and will be removed in a future version.",
+        "The `issues` argument is deprecated and will be removed in a future version.",
         "Use `report_time` instead."
       )
     )
-    report_time <- version
+    report_time <- issues
   }
 
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
@@ -1365,24 +1372,24 @@ epidata <- function(
   fill_method = NULL,
   as_of = NULL,
   report_time = NULL,
-  version = lifecycle::deprecated(),
+  issues = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 ) {
-  if ((!is.null(report_time) || lifecycle::is_present(version)) && !is.null(as_of)) {
+  if ((!is.null(report_time) || lifecycle::is_present(issues)) && !is.null(as_of)) {
     cli::cli_abort(
       "`report_time` and `as_of` are mutually exclusive",
       class = "epidatr__epidata__version_and_as_of_exclusive"
     )
   }
 
-  if (!is.null(report_time) || lifecycle::is_present(version) || identical(as_of, "*")) {
+  if (!is.null(report_time) || lifecycle::is_present(issues) || identical(as_of, "*")) {
     epidata_archive(
       source = source, signals = signals, geo_type = geo_type,
       geo_values = geo_values, reference_time = reference_time,
       time_values = time_values,
       fill_method = fill_method,
       report_time = if (!is.null(report_time)) report_time else "*",
-      version = version,
+      issues = issues,
       fetch_args = fetch_args
     )
   } else {

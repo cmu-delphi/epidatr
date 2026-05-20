@@ -217,7 +217,7 @@ test_that("epidata validations and deprecations", {
       source = "nssp",
       signals = "sig1",
       geo_type = "state",
-      version = "2024-01-01",
+      issues = "2024-01-01",
       fetch_args = fetch_args_list(dry_run = TRUE)
     ),
     regexp = "Use `report_time` instead"
