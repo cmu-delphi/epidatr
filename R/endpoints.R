@@ -1196,6 +1196,7 @@ epidata_snapshot <- function(
   geo_type,
   geo_values = "*",
   reference_time = "*",
+  time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
   as_of = NULL,
@@ -1219,6 +1220,18 @@ epidata_snapshot <- function(
   # as_of reformatting
   if (!is.null(as_of)) as_of <- format(parse_api_date(as_of), "%Y-%m-%d")
 
+  if (lifecycle::is_present(time_values)) {
+    lifecycle::deprecate_warn(
+      "0.3.0",
+      "epidata_snapshot(time_values)",
+      details = paste(
+        "The `time_values` argument is deprecated and will be removed in a future version.",
+        "Use `reference_time` instead."
+      )
+    )
+    reference_time <- time_values
+  }
+
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
 
   create_epidata_call(
@@ -1239,10 +1252,10 @@ epidata_snapshot <- function(
       create_epidata_field_info("reference_time", "date"),
       create_epidata_field_info("value", "float"),
       # source-specific extra columns
-      create_epidata_field_info("age_group", "text"),     # pophive
-      create_epidata_field_info("nwss_source", "text"),   # nwss
-      create_epidata_field_info("sample_index", "text"),  # nwss
-      create_epidata_field_info("pcr_target", "text")     # nwss
+      create_epidata_field_info("age_group", "text"), # pophive
+      create_epidata_field_info("nwss_source", "text"), # nwss
+      create_epidata_field_info("sample_index", "text"), # nwss
+      create_epidata_field_info("pcr_target", "text") # nwss
     ),
     api_version = "cast",
     response_format = "csv"
@@ -1259,9 +1272,11 @@ epidata_archive <- function(
   geo_type,
   geo_values = "*",
   reference_time = "*",
+  time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
   report_time = "*",
+  version = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 ) {
   if (missing(source) || missing(signals) || missing(geo_type)) {
@@ -1278,6 +1293,23 @@ epidata_archive <- function(
   assert_character_param("geo_type", geo_type, len = 1)
   assert_character_param("geo_values", geo_values)
   assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
+
+  if (lifecycle::is_present(time_values)) {
+    lifecycle::deprecate_warn(
+      "0.3.0",
+      "epidata_archive(time_values)",
+      details = "The `time_values` argument is deprecated and will be removed in a future version. Use `reference_times` instead."
+    )
+    reference_time <- time_values
+  }
+  if (lifecycle::is_present(version)) {
+    lifecycle::deprecate_warn(
+      "0.3.0",
+      "epidata_archive(version)",
+      details = "The `version` argument is deprecated and will be removed in a future version. Use `report_time` instead."
+    )
+    report_time <- version
+  }
 
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
   version_query <- validate_version_query(report_time)
@@ -1300,10 +1332,10 @@ epidata_archive <- function(
       create_epidata_field_info("reference_time", "date"),
       create_epidata_field_info("value", "float"),
       # source-specific extra columns
-      create_epidata_field_info("age_group", "text"),     # pophive
-      create_epidata_field_info("nwss_source", "text"),   # nwss
-      create_epidata_field_info("sample_index", "text"),  # nwss
-      create_epidata_field_info("pcr_target", "text")     # nwss
+      create_epidata_field_info("age_group", "text"), # pophive
+      create_epidata_field_info("nwss_source", "text"), # nwss
+      create_epidata_field_info("sample_index", "text"), # nwss
+      create_epidata_field_info("pcr_target", "text") # nwss
     ),
     api_version = "cast",
     response_format = "csv"
