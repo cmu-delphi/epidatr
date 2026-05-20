@@ -1360,31 +1360,36 @@ epidata <- function(
   geo_type,
   geo_values = "*",
   reference_time = "*",
+  time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
   as_of = NULL,
   report_time = NULL,
+  version = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 ) {
-  if (!is.null(report_time) && !is.null(as_of)) {
+  if ((!is.null(report_time) || lifecycle::is_present(version)) && !is.null(as_of)) {
     cli::cli_abort(
       "`report_time` and `as_of` are mutually exclusive",
       class = "epidatr__epidata__version_and_as_of_exclusive"
     )
   }
 
-  if (!is.null(report_time) || identical(as_of, "*")) {
+  if (!is.null(report_time) || lifecycle::is_present(version) || identical(as_of, "*")) {
     epidata_archive(
       source = source, signals = signals, geo_type = geo_type,
       geo_values = geo_values, reference_time = reference_time,
+      time_values = time_values,
       fill_method = fill_method,
       report_time = if (!is.null(report_time)) report_time else "*",
+      version = version,
       fetch_args = fetch_args
     )
   } else {
     epidata_snapshot(
       source = source, signals = signals, geo_type = geo_type,
       geo_values = geo_values, reference_time = reference_time,
+      time_values = time_values,
       fill_method = fill_method,
       as_of = as_of,
       fetch_args = fetch_args
