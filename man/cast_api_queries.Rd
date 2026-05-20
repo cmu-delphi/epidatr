@@ -13,6 +13,7 @@ epidata_snapshot(
   geo_type,
   geo_values = "*",
   reference_time = "*",
+  time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
   as_of = NULL,
@@ -25,9 +26,11 @@ epidata_archive(
   geo_type,
   geo_values = "*",
   reference_time = "*",
+  time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
   report_time = "*",
+  issues = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 )
 
@@ -37,10 +40,12 @@ epidata(
   geo_type,
   geo_values = "*",
   reference_time = "*",
+  time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
   as_of = NULL,
   report_time = NULL,
+  issues = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 )
 }
@@ -59,9 +64,11 @@ geo types for a given source and signal.}
 ("*") geographies within requested geographic resolution (see:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.).}
 
-\item{reference_time}{\code{\link{timeset}}. Reference dates to return (filters on the
+\item{reference_time}{\code{\link{timeset}}. Reference time to return (filters on the
 \code{reference_time} column). Supports individual dates or \code{\link[=epirange]{epirange()}}.
 Defaults to all (\code{"*"}). Filtered locally after the API call.}
+
+\item{time_values}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{reference_time} instead.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
@@ -82,6 +89,8 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 \code{report_time} column for the archive endpoint. Supports exact dates (e.g.,
 \code{"2025-10-16"}), operators (e.g., \code{"<2025-10-16"}), or an \code{\link[=epirange]{epirange()}}.
 Internally maps to the \code{version_query} API parameter.}
+
+\item{issues}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{report_time} instead.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -96,6 +105,14 @@ available issues.
 on which versioning argument is supplied.
 }
 }
+\section{Data Versioning}{
+
+\code{epidata} supports two mutually exclusive versioning arguments. Pass \code{as_of}
+to retrieve data as it appeared on a specific date, or \code{report_time} to query
+the archive by when data was reported. If neither is supplied, \code{epidata}
+returns the latest available snapshot.
+}
+
 \seealso{
 \code{\link[=epidata_meta]{epidata_meta()}}, \code{\link[=epirange]{epirange()}}
 }

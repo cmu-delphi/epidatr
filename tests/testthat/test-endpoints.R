@@ -192,7 +192,7 @@ test_that("epidata* and epidata_meta work as expected", {
   expect_equal(nrow(res_time_range), 2)
 })
 
-test_that("epidata_snapshot validations", {
+test_that("epidata validations and deprecations", {
   # Missing required args
   expect_error(
     epidata_snapshot(source = "nssp", signals = "sig1"),
@@ -209,6 +209,29 @@ test_that("epidata_snapshot validations", {
       report_time = "<2024-01-01"
     ),
     class = "epidatr__epidata__version_and_as_of_exclusive"
+  )
+
+  # Deprecation warnings in epidata
+  expect_warning(
+    epidata(
+      source = "nssp",
+      signals = "sig1",
+      geo_type = "state",
+      issues = "2024-01-01",
+      fetch_args = fetch_args_list(dry_run = TRUE)
+    ),
+    regexp = "Use `report_time` instead"
+  )
+
+  expect_warning(
+    epidata(
+      source = "nssp",
+      signals = "sig1",
+      geo_type = "state",
+      time_values = "2024-01-01",
+      fetch_args = fetch_args_list(dry_run = TRUE)
+    ),
+    regexp = "Use `reference_time` instead"
   )
 })
 

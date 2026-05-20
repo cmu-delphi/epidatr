@@ -109,36 +109,25 @@ test_that("parse_value can handle NA/NULL values in an int field", {
   )
 })
 
-test_that("parse_api_date accepts str and int input", {
+test_that("parse_api_date", {
+  # accepts str
   expect_identical(parse_api_date("20200101"), as.Date("2020-01-01"))
-  expect_identical(parse_api_date(20200101), as.Date("2020-01-01"))
-})
-
-test_that("parse_api_date accepts YYYYMMDD and YYYY-MM-DD", {
+  # accepts YYYYMMDD and YYYY-MM-DD (int and str)
   expect_identical(parse_api_date(20200101), as.Date("2020-01-01"))
   expect_identical(parse_api_date("2020-01-01"), as.Date("2020-01-01"))
-})
-
-test_that("parse_api_date handles missing values appropriately", {
+  # handles missing values appropriately
   expect_identical(parse_api_date(NA), as.Date(NA))
-})
-
-test_that("parse_api_date works on mixed formats", {
-  vals <- c("20210101", "2021-01-02", "01032021", NA)
-  expected <- as.Date(c("2021-01-01", "2021-01-02", "2021-01-03", NA))
-  expect_equal(parse_api_date(vals), expected)
-})
-
-test_that("parse_api_date handles all NAs", {
-  vals <- c(NA, NA)
-  expected <- as.Date(c(NA, NA))
-  expect_equal(parse_api_date(vals), expected)
-})
-
-test_that("parse_api_date handles invalid dates gracefully", {
-  vals <- c("invalid", "20210101")
-  expected <- as.Date(c(NA, "2021-01-01"))
-  expect_equal(parse_api_date(vals), expected)
+  expect_equal(parse_api_date(c(NA, NA)), as.Date(c(NA, NA)))
+  # parse_api_date works on mixed formats
+  expect_equal(
+    parse_api_date(c("20210101", "2021-01-02", "01032021", NA)),
+    as.Date(c("2021-01-01", "2021-01-02", "2021-01-03", NA))
+  )
+  # handles invalid dates gracefully
+  expect_equal(
+    parse_api_date(c("invalid", "20210101")),
+    as.Date(c(NA, "2021-01-01"))
+  )
 })
 
 test_that("parse_api_timestamp_to_datetime works on timestamps", {
@@ -149,15 +138,13 @@ test_that("parse_api_timestamp_to_datetime works on timestamps", {
   expect_identical(parse_api_timestamp_to_datetime(as.character(val)), expected)
 
   # Check vectorization
-  vals <- c(1000000000, 1592707979)
-  expected <- as.POSIXct(c(1000000000, 1592707979), origin = "1970-01-01")
-  expect_equal(parse_api_timestamp_to_datetime(vals), expected)
-})
-
-test_that("parse_api_timestamp_to_datetime handles missing values appropriately", {
+  expect_equal(
+    parse_api_timestamp_to_datetime(c(1000000000, 1592707979)),
+    as.POSIXct(c(1000000000, 1592707979), origin = "1970-01-01")
+  )
+  # Missing values
   expect_identical(parse_api_timestamp_to_datetime(NA), as.POSIXct(NA))
 })
-
 
 test_that("parse_api_week returns the expected day of the week", {
   expect_identical(parse_api_week(202005) %>% weekdays(), "Sunday")
@@ -168,9 +155,7 @@ test_that("parse_api_week returns the expected day of the week", {
 test_that("date_to_epiweek accepts str and int input", {
   expect_identical(date_to_epiweek("20200101"), 202001)
   expect_identical(date_to_epiweek(20200101), 202001)
-})
-
-test_that("date_to_epiweek accepts single and double-digit weeks", {
+  # Single and double-digit weeks
   expect_identical(date_to_epiweek(20201101), 202045)
   expect_identical(date_to_epiweek(20200109), 202002)
 })
