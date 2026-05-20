@@ -928,21 +928,57 @@ pub_covid_hosp_state_timeseries <- function(
 #' the API, along with basic summary statistics such as the dates they are
 #' available, the geographic levels at which they are reported, and etc.
 #'
+#' The result can be filtered server-side by passing `signals`, `time_type`,
+#' and/or `geo_type`. Omitted filters (the default) return metadata for
+#' everything.
+#'
 #' @inheritParams .epidatr_shared_params
+#' @param signals character. Optionally, the signals to return metadata for,
+#'   each formatted as `"source:signal"` (e.g. `"fb-survey:smoothed_cli"`).
+#'   Defaults to all signals.
+#' @param geo_type string. Optionally, a single geographic resolution to return
+#'   metadata for (see:
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>).
+#'   Defaults to all geographic resolutions.
 #'
 #' @return [`tibble::tibble`]
 #'
 #' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
 #'
 #' pub_covidcast_meta()
+#' # All signals from the Facebook survey data source
+#' pub_covidcast_meta(
+#'   signals = "fb-survey:*"
+#' )
+#' # All signals with time_type "day".
+#' pub_covidcast_meta(
+#'   time_type = "day",
+#' )
+#' # All signals with geo_type "state".
+#' pub_covidcast_meta(
+#'   geo_type = "state",
+#' )
 #'
 #' @seealso [pub_covidcast()],[covidcast_epidata()]
 #' @keywords endpoint
 #' @export
-pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
+pub_covidcast_meta <- function(
+  signals = NULL,
+  time_type = NULL,
+  geo_type = NULL,
+  fetch_args = fetch_args_list()
+) {
+  assert_character_param("signals", signals, required = FALSE)
+  assert_character_param("time_type", time_type, len = 1, required = FALSE)
+  assert_character_param("geo_type", geo_type, len = 1, required = FALSE)
+
   create_epidata_call(
     "covidcast_meta/",
-    list(),
+    list(
+      signals = signals,
+      time_types = time_type,
+      geo_types = geo_type
+    ),
     list(
       create_epidata_field_info("data_source", "text"),
       create_epidata_field_info("signal", "text"),

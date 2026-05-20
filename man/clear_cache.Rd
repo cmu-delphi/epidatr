@@ -8,7 +8,7 @@ clear_cache(..., disable = FALSE)
 }
 \arguments{
 \item{...}{
-  Arguments passed on to \code{\link[=set_cache]{set_cache}}
+  Arguments passed on to \code{\link{set_cache}}
   \describe{
     \item{\code{cache_dir}}{the directory in which the cache is stored. By default, this
 is \code{rappdirs::user_cache_dir("R", version = "epidatr")}. The path can be
