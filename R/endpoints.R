@@ -1298,7 +1298,10 @@ epidata_archive <- function(
     lifecycle::deprecate_warn(
       "0.3.0",
       "epidata_archive(time_values)",
-      details = "The `time_values` argument is deprecated and will be removed in a future version. Use `reference_times` instead."
+      details = paste(
+        "The `time_values` argument is deprecated and will be removed in a future version.",
+        "Use `reference_time` instead."
+      )
     )
     reference_time <- time_values
   }
@@ -1306,7 +1309,10 @@ epidata_archive <- function(
     lifecycle::deprecate_warn(
       "0.3.0",
       "epidata_archive(version)",
-      details = "The `version` argument is deprecated and will be removed in a future version. Use `report_time` instead."
+      details = paste(
+        "The `version` argument is deprecated and will be removed in a future version.",
+        "Use `report_time` instead."
+      )
     )
     report_time <- version
   }
