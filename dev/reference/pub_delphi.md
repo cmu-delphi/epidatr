@@ -35,6 +35,11 @@ pub_delphi(system, epiweek, fetch_args = fetch_args_list())
 
 [`list`](https://rdrr.io/r/base/list.html)
 
+## See also
+
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md).
+
 ## Examples
 
 ``` r

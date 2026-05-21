@@ -119,6 +119,11 @@ for details and more ways to specify versioned data.
 
 ## See also
 
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md).
+
+## See also
+
 [`pub_covidcast_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast_meta.md),
 [`covidcast_epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/covidcast_epidata.md),
 [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)

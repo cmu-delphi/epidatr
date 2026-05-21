@@ -127,5 +127,10 @@ epidata(
 
 ## See also
 
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md).
+
+## See also
+
 [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md),
 [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)

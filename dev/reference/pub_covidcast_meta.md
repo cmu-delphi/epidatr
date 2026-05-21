@@ -58,6 +58,11 @@ pub_covidcast_meta(
 
 ## See also
 
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md).
+
+## See also
+
 [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md),[`covidcast_epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/covidcast_epidata.md)
 
 ## Examples

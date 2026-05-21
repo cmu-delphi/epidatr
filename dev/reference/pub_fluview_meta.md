@@ -26,6 +26,11 @@ pub_fluview_meta(fetch_args = fetch_args_list())
 
 ## See also
 
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md).
+
+## See also
+
 [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md)
 
 ## Examples

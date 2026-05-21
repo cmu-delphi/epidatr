@@ -47,6 +47,11 @@ The full list of location inputs can be accessed at
 and
 <https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#fluview-cities>.
 
+## See also
+
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md).
+
 ## Examples
 
 ``` r

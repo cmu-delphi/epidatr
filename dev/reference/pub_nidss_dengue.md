@@ -49,6 +49,11 @@ Possible location inputs can be found in
 and
 <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt>.
 
+## See also
+
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md).
+
 ## Examples
 
 ``` r

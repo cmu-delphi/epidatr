@@ -48,6 +48,11 @@ Possibile input for locations can be found in
 and
 <https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#selected-us-cities>.
 
+## See also
+
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md).
+
 ## Examples
 
 ``` r

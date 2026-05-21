@@ -40,6 +40,11 @@ pub_dengue_nowcast(locations, epiweeks = "*", fetch_args = fetch_args_list())
 
 [`tibble::tibble`](https://tibble.tidyverse.org/reference/tibble.html)
 
+## See also
+
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md).
+
 ## Examples
 
 ``` r

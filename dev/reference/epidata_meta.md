@@ -31,6 +31,11 @@ list
 
 ## See also
 
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md).
+
+## See also
+
 [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
 [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
 [`epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),

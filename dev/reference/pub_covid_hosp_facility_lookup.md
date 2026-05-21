@@ -70,6 +70,11 @@ arguments are not currently supported.
 
 ## See also
 
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md).
+
+## See also
+
 [`pub_covid_hosp_facility()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility.md)
 
 ## Examples
