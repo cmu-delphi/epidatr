@@ -48,6 +48,12 @@ Nearby, Google Flu Trends, etc., during the COVID-19 pandemic, because
 these were designed to track ILI as driven by seasonal influenza, and were
 NOT designed to track ILI during the COVID-19 pandemic.
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontrun{
 pvt_sensors(

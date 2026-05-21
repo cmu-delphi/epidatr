@@ -1,6 +1,6 @@
 # Gate for tests that make real network calls to the Delphi Epidata API.
 # Default `devtools::test()` does NOT run these. Use `make test-live`, which
-# sets EPIDATR_LIVE_TEST=1, to enable.
+# sets EPIDATR_LIVE_TEST=TRUE, to enable.
 #
 # We use a package-specific env var (not NOT_CRAN) because testthat's
 # skip_on_cran() also enables tests in interactive R sessions — too leaky.

@@ -5,7 +5,6 @@
 #' @title Shared Documentation for epidatr Parameters
 #'
 #' @description This is a central text for parameter documentation
-#'
 #' @name .epidatr_shared_params
 #' @keywords internal
 #'
@@ -51,6 +50,10 @@
 #'
 #' See `vignette("versioned-data")` for details and more ways to specify
 #' versioned data.
+#'
+#' @section See also:
+#' For example queries showing how to discover signals and build calls,
+#' see `vignette("signal-discovery", package = "epidatr")`.
 NULL
 
 
@@ -58,6 +61,7 @@ NULL
 #'
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/cdc.html>
+#'
 #'
 #' @examples
 #' \dontrun{
@@ -74,6 +78,7 @@ NULL
 #'   for details.
 #' @return [`tibble::tibble`]
 #'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_cdc <- function(
@@ -141,6 +146,7 @@ pvt_cdc <- function(
 #' @return [`tibble::tibble`]
 #'
 #' @seealso [`pub_covid_hosp_facility()`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_covid_hosp_facility_lookup <- function(
@@ -234,6 +240,7 @@ pub_covid_hosp_facility_lookup <- function(
 #' @importFrom checkmate test_class test_integerish test_character
 #'
 #' @seealso [`pub_covid_hosp_facility()`], [`epirange()`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 #
@@ -614,6 +621,7 @@ pub_covid_hosp_facility <- function(
 #'
 #' @return [`tibble::tibble`]
 #'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 #
@@ -960,6 +968,7 @@ pub_covid_hosp_state_timeseries <- function(
 #' )
 #'
 #' @seealso [pub_covidcast()],[covidcast_epidata()]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_covidcast_meta <- function(
@@ -1051,6 +1060,7 @@ pub_covidcast_meta <- function(
 #' @inheritSection .epidatr_shared_params Data Versioning
 #'
 #' @seealso [pub_covidcast_meta()], [covidcast_epidata()], [epirange()]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_covidcast <- function(
@@ -1173,6 +1183,7 @@ pub_covidcast <- function(
 #' @inheritParams .epidatr_shared_params
 #' @return list
 #' @seealso [epidata_snapshot()], [epidata_archive()], [epidata()], [epirange()]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 epidata_meta <- function(source, fetch_args = fetch_args_list()) {
@@ -1220,6 +1231,7 @@ epidata_meta <- function(source, fetch_args = fetch_args_list()) {
 #'   Internally maps to the `version_query` parameter.
 #' @return [`tibble::tibble`]
 #' @seealso [epidata_meta()], [epirange()]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @name cast_api_queries
 NULL
@@ -1403,6 +1415,7 @@ epidata <- function(
 #' @param epiweek [`timeset`]. Epiweek to fetch. Does not support multiple dates.
 #'  Make separate calls to fetch data for multiple epiweeks.
 #' @return [`list`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_delphi <- function(
@@ -1439,6 +1452,7 @@ pub_delphi <- function(
 #' @param locations character. List of locations to fetch.
 #'   See the [codes for countries and territories in the Americas](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas). # nolint
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_dengue_nowcast <- function(
@@ -1483,6 +1497,7 @@ pub_dengue_nowcast <- function(
 #' @param names character. List of sensor names to fetch.
 #'   See the [available sensors](https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html#available-sensors).
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_dengue_sensors <- function(
@@ -1538,6 +1553,7 @@ pvt_dengue_sensors <- function(
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
 #'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_ecdc_ili <- function(
@@ -1603,6 +1619,7 @@ pub_ecdc_ili <- function(
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
 #'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_flusurv <- function(
@@ -1692,6 +1709,7 @@ pub_flusurv <- function(
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
 #'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_fluview_clinical <- function(
@@ -1750,6 +1768,7 @@ pub_fluview_clinical <- function(
 #'
 #' @return [`tibble::tibble`]
 #' @seealso [`pub_fluview()`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
@@ -1788,6 +1807,7 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
 #'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_fluview <- function(
@@ -1865,6 +1885,7 @@ pub_fluview <- function(
 #' @inheritParams .epidatr_shared_params
 #'
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_gft <- function(
@@ -1911,6 +1932,7 @@ pub_gft <- function(
 #'   for details.
 #' @param query string. The query to be fetched.
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_ght <- function(
@@ -1959,6 +1981,7 @@ pvt_ght <- function(
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
 #'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_kcdc_ili <- function(
@@ -2011,6 +2034,7 @@ pub_kcdc_ili <- function(
 #' @inheritParams .epidatr_shared_params
 #' @return [`list`]
 #' @seealso [`pvt_norostat()`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
@@ -2029,6 +2053,7 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 #' @inheritParams .epidatr_shared_params
 #'
 #' @return [`list`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_meta <- function(fetch_args = fetch_args_list()) {
@@ -2058,6 +2083,7 @@ pub_meta <- function(fetch_args = fetch_args_list()) {
 #'   for details.
 #'
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_nidss_dengue <- function(
@@ -2101,6 +2127,7 @@ pub_nidss_dengue <- function(
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
 #'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_nidss_flu <- function(
@@ -2168,6 +2195,7 @@ pub_nidss_flu <- function(
 #' full state names are permitted. See the `locations` column in the
 #' output of `pvt_meta_norostat()` for the allowed values.
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_norostat <- function(
@@ -2212,6 +2240,7 @@ pvt_norostat <- function(
 #'
 #' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_nowcast <- function(
@@ -2252,6 +2281,7 @@ pub_nowcast <- function(
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
 #'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_paho_dengue <- function(
@@ -2315,6 +2345,7 @@ pub_paho_dengue <- function(
 #'   See [HHS regions' codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#hhs-regions)
 #'   for details.
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_quidel <- function(
@@ -2377,6 +2408,7 @@ pvt_quidel <- function(
 #'   See the codes of the [US regions and states](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states) # nolint
 #'   for details.
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_sensors <- function(
@@ -2433,6 +2465,7 @@ pvt_sensors <- function(
 #'   See the codes of the [US regions and states](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states) # nolint
 #'   for details.
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_twitter <- function(
@@ -2513,6 +2546,7 @@ pvt_twitter <- function(
 #' @param language string. Language to fetch.
 #' @param hours integer. Optionally, the hours to fetch.
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_wiki <- function(

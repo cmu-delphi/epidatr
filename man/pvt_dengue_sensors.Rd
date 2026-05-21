@@ -35,6 +35,12 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html}
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontrun{
 pvt_dengue_sensors(

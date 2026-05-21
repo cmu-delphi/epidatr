@@ -30,6 +30,12 @@ The full list of location inputs can be accessed at
 \url{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states}
 and \url{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#fluview-cities}.
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 

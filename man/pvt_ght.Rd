@@ -31,6 +31,12 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/ght.html}
 
 Estimate of influenza activity based on volume of certain search queries. …
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontrun{
 pvt_ght(

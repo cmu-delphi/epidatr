@@ -41,6 +41,12 @@ This is the API documentation for accessing the Twitter Stream endpoint of
 Delphi’s epidemiological data. Sourced from
 \href{http://www.healthtweets.org/}{Healthtweets}
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontrun{
 pvt_twitter(

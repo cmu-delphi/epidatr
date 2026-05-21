@@ -32,6 +32,12 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/norostat.html}
 This is the documentation of the API for accessing the NoroSTAT endpoint of
 the Delphi’s epidemiological data.
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontrun{
 pvt_norostat(

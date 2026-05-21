@@ -42,6 +42,12 @@ The result can be filtered server-side by passing \code{signals}, \code{time_typ
 and/or \code{geo_type}. Omitted filters (the default) return metadata for
 everything.
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
