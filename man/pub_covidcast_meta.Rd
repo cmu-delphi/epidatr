@@ -4,9 +4,26 @@
 \alias{pub_covidcast_meta}
 \title{Metadata for the COVIDcast endpoint}
 \usage{
-pub_covidcast_meta(fetch_args = fetch_args_list())
+pub_covidcast_meta(
+  signals = NULL,
+  time_type = NULL,
+  geo_type = NULL,
+  fetch_args = fetch_args_list()
+)
 }
 \arguments{
+\item{signals}{character. Optionally, the signals to return metadata for,
+each formatted as \code{"source:signal"} (e.g. \code{"fb-survey:smoothed_cli"}).
+Defaults to all signals.}
+
+\item{time_type}{string. The temporal resolution of the data (either "day" or
+"week", depending on signal).}
+
+\item{geo_type}{string. Optionally, a single geographic resolution to return
+metadata for (see:
+\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}).
+Defaults to all geographic resolutions.}
+
 \item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
@@ -20,11 +37,33 @@ API docs:
 Fetch a summary of metadata for all sources and signals that are available in
 the API, along with basic summary statistics such as the dates they are
 available, the geographic levels at which they are reported, and etc.
+
+The result can be filtered server-side by passing \code{signals}, \code{time_type},
+and/or \code{geo_type}. Omitted filters (the default) return metadata for
+everything.
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
 pub_covidcast_meta()
+# All signals from the Facebook survey data source
+pub_covidcast_meta(
+  signals = "fb-survey:*"
+)
+# All signals with time_type "day".
+pub_covidcast_meta(
+  time_type = "day",
+)
+# All signals with geo_type "state".
+pub_covidcast_meta(
+  geo_type = "state",
+)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

@@ -117,6 +117,12 @@ on which versioning argument is supplied.
 supplied, \code{epidata} returns the latest available snapshot.
 }
 
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \seealso{
 \code{\link[=epidata_meta]{epidata_meta()}}, \code{\link[=epirange]{epirange()}}
 }

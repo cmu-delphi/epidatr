@@ -29,6 +29,12 @@ API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/quidel.html}
 
 Data provided by Quidel Corp., which contains flu lab test results.
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontrun{
 pvt_quidel(

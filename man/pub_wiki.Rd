@@ -48,6 +48,12 @@ Number of page visits for selected English, Influenza-related wikipedia articles
 \item Open access
 }
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 

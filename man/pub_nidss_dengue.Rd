@@ -34,6 +34,12 @@ Possible location inputs can be found in
 and
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt}.
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
