@@ -1,8 +1,8 @@
 # Get cast-API source metadata
 
 `epidata_meta` returns source-level metadata from the cast-API,
-including version ranges, time value ranges, and lists of available
-signals and geo types.
+including `report_time` ranges, `reference_time` ranges, and lists of
+available signals and geo types.
 
 ## Usage
 

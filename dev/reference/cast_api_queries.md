@@ -1,7 +1,7 @@
 # cast-API snapshot and archive queries
 
 - `epidata_snapshot` fetches a snapshot of signals as they appeared at a
-  specific date (or the latest available if `as_of` is omitted).
+  specific date (or the latest available if `snapshot_date` is omitted).
 
 - `epidata_archive` fetches the full version history of signals across
   all available issues.
@@ -17,10 +17,12 @@ epidata_snapshot(
   signals,
   geo_type,
   geo_values = "*",
-  time_values = "*",
+  reference_time = "*",
+  time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
-  as_of = NULL,
+  snapshot_date = NULL,
+  as_of = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 )
 
@@ -29,10 +31,12 @@ epidata_archive(
   signals,
   geo_type,
   geo_values = "*",
-  time_values = "*",
+  reference_time = "*",
+  time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
-  version = "*",
+  report_time = "*",
+  issues = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 )
 
@@ -41,11 +45,14 @@ epidata(
   signals,
   geo_type,
   geo_values = "*",
-  time_values = "*",
+  reference_time = "*",
+  time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
-  as_of = NULL,
-  version = NULL,
+  snapshot_date = NULL,
+  as_of = lifecycle::deprecated(),
+  report_time = NULL,
+  issues = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 )
 ```
@@ -78,12 +85,17 @@ epidata(
   geographies within requested geographic resolution (see:
   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.).
 
-- time_values:
+- reference_time:
 
   [`timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md).
-  Time values to return. Supports individual dates or
+  Reference time to return (filters on the `reference_time` column).
+  Supports individual dates or
   [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md).
   Defaults to all (`"*"`). Filtered locally after the API call.
+
+- time_values:
+
+  **\[deprecated\]** Use `reference_time` instead.
 
 - ...:
 
@@ -98,10 +110,14 @@ epidata(
   average of neighboring values, and `"fill_zero"` fills nulls with
   zero. `NULL` (default) returns all fill methods.
 
-- as_of:
+- snapshot_date:
 
   Date or `NULL`. The snapshot date; `NULL` returns the latest available
-  version. Internally maps to the `snapshot_date` parameter.
+  version.
+
+- as_of:
+
+  **\[deprecated\]** Use `snapshot_date` instead.
 
 - fetch_args:
 
@@ -112,18 +128,30 @@ epidata(
   [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
   for details.
 
-- version:
+- report_time:
 
   Date, string, or
   [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md).
-  A version query for the archive endpoint. Supports exact dates (e.g.,
-  `"2025-10-16"`), operators (e.g., `"<2025-10-16"`), or an
+  A query on the `report_time` column for the archive endpoint. Supports
+  exact dates (e.g., `"2025-10-16"`), operators (e.g., `"<2025-10-16"`),
+  or an
   [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md).
-  Internally maps to the `version_query` parameter.
+  Internally maps to the `version_query` API parameter.
+
+- issues:
+
+  **\[deprecated\]** Use `report_time` instead.
 
 ## Value
 
 [`tibble::tibble`](https://tibble.tidyverse.org/reference/tibble.html)
+
+## Data Versioning
+
+`epidata` supports two mutually exclusive versioning arguments. Pass
+`snapshot_date` to retrieve data as it appeared on a specific date, or
+`report_time` to query the archive by when data was reported. If neither
+is supplied, `epidata` returns the latest available snapshot.
 
 ## See also
 
