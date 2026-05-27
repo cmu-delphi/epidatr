@@ -12,10 +12,12 @@ epidata_snapshot(
   signals,
   geo_type,
   geo_values = "*",
-  time_values = "*",
+  reference_time = "*",
+  time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
-  as_of = NULL,
+  snapshot_date = NULL,
+  as_of = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 )
 
@@ -24,10 +26,12 @@ epidata_archive(
   signals,
   geo_type,
   geo_values = "*",
-  time_values = "*",
+  reference_time = "*",
+  time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
-  version = "*",
+  report_time = "*",
+  issues = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 )
 
@@ -36,11 +40,14 @@ epidata(
   signals,
   geo_type,
   geo_values = "*",
-  time_values = "*",
+  reference_time = "*",
+  time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
-  as_of = NULL,
-  version = NULL,
+  snapshot_date = NULL,
+  as_of = lifecycle::deprecated(),
+  report_time = NULL,
+  issues = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 )
 }
@@ -59,9 +66,11 @@ geo types for a given source and signal.}
 ("*") geographies within requested geographic resolution (see:
 \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.).}
 
-\item{time_values}{\code{\link{timeset}}. Time values to return. Supports individual
-dates or \code{\link[=epirange]{epirange()}}. Defaults to all (\code{"*"}). Filtered locally after
-the API call.}
+\item{reference_time}{\code{\link{timeset}}. Reference time to return (filters on the
+\code{reference_time} column). Supports individual dates or \code{\link[=epirange]{epirange()}}.
+Defaults to all (\code{"*"}). Filtered locally after the API call.}
+
+\item{time_values}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{reference_time} instead.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
@@ -72,16 +81,20 @@ imputation or aggregation (raw source data), \code{"fill_ave"} fills nulls with
 the average of neighboring values, and \code{"fill_zero"} fills nulls with zero.
 \code{NULL} (default) returns all fill methods.}
 
-\item{as_of}{Date or \code{NULL}. The snapshot date; \code{NULL} returns the latest
-available version. Internally maps to the \code{snapshot_date} parameter.}
+\item{snapshot_date}{Date or \code{NULL}. The snapshot date; \code{NULL} returns the
+latest available version.}
+
+\item{as_of}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{snapshot_date} instead.}
 
 \item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}
 
-\item{version}{Date, string, or \code{\link[=epirange]{epirange()}}. A version query for the
-archive endpoint. Supports exact dates (e.g., \code{"2025-10-16"}),
-operators (e.g., \code{"<2025-10-16"}), or an \code{\link[=epirange]{epirange()}}.
-Internally maps to the \code{version_query} parameter.}
+\item{report_time}{Date, string, or \code{\link[=epirange]{epirange()}}. A query on the
+\code{report_time} column for the archive endpoint. Supports exact dates (e.g.,
+\code{"2025-10-16"}), operators (e.g., \code{"<2025-10-16"}), or an \code{\link[=epirange]{epirange()}}.
+Internally maps to the \code{version_query} API parameter.}
+
+\item{issues}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{report_time} instead.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -89,13 +102,21 @@ Internally maps to the \code{version_query} parameter.}
 \description{
 \itemize{
 \item \code{epidata_snapshot} fetches a snapshot of signals as they appeared at a
-specific date (or the latest available if \code{as_of} is omitted).
+specific date (or the latest available if \code{snapshot_date} is omitted).
 \item \code{epidata_archive} fetches the full version history of signals across all
 available issues.
 \item \code{epidata} is a wrapper that routes to one of the above based
 on which versioning argument is supplied.
 }
 }
+\section{Data Versioning}{
+
+\code{epidata} supports two mutually exclusive versioning arguments. Pass
+\code{snapshot_date} to retrieve data as it appeared on a specific date, or
+\code{report_time} to query the archive by when data was reported. If neither is
+supplied, \code{epidata} returns the latest available snapshot.
+}
+
 \section{See also}{
 
 For example queries showing how to discover signals and build calls,

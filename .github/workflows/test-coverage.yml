@@ -38,11 +38,13 @@ jobs:
         env:
           DELPHI_EPIDATA_KEY: ${{ secrets.SECRET_EPIDATR_GHACTIONS_DELPHI_EPIDATA_KEY }}
         run: |
-          covr::codecov(
+          cov <- covr::package_coverage(
             quiet = FALSE,
             clean = FALSE,
-            install_path = file.path(Sys.getenv("RUNNER_TEMP"), "package")
+            install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package")
           )
+          print(cov)
+          covr::to_cobertura(cov)
         shell: Rscript {0}
 
       - name: Show testthat output
@@ -61,3 +63,6 @@ jobs:
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./cobertura.xml

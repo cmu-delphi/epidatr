@@ -25,7 +25,10 @@ Let's check the source-specific metadata for `nssp`.
 
 ```{r meta-example}
 meta_nssp <- epidata_meta(source = "nssp")
-head(meta_nssp)
+meta_nssp$nssp$signals
+meta_nssp$nssp$geo_types
+meta_nssp$nssp$version_range
+meta_nssp$nssp$time_value_range
 ```
 
 ### Basic Queries
@@ -74,8 +77,7 @@ If you want to track how data for a specific time period was revised over time, 
 archive_data <- epidata_archive(
   source = "nssp",
   signal = "pct_ed_visits_influenza",
-  geo_type = "state",
-  time_values = epirange(20230101, 20230114)
+  geo_type = "state"
 )
 head(archive_data)
 ```
@@ -86,7 +88,11 @@ Here are some examples for NHSN (hospitalizations), POPHIVE, and NWSS (wastewate
 
 ```{r other-sources-examples}
 # NHSN: Hospital Admissions
-epidata_meta(source = "nhsn")
+meta_nhsn <- epidata_meta(source = "nhsn")
+meta_nhsn$nhsn$signals
+meta_nhsn$nhsn$geo_types
+meta_nhsn$nhsn$version_range
+meta_nhsn$nhsn$time_value_range
 nhsn_data <- epidata_snapshot(
   source = "nhsn",
   signal = "confirmed_admissions_flu_ew",
@@ -95,7 +101,11 @@ nhsn_data <- epidata_snapshot(
 head(nhsn_data)
 
 # POPHIVE
-epidata_meta(source = "pophive")
+meta_pophive <- epidata_meta(source = "pophive")
+meta_pophive$pophive$signals
+meta_pophive$pophive$geo_types
+meta_pophive$pophive$version_range
+meta_pophive$pophive$time_value_range
 pophive_data <- epidata_snapshot(
   source = "pophive",
   signal = "covid_pct_ed",
@@ -104,7 +114,11 @@ pophive_data <- epidata_snapshot(
 head(pophive_data)
 
 # NWSS: Wastewater Surveillance
-epidata_meta(source = "nwss")
+meta_nwss <- epidata_meta(source = "nwss")
+meta_nwss$nwss$signals
+meta_nwss$nwss$geo_types
+meta_nwss$nwss$version_range
+meta_nwss$nwss$time_value_range
 nwss_data <- epidata_snapshot(
   source = "nwss",
   signal = "covid_avg_conc",

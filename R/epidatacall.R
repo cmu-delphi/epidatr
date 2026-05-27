@@ -111,11 +111,15 @@ extra_arguments <- function(epidata_call, format_type, fields) {
   stopifnot(is.null(fields) || is.character(fields))
 
   extra_params <- list()
-  if (format_type != "classic") {
-    extra_params[["format"]] <- format_type
-  }
-  if (!is.null(fields)) {
-    extra_params[["fields"]] <- fields
+  # The cast API rejects unknown query params (`extra_forbidden`); response
+  # format is determined by the endpoint, and `fields` isn't supported.
+  if (epidata_call$api_version != "cast") {
+    if (format_type != "classic") {
+      extra_params[["format"]] <- format_type
+    }
+    if (!is.null(fields)) {
+      extra_params[["fields"]] <- fields
+    }
   }
 
   epidata_call$request <- epidata_call$request %>%
