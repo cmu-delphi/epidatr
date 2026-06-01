@@ -12,6 +12,7 @@ select geographic regions.
 You can install the stable version of this package from CRAN:
 
 ``` r
+
 install.packages("epidatr")
 pak::pkg_install("epidatr")
 renv::install("epidatr")
@@ -20,6 +21,7 @@ renv::install("epidatr")
 Or if you want the development version, install from GitHub:
 
 ``` r
+
 # Install the dev version using `pak` or `remotes`
 pak::pkg_install("cmu-delphi/epidatr@dev")
 remotes::install_github("cmu-delphi/epidatr", ref = "dev")
@@ -63,6 +65,7 @@ The
 function lets us access the `covidcast` endpoint:
 
 ``` r
+
 library(epidatr)
 library(dplyr)
 #> 
@@ -87,14 +90,14 @@ epidata <- pub_covidcast(
 knitr::kable(head(epidata))
 ```
 
-| geo_value | signal       | source    | geo_type | time_type | time_value | direction | issue      | lag | missing_value | missing_stderr | missing_sample_size |    value |    stderr | sample_size |
-|:----------|:-------------|:----------|:---------|:----------|:-----------|----------:|:-----------|----:|--------------:|---------------:|--------------------:|---------:|----------:|------------:|
-| us        | smoothed_cli | fb-survey | nation   | day       | 2021-01-05 |        NA | 2021-01-10 |   5 |             0 |              0 |                   0 | 1.184132 | 0.0162137 |      360654 |
-| us        | smoothed_cli | fb-survey | nation   | day       | 2021-01-06 |        NA | 2021-01-29 |  23 |             0 |              0 |                   0 | 1.179046 | 0.0162516 |      356720 |
-| us        | smoothed_cli | fb-survey | nation   | day       | 2021-01-07 |        NA | 2021-01-29 |  22 |             0 |              0 |                   0 | 1.197495 | 0.0165100 |      351906 |
-| us        | smoothed_cli | fb-survey | nation   | day       | 2021-01-08 |        NA | 2021-01-29 |  21 |             0 |              0 |                   0 | 1.218064 | 0.0167278 |      348471 |
-| us        | smoothed_cli | fb-survey | nation   | day       | 2021-01-09 |        NA | 2021-01-29 |  20 |             0 |              0 |                   0 | 1.219899 | 0.0168694 |      342855 |
-| us        | smoothed_cli | fb-survey | nation   | day       | 2021-01-10 |        NA | 2021-01-29 |  19 |             0 |              0 |                   0 | 1.231889 | 0.0171074 |      336455 |
+| geo_value | signal | source | geo_type | time_type | time_value | direction | issue | lag | missing_value | missing_stderr | missing_sample_size | value | stderr | sample_size |
+|:---|:---|:---|:---|:---|:---|---:|:---|---:|---:|---:|---:|---:|---:|---:|
+| us | smoothed_cli | fb-survey | nation | day | 2021-01-05 | NA | 2021-01-10 | 5 | 0 | 0 | 0 | 1.184132 | 0.0162137 | 360654 |
+| us | smoothed_cli | fb-survey | nation | day | 2021-01-06 | NA | 2021-01-29 | 23 | 0 | 0 | 0 | 1.179046 | 0.0162516 | 356720 |
+| us | smoothed_cli | fb-survey | nation | day | 2021-01-07 | NA | 2021-01-29 | 22 | 0 | 0 | 0 | 1.197495 | 0.0165100 | 351906 |
+| us | smoothed_cli | fb-survey | nation | day | 2021-01-08 | NA | 2021-01-29 | 21 | 0 | 0 | 0 | 1.218064 | 0.0167278 | 348471 |
+| us | smoothed_cli | fb-survey | nation | day | 2021-01-09 | NA | 2021-01-29 | 20 | 0 | 0 | 0 | 1.219899 | 0.0168694 | 342855 |
+| us | smoothed_cli | fb-survey | nation | day | 2021-01-10 | NA | 2021-01-29 | 19 | 0 | 0 | 0 | 1.231889 | 0.0171074 | 336455 |
 
 [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/reference/pub_covidcast.md)
 returns a `tibble`. (Here we’re using
@@ -114,6 +117,7 @@ access data at all locations. Check the help for a given endpoint to see
 if it supports `*`.)
 
 ``` r
+
 # Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
 # signal from the COVID-19 Trends and Impact survey for all states
 pub_covidcast(
@@ -131,6 +135,7 @@ by listing out the desired locations in the `geo_value` argument and
 using `*` in the `time_values` argument:
 
 ``` r
+
 # Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
 # signal from the COVID-19 Trends and Impact survey for Pennsylvania
 pub_covidcast(
@@ -147,10 +152,12 @@ pub_covidcast(
 
 The Epidata API stores a historical record of all data, including
 corrections and updates, which is particularly useful for accurately
-backtesting forecasting models. To fetch versioned data, we can use the
-`as_of` argument.
+backtesting forecasting models. To retrieve versioned data, we can use
+the `as_of` argument, which fetches the data as it was known on a
+specific date.
 
 ``` r
+
 # Obtain the smoothed covid-like illness (CLI) signal from the COVID-19
 # Trends and Impact survey for Pennsylvania as it was on 2021-06-01
 pub_covidcast(
@@ -164,6 +171,43 @@ pub_covidcast(
 )
 ```
 
+We can also request all versions of the data issued within a specific
+time range using the `issues` argument. `issues` can also take a single
+date.
+
+``` r
+
+# See how the estimate for a SINGLE day (March 1, 2021) evolved
+# by fetching all issues reported between March and April 2021.
+pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = "pa",
+  time_values = "2021-03-01",
+  issues = epirange("2021-03-01", "2021-04-30")
+)
+```
+
+Finally, we can use the `lag` argument to request only data that was
+reported a certain number of days after the event.
+
+``` r
+
+# Fetch survey data for January 2021, but ONLY include data
+# that was issued exactly 2 days after it was collected.
+pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = "pa",
+  time_values = epirange(20210101, 20210131),
+  lag = 2
+)
+```
+
 See
 [`vignette("versioned-data")`](https://cmu-delphi.github.io/epidatr/articles/versioned-data.md)
 for details and more ways to specify versioned data.
@@ -174,6 +218,7 @@ Because the output data is in a standard `tibble` format, we can easily
 plot it using `ggplot2`:
 
 ``` r
+
 library(ggplot2)
 ggplot(epidata, aes(x = time_value, y = value)) +
   geom_line() +
@@ -185,12 +230,13 @@ ggplot(epidata, aes(x = time_value, y = value)) +
   )
 ```
 
-![](epidatr_files/figure-html/unnamed-chunk-6-1.png)
+![](epidatr_files/figure-html/unnamed-chunk-8-1.png)
 
 `ggplot2` can also be used to [create
 choropleths](https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html).
 
 ``` r
+
 library(maps)
 
 # Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
@@ -232,7 +278,7 @@ ggplot(cli_states, aes(x = long, y = lat, group = group, fill = value)) +
   )
 ```
 
-![](epidatr_files/figure-html/unnamed-chunk-7-1.png)
+![](epidatr_files/figure-html/unnamed-chunk-9-1.png)
 
 ## Finding locations of interest
 
@@ -275,41 +321,44 @@ You can also use the
 function to get a table of endpoint functions:
 
 ``` r
+
 avail_endpoints()
 ```
 
     #> ℹ Data is available for the US only, unless otherwise specified
 
-| Endpoint                          | Description                                                        |
-|:----------------------------------|:-------------------------------------------------------------------|
-| pub_covid_hosp_facility()         | COVID hospitalizations by facility                                 |
-| pub_covid_hosp_facility_lookup()  | Helper for finding COVID hospitalization facilities                |
-| pub_covid_hosp_state_timeseries() | COVID hospitalizations by state                                    |
-| pub_covidcast()                   | Various COVID and flu signals via the COVIDcast endpoint           |
-| pub_covidcast_meta()              | Metadata for the COVIDcast endpoint                                |
-| pub_delphi()                      | Delphi’s ILINet outpatient doctor visits forecasts                 |
-| pub_dengue_nowcast()              | Delphi’s PAHO dengue nowcasts (North and South America)            |
-| pub_ecdc_ili()                    | ECDC ILI incidence (Europe)                                        |
-| pub_flusurv()                     | CDC FluSurv flu hospitalizations                                   |
-| pub_fluview()                     | CDC FluView ILINet outpatient doctor visits                        |
-| pub_fluview_clinical()            | CDC FluView flu tests from clinical labs                           |
-| pub_fluview_meta()                | Metadata for the FluView endpoint                                  |
-| pub_gft()                         | Google Flu Trends flu search volume                                |
-| pub_kcdc_ili()                    | KCDC ILI incidence (Korea)                                         |
-| pub_meta()                        | Metadata for the Delphi Epidata API                                |
-| pub_nidss_dengue()                | NIDSS dengue cases (Taiwan)                                        |
-| pub_nidss_flu()                   | NIDSS flu doctor visits (Taiwan)                                   |
-| pub_nowcast()                     | Delphi’s ILI Nearby nowcasts                                       |
-| pub_paho_dengue()                 | PAHO dengue data (North and South America)                         |
-| pub_wiki()                        | Wikipedia webpage counts by article                                |
-| pvt_cdc()                         | CDC total and by topic webpage visits                              |
-| pvt_dengue_sensors()              | PAHO dengue digital surveillance sensors (North and South America) |
-| pvt_ght()                         | Google Health Trends health topics search volume                   |
-| pvt_meta_norostat()               | Metadata for the NoroSTAT endpoint                                 |
-| pvt_norostat()                    | CDC NoroSTAT norovirus outbreaks                                   |
-| pvt_quidel()                      | Quidel COVID-19 and influenza testing data                         |
-| pvt_sensors()                     | Influenza and dengue digital surveillance sensors                  |
-| pvt_twitter()                     | HealthTweets total and influenza-related tweets                    |
+| Endpoint | Description |
+|:---|:---|
+| cast_api_queries() | cast-API snapshot and archive queries |
+| epidata_meta() | Get cast-API source metadata |
+| pub_covid_hosp_facility() | COVID hospitalizations by facility |
+| pub_covid_hosp_facility_lookup() | Helper for finding COVID hospitalization facilities |
+| pub_covid_hosp_state_timeseries() | COVID hospitalizations by state |
+| pub_covidcast() | Various COVID and flu signals via the COVIDcast endpoint |
+| pub_covidcast_meta() | Metadata for the COVIDcast endpoint |
+| pub_delphi() | Delphi’s ILINet outpatient doctor visits forecasts |
+| pub_dengue_nowcast() | Delphi’s PAHO dengue nowcasts (North and South America) |
+| pub_ecdc_ili() | ECDC ILI incidence (Europe) |
+| pub_flusurv() | CDC FluSurv flu hospitalizations |
+| pub_fluview() | CDC FluView ILINet outpatient doctor visits |
+| pub_fluview_clinical() | CDC FluView flu tests from clinical labs |
+| pub_fluview_meta() | Metadata for the FluView endpoint |
+| pub_gft() | Google Flu Trends flu search volume |
+| pub_kcdc_ili() | KCDC ILI incidence (Korea) |
+| pub_meta() | Metadata for the Delphi Epidata API |
+| pub_nidss_dengue() | NIDSS dengue cases (Taiwan) |
+| pub_nidss_flu() | NIDSS flu doctor visits (Taiwan) |
+| pub_nowcast() | Delphi’s ILI Nearby nowcasts |
+| pub_paho_dengue() | PAHO dengue data (North and South America) |
+| pub_wiki() | Wikipedia webpage counts by article |
+| pvt_cdc() | CDC total and by topic webpage visits |
+| pvt_dengue_sensors() | PAHO dengue digital surveillance sensors (North and South America) |
+| pvt_ght() | Google Health Trends health topics search volume |
+| pvt_meta_norostat() | Metadata for the NoroSTAT endpoint |
+| pvt_norostat() | CDC NoroSTAT norovirus outbreaks |
+| pvt_quidel() | Quidel COVID-19 and influenza testing data |
+| pvt_sensors() | Influenza and dengue digital surveillance sensors |
+| pvt_twitter() | HealthTweets total and influenza-related tweets |
 
 See
 [`vignette("signal-discovery")`](https://cmu-delphi.github.io/epidatr/articles/signal-discovery.md)

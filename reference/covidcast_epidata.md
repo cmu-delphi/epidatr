@@ -13,7 +13,7 @@ returns an object containing fields for every signal:
 
     epidata <- covidcast_epidata()
     epidata$signals
-    #> # A tibble: 508 x 3
+    #> # A tibble: 538 x 3
     #>    source        signal                        short_description
     #>    <chr>         <chr>                         <chr>
     #>  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~
@@ -26,7 +26,7 @@ returns an object containing fields for every signal:
     #>  8 chng          7dav_outpatient_covid         Ratio of outpatient doctor visit~
     #>  9 covid-act-now pcr_specimen_positivity_rate  Proportion of PCR specimens test~
     #> 10 covid-act-now pcr_specimen_total_tests      Total number of PCR specimens te~
-    #> # i 498 more rows
+    #> # i 528 more rows
 
 If you use an editor that supports tab completion, such as RStudio, type
 `epidata$signals$` and wait for the tab completion popup. You will be

@@ -1,24 +1,44 @@
-# performs the request
+# Performs an API request and returns the response body as a string.
 
-You can test the authentication headers like so:
+Handles authentication, retries, 414 URI Too Long fallback to POST, HTTP
+errors, and API-level errors. The API returns errors as JSON regardless
+of the requested format, so for non-classic formats we sniff the body
+for a JSON error response.
 
 ## Usage
 
 ``` r
-do_request(url, params, timeout_seconds)
+do_request(
+  epidata_call,
+  format_type = c("json", "csv", "classic"),
+  timeout_seconds,
+  fields,
+  http_method = c("GET", "POST")
+)
 ```
 
-## Examples
+## Arguments
 
-``` r
-if (FALSE) { # \dontrun{
-response <- httr::RETRY(
-  "GET", "https://httpbin.org/headers",
-  httr::authenticate("epidata", "fake_key")
-)
-content(response)$headers$Authorization == paste0(
-  "Basic ",
-  base64enc::base64encode(charToRaw("epidata:fake_key"))
-)
-} # }
-```
+- epidata_call:
+
+  an instance of `epidata_call`
+
+- format_type:
+
+  format to request, one of "json", "csv", "classic"
+
+- timeout_seconds:
+
+  the maximum time to wait for a response
+
+- fields:
+
+  fields to include in the response, or NULL for all
+
+- http_method:
+
+  HTTP method to use
+
+## Value
+
+an `httr2_response` object

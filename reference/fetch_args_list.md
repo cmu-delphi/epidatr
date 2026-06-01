@@ -17,8 +17,8 @@ fetch_args_list(
   timeout_seconds = 15 * 60,
   base_url = NULL,
   dry_run = FALSE,
-  debug = FALSE,
-  format_type = c("json", "classic", "csv"),
+  debug = lifecycle::deprecated(),
+  format_type = lifecycle::deprecated(),
   refresh_cache = FALSE,
   reference_week_day = 1
 )
@@ -67,12 +67,11 @@ fetch_args_list(
 
 - debug:
 
-  if `TRUE`, return the raw response from the API
+  **\[deprecated\]** No longer supported. Use `dry_run = TRUE` instead.
 
 - format_type:
 
-  the format to request from the API, one of classic, json, csv; this is
-  only used by `fetch_debug`, and by default is `"json"`
+  **\[deprecated\]** Now managed internally.
 
 - refresh_cache:
 

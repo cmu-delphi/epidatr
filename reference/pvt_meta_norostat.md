@@ -13,17 +13,25 @@ pvt_meta_norostat(auth, fetch_args = fetch_args_list())
 
 - auth:
 
-  string. Restricted access key (not the same as API key).
+  string. Your restricted access key (not the same as API key).
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/reference/epidata_call.md).
+  See
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md)
+  for details.
 
 ## Value
 
 [`list`](https://rdrr.io/r/base/list.html)
+
+## See also
+
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/articles/signal-discovery.md).
 
 ## See also
 
@@ -33,6 +41,6 @@ pvt_meta_norostat(auth, fetch_args = fetch_args_list())
 
 ``` r
 if (FALSE) { # \dontrun{
-pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
+pvt_meta_norostat(auth = Sys.getenv("DELPHI_EPIDATA_KEY"))
 } # }
 ```

@@ -25,6 +25,7 @@ also provide packages for downstream data processing
 ## Usage
 
 ``` r
+
 library(epidatr)
 # Obtain the smoothed covid-like illness (CLI) signal from Delphi's US COVID-19
 # Trends and Impact Survey (CTIS), in partnership with Facebook, as it was on
@@ -62,6 +63,7 @@ epidata
 Installing the package is straightforward.
 
 ``` r
+
 # Install the CRAN version
 pak::pkg_install("epidatr")
 # Install the development version from the GitHub dev branch

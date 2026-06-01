@@ -14,7 +14,8 @@ create_epidata_call(
   endpoint,
   params,
   meta = NULL,
-  only_supports_classic = FALSE
+  api_version = c("classic", "cast"),
+  response_format = c("classic", "json", "csv")
 )
 
 fetch(epidata_call, fetch_args = fetch_args_list())
@@ -34,9 +35,14 @@ fetch(epidata_call, fetch_args = fetch_args_list())
 
   meta data to attach to the epidata call
 
-- only_supports_classic:
+- api_version:
 
-  if true only classic format is supported
+  string. The API version to use. One of "classic" or "cast".
+
+- response_format:
+
+  string. The expected format of the response. One of "classic", "json",
+  or "csv".
 
 - epidata_call:
 
@@ -52,7 +58,7 @@ fetch(epidata_call, fetch_args = fetch_args_list())
 
 &nbsp;
 
-- For `fetch`: a tibble or a JSON-like list
+- For `fetch`: a tibble
 
 ## Details
 
@@ -62,19 +68,11 @@ function, e.g.,
 [`pub_covidcast`](https://cmu-delphi.github.io/epidatr/reference/pub_covidcast.md),
 to generate an `epidata_call` for the data of interest.
 
-There are some other functions available for debugging and advanced
-usage: - `request_url` (for debugging): outputs the request URL from
-which data would be fetched (note additional parameters below)
-
-`fetch` usually returns the data in tibble format, but a few of the
-endpoints only support the JSON classic format (`pub_delphi`,
-`pvt_meta_norostat`, and `pub_meta`). In that case a JSON-like nested
-list structure is returned instead.
-
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+library(magrittr)
+
 call <- pub_covidcast(
   source = "jhu-csse",
   signals = "confirmed_7dav_incidence_prop",
@@ -85,5 +83,20 @@ call <- pub_covidcast(
   fetch_args = fetch_args_list(dry_run = TRUE)
 )
 call %>% fetch()
-} # }
+#> # A tibble: 124 × 15
+#>    geo_value signal    source geo_type time_type time_value direction issue     
+#>    <chr>     <chr>     <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#>  1 ca        confirme… jhu-c… state    day       2020-06-01        NA 2023-03-10
+#>  2 fl        confirme… jhu-c… state    day       2020-06-01        NA 2023-03-03
+#>  3 ca        confirme… jhu-c… state    day       2020-06-02        NA 2023-03-10
+#>  4 fl        confirme… jhu-c… state    day       2020-06-02        NA 2023-03-03
+#>  5 ca        confirme… jhu-c… state    day       2020-06-03        NA 2023-03-10
+#>  6 fl        confirme… jhu-c… state    day       2020-06-03        NA 2023-03-03
+#>  7 ca        confirme… jhu-c… state    day       2020-06-04        NA 2023-03-10
+#>  8 fl        confirme… jhu-c… state    day       2020-06-04        NA 2023-03-03
+#>  9 ca        confirme… jhu-c… state    day       2020-06-05        NA 2023-03-10
+#> 10 fl        confirme… jhu-c… state    day       2020-06-05        NA 2023-03-03
+#> # ℹ 114 more rows
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```

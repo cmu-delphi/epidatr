@@ -15,16 +15,22 @@ pvt_ght(auth, locations, epiweeks = "*", query, fetch_args = fetch_args_list())
 
 - auth:
 
-  string. Restricted access key (not the same as API key).
+  string. Your restricted access key (not the same as API key).
 
 - locations:
 
-  character. Locations to fetch.
+  character. List of locations to fetch. See [geographic
+  codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states-and-territories)
+  \# nolint for details.
 
 - epiweeks:
 
   [`timeset`](https://cmu-delphi.github.io/epidatr/reference/timeset.md).
-  Epiweeks to fetch. Defaults to all ("\*") dates.
+  Epiweeks to fetch. Supports
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/reference/epirange.md)
+  and defaults to all ("\*") dates. Format as
+  `epirange(startweek, endweek)`, where startweek and endweek are of the
+  form YYYYWW (string or numeric).
 
 - query:
 
@@ -32,20 +38,28 @@ pvt_ght(auth, locations, epiweeks = "*", query, fetch_args = fetch_args_list())
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/reference/epidata_call.md).
+  See
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md)
+  for details.
 
 ## Value
 
 [`tibble::tibble`](https://tibble.tidyverse.org/reference/tibble.html)
+
+## See also
+
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/articles/signal-discovery.md).
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
 pvt_ght(
-  auth = Sys.getenv("SECRET_API_AUTH_GHT"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   locations = "ma",
   epiweeks = epirange(199301, 202304),
   query = "how to get over the flu"

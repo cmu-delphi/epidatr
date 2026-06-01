@@ -23,11 +23,14 @@ pvt_twitter(
 
 - auth:
 
-  string. Restricted access key (not the same as API key).
+  string. Your restricted access key (not the same as API key).
 
 - locations:
 
-  character. Locations to fetch.
+  character. List of locations to fetch. See the codes of the [US
+  regions and
+  states](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states)
+  \# nolint for details.
 
 - ...:
 
@@ -41,24 +44,34 @@ pvt_twitter(
 - time_values:
 
   [`timeset`](https://cmu-delphi.github.io/epidatr/reference/timeset.md).
-  Dates or epiweeks to fetch. Defaults to all ("\*") dates.
+  Dates or epiweeks to fetch. Supports
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/reference/epirange.md)
+  and defaults to all ("\*") dates.
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/reference/epidata_call.md).
+  See
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md)
+  for details.
 
 ## Value
 
 [`tibble::tibble`](https://tibble.tidyverse.org/reference/tibble.html)
+
+## See also
+
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/articles/signal-discovery.md).
 
 ## Examples
 
 ``` r
 if (FALSE) { # \dontrun{
 pvt_twitter(
-  auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   locations = "CA",
   time_type = "week",
   time_values = epirange(201501, 202001)

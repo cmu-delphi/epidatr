@@ -19,6 +19,12 @@ Query Delphi Epidata endpoints
   request
 - [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md)
   : Set custom API request parameters
+- [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/reference/cast_api_queries.md)
+  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/reference/cast_api_queries.md)
+  [`epidata()`](https://cmu-delphi.github.io/epidatr/reference/cast_api_queries.md)
+  : cast-API snapshot and archive queries
+- [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/reference/epidata_meta.md)
+  : Get cast-API source metadata
 - [`pub_covid_hosp_facility()`](https://cmu-delphi.github.io/epidatr/reference/pub_covid_hosp_facility.md)
   : COVID hospitalizations by facility
 - [`pub_covid_hosp_facility_lookup()`](https://cmu-delphi.github.io/epidatr/reference/pub_covid_hosp_facility_lookup.md)

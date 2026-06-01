@@ -15,18 +15,25 @@ pub_gft(locations, epiweeks = "*", fetch_args = fetch_args_list())
 
 - locations:
 
-  character. Locations to fetch.
+  character. List of locations to fetch.
 
 - epiweeks:
 
-  [`timeset`](https://cmu-delphi.github.io/epidatr/reference/timeset.md)
-  Epiweeks to fetch. Defaults to all ("\*") dates.
+  [`timeset`](https://cmu-delphi.github.io/epidatr/reference/timeset.md).
+  Epiweeks to fetch. Supports
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/reference/epirange.md)
+  and defaults to all ("\*") dates. Format as
+  `epirange(startweek, endweek)`, where startweek and endweek are of the
+  form YYYYWW (string or numeric).
 
 - fetch_args:
 
-  [`fetch_args`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md).
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md).
   Additional arguments to pass to
   [`fetch()`](https://cmu-delphi.github.io/epidatr/reference/epidata_call.md).
+  See
+  [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md)
+  for details.
 
 ## Value
 
@@ -36,15 +43,33 @@ pub_gft(locations, epiweeks = "*", fetch_args = fetch_args_list())
 
 Google has discontinued Flu Trends and this is now a static endpoint.
 Possibile input for locations can be found in
-<https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt>,
-<https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/states.txt>,
+<https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#hhs-regions>,
+<https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states>,
 and
-<https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt>.
+<https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#selected-us-cities>.
+
+## See also
+
+For example queries showing how to discover signals and build calls, see
+[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/articles/signal-discovery.md).
 
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+
 pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
-} # }
+#> # A tibble: 189 × 3
+#>    location epiweek      num
+#>    <chr>    <date>     <dbl>
+#>  1 hhs1     2012-01-01  1567
+#>  2 hhs1     2012-01-08  1339
+#>  3 hhs1     2012-01-15  1220
+#>  4 hhs1     2012-01-22  1271
+#>  5 hhs1     2012-01-29  1181
+#>  6 hhs1     2012-02-05   994
+#>  7 hhs1     2012-02-12  1091
+#>  8 hhs1     2012-02-19  1030
+#>  9 hhs1     2012-02-26   856
+#> 10 hhs1     2012-03-04   799
+#> # ℹ 179 more rows
 ```
