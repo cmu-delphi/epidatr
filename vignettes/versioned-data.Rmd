@@ -8,7 +8,7 @@ vignette: >
 ---
 
 ```{r, echo = FALSE, message = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = identical(Sys.getenv("NOT_CRAN"), "true"))
 options(tibble.print_min = 4L, tibble.print_max = 4L, max.print = 4L)
 library(epidatr)
 library(dplyr)
@@ -112,7 +112,7 @@ Note that these results include only data issued or updated between
 
 The `issues` parameter also accepts a list of dates.
 
-```{r, eval = FALSE}
+```{r}
 pub_covidcast(
   source = "doctor-visits",
   signals = "smoothed_adj_cli",

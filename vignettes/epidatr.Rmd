@@ -11,7 +11,7 @@ vignette: >
 ---
 
 ```{r, echo = FALSE, message = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = identical(Sys.getenv("NOT_CRAN"), "true"))
 options(tibble.print_min = 4L, tibble.print_max = 4L, max.print = 4L)
 ```
 
@@ -104,7 +104,7 @@ entire US, we use the `geo_type` argument paired with `*` for the
 access data at all locations. Check the help for a given endpoint to see if
 it supports `*`.)
 
-```{r, eval = FALSE}
+```{r}
 # Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
 # signal from the COVID-19 Trends and Impact survey for all states
 pub_covidcast(
@@ -121,7 +121,7 @@ Alternatively, we can fetch the full time series for a subset of states by
 listing out the desired locations in the `geo_value` argument and using `*`
 in the `time_values` argument:
 
-```{r, eval = FALSE}
+```{r}
 # Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
 # signal from the COVID-19 Trends and Impact survey for Pennsylvania
 pub_covidcast(
@@ -141,7 +141,7 @@ and updates, which is particularly useful for accurately backtesting
 forecasting models. To retrieve versioned data, we can use the `as_of`
 argument, which fetches the data as it was known on a specific date.
 
-```{r, eval = FALSE}
+```{r}
 # Obtain the smoothed covid-like illness (CLI) signal from the COVID-19
 # Trends and Impact survey for Pennsylvania as it was on 2021-06-01
 pub_covidcast(
@@ -157,7 +157,7 @@ pub_covidcast(
 
 We can also request all versions of the data issued within a specific time range using the `issues` argument. `issues` can also take a single date.
 
-```{r, eval = FALSE}
+```{r}
 # See how the estimate for a SINGLE day (March 1, 2021) evolved
 # by fetching all issues reported between March and April 2021.
 pub_covidcast(
@@ -173,7 +173,7 @@ pub_covidcast(
 
 Finally, we can use the `lag` argument to request only data that was reported a certain number of days after the event.
 
-```{r, eval = FALSE}
+```{r}
 # Fetch survey data for January 2021, but ONLY include data
 # that was issued exactly 2 days after it was collected.
 pub_covidcast(
