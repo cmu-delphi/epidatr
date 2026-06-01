@@ -17,7 +17,9 @@ pub_covid_hosp_facility_lookup(
 \arguments{
 \item{...}{not used for values, forces later arguments to bind by name}
 
-\item{state}{string. A two-letter character state abbreviation.}
+\item{state}{string. A two-letter character state abbreviation.
+See \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states}{US states codes}
+for details.}
 
 \item{ccn}{string. A facility CMS certification number.}
 
@@ -27,7 +29,8 @@ pub_covid_hosp_facility_lookup(
 
 \item{fips_code}{string. A 5-digit fips county code, zero-padded.}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -44,11 +47,18 @@ facilities of interest. This is a companion endpoint to the
 Only one location argument needs to be specified.
 Combinations of the arguments are not currently supported.
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
 pub_covid_hosp_facility_lookup(state = "fl")
 pub_covid_hosp_facility_lookup(city = "southlake")
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=pub_covid_hosp_facility]{pub_covid_hosp_facility()}}

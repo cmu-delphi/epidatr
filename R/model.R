@@ -1,3 +1,7 @@
+# A collection of helper data structures that hold smaller components of API
+# requests, such as EpiRanges (which represent date or week ranges) and
+# EpidataFieldInfo (which represent metadata about API fields).
+
 #' Specify a range of days or weeks for API requests
 #'
 #' Specify a date range (in days or epiweeks) for an API request.
@@ -128,6 +132,16 @@ print.EpiRange <- function(x, ...) {
 #' @name timeset
 NULL
 
+#' Add metadata to an epidata_field
+#'
+#' This function annotates the type of the returned API field. This is used
+#' by `parse_value` downstream to determine how to convert the returned data.
+#'
+#' @param name The name of the field.
+#' @param type The type of the field ("text", "int", "float", etc.).
+#' @param description A description of the field's content.
+#' @param categories Categories for the field, if applicable.
+#' @keywords internal
 create_epidata_field_info <- function(name,
                                       type,
                                       description = "",
@@ -139,6 +153,7 @@ create_epidata_field_info <- function(name,
     "int",
     "float",
     "date",
+    "timestamp",
     "epiweek",
     "categorical",
     "bool"
@@ -162,6 +177,17 @@ print.EpidataFieldInfo <- function(x, ...) {
   cli::cli_dl(x[attr(x, "names")])
 }
 
+#' Parse data returned by the API
+#'
+#' This function uses the metadata annotations to determine how to parse the incoming data.
+#' The data annotation refers to the received API type, rather than the target R type.
+#'
+#' @param info The `EpidataFieldInfo` object for the field.
+#' @param value The value to parse.
+#' @param disable_date_parsing If TRUE, disable automatic date parsing.
+#' @param reference_week_day The reference day for epiweek conversion (default 1).
+#' @return The parsed value.
+#' @keywords internal
 #' @importFrom stats na.omit
 parse_value <- function(info, value, disable_date_parsing = FALSE, reference_week_day = 1) {
   stopifnot(inherits(info, "EpidataFieldInfo"))
@@ -170,6 +196,8 @@ parse_value <- function(info, value, disable_date_parsing = FALSE, reference_wee
     return(value)
   } else if (info$type == "date" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_date(value))
+  } else if (info$type == "timestamp" && !disable_date_parsing && !inherits(value, "POSIXt")) {
+    return(parse_api_timestamp_to_datetime(value))
   } else if (info$type == "epiweek" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_week(value, reference_week_day = reference_week_day))
   } else if (info$type == "bool") {
@@ -221,7 +249,7 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE, ref
   }
 
   columns <- colnames(df)
-  for (i in seq_len(length(meta))) {
+  for (i in seq_along(meta)) {
     info <- meta[[i]]
     if (info$name %in% columns) {
       df[[info$name]] <- parse_value(
@@ -251,7 +279,25 @@ date_to_epiweek <- function(value) {
 
 #' @keywords internal
 parse_api_date <- function(value) {
-  as.Date(as.character(value), tryFormats = c("%Y%m%d", "%Y-%m-%d"))
+  value_char <- as.character(value)
+  formats <- c("%Y%m%d", "%m%d%Y", "%Y-%m-%d", "%Y/%m/%d")
+  res <- as.Date(rep(NA, length(value_char)))
+
+  # as.Date(..., tryFormats = ...) assumes that all elements in value share the
+  # same format, which can lead to NA or errors. This implementation does not
+  # assume that all elements share the same format.
+  for (fmt in formats) {
+    is_missing <- is.na(res) & !is.na(value_char)
+    if (!any(is_missing)) break
+    attempt <- suppressWarnings(as.Date(value_char[is_missing], format = fmt))
+    res[is_missing] <- attempt
+  }
+  res
+}
+
+#' @keywords internal
+parse_api_timestamp_to_datetime <- function(value) {
+  as.POSIXct(as.numeric(value), origin = "1970-01-01")
 }
 
 #' parse_api_week converts an integer to a date
@@ -261,39 +307,23 @@ parse_api_date <- function(value) {
 #' @importFrom MMWRweek MMWRweek2Date
 #' @keywords internal
 parse_api_week <- function(value, reference_week_day = 1) {
+  # Guard against empty input (e.g. header-only CSVs)
+  if (length(value) == 0) {
+    return(as.Date(numeric(0), origin = "1970-01-01"))
+  }
   v <- as.integer(value)
   years <- floor(v / 100)
   weeks <- v - (years * 100)
-  MMWRweek::MMWRweek2Date(years, weeks, MMWRday = reference_week_day)
-}
-
-#' @importFrom checkmate test_character test_class test_date test_integerish test_list
-#' @keywords internal
-parse_timeset_input <- function(value) {
-  if (is.null(value)) {
-    return(NULL)
-  } else if (test_date(value)) {
-    return(value)
-  } else if (test_integerish(value)) {
-    if (all(nchar(value) %in% c(6, 8))) {
-      return(value)
-    } else {
-      stop(paste0("Invalid timeset input: ", value))
+  # Guard against NAs
+  if (any(is.na(years)) || any(is.na(weeks))) {
+    # If the input contains NAs or invalid formats,
+    # fall back to returning NA dates.
+    res <- as.Date(rep(NA, length(v)))
+    valid <- !is.na(years) & !is.na(weeks)
+    if (any(valid)) {
+      res[valid] <- MMWRweek::MMWRweek2Date(years[valid], weeks[valid], MMWRday = reference_week_day)
     }
-  } else if (test_character(value)) {
-    if (identical(value, "*")) {
-      return(value)
-    } else if (all(nchar(value) %in% c(6, 8))) {
-      return(value)
-    } else if (all(nchar(value) == 10)) {
-      value <- as.Date(value, format = "%Y-%m-%d")
-      return(format(value, format = "%Y%m%d"))
-    } else {
-      stop(paste0("Invalid timeset input: ", value))
-    }
-  } else if (test_class(value, "EpiRange")) {
-    return(value)
-  } else {
-    stop(paste0("Invalid timeset input: ", value))
+    return(res)
   }
+  MMWRweek::MMWRweek2Date(years, weeks, MMWRday = reference_week_day)
 }

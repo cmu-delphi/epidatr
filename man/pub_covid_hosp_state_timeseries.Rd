@@ -14,21 +14,23 @@ pub_covid_hosp_state_timeseries(
 )
 }
 \arguments{
-\item{states}{character. Two letter state abbreviations.}
+\item{states}{character. Two-letter state abbreviations.
+See \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states}{US states codes}
+for details.}
 
-\item{dates}{\code{\link{timeset}}. Dates to fetch. Defaults to all ("*") dates.}
+\item{dates}{\code{\link{timeset}}. Dates to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates.}
 
 \item{...}{not used for values, forces later arguments to bind by name}
 
-\item{as_of}{Date. Optionally, the as of date for the issues to fetch. If not
-specified, the most recent data is returned. Mutually exclusive with
-\code{issues}.}
+\item{as_of}{Date. Optionally, the as-of date for the issues to fetch.
+See the "Data Versioning" section for details.}
 
-\item{issues}{\code{\link{timeset}}. Optionally, the issue of the data to fetch. If not
-specified, the most recent issue is returned. Mutually exclusive with
-\code{as_of} or \code{lag}.}
+\item{issues}{\code{\link{timeset}}. Optionally, the issue(s) of the
+data to fetch. See the "Data Versioning" section for details.}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -44,13 +46,39 @@ Services.
 Starting October 1, 2022, some facilities are only required to
 report annually.
 }
+\section{Data Versioning}{
+
+Several endpoints support retrieving historical versions of the data.
+The following parameters control this and are mutually exclusive (only
+one can be provided at a time).
+\itemize{
+\item \code{as_of}: (Date) Retrieve the data as it was on this date.
+\item \code{issues}: \code{\link{timeset}} Retrieve data from a
+specific issue date or range of dates.
+\item \code{lag}: (integer) Retrieve data with a specific lag from
+its issue date.
+}
+
+If none of these is specified, the most recent version of the data is
+returned.
+
+See \code{vignette("versioned-data")} for details and more ways to specify
+versioned data.
+}
+
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
 pub_covid_hosp_state_timeseries(
   states = "fl",
   dates = epirange(20200101, 20200501)
 )
-}
-
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

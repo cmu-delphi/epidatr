@@ -22,47 +22,42 @@ test_that("format_list", {
 })
 
 test_that("check_is_cachable can handle both str and date inputs of various lengths", {
-  epidata_call <- list(
-    params = list(as_of = NULL, issues = NULL)
-  )
   fetch_args <- fetch_args_list()
 
-  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+  expect_no_error(check_is_cachable(create_epidata_call("e", list()), fetch_args))
 
   # as_of string
-  epidata_call$params$as_of <- "2022-01-01"
-  epidata_call$params$issues <- NULL
-  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+  expect_no_error(check_is_cachable(create_epidata_call("e", list(as_of = "2022-01-01")), fetch_args))
 
   # as_of date
-  epidata_call$params$as_of <- as.Date("2022-01-01")
-  epidata_call$params$issues <- NULL
-  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+  expect_no_error(check_is_cachable(create_epidata_call("e", list(as_of = as.Date("2022-01-01"))), fetch_args))
 
   # issues single string
-  epidata_call$params$as_of <- NULL
-  epidata_call$params$issues <- "2022-01-01"
-  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+  expect_no_error(check_is_cachable(create_epidata_call("e", list(issues = "2022-01-01")), fetch_args))
 
   # issues string vector
-  epidata_call$params$as_of <- NULL
-  epidata_call$params$issues <- c("2022-01-01", "2022-02-01")
-  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+  expect_no_error(check_is_cachable(create_epidata_call("e", list(issues = c("2022-01-01", "2022-02-01"))), fetch_args))
 
   # issues single date
-  epidata_call$params$as_of <- NULL
-  epidata_call$params$issues <- as.Date("2022-01-01")
-  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+  expect_no_error(check_is_cachable(create_epidata_call("e", list(issues = as.Date("2022-01-01"))), fetch_args))
 
   # issues date vector
-  epidata_call$params$as_of <- NULL
-  epidata_call$params$issues <- c(as.Date("2022-01-01"), as.Date("2022-02-01"))
-  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+  expect_no_error(check_is_cachable(
+    create_epidata_call(
+      "e",
+      list(issues = c(as.Date("2022-01-01"), as.Date("2022-02-01")))
+    ),
+    fetch_args
+  ))
 
   # issues epirange
-  epidata_call$params$as_of <- NULL
-  epidata_call$params$issues <- epirange(as.Date("2022-01-01"), as.Date("2022-02-01"))
-  expect_no_error(check_is_cachable(epidata_call, fetch_args))
+  expect_no_error(check_is_cachable(
+    create_epidata_call(
+      "e",
+      list(issues = epirange(as.Date("2022-01-01"), as.Date("2022-02-01")))
+    ),
+    fetch_args
+  ))
 })
 
 test_that("check_is_recent can handle both str and date inputs of various lengths", {
@@ -90,6 +85,21 @@ test_that("check_is_recent can handle both str and date inputs of various length
   as_of <- as.Date(c("2022-01-01", "3000-01-02", "3000-01-03"))
   expect_no_error(result <- check_is_recent(as_of, 10))
   expect_identical(result, TRUE)
+
+  # as_of numeric epiweek
+  # Recent epiweek (2 days ago)
+  recent_epiweek <- date_to_epiweek(Sys.Date() - 2)
+  expect_true(check_is_recent(recent_epiweek, 7))
+  # Old epiweek (14 days ago)
+  old_epiweek <- date_to_epiweek(Sys.Date() - 14)
+  expect_false(check_is_recent(old_epiweek, 7))
+
+  # Recent integer date
+  recent_int_date <- as.numeric(format(Sys.Date() - 2, "%Y%m%d"))
+  expect_true(check_is_recent(recent_int_date, 7))
+  # Old integer date
+  old_int_date <- as.numeric(format(Sys.Date() - 14, "%Y%m%d"))
+  expect_false(check_is_recent(old_int_date, 7))
 })
 
 test_that("get_wildcard_equivalent_dates works in basic cases", {

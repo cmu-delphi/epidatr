@@ -7,11 +7,17 @@
 pub_nidss_dengue(locations, epiweeks = "*", fetch_args = fetch_args_list())
 }
 \arguments{
-\item{locations}{character. Locations to fetch.}
+\item{locations}{character. List of locations to fetch.
+See \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#nidss}{Taiwan's geographic codes}
+for details.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -28,9 +34,16 @@ Possible location inputs can be found in
 and
 \url{https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt}.
 }
-\examples{
-\dontrun{
-pub_nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301))
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
 }
+
+\examples{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
+pub_nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301))
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

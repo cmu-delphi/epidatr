@@ -1,3 +1,6 @@
+# Functions for the covidcast_epidata() helper, which provides auto-complete for
+# COVIDcast signals.
+
 #' turn a signal into a callable
 #' @param signal the signal of interest
 #' @param base_url the base url
@@ -6,19 +9,9 @@ parse_signal <- function(signal, base_url) {
   class(signal) <- c("covidcast_data_signal", class(signal))
   signal$key <- paste(signal$source, signal$signal, sep = ":")
 
-  #' fetch covidcast data
-  #'
-  #' param data_source data source to fetch
-  #' param signals data source to fetch
-  #' param geo_type geo_type to fetch
-  #' param time_type data source to fetch
-  #' param geo_values data source to fetch
-  #' param time_values data source to fetch
-  #' param as_of data source to fetch
-  #' param issues data source to fetch
-  #' param lag data source to fetch
-  #' return an instance of epidata_call
-  #' keywords internal
+  # Inner callable returned per signal: fetches covidcast data for the bound
+  # source/signal/time_type, taking geo_type, geo_values, time_values, and the
+  # versioning args (as_of, issues, lag). Returns an epidata_call.
   signal$call <- function(geo_type,
                           geo_values,
                           time_values,
@@ -135,30 +128,15 @@ print.covidcast_data_source <- function(x, ...) {
 #' ```
 #' @param base_url optional alternative API base url
 #' @param timeout_seconds the maximum amount of time to wait for a response
-#' @importFrom httr stop_for_status content http_type
 #' @importFrom jsonlite fromJSON
-#' @importFrom xml2 read_html xml_find_all xml_text
 #' @return An instance of `covidcast_epidata`
 #' @export
 covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) {
-  url <- join_url(base_url, "covidcast/meta")
-  response <- do_request(url, list(), timeout_seconds)
+  # covidcast_meta and covidcast/meta are two different endpoints...
+  res <- create_epidata_call("covidcast/meta", list()) %>%
+    do_request(format_type = "json", timeout_seconds = timeout_seconds, fields = NULL)
 
-  if (response$status_code != 200) {
-    # 500, 429, 401 are possible
-    msg <- "fetch data from API"
-    if (httr::http_type(response) == "text/html" && length(response$content) > 0) {
-      # grab the error information out of the returned HTML document
-      msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
-        xml2::read_html(content(response, "text")),
-        "//p"
-      )))
-    }
-    httr::stop_for_status(response, task = msg)
-  }
-
-  response_content <- httr::content(response, "text", encoding = "UTF-8")
-  response_content <- jsonlite::fromJSON(response_content, simplifyVector = FALSE)
+  response_content <- httr2::resp_body_json(res, simplifyDataFrame = FALSE)
 
   sources <- do.call(c, lapply(response_content, parse_source, base_url = base_url))
   class(sources) <- c("covidcast_data_source_list", class(sources))

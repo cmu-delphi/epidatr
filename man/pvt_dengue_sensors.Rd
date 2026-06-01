@@ -13,15 +13,21 @@ pvt_dengue_sensors(
 )
 }
 \arguments{
-\item{auth}{string. Restricted access key (not the same as API key).}
+\item{auth}{string. Your restricted access key (not the same as API key).}
 
-\item{names}{character. Names to fetch.}
+\item{names}{character. List of sensor names to fetch.
+See the \href{https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html#available-sensors}{available sensors}.}
 
-\item{locations}{character. Locations to fetch.}
+\item{locations}{character. List of locations to fetch.
+See the \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas}{codes for countries and territories in the Americas}. # nolint}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -29,14 +35,21 @@ pvt_dengue_sensors(
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html}
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontrun{
 pvt_dengue_sensors(
-  auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   names = "ght",
   locations = "ag",
   epiweeks = epirange(201501, 202001)
 )
 }
+
 }
 \keyword{endpoint}

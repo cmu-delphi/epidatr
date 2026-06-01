@@ -2,24 +2,34 @@
 % Please edit documentation in R/request.R
 \name{do_request}
 \alias{do_request}
-\title{performs the request}
+\title{Performs an API request and returns the response body as a string.}
 \usage{
-do_request(url, params, timeout_seconds)
+do_request(
+  epidata_call,
+  format_type = c("json", "csv", "classic"),
+  timeout_seconds,
+  fields,
+  http_method = c("GET", "POST")
+)
+}
+\arguments{
+\item{epidata_call}{an instance of \code{epidata_call}}
+
+\item{format_type}{format to request, one of "json", "csv", "classic"}
+
+\item{timeout_seconds}{the maximum time to wait for a response}
+
+\item{fields}{fields to include in the response, or NULL for all}
+
+\item{http_method}{HTTP method to use}
+}
+\value{
+an \code{httr2_response} object
 }
 \description{
-You can test the authentication headers like so:
-}
-\examples{
-\dontrun{
-response <- httr::RETRY(
-  "GET", "https://httpbin.org/headers",
-  httr::authenticate("epidata", "fake_key")
-)
-content(response)$headers$Authorization == paste0(
-  "Basic ",
-  base64enc::base64encode(charToRaw("epidata:fake_key"))
-)
-}
-
+Handles authentication, retries, 414 URI Too Long fallback to POST,
+HTTP errors, and API-level errors. The API returns errors as JSON
+regardless of the requested format, so for non-classic formats we
+sniff the body for a JSON error response.
 }
 \keyword{internal}

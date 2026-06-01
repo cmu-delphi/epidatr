@@ -47,22 +47,18 @@ test_that("`parse_timeset_input` on valid inputs", {
   expect_identical(parse_timeset_input(NULL), NULL)
 })
 
-test_that("null parsing", {
-  # parse_data_frame (df[[info$name]] = NULL)-> parse_value
-  epidata_call <- pub_flusurv(
-    locations = "ca",
-    epiweeks = 202001,
-    fetch_args = fetch_args_list(dry_run = TRUE)
+test_that("parse_data_frame handles NA values and missing meta", {
+  meta <- list(
+    create_epidata_field_info("val", "int"),
+    create_epidata_field_info("flag", "bool")
   )
-  # see generate_test_data.R
-  mock_df <- as.data.frame(readr::read_rds(testthat::test_path("data/flusurv-epiweeks.rds")))
-  metadata <- epidata_call$meta
-  mock_df[[metadata[[1]]$name]][1] <- NA
-  mock_df[[metadata[[2]]$name]] <- c(TRUE)
-  epidata_call$meta[[2]]$type <- "bool"
-  expect_no_error(res <- parse_data_frame(epidata_call, mock_df) %>% as_tibble())
-  expect_true(res$location)
-  expect_identical(res$release_date, as.Date(NA))
+  epidata_call <- structure(list(meta = meta), class = "epidata_call")
+  mock_df <- data.frame(val = NA_integer_, flag = TRUE)
+
+  expect_no_error(res <- parse_data_frame(epidata_call, mock_df))
+  expect_true(is.na(res$val))
+  expect_true(is.numeric(res$val))
+  expect_true(res$flag)
 
   # if the call has no metadata, return the whole frame as is
   epidata_call$meta <- NULL
@@ -76,51 +72,30 @@ test_that("parse invalid time", {
 })
 
 test_that("parse_data_frame warns when df contains fields not listed in meta", {
-  epidata_call <- pub_flusurv(
-    locations = "ca",
-    epiweeks = 202001,
-    fetch_args = fetch_args_list(dry_run = TRUE)
-  )
-  # see generate_test_data.R
-  mock_df <- as.data.frame(readr::read_rds(testthat::test_path("data/flusurv-epiweeks.rds")))
+  meta <- list(create_epidata_field_info("val", "int"))
+  epidata_call <- structure(list(meta = meta), class = "epidata_call")
 
-  # Success when meta and df fields match exactly
+  mock_df <- data.frame(val = 1L)
   expect_no_warning(parse_data_frame(epidata_call, mock_df))
 
-  # Warning when df contains extra fields
-  mock_df$extra <- 5
-  expect_warning(
-    parse_data_frame(epidata_call, mock_df),
-    class = "epidatr__missing_meta_fields"
-  )
-  mock_df$extra <- NULL
+  mock_df_extra <- data.frame(val = 1L, extra = 5)
+  expect_snapshot(parse_data_frame(epidata_call, mock_df_extra), cran = TRUE)
 
-  # Success when meta contains extra fields
-  mock_df$rate_age_0 <- NULL
+  # Success when meta contains extra fields that aren't in the data
+  meta_extra <- list(
+    create_epidata_field_info("val", "int"),
+    create_epidata_field_info("other", "int")
+  )
+  epidata_call$meta <- meta_extra
   expect_no_warning(parse_data_frame(epidata_call, mock_df))
 })
 
 test_that("parse_data_frame warns when df contains int values with decimal component", {
-  epidata_call <- pub_flusurv(
-    locations = "ca",
-    epiweeks = 202001,
-    fetch_args = fetch_args_list(dry_run = TRUE)
-  )
-  # see generate_test_data.R
-  mock_df <- as.data.frame(readr::read_rds(testthat::test_path("data/flusurv-epiweeks.rds")))
+  meta <- list(create_epidata_field_info("val", "int"))
+  epidata_call <- structure(list(meta = meta), class = "epidata_call")
+  mock_df <- data.frame(val = 4.3)
 
-  # Int fields are returned as double
-  result <- parse_data_frame(epidata_call, mock_df)
-  expect_type(result$lag, "double")
-
-  # Replace int fields with decimal
-  mock_df$lag <- 4.3
-
-  # Warning when int values have a decimal component
-  expect_warning(
-    parse_data_frame(epidata_call, mock_df),
-    class = "epidatr__int_nonzero_decimal_digits"
-  )
+  expect_snapshot(parse_data_frame(epidata_call, mock_df), cran = TRUE)
 })
 
 test_that("parse_value can handle NA/NULL values in an int field", {
@@ -134,18 +109,41 @@ test_that("parse_value can handle NA/NULL values in an int field", {
   )
 })
 
-test_that("parse_api_date accepts str and int input", {
+test_that("parse_api_date", {
+  # accepts str
   expect_identical(parse_api_date("20200101"), as.Date("2020-01-01"))
-  expect_identical(parse_api_date(20200101), as.Date("2020-01-01"))
-})
-
-test_that("parse_api_date accepts YYYYMMDD and YYYY-MM-DD", {
+  # accepts YYYYMMDD and YYYY-MM-DD (int and str)
   expect_identical(parse_api_date(20200101), as.Date("2020-01-01"))
   expect_identical(parse_api_date("2020-01-01"), as.Date("2020-01-01"))
+  # handles missing values appropriately
+  expect_identical(parse_api_date(NA), as.Date(NA))
+  expect_equal(parse_api_date(c(NA, NA)), as.Date(c(NA, NA)))
+  # parse_api_date works on mixed formats
+  expect_equal(
+    parse_api_date(c("20210101", "2021-01-02", "01032021", NA)),
+    as.Date(c("2021-01-01", "2021-01-02", "2021-01-03", NA))
+  )
+  # handles invalid dates gracefully
+  expect_equal(
+    parse_api_date(c("invalid", "20210101")),
+    as.Date(c(NA, "2021-01-01"))
+  )
 })
 
-test_that("parse_api_date handles missing values appropriately", {
-  expect_identical(parse_api_date(NA), as.Date(NA))
+test_that("parse_api_timestamp_to_datetime works on timestamps", {
+  val <- 1592707979
+  # 1592707979 is 2020-06-20 19:52:59 PDT
+  expected <- as.POSIXct(1592707979, origin = "1970-01-01")
+  expect_equal(parse_api_timestamp_to_datetime(val), expected)
+  expect_identical(parse_api_timestamp_to_datetime(as.character(val)), expected)
+
+  # Check vectorization
+  expect_equal(
+    parse_api_timestamp_to_datetime(c(1000000000, 1592707979)),
+    as.POSIXct(c(1000000000, 1592707979), origin = "1970-01-01")
+  )
+  # Missing values
+  expect_identical(parse_api_timestamp_to_datetime(NA), as.POSIXct(NA))
 })
 
 test_that("parse_api_week returns the expected day of the week", {
@@ -157,9 +155,7 @@ test_that("parse_api_week returns the expected day of the week", {
 test_that("date_to_epiweek accepts str and int input", {
   expect_identical(date_to_epiweek("20200101"), 202001)
   expect_identical(date_to_epiweek(20200101), 202001)
-})
-
-test_that("date_to_epiweek accepts single and double-digit weeks", {
+  # Single and double-digit weeks
   expect_identical(date_to_epiweek(20201101), 202045)
   expect_identical(date_to_epiweek(20200109), 202002)
 })

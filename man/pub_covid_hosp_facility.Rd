@@ -22,7 +22,8 @@ fetch. Defaults to all ("*") dates.}
 
 \item{publication_dates}{\code{\link{timeset}}. Publication dates to fetch.}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -40,8 +41,15 @@ used to look up facility identifiers in a variety of ways.
 Starting October 1, 2022, some facilities are only required to
 report annually.
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
 pub_covid_hosp_facility(
   hospital_pks = "100075",
   collection_weeks = epirange(20200101, 20200501)
@@ -51,7 +59,7 @@ pub_covid_hosp_facility(
   hospital_pks = "050063",
   collection_weeks = epirange(20240101, 20240301)
 )
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=pub_covid_hosp_facility]{pub_covid_hosp_facility()}}, \code{\link[=epirange]{epirange()}}

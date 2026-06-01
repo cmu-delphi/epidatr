@@ -7,14 +7,19 @@
 pvt_cdc(auth, locations, epiweeks = "*", fetch_args = fetch_args_list())
 }
 \arguments{
-\item{auth}{string. Restricted access key (not the same as API key).}
+\item{auth}{string. Your restricted access key (not the same as API key).}
 
-\item{locations}{character. Locations to fetch.}
+\item{locations}{character. List of locations to fetch.
+See \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states}{US Regions and States codes} # nolint
+for details.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.
-See \code{fetch_args_list()} for details.}
+\item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -22,10 +27,16 @@ See \code{fetch_args_list()} for details.}
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/cdc.html}
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontrun{
 pvt_cdc(
-  auth = Sys.getenv("SECRET_API_AUTH_CDC"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   locations = "fl,ca",
   epirange(201501, 201601)
 )

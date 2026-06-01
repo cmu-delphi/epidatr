@@ -7,11 +7,16 @@
 pub_dengue_nowcast(locations, epiweeks = "*", fetch_args = fetch_args_list())
 }
 \arguments{
-\item{locations}{character. Locations to fetch.}
+\item{locations}{character. List of locations to fetch.
+See the \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas}{codes for countries and territories in the Americas}. # nolint}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -19,12 +24,19 @@ pub_dengue_nowcast(locations, epiweeks = "*", fetch_args = fetch_args_list())
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html}
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
-\dontrun{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
 pub_dengue_nowcast(
   locations = "pr",
   epiweeks = epirange(201401, 202301)
 )
-}
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

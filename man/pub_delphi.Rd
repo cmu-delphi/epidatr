@@ -7,12 +7,15 @@
 pub_delphi(system, epiweek, fetch_args = fetch_args_list())
 }
 \arguments{
-\item{system}{character. System name to fetch.}
+\item{system}{character. System name to fetch.
+See the \href{https://cmu-delphi.github.io/delphi-epidata/api/delphi.html#forecasting-systems}{available forecasting systems} # nolint
+for details.}
 
 \item{epiweek}{\code{\link{timeset}}. Epiweek to fetch. Does not support multiple dates.
 Make separate calls to fetch data for multiple epiweeks.}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link{list}}
@@ -20,9 +23,16 @@ Make separate calls to fetch data for multiple epiweeks.}
 \description{
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/delphi.html}
 }
-\examples{
-\dontrun{
-pub_delphi(system = "ec", epiweek = 201501)
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
 }
+
+\examples{
+\dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
+
+pub_delphi(system = "ec", epiweek = 201501)
+\dontshow{\}) # examplesIf}
 }
 \keyword{endpoint}

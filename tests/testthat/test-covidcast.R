@@ -21,15 +21,11 @@ test_that("covidcast", {
 
 
 test_that("http errors", {
-  # see generate_test_data.R
   local_mocked_bindings(
-    do_request = function(...) readRDS(testthat::test_path("data/test-do_request-httpbin.rds"))
+    req_perform = function(...) {
+      create_mock_response("", status_code = 400L, headers = list("content-type" = "text/html"))
+    },
+    .package = "httr2"
   )
-  expect_error(epidatr::covidcast_epidata(), class = "http_400")
-})
-
-
-test_that("name completion", {
-  all_names <- names(epidatr::covidcast_epidata()$signals)
-  expect_identical(all_names, all_names)
+  expect_error(epidatr::covidcast_epidata(), class = "httr2_http_400")
 })

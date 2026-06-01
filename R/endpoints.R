@@ -1,24 +1,84 @@
+# The individual endpoint functions live in this file. Each function creates and
+# `epidata_call` object and then calls `fetch()` on it. The endpoint functions
+# are the main user-facing functions in this package.
+
+#' @title Shared Documentation for epidatr Parameters
+#'
+#' @description This is a central text for parameter documentation
+#' @name .epidatr_shared_params
+#' @keywords internal
+#'
+#' @param auth string. Your restricted access key (not the same as API key).
+#' @param locations character. List of locations to fetch.
+#' @param states character. List of states to fetch, formatted as two letter state abbreviations.
+#' @param regions character. List of regions to fetch.
+#' @param epiweeks [`timeset`]. Epiweeks to fetch. Supports
+#'  [`epirange()`] and defaults to all ("*") dates. Format as
+#'  `epirange(startweek, endweek)`, where startweek and endweek are of the form
+#'  YYYYWW (string or numeric).
+#' @param time_type string. The temporal resolution of the data (either "day" or
+#'  "week", depending on signal).
+#' @param names character. Sensor names to fetch.
+#' @param dates [`timeset`]. Dates to fetch. Supports
+#'   [`epirange()`] and defaults to all ("*") dates.
+#' @param time_values [`timeset`]. Dates or epiweeks to fetch.
+#'   Supports [`epirange()`] and defaults to all ("*") dates.
+#' @param as_of Date. Optionally, the as-of date for the issues to fetch.
+#'   See the "Data Versioning" section for details.
+#' @param issues [`timeset`]. Optionally, the issue(s) of the
+#'   data to fetch. See the "Data Versioning" section for details.
+#' @param lag integer. Optionally, the lag of the issues to fetch.
+#'   See the "Data Versioning" section for details.
+#' @param fetch_args [`fetch_args_list()`]. Additional arguments to pass
+#'   to `fetch()`. See `fetch_args_list()` for details.
+#' @param ... not used for values, forces later arguments to bind by name
+#'
+#' @section Data Versioning:
+#' Several endpoints support retrieving historical versions of the data.
+#' The following parameters control this and are mutually exclusive (only
+#' one can be provided at a time).
+#' \itemize{
+#'   \item \code{as_of}: (Date) Retrieve the data as it was on this date.
+#'   \item \code{issues}: [`timeset`] Retrieve data from a
+#'     specific issue date or range of dates.
+#'   \item \code{lag}: (integer) Retrieve data with a specific lag from
+#'     its issue date.
+#' }
+#'
+#' If none of these is specified, the most recent version of the data is
+#' returned.
+#'
+#' See `vignette("versioned-data")` for details and more ways to specify
+#' versioned data.
+#'
+#' @section See also:
+#' For example queries showing how to discover signals and build calls,
+#' see `vignette("signal-discovery", package = "epidatr")`.
+NULL
+
+
 #' CDC total and by topic webpage visits
 #'
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/cdc.html>
 #'
+#'
 #' @examples
 #' \dontrun{
 #' pvt_cdc(
-#'   auth = Sys.getenv("SECRET_API_AUTH_CDC"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   locations = "fl,ca",
 #'   epirange(201501, 201601)
 #' )
 #' }
 #'
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
-#'   See `fetch_args_list()` for details.
+#' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See [US Regions and States codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states) # nolint
+#'   for details.
 #' @return [`tibble::tibble`]
 #'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_cdc <- function(
@@ -31,8 +91,7 @@ pvt_cdc <- function(
 
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "cdc/",
@@ -71,21 +130,23 @@ pvt_cdc <- function(
 #' @details Only one location argument needs to be specified.
 #' Combinations of the arguments are not currently supported.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_covid_hosp_facility_lookup(state = "fl")
 #' pub_covid_hosp_facility_lookup(city = "southlake")
-#' }
-#' @param ... not used for values, forces later arguments to bind by name
+#'
+#' @inheritParams .epidatr_shared_params
 #' @param state string. A two-letter character state abbreviation.
+#'   See [US states codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states)
+#'   for details.
 #' @param ccn string. A facility CMS certification number.
 #' @param city string. A city name.
 #' @param zip string. A 5-digit zip code.
 #' @param fips_code string. A 5-digit fips county code, zero-padded.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #'
 #' @seealso [`pub_covid_hosp_facility()`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_covid_hosp_facility_lookup <- function(
@@ -157,8 +218,8 @@ pub_covid_hosp_facility_lookup <- function(
 #' @details Starting October 1, 2022, some facilities are only required to
 #' report annually.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_covid_hosp_facility(
 #'   hospital_pks = "100075",
 #'   collection_weeks = epirange(20200101, 20200501)
@@ -168,18 +229,18 @@ pub_covid_hosp_facility_lookup <- function(
 #'   hospital_pks = "050063",
 #'   collection_weeks = epirange(20240101, 20240301)
 #' )
-#' }
+#'
+#' @inheritParams .epidatr_shared_params
 #' @param hospital_pks character. Facility identifiers.
 #' @param collection_weeks [`timeset`]. Dates (corresponding to epiweeks) to
 #'  fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
 #' @param publication_dates [`timeset`]. Publication dates to fetch.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #'
 #' @importFrom checkmate test_class test_integerish test_character
 #'
 #' @seealso [`pub_covid_hosp_facility()`], [`epirange()`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 #
@@ -195,10 +256,8 @@ pub_covid_hosp_facility <- function(
   collection_weeks <- get_wildcard_equivalent_dates(collection_weeks, "day")
 
   assert_character_param("hospital_pks", hospital_pks)
-  assert_timeset_param("collection_weeks", collection_weeks)
-  assert_timeset_param("publication_dates", publication_dates, required = FALSE)
-  collection_weeks <- parse_timeset_input(collection_weeks)
-  publication_dates <- parse_timeset_input(publication_dates)
+  collection_weeks <- validate_timeset_input("collection_weeks", collection_weeks)
+  publication_dates <- validate_timeset_input("publication_dates", publication_dates, required = FALSE)
 
   # Confusingly, the endpoint expects `collection_weeks` to be in day format,
   # but correspond to epiweeks. Allow `collection_weeks` to be provided in
@@ -546,26 +605,23 @@ pub_covid_hosp_facility <- function(
 #' @details Starting October 1, 2022, some facilities are only required to
 #' report annually.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_covid_hosp_state_timeseries(
 #'   states = "fl",
 #'   dates = epirange(20200101, 20200501)
 #' )
-#' }
 #'
-#' @param states character. Two letter state abbreviations.
-#' @param dates [`timeset`]. Dates to fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param as_of Date. Optionally, the as of date for the issues to fetch. If not
-#'   specified, the most recent data is returned. Mutually exclusive with
-#'   `issues`.
-#' @param issues [`timeset`]. Optionally, the issue of the data to fetch. If not
-#'   specified, the most recent issue is returned. Mutually exclusive with
-#'   `as_of` or `lag`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
+#' @param states character. Two-letter state abbreviations.
+#'   See [US states codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states)
+#'   for details.
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
 #' @return [`tibble::tibble`]
 #'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 #
@@ -594,13 +650,9 @@ pub_covid_hosp_state_timeseries <- function(
   dates <- get_wildcard_equivalent_dates(dates, "day")
 
   assert_character_param("states", states)
-  assert_timeset_param("dates", dates)
-  assert_date_param("as_of", as_of, len = 1, required = FALSE)
-  assert_timeset_param("issues", issues, required = FALSE)
-
-  dates <- parse_timeset_input(dates)
-  issues <- parse_timeset_input(issues)
-  as_of <- parse_timeset_input(as_of)
+  dates <- validate_timeset_input("dates", dates)
+  as_of <- validate_date_input("as_of", as_of, len = 1, required = FALSE)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
 
   create_epidata_call(
     "covid_hosp_state_timeseries/",
@@ -884,22 +936,58 @@ pub_covid_hosp_state_timeseries <- function(
 #' the API, along with basic summary statistics such as the dates they are
 #' available, the geographic levels at which they are reported, and etc.
 #'
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' The result can be filtered server-side by passing `signals`, `time_type`,
+#' and/or `geo_type`. Omitted filters (the default) return metadata for
+#' everything.
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param signals character. Optionally, the signals to return metadata for,
+#'   each formatted as `"source:signal"` (e.g. `"fb-survey:smoothed_cli"`).
+#'   Defaults to all signals.
+#' @param geo_type string. Optionally, a single geographic resolution to return
+#'   metadata for (see:
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>).
+#'   Defaults to all geographic resolutions.
 #'
 #' @return [`tibble::tibble`]
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_covidcast_meta()
-#' }
+#' # All signals from the Facebook survey data source
+#' pub_covidcast_meta(
+#'   signals = "fb-survey:*"
+#' )
+#' # All signals with time_type "day".
+#' pub_covidcast_meta(
+#'   time_type = "day",
+#' )
+#' # All signals with geo_type "state".
+#' pub_covidcast_meta(
+#'   geo_type = "state",
+#' )
 #'
 #' @seealso [pub_covidcast()],[covidcast_epidata()]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
-pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
+pub_covidcast_meta <- function(
+  signals = NULL,
+  time_type = NULL,
+  geo_type = NULL,
+  fetch_args = fetch_args_list()
+) {
+  assert_character_param("signals", signals, required = FALSE)
+  assert_character_param("time_type", time_type, len = 1, required = FALSE)
+  assert_character_param("geo_type", geo_type, len = 1, required = FALSE)
+
   create_epidata_call(
     "covidcast_meta/",
-    list(),
+    list(
+      signals = signals,
+      time_types = time_type,
+      geo_types = geo_type
+    ),
     list(
       create_epidata_field_info("data_source", "text"),
       create_epidata_field_info("signal", "text"),
@@ -919,13 +1007,14 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
       create_epidata_field_info("max_value", "float"),
       create_epidata_field_info("mean_value", "float"),
       create_epidata_field_info("stdev_value", "float"),
-      create_epidata_field_info("last_update", "int"),
+      create_epidata_field_info("last_update", "timestamp"),
       create_epidata_field_info("max_issue", "int"),
       create_epidata_field_info("min_lag", "int"),
       create_epidata_field_info("max_lag", "int")
     )
   ) %>% fetch(fetch_args = fetch_args)
 }
+
 
 #' Various COVID and flu signals via the COVIDcast endpoint
 #'
@@ -937,8 +1026,8 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #' link above for more. Delphi's [COVIDcast public
 #' dashboard](https://delphi.cmu.edu/covidcast/) is powered by this endpoint.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_covidcast(
 #'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
@@ -955,34 +1044,23 @@ pub_covidcast_meta <- function(fetch_args = fetch_args_list()) {
 #'   geo_values = "*",
 #'   time_values = epirange(20200601, 20200801)
 #' )
-#' }
 #'
+#' @inheritParams .epidatr_shared_params
 #' @param source string. The data source to query (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>).
 #' @param signals string. The signals to query from a specific source (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>).
 #' @param geo_type string. The geographic resolution of the data (see:
 #'   <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>).
-#' @param time_type string. The temporal resolution of the data (either "day" or
-#' "week", depending on signal).
 #' @param geo_values character. The geographies to return. Defaults to all
 #'  ("*") geographies within requested geographic resolution (see:
 #'  <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.).
-#' @param time_values [`timeset`]. Dates to fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param as_of Date. Optionally, the as of date for the issues to fetch. If not
-#'   specified, the most recent data is returned. Mutually exclusive with
-#'   `issues` or `lag`.
-#' @param issues [`timeset`]. Optionally, the issue of the data to fetch. If not
-#'   specified, the most recent issue is returned. Mutually exclusive with
-#'   `as_of` or `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `as_of` or
-#'   `issues`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
 #'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
 #' @seealso [pub_covidcast_meta()], [covidcast_epidata()], [epirange()]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_covidcast <- function(
@@ -1024,14 +1102,11 @@ pub_covidcast <- function(
   assert_character_param("signals", signals)
   assert_character_param("time_type", time_type, len = 1)
   assert_character_param("geo_type", geo_type, len = 1)
-  assert_timeset_param("time_values", time_values)
+  time_values <- validate_timeset_input("time_values", time_values)
   assert_character_param("geo_values", geo_values)
-  assert_date_param("as_of", as_of, len = 1, required = FALSE)
-  assert_timeset_param("issues", issues, required = FALSE)
+  as_of <- validate_date_input("as_of", as_of, len = 1, required = FALSE)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  time_values <- parse_timeset_input(time_values)
-  as_of <- parse_timeset_input(as_of)
-  issues <- parse_timeset_input(issues)
 
   if (source == "nchs-mortality" && time_type != "week") {
     cli::cli_abort(
@@ -1097,19 +1172,319 @@ pub_covidcast <- function(
   ) %>% fetch(fetch_args = fetch_args)
 }
 
+#' Get cast-API source metadata
+#'
+#' @description
+#' `epidata_meta` returns source-level metadata from the cast-API,
+#' including `report_time` ranges, `reference_time` ranges, and lists of
+#' available signals and geo types.
+#'
+#' @param source string. The data source to query.
+#' @inheritParams .epidatr_shared_params
+#' @return list
+#' @seealso [epidata_snapshot()], [epidata_archive()], [epidata()], [epirange()]
+#' @inheritSection .epidatr_shared_params See also
+#' @keywords endpoint
+#' @export
+epidata_meta <- function(source, fetch_args = fetch_args_list()) {
+  assert_character_param("source", source, len = 1, required = TRUE)
+  create_epidata_call(
+    endpoint = "metadata/",
+    params = list(source = source),
+    api_version = "cast",
+    response_format = "json"
+  ) %>% request_epidata(fetch_args = fetch_args)
+}
+
+#' cast-API snapshot and archive queries
+#'
+#' @description
+#' - `epidata_snapshot` fetches a snapshot of signals as they appeared at a
+#'   specific date (or the latest available if `snapshot_date` is omitted).
+#' - `epidata_archive` fetches the full version history of signals across all
+#'   available issues.
+#' - `epidata` is a wrapper that routes to one of the above based
+#'   on which versioning argument is supplied.
+#'
+#' @inheritParams pub_covidcast
+#' @param source string. The data source to query (e.g., `"nssp"`, `"nhsn"`).
+#'   Use [epidata_meta()] to discover available sources.
+#' @param signals character vector. One or more signals to query for the given
+#'   source. Use [epidata_meta()] to discover available signals.
+#' @param geo_type string. The geography type to query (e.g., `"state"`,
+#'   `"nation"`, `"county"`). Use [epidata_meta()] to discover available
+#'   geo types for a given source and signal.
+#' @param reference_time [`timeset`]. Reference time to return (filters on the
+#'   `reference_time` column). Supports individual dates or [`epirange()`].
+#'   Defaults to all (`"*"`). Filtered locally after the API call.
+#' @param fill_method string. Optional filter to an imputation method.
+#'   The API provides alternatives of the same signal differing in how
+#'   nulls were handled during geographic aggregation: `"source"` means no
+#'   imputation or aggregation (raw source data), `"fill_ave"` fills nulls with
+#'   the average of neighboring values, and `"fill_zero"` fills nulls with zero.
+#'   `NULL` (default) returns all fill methods.
+#' @param snapshot_date Date or `NULL`. The snapshot date; `NULL` returns the
+#'   latest available version.
+#' @param as_of `r lifecycle::badge("deprecated")` Use `snapshot_date` instead.
+#' @param report_time Date, string, or [`epirange()`]. A query on the
+#'   `report_time` column for the archive endpoint. Supports exact dates (e.g.,
+#'   `"2025-10-16"`), operators (e.g., `"<2025-10-16"`), or an [`epirange()`].
+#'   Internally maps to the `version_query` API parameter.
+#' @param issues `r lifecycle::badge("deprecated")` Use `report_time` instead.
+#' @param time_values `r lifecycle::badge("deprecated")` Use `reference_time` instead.
+#' @return [`tibble::tibble`]
+#'
+#' @section Data Versioning:
+#' `epidata` supports two mutually exclusive versioning arguments. Pass
+#' `snapshot_date` to retrieve data as it appeared on a specific date, or
+#' `report_time` to query the archive by when data was reported. If neither is
+#' supplied, `epidata` returns the latest available snapshot.
+#'
+#' @seealso [epidata_meta()], [epirange()]
+#' @inheritSection .epidatr_shared_params See also
+#' @keywords endpoint
+#' @name cast_api_queries
+NULL
+
+#' @rdname cast_api_queries
+#' @export
+epidata_snapshot <- function(
+  source,
+  signals,
+  geo_type,
+  geo_values = "*",
+  reference_time = "*",
+  time_values = lifecycle::deprecated(),
+  ...,
+  fill_method = NULL,
+  snapshot_date = NULL,
+  as_of = lifecycle::deprecated(),
+  fetch_args = fetch_args_list()
+) {
+  if (missing(source) || missing(signals) || missing(geo_type)) {
+    cli::cli_abort(
+      "`source`, `signals`, and `geo_type` are all required",
+      class = "epidatr__epidata__missing_required_args"
+    )
+  }
+
+  rlang::check_dots_empty()
+
+  if (lifecycle::is_present(as_of)) {
+    lifecycle::deprecate_warn(
+      "1.3.0",
+      "epidata_snapshot(as_of)",
+      details = paste(
+        "The `as_of` argument is deprecated and will be removed in a future version.",
+        "Use `snapshot_date` instead."
+      )
+    )
+    snapshot_date <- as_of
+  }
+
+  if (lifecycle::is_present(time_values)) {
+    lifecycle::deprecate_warn(
+      "1.3.0",
+      "epidata_snapshot(time_values)",
+      details = paste(
+        "The `time_values` argument is deprecated and will be removed in a future version.",
+        "Use `reference_time` instead."
+      )
+    )
+    reference_time <- time_values
+  }
+
+  assert_character_param("source", source, len = 1)
+  assert_character_param("signals", signals)
+  assert_character_param("geo_type", geo_type, len = 1)
+  assert_character_param("geo_values", geo_values)
+  assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
+  assert_date_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
+  if (!is.null(snapshot_date)) snapshot_date <- format(parse_api_date(snapshot_date), "%Y-%m-%d")
+
+  parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
+
+  create_epidata_call(
+    endpoint = "snapshot/",
+    params = list(
+      source = source,
+      signal = paste(signals, collapse = ","),
+      geo_type = geo_type,
+      fill_method = fill_method,
+      snapshot_date = snapshot_date
+    ),
+    meta = list(
+      create_epidata_field_info("signal", "text"),
+      create_epidata_field_info("report_time", "date"),
+      create_epidata_field_info("geo_type", "text"),
+      create_epidata_field_info("geo_value", "text"),
+      create_epidata_field_info("fill_method", "text"),
+      create_epidata_field_info("reference_time", "date"),
+      create_epidata_field_info("value", "float"),
+      # source-specific extra columns
+      create_epidata_field_info("age_group", "text"), # pophive
+      create_epidata_field_info("nwss_source", "text"), # nwss
+      create_epidata_field_info("sample_index", "text"), # nwss
+      create_epidata_field_info("pcr_target", "text") # nwss
+    ),
+    api_version = "cast",
+    response_format = "csv"
+  ) %>%
+    fetch(fetch_args = fetch_args) %>%
+    .cast_filter(geo_values, reference_time, parsed_reference_times)
+}
+
+#' @rdname cast_api_queries
+#' @export
+epidata_archive <- function(
+  source,
+  signals,
+  geo_type,
+  geo_values = "*",
+  reference_time = "*",
+  time_values = lifecycle::deprecated(),
+  ...,
+  fill_method = NULL,
+  report_time = "*",
+  issues = lifecycle::deprecated(),
+  fetch_args = fetch_args_list()
+) {
+  if (missing(source) || missing(signals) || missing(geo_type)) {
+    cli::cli_abort(
+      "`source`, `signals`, and `geo_type` are all required",
+      class = "epidatr__epidata__missing_required_args"
+    )
+  }
+
+  rlang::check_dots_empty()
+
+  assert_character_param("source", source, len = 1)
+  assert_character_param("signals", signals)
+  assert_character_param("geo_type", geo_type, len = 1)
+  assert_character_param("geo_values", geo_values)
+  assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
+
+  if (lifecycle::is_present(time_values)) {
+    lifecycle::deprecate_warn(
+      "1.3.0",
+      "epidata_archive(time_values)",
+      details = paste(
+        "The `time_values` argument is deprecated and will be removed in a future version.",
+        "Use `reference_time` instead."
+      )
+    )
+    reference_time <- time_values
+  }
+  if (lifecycle::is_present(issues)) {
+    lifecycle::deprecate_warn(
+      "1.3.0",
+      "epidata_archive(issues)",
+      details = paste(
+        "The `issues` argument is deprecated and will be removed in a future version.",
+        "Use `report_time` instead."
+      )
+    )
+    report_time <- issues
+  }
+
+  parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
+  version_query <- validate_version_query(report_time)
+
+  create_epidata_call(
+    endpoint = "archive/",
+    params = list(
+      source = source,
+      signal = paste(signals, collapse = ","),
+      geo_type = geo_type,
+      fill_method = fill_method,
+      version_query = version_query
+    ),
+    meta = list(
+      create_epidata_field_info("signal", "text"),
+      create_epidata_field_info("report_time", "date"),
+      create_epidata_field_info("geo_type", "text"),
+      create_epidata_field_info("geo_value", "text"),
+      create_epidata_field_info("fill_method", "text"),
+      create_epidata_field_info("reference_time", "date"),
+      create_epidata_field_info("value", "float"),
+      # source-specific extra columns
+      create_epidata_field_info("age_group", "text"), # pophive
+      create_epidata_field_info("nwss_source", "text"), # nwss
+      create_epidata_field_info("sample_index", "text"), # nwss
+      create_epidata_field_info("pcr_target", "text") # nwss
+    ),
+    api_version = "cast",
+    response_format = "csv"
+  ) %>%
+    fetch(fetch_args = fetch_args) %>%
+    .cast_filter(geo_values, reference_time, parsed_reference_times, report_time = report_time)
+}
+
+#' @rdname cast_api_queries
+#' @export
+epidata <- function(
+  source,
+  signals,
+  geo_type,
+  geo_values = "*",
+  reference_time = "*",
+  time_values = lifecycle::deprecated(),
+  ...,
+  fill_method = NULL,
+  snapshot_date = NULL,
+  as_of = lifecycle::deprecated(),
+  report_time = NULL,
+  issues = lifecycle::deprecated(),
+  fetch_args = fetch_args_list()
+) {
+  if ((!is.null(report_time) || lifecycle::is_present(issues)) &&
+        (!is.null(snapshot_date) || lifecycle::is_present(as_of))) {
+    cli::cli_abort(
+      "`report_time` and `snapshot_date` are mutually exclusive",
+      class = "epidatr__epidata__version_and_as_of_exclusive"
+    )
+  }
+
+  if (!is.null(report_time) || lifecycle::is_present(issues) ||
+        identical(snapshot_date, "*") || identical(as_of, "*")) {
+    epidata_archive(
+      source = source, signals = signals, geo_type = geo_type,
+      geo_values = geo_values, reference_time = reference_time,
+      time_values = time_values,
+      fill_method = fill_method,
+      report_time = if (!is.null(report_time)) report_time else "*",
+      issues = issues,
+      fetch_args = fetch_args
+    )
+  } else {
+    epidata_snapshot(
+      source = source, signals = signals, geo_type = geo_type,
+      geo_values = geo_values, reference_time = reference_time,
+      time_values = time_values,
+      fill_method = fill_method,
+      snapshot_date = snapshot_date,
+      as_of = as_of,
+      fetch_args = fetch_args
+    )
+  }
+}
+
 #' Delphi's ILINet outpatient doctor visits forecasts
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/delphi.html>
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_delphi(system = "ec", epiweek = 201501)
-#' }
+#'
+#' @inheritParams .epidatr_shared_params
 #' @param system character. System name to fetch.
+#'   See the [available forecasting systems](https://cmu-delphi.github.io/delphi-epidata/api/delphi.html#forecasting-systems) # nolint
+#'   for details.
 #' @param epiweek [`timeset`]. Epiweek to fetch. Does not support multiple dates.
 #'  Make separate calls to fetch data for multiple epiweeks.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`list`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_delphi <- function(
@@ -1118,8 +1493,7 @@ pub_delphi <- function(
   fetch_args = fetch_args_list()
 ) {
   assert_character_param("system", system)
-  assert_timeset_param("epiweek", epiweek, len = 1)
-  epiweek <- parse_timeset_input(epiweek)
+  epiweek <- validate_timeset_input("epiweek", epiweek, len = 1)
 
   create_epidata_call(
     "delphi/",
@@ -1128,26 +1502,26 @@ pub_delphi <- function(
       create_epidata_field_info("system", "text"),
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("json", "text")
-    ),
-    only_supports_classic = TRUE
-  ) %>% fetch(fetch_args = fetch_args)
+    )
+  ) %>% request_epidata(fetch_args = fetch_args, simplify = FALSE)
 }
 
 #' Delphi's PAHO dengue nowcasts (North and South America)
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html>
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_dengue_nowcast(
 #'   locations = "pr",
 #'   epiweeks = epirange(201401, 202301)
 #' )
-#' }
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See the [codes for countries and territories in the Americas](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas). # nolint
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_dengue_nowcast <- function(
@@ -1158,8 +1532,7 @@ pub_dengue_nowcast <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "dengue_nowcast/",
@@ -1180,18 +1553,20 @@ pub_dengue_nowcast <- function(
 #' @examples
 #' \dontrun{
 #' pvt_dengue_sensors(
-#'   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   names = "ght",
 #'   locations = "ag",
 #'   epiweeks = epirange(201501, 202001)
 #' )
 #' }
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param names character. Names to fetch.
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See the [codes for countries and territories in the Americas](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas). # nolint
+#' @param names character. List of sensor names to fetch.
+#'   See the [available sensors](https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html#available-sensors).
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_dengue_sensors <- function(
@@ -1206,8 +1581,7 @@ pvt_dengue_sensors <- function(
   assert_character_param("auth", auth, len = 1)
   assert_character_param("names", names)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "dengue_sensors/",
@@ -1237,19 +1611,18 @@ pvt_dengue_sensors <- function(
 #' @details The list of location argument can be found in
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/ecdc_regions.txt>.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_ecdc_ili(regions = "austria", epiweeks = epirange(201901, 202001))
-#' }
-#' @param regions character. Regions to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#'   most recent issue is returned. Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `issues`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param regions character. List of regions to fetch.
+#'   See the [codes for European countries](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#european-countries). # nolint
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_ecdc_ili <- function(
@@ -1265,11 +1638,9 @@ pub_ecdc_ili <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1305,19 +1676,19 @@ pub_ecdc_ili <- function(
 #' @details The list of location argument can be found in
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/flusurv_locations.txt>.
 #'
-#' @examples
-#' \dontrun{
-#' pub_flusurv(locations = "CA", epiweeks = epirange(201701, 201801))
-#' }
-#' @param locations character. Character vector indicating location.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#'   most recent issue is returned. Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `issues`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
+#' pub_flusurv(locations = "ca", epiweeks = epirange(201701, 201801))
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See [geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#flusurv-locations)
+#'   for details.
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_flusurv <- function(
@@ -1333,11 +1704,9 @@ pub_flusurv <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1393,21 +1762,23 @@ pub_flusurv <- function(
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html>
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
-#' }
-#' @param regions character. Regions to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch in the form
-#'   epirange(startweek,endweek), where startweek and endweek are of the form
-#'   YYYYWW (string or numeric). Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#'   most recent issue is returned. Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `issues`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param regions character. Vector of location IDs to fetch.  Can be
+#'   "nat" for national, "hhs1"--"hhs10" for HHS Regions, "cen1"--"cen9" for
+#'   census divisions, lowercase two-letter state or territory abbreviations
+#'   for most states and territories,"jfk" for New York City, or "ny_minus_jfk"
+#'   for upstate New York. Full list of locations is available
+#'   [here](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states)
+#'   and [here](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#fluview-cities).
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_fluview_clinical <- function(
@@ -1423,11 +1794,9 @@ pub_fluview_clinical <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1460,15 +1829,15 @@ pub_fluview_clinical <- function(
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
 #'
-#' @examples
-#' \dontrun{
-#' pub_fluview_meta()
-#' }
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
 #'
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' pub_fluview_meta()
+#'
+#' @inheritParams .epidatr_shared_params
 #'
 #' @return [`tibble::tibble`]
 #' @seealso [`pub_fluview()`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
@@ -1497,25 +1866,17 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 #' @details The full list of location inputs can be accessed at
 #'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_fluview(regions = "nat", epiweeks = epirange(201201, 202005))
-#' }
-#' @param regions character. Locations to fetch. Can be any string IDs in
-#'   national, HHS region, census division, most states and territories, and so
-#'   on. Full list link below.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch in the form
-#'   `epirange(startweek, endweek)`, where startweek and endweek are of the form
-#'   YYYYWW (string or numeric). Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#'   most recent issue is returned. Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `issues`.
-#' @param auth string. Optionally, restricted access key (not the same as API
-#' key).
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams pub_fluview_clinical
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_fluview <- function(
@@ -1532,12 +1893,10 @@ pub_fluview <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
   assert_character_param("auth", auth, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!is.null(issues) && !is.null(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1583,20 +1942,19 @@ pub_fluview <- function(
 #'
 #' @details Google has discontinued Flu Trends and this is now a static
 #'   endpoint. Possibile input for locations can be found in
-#'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/regions.txt>,
-#'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/states.txt>,
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#hhs-regions>,
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states>,
 #'   and
-#'   <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/cities.txt>.
+#'   <https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#selected-us-cities>.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
-#' }
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`] Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams .epidatr_shared_params
 #'
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_gft <- function(
@@ -1607,8 +1965,7 @@ pub_gft <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "gft/",
@@ -1631,18 +1988,20 @@ pub_gft <- function(
 #' @examples
 #' \dontrun{
 #' pvt_ght(
-#'   auth = Sys.getenv("SECRET_API_AUTH_GHT"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   locations = "ma",
 #'   epiweeks = epirange(199301, 202304),
 #'   query = "how to get over the flu"
 #' )
 #' }
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See [geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-states-and-territories) # nolint
+#'   for details.
 #' @param query string. The query to be fetched.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_ght <- function(
@@ -1656,9 +2015,8 @@ pvt_ght <- function(
 
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
   assert_character_param("query", query, len = 1)
-  epiweeks <- parse_timeset_input(epiweeks)
 
   create_epidata_call(
     "ght/",
@@ -1680,19 +2038,19 @@ pvt_ght <- function(
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html>
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
-#' }
-#' @param regions character. Regions to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#'   most recent issue is returned. Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `issues`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param regions character. List of regions to fetch.
+#'   See [South Korea's geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#republic-of-korea) # nolint
+#'   for details.
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_kcdc_ili <- function(
@@ -1708,11 +2066,9 @@ pub_kcdc_ili <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!missing(issues) && !missing(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1742,12 +2098,12 @@ pub_kcdc_ili <- function(
 #'
 #' @examples
 #' \dontrun{
-#' pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
+#' pvt_meta_norostat(auth = Sys.getenv("DELPHI_EPIDATA_KEY"))
 #' }
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #' @return [`list`]
 #' @seealso [`pvt_norostat()`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
@@ -1755,22 +2111,22 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 
   create_epidata_call(
     "meta_norostat/",
-    list(auth = auth),
-    only_supports_classic = TRUE
-  ) %>% fetch(fetch_args = fetch_args)
+    list(auth = auth)
+  ) %>% request_epidata(fetch_args = fetch_args, simplify = FALSE)
 }
 
 #' Metadata for the Delphi Epidata API
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta.html>
 #'
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#' @inheritParams .epidatr_shared_params
 #'
 #' @return [`list`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_meta <- function(fetch_args = fetch_args_list()) {
-  create_epidata_call("meta/", list(), only_supports_classic = TRUE) %>% fetch(fetch_args = fetch_args)
+  create_epidata_call("meta/", list()) %>% request_epidata(fetch_args = fetch_args, simplify = FALSE)
 }
 
 #' NIDSS dengue cases (Taiwan)
@@ -1786,15 +2142,17 @@ pub_meta <- function(fetch_args = fetch_args_list()) {
 #' and
 #' <https://github.com/cmu-delphi/delphi-epidata/blob/main/labels/nidss_locations.txt>.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_nidss_dengue(locations = "taipei", epiweeks = epirange(201201, 201301))
-#' }
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See [Taiwan's geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#nidss)
+#'   for details.
 #'
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_nidss_dengue <- function(
@@ -1805,8 +2163,7 @@ pub_nidss_dengue <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "nidss_dengue/",
@@ -1827,19 +2184,19 @@ pub_nidss_dengue <- function(
 #' Infectious Disease Statistical System.
 #'
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_nidss_flu(regions = "taipei", epiweeks = epirange(201501, 201601))
-#' }
-#' @param regions character. Regions to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#'   most recent issue is returned. Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `issues`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param regions character. List of regions to fetch.
+#'   See [Taiwan's geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#nidss)
+#'   for details.
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_nidss_flu <- function(
@@ -1855,11 +2212,9 @@ pub_nidss_flu <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   if (!is.null(issues) && !is.null(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
@@ -1898,16 +2253,18 @@ pub_nidss_flu <- function(
 #' @examples
 #' \dontrun{
 #' pvt_norostat(
-#'   auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   locations = "Minnesota, Ohio, Oregon, Tennessee, and Wisconsin",
 #'   epiweeks = 201233
 #' )
 #' }
-#' @param auth string. Your authentication key.
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param locations character. Locations to fetch. Only a specific list of
+#' full state names are permitted. See the `locations` column in the
+#' output of `pvt_meta_norostat()` for the allowed values.
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_norostat <- function(
@@ -1920,8 +2277,7 @@ pvt_norostat <- function(
 
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations, len = 1)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "norostat/",
@@ -1945,16 +2301,15 @@ pvt_norostat <- function(
 #' Obtains information on outpatient inluenza-like-illness (ILI) from Delphi's
 #'
 #' @details The full list of location inputs can be accessed at
-#' <https://github.com/cmu-delphi/delphi-epidata/blob/main/src/acquisition/fluview/fluview_locations.py>.
+#' <https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states>
+#' and <https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#fluview-cities>.
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
 #'
-#' @examples
-#' \dontrun{
 #' pub_nowcast(locations = "ca", epiweeks = epirange(201201, 201301))
-#' }
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams .epidatr_shared_params
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_nowcast <- function(
@@ -1965,8 +2320,7 @@ pub_nowcast <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "nowcast/",
@@ -1984,19 +2338,19 @@ pub_nowcast <- function(
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html>
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501))
-#' }
-#' @param regions character. Regions to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param issues [`timeset`]. Optionally, the issues to fetch. If not set, the
-#'   most recent issue is returned. Mutually exclusive with `lag`.
-#' @param lag integer. Optionally, the lag of the issues to fetch. If not set,
-#'   the most recent issue is returned. Mutually exclusive with `issues`.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param regions character. List of regions to fetch.
+#'   See [Americas' geographic codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#countries-and-territories-in-the-americas) # nolint
+#'   for details.
 #' @return [`tibble::tibble`]
+#'
+#' @inheritSection .epidatr_shared_params Data Versioning
+#'
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_paho_dengue <- function(
@@ -2012,11 +2366,9 @@ pub_paho_dengue <- function(
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("regions", regions)
-  assert_timeset_param("epiweeks", epiweeks)
-  assert_timeset_param("issues", issues, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
+  issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  epiweeks <- parse_timeset_input(epiweeks)
-  issues <- parse_timeset_input(issues)
 
   create_epidata_call(
     "paho_dengue/",
@@ -2051,16 +2403,18 @@ pub_paho_dengue <- function(
 #' @examples
 #' \dontrun{
 #' pvt_quidel(
-#'   auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   epiweeks = epirange(201201, 202001),
 #'   locations = "hhs1"
 #' )
 #' }
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See [HHS regions' codes](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#hhs-regions)
+#'   for details.
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_quidel <- function(
@@ -2073,8 +2427,7 @@ pvt_quidel <- function(
 
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "quidel/",
@@ -2109,18 +2462,22 @@ pvt_quidel <- function(
 #' @examples
 #' \dontrun{
 #' pvt_sensors(
-#'   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   names = "sar3",
 #'   locations = "nat",
 #'   epiweeks = epirange(201501, 202001)
 #' )
 #' }
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param names character. Sensor names to fetch.
-#' @param locations character. Locations to fetch.
-#' @param epiweeks [`timeset`]. Epiweeks to fetch. Defaults to all ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param names character. List of sensor names to fetch.
+#'   See the [data sources available](https://cmu-delphi.github.io/delphi-epidata/api/sensors.html#data-sources)
+#'   for details.
+#' @param locations character. List of locations to fetch.
+#'   See the codes of the [US regions and states](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states) # nolint
+#'   for details.
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_sensors <- function(
@@ -2135,8 +2492,7 @@ pvt_sensors <- function(
   assert_character_param("auth", auth, len = 1)
   assert_character_param("names", names)
   assert_character_param("locations", locations)
-  assert_timeset_param("epiweeks", epiweeks)
-  epiweeks <- parse_timeset_input(epiweeks)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks)
 
   create_epidata_call(
     "sensors/",
@@ -2166,21 +2522,19 @@ pvt_sensors <- function(
 #' @examples
 #' \dontrun{
 #' pvt_twitter(
-#'   auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
+#'   auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
 #'   locations = "CA",
 #'   time_type = "week",
 #'   time_values = epirange(201501, 202001)
 #' )
 #' }
-#' @param auth string. Restricted access key (not the same as API key).
-#' @param locations character. Locations to fetch.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param time_type string. The temporal resolution of the data (either "day" or
-#'  "week", depending on signal).
-#' @param time_values [`timeset`]. Dates or epiweeks to fetch. Defaults to all
-#'  ("*") dates.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
+#'
+#' @inheritParams .epidatr_shared_params
+#' @param locations character. List of locations to fetch.
+#'   See the codes of the [US regions and states](https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states) # nolint
+#'   for details.
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pvt_twitter <- function(
@@ -2207,11 +2561,9 @@ pvt_twitter <- function(
   assert_character_param("auth", auth, len = 1)
   assert_character_param("locations", locations)
   assert_character_param("time_type", time_type, len = 1)
-  assert_timeset_param("time_values", time_values)
-  assert_timeset_param("dates", dates, required = FALSE)
-  assert_timeset_param("epiweeks", epiweeks, required = FALSE)
-  dates <- parse_timeset_input(dates)
-  epiweeks <- parse_timeset_input(epiweeks)
+  time_values <- validate_timeset_input("time_values", time_values)
+  dates <- validate_timeset_input("dates", dates, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks, required = FALSE)
 
   time_field <- if (!is.null(dates)) {
     create_epidata_field_info("date", "date")
@@ -2248,24 +2600,22 @@ pvt_twitter <- function(
 #' * Other resolution: By article (54)
 #' * Open access
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#'
 #' pub_wiki(
 #'   articles = "avian_influenza",
 #'   time_type = "week",
 #'   time_values = epirange(201501, 201601)
 #' )
-#' }
+#'
+#' @inheritParams .epidatr_shared_params
 #' @param articles character. Articles to fetch.
-#' @param ... not used for values, forces later arguments to bind by name
-#' @param time_type string. The temporal resolution of the data (either "day" or
-#'  "week", depending on signal).
-#' @param time_values [`timeset`]. Dates or epiweeks to fetch. Defaults to all
-#'  ("*") dates.
+#'   See [available articles](https://cmu-delphi.github.io/delphi-epidata/api/wiki.html#available-articles)
+#'   for details.
 #' @param language string. Language to fetch.
 #' @param hours integer. Optionally, the hours to fetch.
-#' @param fetch_args [`fetch_args`]. Additional arguments to pass to `fetch()`.
 #' @return [`tibble::tibble`]
+#' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 pub_wiki <- function(
@@ -2292,13 +2642,11 @@ pub_wiki <- function(
 
   assert_character_param("articles", articles)
   assert_character_param("time_type", time_type, len = 1)
-  assert_timeset_param("time_values", time_values)
-  assert_timeset_param("dates", dates, required = FALSE)
-  assert_timeset_param("epiweeks", epiweeks, required = FALSE)
+  time_values <- validate_timeset_input("time_values", time_values)
+  dates <- validate_timeset_input("dates", dates, required = FALSE)
+  epiweeks <- validate_timeset_input("epiweeks", epiweeks, required = FALSE)
   assert_integerish_param("hours", hours, required = FALSE)
   assert_character_param("language", language, len = 1, required = FALSE)
-  dates <- parse_timeset_input(dates)
-  epiweeks <- parse_timeset_input(epiweeks)
 
   time_field <- if (!is.null(dates)) {
     create_epidata_field_info("date", "date")

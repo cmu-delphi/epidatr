@@ -1,3 +1,7 @@
+# Functions for creating and handling `epidata_call` objects, which represent
+# API calls to the Epidata API. The `fetch()` function is used to execute an
+# `epidata_call` and return the data.
+
 #' An abstraction that holds information needed to make an epidata request
 #' @rdname epidata_call
 #' @aliases epidata_call
@@ -15,12 +19,9 @@
 #'   e.g., [`pub_covidcast`], to generate an `epidata_call` for the data of
 #'   interest.
 #'
-#' There are some other functions available for debugging and advanced usage: -
-#'   `request_url` (for debugging):  outputs the request URL from which data
-#'   would be fetched (note additional parameters below)
+#' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
+#' library(magrittr)
 #'
-#' @examples
-#' \dontrun{
 #' call <- pub_covidcast(
 #'   source = "jhu-csse",
 #'   signals = "confirmed_7dav_incidence_prop",
@@ -31,23 +32,25 @@
 #'   fetch_args = fetch_args_list(dry_run = TRUE)
 #' )
 #' call %>% fetch()
-#' }
 #'
 #' @param endpoint the epidata endpoint to call
 #' @param params the parameters to pass to the epidata endpoint
 #' @param meta meta data to attach to the epidata call
-#' @param only_supports_classic if true only classic format is supported
+#' @param api_version string. The API version to use. One of "classic" or "cast".
+#' @param response_format string. The expected format of the response. One of "classic", "json", or "csv".
 #'
 #' @return
 #' - For `create_epidata_call`: an `epidata_call` object
 #'
 #' @importFrom purrr map_chr map_lgl
 create_epidata_call <- function(endpoint, params, meta = NULL,
-                                only_supports_classic = FALSE) {
+                                api_version = c("classic", "cast"),
+                                response_format = c("classic", "json", "csv")) {
   checkmate::assert_character(endpoint, len = 1)
   checkmate::assert_list(params)
   checkmate::assert_list(meta, null.ok = TRUE)
-  checkmate::assert_logical(only_supports_classic, len = 1)
+  api_version <- rlang::arg_match(api_version)
+  response_format <- rlang::arg_match(response_format)
   checkmate::assert_true(all(map_lgl(meta, ~ inherits(.x, "EpidataFieldInfo"))))
 
   if (length(unique(meta)) != length(meta)) {
@@ -80,47 +83,49 @@ create_epidata_call <- function(endpoint, params, meta = NULL,
   if (is.null(meta)) {
     meta <- list()
   }
+  base_url <- if (api_version == "cast") cast_base_url else global_base_url
+  # Format the parameters before passing them to httr2::req_url_query
+  # This is necessary because httr2::req_url_query expects atomic vector
+  formatted_params <- format_params_for_api(params)
+
+  r <- httr2::request(base_url) %>%
+    httr2::req_url_path_append(endpoint) %>%
+    httr2::req_url_query(!!!formatted_params, .multi = "comma")
+
   structure(
     list(
-      endpoint = endpoint,
-      params = params,
-      base_url = global_base_url,
+      request = r,
+      base_url = base_url,
       meta = meta,
-      only_supports_classic = only_supports_classic
+      api_version = api_version,
+      response_format = response_format
     ),
     class = "epidata_call"
   )
 }
 
 #' @importFrom checkmate test_class test_list
-request_arguments <- function(epidata_call, format_type, fields) {
+extra_arguments <- function(epidata_call, format_type, fields) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(format_type %in% c("json", "csv", "classic"))
   stopifnot(is.null(fields) || is.character(fields))
 
   extra_params <- list()
-  if (format_type != "classic") {
-    extra_params[["format"]] <- format_type
-  }
-  if (!is.null(fields)) {
-    extra_params[["fields"]] <- fields
-  }
-  all_params <- c(epidata_call$params, extra_params)
-
-  formatted_params <- list()
-  for (name in names(all_params)) {
-    v <- all_params[[name]]
-    if (!is.null(v)) {
-      if (test_class(v, "EpiRange")) {
-        formatted_params[[name]] <- format_item(v)
-      } else if (test_list(v)) {
-        formatted_params[[name]] <- format_list(v)
-      } else {
-        formatted_params[[name]] <- format_item(v)
-      }
+  # The cast API rejects unknown query params (`extra_forbidden`); response
+  # format is determined by the endpoint, and `fields` isn't supported.
+  if (epidata_call$api_version != "cast") {
+    if (format_type != "classic") {
+      extra_params[["format"]] <- format_type
+    }
+    if (!is.null(fields)) {
+      extra_params[["fields"]] <- fields
     }
   }
-  formatted_params
+
+  epidata_call$request <- epidata_call$request %>%
+    httr2::req_url_query(!!!extra_params, .multi = "comma")
+
+  epidata_call
 }
 
 #' @export
@@ -128,7 +133,7 @@ print.epidata_call <- function(x, ...) {
   cli::cli_h1("<epidata_call> object:")
   cli::cli_bullets(c(
     "*" = "Pipe this object into `fetch()` to actually fetch the data",
-    "*" = paste0("Request URL: ", request_url(x))
+    "*" = paste0("Request URL: ", x$request$url)
   ))
 }
 
@@ -155,11 +160,10 @@ print.epidata_call <- function(x, ...) {
 #'   base URL `"https://api.delphi.cmu.edu/epidata/"`
 #' @param dry_run if `TRUE`, skip the call to the API and instead return the
 #'   `epidata_call` object (useful for debugging)
-#' @param debug if `TRUE`, return the raw response from the API
-#' @param format_type the format to request from the API, one of classic, json,
-#'   csv; this is only used by `fetch_debug`, and by default is `"json"`
 #' @param refresh_cache if `TRUE`, ignore the cache, fetch the data from the
 #'   API, and update the cache, if it is enabled
+#' @param debug `r lifecycle::badge("deprecated")` No longer supported. Use `dry_run = TRUE` instead.
+#' @param format_type `r lifecycle::badge("deprecated")` Now managed internally.
 #' @param reference_week_day the day of the week to use as the reference day
 #'   when parsing epiweeks to dates (happens if `disable_date_parsing` is `FALSE`)
 #'   Defaults to 1 Sunday (the first day of the week).
@@ -176,11 +180,27 @@ fetch_args_list <- function(
   timeout_seconds = 15 * 60,
   base_url = NULL,
   dry_run = FALSE,
-  debug = FALSE,
-  format_type = c("json", "classic", "csv"),
+  debug = lifecycle::deprecated(),
+  format_type = lifecycle::deprecated(),
   refresh_cache = FALSE,
   reference_week_day = 1
 ) {
+  # Deprecation warnings
+  if (lifecycle::is_present(debug)) {
+    lifecycle::deprecate_warn(
+      when = "1.0.0",
+      what = "fetch_args_list(debug)",
+      details = "The `debug` argument is no longer supported. Use `dry_run = TRUE` instead."
+    )
+  }
+  if (lifecycle::is_present(format_type)) {
+    lifecycle::deprecate_warn(
+      when = "1.0.0",
+      what = "fetch_args_list(format_type)",
+      details = "The `format_type` argument is now managed internally to ensure efficient data fetching."
+    )
+  }
+
   rlang::check_dots_empty()
 
   assert_character(fields, null.ok = TRUE, any.missing = FALSE)
@@ -190,8 +210,6 @@ fetch_args_list <- function(
   assert_numeric(timeout_seconds, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
-  assert_logical(debug, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  format_type <- match.arg(format_type)
   assert_logical(refresh_cache, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_numeric(reference_week_day, null.ok = FALSE, len = 1L, any.missing = FALSE)
 
@@ -204,8 +222,6 @@ fetch_args_list <- function(
       timeout_seconds = timeout_seconds,
       base_url = base_url,
       dry_run = dry_run,
-      debug = debug,
-      format_type = format_type,
       refresh_cache = refresh_cache,
       reference_week_day = reference_week_day
     ),
@@ -222,17 +238,11 @@ print.fetch_args <- function(x, ...) {
 
 #' Fetches the data
 #'
-#' @details
-#' `fetch` usually returns the data in tibble format, but a few of the
-#' endpoints only support the JSON classic format (`pub_delphi`,
-#' `pvt_meta_norostat`, and `pub_meta`). In that case a
-#' JSON-like nested list structure is returned instead.
-#'
 #' @rdname epidata_call
 #' @param epidata_call an instance of `epidata_call`
 #' @param fetch_args a `fetch_args` object
 #' @return
-#' - For `fetch`: a tibble or a JSON-like list
+#' - For `fetch`: a tibble
 #' @export
 #' @include cache.R
 #' @importFrom openssl md5
@@ -247,112 +257,99 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     epidata_call <- with_base_url(epidata_call, fetch_args$base_url)
   }
 
-  # Just display the epidata_call object, don't fetch the data
   if (fetch_args$dry_run) {
     return(epidata_call)
   }
 
-  # Just display the raw response from the API, don't parse
-  if (fetch_args$debug) {
-    return(fetch_debug(epidata_call, fetch_args))
+  # If cacheable and the value is in cache, return the cached value.
+  is_cachable <- check_is_cachable(epidata_call, fetch_args)
+  should_write_cache <- is_cachable || (fetch_args$refresh_cache && is_cache_enabled())
+
+  if (should_write_cache) {
+    target <- request_url(epidata_call, "json", fetch_args$fields)
+    hashed <- openssl::md5(target)
   }
 
-  # Check if the data is cachable
-  is_cachable <- check_is_cachable(epidata_call, fetch_args)
   if (is_cachable) {
     check_for_cache_warnings(epidata_call, fetch_args)
 
-    # Check if the data is in the cache
-    target <- request_url(epidata_call)
-    hashed <- md5(target)
     cached <- cache_environ$epidatr_cache$get(hashed)
     if (!is.key_missing(cached)) {
-      return(cached[[1]]) # extract `fetched` from `fetch()`, no metadata
+      return(cached[[1]])
     }
   }
 
-  # Need to actually get the data, since its either not in the cache or we're not caching
-  runtime <- system.time(if (epidata_call$only_supports_classic) {
-    fetch_args[["disable_data_frame_parsing"]] <- TRUE
-    fetched <- fetch_classic(epidata_call, fetch_args)
-  } else {
-    response_content <- fetch_classic(epidata_call, fetch_args = fetch_args)
+  # Otherwise fetch the data from the API.
+  runtime <- system.time({
+    response_content <- request_epidata(epidata_call, fetch_args)
+
     if (fetch_args$return_empty && length(response_content) == 0) {
-      fetched <- tibble()
+      fetched <- tibble::tibble()
     } else {
       fetched <- parse_data_frame(
         epidata_call,
         response_content,
         fetch_args$disable_date_parsing,
         fetch_args$reference_week_day
-      ) %>% as_tibble()
+      ) %>% tibble::as_tibble()
     }
   })
 
-  # Add it to the cache if appropriate
-  if (is_cachable || (fetch_args$refresh_cache && is_cache_enabled())) {
+  # Add to cache if appropriate.
+  if (should_write_cache) {
     cache_environ$epidatr_cache$set(hashed, list(fetched, Sys.time(), runtime))
   }
 
   return(fetched)
 }
 
-#' Fetches the data, raises on epidata errors, and returns the results as a
-#' JSON-like list
+#' Fetches the data.
 #'
-#' @rdname fetch_classic
+#' Raises on errors from the API. Returns JSON.
+#'
+#' @rdname request_epidata
 #'
 #' @param epidata_call an instance of `epidata_call`
 #' @param fetch_args a `fetch_args` object
-#' @importFrom httr stop_for_status content http_error
 #' @importFrom jsonlite fromJSON
 #' @return
-#' - For `fetch_classic`: a JSON-like list
+#' - For `request_epidata`: a JSON-like list
 #' @keywords internal
-fetch_classic <- function(epidata_call, fetch_args = fetch_args_list()) {
+request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simplify = TRUE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
 
-  response_content <- request_impl(epidata_call, "classic", fetch_args$timeout_seconds, fetch_args$fields) %>%
-    httr::content(as = "text", encoding = "UTF-8") %>%
-    jsonlite::fromJSON(simplifyDataFrame = !fetch_args$disable_data_frame_parsing)
-
-  # success is 1, no results is -2, truncated is 2, -1 is generic error
-  if (response_content$result != 1) {
-    if ((response_content$result != -2) && !(fetch_args$return_empty)) {
-      cli::cli_abort(
-        c(
-          "epidata error: {.code {response_content$message}}"
-        ),
-        class = "epidata_error"
-      )
-    }
+  if (!is.null(fetch_args$base_url)) {
+    epidata_call <- with_base_url(epidata_call, fetch_args$base_url)
   }
 
-  if (response_content$message != "success") {
-    cli::cli_warn(
-      c(
-        "epidata warning: {.code {response_content$message}}"
-      ),
-      class = "epidata_warning"
-    )
+  if (fetch_args$dry_run) {
+    return(epidata_call)
   }
 
+  res <- do_request(
+    epidata_call,
+    format_type = epidata_call$response_format,
+    timeout_seconds = fetch_args$timeout_seconds,
+    fields = fetch_args$fields
+  )
+
+  if (epidata_call$response_format == "csv") {
+    return(readr::read_csv(I(httr2::resp_body_string(res)),
+                           col_types = readr::cols(.default = "c"),
+                           show_col_types = FALSE))
+  }
+
+  # JSON parsing (both "json" and "classic")
+  response_content <- httr2::resp_body_json(res, simplifyVector = simplify, simplifyDataFrame = simplify)
+
+  if (epidata_call$response_format == "json") {
+    return(response_content)
+  }
+
+  # classic: JSON with result/message wrapper
+  check_epidata_result(response_content, allow_empty = fetch_args$return_empty)
   return(response_content$epidata)
-}
-
-fetch_debug <- function(epidata_call, fetch_args = fetch_args_list()) {
-  stopifnot(inherits(epidata_call, "epidata_call"))
-  stopifnot(inherits(fetch_args, "fetch_args"))
-
-  response <- request_impl(epidata_call, fetch_args$format_type, fetch_args$timeout_seconds, fetch_args$fields)
-  content <- httr::content(response, "text", encoding = "UTF-8")
-  content
-}
-
-full_url <- function(epidata_call) {
-  stopifnot(inherits(epidata_call, "epidata_call"))
-  join_url(epidata_call$base_url, epidata_call$endpoint)
 }
 
 #' Returns the full request url for the given epidata_call
@@ -364,15 +361,15 @@ full_url <- function(epidata_call) {
 #'   fields (default) e.g. c("time_value", "value") to return only the
 #'   time_value and value fields or c("-direction") to return everything except
 #'   the direction field
-#' @importFrom httr modify_url
 #' @return
 #' - For `request_url`: string containing the URL
 #' @keywords internal
 request_url <- function(epidata_call, format_type = "classic", fields = NULL) {
   stopifnot(inherits(epidata_call, "epidata_call"))
-  url <- full_url(epidata_call)
-  params <- request_arguments(epidata_call, format_type, fields)
-  httr::modify_url(url, query = params)
+
+  epidata_call <- extra_arguments(epidata_call, format_type, fields)
+
+  epidata_call$request$url
 }
 
 #' `epidata_call` object using a different base URL
@@ -384,35 +381,19 @@ request_url <- function(epidata_call, format_type = "classic", fields = NULL) {
 with_base_url <- function(epidata_call, base_url) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(is.character(base_url), length(base_url) == 1)
-  epidata_call$base_url <- base_url
-  epidata_call
-}
 
-#' Makes a request to the API and returns the response, catching
-#' HTTP errors and forwarding the HTTP body in R errors
-#' @importFrom httr stop_for_status content http_type
-#' @importFrom xml2 read_html xml_find_all xml_text
-#' @keywords internal
-request_impl <- function(epidata_call, format_type, timeout_seconds, fields) {
-  stopifnot(inherits(epidata_call, "epidata_call"))
-  stopifnot(format_type %in% c("json", "csv", "classic"))
-
-  url <- full_url(epidata_call)
-  params <- request_arguments(epidata_call, format_type, fields)
-  response <- do_request(url, params, timeout_seconds)
-
-  if (response$status_code != 200) {
-    # 500, 429, 401 are possible
-    msg <- "fetch data from API"
-    if (httr::http_type(response) == "text/html") {
-      # grab the error information out of the returned HTML document
-      msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
-        xml2::read_html(content(response, "text")),
-        "//p"
-      )))
-    }
-    httr::stop_for_status(response, task = msg)
+  old_base_url <- epidata_call$base_url
+  if (endsWith(old_base_url, "/") && !endsWith(base_url, "/")) {
+    base_url <- paste0(base_url, "/")
   }
 
-  response
+  epidata_call$request$url <- sub(
+    old_base_url,
+    base_url,
+    epidata_call$request$url,
+    fixed = TRUE
+  )
+  epidata_call$base_url <- base_url
+
+  epidata_call
 }

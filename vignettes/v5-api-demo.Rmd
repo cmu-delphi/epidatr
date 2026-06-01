@@ -1,0 +1,128 @@
+---
+title: "epidatr v5 API demo"
+output:
+  rmarkdown::html_vignette:
+    code_folding: show
+vignette: >
+  %\VignetteIndexEntry{epidatr v5 API demo}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r setup, message = FALSE, eval = TRUE}
+library(dplyr)
+library(ggplot2)
+library(epidatr)
+```
+
+### Metadata
+
+Let's check the source-specific metadata for `nssp`.
+
+```{r meta-example}
+meta_nssp <- epidata_meta(source = "nssp")
+meta_nssp$nssp$signals
+meta_nssp$nssp$geo_types
+meta_nssp$nssp$version_range
+meta_nssp$nssp$time_value_range
+```
+
+### Basic Queries
+
+We can pull the latest snapshot of a signal.
+
+```{r snapshot-example}
+nssp_data <- epidata_snapshot(
+  source = "nssp",
+  signal = "pct_ed_visits_influenza",
+  geo_type = "state"
+)
+head(nssp_data)
+```
+
+If you want to inspect the API request URL or query structure without actually fetching the data, you can use the `dry_run` argument via `fetch_args_list()`:
+
+```{r dry-run-example}
+dry_run_call <- epidata_snapshot(
+  source = "nssp",
+  signal = "pct_ed_visits_influenza",
+  geo_type = "state",
+  fetch_args = fetch_args_list(dry_run = TRUE)
+)
+dry_run_call
+```
+
+Filtering by specific geographies and versions:
+
+```{r geo-filter}
+pa_ca_data <- epidata_snapshot(
+  source = "nssp",
+  signal = "pct_ed_visits_influenza",
+  geo_type = "state",
+  geo_values = c("PA", "CA"),
+  as_of = "2025-01-01" # fetch data as it was known on this date
+)
+head(pa_ca_data)
+```
+
+### Archive Queries
+
+If you want to track how data for a specific time period was revised over time, you can use `epidata_archive()`.
+
+```{r archive-example}
+archive_data <- epidata_archive(
+  source = "nssp",
+  signal = "pct_ed_visits_influenza",
+  geo_type = "state"
+)
+head(archive_data)
+```
+
+### Other Sources
+
+Here are some examples for NHSN (hospitalizations), POPHIVE, and NWSS (wastewater).
+
+```{r other-sources-examples}
+# NHSN: Hospital Admissions
+meta_nhsn <- epidata_meta(source = "nhsn")
+meta_nhsn$nhsn$signals
+meta_nhsn$nhsn$geo_types
+meta_nhsn$nhsn$version_range
+meta_nhsn$nhsn$time_value_range
+nhsn_data <- epidata_snapshot(
+  source = "nhsn",
+  signal = "confirmed_admissions_flu_ew",
+  geo_type = "state"
+)
+head(nhsn_data)
+
+# POPHIVE
+meta_pophive <- epidata_meta(source = "pophive")
+meta_pophive$pophive$signals
+meta_pophive$pophive$geo_types
+meta_pophive$pophive$version_range
+meta_pophive$pophive$time_value_range
+pophive_data <- epidata_snapshot(
+  source = "pophive",
+  signal = "covid_pct_ed",
+  geo_type = "state"
+)
+head(pophive_data)
+
+# NWSS: Wastewater Surveillance
+meta_nwss <- epidata_meta(source = "nwss")
+meta_nwss$nwss$signals
+meta_nwss$nwss$geo_types
+meta_nwss$nwss$version_range
+meta_nwss$nwss$time_value_range
+nwss_data <- epidata_snapshot(
+  source = "nwss",
+  signal = "covid_avg_conc",
+  geo_type = "sewershed"
+)
+head(nwss_data)
+```

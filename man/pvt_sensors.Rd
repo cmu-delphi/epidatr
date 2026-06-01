@@ -13,15 +13,23 @@ pvt_sensors(
 )
 }
 \arguments{
-\item{auth}{string. Restricted access key (not the same as API key).}
+\item{auth}{string. Your restricted access key (not the same as API key).}
 
-\item{names}{character. Sensor names to fetch.}
+\item{names}{character. List of sensor names to fetch.
+See the \href{https://cmu-delphi.github.io/delphi-epidata/api/sensors.html#data-sources}{data sources available}
+for details.}
 
-\item{locations}{character. Locations to fetch.}
+\item{locations}{character. List of locations to fetch.
+See the codes of the \href{https://cmu-delphi.github.io/delphi-epidata/api/geographic_codes.html#us-regions-and-states}{US regions and states} # nolint
+for details.}
 
-\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Defaults to all ("*") dates.}
+\item{epiweeks}{\code{\link{timeset}}. Epiweeks to fetch. Supports
+\code{\link[=epirange]{epirange()}} and defaults to all ("*") dates. Format as
+\code{epirange(startweek, endweek)}, where startweek and endweek are of the form
+YYYYWW (string or numeric).}
 
-\item{fetch_args}{\code{\link{fetch_args}}. Additional arguments to pass to \code{fetch()}.}
+\item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
+to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
 \code{\link[tibble:tibble]{tibble::tibble}}
@@ -40,14 +48,21 @@ Nearby, Google Flu Trends, etc., during the COVID-19 pandemic, because
 these were designed to track ILI as driven by seasonal influenza, and were
 NOT designed to track ILI during the COVID-19 pandemic.
 }
+\section{See also}{
+
+For example queries showing how to discover signals and build calls,
+see \code{vignette("signal-discovery", package = "epidatr")}.
+}
+
 \examples{
 \dontrun{
 pvt_sensors(
-  auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
+  auth = Sys.getenv("DELPHI_EPIDATA_KEY"),
   names = "sar3",
   locations = "nat",
   epiweeks = epirange(201501, 202001)
 )
 }
+
 }
 \keyword{endpoint}
