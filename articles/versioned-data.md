@@ -129,6 +129,14 @@ pub_covidcast(
   geo_values = "pa",
   issues = c("2020-05-07", "2020-05-09", "2020-05-15")
 )
+#> # A tibble: 3 × 15
+#>   geo_value signal     source geo_type time_type time_value direction issue     
+#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#> 1 pa        smoothed_… docto… state    day       2020-05-01        NA 2020-05-07
+#> 2 pa        smoothed_… docto… state    day       2020-05-01        NA 2020-05-09
+#> 3 pa        smoothed_… docto… state    day       2020-05-01        NA 2020-05-15
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
 
 ### Observations issued with a specific lag
