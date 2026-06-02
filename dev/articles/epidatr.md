@@ -128,6 +128,16 @@ pub_covidcast(
   geo_values = "*",
   time_values = epirange(20210105, 20210410)
 )
+#> # A tibble: 4,896 × 15
+#>   geo_value signal     source geo_type time_type time_value direction issue     
+#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#> 1 ak        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10
+#> 2 al        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10
+#> 3 ar        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10
+#> 4 az        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10
+#> # ℹ 4,892 more rows
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
 
 Alternatively, we can fetch the full time series for a subset of states
@@ -146,6 +156,16 @@ pub_covidcast(
   geo_values = c("pa", "ca", "fl"),
   time_values = "*"
 )
+#> # A tibble: 2,439 × 15
+#>   geo_value signal     source geo_type time_type time_value direction issue     
+#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#> 1 ca        smoothed_… fb-su… state    day       2020-04-06        NA 2020-09-03
+#> 2 fl        smoothed_… fb-su… state    day       2020-04-06        NA 2020-09-03
+#> 3 pa        smoothed_… fb-su… state    day       2020-04-06        NA 2020-09-03
+#> 4 ca        smoothed_… fb-su… state    day       2020-04-07        NA 2020-09-03
+#> # ℹ 2,435 more rows
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
 
 ## Getting versioned data
@@ -169,6 +189,16 @@ pub_covidcast(
   time_values = epirange(20210105, 20210410),
   as_of = "2021-06-01"
 )
+#> # A tibble: 96 × 15
+#>   geo_value signal     source geo_type time_type time_value direction issue     
+#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#> 1 pa        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10
+#> 2 pa        smoothed_… fb-su… state    day       2021-01-06        NA 2021-01-29
+#> 3 pa        smoothed_… fb-su… state    day       2021-01-07        NA 2021-01-29
+#> 4 pa        smoothed_… fb-su… state    day       2021-01-08        NA 2021-01-29
+#> # ℹ 92 more rows
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
 
 We can also request all versions of the data issued within a specific
@@ -188,6 +218,16 @@ pub_covidcast(
   time_values = "2021-03-01",
   issues = epirange("2021-03-01", "2021-04-30")
 )
+#> # A tibble: 6 × 15
+#>   geo_value signal     source geo_type time_type time_value direction issue     
+#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#> 1 pa        smoothed_… fb-su… state    day       2021-03-01        NA 2021-03-02
+#> 2 pa        smoothed_… fb-su… state    day       2021-03-01        NA 2021-03-03
+#> 3 pa        smoothed_… fb-su… state    day       2021-03-01        NA 2021-03-04
+#> 4 pa        smoothed_… fb-su… state    day       2021-03-01        NA 2021-03-05
+#> # ℹ 2 more rows
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
 
 Finally, we can use the `lag` argument to request only data that was
@@ -206,6 +246,16 @@ pub_covidcast(
   time_values = epirange(20210101, 20210131),
   lag = 2
 )
+#> # A tibble: 31 × 15
+#>   geo_value signal     source geo_type time_type time_value direction issue     
+#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#> 1 pa        smoothed_… fb-su… state    day       2021-01-01        NA 2021-01-03
+#> 2 pa        smoothed_… fb-su… state    day       2021-01-02        NA 2021-01-04
+#> 3 pa        smoothed_… fb-su… state    day       2021-01-03        NA 2021-01-05
+#> 4 pa        smoothed_… fb-su… state    day       2021-01-04        NA 2021-01-06
+#> # ℹ 27 more rows
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
 
 See
