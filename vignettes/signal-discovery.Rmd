@@ -8,7 +8,7 @@ vignette: >
 ---
 
 ```{r, echo = FALSE, message = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = identical(Sys.getenv("NOT_CRAN"), "true"))
 options(tibble.print_min = 4L, tibble.print_max = 4L, max.print = 4L)
 library(epidatr)
 library(dplyr)
@@ -140,9 +140,12 @@ pub_covidcast(
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_covid_hosp_facility_lookup(city = "southlake")
 pub_covid_hosp_facility_lookup(state = "WY")
+```
+
+```{r, error = TRUE}
 # A non-example (there is no city called New York in Wyoming)
 pub_covid_hosp_facility_lookup(state = "WY", city = "New York")
 ```
@@ -151,7 +154,7 @@ pub_covid_hosp_facility_lookup(state = "WY", city = "New York")
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_covid_hosp_facility(
   hospital_pks = "100075",
   collection_weeks = epirange(20200101, 20200501)
@@ -162,7 +165,7 @@ pub_covid_hosp_facility(
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_covid_hosp_state_timeseries(states = "MA", dates = "20200510")
 ```
 
@@ -172,7 +175,7 @@ pub_covid_hosp_state_timeseries(states = "MA", dates = "20200510")
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/delphi.html>
 
-```{r, eval = FALSE}
+```{r}
 del <- pub_delphi(system = "ec", epiweek = 201501)
 names(del[[1L]]$forecast)
 ```
@@ -181,7 +184,7 @@ names(del[[1L]]$forecast)
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_flusurv(locations = "ca", epiweeks = 202001)
 ```
 
@@ -189,7 +192,7 @@ pub_flusurv(locations = "ca", epiweeks = 202001)
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_fluview(regions = "nat", epiweeks = epirange(201201, 202001))
 ```
 
@@ -197,7 +200,7 @@ pub_fluview(regions = "nat", epiweeks = epirange(201201, 202001))
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
 ```
 
@@ -205,7 +208,7 @@ pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_fluview_meta()
 ```
 
@@ -213,7 +216,7 @@ pub_fluview_meta()
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/gft.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
 ```
 
@@ -221,7 +224,7 @@ pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_ecdc_ili(regions = "Armenia", epiweeks = 201840)
 ```
 
@@ -229,7 +232,7 @@ pub_ecdc_ili(regions = "Armenia", epiweeks = 201840)
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
 ```
 
@@ -237,7 +240,7 @@ pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_nidss_flu(regions = "taipei", epiweeks = epirange(200901, 201301))
 ```
 
@@ -245,7 +248,7 @@ pub_nidss_flu(regions = "taipei", epiweeks = epirange(200901, 201301))
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_nowcast(locations = "ca", epiweeks = epirange(202201, 202319))
 ```
 
@@ -255,7 +258,7 @@ pub_nowcast(locations = "ca", epiweeks = epirange(202201, 202319))
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_dengue_nowcast(locations = "pr", epiweeks = epirange(201401, 202301))
 ```
 
@@ -263,7 +266,7 @@ pub_dengue_nowcast(locations = "pr", epiweeks = epirange(201401, 202301))
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_nidss_dengue(locations = "taipei", epiweeks = epirange(200301, 201301))
 ```
 
@@ -271,7 +274,7 @@ pub_nidss_dengue(locations = "taipei", epiweeks = epirange(200301, 201301))
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html>
 
-```{r, eval=FALSE}
+```{r}
 pub_paho_dengue(regions = "ca", epiweeks = epirange(200201, 202319))
 ```
 
@@ -281,7 +284,7 @@ pub_paho_dengue(regions = "ca", epiweeks = epirange(200201, 202319))
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
 
-```{r, eval = FALSE}
+```{r}
 pub_wiki(
   language = "en",
   articles = "influenza",
@@ -303,7 +306,7 @@ To actually run these locally, you will need to store these secrets in your `.Re
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/cdc.html>
 
-```{r, eval=FALSE}
+```{r, eval = FALSE}
 pvt_cdc(auth = Sys.getenv("SECRET_API_AUTH_CDC"), epiweeks = epirange(202003, 202304), locations = "ma")
 ```
 
@@ -311,7 +314,7 @@ pvt_cdc(auth = Sys.getenv("SECRET_API_AUTH_CDC"), epiweeks = epirange(202003, 20
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html>
 
-```{r, eval=FALSE}
+```{r, eval = FALSE}
 pvt_dengue_sensors(
   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
   names = "ght",
@@ -324,7 +327,7 @@ pvt_dengue_sensors(
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
 
-```{r, eval=FALSE}
+```{r, eval = FALSE}
 pvt_ght(
   auth = Sys.getenv("SECRET_API_AUTH_GHT"),
   epiweeks = epirange(199301, 202304),
@@ -337,7 +340,7 @@ pvt_ght(
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html>
 
-```{r, eval=FALSE}
+```{r, eval = FALSE}
 pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
 ```
 
@@ -345,7 +348,7 @@ pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
 
-```{r, eval=FALSE}
+```{r, eval = FALSE}
 pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "1", epiweeks = 201233)
 ```
 
@@ -353,7 +356,7 @@ pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "1", epi
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/quidel.html>
 
-```{r, eval=FALSE}
+```{r, eval = FALSE}
 pvt_quidel(auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"), locations = "hhs1", epiweeks = epirange(200301, 202105))
 ```
 
@@ -361,7 +364,7 @@ pvt_quidel(auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"), locations = "hhs1", epiw
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
 
-```{r, eval=FALSE}
+```{r, eval = FALSE}
 pvt_sensors(
   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
   names = "sar3",
@@ -374,7 +377,7 @@ pvt_sensors(
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/twitter.html>
 
-```{r, eval=FALSE}
+```{r, eval = FALSE}
 pvt_twitter(
   auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
   locations = "nat",
