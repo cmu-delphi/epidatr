@@ -306,7 +306,7 @@ To actually run these locally, you will need to store these secrets in your `.Re
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/cdc.html>
 
-```{r}
+```{r, eval = FALSE}
 pvt_cdc(auth = Sys.getenv("SECRET_API_AUTH_CDC"), epiweeks = epirange(202003, 202304), locations = "ma")
 ```
 
@@ -314,7 +314,7 @@ pvt_cdc(auth = Sys.getenv("SECRET_API_AUTH_CDC"), epiweeks = epirange(202003, 20
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html>
 
-```{r}
+```{r, eval = FALSE}
 pvt_dengue_sensors(
   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
   names = "ght",
@@ -327,7 +327,7 @@ pvt_dengue_sensors(
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
 
-```{r}
+```{r, eval = FALSE}
 pvt_ght(
   auth = Sys.getenv("SECRET_API_AUTH_GHT"),
   epiweeks = epirange(199301, 202304),
@@ -340,7 +340,7 @@ pvt_ght(
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html>
 
-```{r}
+```{r, eval = FALSE}
 pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
 ```
 
@@ -348,7 +348,7 @@ pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
 
-```{r}
+```{r, eval = FALSE}
 pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "1", epiweeks = 201233)
 ```
 
@@ -356,7 +356,7 @@ pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "1", epi
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/quidel.html>
 
-```{r}
+```{r, eval = FALSE}
 pvt_quidel(auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"), locations = "hhs1", epiweeks = epirange(200301, 202105))
 ```
 
@@ -364,7 +364,7 @@ pvt_quidel(auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"), locations = "hhs1", epiw
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
 
-```{r}
+```{r, eval = FALSE}
 pvt_sensors(
   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
   names = "sar3",
@@ -377,7 +377,7 @@ pvt_sensors(
 
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/twitter.html>
 
-```{r}
+```{r, eval = FALSE}
 pvt_twitter(
   auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
   locations = "nat",
