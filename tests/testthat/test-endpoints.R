@@ -140,6 +140,7 @@ test_that("epidata* and epidata_meta work as expected", {
   res <- epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state")
   expect_s3_class(res, "tbl_df")
   expect_equal(nrow(res), 2)
+  expect_equal(attr(res, "cast_source"), "nssp") # tag lets epidata_aux() recover source
 
   # Test epidata_snapshot filtering
   res_filtered <- epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", geo_values = "ca")
@@ -277,4 +278,130 @@ test_that("epidata_archive local EpiRange filtering for report_time works", {
   )
   expect_equal(nrow(res_wide), 2)
   expect_true(all(res_wide$report_time %in% as.Date(c("2024-01-01", "2024-01-02"))))
+})
+
+# ---- epidata_aux ----
+
+test_that("epidata_aux base-pull builds the call, serializes filtered_keys, deprecates aliases", {
+  call <- epidata_aux(
+    "nwss",
+    report_time = "<2024-06-01",
+    filtered_keys = list(pcr_target = "SARS-CoV-2", reference_time = as.Date("2024-01-01")),
+    columns = c("geo_value", "population_served"),
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_match(call$request$url, "aux_data/")
+  expect_match(call$request$url, "source=nwss")
+  expect_match(call$request$url, "report_time_query=%3C2024-06-01") # "<" url-encoded
+  expect_match(call$request$url, "population_served") # columns
+  expect_match(call$request$url, "pcr_target") # filtered_keys serialized
+  expect_match(call$request$url, "2024-01-01") # Date value -> ISO, not day-count
+
+  # one value per key
+  expect_error(
+    epidata_aux("nwss", filtered_keys = list(geo_value = c("ca", "ny")), fetch_args = fetch_args_list(dry_run = TRUE)),
+    class = "epidatr__epidata__multivalue_filtered_key"
+  )
+  # deprecated aliases map to their replacements
+  expect_warning(
+    epidata_aux("nwss", issues = "2024-01-01", fetch_args = fetch_args_list(dry_run = TRUE)),
+    regexp = "Use `report_time` instead"
+  )
+  expect_warning(
+    epidata_aux("nwss", time_values = "2024-01-01", fetch_args = fetch_args_list(dry_run = TRUE)),
+    regexp = "Use `reference_time` instead"
+  )
+})
+
+test_that("epidata_aux rejects a non-source, non-tagged input", {
+  expect_error(epidata_aux(tibble::tibble(a = 1)), class = "epidatr__epidata__untagged_base")
+})
+
+# aux_schema (key columns) + aux_data (CSV)
+mock_aux_connected <- function(keys, aux_csv) {
+  key_json <- paste0('"', keys, '"', collapse = ",")
+  function(req, ...) {
+    if (grepl("aux_schema", req$url)) {
+      to_httr2_response(sprintf('{"nwss":{"key_columns":[%s],"value_columns":[]}}', key_json))
+    } else {
+      to_httr2_response(aux_csv)
+    }
+  }
+}
+
+test_that("epidata_aux connected merge attaches the latest aux version per key, preserving the base", {
+  base <- tibble::tibble(
+    geo_value = "162",
+    reference_time = as.Date(c("2024-01-01", "2024-01-08")),
+    report_time = as.Date("2024-03-10"),
+    county_fips = "999", # shared name but NOT a key -> must not be clobbered
+    value = c(1, 2)
+  )
+  attr(base, "cast_source") <- "nwss"
+  aux_csv <- paste(
+    "report_time,geo_value,reference_time,county_fips,population_served",
+    "2024-01-05,162,2024-01-01,001,100",
+    "2024-02-15,162,2024-01-01,001,200", # newer version for the 01-01 key -> wins
+    "2024-01-05,162,2024-01-08,001,300",
+    sep = "\n"
+  )
+  local_mocked_bindings(
+    req_perform = mock_aux_connected(c("report_time", "geo_value", "reference_time"), aux_csv),
+    .package = "httr2"
+  )
+  out <- epidata_aux(base)
+  expect_equal(nrow(out), 2) # base rows kept, order preserved
+  expect_equal(out$population_served, c("200", "300")) # latest version per key
+  expect_equal(out$county_fips, c("999", "999")) # shared non-key column not clobbered
+})
+
+test_that("epidata_aux connected path edge cases: empty base, dry_run, no shared keys", {
+  tag <- function(df) {
+    attr(df, "cast_source") <- "nwss"
+    df
+  }
+
+  # empty base returns unchanged without any fetch
+  empty <- tag(tibble::tibble(
+    geo_value = character(), reference_time = as.Date(character()),
+    report_time = as.Date(character()), value = numeric()
+  ))
+  expect_identical(epidata_aux(empty), empty)
+
+  # dry_run surfaces the call, forwards explicit keys, and never fetches the schema
+  base <- tag(tibble::tibble(
+    geo_value = "ca", reference_time = as.Date("2024-01-01"),
+    report_time = as.Date("2024-02-01"), value = 1
+  ))
+  call <- epidata_aux(base, filtered_keys = list(pcr_target = "x"), fetch_args = fetch_args_list(dry_run = TRUE))
+  expect_s3_class(call, "epidata_call")
+  expect_match(call$request$url, "pcr_target")
+
+  # no shared keys between base and aux -> abort
+  nokeys <- tag(tibble::tibble(report_time = as.Date("2024-02-01"), value = 1))
+  local_mocked_bindings(
+    req_perform = mock_aux_connected(
+      c("report_time", "geo_value", "reference_time"),
+      "report_time,geo_value,reference_time,foo\n2024-01-01,ca,2024-01-01,1"
+    ),
+    .package = "httr2"
+  )
+  expect_error(epidata_aux(nokeys), class = "epidatr__epidata__no_merge_keys")
+})
+
+test_that("disable_missing_meta_warning suppresses the unspecified-fields warning", {
+  local_mocked_bindings(
+    req_perform = function(req, ...) to_httr2_response("report_time,geo_value,extra_col\n2024-06-01,ca,foo"),
+    .package = "httr2"
+  )
+  call <- create_epidata_call(
+    "aux_data/", list(source = "nwss"),
+    meta = list(
+      create_epidata_field_info("report_time", "date"),
+      create_epidata_field_info("geo_value", "text")
+    ),
+    api_version = "cast", response_format = "csv"
+  )
+  expect_warning(fetch(call, fetch_args_list()), class = "epidatr__missing_meta_fields")
+  expect_no_warning(fetch(call, fetch_args_list(disable_missing_meta_warning = TRUE)))
 })
