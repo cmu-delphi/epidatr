@@ -344,21 +344,21 @@ test_that("pub_wiki day wildcard", {
 # ---- epidata_* (cast API) ----
 # TODO: Happy to add more, this is a starting point.
 cast_queries <- tibble::tribble(
-  ~source,    ~signal,    ~geo_type,
-  "nssp",     "pct_ed_visits_influenza",         "state",
-  "nssp",     "pct_ed_visits_influenza",         "hhs",
+  ~source, ~signal, ~geo_type,
+  "nssp", "pct_ed_visits_influenza", "state",
+  "nssp", "pct_ed_visits_influenza", "hhs",
   # TODO: Ignore county until row limits are in-place server side.
   # "nssp",     "pct_ed_visits_influenza",         "county",
   # TODO: Nhsn is currently without data.
   # "nhsn",     "confirmed_admissions_flu_ew",         "state",
   # "nhsn",     "confirmed_admissions_flu_ew",         "hhs",
   # "nhsn",     "confirmed_admissions_flu_ew",         "national",
-  "pophive",  "flu_pct_ed",         "state",
-  "pophive",  "flu_pct_ed",         "hhs",
-  "pophive",  "flu_n_ed",         "state",
-  "pophive",  "flu_n_ed",         "hhs",
-  "pophive",  "flu_n_ed",         "nation",
-  "nwss",     "covid_avg_conc",         "sewershed",
+  "pophive", "flu_pct_ed", "state",
+  "pophive", "flu_pct_ed", "hhs",
+  "pophive", "flu_n_ed", "state",
+  "pophive", "flu_n_ed", "hhs",
+  "pophive", "flu_n_ed", "nation",
+  "nwss", "covid_avg_conc", "sewershed",
 )
 
 test_that("epidata_meta returns signals + geo_types for each cast source", {
@@ -374,8 +374,10 @@ test_that("epidata_meta returns signals + geo_types for each cast source", {
 for (i in seq_len(nrow(cast_queries))) {
   local({
     row <- cast_queries[i, ]
-    test_that(sprintf("epidata_snapshot + epidata_archive for source=%s signal=%s geo_type=%s",
-                      row$source, row$signal, row$geo_type), {
+    test_that(sprintf(
+      "epidata_snapshot + epidata_archive for source=%s signal=%s geo_type=%s",
+      row$source, row$signal, row$geo_type
+    ), {
       skip_unless_live()
       snapshot <- epidata_snapshot(source = row$source, signals = row$signal, geo_type = row$geo_type)
       expect_s3_class(snapshot, "tbl_df")
