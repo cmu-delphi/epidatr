@@ -344,8 +344,9 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
 
   if (epidata_call$response_format == "csv") {
     return(readr::read_csv(I(httr2::resp_body_string(res)),
-                           col_types = readr::cols(.default = "c"),
-                           show_col_types = FALSE))
+      col_types = readr::cols(.default = "c"),
+      show_col_types = FALSE
+    ))
   }
 
   # JSON parsing (both "json" and "classic")
