@@ -321,10 +321,11 @@ test_that("epidata_aux rejects a non-source, non-tagged input", {
 mock_aux_connected <- function(keys, aux_csv) {
   key_json <- paste0('"', keys, '"', collapse = ",")
   function(req, ...) {
+    schema_json <- sprintf('{"nwss":{"key_columns":[%s],"value_columns":[]}}', key_json)
     if (grepl("aux_schema", req$url)) {
-      to_httr2_response(sprintf('{"nwss":{"key_columns":[%s],"value_columns":[]}}', key_json))
+      to_httr2_response(schema_json) # nolint: object_usage_linter.
     } else {
-      to_httr2_response(aux_csv)
+      to_httr2_response(aux_csv) # nolint: object_usage_linter.
     }
   }
 }

@@ -1649,7 +1649,7 @@ epidata <- function(
   fetch_args = fetch_args_list()
 ) {
   if ((!is.null(report_time) || lifecycle::is_present(issues)) &&
-    (!is.null(snapshot_date) || lifecycle::is_present(as_of))) {
+        (!is.null(snapshot_date) || lifecycle::is_present(as_of))) {
     cli::cli_abort(
       "`report_time` and `snapshot_date` are mutually exclusive",
       class = "epidatr__epidata__version_and_as_of_exclusive"
@@ -1657,7 +1657,7 @@ epidata <- function(
   }
 
   if (!is.null(report_time) || lifecycle::is_present(issues) ||
-    identical(snapshot_date, "*") || identical(as_of, "*")) {
+        identical(snapshot_date, "*") || identical(as_of, "*")) {
     epidata_archive(
       source = source, signals = signals, geo_type = geo_type,
       geo_values = geo_values, reference_time = reference_time,
