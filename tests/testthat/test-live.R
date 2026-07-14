@@ -387,6 +387,17 @@ for (i in seq_len(nrow(cast_queries))) {
       expect_s3_class(archive, "tbl_df")
       expect_s3_class(archive$report_time, "Date")
       expect_gt(nrow(archive), 0)
+
+      # aux: only for sources that expose an aux schema (currently just nwss)
+      keys <- tryCatch(.aux_key_columns(row$source, fetch_args_list()), error = function(e) NULL)
+      if (length(keys) > 0) {
+        small <- head(snapshot, 1) # one row -> auto-inferred filtered_keys keep the pull tiny
+        attr(small, "cast_source") <- attr(snapshot, "cast_source") # head() drops the tag
+        merged <- epidata_aux(small)
+        expect_s3_class(merged, "tbl_df")
+        expect_equal(nrow(merged), 1) # base row preserved
+        expect_gt(ncol(merged), ncol(small)) # aux columns appended
+      }
     })
   })
 }
