@@ -99,6 +99,12 @@ head(aux_data)
 More often you want the auxiliary columns attached to a signal pull. Pass the output of `epidata_snapshot()` (or `epidata_archive()`) straight to `epidata_aux()`. It then recovers the source, fetches the matching auxiliary data, and left-joins it onto the shared key columns.
 
 ```{r aux-merge}
+nwss_data <- epidata_snapshot(
+  source = "nwss",
+  signal = "covid_avg_conc",
+  geo_type = "sewershed"
+)
+
 # Narrow the base first so the auxiliary pull stays small.
 nwss_small <- nwss_data %>%
   dplyr::filter(geo_value == first(geo_value))
