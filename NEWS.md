@@ -1,3 +1,9 @@
+# epidatr 1.3.1
+
+## Features
+
+- Added `epidata_aux()` to fetch V5-API auxiliary data, either directly by source or by merging it onto `epidata_snapshot()`/`epidata_archive()` output via a version-aware left join. When no `filtered_keys` is supplied, it infers them from the base to keep the pull small.
+
 # epidatr 1.3.0
 
 ## Changes
