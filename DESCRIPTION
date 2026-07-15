@@ -48,6 +48,7 @@ Imports:
     rlang,
     tibble,
     usethis,
+    vctrs,
     lifecycle,
     xml2
 Suggests:

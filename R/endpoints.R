@@ -1620,11 +1620,8 @@ epidata_aux.data.frame <- function(
     aux <- aux[order(aux[[ver]]), , drop = FALSE]
     aux <- aux[!duplicated(aux[keys], fromLast = TRUE), , drop = FALSE]
   }
-  # match on a composite key without extra dependencies
-  idx <- match(
-    do.call(paste, c(lapply(base[keys], as.character), sep = "\r")),
-    do.call(paste, c(lapply(aux[keys], as.character), sep = "\r"))
-  )
+  # match on a composite key
+  idx <- vctrs::vec_match(base[keys], aux[keys])
   for (col in setdiff(names(aux), c(names(base), ver))) {
     base[[col]] <- aux[[col]][idx]
   }
