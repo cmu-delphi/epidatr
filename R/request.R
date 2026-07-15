@@ -68,9 +68,8 @@ do_request <- function(epidata_call,
           500, # Internal Server Error
           502, # Bad Gateway
           503, # Service Unavailable
-          504  # Gateway Timeout
+          504 # Gateway Timeout
         )
-
       }
     ) %>%
     # Use requested method.
