@@ -52,6 +52,32 @@ test_that("large responses stream to disk and parse identically to in-memory", {
   expect_false(file.exists(tmp))
 })
 
+test_that("a failed read of a streamed body keeps the file and errors clearly", {
+  call <- create_epidata_call(
+    "covidcast/",
+    list(),
+    api_version = "classic",
+    response_format = "csv"
+  )
+  tmp <- tempfile()
+  writeLines("geo_value,value\nca,1.5", tmp)
+  local_mocked_bindings(
+    perform_and_read = function(req, ...) {
+      resp <- create_mock_response("", headers = list("content-type" = "text/csv"))
+      resp$body_path <- tmp
+      resp
+    },
+    .package = "epidatr"
+  )
+  # Force the read into memory to fail.
+  local_mocked_bindings(read_csv = function(...) stop("boom"), .package = "readr")
+
+  expect_error(request_epidata(call), class = "epidatr__read_download_failed")
+  # the download is preserved for recovery rather than deleted
+  expect_true(file.exists(tmp))
+  unlink(tmp)
+})
+
 test_that("fetch_args", {
   expect_snapshot_value(fetch_args_list(), style = "json2", cran = TRUE)
   expect_snapshot_value(
