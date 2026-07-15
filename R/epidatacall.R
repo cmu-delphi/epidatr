@@ -163,6 +163,10 @@ print.epidata_call <- function(x, ...) {
 #'   parsed from there; smaller responses are read into memory as usual. The
 #'   returned object is a tibble either way. Set to `Inf` to always read into
 #'   memory. Defaults to 500 MiB.
+#' @param download_path if not `NULL`, the raw response body is streamed to this
+#'   file (regardless of size) and kept. Useful for very large pulls. If parsing 
+#'   into memory fails, the download is preserved here so you can read it with 
+#'   out-of-memory tools (e.g. `arrow` or `duckdb`) instead of re-downloading.
 #' @param base_url base URL to use; by default `NULL`, which means the global
 #'   base URL `"https://api.delphi.cmu.edu/epidata/"`
 #' @param dry_run if `TRUE`, skip the call to the API and instead return the
@@ -186,6 +190,7 @@ fetch_args_list <- function(
   return_empty = FALSE,
   timeout_seconds = 15 * 60,
   stream_threshold_bytes = 500 * 1024^2,
+  download_path = NULL,
   base_url = NULL,
   dry_run = FALSE,
   debug = lifecycle::deprecated(),
@@ -217,6 +222,7 @@ fetch_args_list <- function(
   assert_logical(return_empty, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_numeric(timeout_seconds, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_numeric(stream_threshold_bytes, null.ok = FALSE, len = 1L, any.missing = FALSE, lower = 0)
+  assert_character(download_path, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
   assert_logical(refresh_cache, null.ok = FALSE, len = 1L, any.missing = FALSE)
@@ -230,6 +236,7 @@ fetch_args_list <- function(
       return_empty = return_empty,
       timeout_seconds = timeout_seconds,
       stream_threshold_bytes = stream_threshold_bytes,
+      download_path = download_path,
       base_url = base_url,
       dry_run = dry_run,
       refresh_cache = refresh_cache,
@@ -342,22 +349,35 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
     format_type = epidata_call$response_format,
     timeout_seconds = fetch_args$timeout_seconds,
     fields = fetch_args$fields,
-    stream_threshold_bytes = fetch_args$stream_threshold_bytes
+    stream_threshold_bytes = fetch_args$stream_threshold_bytes,
+    download_path = fetch_args$download_path
   )
-  if (!is.null(res$body_path)) {
-    on.exit(unlink(res$body_path), add = TRUE)
-  }
+  # Whether the streamed file is the user's chosen download_path (keep it) or a
+  # temp file (delete after a successful read).
+  from_download_path <- !is.null(fetch_args$download_path)
 
   if (epidata_call$response_format == "csv") {
-    src <- if (!is.null(res$body_path)) res$body_path else I(httr2::resp_body_string(res))
-    return(readr::read_csv(src,
+    if (!is.null(res$body_path)) {
+      return(read_streamed_body(
+        res$body_path,
+        function(p) {
+          readr::read_csv(p, col_types = readr::cols(.default = "c"), show_col_types = FALSE)
+        },
+        from_download_path
+      ))
+    }
+    return(readr::read_csv(I(httr2::resp_body_string(res)),
                            col_types = readr::cols(.default = "c"),
                            show_col_types = FALSE))
   }
 
   # JSON parsing (both "json" and "classic")
   response_content <- if (!is.null(res$body_path)) {
-    jsonlite::fromJSON(res$body_path, simplifyVector = simplify, simplifyDataFrame = simplify)
+    read_streamed_body(
+      res$body_path,
+      function(p) jsonlite::fromJSON(p, simplifyVector = simplify, simplifyDataFrame = simplify),
+      from_download_path
+    )
   } else {
     httr2::resp_body_json(res, simplifyVector = simplify, simplifyDataFrame = simplify)
   }
@@ -369,6 +389,38 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
   # classic: JSON with result/message wrapper
   check_epidata_result(response_content, allow_empty = fetch_args$return_empty)
   return(response_content$epidata)
+}
+
+# Parse a response body that was streamed to disk.
+read_streamed_body <- function(path, reader, from_download_path) {
+  out <- tryCatch(
+    reader(path),
+    error = function(cnd) {
+      size <- format(
+        structure(file.size(path), class = "object_size"),
+        units = "auto"
+      )
+      msg <- c(
+        "Couldn't read the downloaded response into memory.",
+        "i" = "The raw response is at {.file {path}} ({size}).",
+        "i" = paste(
+          "Read it directly, e.g. with the {.pkg arrow} or {.pkg duckdb}",
+          "packages for larger-than-memory data."
+        )
+      )
+      if (!from_download_path) {
+        msg <- c(msg, "i" = paste(
+          "It is kept only for this R session. Pass {.arg download_path}",
+          "to {.fn fetch_args_list} to save downloads persistently."
+        ))
+      }
+      cli::cli_abort(msg, parent = cnd, class = "epidatr__read_download_failed")
+    }
+  )
+  if (!from_download_path) {
+    unlink(path)
+  }
+  out
 }
 
 #' Returns the full request url for the given epidata_call

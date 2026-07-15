@@ -16,9 +16,9 @@
 #'   (per the `Content-Length` header, or when that header is absent) are
 #'   streamed to a temp file instead of being read into memory.
 #'   `Inf` always reads into memory
-#' @return an in-memory `httr2_response`. When the body was streamed to disk it
-#'   carries an extra `body_path` element (the temp file path) and an empty
-#'   `body`; otherwise `body_path` is `NULL` and the body is in `body`.
+#' @param download_path if not `NULL`, stream the (successful) response body to
+#'   this path regardless of size, instead of a temp file
+#' @return an `httr2_response` object
 #'
 #' @importFrom httr2 req_perform req_perform_connection req_timeout req_headers
 #' @importFrom httr2 req_user_agent req_retry resp_stream_raw resp_header
@@ -27,8 +27,13 @@
 #' @importFrom rlang %||%
 #' @importFrom xml2 read_html xml_find_all xml_text
 #' @keywords internal
-do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), timeout_seconds, fields,
-                       http_method = c("GET", "POST"), stream_threshold_bytes = Inf) {
+do_request <- function(epidata_call,
+                       format_type = c("json", "csv", "classic"),
+                       timeout_seconds,
+                       fields,
+                       http_method = c("GET", "POST"),
+                       stream_threshold_bytes = Inf,
+                       download_path = NULL) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   format_type <- rlang::arg_match(format_type)
   http_method <- rlang::arg_match(http_method)
@@ -73,7 +78,7 @@ do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), 
     httr2::req_error(is_error = function(resp) FALSE)
 
   # Do the request, streaming large bodies to disk to keep peak memory low.
-  res <- perform_and_read(req, stream_threshold_bytes)
+  res <- perform_and_read(req, stream_threshold_bytes, download_path)
 
   # Fall back to POST if the request is too long for GET (414 URI Too Long).
   if (httr2::resp_status(res) == 414) {
@@ -84,7 +89,7 @@ do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), 
       httr2::req_method("POST") %>%
       httr2::req_body_form(!!!query)
 
-    res <- perform_and_read(req_post, stream_threshold_bytes)
+    res <- perform_and_read(req_post, stream_threshold_bytes, download_path)
   }
 
   # If there is an error, extract the message from the API into the error
@@ -114,9 +119,10 @@ do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), 
 #' at a time to keep peak memory low.
 #'
 #' @param req an `httr2` request object
-#' @param stream_threshold_bytes see [do_request()]
-#' @return an `httr2_response`; see [do_request()] for the `body_path` element
-perform_and_read <- function(req, stream_threshold_bytes = Inf) {
+#' @return an `httr2_response`
+perform_and_read <- function(req,
+                             stream_threshold_bytes = Inf,
+                             download_path = NULL) {
   resp <- httr2::req_perform_connection(req)
   drained <- FALSE
   # Close the response if it's not drained
@@ -125,8 +131,14 @@ perform_and_read <- function(req, stream_threshold_bytes = Inf) {
   status <- httr2::resp_status(resp)
   content_length <- suppressWarnings(as.numeric(httr2::resp_header(resp, "Content-Length") %||% NA))
 
-  if (status < 400 && (is.na(content_length) || content_length > stream_threshold_bytes)) {
-    path <- tempfile()
+  # Stream to disk when a download_path is requested, or the body is large /
+  # of unknown size.
+  oversize <- is.na(content_length) ||
+    content_length > stream_threshold_bytes
+  stream <- status < 400 && (!is.null(download_path) || oversize)
+
+  if (stream) {
+    path <- download_path %||% tempfile()
     con <- file(path, "wb")
     repeat {
       chunk <- httr2::resp_stream_raw(resp, kb = 1024)
@@ -163,11 +175,7 @@ drain_to_raw <- function(resp) {
   if (length(chunks) == 0) raw(0) else vctrs::list_unchop(chunks)
 }
 
-# Rebuild an in-memory `httr2_response` from a (drained) connection response so
-# `resp_body_*()` and `resp_check_status()` work as usual. `body_path` is an
-# extra element carrying the temp-file path when the body was streamed to disk
-# (in which case `body_raw` is empty); it is `NULL` otherwise. httr2 accessors
-# read named fields and ignore the extra element.
+# Rebuild an in-memory `httr2_response` with body_path argument to support streaming
 new_inmem_response <- function(resp, body_raw, body_path = NULL) {
   structure(
     list(
