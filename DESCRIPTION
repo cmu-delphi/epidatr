@@ -1,7 +1,7 @@
 Type: Package
 Package: epidatr
 Title: Client for Delphi's 'Epidata' API
-Version: 1.2.4
+Version: 1.3.1
 Authors@R: c(
     person("Logan", "Brooks", , "lcbrooks@andrew.cmu.edu", role = "aut"),
     person("Dmitry", "Shemetov", , "dshemeto@andrew.cmu.edu", role = "aut"),
@@ -37,7 +37,7 @@ Imports:
     checkmate,
     cli,
     glue,
-    httr2,
+    httr2 (>= 1.1.0),
     jsonlite,
     magrittr,
     MMWRweek,
@@ -49,6 +49,7 @@ Imports:
     tibble,
     usethis,
     lifecycle,
+    vctrs,
     xml2
 Suggests:
     dplyr,

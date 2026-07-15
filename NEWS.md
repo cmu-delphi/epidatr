@@ -1,3 +1,9 @@
+# epidatr 1.3.1
+
+## Features
+
+- Added `stream_threshold_bytes` to `fetch_args_list()` so responses larger than this are streamed to disk instead of read into memory. This prevents out-of-memory crashes on large downloads while still returning a tibble.
+
 # epidatr 1.3.0
 
 ## Changes
