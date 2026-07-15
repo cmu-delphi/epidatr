@@ -51,7 +51,7 @@ returned object is a tibble either way. Set to \code{Inf} to always read into
 memory. Defaults to 500 MiB.}
 
 \item{download_path}{if not \code{NULL}, the raw response body is streamed to this
-file (regardless of size) and kept. Useful for very large pulls: if parsing
+file (regardless of size) and kept. Useful for very large pulls. If parsing
 into memory fails, the download is preserved here so you can read it with
 out-of-memory tools (e.g. \code{arrow} or \code{duckdb}) instead of re-downloading.}
 

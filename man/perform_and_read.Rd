@@ -23,3 +23,4 @@ the body. Small bodies and all error bodies are read into memory. Larger
 ones or bodies with no \code{Content-Length} are streamed to a temp file a chunk
 at a time to keep peak memory low.
 }
+\keyword{internal}
