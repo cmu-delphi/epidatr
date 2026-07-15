@@ -86,11 +86,11 @@ test_that("cache saves & loads", {
     auto_unbox = TRUE
   )))
   local_mocked_bindings(
-    req_perform = function(req, ...) {
+    perform_and_read = function(req, ...) {
       perform_count <<- perform_count + 1
       fixture
     },
-    .package = "httr2"
+    .package = "epidatr"
   )
 
   first_call <- epidata_call %>% fetch()
@@ -115,8 +115,8 @@ test_that("cache saves & loads", {
     '{"epidata":[],"result":-2,"message":"no results"}'
   )
   local_mocked_bindings(
-    req_perform = function(req, ...) empty_fixture,
-    .package = "httr2"
+    perform_and_read = function(req, ...) empty_fixture,
+    .package = "epidatr"
   )
   expect_warning(empty_call <- epidata_call %>% fetch())
   expect_equal(empty_call, tibble())
