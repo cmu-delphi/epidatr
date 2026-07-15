@@ -2,7 +2,7 @@
 
 ## Features
 
-- Added `stream_threshold_bytes` to `fetch_args_list()` so responses larger than this are streamed to disk instead of read into memory. This prevents out-of-memory crashes on large downloads while still returning a tibble.
+- Added `stream_threshold_bytes` and `download_path` to `fetch_args_list()` to stream large or custom-path responses to disk, preventing out-of-memory crashes. If parsing fails, the downloaded response is preserved so it can be read with out-of-memory tools instead of being re-downloaded.
 
 # epidatr 1.3.0
 
