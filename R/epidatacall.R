@@ -156,6 +156,13 @@ print.epidata_call <- function(x, ...) {
 #'   no data
 #' @param timeout_seconds the maximum amount of time (in seconds) to wait for a
 #'   response from the API server
+#' @param stream_threshold_bytes for large responses, avoid high peak memory
+#'   use during fetching by streaming the response body to a temp file instead
+#'   of reading it into memory. Responses whose `Content-Length` exceeds this
+#'   many bytes (or that report no `Content-Length`) are streamed to disk and
+#'   parsed from there; smaller responses are read into memory as usual. The
+#'   returned object is a tibble either way. Set to `Inf` to always read into
+#'   memory. Defaults to 500 MiB.
 #' @param base_url base URL to use; by default `NULL`, which means the global
 #'   base URL `"https://api.delphi.cmu.edu/epidata/"`
 #' @param dry_run if `TRUE`, skip the call to the API and instead return the
@@ -178,6 +185,7 @@ fetch_args_list <- function(
   disable_data_frame_parsing = FALSE,
   return_empty = FALSE,
   timeout_seconds = 15 * 60,
+  stream_threshold_bytes = 500 * 1024^2,
   base_url = NULL,
   dry_run = FALSE,
   debug = lifecycle::deprecated(),
@@ -208,6 +216,7 @@ fetch_args_list <- function(
   assert_logical(disable_data_frame_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_logical(return_empty, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_numeric(timeout_seconds, null.ok = FALSE, len = 1L, any.missing = FALSE)
+  assert_numeric(stream_threshold_bytes, null.ok = FALSE, len = 1L, any.missing = FALSE, lower = 0)
   assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
   assert_logical(refresh_cache, null.ok = FALSE, len = 1L, any.missing = FALSE)
@@ -220,6 +229,7 @@ fetch_args_list <- function(
       disable_data_frame_parsing = disable_data_frame_parsing,
       return_empty = return_empty,
       timeout_seconds = timeout_seconds,
+      stream_threshold_bytes = stream_threshold_bytes,
       base_url = base_url,
       dry_run = dry_run,
       refresh_cache = refresh_cache,
@@ -331,17 +341,26 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
     epidata_call,
     format_type = epidata_call$response_format,
     timeout_seconds = fetch_args$timeout_seconds,
-    fields = fetch_args$fields
+    fields = fetch_args$fields,
+    stream_threshold_bytes = fetch_args$stream_threshold_bytes
   )
+  if (!is.null(res$body_path)) {
+    on.exit(unlink(res$body_path), add = TRUE)
+  }
 
   if (epidata_call$response_format == "csv") {
-    return(readr::read_csv(I(httr2::resp_body_string(res)),
+    src <- if (!is.null(res$body_path)) res$body_path else I(httr2::resp_body_string(res))
+    return(readr::read_csv(src,
                            col_types = readr::cols(.default = "c"),
                            show_col_types = FALSE))
   }
 
   # JSON parsing (both "json" and "classic")
-  response_content <- httr2::resp_body_json(res, simplifyVector = simplify, simplifyDataFrame = simplify)
+  response_content <- if (!is.null(res$body_path)) {
+    jsonlite::fromJSON(res$body_path, simplifyVector = simplify, simplifyDataFrame = simplify)
+  } else {
+    httr2::resp_body_json(res, simplifyVector = simplify, simplifyDataFrame = simplify)
+  }
 
   if (epidata_call$response_format == "json") {
     return(response_content)
