@@ -136,12 +136,11 @@ covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) 
   res <- create_epidata_call("covidcast/meta", list()) %>%
     do_request(format_type = "json", timeout_seconds = timeout_seconds, fields = NULL)
 
-  response_content <- if (!is.null(res$body_path)) {
-    on.exit(unlink(res$body_path), add = TRUE)
-    jsonlite::fromJSON(res$body_path, simplifyDataFrame = FALSE)
-  } else {
-    httr2::resp_body_json(res, simplifyDataFrame = FALSE)
-  }
+  response_content <- read_body(
+    res,
+    function(src) jsonlite::fromJSON(src, simplifyDataFrame = FALSE),
+    from_download_path = FALSE
+  )
 
   sources <- do.call(c, lapply(response_content, parse_source, base_url = base_url))
   class(sources) <- c("covidcast_data_source_list", class(sources))

@@ -357,30 +357,21 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
   from_download_path <- !is.null(fetch_args$download_path)
 
   if (epidata_call$response_format == "csv") {
-    if (!is.null(res$body_path)) {
-      return(read_streamed_body(
-        res$body_path,
-        function(p) {
-          readr::read_csv(p, col_types = readr::cols(.default = "c"), show_col_types = FALSE)
-        },
-        from_download_path
-      ))
-    }
-    return(readr::read_csv(I(httr2::resp_body_string(res)),
-                           col_types = readr::cols(.default = "c"),
-                           show_col_types = FALSE))
+    return(read_body(
+      res,
+      function(src) {
+        readr::read_csv(src, col_types = readr::cols(.default = "c"), show_col_types = FALSE)
+      },
+      from_download_path
+    ))
   }
 
   # JSON parsing (both "json" and "classic")
-  response_content <- if (!is.null(res$body_path)) {
-    read_streamed_body(
-      res$body_path,
-      function(p) jsonlite::fromJSON(p, simplifyVector = simplify, simplifyDataFrame = simplify),
-      from_download_path
-    )
-  } else {
-    httr2::resp_body_json(res, simplifyVector = simplify, simplifyDataFrame = simplify)
-  }
+  response_content <- read_body(
+    res,
+    function(src) jsonlite::fromJSON(src, simplifyVector = simplify, simplifyDataFrame = simplify),
+    from_download_path
+  )
 
   if (epidata_call$response_format == "json") {
     return(response_content)
@@ -391,8 +382,17 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
   return(response_content$epidata)
 }
 
-# Parse a response body that was streamed to disk.
-read_streamed_body <- function(path, reader, from_download_path) {
+# Read a response body with `reader`, whether it was kept in memory or streamed
+# to disk
+read_body <- function(res, reader, from_download_path) {
+  if (is.null(res$body_path)) {
+    con <- rawConnection(httr2::resp_body_raw(res))
+    # read_csv() closes the connection itself, but fromJSON()
+    on.exit(try(close(con), silent = TRUE), add = TRUE)
+    return(reader(con))
+  }
+
+  path <- res$body_path
   out <- tryCatch(
     reader(path),
     error = function(cnd) {
