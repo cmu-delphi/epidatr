@@ -1,9 +1,3 @@
-# epidatr 1.4.0
-
-## Features
-
-- Added `stream_threshold_bytes` and `download_path` to `fetch_args_list()` to stream large or custom-path responses to disk, preventing out-of-memory crashes. If parsing fails, the downloaded response is preserved so it can be read with out-of-memory tools instead of being re-downloaded.
-
 # epidatr 1.3.0
 
 ## Changes
@@ -17,6 +11,7 @@
 
 ## Features
 
+- Added `stream_threshold_bytes` and `download_path` to `fetch_args_list()` to stream large or custom-path responses to disk, preventing out-of-memory crashes. If parsing fails, the downloaded response is preserved so it can be read with out-of-memory tools instead of being re-downloaded.
 - Added new `epidata`, `epidata_meta`, `epidata_snapshot`, and `epidata_archive` for accessing the Delphi V5 API.
 - `pub_covidcast_meta()` gained `signals`, `time_type`, and `geo_type` arguments for server-side filtering of the metadata results.
 
