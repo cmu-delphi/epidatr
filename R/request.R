@@ -119,6 +119,8 @@ do_request <- function(epidata_call,
 #' at a time to keep peak memory low.
 #'
 #' @param req an `httr2` request object
+#' @param stream_threshold_bytes see [do_request()]
+#' @param download_path see [do_request()]
 #' @return an `httr2_response`
 perform_and_read <- function(req,
                              stream_threshold_bytes = Inf,

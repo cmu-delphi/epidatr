@@ -164,8 +164,8 @@ print.epidata_call <- function(x, ...) {
 #'   returned object is a tibble either way. Set to `Inf` to always read into
 #'   memory. Defaults to 500 MiB.
 #' @param download_path if not `NULL`, the raw response body is streamed to this
-#'   file (regardless of size) and kept. Useful for very large pulls. If parsing 
-#'   into memory fails, the download is preserved here so you can read it with 
+#'   file (regardless of size) and kept. Useful for very large pulls. If parsing
+#'   into memory fails, the download is preserved here so you can read it with
 #'   out-of-memory tools (e.g. `arrow` or `duckdb`) instead of re-downloading.
 #' @param base_url base URL to use; by default `NULL`, which means the global
 #'   base URL `"https://api.delphi.cmu.edu/epidata/"`
@@ -402,7 +402,7 @@ read_streamed_body <- function(path, reader, from_download_path) {
       )
       msg <- c(
         "Couldn't read the downloaded response into memory.",
-        "i" = "The raw response is at {.file {path}} ({size}).",
+        "i" = paste0("The raw response is at {.file {path}} (", size, ")."),
         "i" = paste(
           "Read it directly, e.g. with the {.pkg arrow} or {.pkg duckdb}",
           "packages for larger-than-memory data."
