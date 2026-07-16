@@ -388,6 +388,23 @@ test_that("epidata_aux connected path edge cases: empty base, dry_run, no shared
     .package = "httr2"
   )
   expect_error(epidata_aux(nokeys), class = "epidatr__epidata__no_merge_keys")
+
+  # `columns` that excludes a key column -> abort before the aux data is fetched
+  base2 <- tag(tibble::tibble(
+    geo_value = "ca", reference_time = as.Date("2024-01-01"),
+    report_time = as.Date("2024-02-01"), value = 1
+  ))
+  local_mocked_bindings(
+    req_perform = mock_aux_connected(
+      c("report_time", "geo_value", "reference_time"),
+      "report_time,geo_value,reference_time,foo\n2024-01-01,ca,2024-01-01,1"
+    ),
+    .package = "httr2"
+  )
+  expect_error(
+    epidata_aux(base2, columns = "population_served"), # drops the reference_time key
+    class = "epidatr__epidata__missing_aux_keys"
+  )
 })
 
 test_that("disable_missing_meta_warning suppresses the unspecified-fields warning", {

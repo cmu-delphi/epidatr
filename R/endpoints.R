@@ -1589,10 +1589,32 @@ epidata_aux.data.frame <- function(
   # Aux key columns from the schema endpoint
   keys_schema <- if (!fetch_args$dry_run) .aux_key_columns(src, fetch_args) else NULL
 
+  # Aux key columns the base actually carries. Empty on dry_run.
+  ver <- "report_time"
+  keys <- setdiff(intersect(keys_schema, names(base)), ver)
+
+  # Validate before fetching, so a doomed merge never triggers a download.
+  # (skipped on dry_run)
+  if (!is.null(keys_schema)) {
+    if (length(keys) == 0) {
+      cli::cli_abort(
+        "No shared key columns between base data and aux data. It cannot be merged.",
+        class = "epidatr__epidata__no_merge_keys"
+      )
+    }
+
+    dropped <- if (!is.null(columns)) setdiff(keys, columns) else character()
+    if (length(dropped)) {
+      cli::cli_abort(
+        "`columns` excludes key column{?s} {.field {dropped}} needed to merge.",
+        class = "epidatr__epidata__missing_aux_keys"
+      )
+    }
+  }
+
   # With no explicit `filtered_keys`, infer them from the base.
   if (is.null(filtered_keys) && !is.null(keys_schema)) {
-    cand <- setdiff(intersect(keys_schema, names(base)), "report_time")
-    single <- cand[vapply(cand, function(k) length(unique(base[[k]])) == 1L, logical(1))]
+    single <- keys[vapply(keys, function(k) length(unique(base[[k]])) == 1L, logical(1))]
     # for each aux key present in the base, if the base
     # pins it to a single value, filter aux to that value.
     if (length(single)) {
@@ -1607,14 +1629,6 @@ epidata_aux.data.frame <- function(
     return(aux) # dry run: surface the aux call
   }
 
-  ver <- "report_time"
-  keys <- intersect(setdiff(keys_schema, ver), intersect(names(base), names(aux)))
-  if (length(keys) == 0) {
-    cli::cli_abort(
-      "No shared key columns between base data and aux data. It cannot be merged.",
-      class = "epidatr__epidata__no_merge_keys"
-    )
-  }
   # keep the newest aux version per key
   if (ver %in% names(aux)) {
     aux <- aux[order(aux[[ver]]), , drop = FALSE]
