@@ -82,40 +82,6 @@ archive_data <- epidata_archive(
 head(archive_data)
 ```
 
-### Auxiliary Data
-
-Some sources ship extra columns connected to the signal data, such as the population served by each NWSS sewershed. `epidata_aux()` retrieves it, either on its own or merged onto a signal pull.
-
-You can pull auxiliary data directly by source. Use `filtered_keys` to keep the download small by pinning a key column to a single value, and `columns` to choose which columns come back.
-
-```{r aux-base-pull}
-aux_data <- epidata_aux(
-  source = "nwss",
-  filtered_keys = list(pcr_target = "sars-cov-2", sample_index = "92012")
-)
-head(aux_data)
-```
-
-More often you want the auxiliary columns attached to a signal pull. Pass the output of `epidata_snapshot()` (or `epidata_archive()`) straight to `epidata_aux()`. It then recovers the source, fetches the matching auxiliary data, and left-joins it onto the shared key columns.
-
-```{r aux-merge}
-nwss_data <- epidata_snapshot(
-  source = "nwss",
-  signal = "covid_avg_conc",
-  geo_type = "sewershed"
-)
-
-# Narrow the base first so the auxiliary pull stays small.
-nwss_small <- nwss_data %>%
-  dplyr::filter(geo_value == first(geo_value))
-
-nwss_merged <- nwss_small %>%
-  epidata_aux()
-head(nwss_merged)
-```
-
-When you don't pass `filtered_keys`, `epidata_aux()` infers them from the base. Any key column the base pins to a single value (here `geo_value`) is used to narrow the auxiliary request automatically, so you only download the auxiliary rows you actually need.
-
 ### Other Sources
 
 Here are some examples for NHSN (hospitalizations), POPHIVE, and NWSS (wastewater).
@@ -160,3 +126,33 @@ nwss_data <- epidata_snapshot(
 )
 head(nwss_data)
 ```
+
+
+### Auxiliary Data
+
+Some sources ship extra columns connected to the signal data, such as the population served by each NWSS sewershed. `epidata_aux()` retrieves it, either on its own or merged onto a signal pull.
+
+You can pull auxiliary data directly by source. Two parameters can be used to control download size and speed by controlling the size of the returned data. The parameter `filtered_keys` can be used to filter the returned data to fewer rows. The parameter `columns` is used to choose which columns are returned.
+
+```{r aux-base-pull}
+aux_data <- epidata_aux(
+  source = "nwss",
+  filtered_keys = list(pcr_target = "sars-cov-2", sample_index = "92012")
+)
+head(aux_data)
+```
+
+You may want the auxiliary columns attached to the original signal pull. The output of `epidata_snapshot()` or `epidata_archive` can be passed directly to `epidata_aux()`. In this use case, `epidata_aux()` uses the `source` parameter from the original signal pull function. It fetches the matching auxiliary data and left-joins it onto the shared key columns, keeping only the sample data from the original signal pull.
+
+```{r aux-merge}
+# Filter the base dataset to only one site, so the auxiliary
+# pull stays small for this example
+nwss_small <- nwss_data %>%
+  dplyr::filter(geo_value == first(geo_value))
+
+nwss_merged <- nwss_small %>%
+  epidata_aux()
+head(nwss_merged)
+```
+
+If you don’t pass `filtered_keys`, `epidata_aux()` infers them from the base dataset. Any key column in the base dataset with a single value (like `geo_value`) is used to automatically narrow the auxiliary request, so you download only the auxiliary rows you need.
