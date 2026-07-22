@@ -64,7 +64,12 @@ Fetch auxiliary data associated with a cast signal.
 You can pass a source string to fetch the auxiliary data directly. Alternatively,
 you can pass the output of \code{\link[=epidata_snapshot]{epidata_snapshot()}} or \code{\link[=epidata_archive]{epidata_archive()}}. In this
 case, \code{epidata_aux} automatically retrieves the source from the object, fetches
-the matching auxiliary data, and performs a version-aware left join onto the base data.
+the matching auxiliary data (capping the pull at the base's newest \code{report_time}),
+and left-joins it onto the base. The join respects versions: for an
+\code{\link[=epidata_archive]{epidata_archive()}} base each row is matched to the aux version current at that
+row's own \code{report_time} (a per-row "as-of" join), while for an
+\code{\link[=epidata_snapshot]{epidata_snapshot()}} base -- a single-version view -- every row is matched to
+the one aux version current at the snapshot's version.
 }
 \seealso{
 \code{\link[=epidata_snapshot]{epidata_snapshot()}}, \code{\link[=epidata_archive]{epidata_archive()}}, \code{\link[=epidata_meta]{epidata_meta()}}

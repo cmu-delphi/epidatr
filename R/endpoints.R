@@ -1333,6 +1333,7 @@ epidata_snapshot <- function(
     fetch(fetch_args = fetch_args) %>%
     .cast_filter(geo_values, reference_time, parsed_reference_times)
   attr(res, "cast_source") <- source # lets epidata_aux() recover the source
+  attr(res, "cast_kind") <- "snapshot" # single-version view -> uniform aux merge
   res
 }
 
@@ -1421,6 +1422,7 @@ epidata_archive <- function(
     fetch(fetch_args = fetch_args) %>%
     .cast_filter(geo_values, reference_time, parsed_reference_times, report_time = report_time)
   attr(res, "cast_source") <- source # lets epidata_aux() recover the source
+  attr(res, "cast_kind") <- "archive" # per-row revision history -> as-of aux merge
   res
 }
 
@@ -1623,22 +1625,37 @@ epidata_aux.data.frame <- function(
     }
   }
 
+  # Never need aux versions newer than the newest base report_time
+  report_cut <- if (ver %in% names(base) && !all(is.na(base[[ver]]))) {
+    paste0("<", format(max(base[[ver]], na.rm = TRUE) + 1, "%Y-%m-%d"))
+  } else {
+    "*"
+  }
+
   # Reuse the base-pull method to fetch aux.
-  aux <- epidata_aux(src, filtered_keys = filtered_keys, columns = columns, fetch_args = fetch_args)
+  aux <- epidata_aux(
+    src,
+    report_time = report_cut, filtered_keys = filtered_keys,
+    columns = columns, fetch_args = fetch_args
+  )
   if (!inherits(aux, "data.frame")) {
     return(aux) # dry run: surface the aux call
   }
 
-  # keep the newest aux version per key
-  if (ver %in% names(aux)) {
-    aux <- aux[order(aux[[ver]]), , drop = FALSE]
-    aux <- aux[!duplicated(aux[keys], fromLast = TRUE), , drop = FALSE]
-  }
-  # match on a composite key
-  idx <- vctrs::vec_match(base[keys], aux[keys])
-  for (col in setdiff(names(aux), c(names(base), ver))) {
-    base[[col]] <- aux[[col]][idx]
-  }
+  # Match each base dataset row to the aux version current at its report_time
+  # with keys equal and aux report_time at or before the base's, keeping the newest
+  match_time <- if (identical(attr(base, "cast_kind"), "snapshot")) max(base[[ver]]) else base[[ver]]
+  m <- vctrs::vec_locate_matches(
+    needles = vctrs::vec_cbind(base[keys], .t = match_time),
+    haystack = vctrs::vec_cbind(aux[keys], .t = aux[[ver]]),
+    condition = c(rep("==", length(keys)), ">="),
+    filter = c(rep("none", length(keys)), "max"),
+    multiple = "any"
+  )
+  idx <- m$haystack[order(m$needles)]
+
+  value_cols <- setdiff(names(aux), c(names(base), ver))
+  base[value_cols] <- vctrs::vec_slice(aux[value_cols], idx)
   base
 }
 

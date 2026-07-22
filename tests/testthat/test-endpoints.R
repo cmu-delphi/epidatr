@@ -141,6 +141,7 @@ test_that("epidata* and epidata_meta work as expected", {
   expect_s3_class(res, "tbl_df")
   expect_equal(nrow(res), 2)
   expect_equal(attr(res, "cast_source"), "nssp") # tag lets epidata_aux() recover source
+  expect_equal(attr(res, "cast_kind"), "snapshot") # drives uniform vs as-of aux merge
 
   # Test epidata_snapshot filtering
   res_filtered <- epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", geo_values = "ca")
@@ -160,6 +161,7 @@ test_that("epidata* and epidata_meta work as expected", {
     report_time = epirange("2024-01-01", "2024-01-05")
   )
   expect_s3_class(res_range, "tbl_df")
+  expect_equal(attr(res_range, "cast_kind"), "archive") # per-row as-of aux merge
 
   # Test report_time = "*" mapping in epidata
   call_wildcard <- epidata(
@@ -313,10 +315,6 @@ test_that("epidata_aux base-pull builds the call, serializes filtered_keys, depr
   )
 })
 
-test_that("epidata_aux rejects a non-source, non-tagged input", {
-  expect_error(epidata_aux(tibble::tibble(a = 1)), class = "epidatr__epidata__untagged_base")
-})
-
 # aux_schema (key columns) + aux_data (CSV)
 mock_aux_connected <- function(keys, aux_csv) {
   key_json <- paste0('"', keys, '"', collapse = ",")
@@ -330,37 +328,70 @@ mock_aux_connected <- function(keys, aux_csv) {
   }
 }
 
-test_that("epidata_aux connected merge attaches the latest aux version per key, preserving the base", {
-  base <- tibble::tibble(
-    geo_value = "162",
-    reference_time = as.Date(c("2024-01-01", "2024-01-08")),
-    report_time = as.Date("2024-03-10"),
-    county_fips = "999", # shared name but NOT a key -> must not be clobbered
-    value = c(1, 2)
-  )
-  attr(base, "cast_source") <- "nwss"
-  aux_csv <- paste(
-    "report_time,geo_value,reference_time,county_fips,population_served",
-    "2024-01-05,162,2024-01-01,001,100",
-    "2024-02-15,162,2024-01-01,001,200", # newer version for the 01-01 key -> wins
-    "2024-01-05,162,2024-01-08,001,300",
-    sep = "\n"
-  )
+# Shared aux table for the merge test: three keys, some with two revisions whose
+# dates straddle the base report times (so as-of vs uniform differ), plus a
+# non-key `county_fips` to check shared columns aren't clobbered.
+aux_versions_keys <- c("report_time", "geo_value", "reference_time", "sample_index")
+aux_versions_csv <- paste(
+  "report_time,geo_value,reference_time,sample_index,county_fips,population_served,label",
+  "2024-02-01,ca,2024-01-01,A,001,100,p1",
+  "2024-05-01,ca,2024-01-01,A,001,200,p2", # newer ca/01-01/A revision
+  "2024-02-01,ca,2024-01-08,A,001,300,p3",
+  "2024-01-01,ny,2024-01-01,B,001,350,p0",
+  "2024-04-01,ny,2024-01-01,B,001,400,p4", # newer ny revision (after 03-01)
+  sep = "\n"
+)
+
+test_that("epidata_aux merge is version-aware: archive per-row vs snapshot uniform", {
   local_mocked_bindings(
-    req_perform = mock_aux_connected(c("report_time", "geo_value", "reference_time"), aux_csv),
+    req_perform = mock_aux_connected(aux_versions_keys, aux_versions_csv),
     .package = "httr2"
   )
-  out <- epidata_aux(base)
-  expect_equal(nrow(out), 2) # base rows kept, order preserved
-  expect_equal(out$population_served, c("200", "300")) # latest version per key
-  expect_equal(out$county_fips, c("999", "999")) # shared non-key column not clobbered
+
+  # Archive: each row as-of its own report_time, never a newer version; too-early
+  # or unknown keys -> NA; a shared non-key column (county_fips) is preserved.
+  archive <- tibble::tibble(
+    geo_value = c("ca", "ca", "ca", "ny", "tx"),
+    reference_time = as.Date(c("2024-01-01", "2024-01-01", "2024-01-08", "2024-01-01", "2024-01-01")),
+    sample_index = c("A", "A", "A", "B", "C"),
+    report_time = as.Date(c("2024-01-15", "2024-03-01", "2024-06-01", "2024-03-01", "2024-03-01")),
+    county_fips = "999",
+    value = 1:5
+  )
+  attr(archive, "cast_source") <- "nwss"
+  attr(archive, "cast_kind") <- "archive"
+  out <- epidata_aux(archive)
+  # 01-15 predates aux -> NA; 03-01 -> 02-01 (not newer 05-01); 06-01 -> 300;
+  # ny 03-01 -> 01-01 (not newer 04-01); tx key absent -> NA
+  expect_equal(out$population_served, c(NA, "100", "300", "350", NA))
+  expect_equal(out$label, c(NA, "p1", "p3", "p0", NA)) # a second value column
+  expect_equal(out$county_fips, rep("999", 5)) # shared non-key not clobbered
+  expect_equal(out$value, 1:5) # base rows and order preserved
+
+  # Snapshot: single-version view -> every row as-of the cutoff (max = 06-01),
+  # a different result than the archive on the same aux.
+  snapshot <- tibble::tibble(
+    geo_value = c("ca", "ca", "ny"),
+    reference_time = as.Date(c("2024-01-01", "2024-01-08", "2024-01-01")),
+    sample_index = c("A", "A", "B"),
+    report_time = as.Date(c("2024-03-01", "2024-06-01", "2024-03-01")),
+    value = 1:3
+  )
+  attr(snapshot, "cast_source") <- "nwss"
+  attr(snapshot, "cast_kind") <- "snapshot"
+  out <- epidata_aux(snapshot)
+  # ca/01-01/A -> 200, ca/01-08/A -> 300, ny/01-01/B -> 400
+  expect_equal(out$population_served, c("200", "300", "400"))
 })
 
-test_that("epidata_aux connected path edge cases: empty base, dry_run, no shared keys", {
+test_that("epidata_aux connected path: validation, empty base, dry_run cap/forwarding, key errors", {
   tag <- function(df) {
     attr(df, "cast_source") <- "nwss"
     df
   }
+
+  # untagged data frame -> reject
+  expect_error(epidata_aux(tibble::tibble(a = 1)), class = "epidatr__epidata__untagged_base")
 
   # empty base returns unchanged without any fetch
   empty <- tag(tibble::tibble(
@@ -369,17 +400,18 @@ test_that("epidata_aux connected path edge cases: empty base, dry_run, no shared
   ))
   expect_identical(epidata_aux(empty), empty)
 
-  # dry_run surfaces the call, forwards explicit keys, and never fetches the schema
+  # dry_run surfaces the call: forwards explicit keys AND caps the pull at the
+  # base's newest report_time (max + 1 day); no schema fetch (would fail unmocked)
   base <- tag(tibble::tibble(
     geo_value = "ca", reference_time = as.Date("2024-01-01"),
-    report_time = as.Date("2024-02-01"), value = 1
+    report_time = as.Date(c("2024-01-10", "2024-05-20")), value = c(1, 2)
   ))
   call <- epidata_aux(base, filtered_keys = list(pcr_target = "x"), fetch_args = fetch_args_list(dry_run = TRUE))
   expect_s3_class(call, "epidata_call")
-  expect_match(call$request$url, "pcr_target")
+  expect_match(call$request$url, "pcr_target") # explicit keys forwarded
+  expect_match(call$request$url, "report_time_query=%3C2024-05-21") # capped, "<" -> %3C
 
-  # no shared keys between base and aux -> abort
-  nokeys <- tag(tibble::tibble(report_time = as.Date("2024-02-01"), value = 1))
+  # remaining cases share one mocked schema (keys: report_time/geo_value/reference_time)
   local_mocked_bindings(
     req_perform = mock_aux_connected(
       c("report_time", "geo_value", "reference_time"),
@@ -387,22 +419,20 @@ test_that("epidata_aux connected path edge cases: empty base, dry_run, no shared
     ),
     .package = "httr2"
   )
-  expect_error(epidata_aux(nokeys), class = "epidatr__epidata__no_merge_keys")
-
-  # `columns` that excludes a key column -> abort before the aux data is fetched
-  base2 <- tag(tibble::tibble(
-    geo_value = "ca", reference_time = as.Date("2024-01-01"),
-    report_time = as.Date("2024-02-01"), value = 1
-  ))
-  local_mocked_bindings(
-    req_perform = mock_aux_connected(
-      c("report_time", "geo_value", "reference_time"),
-      "report_time,geo_value,reference_time,foo\n2024-01-01,ca,2024-01-01,1"
-    ),
-    .package = "httr2"
-  )
+  # no key shared between base and aux -> abort
   expect_error(
-    epidata_aux(base2, columns = "population_served"), # drops the reference_time key
+    epidata_aux(tag(tibble::tibble(report_time = as.Date("2024-02-01"), value = 1))),
+    class = "epidatr__epidata__no_merge_keys"
+  )
+  # `columns` excluding a key column -> abort before the aux data is fetched
+  expect_error(
+    epidata_aux(
+      tag(tibble::tibble(
+        geo_value = "ca", reference_time = as.Date("2024-01-01"),
+        report_time = as.Date("2024-02-01"), value = 1
+      )),
+      columns = "population_served" # drops the reference_time key
+    ),
     class = "epidatr__epidata__missing_aux_keys"
   )
 })
