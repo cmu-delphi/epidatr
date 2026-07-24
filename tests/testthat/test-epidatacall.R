@@ -52,30 +52,28 @@ test_that("large responses stream to disk and parse identically to in-memory", {
   expect_false(file.exists(tmp))
 })
 
-test_that("a failed read of a streamed body keeps the file and errors clearly", {
-  call <- create_epidata_call(
-    "covidcast/",
-    list(),
-    api_version = "classic",
-    response_format = "csv"
-  )
-  tmp <- tempfile()
-  writeLines("geo_value,value\nca,1.5", tmp)
+test_that("perform_and_read messages when streaming to a temp file", {
+  # verify cli_inform message when streaming threshold is exceeded
+  req <- httr2::request("http://example.com")
   local_mocked_bindings(
-    perform_and_read = function(req, ...) {
-      resp <- create_mock_response("", headers = list("content-type" = "text/csv"))
-      resp$body_path <- tmp
-      resp
-    },
+    req_perform_connection = function(...) create_mock_response(""),
+    resp_stream_raw = local({
+      called <- FALSE
+      function(...) {
+        if (!called) {
+          called <<- TRUE
+          raw(100)
+        } else {
+          raw(0)
+        }
+      }
+    }),
     .package = "epidatr"
   )
-  # Force the read into memory to fail.
-  local_mocked_bindings(read_csv = function(...) stop("boom"), .package = "readr")
-
-  expect_error(request_epidata(call), class = "epidatr__read_download_failed")
-  # the download is preserved for recovery rather than deleted
-  expect_true(file.exists(tmp))
-  unlink(tmp)
+  expect_message(
+    perform_and_read(req, stream_threshold_bytes = 10),
+    "Streaming response to temporary file"
+  )
 })
 
 test_that("fetch_args", {

@@ -152,6 +152,7 @@ perform_and_read <- function(req,
     bytes <- bytes + length(chunk)
     if (bytes > stream_threshold_bytes) {
       path <- tempfile()
+      cli::cli_inform(c("i" = "Streaming response to temporary file at {.file {path}}."))
       con <- file(path, "wb")
       writeBin(vctrs::list_unchop(chunks), con) # flush what we have so far
       chunks <- NULL

@@ -390,34 +390,10 @@ read_body <- function(res, reader, from_download_path) {
   }
 
   path <- res$body_path
-  out <- tryCatch(
-    reader(path),
-    error = function(cnd) {
-      size <- format(
-        structure(file.size(path), class = "object_size"),
-        units = "auto"
-      )
-      msg <- c(
-        "Couldn't read the downloaded response into memory.",
-        "i" = paste0("The raw response is at {.file {path}} (", size, ")."),
-        "i" = paste(
-          "Read it directly, e.g. with the {.pkg arrow} or {.pkg duckdb}",
-          "packages for larger-than-memory data."
-        )
-      )
-      if (!from_download_path) {
-        msg <- c(msg, "i" = paste(
-          "It is kept only for this R session. Pass {.arg download_path}",
-          "to {.fn fetch_args_list} to save downloads persistently."
-        ))
-      }
-      cli::cli_abort(msg, parent = cnd, class = "epidatr__read_download_failed")
-    }
-  )
   if (!from_download_path) {
-    unlink(path)
+    on.exit(unlink(path), add = TRUE)
   }
-  out
+  reader(path)
 }
 
 #' Returns the full request url for the given epidata_call
