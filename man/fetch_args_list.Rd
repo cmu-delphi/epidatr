@@ -12,6 +12,8 @@ fetch_args_list(
   disable_data_frame_parsing = FALSE,
   return_empty = FALSE,
   timeout_seconds = 15 * 60,
+  stream_threshold_bytes = 500 * 1024^2,
+  download_path = NULL,
   base_url = NULL,
   dry_run = FALSE,
   debug = lifecycle::deprecated(),
@@ -39,6 +41,20 @@ no data}
 
 \item{timeout_seconds}{the maximum amount of time (in seconds) to wait for a
 response from the API server}
+
+\item{stream_threshold_bytes}{for large responses, avoid high peak memory
+use during fetching. The response body is read into memory until this many
+bytes have been received; once it crosses the threshold, the bytes so far
+and the remainder are streamed to a temp file and parsed from there. The
+decision uses the bytes actually received, so it is robust even when the
+server misreports or omits \code{Content-Length}. The returned object is a
+tibble either way. Set to \code{Inf} to always read into memory. Defaults to
+500 MiB.}
+
+\item{download_path}{if not \code{NULL}, the raw response body is streamed to this
+file (regardless of size) and kept. Useful for very large pulls. If parsing
+into memory fails, the download is preserved here so you can read it with
+out-of-memory tools (e.g. \code{arrow} or \code{duckdb}) instead of re-downloading.}
 
 \item{base_url}{base URL to use; by default \code{NULL}, which means the global
 base URL \code{"https://api.delphi.cmu.edu/epidata/"}}

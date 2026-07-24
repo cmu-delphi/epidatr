@@ -1,0 +1,10 @@
+sample.interval=20000
+"findLocalsList" "funEnv" "make.functionContext" "cmpfun" "doTryCatch" "tryCatchOne" "tryCatchList" "tryCatch" "compiler:::tryCmpfun" "fetch_hybrid" 
+"open.connection" "open" "withCallingHandlers" "suppressWarnings" "doTryCatch" "tryCatchOne" "tryCatchList" "tryCatch" "capture_curl_error" "req_perform_connection1" "httr2::req_perform_connection" "epidatr:::perform_and_read" "fetch_hybrid" 
+"open.connection" "open" "withCallingHandlers" "suppressWarnings" "doTryCatch" "tryCatchOne" "tryCatchList" "tryCatch" "capture_curl_error" "req_perform_connection1" "httr2::req_perform_connection" "epidatr:::perform_and_read" "fetch_hybrid" 
+"open.connection" "open" "withCallingHandlers" "suppressWarnings" "doTryCatch" "tryCatchOne" "tryCatchList" "tryCatch" "capture_curl_error" "req_perform_connection1" "httr2::req_perform_connection" "epidatr:::perform_and_read" "fetch_hybrid" 
+"open.connection" "open" "withCallingHandlers" "suppressWarnings" "doTryCatch" "tryCatchOne" "tryCatchList" "tryCatch" "capture_curl_error" "req_perform_connection1" "httr2::req_perform_connection" "epidatr:::perform_and_read" "fetch_hybrid" 
+"open.connection" "open" "withCallingHandlers" "suppressWarnings" "doTryCatch" "tryCatchOne" "tryCatchList" "tryCatch" "capture_curl_error" "req_perform_connection1" "httr2::req_perform_connection" "epidatr:::perform_and_read" "fetch_hybrid" 
+"open.connection" "open" "withCallingHandlers" "suppressWarnings" "doTryCatch" "tryCatchOne" "tryCatchList" "tryCatch" "capture_curl_error" "req_perform_connection1" "httr2::req_perform_connection" "epidatr:::perform_and_read" "fetch_hybrid" 
+"open.connection" "open" "withCallingHandlers" "suppressWarnings" "doTryCatch" "tryCatchOne" "tryCatchList" "tryCatch" "capture_curl_error" "req_perform_connection1" "httr2::req_perform_connection" "epidatr:::perform_and_read" "fetch_hybrid" 
+"strsplit" "curl::parse_headers" "as_headers" "as_headers" "new_response" "create_response" "req_perform_connection1" "httr2::req_perform_connection" "epidatr:::perform_and_read" "fetch_hybrid" 

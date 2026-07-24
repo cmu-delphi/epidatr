@@ -37,7 +37,7 @@ Imports:
     checkmate,
     cli,
     glue,
-    httr2,
+    httr2 (>= 1.1.0),
     jsonlite,
     magrittr,
     MMWRweek,
@@ -49,6 +49,7 @@ Imports:
     tibble,
     usethis,
     lifecycle,
+    vctrs,
     xml2
 Suggests:
     dplyr,

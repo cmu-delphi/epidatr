@@ -24,6 +24,58 @@ test_that("fetch surfaces http errors", {
   )
 })
 
+test_that("large responses stream to disk and parse identically to in-memory", {
+  csv_data <- "geo_value,value\nca,1.5\nfl,2.0"
+  call <- create_epidata_call(
+    "covidcast/",
+    list(),
+    api_version = "classic",
+    response_format = "csv"
+  )
+
+  in_mem <- with_mocked_response(csv_data, request_epidata(call))
+
+  tmp <- tempfile()
+  writeLines(csv_data, tmp)
+  local_mocked_bindings(
+    perform_and_read = function(req, ...) {
+      resp <- create_mock_response("", headers = list("content-type" = "text/csv"))
+      resp$body_path <- tmp
+      resp
+    },
+    .package = "epidatr"
+  )
+  from_disk <- request_epidata(call)
+
+  expect_equal(from_disk, in_mem)
+  # temp file is cleaned up after parsing
+  expect_false(file.exists(tmp))
+})
+
+test_that("perform_and_read messages when streaming to a temp file", {
+  # verify cli_inform message when streaming threshold is exceeded
+  req <- httr2::request("http://example.com")
+  local_mocked_bindings(
+    req_perform_connection = function(...) create_mock_response(""),
+    resp_stream_raw = local({
+      called <- FALSE
+      function(...) {
+        if (!called) {
+          called <<- TRUE
+          raw(100)
+        } else {
+          raw(0)
+        }
+      }
+    }),
+    .package = "epidatr"
+  )
+  expect_message(
+    perform_and_read(req, stream_threshold_bytes = 10),
+    "Streaming response to temporary file"
+  )
+})
+
 test_that("fetch_args", {
   expect_snapshot_value(fetch_args_list(), style = "json2", cran = TRUE)
   expect_snapshot_value(

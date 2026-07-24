@@ -20,24 +20,25 @@ to_httr2_response <- function(obj) {
   )
 }
 
-# Mock httr2::req_perform to return a fixed response. `response` can be an
-# httr2_response (built via create_mock_response) or a raw JSON/CSV string.
+# Mock the perform-and-read seam to return a fixed response. `response` can be
+# an httr2_response (built via create_mock_response) or a raw JSON/CSV string.
 with_mocked_response <- function(response, code) {
   resp <- to_httr2_response(response)
   testthat::local_mocked_bindings(
-    req_perform = function(req, ...) resp,
-    .package = "httr2",
+    perform_and_read = function(req, ...) resp,
+    .package = "epidatr",
     .env = parent.frame()
   )
   force(code)
 }
 
-# Mock httr2::req_perform with a handler that receives the outgoing request,
-# letting tests assert on URL/headers/body and vary the response per call.
+# Mock the perform-and-read seam with a handler that receives the outgoing
+# request, letting tests assert on URL/headers/body and vary the response per
+# call.
 with_mock_perform <- function(handler, code) {
   testthat::local_mocked_bindings(
-    req_perform = function(req, ...) to_httr2_response(handler(req)),
-    .package = "httr2",
+    perform_and_read = function(req, ...) to_httr2_response(handler(req)),
+    .package = "epidatr",
     .env = parent.frame()
   )
   force(code)
