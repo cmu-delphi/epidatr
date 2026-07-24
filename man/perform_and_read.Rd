@@ -17,10 +17,14 @@ perform_and_read(req, stream_threshold_bytes = Inf, download_path = NULL)
 an \code{httr2_response}
 }
 \description{
-\code{\link[httr2:req_perform_connection]{httr2::req_perform_connection()}} returns the headers with the
-body still an open connection, so we can read \code{Content-Length} before pulling
-the body. Small bodies and all error bodies are read into memory. Larger
-ones or bodies with no \code{Content-Length} are streamed to a temp file a chunk
-at a time to keep peak memory low.
+\code{\link[httr2:req_perform_connection]{httr2::req_perform_connection()}} returns the headers with the body still an
+open connection, which we pull a chunk at a time. We decide memory-vs-disk
+from the bytes we actually receive, NOT the \code{Content-Length} header: the
+streaming (cast/V5) API server forwards rows without knowing the total up
+front, so it may omit \code{Content-Length} or report a wrong value -- trusting it
+risks reading a huge body into memory and OOMing. The body is accumulated in
+memory until it crosses \code{stream_threshold_bytes}, at which point everything
+received so far is flushed to a temp file and the rest is streamed there.
+Error bodies (small) are always kept in memory so error handling is unchanged.
 }
 \keyword{internal}

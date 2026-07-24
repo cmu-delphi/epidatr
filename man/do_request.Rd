@@ -25,10 +25,10 @@ do_request(
 
 \item{http_method}{HTTP method to use}
 
-\item{stream_threshold_bytes}{successful response bodies larger than this
-(per the \code{Content-Length} header, or when that header is absent) are
-streamed to a temp file instead of being read into memory.
-\code{Inf} always reads into memory}
+\item{stream_threshold_bytes}{the response body is accumulated in memory
+until this many bytes have been received, then the remainder is streamed to
+a temp file to keep peak memory low. The decision uses the bytes actually
+received, not the \code{Content-Length} header. \code{Inf} always reads into memory}
 
 \item{download_path}{if not \code{NULL}, stream the (successful) response body to
 this path regardless of size, instead of a temp file}

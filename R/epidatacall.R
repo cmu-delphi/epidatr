@@ -156,13 +156,9 @@ print.epidata_call <- function(x, ...) {
 #'   no data
 #' @param timeout_seconds the maximum amount of time (in seconds) to wait for a
 #'   response from the API server
-#' @param stream_threshold_bytes for large responses, avoid high peak memory
-#'   use during fetching by streaming the response body to a temp file instead
-#'   of reading it into memory. Responses whose `Content-Length` exceeds this
-#'   many bytes (or that report no `Content-Length`) are streamed to disk and
-#'   parsed from there; smaller responses are read into memory as usual. The
-#'   returned object is a tibble either way. Set to `Inf` to always read into
-#'   memory. Defaults to 500 MiB.
+#' @param stream_threshold_bytes the response body is accumulated in memory
+#'   until this many bytes have been received, then it is streamed to
+#'   a temp file to keep peak memory low. `Inf` always reads into memory.
 #' @param download_path if not `NULL`, the raw response body is streamed to this
 #'   file (regardless of size) and kept. Useful for very large pulls. If parsing
 #'   into memory fails, the download is preserved here so you can read it with
@@ -387,7 +383,8 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
 read_body <- function(res, reader, from_download_path) {
   if (is.null(res$body_path)) {
     con <- rawConnection(httr2::resp_body_raw(res))
-    # read_csv() closes the connection itself, but fromJSON()
+    # read_csv() closes the connection itself, but fromJSON() doesn't.
+    # Close the connection here and guard against the double close.
     on.exit(try(close(con), silent = TRUE), add = TRUE)
     return(reader(con))
   }

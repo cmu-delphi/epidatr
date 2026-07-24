@@ -43,12 +43,13 @@ no data}
 response from the API server}
 
 \item{stream_threshold_bytes}{for large responses, avoid high peak memory
-use during fetching by streaming the response body to a temp file instead
-of reading it into memory. Responses whose \code{Content-Length} exceeds this
-many bytes (or that report no \code{Content-Length}) are streamed to disk and
-parsed from there; smaller responses are read into memory as usual. The
-returned object is a tibble either way. Set to \code{Inf} to always read into
-memory. Defaults to 500 MiB.}
+use during fetching. The response body is read into memory until this many
+bytes have been received; once it crosses the threshold, the bytes so far
+and the remainder are streamed to a temp file and parsed from there. The
+decision uses the bytes actually received, so it is robust even when the
+server misreports or omits \code{Content-Length}. The returned object is a
+tibble either way. Set to \code{Inf} to always read into memory. Defaults to
+500 MiB.}
 
 \item{download_path}{if not \code{NULL}, the raw response body is streamed to this
 file (regardless of size) and kept. Useful for very large pulls. If parsing
