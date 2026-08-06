@@ -72,7 +72,12 @@ Defaults to all (\code{"*"}). Filtered locally after the API call.}
 
 \item{time_values}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{reference_time} instead.}
 
-\item{...}{not used for values, forces later arguments to bind by name}
+\item{...}{Named filters on extra key columns beyond \code{geo_value}, such as
+\code{pcr_target = "sars-cov-2"} or \code{sample_index = c("a", "b")}. Each key
+accepts one or more values (matched as OR) and is sent server-side via the
+\code{extra_keys} API parameter to shrink the download. Passing more than 10
+values for a key warns, since the request URL may get too long. Unlike
+\code{geo_values} (filtered locally), these narrow the query on the server.}
 
 \item{fill_method}{string. Optional filter to an imputation method.
 The API provides alternatives of the same signal differing in how

@@ -15,25 +15,24 @@ epidata_aux(source, ...)
   time_values = lifecycle::deprecated(),
   report_time = "*",
   issues = lifecycle::deprecated(),
-  filtered_keys = NULL,
   columns = NULL,
   fetch_args = fetch_args_list()
 )
 
-\method{epidata_aux}{data.frame}(
-  source,
-  ...,
-  filtered_keys = NULL,
-  columns = NULL,
-  fetch_args = fetch_args_list()
-)
+\method{epidata_aux}{data.frame}(source, ..., columns = NULL, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{source}{A source string to retrieve auxiliary data directly, or a tibble returned by
 \code{\link[=epidata_snapshot]{epidata_snapshot()}} or \code{\link[=epidata_archive]{epidata_archive()}} to merge the data onto (its
 source is recovered automatically).}
 
-\item{...}{not used for values, forces later arguments to bind by name}
+\item{...}{Named filters on the auxiliary key columns, such as
+\code{pcr_target = "sars-cov-2"} or \code{geo_value = c("ca", "ny")}. Each key accepts
+one or more values (matched as OR); they are serialized as repeated
+\code{key:value} terms server-side to keep the aux pull small. Passing more than
+10 values for a key warns, since the request URL may get too long. In
+merge mode, when no filters are given, they are inferred from the base:
+each key it narrows to at most 10 distinct values is filtered to those.}
 
 \item{reference_time}{\code{\link{timeset}}. Reference time to return (filters on the
 \code{reference_time} column). Supports individual dates or \code{\link[=epirange]{epirange()}}.
@@ -45,10 +44,6 @@ Base-pull mode only (when \code{source} is a string).}
 to retrieve. Base-pull mode only (when \code{source} is a string).}
 
 \item{issues}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{report_time} instead.}
-
-\item{filtered_keys}{A named list or character vector of filters to apply to the auxiliary key columns,
-such as \code{list(pcr_target = "sars-cov-2")}. Each key takes a single value. In
-connected mode, use it to keep the aux pull small enough to download.}
 
 \item{columns}{A character vector of columns to return. By default, all columns are returned.}
 
@@ -64,12 +59,7 @@ Fetch auxiliary data associated with a cast signal.
 You can pass a source string to fetch the auxiliary data directly. Alternatively,
 you can pass the output of \code{\link[=epidata_snapshot]{epidata_snapshot()}} or \code{\link[=epidata_archive]{epidata_archive()}}. In this
 case, \code{epidata_aux} automatically retrieves the source from the object, fetches
-the matching auxiliary data (capping the pull at the base's newest \code{report_time}),
-and left-joins it onto the base. The join respects versions: for an
-\code{\link[=epidata_archive]{epidata_archive()}} base each row is matched to the aux version current at that
-row's own \code{report_time} (a per-row "as-of" join), while for an
-\code{\link[=epidata_snapshot]{epidata_snapshot()}} base -- a single-version view -- every row is matched to
-the one aux version current at the snapshot's version.
+the matching auxiliary data, and performs a version-aware left join onto the base data.
 }
 \seealso{
 \code{\link[=epidata_snapshot]{epidata_snapshot()}}, \code{\link[=epidata_archive]{epidata_archive()}}, \code{\link[=epidata_meta]{epidata_meta()}}
