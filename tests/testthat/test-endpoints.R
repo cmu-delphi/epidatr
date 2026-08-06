@@ -195,6 +195,34 @@ test_that("epidata* and epidata_meta work as expected", {
   expect_equal(nrow(res_time_range), 2)
 })
 
+test_that("snapshot/archive/epidata send ... key filters server-side as extra_keys", {
+  snap <- epidata_snapshot(
+    source = "nwss", signals = "sig1", geo_type = "county",
+    pcr_target = c("sars-cov-2", "influenza"),
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_match(snap$request$url, "extra_keys=")
+  expect_match(snap$request$url, "pcr_target%3Asars-cov-2") # "pcr_target:sars-cov-2"
+  expect_match(snap$request$url, "pcr_target%3Ainfluenza")
+
+  arch <- epidata_archive(
+    source = "nwss", signals = "sig1", geo_type = "county",
+    sample_index = "92012",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_match(arch$request$url, "extra_keys=")
+  expect_match(arch$request$url, "sample_index%3A92012")
+
+  # dispatcher forwards ... to the routed endpoint
+  disp <- epidata(
+    source = "nwss", signals = "sig1", geo_type = "county",
+    pcr_target = "sars-cov-2",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_match(disp$request$url, "extra_keys=")
+  expect_match(disp$request$url, "pcr_target%3Asars-cov-2")
+})
+
 test_that("epidata validations and deprecations", {
   # Missing required args
   expect_error(
@@ -284,11 +312,12 @@ test_that("epidata_archive local EpiRange filtering for report_time works", {
 
 # ---- epidata_aux ----
 
-test_that("epidata_aux base-pull builds the call, serializes filtered_keys, deprecates aliases", {
+test_that("epidata_aux base-pull builds the call, serializes key filters via ..., deprecates aliases", {
   call <- epidata_aux(
     "nwss",
     report_time = "<2024-06-01",
-    filtered_keys = list(pcr_target = "SARS-CoV-2", reference_time = as.Date("2024-01-01")),
+    pcr_target = "SARS-CoV-2",
+    ref_date = as.Date("2024-01-01"), # a typed key value -> ISO, not day-count
     columns = c("geo_value", "population_served"),
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
@@ -296,13 +325,23 @@ test_that("epidata_aux base-pull builds the call, serializes filtered_keys, depr
   expect_match(call$request$url, "source=nwss")
   expect_match(call$request$url, "report_time_query=%3C2024-06-01") # "<" url-encoded
   expect_match(call$request$url, "population_served") # columns
-  expect_match(call$request$url, "pcr_target") # filtered_keys serialized
+  expect_match(call$request$url, "pcr_target") # ... key filter serialized
   expect_match(call$request$url, "2024-01-01") # Date value -> ISO, not day-count
 
-  # one value per key
+  # multiple values per key are allowed and serialized as repeated key:value terms
+  multi <- epidata_aux("nwss", geo_value = c("ca", "ny"), fetch_args = fetch_args_list(dry_run = TRUE))
+  expect_match(multi$request$url, "geo_value%3Aca") # "geo_value:ca" url-encoded
+  expect_match(multi$request$url, "geo_value%3Any") # "geo_value:ny"
+
+  # unnamed ... filters are rejected
   expect_error(
-    epidata_aux("nwss", filtered_keys = list(geo_value = c("ca", "ny")), fetch_args = fetch_args_list(dry_run = TRUE)),
-    class = "epidatr__epidata__multivalue_filtered_key"
+    epidata_aux("nwss", "ca", fetch_args = fetch_args_list(dry_run = TRUE)),
+    class = "epidatr__epidata__unnamed_filter"
+  )
+  # more than the cap warns about URL length (still serializes)
+  expect_warning(
+    epidata_aux("nwss", geo_value = as.character(1:11), fetch_args = fetch_args_list(dry_run = TRUE)),
+    class = "epidatr__epidata__many_filtered_values"
   )
   # deprecated aliases map to their replacements
   expect_warning(
@@ -384,6 +423,29 @@ test_that("epidata_aux merge is version-aware: archive per-row vs snapshot unifo
   expect_equal(out$population_served, c("200", "300", "400"))
 })
 
+test_that("epidata_aux infers multi-value key filters from the base (<= cap)", {
+  seen <- new.env()
+  recorder <- function(req, ...) {
+    if (grepl("aux_schema", req$url)) {
+      to_httr2_response('{"nwss":{"key_columns":["report_time","geo_value"],"value_columns":[]}}')
+    } else {
+      seen$url <- req$url # capture the forwarded aux_data request
+      to_httr2_response("report_time,geo_value,population_served\n2024-02-01,ca,100\n2024-02-01,ny,200")
+    }
+  }
+  local_mocked_bindings(req_perform = recorder, .package = "httr2")
+
+  base <- tibble::tibble(
+    geo_value = c("ca", "ny"), # two distinct values, under the cap -> both pinned
+    report_time = as.Date(c("2024-03-01", "2024-03-01")), value = 1:2
+  )
+  attr(base, "cast_source") <- "nwss"
+  attr(base, "cast_kind") <- "snapshot"
+  epidata_aux(base)
+  expect_match(seen$url, "geo_value%3Aca") # "geo_value:ca"
+  expect_match(seen$url, "geo_value%3Any") # "geo_value:ny"
+})
+
 test_that("epidata_aux connected path: validation, empty base, dry_run cap/forwarding, key errors", {
   tag <- function(df) {
     attr(df, "cast_source") <- "nwss"
@@ -406,9 +468,9 @@ test_that("epidata_aux connected path: validation, empty base, dry_run cap/forwa
     geo_value = "ca", reference_time = as.Date("2024-01-01"),
     report_time = as.Date(c("2024-01-10", "2024-05-20")), value = c(1, 2)
   ))
-  call <- epidata_aux(base, filtered_keys = list(pcr_target = "x"), fetch_args = fetch_args_list(dry_run = TRUE))
+  call <- epidata_aux(base, pcr_target = "x", fetch_args = fetch_args_list(dry_run = TRUE))
   expect_s3_class(call, "epidata_call")
-  expect_match(call$request$url, "pcr_target") # explicit keys forwarded
+  expect_match(call$request$url, "pcr_target") # explicit ... keys forwarded
   expect_match(call$request$url, "report_time_query=%3C2024-05-21") # capped, "<" -> %3C
 
   # remaining cases share one mocked schema (keys: report_time/geo_value/reference_time)
