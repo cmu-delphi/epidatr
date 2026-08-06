@@ -1232,6 +1232,11 @@ epidata_meta <- function(source, fetch_args = fetch_args_list()) {
 #'   Internally maps to the `version_query` API parameter.
 #' @param issues `r lifecycle::badge("deprecated")` Use `report_time` instead.
 #' @param time_values `r lifecycle::badge("deprecated")` Use `reference_time` instead.
+#' @param ... Named filters on extra key columns beyond `geo_value`, such as
+#'   `pcr_target = "sars-cov-2"` or `sample_index = c("a", "b")`. Each key
+#'   accepts one or more values (matched as OR) and is sent server-side via the
+#'   `extra_keys` API parameter to shrink the download. Passing more than 10
+#'   values for a key warns. Unlike
 #' @return [`tibble::tibble`]
 #'
 #' @section Data Versioning:
@@ -1268,7 +1273,7 @@ epidata_snapshot <- function(
     )
   }
 
-  rlang::check_dots_empty()
+  extra_keys <- .serialize_key_filters(rlang::list2(...))
 
   if (lifecycle::is_present(as_of)) {
     lifecycle::deprecate_warn(
@@ -1311,7 +1316,8 @@ epidata_snapshot <- function(
       signal = paste(signals, collapse = ","),
       geo_type = geo_type,
       fill_method = fill_method,
-      snapshot_date = snapshot_date
+      snapshot_date = snapshot_date,
+      extra_keys = extra_keys
     ),
     meta = list(
       create_epidata_field_info("signal", "text"),
@@ -1359,7 +1365,7 @@ epidata_archive <- function(
     )
   }
 
-  rlang::check_dots_empty()
+  extra_keys <- .serialize_key_filters(rlang::list2(...))
 
   assert_character_param("source", source, len = 1)
   assert_character_param("signals", signals)
@@ -1400,7 +1406,8 @@ epidata_archive <- function(
       signal = paste(signals, collapse = ","),
       geo_type = geo_type,
       fill_method = fill_method,
-      version_query = version_query
+      version_query = version_query,
+      extra_keys = extra_keys
     ),
     meta = list(
       create_epidata_field_info("signal", "text"),
@@ -1460,9 +1467,13 @@ epidata_archive <- function(
 #'   to retrieve. Base-pull mode only (when `source` is a string).
 #' @param issues `r lifecycle::badge("deprecated")` Use `report_time` instead.
 #' @param time_values `r lifecycle::badge("deprecated")` Use `reference_time` instead.
-#' @param filtered_keys A named list or character vector of filters to apply to the auxiliary key columns,
-#'   such as `list(pcr_target = "sars-cov-2")`. Each key takes a single value. In
-#'   connected mode, use it to keep the aux pull small enough to download.
+#' @param ... Named filters on the auxiliary key columns, such as
+#'   `pcr_target = "sars-cov-2"` or `geo_value = c("ca", "ny")`. Each key accepts
+#'   one or more values (matched as OR); they are serialized as repeated
+#'   `key:value` terms server-side to keep the aux pull small. Passing more than
+#'   10 values for a key warns, since the request URL may get too long. In
+#'   merge mode, when no filters are given, they are inferred from the base:
+#'   each key it narrows to at most 10 distinct values is filtered to those.
 #' @param columns A character vector of columns to return. By default, all columns are returned.
 #' @inheritParams .epidatr_shared_params
 #' @return A [`tibble::tibble`].
@@ -1482,11 +1493,10 @@ epidata_aux.default <- function(
   time_values = lifecycle::deprecated(),
   report_time = "*",
   issues = lifecycle::deprecated(),
-  filtered_keys = NULL,
   columns = NULL,
   fetch_args = fetch_args_list()
 ) {
-  rlang::check_dots_empty()
+  key_filters <- rlang::list2(...)
   assert_character_param("source", source, len = 1)
 
   if (lifecycle::is_present(time_values)) {
@@ -1514,24 +1524,7 @@ epidata_aux.default <- function(
 
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
   report_time_query <- validate_version_query(report_time)
-  if (!is.null(filtered_keys)) {
-    filtered_keys <- if (!is.null(names(filtered_keys))) {
-      # One value per key (documented contract). `unlist()` would strip class,
-      # so a typed value (e.g. a Date inferred from the base) must go through
-      # `as.character` to serialize as "2024-01-01", not its integer day-count.
-      n <- vapply(filtered_keys, length, integer(1))
-      if (any(n != 1L)) {
-        cli::cli_abort(
-          "Each `filtered_keys` entry must have a single value; \\
-           {.field {names(filtered_keys)[n != 1L]}} {?has/have} more.",
-          class = "epidatr__epidata__multivalue_filtered_key"
-        )
-      }
-      paste0(names(filtered_keys), ":", vapply(filtered_keys, as.character, character(1)), collapse = ",")
-    } else {
-      paste(filtered_keys, collapse = ",")
-    }
-  }
+  filtered_keys <- .serialize_key_filters(key_filters)
   if (!is.null(columns)) columns <- paste(columns, collapse = ",")
 
   # Value columns come through as character,
@@ -1568,11 +1561,16 @@ epidata_aux.default <- function(
 epidata_aux.data.frame <- function(
   source, # a snapshot/archive tibble here
   ...,
-  filtered_keys = NULL,
   columns = NULL,
   fetch_args = fetch_args_list()
 ) {
-  rlang::check_dots_empty()
+  key_filters <- rlang::list2(...)
+  if (length(key_filters) && !rlang::is_named(key_filters)) {
+    cli::cli_abort(
+      "Every filter must be named, e.g. {.code pcr_target = \"sars-cov-2\"}.",
+      class = "epidatr__epidata__unnamed_filter"
+    )
+  }
   base <- source
   src <- attr(base, "cast_source")
   if (is.null(src)) {
@@ -1614,15 +1612,22 @@ epidata_aux.data.frame <- function(
     }
   }
 
-  # With no explicit `filtered_keys`, infer them from the base.
-  if (is.null(filtered_keys) && !is.null(keys_schema)) {
-    single <- keys[vapply(keys, function(k) length(unique(base[[k]])) == 1L, logical(1))]
-    # for each aux key present in the base, if the base
-    # pins it to a single value, filter aux to that value.
-    if (length(single)) {
-      filtered_keys <- lapply(single, function(k) base[[k]][[1]])
-      names(filtered_keys) <- single
+  # Explicit `...` filters win. Otherwise infer them from the base.
+  filters <- if (length(key_filters)) {
+    unknown <- setdiff(names(key_filters), keys)
+    if (!is.null(keys_schema) && length(unknown)) {
+      cli::cli_warn(
+        "Filter{?s} {.field {unknown}} {?is/are} not {?an /}aux key column{?s} in the base."
+      )
     }
+    key_filters
+  } else if (!is.null(keys_schema)) {
+    # Pin each key the base narrows to a small set (<= cap)
+    uniq <- lapply(keys, function(k) unique(base[[k]]))
+    names(uniq) <- keys
+    uniq[lengths(uniq) <= 10L]
+  } else {
+    list()
   }
 
   # Never need aux versions newer than the newest base report_time
@@ -1632,12 +1637,13 @@ epidata_aux.data.frame <- function(
     "*"
   }
 
-  # Reuse the base-pull method to fetch aux.
-  aux <- epidata_aux(
+  # Reuse the base-pull method to fetch aux
+  aux <- rlang::inject(epidata_aux(
     src,
-    report_time = report_cut, filtered_keys = filtered_keys,
-    columns = columns, fetch_args = fetch_args
-  )
+    report_time = report_cut,
+    columns = columns, fetch_args = fetch_args,
+    !!!filters
+  ))
   if (!inherits(aux, "data.frame")) {
     return(aux) # dry run: surface the aux call
   }
@@ -1690,6 +1696,7 @@ epidata <- function(
       source = source, signals = signals, geo_type = geo_type,
       geo_values = geo_values, reference_time = reference_time,
       time_values = time_values,
+      ...,
       fill_method = fill_method,
       report_time = if (!is.null(report_time)) report_time else "*",
       issues = issues,
@@ -1700,6 +1707,7 @@ epidata <- function(
       source = source, signals = signals, geo_type = geo_type,
       geo_values = geo_values, reference_time = reference_time,
       time_values = time_values,
+      ...,
       fill_method = fill_method,
       snapshot_date = snapshot_date,
       as_of = as_of,
