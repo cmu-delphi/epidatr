@@ -122,7 +122,7 @@ see <code><a href="../articles/signal-discovery.html">vignette("signal-discovery
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">pub_covidcast_meta</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,964 × 15</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,970 × 15</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    data_source         signal time_type geo_type min_time max_time num_locations</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> beta_google_sympto… s01_r… day       county   20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029          <span style="text-decoration: underline;">2</span>718</span>
@@ -135,7 +135,7 @@ see <code><a href="../articles/signal-discovery.html">vignette("signal-discovery
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> beta_google_sympto… s01_s… day       msa      20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029           380</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> beta_google_sympto… s02_r… day       county   20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029          <span style="text-decoration: underline;">2</span>718</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> beta_google_sympto… s02_r… day       state    20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029            51</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,954 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,960 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 8 more variables: min_value &lt;dbl&gt;, max_value &lt;dbl&gt;, mean_value &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   stdev_value &lt;dbl&gt;, last_update &lt;dttm&gt;, max_issue &lt;dbl&gt;, min_lag &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   max_lag &lt;dbl&gt;</span></span>
@@ -185,7 +185,7 @@ see <code><a href="../articles/signal-discovery.html">vignette("signal-discovery
 <span class="r-in"><span><span class="fu">pub_covidcast_meta</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 622 × 15</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 624 × 15</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    data_source         signal time_type geo_type min_time max_time num_locations</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> beta_google_sympto… s01_r… day       state    20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029            51</span>
@@ -198,7 +198,7 @@ see <code><a href="../articles/signal-discovery.html">vignette("signal-discovery
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> beta_google_sympto… s04_s… day       state    20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029            51</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> beta_google_sympto… s05_r… day       state    20<span style="text-decoration: underline;">250</span>919 20<span style="text-decoration: underline;">251</span>029            51</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> beta_google_sympto… s05_s… day       state    20<span style="text-decoration: underline;">250</span>925 20<span style="text-decoration: underline;">251</span>029            51</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 612 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 614 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 8 more variables: min_value &lt;dbl&gt;, max_value &lt;dbl&gt;, mean_value &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   stdev_value &lt;dbl&gt;, last_update &lt;dttm&gt;, max_issue &lt;dbl&gt;, min_lag &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   max_lag &lt;dbl&gt;</span></span>

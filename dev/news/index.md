@@ -4,6 +4,19 @@
 
 ### Changes
 
+- Added
+  [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md)
+  to fetch V5-API auxiliary data, either directly by source or by
+  merging it onto
+  [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)/[`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+  output via a version-aware left join. When no key filters are
+  supplied, it infers them from the base to keep the pull small.
+- [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md),
+  [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+  and
+  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+  now accept per-key filters as named `...` arguments. Each key takes
+  one or more values, sent server-side to shrink the download.
 - Improve documentation, including descriptions for
   [`save_api_key()`](https://cmu-delphi.github.io/epidatr/dev/reference/get_api_key.md)
   and endpoint parameters, and standardize parameter information
@@ -43,6 +56,8 @@
   deprecations.
 
 ## epidatr 1.2.4
+
+CRAN release: 2026-06-02
 
 ### Patches
 

@@ -8,7 +8,9 @@ available issues.
 epidata is a wrapper that routes to one of the above based
 on which versioning argument is supplied.
 
-"><meta property="og:description" content="
+
+For a source's signals, geo types, and extra key columns, see its API docs,
+e.g. NWSS: https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html."><meta property="og:description" content="
 
 epidata_snapshot fetches a snapshot of signals as they appeared at a
 specific date (or the latest available if snapshot_date is omitted).
@@ -17,7 +19,9 @@ available issues.
 epidata is a wrapper that routes to one of the above based
 on which versioning argument is supplied.
 
-"><meta name="robots" content="noindex"></head><body>
+
+For a source's signals, geo types, and extra key columns, see its API docs,
+e.g. NWSS: https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html."><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -66,7 +70,9 @@ specific date (or the latest available if <code>snapshot_date</code> is omitted)
 available issues.</p></li>
 <li><p><code>epidata</code> is a wrapper that routes to one of the above based
 on which versioning argument is supplied.</p></li>
-</ul></div>
+</ul><p>For a source's signals, geo types, and extra key columns, see its API docs,
+e.g. NWSS: <a href="https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html" class="external-link">https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html</a>.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
@@ -152,7 +158,11 @@ Defaults to all (<code>"*"</code>). Filtered locally after the API call.</p></dd
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>not used for values, forces later arguments to bind by name</p></dd>
+<dd><p>Named filters on extra key columns beyond <code>geo_value</code>, such as
+<code>pcr_target = "sars-cov-2"</code> or <code>sample_index = c("a", "b")</code>. Each key
+accepts one or more values (matched as OR) and is sent server-side via the
+<code>extra_keys</code> API parameter to shrink the download. Passing more than 10
+values for a key warns. Unlike</p></dd>
 
 
 <dt id="arg-fill-method">fill_method<a class="anchor" aria-label="anchor" href="#arg-fill-method"></a></dt>

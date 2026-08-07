@@ -1,12 +1,12 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   epidatr: epidatr.html
   signal-discovery: signal-discovery.html
   v5-api-demo: v5-api-demo.html
   versioned-data: versioned-data.html
-last_built: 2026-06-02T15:59Z
+last_built: 2026-08-07T14:40Z
 urls:
   reference: https://cmu-delphi.github.io/epidatr/reference
   article: https://cmu-delphi.github.io/epidatr/articles

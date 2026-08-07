@@ -380,6 +380,7 @@ avail_endpoints()
 | Endpoint | Description |
 |:---|:---|
 | cast_api_queries() | cast-API snapshot and archive queries |
+| epidata_aux() | Fetch V5 auxiliary data |
 | epidata_meta() | Get cast-API source metadata |
 | pub_covid_hosp_facility() | COVID hospitalizations by facility |
 | pub_covid_hosp_facility_lookup() | Helper for finding COVID hospitalization facilities |

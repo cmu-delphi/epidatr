@@ -23,6 +23,8 @@ Query Delphi Epidata endpoints
   [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
   [`epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
   : cast-API snapshot and archive queries
+- [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md)
+  : Fetch V5 auxiliary data
 - [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)
   : Get cast-API source metadata
 - [`pub_covid_hosp_facility()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility.md)

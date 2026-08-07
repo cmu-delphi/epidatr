@@ -144,122 +144,126 @@ non-US locations:</p>
 <td align="left">cast-API snapshot and archive queries</td>
 </tr>
 <tr class="even">
+<td align="left">epidata_aux()</td>
+<td align="left">Fetch V5 auxiliary data</td>
+</tr>
+<tr class="odd">
 <td align="left">epidata_meta()</td>
 <td align="left">Get cast-API source metadata</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_covid_hosp_facility()</td>
 <td align="left">COVID hospitalizations by facility</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_covid_hosp_facility_lookup()</td>
 <td align="left">Helper for finding COVID hospitalization
 facilities</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_covid_hosp_state_timeseries()</td>
 <td align="left">COVID hospitalizations by state</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_covidcast()</td>
 <td align="left">Various COVID and flu signals via the COVIDcast
 endpoint</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_covidcast_meta()</td>
 <td align="left">Metadata for the COVIDcast endpoint</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_delphi()</td>
 <td align="left">Delphi’s ILINet outpatient doctor visits forecasts</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_dengue_nowcast()</td>
 <td align="left">Delphi’s PAHO dengue nowcasts (North and South
 America)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_ecdc_ili()</td>
 <td align="left">ECDC ILI incidence (Europe)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_flusurv()</td>
 <td align="left">CDC FluSurv flu hospitalizations</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_fluview()</td>
 <td align="left">CDC FluView ILINet outpatient doctor visits</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_fluview_clinical()</td>
 <td align="left">CDC FluView flu tests from clinical labs</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_fluview_meta()</td>
 <td align="left">Metadata for the FluView endpoint</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_gft()</td>
 <td align="left">Google Flu Trends flu search volume</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_kcdc_ili()</td>
 <td align="left">KCDC ILI incidence (Korea)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_meta()</td>
 <td align="left">Metadata for the Delphi Epidata API</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_nidss_dengue()</td>
 <td align="left">NIDSS dengue cases (Taiwan)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_nidss_flu()</td>
 <td align="left">NIDSS flu doctor visits (Taiwan)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_nowcast()</td>
 <td align="left">Delphi’s ILI Nearby nowcasts</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_paho_dengue()</td>
 <td align="left">PAHO dengue data (North and South America)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_wiki()</td>
 <td align="left">Wikipedia webpage counts by article</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pvt_cdc()</td>
 <td align="left">CDC total and by topic webpage visits</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pvt_dengue_sensors()</td>
 <td align="left">PAHO dengue digital surveillance sensors (North and
 South America)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pvt_ght()</td>
 <td align="left">Google Health Trends health topics search volume</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pvt_meta_norostat()</td>
 <td align="left">Metadata for the NoroSTAT endpoint</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pvt_norostat()</td>
 <td align="left">CDC NoroSTAT norovirus outbreaks</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pvt_quidel()</td>
 <td align="left">Quidel COVID-19 and influenza testing data</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pvt_sensors()</td>
 <td align="left">Influenza and dengue digital surveillance sensors</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pvt_twitter()</td>
 <td align="left">HealthTweets total and influenza-related tweets</td>
 </tr>
@@ -671,7 +675,7 @@ time and geo fields:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
 <span><span class="co">#&gt;   latest_update latest_issue table_rows</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2026-05-29    2026-05-17      2<span style="text-decoration: underline;">765</span>829</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2026-07-31    2026-07-19      2<span style="text-decoration: underline;">823</span>627</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="google-flu-trends-data">Google Flu Trends data<a class="anchor" aria-label="anchor" href="#google-flu-trends-data"></a>

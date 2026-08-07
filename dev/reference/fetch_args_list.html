@@ -57,6 +57,7 @@ makes calls to the Epidata API.</p>
 <span>  fields <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  disable_date_parsing <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  disable_data_frame_parsing <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  disable_missing_meta_warning <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  return_empty <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  timeout_seconds <span class="op">=</span> <span class="fl">15</span> <span class="op">*</span> <span class="fl">60</span>,</span>
 <span>  base_url <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -91,6 +92,13 @@ except the direction field</p></dd>
 <dd><p>disable automatic conversion to data frame;
 this is only supported by endpoints that only support the 'classic' format
 (non-tabular)</p></dd>
+
+
+<dt id="arg-disable-missing-meta-warning">disable_missing_meta_warning<a class="anchor" aria-label="anchor" href="#arg-disable-missing-meta-warning"></a></dt>
+<dd><p>if <code>TRUE</code>, suppress the warning emitted
+when the response contains columns not declared as expected epidata fields.
+Useful for endpoints/signals that intentionally return extra, untyped
+columns.</p></dd>
 
 
 <dt id="arg-return-empty">return_empty<a class="anchor" aria-label="anchor" href="#arg-return-empty"></a></dt>

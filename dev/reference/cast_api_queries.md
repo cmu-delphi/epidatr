@@ -9,6 +9,10 @@
 - `epidata` is a wrapper that routes to one of the above based on which
   versioning argument is supplied.
 
+For a source's signals, geo types, and extra key columns, see its API
+docs, e.g. NWSS:
+<https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html>.
+
 ## Usage
 
 ``` r
@@ -99,7 +103,11 @@ epidata(
 
 - ...:
 
-  not used for values, forces later arguments to bind by name
+  Named filters on extra key columns beyond `geo_value`, such as
+  `pcr_target = "sars-cov-2"` or `sample_index = c("a", "b")`. Each key
+  accepts one or more values (matched as OR) and is sent server-side via
+  the `extra_keys` API parameter to shrink the download. Passing more
+  than 10 values for a key warns. Unlike
 
 - fill_method:
 
