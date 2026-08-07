@@ -4,12 +4,12 @@
 \alias{.serialize_key_filters}
 \title{Serialize named key filters into the cast-API \code{key:value} term string.}
 \usage{
-.serialize_key_filters(key_filters)
+.serialize_key_filters(key_filters, max_vals = 10L)
 }
 \description{
 The backend takes multiple filters per key as repeated \code{key:value} terms in a
 single query param, so \code{list(pcr_target = c("a", "b"), geo_value = "ca")}
 becomes \code{"pcr_target:a,pcr_target:b,geo_value:ca"}. Returns \code{NULL} for no
-filters (dropped from the URL by \code{format_params_for_api()}).
+filters.
 }
 \keyword{internal}
