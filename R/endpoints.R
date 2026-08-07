@@ -1206,6 +1206,9 @@ epidata_meta <- function(source, fetch_args = fetch_args_list()) {
 #' - `epidata` is a wrapper that routes to one of the above based
 #'   on which versioning argument is supplied.
 #'
+#' For a source's signals, geo types, and extra key columns, see its API docs,
+#' e.g. NWSS: <https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html>.
+#'
 #' @inheritParams pub_covidcast
 #' @param source string. The data source to query (e.g., `"nssp"`, `"nhsn"`).
 #'   Use [epidata_meta()] to discover available sources.
@@ -1456,6 +1459,10 @@ epidata_archive <- function(
 #' you can pass the output of [epidata_snapshot()] or [epidata_archive()]. In this
 #' case, `epidata_aux` automatically retrieves the source from the object, fetches
 #' the matching auxiliary data, and performs a version-aware left join onto the base data.
+#'
+#' For the auxiliary key columns and their allowed values, see the source's API
+#' docs, e.g. NWSS:
+#' <https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html>.
 #'
 #' @param source A source string to retrieve auxiliary data directly, or a tibble returned by
 #'   [epidata_snapshot()] or [epidata_archive()] to merge the data onto (its

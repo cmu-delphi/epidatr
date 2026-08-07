@@ -60,6 +60,10 @@ You can pass a source string to fetch the auxiliary data directly. Alternatively
 you can pass the output of \code{\link[=epidata_snapshot]{epidata_snapshot()}} or \code{\link[=epidata_archive]{epidata_archive()}}. In this
 case, \code{epidata_aux} automatically retrieves the source from the object, fetches
 the matching auxiliary data, and performs a version-aware left join onto the base data.
+
+For the auxiliary key columns and their allowed values, see the source's API
+docs, e.g. NWSS:
+\url{https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html}.
 }
 \seealso{
 \code{\link[=epidata_snapshot]{epidata_snapshot()}}, \code{\link[=epidata_archive]{epidata_archive()}}, \code{\link[=epidata_meta]{epidata_meta()}}

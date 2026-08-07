@@ -112,6 +112,9 @@ available issues.
 \item \code{epidata} is a wrapper that routes to one of the above based
 on which versioning argument is supplied.
 }
+
+For a source's signals, geo types, and extra key columns, see its API docs,
+e.g. NWSS: \url{https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html}.
 }
 \section{Data Versioning}{
 
