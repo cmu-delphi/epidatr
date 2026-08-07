@@ -1206,6 +1206,9 @@ epidata_meta <- function(source, fetch_args = fetch_args_list()) {
 #' - `epidata` is a wrapper that routes to one of the above based
 #'   on which versioning argument is supplied.
 #'
+#' For a source's signals, geo types, and extra key columns, see its API docs,
+#' e.g. NWSS: <https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html>.
+#'
 #' @inheritParams pub_covidcast
 #' @param source string. The data source to query (e.g., `"nssp"`, `"nhsn"`).
 #'   Use [epidata_meta()] to discover available sources.
@@ -1232,6 +1235,11 @@ epidata_meta <- function(source, fetch_args = fetch_args_list()) {
 #'   Internally maps to the `version_query` API parameter.
 #' @param issues `r lifecycle::badge("deprecated")` Use `report_time` instead.
 #' @param time_values `r lifecycle::badge("deprecated")` Use `reference_time` instead.
+#' @param ... Named filters on extra key columns beyond `geo_value`, such as
+#'   `pcr_target = "sars-cov-2"` or `sample_index = c("a", "b")`. Each key
+#'   accepts one or more values (matched as OR) and is sent server-side via the
+#'   `extra_keys` API parameter to shrink the download. Passing more than 10
+#'   values for a key warns. Unlike
 #' @return [`tibble::tibble`]
 #'
 #' @section Data Versioning:
@@ -1268,7 +1276,7 @@ epidata_snapshot <- function(
     )
   }
 
-  rlang::check_dots_empty()
+  extra_keys <- .serialize_key_filters(rlang::list2(...))
 
   if (lifecycle::is_present(as_of)) {
     lifecycle::deprecate_warn(
@@ -1304,14 +1312,15 @@ epidata_snapshot <- function(
 
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
 
-  create_epidata_call(
+  res <- create_epidata_call(
     endpoint = "snapshot/",
     params = list(
       source = source,
       signal = paste(signals, collapse = ","),
       geo_type = geo_type,
       fill_method = fill_method,
-      snapshot_date = snapshot_date
+      snapshot_date = snapshot_date,
+      extra_keys = extra_keys
     ),
     meta = list(
       create_epidata_field_info("signal", "text"),
@@ -1332,6 +1341,9 @@ epidata_snapshot <- function(
   ) %>%
     fetch(fetch_args = fetch_args) %>%
     .cast_filter(geo_values, reference_time, parsed_reference_times)
+  attr(res, "cast_source") <- source # lets epidata_aux() recover the source
+  attr(res, "cast_kind") <- "snapshot" # single-version view -> uniform aux merge
+  res
 }
 
 #' @rdname cast_api_queries
@@ -1356,7 +1368,7 @@ epidata_archive <- function(
     )
   }
 
-  rlang::check_dots_empty()
+  extra_keys <- .serialize_key_filters(rlang::list2(...))
 
   assert_character_param("source", source, len = 1)
   assert_character_param("signals", signals)
@@ -1390,14 +1402,15 @@ epidata_archive <- function(
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
   version_query <- validate_version_query(report_time)
 
-  create_epidata_call(
+  res <- create_epidata_call(
     endpoint = "archive/",
     params = list(
       source = source,
       signal = paste(signals, collapse = ","),
       geo_type = geo_type,
       fill_method = fill_method,
-      version_query = version_query
+      version_query = version_query,
+      extra_keys = extra_keys
     ),
     meta = list(
       create_epidata_field_info("signal", "text"),
@@ -1418,6 +1431,245 @@ epidata_archive <- function(
   ) %>%
     fetch(fetch_args = fetch_args) %>%
     .cast_filter(geo_values, reference_time, parsed_reference_times, report_time = report_time)
+  attr(res, "cast_source") <- source # lets epidata_aux() recover the source
+  attr(res, "cast_kind") <- "archive" # per-row revision history -> as-of aux merge
+  res
+}
+
+#' Fetch the declared aux key columns for a source from the cast-API
+#' `metadata/aux_schema/` endpoint.
+#' @keywords internal
+.aux_key_columns <- function(source, fetch_args) {
+  schema <- create_epidata_call(
+    endpoint = "metadata/aux_schema/",
+    params = list(source = source),
+    api_version = "cast",
+    response_format = "json"
+  ) %>%
+    request_epidata(fetch_args = fetch_args)
+  schema[[source]]$key_columns
+}
+
+#' Fetch V5 auxiliary data
+#'
+#' @description
+#' Fetch auxiliary data associated with a cast signal.
+#'
+#' You can pass a source string to fetch the auxiliary data directly. Alternatively,
+#' you can pass the output of [epidata_snapshot()] or [epidata_archive()]. In this
+#' case, `epidata_aux` automatically retrieves the source from the object, fetches
+#' the matching auxiliary data, and performs a version-aware left join onto the base data.
+#'
+#' For the auxiliary key columns and their allowed values, see the source's API
+#' docs, e.g. NWSS:
+#' <https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html>.
+#'
+#' @param source A source string to retrieve auxiliary data directly, or a tibble returned by
+#'   [epidata_snapshot()] or [epidata_archive()] to merge the data onto (its
+#'   source is recovered automatically).
+#' @param reference_time [`timeset`]. Reference time to return (filters on the
+#'   `reference_time` column). Supports individual dates or [`epirange()`].
+#'   Base-pull mode only (when `source` is a string).
+#' @param report_time A date, string, or [epirange()] specifying the version of the auxiliary data
+#'   to retrieve. Base-pull mode only (when `source` is a string).
+#' @param issues `r lifecycle::badge("deprecated")` Use `report_time` instead.
+#' @param time_values `r lifecycle::badge("deprecated")` Use `reference_time` instead.
+#' @param ... Named filters on the auxiliary key columns, such as
+#'   `pcr_target = "sars-cov-2"` or `geo_value = c("ca", "ny")`. Each key accepts
+#'   one or more values (matched as OR); they are serialized as repeated
+#'   `key:value` terms server-side to keep the aux pull small. Passing more than
+#'   10 values for a key warns, since the request URL may get too long. In
+#'   merge mode, when no filters are given, they are inferred from the base:
+#'   each key it narrows to at most 10 distinct values is filtered to those.
+#' @param columns A character vector of columns to return. By default, all columns are returned.
+#' @inheritParams .epidatr_shared_params
+#' @return A [`tibble::tibble`].
+#' @seealso [epidata_snapshot()], [epidata_archive()], [epidata_meta()]
+#' @keywords endpoint
+#' @export
+epidata_aux <- function(source, ...) {
+  UseMethod("epidata_aux")
+}
+
+#' @rdname epidata_aux
+#' @export
+epidata_aux.default <- function(
+  source,
+  ...,
+  reference_time = "*",
+  time_values = lifecycle::deprecated(),
+  report_time = "*",
+  issues = lifecycle::deprecated(),
+  columns = NULL,
+  fetch_args = fetch_args_list()
+) {
+  key_filters <- rlang::list2(...)
+  assert_character_param("source", source, len = 1)
+
+  if (lifecycle::is_present(time_values)) {
+    lifecycle::deprecate_warn(
+      "1.3.0",
+      "epidata_aux(time_values)",
+      details = paste(
+        "The `time_values` argument is deprecated and will be removed in a future version.",
+        "Use `reference_time` instead."
+      )
+    )
+    reference_time <- time_values
+  }
+  if (lifecycle::is_present(issues)) {
+    lifecycle::deprecate_warn(
+      "1.3.0",
+      "epidata_aux(issues)",
+      details = paste(
+        "The `issues` argument is deprecated and will be removed in a future version.",
+        "Use `report_time` instead."
+      )
+    )
+    report_time <- issues
+  }
+
+  parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
+  report_time_query <- validate_version_query(report_time)
+  filtered_keys <- .serialize_key_filters(key_filters)
+  if (!is.null(columns)) columns <- paste(columns, collapse = ",")
+
+  # Value columns come through as character,
+  # so silence the "unspecified fields" warning.
+  fetch_args$disable_missing_meta_warning <- TRUE
+
+  create_epidata_call(
+    endpoint = "aux_data/",
+    params = list(
+      source = source,
+      report_time_query = report_time_query,
+      filtered_keys = filtered_keys,
+      columns = columns
+    ),
+    # Only the aux key columns are typed (nwss's schema).
+    # Extend for new aux sources whose keys differ.
+    meta = list(
+      create_epidata_field_info("report_time", "date"),
+      create_epidata_field_info("geo_value", "text"),
+      create_epidata_field_info("reference_time", "date"),
+      create_epidata_field_info("nwss_source", "text"),
+      create_epidata_field_info("sample_index", "text"),
+      create_epidata_field_info("pcr_target", "text")
+    ),
+    api_version = "cast",
+    response_format = "csv"
+  ) %>%
+    fetch(fetch_args = fetch_args) %>%
+    .cast_filter("*", reference_time, parsed_reference_times, report_time = report_time)
+}
+
+#' @rdname epidata_aux
+#' @export
+epidata_aux.data.frame <- function(
+  source, # a snapshot/archive tibble here
+  ...,
+  columns = NULL,
+  fetch_args = fetch_args_list()
+) {
+  key_filters <- rlang::list2(...)
+  if (length(key_filters) && !rlang::is_named(key_filters)) {
+    cli::cli_abort(
+      "Every filter must be named, e.g. {.code pcr_target = \"sars-cov-2\"}.",
+      class = "epidatr__epidata__unnamed_filter"
+    )
+  }
+  base <- source
+  src <- attr(base, "cast_source")
+  if (is.null(src)) {
+    cli::cli_abort(
+      c(
+        "`source` is a data frame but not a tagged cast-API output",
+        ">" = "Pass the result of `epidata_snapshot()` or `epidata_archive()`."
+      ),
+      class = "epidatr__epidata__untagged_base"
+    )
+  }
+  if (nrow(base) == 0L) {
+    return(base)
+  }
+
+  # Aux key columns from the schema endpoint
+  keys_schema <- if (!fetch_args$dry_run) .aux_key_columns(src, fetch_args) else NULL
+
+  # Aux key columns the base actually carries. Empty on dry_run.
+  ver <- "report_time"
+  keys <- setdiff(intersect(keys_schema, names(base)), ver)
+
+  # Validate before fetching, so a doomed merge never triggers a download.
+  # (skipped on dry_run)
+  if (!is.null(keys_schema)) {
+    if (length(keys) == 0) {
+      cli::cli_abort(
+        "No shared key columns between base data and aux data. It cannot be merged.",
+        class = "epidatr__epidata__no_merge_keys"
+      )
+    }
+
+    dropped <- if (!is.null(columns)) setdiff(keys, columns) else character()
+    if (length(dropped)) {
+      cli::cli_abort(
+        "`columns` excludes key column{?s} {.field {dropped}} needed to merge.",
+        class = "epidatr__epidata__missing_aux_keys"
+      )
+    }
+  }
+
+  # Explicit `...` filters win. Otherwise infer them from the base.
+  filters <- if (length(key_filters)) {
+    unknown <- setdiff(names(key_filters), keys)
+    if (!is.null(keys_schema) && length(unknown)) {
+      cli::cli_warn(
+        "Filter{?s} {.field {unknown}} {?is/are} not {?an /}aux key column{?s} in the base."
+      )
+    }
+    key_filters
+  } else if (!is.null(keys_schema)) {
+    # Pin each key the base narrows to a small set (<= cap)
+    uniq <- lapply(keys, function(k) unique(base[[k]]))
+    names(uniq) <- keys
+    uniq[lengths(uniq) <= 10L]
+  } else {
+    list()
+  }
+
+  # Never need aux versions newer than the newest base report_time
+  report_cut <- if (ver %in% names(base) && !all(is.na(base[[ver]]))) {
+    paste0("<", format(max(base[[ver]], na.rm = TRUE) + 1, "%Y-%m-%d"))
+  } else {
+    "*"
+  }
+
+  # Reuse the base-pull method to fetch aux
+  aux <- rlang::inject(epidata_aux(
+    src,
+    report_time = report_cut,
+    columns = columns, fetch_args = fetch_args,
+    !!!filters
+  ))
+  if (!inherits(aux, "data.frame")) {
+    return(aux) # dry run: surface the aux call
+  }
+
+  # Match each base dataset row to the aux version current at its report_time
+  # with keys equal and aux report_time at or before the base's, keeping the newest
+  match_time <- if (identical(attr(base, "cast_kind"), "snapshot")) max(base[[ver]]) else base[[ver]]
+  m <- vctrs::vec_locate_matches(
+    needles = vctrs::vec_cbind(base[keys], .t = match_time),
+    haystack = vctrs::vec_cbind(aux[keys], .t = aux[[ver]]),
+    condition = c(rep("==", length(keys)), ">="),
+    filter = c(rep("none", length(keys)), "max"),
+    multiple = "any"
+  )
+  idx <- m$haystack[order(m$needles)]
+
+  value_cols <- setdiff(names(aux), c(names(base), ver))
+  base[value_cols] <- vctrs::vec_slice(aux[value_cols], idx)
+  base
 }
 
 #' @rdname cast_api_queries
@@ -1451,6 +1703,7 @@ epidata <- function(
       source = source, signals = signals, geo_type = geo_type,
       geo_values = geo_values, reference_time = reference_time,
       time_values = time_values,
+      ...,
       fill_method = fill_method,
       report_time = if (!is.null(report_time)) report_time else "*",
       issues = issues,
@@ -1461,6 +1714,7 @@ epidata <- function(
       source = source, signals = signals, geo_type = geo_type,
       geo_values = geo_values, reference_time = reference_time,
       time_values = time_values,
+      ...,
       fill_method = fill_method,
       snapshot_date = snapshot_date,
       as_of = as_of,

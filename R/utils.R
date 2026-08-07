@@ -79,6 +79,41 @@ filter_by_timeset <- function(df, column, timeset) {
   df[mask, ]
 }
 
+#' Serialize named key filters into the cast-API `key:value` term string.
+#'
+#' The backend takes multiple filters per key as repeated `key:value` terms in a
+#' single query param, so `list(pcr_target = c("a", "b"), geo_value = "ca")`
+#' becomes `"pcr_target:a,pcr_target:b,geo_value:ca"`. Returns `NULL` for no
+#' filters.
+#' @keywords internal
+.serialize_key_filters <- function(key_filters, max_vals = 10L) {
+  if (!length(key_filters)) {
+    return(NULL)
+  }
+  if (!rlang::is_named(key_filters)) {
+    cli::cli_abort(
+      "Every filter must be named, e.g. {.code pcr_target = \"sars-cov-2\"}.",
+      class = "epidatr__epidata__unnamed_filter"
+    )
+  }
+  over <- vapply(key_filters, length, integer(1)) > max_vals
+  if (any(over)) {
+    cli::cli_warn(
+      "{.field {names(key_filters)[over]}} {?has/have} more than {max_vals} \\
+       values; the request URL may be too long.",
+      class = "epidatr__epidata__many_filtered_values"
+    )
+  }
+  # One `key:value` term per value. `as.character` so a typed value (e.g. a Date)
+  # serializes as "2024-01-01", not its integer day-count.
+  terms <- unlist(mapply(
+    function(k, vals) paste0(k, ":", as.character(vals)),
+    names(key_filters), key_filters,
+    SIMPLIFY = FALSE, USE.NAMES = FALSE
+  ))
+  paste(terms, collapse = ",")
+}
+
 #' @keywords internal
 .cast_filter <- function(res, geo_values, reference_time, parsed_reference_times, report_time = NULL) {
   if (!inherits(res, "data.frame")) {
