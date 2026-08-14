@@ -1179,15 +1179,16 @@ pub_covidcast <- function(
 #' including `report_time` ranges, `reference_time` ranges, and lists of
 #' available signals and geo types.
 #'
-#' @param source string. The data source to query.
+#' @param source string. The data source to query. If `NULL` (default), returns
+#'   metadata for all available sources.
 #' @inheritParams .epidatr_shared_params
 #' @return list
 #' @seealso [epidata_snapshot()], [epidata_archive()], [epidata()], [epirange()]
 #' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
-epidata_meta <- function(source, fetch_args = fetch_args_list()) {
-  assert_character_param("source", source, len = 1, required = TRUE)
+epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
+  assert_character_param("source", source, len = 1, required = FALSE)
   create_epidata_call(
     endpoint = "metadata/",
     params = list(source = source),
