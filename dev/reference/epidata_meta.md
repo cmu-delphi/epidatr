@@ -7,14 +7,15 @@ available signals and geo types.
 ## Usage
 
 ``` r
-epidata_meta(source, fetch_args = fetch_args_list())
+epidata_meta(source = NULL, fetch_args = fetch_args_list())
 ```
 
 ## Arguments
 
 - source:
 
-  string. The data source to query.
+  string. The data source to query. If `NULL` (default), returns
+  metadata for all available sources.
 
 - fetch_args:
 

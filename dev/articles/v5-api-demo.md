@@ -191,10 +191,10 @@ head(pophive_data)
 #>   <chr>      <date>      <chr>    <chr>     <chr>       <date>         <chr>    
 #> 1 covid_pct… 2026-07-31  state    ak        source      2018-01-13     <1       
 #> 2 covid_pct… 2026-07-31  state    ak        source      2018-01-13     1-4      
-#> 3 covid_pct… 2026-07-31  state    ak        source      2018-01-13     18-49    
-#> 4 covid_pct… 2026-07-31  state    ak        source      2018-01-13     50-64    
-#> 5 covid_pct… 2026-07-31  state    ak        source      2018-01-13     5-17     
-#> 6 covid_pct… 2026-07-31  state    ak        source      2018-01-13     65+      
+#> 3 covid_pct… 2026-07-31  state    ak        source      2018-01-20     <1       
+#> 4 covid_pct… 2026-07-31  state    ak        source      2018-01-20     1-4      
+#> 5 covid_pct… 2026-07-31  state    ak        source      2018-01-20     5-17     
+#> 6 covid_pct… 2026-07-31  state    ak        source      2018-01-27     <1       
 #> # ℹ 1 more variable: value <dbl>
 
 # NWSS: Wastewater Surveillance
