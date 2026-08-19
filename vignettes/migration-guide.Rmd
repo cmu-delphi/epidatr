@@ -79,8 +79,9 @@ Some sources also carry extra columns in the new API, for example `age_group`
 
 The covidcast columns `stderr` and `sample_size` have no fixed replacement.
 The shared schema carries only `value`; a source that quantifies uncertainty
-adds its own columns, such as `ci_lower` and `ci_upper`. Use the metadata to
-see which value columns a source returns:
+adds its own columns, such as `ci_lower` and `ci_upper`. Use the metadata or 
+the [documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
+ to see which value columns a source returns:
 
 ```{r value-columns}
 meta_sleepcycle <- epidata_meta(source = "sleepcycle")
