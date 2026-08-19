@@ -114,7 +114,8 @@ pvt_cdc <- function(
       create_epidata_field_info("total", "int"),
       create_epidata_field_info("value", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' Helper for finding COVID hospitalization facilities
@@ -176,8 +177,19 @@ pub_covid_hosp_facility_lookup <- function(
     stop("one of `state`, `ccn`, `city`, `zip`, or `fips_code` is required")
   }
 
-  if (sum(!missing(state), !missing(ccn), !missing(city), !missing(zip), !missing(fips_code)) > 1) {
-    stop("only one of `state`, `ccn`, `city`, `zip`, or `fips_code` can be specified")
+  if (
+    sum(
+      !missing(state),
+      !missing(ccn),
+      !missing(city),
+      !missing(zip),
+      !missing(fips_code)
+    ) >
+      1
+  ) {
+    stop(
+      "only one of `state`, `ccn`, `city`, `zip`, or `fips_code` can be specified"
+    )
   }
 
   create_epidata_call(
@@ -201,7 +213,8 @@ pub_covid_hosp_facility_lookup <- function(
       create_epidata_field_info("fips_code", "text"),
       create_epidata_field_info("is_metro_micro", "int")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' COVID hospitalizations by facility
@@ -256,8 +269,15 @@ pub_covid_hosp_facility <- function(
   collection_weeks <- get_wildcard_equivalent_dates(collection_weeks, "day")
 
   assert_character_param("hospital_pks", hospital_pks)
-  collection_weeks <- validate_timeset_input("collection_weeks", collection_weeks)
-  publication_dates <- validate_timeset_input("publication_dates", publication_dates, required = FALSE)
+  collection_weeks <- validate_timeset_input(
+    "collection_weeks",
+    collection_weeks
+  )
+  publication_dates <- validate_timeset_input(
+    "publication_dates",
+    publication_dates,
+    required = FALSE
+  )
 
   # Confusingly, the endpoint expects `collection_weeks` to be in day format,
   # but correspond to epiweeks. Allow `collection_weeks` to be provided in
@@ -267,7 +287,10 @@ pub_covid_hosp_facility <- function(
        expects day format; dates will be converted to day format but may not
        correspond exactly to desired time range"
   )
-  if (test_class(collection_weeks, "EpiRange") && nchar(collection_weeks$from) == 6) {
+  if (
+    test_class(collection_weeks, "EpiRange") &&
+      nchar(collection_weeks$from) == 6
+  ) {
     cli::cli_warn(coercion_msg, class = "epidatr__epirange_week_coercion")
     collection_weeks <- reformat_epirange(collection_weeks, to_type = "day")
     # Single week date.
@@ -301,7 +324,10 @@ pub_covid_hosp_facility <- function(
       create_epidata_field_info("is_metro_micro", "bool"),
       create_epidata_field_info("total_beds_7_day_sum", "int"),
       create_epidata_field_info("all_adult_hospital_beds_7_day_sum", "int"),
-      create_epidata_field_info("all_adult_hospital_inpatient_beds_7_day_sum", "int"),
+      create_epidata_field_info(
+        "all_adult_hospital_inpatient_beds_7_day_sum",
+        "int"
+      ),
       create_epidata_field_info("inpatient_beds_used_7_day_sum", "int"),
       create_epidata_field_info(
         "all_adult_hospital_inpatient_bed_occupied_7_day_sum",
@@ -325,9 +351,15 @@ pub_covid_hosp_facility <- function(
       ),
       create_epidata_field_info("inpatient_beds_7_day_sum", "int"),
       create_epidata_field_info("total_icu_beds_7_day_sum", "int"),
-      create_epidata_field_info("total_staffed_adult_icu_beds_7_day_sum", "int"),
+      create_epidata_field_info(
+        "total_staffed_adult_icu_beds_7_day_sum",
+        "int"
+      ),
       create_epidata_field_info("icu_beds_used_7_day_sum", "int"),
-      create_epidata_field_info("staffed_adult_icu_bed_occupancy_7_day_sum", "int"),
+      create_epidata_field_info(
+        "staffed_adult_icu_bed_occupancy_7_day_sum",
+        "int"
+      ),
       create_epidata_field_info(
         "staffed_icu_adult_patients_confirmed_suspected_covid_7d_sum",
         "int"
@@ -340,14 +372,23 @@ pub_covid_hosp_facility <- function(
         "total_patients_hospitalized_confirmed_influenza_7_day_sum",
         "int"
       ),
-      create_epidata_field_info("icu_patients_confirmed_influenza_7_day_sum", "int"),
+      create_epidata_field_info(
+        "icu_patients_confirmed_influenza_7_day_sum",
+        "int"
+      ),
       create_epidata_field_info(
         "total_patients_hosp_confirmed_influenza_and_covid_7d_sum",
         "int"
       ),
       create_epidata_field_info("total_beds_7_day_coverage", "int"),
-      create_epidata_field_info("all_adult_hospital_beds_7_day_coverage", "int"),
-      create_epidata_field_info("all_adult_hospital_inpatient_beds_7_day_coverage", "int"),
+      create_epidata_field_info(
+        "all_adult_hospital_beds_7_day_coverage",
+        "int"
+      ),
+      create_epidata_field_info(
+        "all_adult_hospital_inpatient_beds_7_day_coverage",
+        "int"
+      ),
       create_epidata_field_info("inpatient_beds_used_7_day_coverage", "int"),
       create_epidata_field_info(
         "all_adult_hospital_inpatient_bed_occupied_7_day_coverage",
@@ -371,9 +412,15 @@ pub_covid_hosp_facility <- function(
       ),
       create_epidata_field_info("inpatient_beds_7_day_coverage", "int"),
       create_epidata_field_info("total_icu_beds_7_day_coverage", "int"),
-      create_epidata_field_info("total_staffed_adult_icu_beds_7_day_coverage", "int"),
+      create_epidata_field_info(
+        "total_staffed_adult_icu_beds_7_day_coverage",
+        "int"
+      ),
       create_epidata_field_info("icu_beds_used_7_day_coverage", "int"),
-      create_epidata_field_info("staffed_adult_icu_bed_occupancy_7_day_coverage", "int"),
+      create_epidata_field_info(
+        "staffed_adult_icu_bed_occupancy_7_day_coverage",
+        "int"
+      ),
       create_epidata_field_info(
         "staffed_icu_adult_patients_confirmed_suspected_covid_7d_cov",
         "int"
@@ -386,7 +433,10 @@ pub_covid_hosp_facility <- function(
         "total_patients_hospitalized_confirmed_influenza_7_day_coverage",
         "int"
       ),
-      create_epidata_field_info("icu_patients_confirmed_influenza_7_day_coverage", "int"),
+      create_epidata_field_info(
+        "icu_patients_confirmed_influenza_7_day_coverage",
+        "int"
+      ),
       create_epidata_field_info(
         "total_patients_hosp_confirmed_influenza_and_covid_7d_cov",
         "int"
@@ -435,7 +485,10 @@ pub_covid_hosp_facility <- function(
         "previous_day_admission_pediatric_covid_confirmed_7_day_sum",
         "int"
       ),
-      create_epidata_field_info("previous_day_covid_ed_visits_7_day_sum", "int"),
+      create_epidata_field_info(
+        "previous_day_covid_ed_visits_7_day_sum",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_suspected_7_day_sum",
         "int"
@@ -480,14 +533,20 @@ pub_covid_hosp_facility <- function(
         "previous_day_admission_pediatric_covid_suspected_7_day_sum",
         "int"
       ),
-      create_epidata_field_info("previous_day_total_ed_visits_7_day_sum", "int"),
+      create_epidata_field_info(
+        "previous_day_total_ed_visits_7_day_sum",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_influenza_confirmed_7_day_sum",
         "int"
       ),
       create_epidata_field_info("total_beds_7_day_avg", "float"),
       create_epidata_field_info("all_adult_hospital_beds_7_day_avg", "float"),
-      create_epidata_field_info("all_adult_hospital_inpatient_beds_7_day_avg", "float"),
+      create_epidata_field_info(
+        "all_adult_hospital_inpatient_beds_7_day_avg",
+        "float"
+      ),
       create_epidata_field_info("inpatient_beds_used_7_day_avg", "float"),
       create_epidata_field_info(
         "all_adult_hospital_inpatient_bed_occupied_7_day_avg",
@@ -511,9 +570,15 @@ pub_covid_hosp_facility <- function(
       ),
       create_epidata_field_info("inpatient_beds_7_day_avg", "float"),
       create_epidata_field_info("total_icu_beds_7_day_avg", "float"),
-      create_epidata_field_info("total_staffed_adult_icu_beds_7_day_avg", "float"),
+      create_epidata_field_info(
+        "total_staffed_adult_icu_beds_7_day_avg",
+        "float"
+      ),
       create_epidata_field_info("icu_beds_used_7_day_avg", "float"),
-      create_epidata_field_info("staffed_adult_icu_bed_occupancy_7_day_avg", "float"),
+      create_epidata_field_info(
+        "staffed_adult_icu_bed_occupancy_7_day_avg",
+        "float"
+      ),
       create_epidata_field_info(
         "staffed_icu_adult_patients_confirmed_suspected_covid_7d_avg",
         "float"
@@ -526,7 +591,10 @@ pub_covid_hosp_facility <- function(
         "total_patients_hospitalized_confirmed_influenza_7_day_avg",
         "float"
       ),
-      create_epidata_field_info("icu_patients_confirmed_influenza_7_day_avg", "float"),
+      create_epidata_field_info(
+        "icu_patients_confirmed_influenza_7_day_avg",
+        "float"
+      ),
       create_epidata_field_info(
         "total_patients_hosp_confirmed_influenza_and_covid_7d_avg",
         "float"
@@ -574,23 +642,33 @@ pub_covid_hosp_facility <- function(
         "previous_week_personnel_covid_vaccd_doses_administered_7_day_sum",
         "int"
       ),
-      create_epidata_field_info("total_personnel_covid_vaccinated_doses_all_7_day", "int"),
+      create_epidata_field_info(
+        "total_personnel_covid_vaccinated_doses_all_7_day",
+        "int"
+      ),
       create_epidata_field_info(
         "total_personnel_covid_vaccinated_doses_all_7_day_sum",
         "int"
       ),
-      create_epidata_field_info("total_personnel_covid_vaccinated_doses_none_7_day", "int"),
+      create_epidata_field_info(
+        "total_personnel_covid_vaccinated_doses_none_7_day",
+        "int"
+      ),
       create_epidata_field_info(
         "total_personnel_covid_vaccinated_doses_none_7_day_sum",
         "int"
       ),
-      create_epidata_field_info("total_personnel_covid_vaccinated_doses_one_7_day", "int"),
+      create_epidata_field_info(
+        "total_personnel_covid_vaccinated_doses_one_7_day",
+        "int"
+      ),
       create_epidata_field_info(
         "total_personnel_covid_vaccinated_doses_one_7_day_sum",
         "int"
       )
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' COVID hospitalizations by state
@@ -668,7 +746,10 @@ pub_covid_hosp_state_timeseries <- function(
       create_epidata_field_info("date", "date"),
       create_epidata_field_info("critical_staffing_shortage_today_yes", "bool"),
       create_epidata_field_info("critical_staffing_shortage_today_no", "bool"),
-      create_epidata_field_info("critical_staffing_shortage_today_not_reported", "bool"),
+      create_epidata_field_info(
+        "critical_staffing_shortage_today_not_reported",
+        "bool"
+      ),
       create_epidata_field_info(
         "critical_staffing_shortage_anticipated_within_week_yes",
         "bool"
@@ -689,28 +770,43 @@ pub_covid_hosp_state_timeseries <- function(
       create_epidata_field_info("inpatient_beds_used_coverage", "int"),
       create_epidata_field_info("inpatient_beds_used_covid", "int"),
       create_epidata_field_info("inpatient_beds_used_covid_coverage", "int"),
-      create_epidata_field_info("previous_day_admission_adult_covid_confirmed", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_confirmed_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_suspected", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_suspected_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_pediatric_covid_confirmed", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_pediatric_covid_confirmed",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_pediatric_covid_confirmed_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_pediatric_covid_suspected", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_pediatric_covid_suspected",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_pediatric_covid_suspected_coverage",
         "int"
       ),
       create_epidata_field_info("staffed_adult_icu_bed_occupancy", "int"),
-      create_epidata_field_info("staffed_adult_icu_bed_occupancy_coverage", "int"),
+      create_epidata_field_info(
+        "staffed_adult_icu_bed_occupancy_coverage",
+        "int"
+      ),
       create_epidata_field_info(
         "staffed_icu_adult_patients_confirmed_suspected_covid",
         "int"
@@ -719,7 +815,10 @@ pub_covid_hosp_state_timeseries <- function(
         "staffed_icu_adult_patients_confirmed_suspected_covid_coverage",
         "int"
       ),
-      create_epidata_field_info("staffed_icu_adult_patients_confirmed_covid", "int"),
+      create_epidata_field_info(
+        "staffed_icu_adult_patients_confirmed_covid",
+        "int"
+      ),
       create_epidata_field_info(
         "staffed_icu_adult_patients_confirmed_covid_coverage",
         "int"
@@ -732,7 +831,10 @@ pub_covid_hosp_state_timeseries <- function(
         "total_adult_patients_hosp_confirmed_suspected_covid_coverage",
         "int"
       ),
-      create_epidata_field_info("total_adult_patients_hosp_confirmed_covid", "int"),
+      create_epidata_field_info(
+        "total_adult_patients_hosp_confirmed_covid",
+        "int"
+      ),
       create_epidata_field_info(
         "total_adult_patients_hosp_confirmed_covid_coverage",
         "int"
@@ -745,7 +847,10 @@ pub_covid_hosp_state_timeseries <- function(
         "total_pediatric_patients_hosp_confirmed_suspected_covid_coverage",
         "int"
       ),
-      create_epidata_field_info("total_pediatric_patients_hosp_confirmed_covid", "int"),
+      create_epidata_field_info(
+        "total_pediatric_patients_hosp_confirmed_covid",
+        "int"
+      ),
       create_epidata_field_info(
         "total_pediatric_patients_hosp_confirmed_covid_coverage",
         "int"
@@ -754,16 +859,46 @@ pub_covid_hosp_state_timeseries <- function(
       create_epidata_field_info("total_staffed_adult_icu_beds_coverage", "int"),
       create_epidata_field_info("inpatient_beds_utilization_coverage", "int"),
       create_epidata_field_info("inpatient_beds_utilization_numerator", "int"),
-      create_epidata_field_info("inpatient_beds_utilization_denominator", "int"),
-      create_epidata_field_info("percent_of_inpatients_with_covid_coverage", "int"),
-      create_epidata_field_info("percent_of_inpatients_with_covid_numerator", "int"),
-      create_epidata_field_info("percent_of_inpatients_with_covid_denominator", "int"),
-      create_epidata_field_info("inpatient_bed_covid_utilization_coverage", "int"),
-      create_epidata_field_info("inpatient_bed_covid_utilization_numerator", "int"),
-      create_epidata_field_info("inpatient_bed_covid_utilization_denominator", "int"),
-      create_epidata_field_info("adult_icu_bed_covid_utilization_coverage", "int"),
-      create_epidata_field_info("adult_icu_bed_covid_utilization_numerator", "int"),
-      create_epidata_field_info("adult_icu_bed_covid_utilization_denominator", "int"),
+      create_epidata_field_info(
+        "inpatient_beds_utilization_denominator",
+        "int"
+      ),
+      create_epidata_field_info(
+        "percent_of_inpatients_with_covid_coverage",
+        "int"
+      ),
+      create_epidata_field_info(
+        "percent_of_inpatients_with_covid_numerator",
+        "int"
+      ),
+      create_epidata_field_info(
+        "percent_of_inpatients_with_covid_denominator",
+        "int"
+      ),
+      create_epidata_field_info(
+        "inpatient_bed_covid_utilization_coverage",
+        "int"
+      ),
+      create_epidata_field_info(
+        "inpatient_bed_covid_utilization_numerator",
+        "int"
+      ),
+      create_epidata_field_info(
+        "inpatient_bed_covid_utilization_denominator",
+        "int"
+      ),
+      create_epidata_field_info(
+        "adult_icu_bed_covid_utilization_coverage",
+        "int"
+      ),
+      create_epidata_field_info(
+        "adult_icu_bed_covid_utilization_numerator",
+        "int"
+      ),
+      create_epidata_field_info(
+        "adult_icu_bed_covid_utilization_denominator",
+        "int"
+      ),
       create_epidata_field_info("adult_icu_bed_utilization_coverage", "int"),
       create_epidata_field_info("adult_icu_bed_utilization_numerator", "int"),
       create_epidata_field_info("adult_icu_bed_utilization_denominator", "int"),
@@ -776,47 +911,74 @@ pub_covid_hosp_state_timeseries <- function(
       create_epidata_field_info("deaths_covid", "int"),
       create_epidata_field_info("deaths_covid_coverage", "int"),
       create_epidata_field_info("icu_patients_confirmed_influenza", "int"),
-      create_epidata_field_info("icu_patients_confirmed_influenza_coverage", "int"),
+      create_epidata_field_info(
+        "icu_patients_confirmed_influenza_coverage",
+        "int"
+      ),
       create_epidata_field_info(
         "on_hand_supply_therapeutic_a_casirivimab_imdevimab_courses",
         "int"
       ),
-      create_epidata_field_info("on_hand_supply_therapeutic_b_bamlanivimab_courses", "int"),
+      create_epidata_field_info(
+        "on_hand_supply_therapeutic_b_bamlanivimab_courses",
+        "int"
+      ),
       create_epidata_field_info(
         "on_hand_supply_therapeutic_c_bamlanivimab_etesevimab_courses",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_confirmed_18_19", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_18_19",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_confirmed_18_19_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_confirmed_20_29", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_20_29",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_confirmed_20_29_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_confirmed_30_39", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_30_39",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_confirmed_30_39_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_confirmed_40_49", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_40_49",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_confirmed_40_49_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_confirmed_50_59", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_50_59",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_confirmed_50_59_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_confirmed_60_69", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_60_69",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_confirmed_60_69_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_confirmed_70_79", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_confirmed_70_79",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_confirmed_70_79_coverage",
         "int"
@@ -837,37 +999,58 @@ pub_covid_hosp_state_timeseries <- function(
         "previous_day_admission_adult_covid_confirmed_unknown_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_suspected_18_19", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_18_19",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_suspected_18_19_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_suspected_20_29", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_20_29",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_suspected_20_29_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_suspected_30_39", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_30_39",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_suspected_30_39_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_suspected_40_49", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_40_49",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_suspected_40_49_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_suspected_50_59", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_50_59",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_suspected_50_59_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_suspected_60_69", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_60_69",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_suspected_60_69_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_adult_covid_suspected_70_79", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_adult_covid_suspected_70_79",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_adult_covid_suspected_70_79_coverage",
         "int"
@@ -888,15 +1071,27 @@ pub_covid_hosp_state_timeseries <- function(
         "previous_day_admission_adult_covid_suspected_unknown_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_admission_influenza_confirmed", "int"),
+      create_epidata_field_info(
+        "previous_day_admission_influenza_confirmed",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_day_admission_influenza_confirmed_coverage",
         "int"
       ),
-      create_epidata_field_info("previous_day_deaths_covid_and_influenza", "int"),
-      create_epidata_field_info("previous_day_deaths_covid_and_influenza_coverage", "int"),
+      create_epidata_field_info(
+        "previous_day_deaths_covid_and_influenza",
+        "int"
+      ),
+      create_epidata_field_info(
+        "previous_day_deaths_covid_and_influenza_coverage",
+        "int"
+      ),
       create_epidata_field_info("previous_day_deaths_influenza", "int"),
-      create_epidata_field_info("previous_day_deaths_influenza_coverage", "int"),
+      create_epidata_field_info(
+        "previous_day_deaths_influenza_coverage",
+        "int"
+      ),
       create_epidata_field_info(
         "previous_week_therapeutic_a_casirivimab_imdevimab_courses_used",
         "int"
@@ -917,13 +1112,17 @@ pub_covid_hosp_state_timeseries <- function(
         "total_patients_hospitalized_confirmed_influenza_covid_coverage",
         "int"
       ),
-      create_epidata_field_info("total_patients_hospitalized_confirmed_influenza", "int"),
+      create_epidata_field_info(
+        "total_patients_hospitalized_confirmed_influenza",
+        "int"
+      ),
       create_epidata_field_info(
         "total_patients_hospitalized_confirmed_influenza_coverage",
         "int"
       )
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' Metadata for the COVIDcast endpoint
@@ -991,14 +1190,24 @@ pub_covidcast_meta <- function(
     list(
       create_epidata_field_info("data_source", "text"),
       create_epidata_field_info("signal", "text"),
-      create_epidata_field_info("time_type", "categorical",
-        categories =
-          c("week", "day")
+      create_epidata_field_info(
+        "time_type",
+        "categorical",
+        categories = c("week", "day")
       ),
       create_epidata_field_info(
         "geo_type",
         "categorical",
-        categories = c("nation", "msa", "hrr", "hhs", "state", "county", "dma", "hsa_nci")
+        categories = c(
+          "nation",
+          "msa",
+          "hrr",
+          "hhs",
+          "state",
+          "county",
+          "dma",
+          "hsa_nci"
+        )
       ),
       create_epidata_field_info("min_time", "int"),
       create_epidata_field_info("max_time", "int"),
@@ -1012,7 +1221,8 @@ pub_covidcast_meta <- function(
       create_epidata_field_info("min_lag", "int"),
       create_epidata_field_info("max_lag", "int")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 
@@ -1145,21 +1355,31 @@ pub_covidcast <- function(
       create_epidata_field_info(
         "geo_type",
         "categorical",
-        categories = c("nation", "msa", "hrr", "hhs", "state", "county", "dma", "hsa_nci")
+        categories = c(
+          "nation",
+          "msa",
+          "hrr",
+          "hhs",
+          "state",
+          "county",
+          "dma",
+          "hsa_nci"
+        )
       ),
-      create_epidata_field_info("time_type", "categorical",
-        categories =
-          c("day", "week")
+      create_epidata_field_info(
+        "time_type",
+        "categorical",
+        categories = c("day", "week")
       ),
       create_epidata_field_info("geo_value", "text"),
-      create_epidata_field_info("time_value", switch(time_type,
-        day = "date",
-        week = "epiweek"
-      )),
-      create_epidata_field_info("issue", switch(time_type,
-        day = "date",
-        week = "epiweek"
-      )),
+      create_epidata_field_info(
+        "time_value",
+        switch(time_type, day = "date", week = "epiweek")
+      ),
+      create_epidata_field_info(
+        "issue",
+        switch(time_type, day = "date", week = "epiweek")
+      ),
       create_epidata_field_info("lag", "int"),
       create_epidata_field_info("value", "float"),
       create_epidata_field_info("stderr", "float"),
@@ -1169,7 +1389,8 @@ pub_covidcast <- function(
       create_epidata_field_info("missing_stderr", "int"),
       create_epidata_field_info("missing_sample_size", "int")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' Get cast-API source metadata
@@ -1194,7 +1415,8 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
     params = list(source = source),
     api_version = "cast",
     response_format = "json"
-  ) %>% request_epidata(fetch_args = fetch_args)
+  ) %>%
+    request_epidata(fetch_args = fetch_args)
 }
 
 #' cast-API snapshot and archive queries
@@ -1325,9 +1547,14 @@ epidata_snapshot <- function(
   assert_character_param("geo_values", geo_values)
   assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
   assert_date_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
-  if (!is.null(snapshot_date)) snapshot_date <- format(parse_api_date(snapshot_date), "%Y-%m-%d")
+  if (!is.null(snapshot_date)) {
+    snapshot_date <- format(parse_api_date(snapshot_date), "%Y-%m-%d")
+  }
 
-  parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
+  parsed_reference_times <- validate_timeset_input(
+    "reference_time",
+    reference_time
+  )
 
   # Accept comma-joined signal/geo_type strings.
   signals <- unique(unlist(strsplit(signals, ",", fixed = TRUE)))
@@ -1364,14 +1591,16 @@ epidata_snapshot <- function(
       ),
       api_version = "cast",
       response_format = "csv"
-    ) %>% fetch(fetch_args = fetch_args)
+    ) %>%
+      fetch(fetch_args = fetch_args)
   })
   if (fetch_args$dry_run) {
     return(if (length(fetched) == 1) fetched[[1]] else fetched)
   }
 
   fetched <- vctrs::vec_rbind(!!!fetched)
-  res <- fetched %>% .cast_filter(geo_values, reference_time, parsed_reference_times)
+  res <- fetched %>%
+    .cast_filter(geo_values, reference_time, parsed_reference_times)
   attr(res, "cast_source") <- source # lets epidata_aux() recover the source
   attr(res, "cast_kind") <- "snapshot" # single-version view -> uniform aux merge
 
@@ -1432,7 +1661,10 @@ epidata_archive <- function(
     report_time <- issues
   }
 
-  parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
+  parsed_reference_times <- validate_timeset_input(
+    "reference_time",
+    reference_time
+  )
   version_query <- validate_version_query(report_time)
 
   # Accept comma-joined signal/geo_type strings.
@@ -1470,14 +1702,21 @@ epidata_archive <- function(
       ),
       api_version = "cast",
       response_format = "csv"
-    ) %>% fetch(fetch_args = fetch_args)
+    ) %>%
+      fetch(fetch_args = fetch_args)
   })
   if (fetch_args$dry_run) {
     return(if (length(fetched) == 1) fetched[[1]] else fetched)
   }
 
   fetched <- vctrs::vec_rbind(!!!fetched)
-  res <- fetched %>% .cast_filter(geo_values, reference_time, parsed_reference_times, report_time = report_time)
+  res <- fetched %>%
+    .cast_filter(
+      geo_values,
+      reference_time,
+      parsed_reference_times,
+      report_time = report_time
+    )
   attr(res, "cast_source") <- source # lets epidata_aux() recover the source
   attr(res, "cast_kind") <- "archive" # per-row revision history -> as-of aux merge
 
@@ -1578,10 +1817,15 @@ epidata_aux.default <- function(
     report_time <- issues
   }
 
-  parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
+  parsed_reference_times <- validate_timeset_input(
+    "reference_time",
+    reference_time
+  )
   report_time_query <- validate_version_query(report_time)
   filtered_keys <- .serialize_key_filters(key_filters)
-  if (!is.null(columns)) columns <- paste(columns, collapse = ",")
+  if (!is.null(columns)) {
+    columns <- paste(columns, collapse = ",")
+  }
 
   # Value columns come through as character,
   # so silence the "unspecified fields" warning.
@@ -1609,7 +1853,12 @@ epidata_aux.default <- function(
     response_format = "csv"
   ) %>%
     fetch(fetch_args = fetch_args) %>%
-    .cast_filter("*", reference_time, parsed_reference_times, report_time = report_time)
+    .cast_filter(
+      "*",
+      reference_time,
+      parsed_reference_times,
+      report_time = report_time
+    )
 }
 
 #' @rdname epidata_aux
@@ -1643,7 +1892,11 @@ epidata_aux.data.frame <- function(
   }
 
   # Aux key columns from the schema endpoint
-  keys_schema <- if (!fetch_args$dry_run) .aux_key_columns(src, fetch_args) else NULL
+  keys_schema <- if (!fetch_args$dry_run) {
+    .aux_key_columns(src, fetch_args)
+  } else {
+    NULL
+  }
 
   # Aux key columns the base actually carries. Empty on dry_run.
   ver <- "report_time"
@@ -1697,7 +1950,8 @@ epidata_aux.data.frame <- function(
   aux <- rlang::inject(epidata_aux(
     src,
     report_time = report_cut,
-    columns = columns, fetch_args = fetch_args,
+    columns = columns,
+    fetch_args = fetch_args,
     !!!filters
   ))
   if (!inherits(aux, "data.frame")) {
@@ -1706,7 +1960,11 @@ epidata_aux.data.frame <- function(
 
   # Match each base dataset row to the aux version current at its report_time
   # with keys equal and aux report_time at or before the base's, keeping the newest
-  match_time <- if (identical(attr(base, "cast_kind"), "snapshot")) max(base[[ver]]) else base[[ver]]
+  match_time <- if (identical(attr(base, "cast_kind"), "snapshot")) {
+    max(base[[ver]])
+  } else {
+    base[[ver]]
+  }
   m <- vctrs::vec_locate_matches(
     needles = vctrs::vec_cbind(base[keys], .t = match_time),
     haystack = vctrs::vec_cbind(aux[keys], .t = aux[[ver]]),
@@ -1738,19 +1996,28 @@ epidata <- function(
   issues = lifecycle::deprecated(),
   fetch_args = fetch_args_list()
 ) {
-  if ((!is.null(report_time) || lifecycle::is_present(issues)) &&
-        (!is.null(snapshot_date) || lifecycle::is_present(as_of))) {
+  if (
+    (!is.null(report_time) || lifecycle::is_present(issues)) &&
+      (!is.null(snapshot_date) || lifecycle::is_present(as_of))
+  ) {
     cli::cli_abort(
       "`report_time` and `snapshot_date` are mutually exclusive",
       class = "epidatr__epidata__version_and_as_of_exclusive"
     )
   }
 
-  if (!is.null(report_time) || lifecycle::is_present(issues) ||
-        identical(snapshot_date, "*") || identical(as_of, "*")) {
+  if (
+    !is.null(report_time) ||
+      lifecycle::is_present(issues) ||
+      identical(snapshot_date, "*") ||
+      identical(as_of, "*")
+  ) {
     epidata_archive(
-      source = source, signals = signals, geo_type = geo_type,
-      geo_values = geo_values, reference_time = reference_time,
+      source = source,
+      signals = signals,
+      geo_type = geo_type,
+      geo_values = geo_values,
+      reference_time = reference_time,
       time_values = time_values,
       ...,
       fill_method = fill_method,
@@ -1760,8 +2027,11 @@ epidata <- function(
     )
   } else {
     epidata_snapshot(
-      source = source, signals = signals, geo_type = geo_type,
-      geo_values = geo_values, reference_time = reference_time,
+      source = source,
+      signals = signals,
+      geo_type = geo_type,
+      geo_values = geo_values,
+      reference_time = reference_time,
       time_values = time_values,
       ...,
       fill_method = fill_method,
@@ -1806,7 +2076,8 @@ pub_delphi <- function(
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("json", "text")
     )
-  ) %>% request_epidata(fetch_args = fetch_args, simplify = FALSE)
+  ) %>%
+    request_epidata(fetch_args = fetch_args, simplify = FALSE)
 }
 
 #' Delphi's PAHO dengue nowcasts (North and South America)
@@ -1846,7 +2117,8 @@ pub_dengue_nowcast <- function(
       create_epidata_field_info("value", "float"),
       create_epidata_field_info("std", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' PAHO dengue digital surveillance sensors (North and South America)
@@ -1900,7 +2172,8 @@ pvt_dengue_sensors <- function(
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("value", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' ECDC ILI incidence (Europe)
@@ -1964,7 +2237,8 @@ pub_ecdc_ili <- function(
       create_epidata_field_info("lag", "int"),
       create_epidata_field_info("incidence_rate", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' CDC FluSurv flu hospitalizations
@@ -2058,7 +2332,8 @@ pub_flusurv <- function(
       create_epidata_field_info("rate_flu_b", "float"),
       create_epidata_field_info("season", "text")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' CDC FluView flu tests from clinical labs
@@ -2125,7 +2400,8 @@ pub_fluview_clinical <- function(
       create_epidata_field_info("percent_a", "float"),
       create_epidata_field_info("percent_b", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' Metadata for the FluView endpoint
@@ -2152,7 +2428,8 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
       create_epidata_field_info("latest_issue", "epiweek"),
       create_epidata_field_info("table_rows", "int")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 
@@ -2232,7 +2509,8 @@ pub_fluview <- function(
       create_epidata_field_info("wili", "float"),
       create_epidata_field_info("ili", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' Google Flu Trends flu search volume
@@ -2278,7 +2556,8 @@ pub_gft <- function(
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("num", "int")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' Google Health Trends health topics search volume
@@ -2334,7 +2613,8 @@ pvt_ght <- function(
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("value", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' KCDC ILI incidence (Korea)
@@ -2392,7 +2672,8 @@ pub_kcdc_ili <- function(
       create_epidata_field_info("lag", "int"),
       create_epidata_field_info("ili", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' Metadata for the NoroSTAT endpoint
@@ -2415,7 +2696,8 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
   create_epidata_call(
     "meta_norostat/",
     list(auth = auth)
-  ) %>% request_epidata(fetch_args = fetch_args, simplify = FALSE)
+  ) %>%
+    request_epidata(fetch_args = fetch_args, simplify = FALSE)
 }
 
 #' Metadata for the Delphi Epidata API
@@ -2429,7 +2711,8 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 #' @keywords endpoint
 #' @export
 pub_meta <- function(fetch_args = fetch_args_list()) {
-  create_epidata_call("meta/", list()) %>% request_epidata(fetch_args = fetch_args, simplify = FALSE)
+  create_epidata_call("meta/", list()) %>%
+    request_epidata(fetch_args = fetch_args, simplify = FALSE)
 }
 
 #' NIDSS dengue cases (Taiwan)
@@ -2476,7 +2759,8 @@ pub_nidss_dengue <- function(
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("count", "int")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' NIDSS flu doctor visits (Taiwan)
@@ -2540,7 +2824,8 @@ pub_nidss_flu <- function(
       create_epidata_field_info("visits", "int"),
       create_epidata_field_info("ili", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 
@@ -2594,7 +2879,8 @@ pvt_norostat <- function(
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("value", "int")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' Delphi's ILI Nearby nowcasts
@@ -2634,7 +2920,8 @@ pub_nowcast <- function(
       create_epidata_field_info("value", "float"),
       create_epidata_field_info("std", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' PAHO dengue data (North and South America)
@@ -2694,7 +2981,8 @@ pub_paho_dengue <- function(
       create_epidata_field_info("num_deaths", "int"),
       create_epidata_field_info("incidence_rate", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' Quidel COVID-19 and influenza testing data
@@ -2744,7 +3032,8 @@ pvt_quidel <- function(
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("value", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' Influenza and dengue digital surveillance sensors
@@ -2811,7 +3100,8 @@ pvt_sensors <- function(
       create_epidata_field_info("epiweek", "epiweek"),
       create_epidata_field_info("value", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' HealthTweets total and influenza-related tweets
@@ -2888,7 +3178,8 @@ pvt_twitter <- function(
       create_epidata_field_info("total", "int"),
       create_epidata_field_info("percent", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
 
 #' Wikipedia webpage counts by article
@@ -2973,5 +3264,6 @@ pub_wiki <- function(
       create_epidata_field_info("hour", "int"),
       create_epidata_field_info("value", "float")
     )
-  ) %>% fetch(fetch_args = fetch_args)
+  ) %>%
+    fetch(fetch_args = fetch_args)
 }
