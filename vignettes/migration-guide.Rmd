@@ -68,7 +68,7 @@ if you want exactly one time series per location.
 | `time_type` | dropped | No longer needed since times are `Date`s. |
 | `lag` | dropped | Compute as `report_time - reference_time`. |
 | `direction` | dropped | Was already deprecated in the covidcast API. |
-| `stderr`, `sample_size` | dropped | Some sources publish their own uncertainty columns instead; see below. |
+| `stderr`, `sample_size` | `ci_lower`, `ci_upper` | Uncertainty is now expressed as confidence interval bounds on `value` instead of a standard error. Populated only for sources that publish them. See below. |
 | `missing_value`, `missing_stderr`, `missing_sample_size` | dropped | Missingness is now expressed through `fill_method` variants and plain `NA`s. |
 | none | `fill_method` | Which null-handling variant of the signal this row belongs to. See above. |
 
