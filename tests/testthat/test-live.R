@@ -361,6 +361,40 @@ cast_queries <- tibble::tribble(
   "nwss", "covid_avg_conc", "sewershed",
 )
 
+test_that("cast versioning args reach the server (snapshot_date, report_time_query)", {
+  skip_unless_live()
+  snap <- epidata_snapshot(
+    source = "nssp", signals = "pct_ed_visits_influenza", geo_type = "state",
+    geo_values = "pa", snapshot_date = "2025-01-01"
+  )
+  expect_gt(nrow(snap), 0)
+  expect_true(all(snap$report_time <= as.Date("2025-01-01")))
+
+  arch_lt <- epidata_archive(
+    source = "nssp", signals = "pct_ed_visits_influenza", geo_type = "state",
+    geo_values = "pa", report_time = "<2025-06-01"
+  )
+  expect_gt(nrow(arch_lt), 0)
+  expect_true(all(arch_lt$report_time < as.Date("2025-06-01")))
+
+  one_day <- max(arch_lt$report_time)
+  arch_eq <- epidata_archive(
+    source = "nssp", signals = "pct_ed_visits_influenza", geo_type = "state",
+    geo_values = "pa", report_time = one_day
+  )
+  expect_gt(nrow(arch_eq), 0)
+  expect_true(all(arch_eq$report_time == one_day))
+
+  # epirange: upper bound goes server-side, lower bound is filtered locally
+  arch_range <- epidata_archive(
+    source = "nssp", signals = "pct_ed_visits_influenza", geo_type = "state",
+    geo_values = "pa", report_time = epirange("2025-01-01", "2025-06-01")
+  )
+  expect_gt(nrow(arch_range), 0)
+  expect_true(all(arch_range$report_time >= as.Date("2025-01-01")))
+  expect_true(all(arch_range$report_time <= as.Date("2025-06-01")))
+})
+
 test_that("epidata_meta returns signals + geo_types for each cast source", {
   skip_unless_live()
   for (src in unique(cast_queries$source)) {
