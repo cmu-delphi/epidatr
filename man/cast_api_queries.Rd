@@ -56,7 +56,9 @@ epidata(
 Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available sources.}
 
 \item{signals}{character vector. One or more signals to query for the given
-source. Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available signals.}
+source. Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available signals. A separate API
+request is made per signal (the cast-API only accepts one signal per
+request) and the results are combined.}
 
 \item{geo_type}{string. The geography type to query (e.g., \code{"state"},
 \code{"nation"}, \code{"county"}). Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available

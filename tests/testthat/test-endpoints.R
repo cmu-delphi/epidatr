@@ -310,6 +310,56 @@ test_that("epidata_archive local EpiRange filtering for report_time works", {
   expect_true(all(res_wide$report_time %in% as.Date(c("2024-01-01", "2024-01-02"))))
 })
 
+test_that("epidata_snapshot fans out one request per signal and combines results", {
+  seen_urls <- character()
+  handler <- function(req) {
+    seen_urls <<- c(seen_urls, req$url)
+    if (grepl("signal=sig1", req$url)) {
+      "signal,geo_value,reference_time,value\nsig1,ca,2024-01-01,1.0"
+    } else if (grepl("signal=sig2", req$url)) {
+      "signal,geo_value,reference_time,value\nsig2,ca,2024-01-01,2.0"
+    } else {
+      stop("unexpected signal in url: ", req$url)
+    }
+  }
+  with_mock_perform(handler, {
+    res <- epidata_snapshot(source = "nssp", signals = c("sig1", "sig2"), geo_type = "state")
+    expect_equal(sort(unique(res$signal)), c("sig1", "sig2"))
+    expect_equal(nrow(res), 2)
+  })
+  expect_length(seen_urls, 2)
+  # exactly one "signal=" term per request URL, no comma-joined signals
+  expect_true(all(vapply(seen_urls, function(u) length(gregexpr("signal=", u)[[1]]) == 1, logical(1))))
+  expect_false(any(grepl("sig1.{0,3}sig2|sig2.{0,3}sig1", seen_urls)))
+})
+
+test_that("epidata_snapshot/epidata_archive dry_run returns a list of calls for multiple signals", {
+  calls <- epidata_snapshot(
+    source = "nssp", signals = c("sig1", "sig2"), geo_type = "state",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_type(calls, "list")
+  expect_length(calls, 2)
+  expect_s3_class(calls[[1]], "epidata_call")
+  expect_s3_class(calls[[2]], "epidata_call")
+  expect_match(calls[[1]]$request$url, "signal=sig1")
+  expect_match(calls[[2]]$request$url, "signal=sig2")
+
+  # single signal keeps the old, backward-compatible behavior
+  single <- epidata_snapshot(
+    source = "nssp", signals = "sig1", geo_type = "state",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_s3_class(single, "epidata_call")
+
+  arch_calls <- epidata_archive(
+    source = "nssp", signals = c("sig1", "sig2"), geo_type = "state",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_type(arch_calls, "list")
+  expect_length(arch_calls, 2)
+})
+
 # ---- epidata_aux ----
 
 test_that("epidata_aux base-pull builds the call, serializes key filters via ..., deprecates aliases", {

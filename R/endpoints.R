@@ -1214,7 +1214,9 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #' @param source string. The data source to query (e.g., `"nssp"`, `"nhsn"`).
 #'   Use [epidata_meta()] to discover available sources.
 #' @param signals character vector. One or more signals to query for the given
-#'   source. Use [epidata_meta()] to discover available signals.
+#'   source. Use [epidata_meta()] to discover available signals. A separate API
+#'   request is made per signal (the cast-API only accepts one signal per
+#'   request) and the results are combined.
 #' @param geo_type string. The geography type to query (e.g., `"state"`,
 #'   `"nation"`, `"county"`). Use [epidata_meta()] to discover available
 #'   geo types for a given source and signal.
@@ -1313,39 +1315,47 @@ epidata_snapshot <- function(
 
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
 
-  res <- create_epidata_call(
-    endpoint = "snapshot/",
-    params = list(
-      source = source,
-      signal = paste(signals, collapse = ","),
-      geo_type = geo_type,
-      fill_method = fill_method,
-      snapshot_date = snapshot_date,
-      extra_keys = extra_keys
-    ),
-    meta = list(
-      create_epidata_field_info("signal", "text"),
-      create_epidata_field_info("report_time", "date"),
-      create_epidata_field_info("geo_type", "text"),
-      create_epidata_field_info("geo_value", "text"),
-      create_epidata_field_info("fill_method", "text"),
-      create_epidata_field_info("reference_time", "date"),
-      create_epidata_field_info("value", "float"),
-      create_epidata_field_info("ci_lower", "float"), # nickel_beta, va_respiratory, sleepcycle
-      create_epidata_field_info("ci_upper", "float"), # nickel_beta, va_respiratory, sleepcycle
-      # source-specific extra columns
-      create_epidata_field_info("age_group", "text"), # pophive
-      create_epidata_field_info("nwss_source", "text"), # nwss
-      create_epidata_field_info("sample_index", "text"), # nwss
-      create_epidata_field_info("pcr_target", "text") # nwss
-    ),
-    api_version = "cast",
-    response_format = "csv"
-  ) %>%
-    fetch(fetch_args = fetch_args) %>%
-    .cast_filter(geo_values, reference_time, parsed_reference_times)
+  # One request per signal: the cast-API accepts a single signal per query.
+  fetched <- lapply(signals, function(s) {
+    create_epidata_call(
+      endpoint = "snapshot/",
+      params = list(
+        source = source,
+        signal = s,
+        geo_type = geo_type,
+        fill_method = fill_method,
+        snapshot_date = snapshot_date,
+        extra_keys = extra_keys
+      ),
+      meta = list(
+        create_epidata_field_info("signal", "text"),
+        create_epidata_field_info("report_time", "date"),
+        create_epidata_field_info("geo_type", "text"),
+        create_epidata_field_info("geo_value", "text"),
+        create_epidata_field_info("fill_method", "text"),
+        create_epidata_field_info("reference_time", "date"),
+        create_epidata_field_info("value", "float"),
+        create_epidata_field_info("ci_lower", "float"), # nickel_beta, va_respiratory, sleepcycle
+        create_epidata_field_info("ci_upper", "float"), # nickel_beta, va_respiratory, sleepcycle
+        # source-specific extra columns
+        create_epidata_field_info("age_group", "text"), # pophive
+        create_epidata_field_info("nwss_source", "text"), # nwss
+        create_epidata_field_info("sample_index", "text"), # nwss
+        create_epidata_field_info("pcr_target", "text") # nwss
+      ),
+      api_version = "cast",
+      response_format = "csv"
+    ) %>% fetch(fetch_args = fetch_args)
+  })
+  if (fetch_args$dry_run) {
+    return(if (length(fetched) == 1) fetched[[1]] else fetched)
+  }
+
+  fetched <- vctrs::vec_rbind(!!!fetched)
+  res <- fetched %>% .cast_filter(geo_values, reference_time, parsed_reference_times)
   attr(res, "cast_source") <- source # lets epidata_aux() recover the source
   attr(res, "cast_kind") <- "snapshot" # single-version view -> uniform aux merge
+
   res
 }
 
@@ -1405,39 +1415,47 @@ epidata_archive <- function(
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
   version_query <- validate_version_query(report_time)
 
-  res <- create_epidata_call(
-    endpoint = "archive/",
-    params = list(
-      source = source,
-      signal = paste(signals, collapse = ","),
-      geo_type = geo_type,
-      fill_method = fill_method,
-      report_time_query = version_query,
-      extra_keys = extra_keys
-    ),
-    meta = list(
-      create_epidata_field_info("signal", "text"),
-      create_epidata_field_info("report_time", "date"),
-      create_epidata_field_info("geo_type", "text"),
-      create_epidata_field_info("geo_value", "text"),
-      create_epidata_field_info("fill_method", "text"),
-      create_epidata_field_info("reference_time", "date"),
-      create_epidata_field_info("value", "float"),
-      create_epidata_field_info("ci_lower", "float"), # nickel_beta, va_respiratory, sleepcycle
-      create_epidata_field_info("ci_upper", "float"), # nickel_beta, va_respiratory, sleepcycle
-      # source-specific extra columns
-      create_epidata_field_info("age_group", "text"), # pophive
-      create_epidata_field_info("nwss_source", "text"), # nwss
-      create_epidata_field_info("sample_index", "text"), # nwss
-      create_epidata_field_info("pcr_target", "text") # nwss
-    ),
-    api_version = "cast",
-    response_format = "csv"
-  ) %>%
-    fetch(fetch_args = fetch_args) %>%
-    .cast_filter(geo_values, reference_time, parsed_reference_times, report_time = report_time)
+  # One request per signal: the cast-API accepts a single signal per query.
+  fetched <- lapply(signals, function(s) {
+    create_epidata_call(
+      endpoint = "archive/",
+      params = list(
+        source = source,
+        signal = s,
+        geo_type = geo_type,
+        fill_method = fill_method,
+        report_time_query = version_query,
+        extra_keys = extra_keys
+      ),
+      meta = list(
+        create_epidata_field_info("signal", "text"),
+        create_epidata_field_info("report_time", "date"),
+        create_epidata_field_info("geo_type", "text"),
+        create_epidata_field_info("geo_value", "text"),
+        create_epidata_field_info("fill_method", "text"),
+        create_epidata_field_info("reference_time", "date"),
+        create_epidata_field_info("value", "float"),
+        create_epidata_field_info("ci_lower", "float"), # nickel_beta, va_respiratory, sleepcycle
+        create_epidata_field_info("ci_upper", "float"), # nickel_beta, va_respiratory, sleepcycle
+        # source-specific extra columns
+        create_epidata_field_info("age_group", "text"), # pophive
+        create_epidata_field_info("nwss_source", "text"), # nwss
+        create_epidata_field_info("sample_index", "text"), # nwss
+        create_epidata_field_info("pcr_target", "text") # nwss
+      ),
+      api_version = "cast",
+      response_format = "csv"
+    ) %>% fetch(fetch_args = fetch_args)
+  })
+  if (fetch_args$dry_run) {
+    return(if (length(fetched) == 1) fetched[[1]] else fetched)
+  }
+
+  fetched <- vctrs::vec_rbind(!!!fetched)
+  res <- fetched %>% .cast_filter(geo_values, reference_time, parsed_reference_times, report_time = report_time)
   attr(res, "cast_source") <- source # lets epidata_aux() recover the source
   attr(res, "cast_kind") <- "archive" # per-row revision history -> as-of aux merge
+
   res
 }
 
