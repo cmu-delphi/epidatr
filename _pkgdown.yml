@@ -27,18 +27,40 @@ home:
 
 
 reference:
-  - title: Data source and signal discovery
-    desc: Quickly explore endpoints, and API signal and source names
+  - title: Query the new Epidata API (v5)
+    desc: >
+      The current API. Sources are moving here from the covidcast endpoint;
+      see `vignette("migration-guide")` for how to update covidcast queries.
   - contents:
-      - avail_endpoints
+      - epidata_meta
+      - cast_api_queries
+      - epidata_aux
+  - title: Query the covidcast endpoint (v4)
+    desc: >
+      The previous main endpoint. Still carries the sources that have not
+      moved to v5 yet.
+  - contents:
+      - pub_covidcast
+      - pub_covidcast_meta
       - covidcast_epidata
-  - title: Make API requests
-    desc: Query Delphi Epidata endpoints
+  - title: Query legacy endpoints (v3)
+    desc: >
+      Older endpoints, each with its own dataset. Most are static or no
+      longer updated.
   - contents:
-      - epidata_call
-      - fetch_args_list
       - has_keyword("endpoint")
       - -starts_with("pvt_")
+      - -epidata_meta
+      - -cast_api_queries
+      - -epidata_aux
+      - -pub_covidcast
+      - -pub_covidcast_meta
+  - title: Make API requests
+    desc: Discover endpoints and control how queries are built and fetched
+  - contents:
+      - avail_endpoints
+      - epidata_call
+      - fetch_args_list
   - title: Configuration and utilities
     desc: Set API keys and handle API data types
   - contents:
