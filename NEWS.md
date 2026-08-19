@@ -18,6 +18,7 @@
 
 ## Patches
 
+- `epidata_archive(report_time = ...)` now sends the `report_time_query` API parameter; the server renamed it from `version_query`, which it now rejects.
 - `last_update` in `pub_covidcast_meta` is now returned as a `POSIXct` object instead of an integer.
 - Improved efficiency of date parsing for API responses.
 - Migrate HTTP requests from `httr` to `httr2`.

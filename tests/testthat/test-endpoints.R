@@ -172,7 +172,7 @@ test_that("epidata* and epidata_meta work as expected", {
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_match(call_wildcard$request$url, "archive/")
-  expect_no_match(call_wildcard$request$url, "version_query=")
+  expect_no_match(call_wildcard$request$url, "report_time_query=")
 
   # Test snapshot_date = "*" mapping in epidata routes to archive
   call_as_of_wildcard <- epidata(

@@ -96,7 +96,7 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 \item{report_time}{Date, string, or \code{\link[=epirange]{epirange()}}. A query on the
 \code{report_time} column for the archive endpoint. Supports exact dates (e.g.,
 \code{"2025-10-16"}), operators (e.g., \code{"<2025-10-16"}), or an \code{\link[=epirange]{epirange()}}.
-Internally maps to the \code{version_query} API parameter.}
+Internally maps to the \code{report_time_query} API parameter.}
 
 \item{issues}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{report_time} instead.}
 }

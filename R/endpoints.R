@@ -1233,7 +1233,7 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #' @param report_time Date, string, or [`epirange()`]. A query on the
 #'   `report_time` column for the archive endpoint. Supports exact dates (e.g.,
 #'   `"2025-10-16"`), operators (e.g., `"<2025-10-16"`), or an [`epirange()`].
-#'   Internally maps to the `version_query` API parameter.
+#'   Internally maps to the `report_time_query` API parameter.
 #' @param issues `r lifecycle::badge("deprecated")` Use `report_time` instead.
 #' @param time_values `r lifecycle::badge("deprecated")` Use `reference_time` instead.
 #' @param ... Named filters on extra key columns beyond `geo_value`, such as
@@ -1410,7 +1410,7 @@ epidata_archive <- function(
       signal = paste(signals, collapse = ","),
       geo_type = geo_type,
       fill_method = fill_method,
-      version_query = version_query,
+      report_time_query = version_query,
       extra_keys = extra_keys
     ),
     meta = list(
