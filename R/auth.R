@@ -64,7 +64,12 @@ save_api_key <- function() {
   )
   readline()
 
-  if (file.exists(usethis::proj_path(".Renviron"))) {
+  # proj_path() errors when not inside a project; fall back to user scope.
+  project_renviron_exists <- tryCatch(
+    file.exists(usethis::proj_path(".Renviron")),
+    error = function(e) FALSE
+  )
+  if (project_renviron_exists) {
     usethis::edit_r_environ(scope = "project")
 
     cat("\n\n")
