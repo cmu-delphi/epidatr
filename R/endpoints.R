@@ -1331,6 +1331,8 @@ epidata_snapshot <- function(
       create_epidata_field_info("fill_method", "text"),
       create_epidata_field_info("reference_time", "date"),
       create_epidata_field_info("value", "float"),
+      create_epidata_field_info("ci_lower", "float"), # nickel_beta, va_respiratory, sleepcycle
+      create_epidata_field_info("ci_upper", "float"), # nickel_beta, va_respiratory, sleepcycle
       # source-specific extra columns
       create_epidata_field_info("age_group", "text"), # pophive
       create_epidata_field_info("nwss_source", "text"), # nwss
@@ -1421,6 +1423,8 @@ epidata_archive <- function(
       create_epidata_field_info("fill_method", "text"),
       create_epidata_field_info("reference_time", "date"),
       create_epidata_field_info("value", "float"),
+      create_epidata_field_info("ci_lower", "float"), # nickel_beta, va_respiratory, sleepcycle
+      create_epidata_field_info("ci_upper", "float"), # nickel_beta, va_respiratory, sleepcycle
       # source-specific extra columns
       create_epidata_field_info("age_group", "text"), # pophive
       create_epidata_field_info("nwss_source", "text"), # nwss

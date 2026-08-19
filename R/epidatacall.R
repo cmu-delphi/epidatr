@@ -343,7 +343,11 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
   )
 
   if (epidata_call$response_format == "csv") {
-    return(readr::read_csv(I(httr2::resp_body_string(res)),
+    # Pass raw bytes straight to read_csv() instead of resp_body_string().
+    # This avoids copying the whole response body through readBin/iconv/paste first.
+    # read_csv() routes raw vectors straight to its raw-input parser regardless.
+    # See https://readr.tidyverse.org/reference/datasource.html?q=datasource#null for more information.
+    return(readr::read_csv(httr2::resp_body_raw(res),
       col_types = readr::cols(.default = "c"),
       show_col_types = FALSE
     ))
