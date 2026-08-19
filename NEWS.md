@@ -1,4 +1,4 @@
-# epidatr 1.3.0
+# epidatr 1.2.4
 
 ## Changes
 
@@ -23,12 +23,6 @@
 - Migrate HTTP requests from `httr` to `httr2`.
 - Update endpoint examples to skip execution when required API keys or internet connectivity are unavailable, ensuring cleaner `R CMD check` results.
 - Add `lifecycle` to `DESCRIPTION` to properly manage function deprecations.
-
-
-# epidatr 1.2.4
-
-## Patches
-
 - Extend `check_is_recent` to support numeric date formats (#320).
 
 # epidatr 1.2.2
