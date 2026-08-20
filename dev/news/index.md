@@ -1,6 +1,33 @@
 # Changelog
 
-## epidatr 1.3.0
+## epidatr 1.3.5
+
+### Patches
+
+- [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+  and
+  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+  now issue one request per signal instead of joining `signals` with a
+  comma, which the cast-API server silently matched against nothing
+  ([\#354](https://github.com/cmu-delphi/epidatr/issues/354)).
+- `epidata_archive(report_time = ...)` now sends the `report_time_query`
+  API parameter; the server renamed it from `version_query`, which it
+  now rejects.
+- Add a migration guide vignette
+  ([`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md))
+  mapping `pub_covidcast` arguments and columns to the new
+  `epidata_snapshot`/`epidata_archive` functions, and update the README
+  and pkgdown reference to lead with the new API.
+- Parse `ci_lower` and `ci_upper` data columns for some signals.
+- Improve CSV parsing performance by reading bytes directly.
+- [`save_api_key()`](https://cmu-delphi.github.io/epidatr/dev/reference/get_api_key.md)
+  no longer errors when called outside a project; it falls back to the
+  user `.Renviron`
+  ([\#339](https://github.com/cmu-delphi/epidatr/issues/339)).
+
+## epidatr 1.2.4
+
+CRAN release: 2026-06-02
 
 ### Changes
 
@@ -54,13 +81,6 @@
   results.
 - Add `lifecycle` to `DESCRIPTION` to properly manage function
   deprecations.
-
-## epidatr 1.2.4
-
-CRAN release: 2026-06-02
-
-### Patches
-
 - Extend `check_is_recent` to support numeric date formats
   ([\#320](https://github.com/cmu-delphi/epidatr/issues/320)).
 

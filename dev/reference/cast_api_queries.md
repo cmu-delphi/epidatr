@@ -71,15 +71,18 @@ epidata(
 
 - signals:
 
-  character vector. One or more signals to query for the given source.
-  Use
+  character vector. One or more signals to query for the given source;
+  comma-joined strings (e.g., `"sig1,sig2"`) are also accepted. Use
   [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)
-  to discover available signals.
+  to discover available signals. A separate API request is made per
+  signal and geo type (the cast-API only accepts one of each per
+  request) and the results are combined.
 
 - geo_type:
 
-  string. The geography type to query (e.g., `"state"`, `"nation"`,
-  `"county"`). Use
+  character vector. One or more geography types to query (e.g.,
+  `"state"`, `"nation"`, `"county"`); comma-joined strings are also
+  accepted. Use
   [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)
   to discover available geo types for a given source and signal.
 
@@ -144,7 +147,7 @@ epidata(
   exact dates (e.g., `"2025-10-16"`), operators (e.g., `"<2025-10-16"`),
   or an
   [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md).
-  Internally maps to the `version_query` API parameter.
+  Internally maps to the `report_time_query` API parameter.
 
 - issues:
 
@@ -160,6 +163,20 @@ epidata(
 `snapshot_date` to retrieve data as it appeared on a specific date, or
 `report_time` to query the archive by when data was reported. If neither
 is supplied, `epidata` returns the latest available snapshot.
+
+## Empty results
+
+An invalid `geo_type` or `signals` value for the given `source` raises
+an error (class `epidatr__epidata__invalid_geo_type` or
+`epidatr__epidata__invalid_signals` respectively), looked up via
+[`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md).
+Otherwise, an empty result warns rather than failing silently: a warning
+of class `epidatr__empty_signals` if only some of the requested signals
+returned no data, or `epidatr__empty_result` if the whole query came
+back empty (whether because the server had no matching rows, or because
+the local `geo_values`/`reference_time` filters dropped everything the
+server returned). Pass `fetch_args_list(return_empty = TRUE)` to
+suppress these errors and warnings and get an empty tibble back instead.
 
 ## See also
 

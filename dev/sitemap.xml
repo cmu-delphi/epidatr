@@ -4,6 +4,7 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/LICENSE.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/articles/epidatr.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/articles/index.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/articles/v5-api-demo.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/articles/versioned-data.html</loc></url>
@@ -28,6 +29,7 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/disable_cache.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/do_request.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/dot-aux_key_columns.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/dot-check_cast_empty.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/dot-epidatr_shared_params.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/dot-serialize_key_filters.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.html</loc></url>

@@ -405,7 +405,7 @@ pub_fluview_meta()
 #> # A tibble: 1 × 3
 #>   latest_update latest_issue table_rows
 #>   <date>        <date>            <dbl>
-#> 1 2026-08-07    2026-07-26      2830379
+#> 1 2026-08-14    2026-08-02      2837197
 ```
 
 #### Google Flu Trends data

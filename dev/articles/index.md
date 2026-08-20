@@ -4,6 +4,8 @@
 
 - [Get started with
   epidatr](https://cmu-delphi.github.io/epidatr/dev/articles/epidatr.md):
+- [Migrating from pub_covidcast to the new Epidata
+  API](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md):
 - [Finding data sources and signals of
   interest](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md):
 - [epidatr v5 API

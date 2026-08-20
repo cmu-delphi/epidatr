@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.2.4</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,7 +19,8 @@
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/migration-guide.html">Migrating from pub_covidcast to the new Epidata API</a></li>
+    <li><a class="dropdown-item" href="../articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
     <li><a class="dropdown-item" href="../articles/v5-api-demo.html">epidatr v5 API demo</a></li>
     <li><a class="dropdown-item" href="../articles/versioned-data.html">Understanding and accessing versioned data</a></li>
   </ul></li>
@@ -40,9 +41,24 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.3.0" id="epidatr-130">epidatr 1.3.0<a class="anchor" aria-label="anchor" href="#epidatr-130"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.3.5" id="epidatr-135">epidatr 1.3.5<a class="anchor" aria-label="anchor" href="#epidatr-135"></a></h2>
 <div class="section level3">
-<h3 id="changes-1-3-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-3-0"></a></h3>
+<h3 id="patches-1-3-5">Patches<a class="anchor" aria-label="anchor" href="#patches-1-3-5"></a></h3>
+<ul><li>
+<code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code> and <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> now issue one request per signal instead of joining <code>signals</code> with a comma, which the cast-API server silently matched against nothing (<a href="https://github.com/cmu-delphi/epidatr/issues/354" class="external-link">#354</a>).</li>
+<li>
+<code>epidata_archive(report_time = ...)</code> now sends the <code>report_time_query</code> API parameter; the server renamed it from <code>version_query</code>, which it now rejects.</li>
+<li>Add a migration guide vignette (<code><a href="../articles/migration-guide.html">vignette("migration-guide")</a></code>) mapping <code>pub_covidcast</code> arguments and columns to the new <code>epidata_snapshot</code>/<code>epidata_archive</code> functions, and update the README and pkgdown reference to lead with the new API.</li>
+<li>Parse <code>ci_lower</code> and <code>ci_upper</code> data columns for some signals.</li>
+<li>Improve CSV parsing performance by reading bytes directly.</li>
+<li>
+<code><a href="../reference/get_api_key.html">save_api_key()</a></code> no longer errors when called outside a project; it falls back to the user <code>.Renviron</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/339" class="external-link">#339</a>).</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.4" id="epidatr-124">epidatr 1.2.4<a class="anchor" aria-label="anchor" href="#epidatr-124"></a></h2><p class="text-muted">CRAN release: 2026-06-02</p>
+<div class="section level3">
+<h3 id="changes-1-2-4">Changes<a class="anchor" aria-label="anchor" href="#changes-1-2-4"></a></h3>
 <ul><li>Added <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code> to fetch V5-API auxiliary data, either directly by source or by merging it onto <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>/<code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> output via a version-aware left join. When no key filters are supplied, it infers them from the base to keep the pull small.</li>
 <li>
 <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, and <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> now accept per-key filters as named <code>...</code> arguments. Each key takes one or more values, sent server-side to shrink the download.</li>
@@ -54,26 +70,20 @@
 <li>Deprecate <code>debug</code> and <code>format_type</code> arguments in <code><a href="../reference/fetch_args_list.html">fetch_args_list()</a></code>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="features-1-3-0">Features<a class="anchor" aria-label="anchor" href="#features-1-3-0"></a></h3>
+<h3 id="features-1-2-4">Features<a class="anchor" aria-label="anchor" href="#features-1-2-4"></a></h3>
 <ul><li>Added new <code>epidata</code>, <code>epidata_meta</code>, <code>epidata_snapshot</code>, and <code>epidata_archive</code> for accessing the Delphi V5 API.</li>
 <li>
 <code><a href="../reference/pub_covidcast_meta.html">pub_covidcast_meta()</a></code> gained <code>signals</code>, <code>time_type</code>, and <code>geo_type</code> arguments for server-side filtering of the metadata results.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="patches-1-3-0">Patches<a class="anchor" aria-label="anchor" href="#patches-1-3-0"></a></h3>
+<h3 id="patches-1-2-4">Patches<a class="anchor" aria-label="anchor" href="#patches-1-2-4"></a></h3>
 <ul><li>
 <code>last_update</code> in <code>pub_covidcast_meta</code> is now returned as a <code>POSIXct</code> object instead of an integer.</li>
 <li>Improved efficiency of date parsing for API responses.</li>
 <li>Migrate HTTP requests from <code>httr</code> to <code>httr2</code>.</li>
 <li>Update endpoint examples to skip execution when required API keys or internet connectivity are unavailable, ensuring cleaner <code>R CMD check</code> results.</li>
 <li>Add <code>lifecycle</code> to <code>DESCRIPTION</code> to properly manage function deprecations.</li>
-</ul></div>
-</div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.2.4" id="epidatr-124">epidatr 1.2.4<a class="anchor" aria-label="anchor" href="#epidatr-124"></a></h2><p class="text-muted">CRAN release: 2026-06-02</p>
-<div class="section level3">
-<h3 id="patches-1-2-4">Patches<a class="anchor" aria-label="anchor" href="#patches-1-2-4"></a></h3>
-<ul><li>Extend <code>check_is_recent</code> to support numeric date formats (<a href="https://github.com/cmu-delphi/epidatr/issues/320" class="external-link">#320</a>).</li>
+<li>Extend <code>check_is_recent</code> to support numeric date formats (<a href="https://github.com/cmu-delphi/epidatr/issues/320" class="external-link">#320</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
