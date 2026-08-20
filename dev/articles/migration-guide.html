@@ -307,17 +307,16 @@ data looked on January 1, 2025:</p>
 <span>  as_of <span class="op">=</span> <span class="fl">20250101</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">old</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 15</span></span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 15</span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ca        pct_ed_vi… nssp   state    week      2024-09-29        <span style="color: #BB0000;">NA</span> 2026-08-16</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> pa        pct_ed_vi… nssp   state    week      2024-09-29        <span style="color: #BB0000;">NA</span> 2026-08-16</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ca        pct_ed_vi… nssp   state    week      2024-10-06        <span style="color: #BB0000;">NA</span> 2026-08-16</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> pa        pct_ed_vi… nssp   state    week      2024-10-06        <span style="color: #BB0000;">NA</span> 2026-08-16</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> ca        pct_ed_vi… nssp   state    week      2024-10-13        <span style="color: #BB0000;">NA</span> 2026-08-16</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> pa        pct_ed_vi… nssp   state    week      2024-10-13        <span style="color: #BB0000;">NA</span> 2026-08-16</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span><span class="co">#&gt; 1 ca        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-16</span></span>
+<span><span class="co">#&gt; 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-16</span></span>
+<span><span class="co">#&gt; 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-16</span></span>
+<span><span class="co">#&gt; 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-16</span></span>
+<span><span class="co">#&gt; # ℹ 2 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">new</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cast_api_queries.html">epidata_snapshot</a></span><span class="op">(</span></span>
 <span>  source <span class="op">=</span> <span class="st">"nssp"</span>,</span>
@@ -328,15 +327,14 @@ data looked on January 1, 2025:</p>
 <span>  snapshot_date <span class="op">=</span> <span class="st">"2025-01-01"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">new</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 7</span></span>
 <span><span class="co">#&gt;   signal         report_time geo_type geo_value fill_method reference_time value</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> pct_ed_visits… 2024-12-27  state    ca        source      2024-10-05     0.140</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> pct_ed_visits… 2024-12-27  state    ca        source      2024-10-12     0.140</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> pct_ed_visits… 2024-12-27  state    ca        source      2024-10-19     0.160</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> pct_ed_visits… 2024-12-27  state    ca        source      2024-10-26     0.200</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> pct_ed_visits… 2024-12-27  state    ca        source      2024-11-02     0.25 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> pct_ed_visits… 2024-12-27  state    ca        source      2024-11-09     0.310</span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;          &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-05     0.140</span></span>
+<span><span class="co">#&gt; 2 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-12     0.140</span></span>
+<span><span class="co">#&gt; 3 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-19     0.160</span></span>
+<span><span class="co">#&gt; 4 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-26     0.200</span></span>
+<span><span class="co">#&gt; # ℹ 2 more rows</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="revision-history-queries">Revision history queries<a class="anchor" aria-label="anchor" href="#revision-history-queries"></a>
@@ -350,18 +348,18 @@ data looked on January 1, 2025:</p>
 <span>  signals <span class="op">=</span> <span class="st">"pct_ed_visits_influenza"</span>,</span>
 <span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
 <span>  geo_values <span class="op">=</span> <span class="st">"pa"</span>,</span>
+<span>  reference_time <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2024-10-01"</span>, <span class="st">"2025-01-01"</span><span class="op">)</span>,</span>
 <span>  report_time <span class="op">=</span> <span class="st">"&lt;2025-06-01"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">revisions</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 7</span></span></span>
-<span><span class="co">#&gt;   signal         report_time geo_type geo_value fill_method reference_time value</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> pct_ed_visits… 2024-04-18  state    pa        source      2022-10-01     0.120</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> pct_ed_visits… 2024-04-18  state    pa        source      2022-10-08     0.100</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> pct_ed_visits… 2024-04-18  state    pa        source      2022-10-15     0.210</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> pct_ed_visits… 2024-04-18  state    pa        source      2022-10-22     0.330</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> pct_ed_visits… 2024-04-18  state    pa        source      2022-10-29     0.770</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> pct_ed_visits… 2024-04-18  state    pa        source      2022-11-05     1.63</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 6 × 7</span></span>
+<span><span class="co">#&gt;   signal        report_time geo_type geo_value fill_method reference_time  value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;         &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;          &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-05     0.0500</span></span>
+<span><span class="co">#&gt; 2 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-12     0.0700</span></span>
+<span><span class="co">#&gt; 3 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-19     0.0800</span></span>
+<span><span class="co">#&gt; 4 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-26     0.130 </span></span>
+<span><span class="co">#&gt; # ℹ 2 more rows</span></span></code></pre></div>
 <p>If you filtered by <code>lag</code>, fetch the archive and filter
 afterwards:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -376,11 +374,9 @@ new API. It returns signals, geo types, and the available
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/epidata_meta.html">epidata_meta</a></span><span class="op">(</span>source <span class="op">=</span> <span class="st">"nssp"</span><span class="op">)</span></span>
 <span><span class="va">meta</span><span class="op">$</span><span class="va">nssp</span><span class="op">$</span><span class="va">signals</span></span>
-<span><span class="co">#&gt; [1] "pct_ed_visits_ari"                "pct_ed_visits_combined"          </span></span>
-<span><span class="co">#&gt; [3] "pct_ed_visits_covid"              "pct_ed_visits_influenza"         </span></span>
-<span><span class="co">#&gt; [5] "pct_ed_visits_rsv"                "smoothed_pct_ed_visits_combined" </span></span>
-<span><span class="co">#&gt; [7] "smoothed_pct_ed_visits_covid"     "smoothed_pct_ed_visits_influenza"</span></span>
-<span><span class="co">#&gt; [9] "smoothed_pct_ed_visits_rsv"</span></span>
+<span><span class="co">#&gt; [1] "pct_ed_visits_ari"       "pct_ed_visits_combined" </span></span>
+<span><span class="co">#&gt; [3] "pct_ed_visits_covid"     "pct_ed_visits_influenza"</span></span>
+<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]</span></span>
 <span><span class="va">meta</span><span class="op">$</span><span class="va">nssp</span><span class="op">$</span><span class="va">time_value_range</span></span>
 <span><span class="co">#&gt; NULL</span></span></code></pre></div>
 <p>If <code><a href="../reference/epidata_meta.html">epidata_meta()</a></code> does not know the source yet, keep

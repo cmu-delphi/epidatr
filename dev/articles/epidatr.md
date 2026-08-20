@@ -280,7 +280,9 @@ ggplot(epidata, aes(x = time_value, y = value)) +
   )
 ```
 
-![](epidatr_files/figure-html/unnamed-chunk-8-1.png)
+![plot of chunk unnamed-chunk-8](img/epidatr-unnamed-chunk-8-1.png)
+
+plot of chunk unnamed-chunk-8
 
 `ggplot2` can also be used to [create
 choropleths](https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html).
@@ -328,7 +330,9 @@ ggplot(cli_states, aes(x = long, y = lat, group = group, fill = value)) +
   )
 ```
 
-![](epidatr_files/figure-html/unnamed-chunk-9-1.png)
+![plot of chunk unnamed-chunk-9](img/epidatr-unnamed-chunk-9-1.png)
+
+plot of chunk unnamed-chunk-9
 
 ## Finding locations of interest
 

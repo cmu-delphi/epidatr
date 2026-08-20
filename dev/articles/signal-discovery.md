@@ -127,14 +127,14 @@ be able to browse the list of data sources.
 ``` r
 
 covid_sources$signals
-#> # A tibble: 520 × 3
+#> # A tibble: 538 × 3
 #>   source signal                        short_description                        
 #>   <chr>  <chr>                         <chr>                                    
 #> 1 chng   smoothed_outpatient_cli       Estimated percentage of outpatient docto…
 #> 2 chng   smoothed_adj_outpatient_cli   Estimated percentage of outpatient docto…
 #> 3 chng   smoothed_outpatient_covid     COVID-Confirmed Doctor Visits            
 #> 4 chng   smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits            
-#> # ℹ 516 more rows
+#> # ℹ 534 more rows
 ```
 
 If you use an editor that supports tab completion, type
@@ -256,7 +256,7 @@ pub_covid_hosp_facility_lookup(state = "WY")
 #> # A tibble: 34 × 10
 #>   hospital_pk     state ccn   hospital_name address city  zip   hospital_subtype
 #>   <chr>           <chr> <chr> <chr>         <chr>   <chr> <chr> <chr>           
-#> 1 100 LANCASTER … WY    2020… 42091         NA      [C39… MAIN  390195          
+#> 1 100 LANCASTER … WY    2020… 42091         <NA>    [C39… MAIN  390195          
 #> 2 2333 BIDDLE AVE WY    2020… 26163         POINT … [C23… HENRY 230146          
 #> 3 2333 BIDDLE AV… WY    2020… 26163         POINT … [C23… SELEC 232031          
 #> 4 2752 CENTURY B… WY    2020… 42011         POINT … [C39… SURGI 390316          

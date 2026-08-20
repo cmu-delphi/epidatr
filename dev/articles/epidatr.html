@@ -310,16 +310,16 @@ supports <code>*</code>.)</p>
 <span>  geo_values <span class="op">=</span> <span class="st">"*"</span>,</span>
 <span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210105</span>, <span class="fl">20210410</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4,896 × 15</span></span></span>
+<span><span class="co">#&gt; # A tibble: 4,896 × 15</span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ak        smoothed_… fb-su… state    day       2021-01-05        <span style="color: #BB0000;">NA</span> 2021-01-10</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> al        smoothed_… fb-su… state    day       2021-01-05        <span style="color: #BB0000;">NA</span> 2021-01-10</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ar        smoothed_… fb-su… state    day       2021-01-05        <span style="color: #BB0000;">NA</span> 2021-01-10</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> az        smoothed_… fb-su… state    day       2021-01-05        <span style="color: #BB0000;">NA</span> 2021-01-10</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4,892 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span><span class="co">#&gt; 1 ak        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10</span></span>
+<span><span class="co">#&gt; 2 al        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10</span></span>
+<span><span class="co">#&gt; 3 ar        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10</span></span>
+<span><span class="co">#&gt; 4 az        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10</span></span>
+<span><span class="co">#&gt; # ℹ 4,892 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
 <p>Alternatively, we can fetch the full time series for a subset of
 states by listing out the desired locations in the
 <code>geo_value</code> argument and using <code>*</code> in the
@@ -335,16 +335,16 @@ states by listing out the desired locations in the
 <span>  geo_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pa"</span>, <span class="st">"ca"</span>, <span class="st">"fl"</span><span class="op">)</span>,</span>
 <span>  time_values <span class="op">=</span> <span class="st">"*"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,439 × 15</span></span></span>
+<span><span class="co">#&gt; # A tibble: 2,439 × 15</span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ca        smoothed_… fb-su… state    day       2020-04-06        <span style="color: #BB0000;">NA</span> 2020-09-03</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> fl        smoothed_… fb-su… state    day       2020-04-06        <span style="color: #BB0000;">NA</span> 2020-09-03</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> pa        smoothed_… fb-su… state    day       2020-04-06        <span style="color: #BB0000;">NA</span> 2020-09-03</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> ca        smoothed_… fb-su… state    day       2020-04-07        <span style="color: #BB0000;">NA</span> 2020-09-03</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,435 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span><span class="co">#&gt; 1 ca        smoothed_… fb-su… state    day       2020-04-06        NA 2020-09-03</span></span>
+<span><span class="co">#&gt; 2 fl        smoothed_… fb-su… state    day       2020-04-06        NA 2020-09-03</span></span>
+<span><span class="co">#&gt; 3 pa        smoothed_… fb-su… state    day       2020-04-06        NA 2020-09-03</span></span>
+<span><span class="co">#&gt; 4 ca        smoothed_… fb-su… state    day       2020-04-07        NA 2020-09-03</span></span>
+<span><span class="co">#&gt; # ℹ 2,435 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="getting-versioned-data">Getting versioned data<a class="anchor" aria-label="anchor" href="#getting-versioned-data"></a>
@@ -366,16 +366,16 @@ on a specific date.</p>
 <span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210105</span>, <span class="fl">20210410</span><span class="op">)</span>,</span>
 <span>  as_of <span class="op">=</span> <span class="st">"2021-06-01"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 96 × 15</span></span></span>
+<span><span class="co">#&gt; # A tibble: 96 × 15</span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> pa        smoothed_… fb-su… state    day       2021-01-05        <span style="color: #BB0000;">NA</span> 2021-01-10</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> pa        smoothed_… fb-su… state    day       2021-01-06        <span style="color: #BB0000;">NA</span> 2021-01-29</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> pa        smoothed_… fb-su… state    day       2021-01-07        <span style="color: #BB0000;">NA</span> 2021-01-29</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> pa        smoothed_… fb-su… state    day       2021-01-08        <span style="color: #BB0000;">NA</span> 2021-01-29</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 92 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span><span class="co">#&gt; 1 pa        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10</span></span>
+<span><span class="co">#&gt; 2 pa        smoothed_… fb-su… state    day       2021-01-06        NA 2021-01-29</span></span>
+<span><span class="co">#&gt; 3 pa        smoothed_… fb-su… state    day       2021-01-07        NA 2021-01-29</span></span>
+<span><span class="co">#&gt; 4 pa        smoothed_… fb-su… state    day       2021-01-08        NA 2021-01-29</span></span>
+<span><span class="co">#&gt; # ℹ 92 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
 <p>We can also request all versions of the data issued within a specific
 time range using the <code>issues</code> argument. <code>issues</code>
 can also take a single date.</p>
@@ -391,16 +391,16 @@ can also take a single date.</p>
 <span>  time_values <span class="op">=</span> <span class="st">"2021-03-01"</span>,</span>
 <span>  issues <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2021-03-01"</span>, <span class="st">"2021-04-30"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 15</span></span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 15</span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> pa        smoothed_… fb-su… state    day       2021-03-01        <span style="color: #BB0000;">NA</span> 2021-03-02</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> pa        smoothed_… fb-su… state    day       2021-03-01        <span style="color: #BB0000;">NA</span> 2021-03-03</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> pa        smoothed_… fb-su… state    day       2021-03-01        <span style="color: #BB0000;">NA</span> 2021-03-04</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> pa        smoothed_… fb-su… state    day       2021-03-01        <span style="color: #BB0000;">NA</span> 2021-03-05</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span><span class="co">#&gt; 1 pa        smoothed_… fb-su… state    day       2021-03-01        NA 2021-03-02</span></span>
+<span><span class="co">#&gt; 2 pa        smoothed_… fb-su… state    day       2021-03-01        NA 2021-03-03</span></span>
+<span><span class="co">#&gt; 3 pa        smoothed_… fb-su… state    day       2021-03-01        NA 2021-03-04</span></span>
+<span><span class="co">#&gt; 4 pa        smoothed_… fb-su… state    day       2021-03-01        NA 2021-03-05</span></span>
+<span><span class="co">#&gt; # ℹ 2 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
 <p>Finally, we can use the <code>lag</code> argument to request only
 data that was reported a certain number of days after the event.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -415,16 +415,16 @@ data that was reported a certain number of days after the event.</p>
 <span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210101</span>, <span class="fl">20210131</span><span class="op">)</span>,</span>
 <span>  lag <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 31 × 15</span></span></span>
+<span><span class="co">#&gt; # A tibble: 31 × 15</span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> pa        smoothed_… fb-su… state    day       2021-01-01        <span style="color: #BB0000;">NA</span> 2021-01-03</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> pa        smoothed_… fb-su… state    day       2021-01-02        <span style="color: #BB0000;">NA</span> 2021-01-04</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> pa        smoothed_… fb-su… state    day       2021-01-03        <span style="color: #BB0000;">NA</span> 2021-01-05</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> pa        smoothed_… fb-su… state    day       2021-01-04        <span style="color: #BB0000;">NA</span> 2021-01-06</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 27 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span><span class="co">#&gt; 1 pa        smoothed_… fb-su… state    day       2021-01-01        NA 2021-01-03</span></span>
+<span><span class="co">#&gt; 2 pa        smoothed_… fb-su… state    day       2021-01-02        NA 2021-01-04</span></span>
+<span><span class="co">#&gt; 3 pa        smoothed_… fb-su… state    day       2021-01-03        NA 2021-01-05</span></span>
+<span><span class="co">#&gt; 4 pa        smoothed_… fb-su… state    day       2021-01-04        NA 2021-01-06</span></span>
+<span><span class="co">#&gt; # ℹ 27 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
 <p>See <code><a href="../articles/versioned-data.html">vignette("versioned-data")</a></code> for details and more ways
 to specify versioned data.</p>
 </div>
@@ -443,7 +443,11 @@ we can easily plot it using <code>ggplot2</code>:</p>
 <span>    x <span class="op">=</span> <span class="st">"Date"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"CLI"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="epidatr_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="700" height="65%"></p>
+<div class="figure">
+<img src="img/epidatr-unnamed-chunk-8-1.png" alt="plot of chunk unnamed-chunk-8" width="700.0000032" height="65%"><p class="caption">
+plot of chunk unnamed-chunk-8
+</p>
+</div>
 <p><code>ggplot2</code> can also be used to <a href="https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html" class="external-link">create
 choropleths</a>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -486,7 +490,11 @@ choropleths</a>.</p>
 <span>    x <span class="op">=</span> <span class="st">"Longitude"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Latitude"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="epidatr_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="700" height="65%"></p>
+<div class="figure">
+<img src="img/epidatr-unnamed-chunk-9-1.png" alt="plot of chunk unnamed-chunk-9" width="700.0000032" height="65%"><p class="caption">
+plot of chunk unnamed-chunk-9
+</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="finding-locations-of-interest">Finding locations of interest<a class="anchor" aria-label="anchor" href="#finding-locations-of-interest"></a>
@@ -534,7 +542,7 @@ diseases</a>.</p>
 table of endpoint functions:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/avail_endpoints.html">avail_endpoints</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Data is available for the US only, unless otherwise specified</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; ℹ Data is available for the US only, unless otherwise specified</span></span></code></pre>
 <table class="table">
 <colgroup>
 <col width="33%">

@@ -117,8 +117,7 @@ head(old)
 #> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-16
 #> 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-16
 #> 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-16
-#> 5 ca        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-08-16
-#> 6 pa        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-08-16
+#> # ℹ 2 more rows
 #> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
 #> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
@@ -141,8 +140,7 @@ head(new)
 #> 2 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-12     0.140
 #> 3 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-19     0.160
 #> 4 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-26     0.200
-#> 5 pct_ed_visits… 2024-12-27  state    ca        source      2024-11-02     0.25 
-#> 6 pct_ed_visits… 2024-12-27  state    ca        source      2024-11-09     0.310
+#> # ℹ 2 more rows
 ```
 
 ## Revision history queries
@@ -160,18 +158,18 @@ revisions <- epidata_archive(
   signals = "pct_ed_visits_influenza",
   geo_type = "state",
   geo_values = "pa",
+  reference_time = epirange("2024-10-01", "2025-01-01"),
   report_time = "<2025-06-01"
 )
 head(revisions)
 #> # A tibble: 6 × 7
-#>   signal         report_time geo_type geo_value fill_method reference_time value
-#>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
-#> 1 pct_ed_visits… 2024-04-18  state    pa        source      2022-10-01     0.120
-#> 2 pct_ed_visits… 2024-04-18  state    pa        source      2022-10-08     0.100
-#> 3 pct_ed_visits… 2024-04-18  state    pa        source      2022-10-15     0.210
-#> 4 pct_ed_visits… 2024-04-18  state    pa        source      2022-10-22     0.330
-#> 5 pct_ed_visits… 2024-04-18  state    pa        source      2022-10-29     0.770
-#> 6 pct_ed_visits… 2024-04-18  state    pa        source      2022-11-05     1.63
+#>   signal        report_time geo_type geo_value fill_method reference_time  value
+#>   <chr>         <date>      <chr>    <chr>     <chr>       <date>          <dbl>
+#> 1 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-05     0.0500
+#> 2 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-12     0.0700
+#> 3 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-19     0.0800
+#> 4 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-26     0.130 
+#> # ℹ 2 more rows
 ```
 
 If you filtered by `lag`, fetch the archive and filter afterwards:
@@ -192,11 +190,9 @@ types, and the available `reference_time` and `report_time` ranges:
 
 meta <- epidata_meta(source = "nssp")
 meta$nssp$signals
-#> [1] "pct_ed_visits_ari"                "pct_ed_visits_combined"          
-#> [3] "pct_ed_visits_covid"              "pct_ed_visits_influenza"         
-#> [5] "pct_ed_visits_rsv"                "smoothed_pct_ed_visits_combined" 
-#> [7] "smoothed_pct_ed_visits_covid"     "smoothed_pct_ed_visits_influenza"
-#> [9] "smoothed_pct_ed_visits_rsv"
+#> [1] "pct_ed_visits_ari"       "pct_ed_visits_combined" 
+#> [3] "pct_ed_visits_covid"     "pct_ed_visits_influenza"
+#>  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]
 meta$nssp$time_value_range
 #> NULL
 ```

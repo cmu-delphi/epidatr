@@ -6,7 +6,7 @@ variables for a persistent cache.
 The typical recommended workflow for using the cache is to set the
 environmental variables EPIDATR_USE_CACHE=TRUE and
 EPIDATR_CACHE_DIRECTORY=&quot;/your/directory/here&quot;in your .Renviron, for
-example by calling usethis::edit_r_environ().
+example by calling file.edit(&quot;~/.Renviron&quot;).
 See the parameters below for some more configurables if you're so inclined.
 set_cache (re)defines the cache to use in a particular R session. This does
 not clear existing data at any previous location, but instead creates a
@@ -59,7 +59,7 @@ variables for a persistent cache.
 The typical recommended workflow for using the cache is to set the
 environmental variables EPIDATR_USE_CACHE=TRUE and
 EPIDATR_CACHE_DIRECTORY=&quot;/your/directory/here&quot;in your .Renviron, for
-example by calling usethis::edit_r_environ().
+example by calling file.edit(&quot;~/.Renviron&quot;).
 See the parameters below for some more configurables if you're so inclined.
 set_cache (re)defines the cache to use in a particular R session. This does
 not clear existing data at any previous location, but instead creates a
@@ -155,7 +155,7 @@ variables for a persistent cache.
 The typical recommended workflow for using the cache is to set the
 environmental variables <code>EPIDATR_USE_CACHE=TRUE</code> and
 <code>EPIDATR_CACHE_DIRECTORY="/your/directory/here"</code>in your <code>.Renviron</code>, for
-example by calling <code><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">usethis::edit_r_environ()</a></code>.
+example by calling <code>file.edit("~/.Renviron")</code>.
 See the parameters below for some more configurables if you're so inclined.</p>
 <p><code>set_cache</code> (re)defines the cache to use in a particular R session. This does
 not clear existing data at any previous location, but instead creates a
@@ -274,10 +274,10 @@ environment</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   intended).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache directory is /tmp/Rtmp4MjTeK.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache directory is /tmp/Rtmp4ksRPD.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache will be cleared after 14 days and will be pruned if it exceeds 512</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   MB.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The log of cache transactions is stored at /tmp/Rtmp4MjTeK/logs.txt.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The log of cache transactions is stored at /tmp/Rtmp4ksRPD/logs.txt.</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
