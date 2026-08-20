@@ -360,6 +360,41 @@ test_that("epidata_snapshot/epidata_archive dry_run returns a list of calls for 
   expect_length(arch_calls, 2)
 })
 
+test_that("epidata_snapshot splits comma-joined signals/geo_type strings into separate requests", {
+  calls <- epidata_snapshot(
+    source = "nssp", signals = "sig1,sig2", geo_type = "state",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_length(calls, 2)
+  expect_match(calls[[1]]$request$url, "signal=sig1")
+  expect_match(calls[[2]]$request$url, "signal=sig2")
+
+  arch_calls <- epidata_archive(
+    source = "nssp", signals = "sig1,sig2", geo_type = "state,nation",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_length(arch_calls, 4)
+  urls <- vapply(arch_calls, function(call) call$request$url, character(1))
+  for (s in c("sig1", "sig2")) {
+    for (g in c("state", "nation")) {
+      expect_length(grep(sprintf("signal=%s.*geo_type=%s|geo_type=%s.*signal=%s", s, g, g, s), urls), 1)
+    }
+  }
+})
+
+test_that("epidata_snapshot fans out one request per signal x geo_type and combines results", {
+  handler <- function(req) {
+    geo <- sub(".*geo_type=([a-z]+).*", "\\1", req$url)
+    val <- if (geo == "state") "1.0" else "2.0"
+    sprintf("signal,geo_type,geo_value,reference_time,value\nsig1,%s,ca,2024-01-01,%s", geo, val)
+  }
+  with_mock_perform(handler, {
+    res <- epidata_snapshot(source = "nssp", signals = "sig1", geo_type = c("state", "nation"))
+    expect_equal(sort(unique(res$geo_type)), c("nation", "state"))
+    expect_equal(nrow(res), 2)
+  })
+})
+
 # ---- epidata_aux ----
 
 test_that("epidata_aux base-pull builds the call, serializes key filters via ..., deprecates aliases", {

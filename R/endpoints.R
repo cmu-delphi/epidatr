@@ -1214,12 +1214,14 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #' @param source string. The data source to query (e.g., `"nssp"`, `"nhsn"`).
 #'   Use [epidata_meta()] to discover available sources.
 #' @param signals character vector. One or more signals to query for the given
-#'   source. Use [epidata_meta()] to discover available signals. A separate API
-#'   request is made per signal (the cast-API only accepts one signal per
+#'   source; comma-joined strings (e.g., `"sig1,sig2"`) are also accepted. Use
+#'   [epidata_meta()] to discover available signals. A separate API request is
+#'   made per signal and geo type (the cast-API only accepts one of each per
 #'   request) and the results are combined.
-#' @param geo_type string. The geography type to query (e.g., `"state"`,
-#'   `"nation"`, `"county"`). Use [epidata_meta()] to discover available
-#'   geo types for a given source and signal.
+#' @param geo_type character vector. One or more geography types to query
+#'   (e.g., `"state"`, `"nation"`, `"county"`); comma-joined strings are also
+#'   accepted. Use [epidata_meta()] to discover available geo types for a given
+#'   source and signal.
 #' @param reference_time [`timeset`]. Reference time to return (filters on the
 #'   `reference_time` column). Supports individual dates or [`epirange()`].
 #'   Defaults to all (`"*"`). Filtered locally after the API call.
@@ -1307,7 +1309,7 @@ epidata_snapshot <- function(
 
   assert_character_param("source", source, len = 1)
   assert_character_param("signals", signals)
-  assert_character_param("geo_type", geo_type, len = 1)
+  assert_character_param("geo_type", geo_type)
   assert_character_param("geo_values", geo_values)
   assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
   assert_date_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
@@ -1315,14 +1317,19 @@ epidata_snapshot <- function(
 
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
 
-  # One request per signal: the cast-API accepts a single signal per query.
-  fetched <- lapply(signals, function(s) {
+  # Accept comma-joined signal/geo_type strings.
+  signals <- unique(unlist(strsplit(signals, ",", fixed = TRUE)))
+  geo_type <- unique(unlist(strsplit(geo_type, ",", fixed = TRUE)))
+
+  # One request per signal x geo_type: the cast-API accepts a single value of each per query.
+  combos <- expand.grid(signal = signals, geo_type = geo_type, stringsAsFactors = FALSE)
+  fetched <- purrr::map2(combos$signal, combos$geo_type, function(s, g) {
     create_epidata_call(
       endpoint = "snapshot/",
       params = list(
         source = source,
         signal = s,
-        geo_type = geo_type,
+        geo_type = g,
         fill_method = fill_method,
         snapshot_date = snapshot_date,
         extra_keys = extra_keys
@@ -1385,7 +1392,7 @@ epidata_archive <- function(
 
   assert_character_param("source", source, len = 1)
   assert_character_param("signals", signals)
-  assert_character_param("geo_type", geo_type, len = 1)
+  assert_character_param("geo_type", geo_type)
   assert_character_param("geo_values", geo_values)
   assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
 
@@ -1415,14 +1422,19 @@ epidata_archive <- function(
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time)
   version_query <- validate_version_query(report_time)
 
-  # One request per signal: the cast-API accepts a single signal per query.
-  fetched <- lapply(signals, function(s) {
+  # Accept comma-joined signal/geo_type strings.
+  signals <- unique(unlist(strsplit(signals, ",", fixed = TRUE)))
+  geo_type <- unique(unlist(strsplit(geo_type, ",", fixed = TRUE)))
+
+  # One request per signal x geo_type: the cast-API accepts a single value of each per query.
+  combos <- expand.grid(signal = signals, geo_type = geo_type, stringsAsFactors = FALSE)
+  fetched <- purrr::map2(combos$signal, combos$geo_type, function(s, g) {
     create_epidata_call(
       endpoint = "archive/",
       params = list(
         source = source,
         signal = s,
-        geo_type = geo_type,
+        geo_type = g,
         fill_method = fill_method,
         report_time_query = version_query,
         extra_keys = extra_keys
