@@ -56,11 +56,15 @@ epidata(
 Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available sources.}
 
 \item{signals}{character vector. One or more signals to query for the given
-source. Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available signals.}
+source; comma-joined strings (e.g., \code{"sig1,sig2"}) are also accepted. Use
+\code{\link[=epidata_meta]{epidata_meta()}} to discover available signals. A separate API request is
+made per signal and geo type (the cast-API only accepts one of each per
+request) and the results are combined.}
 
-\item{geo_type}{string. The geography type to query (e.g., \code{"state"},
-\code{"nation"}, \code{"county"}). Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available
-geo types for a given source and signal.}
+\item{geo_type}{character vector. One or more geography types to query
+(e.g., \code{"state"}, \code{"nation"}, \code{"county"}); comma-joined strings are also
+accepted. Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available geo types for a given
+source and signal.}
 
 \item{geo_values}{character. The geographies to return. Defaults to all
 ("*") geographies within requested geographic resolution (see:
