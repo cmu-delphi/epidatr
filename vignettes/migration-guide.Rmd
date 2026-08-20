@@ -129,6 +129,7 @@ revisions <- epidata_archive(
   signals = "pct_ed_visits_influenza",
   geo_type = "state",
   geo_values = "pa",
+  reference_time = epirange("2024-10-01", "2025-01-01"),
   report_time = "<2025-06-01"
 )
 head(revisions)
