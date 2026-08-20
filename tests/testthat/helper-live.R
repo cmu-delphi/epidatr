@@ -14,3 +14,20 @@ skip_unless_live <- function() {
     testthat::skip("DELPHI_EPIDATA_KEY not set")
   }
 }
+
+# Live contract check for one endpoint_calls() row: the endpoint returns
+# non-empty data, the fetch is warning-free (so schema drift surfacing as
+# epidatr__missing_meta_fields or epidatr__int_nonzero_decimal_digits fails the
+# test), and each column has the class its field metadata promises.
+expect_live_call_parses <- function(thunk) {
+  call <- thunk(fetch_args_list(dry_run = TRUE))
+  result <- NULL
+  testthat::expect_no_warning(result <- thunk(fetch_args_list()))
+  if (inherits(result, "data.frame")) {
+    testthat::expect_gt(nrow(result), 0)
+    expect_meta_classes(result, call$meta)
+  } else {
+    # classic list endpoints (pub_delphi, pub_meta, pvt_meta_norostat)
+    testthat::expect_gt(length(result), 0)
+  }
+}
