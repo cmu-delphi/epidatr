@@ -1253,6 +1253,18 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #' `report_time` to query the archive by when data was reported. If neither is
 #' supplied, `epidata` returns the latest available snapshot.
 #'
+#' @section Empty results:
+#' An invalid `geo_type` or `signals` value for the given `source` raises an
+#' error (class `epidatr__epidata__invalid_geo_type` or
+#' `epidatr__epidata__invalid_signals` respectively), looked up via
+#' [epidata_meta()]. Otherwise, an empty result warns rather than failing
+#' silently: a warning of class `epidatr__empty_signals` if only some of the
+#' requested signals returned no data, or `epidatr__empty_result` if the whole
+#' query came back empty (whether because the server had no matching rows, or
+#' because the local `geo_values`/`reference_time` filters dropped everything
+#' the server returned). Pass `fetch_args_list(return_empty = TRUE)` to
+#' suppress these errors and warnings and get an empty tibble back instead.
+#'
 #' @seealso [epidata_meta()], [epirange()]
 #' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
@@ -1363,6 +1375,7 @@ epidata_snapshot <- function(
   attr(res, "cast_source") <- source # lets epidata_aux() recover the source
   attr(res, "cast_kind") <- "snapshot" # single-version view -> uniform aux merge
 
+  .check_cast_empty(res, fetched, source, signals, geo_type, fetch_args)
   res
 }
 
@@ -1468,6 +1481,7 @@ epidata_archive <- function(
   attr(res, "cast_source") <- source # lets epidata_aux() recover the source
   attr(res, "cast_kind") <- "archive" # per-row revision history -> as-of aux merge
 
+  .check_cast_empty(res, fetched, source, signals, geo_type, fetch_args)
   res
 }
 

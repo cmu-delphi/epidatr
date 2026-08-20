@@ -128,6 +128,20 @@ e.g. NWSS: \url{https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.
 supplied, \code{epidata} returns the latest available snapshot.
 }
 
+\section{Empty results}{
+
+An invalid \code{geo_type} or \code{signals} value for the given \code{source} raises an
+error (class \code{epidatr__epidata__invalid_geo_type} or
+\code{epidatr__epidata__invalid_signals} respectively), looked up via
+\code{\link[=epidata_meta]{epidata_meta()}}. Otherwise, an empty result warns rather than failing
+silently: a warning of class \code{epidatr__empty_signals} if only some of the
+requested signals returned no data, or \code{epidatr__empty_result} if the whole
+query came back empty (whether because the server had no matching rows, or
+because the local \code{geo_values}/\code{reference_time} filters dropped everything
+the server returned). Pass \code{fetch_args_list(return_empty = TRUE)} to
+suppress these errors and warnings and get an empty tibble back instead.
+}
+
 \section{See also}{
 
 For example queries showing how to discover signals and build calls,

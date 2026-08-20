@@ -132,3 +132,98 @@ filter_by_timeset <- function(df, column, timeset) {
   }
   res
 }
+
+#' Diagnose an empty (or partially empty) cast-API result.
+#'
+#' On a partial result (some rows returned), warns about the signals/geo_types
+#' that returned nothing, noting any that `epidata_meta()` says don't exist.
+#' On a fully empty result, errors on an invalid `geo_type`/`signals`, warns
+#' when the local `geo_values`/`reference_time` filters dropped every row the
+#' server returned, and warns generically otherwise. No-op when
+#' `fetch_args$return_empty` is `TRUE`.
+#' @param result the filtered result (a data frame)
+#' @param fetched the combined server response before local filtering
+#' @param source,signals,geo_type the query parameters, for error/warning
+#'   messages and for looking up `epidata_meta()`
+#' @param fetch_args a `fetch_args` object
+#' @keywords internal
+.check_cast_empty <- function(result, fetched, source, signals, geo_type, fetch_args) {
+  if (isTRUE(fetch_args$return_empty)) {
+    return(invisible(NULL))
+  }
+
+  empty_signals <- setdiff(signals, fetched[["signal"]])
+  empty_geo_types <- if ("geo_type" %in% names(fetched)) {
+    setdiff(geo_type, fetched[["geo_type"]])
+  } else if (nrow(fetched) == 0) {
+    geo_type
+  } else {
+    # Rows came back but carry no geo_type column: per-geo emptiness is unknowable.
+    character()
+  }
+  meta <- NULL
+  if (length(empty_signals) > 0 || length(empty_geo_types) > 0) {
+    meta <- tryCatch(epidata_meta(source, fetch_args = fetch_args)[[source]], error = function(e) NULL)
+  }
+  bad_signals <- if (!is.null(meta)) setdiff(empty_signals, meta$signals) else character()
+  bad_geo_types <- if (!is.null(meta)) setdiff(empty_geo_types, meta$geo_types) else character()
+
+  total_rows <- nrow(result)
+  server_total <- nrow(fetched)
+
+  if (total_rows > 0) {
+    # Partial result: warn about the empty parts, but never discard returned data.
+    msg <- c()
+    if (length(empty_signals) > 0) {
+      msg <- c(msg, "!" = "No data returned for signal{?s} {.val {empty_signals}}.")
+    }
+    if (length(empty_geo_types) > 0) {
+      msg <- c(msg, "!" = "No data returned for geo_type{?s} {.val {empty_geo_types}}.")
+    }
+    if (length(bad_signals) > 0) {
+      msg <- c(msg, "x" = "{.val {bad_signals}} {?is/are} not {?an /}available signal{?s} for \\
+        source {.val {source}}. Available signals: {.val {meta$signals}}.")
+    }
+    if (length(bad_geo_types) > 0) {
+      msg <- c(msg, "x" = "{.val {bad_geo_types}} {?is/are} not {?an /}available geo_type{?s} for \\
+        source {.val {source}}. Available geo_types: {.val {meta$geo_types}}.")
+    }
+    if (length(msg) > 0) {
+      cli::cli_warn(msg, class = "epidatr__empty_signals")
+    }
+    return(invisible(NULL))
+  }
+
+  # From here, total_rows == 0: nothing to salvage, so invalid keys are an error.
+  if (length(bad_geo_types) > 0) {
+    cli::cli_abort(
+      "{.val {bad_geo_types}} {?is/are} not {?an /}available geo_type{?s} for source {.val {source}}. \\
+       Available geo_types: {.val {meta$geo_types}}.",
+      class = "epidatr__epidata__invalid_geo_type"
+    )
+  }
+  if (length(bad_signals) > 0) {
+    cli::cli_abort(
+      "{.val {bad_signals}} {?is/are} not {?an /}available signal{?s} for source {.val {source}}. \\
+       Available signals: {.val {meta$signals}}.",
+      class = "epidatr__epidata__invalid_signals"
+    )
+  }
+
+  if (server_total > 0) {
+    cli::cli_warn(
+      "The API returned {server_total} row{?s} total, but the local {.field geo_values}/\\
+       {.field reference_time} filters matched none of them.",
+      class = "epidatr__empty_result"
+    )
+    return(invisible(NULL))
+  }
+
+  msg <- c("Query returned no rows.")
+  if (!is.null(meta) && !is.null(meta$reference_time_range)) {
+    msg <- c(msg, "i" = "Source {.val {source}}'s reference_time range: \\
+      {meta$reference_time_range$first} to {meta$reference_time_range$latest}.")
+  }
+  cli::cli_warn(msg, class = "epidatr__empty_result")
+  invisible(NULL)
+}

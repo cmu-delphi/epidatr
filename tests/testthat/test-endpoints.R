@@ -395,6 +395,167 @@ test_that("epidata_snapshot fans out one request per signal x geo_type and combi
   })
 })
 
+test_that("epidata_snapshot errors on invalid geo_type via epidata_meta", {
+  meta_json <- jsonlite::toJSON(
+    list(nssp = list(signals = c("sig1"), geo_types = c("state"))),
+    auto_unbox = TRUE
+  )
+  handler <- function(req) {
+    if (grepl("metadata/", req$url)) {
+      as.character(meta_json)
+    } else {
+      "signal,geo_value,reference_time,value\n"
+    }
+  }
+  with_mock_perform(handler, {
+    expect_error(
+      epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "county"),
+      class = "epidatr__epidata__invalid_geo_type"
+    )
+  })
+})
+
+test_that("epidata_snapshot errors on invalid signal via epidata_meta", {
+  meta_json <- jsonlite::toJSON(
+    list(nssp = list(signals = c("sig1"), geo_types = c("state"))),
+    auto_unbox = TRUE
+  )
+  handler <- function(req) {
+    if (grepl("metadata/", req$url)) {
+      as.character(meta_json)
+    } else {
+      "signal,geo_value,reference_time,value\n"
+    }
+  }
+  with_mock_perform(handler, {
+    expect_error(
+      epidata_snapshot(source = "nssp", signals = "sig2", geo_type = "state"),
+      class = "epidatr__epidata__invalid_signals"
+    )
+  })
+})
+
+test_that("epidata_snapshot warns generically on a valid-but-empty query", {
+  meta_json <- jsonlite::toJSON(
+    list(nssp = list(
+      signals = c("sig1"), geo_types = c("state"),
+      reference_time_range = list(first = "2020-01-01", latest = "2024-01-01")
+    )),
+    auto_unbox = TRUE
+  )
+  handler <- function(req) {
+    if (grepl("metadata/", req$url)) {
+      as.character(meta_json)
+    } else {
+      "signal,geo_value,reference_time,value\n"
+    }
+  }
+  with_mock_perform(handler, {
+    expect_warning(
+      epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state"),
+      class = "epidatr__empty_result"
+    )
+  })
+})
+
+test_that("epidata_snapshot warns on local-filter emptiness without ever calling epidata_meta", {
+  csv_data <- "signal,geo_value,reference_time,value\nsig1,ca,2024-01-01,1.0"
+  handler <- function(req) {
+    if (grepl("metadata/", req$url)) {
+      stop("metadata endpoint should not be requested when the server itself returned rows")
+    }
+    csv_data
+  }
+  with_mock_perform(handler, {
+    expect_warning(
+      epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", geo_values = "zz"),
+      class = "epidatr__empty_result"
+    )
+  })
+})
+
+test_that("fetch_args_list(return_empty = TRUE) suppresses cast-API empty errors/warnings", {
+  handler <- function(req) {
+    if (grepl("metadata/", req$url)) {
+      stop("metadata endpoint should not be requested when return_empty is TRUE")
+    }
+    "signal,geo_value,reference_time,value\n"
+  }
+  with_mock_perform(handler, {
+    expect_no_warning(
+      res <- epidata_snapshot(
+        source = "nssp", signals = "sig1", geo_type = "state",
+        fetch_args = fetch_args_list(return_empty = TRUE)
+      )
+    )
+    expect_equal(nrow(res), 0)
+  })
+})
+
+test_that("epidata_snapshot warns epidatr__empty_signals when only some signals return data", {
+  meta_json <- jsonlite::toJSON(
+    list(nssp = list(signals = c("sig1", "sig2"), geo_types = c("state"))),
+    auto_unbox = TRUE
+  )
+  handler <- function(req) {
+    if (grepl("metadata/", req$url)) {
+      as.character(meta_json)
+    } else if (grepl("signal=sig1", req$url)) {
+      "signal,geo_value,reference_time,value\nsig1,ca,2024-01-01,1.0"
+    } else if (grepl("signal=sig2", req$url)) {
+      "signal,geo_value,reference_time,value\n"
+    } else {
+      stop("unexpected url: ", req$url)
+    }
+  }
+  with_mock_perform(handler, {
+    expect_warning(
+      res <- epidata_snapshot(source = "nssp", signals = c("sig1", "sig2"), geo_type = "state"),
+      class = "epidatr__empty_signals"
+    )
+    expect_equal(nrow(res), 1)
+  })
+})
+
+test_that("partial results with an invalid signal or geo_type warn instead of erroring", {
+  meta_json <- jsonlite::toJSON(
+    list(nssp = list(signals = c("sig1"), geo_types = c("state"))),
+    auto_unbox = TRUE
+  )
+  handler <- function(req) {
+    if (grepl("metadata/", req$url)) {
+      as.character(meta_json)
+    } else if (grepl("signal=sig1", req$url) && grepl("geo_type=state", req$url)) {
+      "signal,geo_type,geo_value,reference_time,value\nsig1,state,ca,2024-01-01,1.0"
+    } else {
+      "signal,geo_type,geo_value,reference_time,value\n"
+    }
+  }
+  # invalid signal alongside a valid one: data survives, warning names the bad signal
+  with_mock_perform(handler, {
+    expect_warning(
+      res <- epidata_snapshot(source = "nssp", signals = c("sig1", "bogus"), geo_type = "state"),
+      class = "epidatr__empty_signals"
+    )
+    expect_equal(nrow(res), 1)
+  })
+  # invalid geo_type alongside a valid one: same, no error
+  with_mock_perform(handler, {
+    expect_warning(
+      res <- epidata_snapshot(source = "nssp", signals = "sig1", geo_type = c("state", "bogus")),
+      class = "epidatr__empty_signals"
+    )
+    expect_equal(nrow(res), 1)
+  })
+  # fully empty with an invalid signal still errors
+  with_mock_perform(handler, {
+    expect_error(
+      epidata_snapshot(source = "nssp", signals = "bogus", geo_type = "state"),
+      class = "epidatr__epidata__invalid_signals"
+    )
+  })
+})
+
 # ---- epidata_aux ----
 
 test_that("epidata_aux base-pull builds the call, serializes key filters via ..., deprecates aliases", {
