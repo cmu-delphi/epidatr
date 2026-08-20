@@ -283,7 +283,7 @@ ggplot(epidata, aes(x = time_value, y = value)) +
 ```
 
 <div class="figure">
-<img src="img/epidatr-unnamed-chunk-8-1.png" alt="plot of chunk unnamed-chunk-8" height="65%" />
+<img src="img/epidatr-unnamed-chunk-8-1.png" alt="plot of chunk unnamed-chunk-8" width="700.0000032" height="65%" />
 <p class="caption">plot of chunk unnamed-chunk-8</p>
 </div>
 
@@ -334,7 +334,7 @@ ggplot(cli_states, aes(x = long, y = lat, group = group, fill = value)) +
 ```
 
 <div class="figure">
-<img src="img/epidatr-unnamed-chunk-9-1.png" alt="plot of chunk unnamed-chunk-9" height="65%" />
+<img src="img/epidatr-unnamed-chunk-9-1.png" alt="plot of chunk unnamed-chunk-9" width="700.0000032" height="65%" />
 <p class="caption">plot of chunk unnamed-chunk-9</p>
 </div>
 

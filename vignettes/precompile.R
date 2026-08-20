@@ -20,12 +20,24 @@ local({
   # demonstrating errors on purpose set error = TRUE locally.
   knitr::opts_chunk$set(error = FALSE)
 
+  # Match pkgdown's figure settings (see pkgdown:::fig_save_args()) so the
+  # committed PNGs look like ones the website would have generated itself.
+  stopifnot("the ragg package is needed to knit figures" = requireNamespace("ragg", quietly = TRUE))
+  knitr::opts_chunk$set(
+    fig.width = 7.2916667, fig.asp = 0.618, dpi = 96,
+    fig.retina = 2, dev = "ragg_png"
+  )
+
+  # Match the other knit-time settings pkgdown::build_article() applies.
+  options(width = 80, knitr.graphics.rel_path = FALSE)
+
   # Knit from vignettes/ so figure paths (e.g. img/) resolve relative to it.
   owd <- setwd("vignettes")
   on.exit(setwd(owd))
   for (src in sources) {
     out <- sub("\\.orig$", "", src)
     message("Knitting ", src, " -> ", out)
+    set.seed(1014) # pkgdown::build_article() seeds each article the same way
     knitr::knit(src, output = out, envir = new.env(), quiet = TRUE)
   }
 })
