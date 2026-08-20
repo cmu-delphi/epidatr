@@ -141,46 +141,51 @@ perform_and_read <- function(req,
     download_path <- NULL
   }
 
-  # `con` accumulates the body until we spill to disk
+  # Holds chunks in memory until they exceed the threshold, then flushed
+  # straight to a file one chunk at a time -- never concatenated into a
+  # second full-size copy, so peak memory stays close to 1x what's buffered.
+  chunks <- list()
+  bytes_in_memory <- 0
   path <- download_path
-  con <- if (is.null(path)) rawConnection(raw(0), "r+") else file(path, "wb")
-  spilled <- !is.null(path)
+  con <- if (is.null(path)) NULL else file(path, "wb")
+  spilled <- !is.null(con)
   success <- FALSE
   on.exit(
     {
-      try(close(con), silent = TRUE)
+      if (!is.null(con)) try(close(con), silent = TRUE)
       if (!success && spilled && is.null(download_path)) try(unlink(path), silent = TRUE)
     },
     add = TRUE
   )
 
-  # Bytes buffered in memory so far. Then stop incrementing once spilled to disk.
-  bytes_in_memory <- 0
-
   # 8 MB chunks: benchmarking showed smaller chunks (e.g. 1 MB) spend most of
   # the time in per-call R<->curl overhead; 8 MB roughly halves streaming time
   # with negligible extra memory, and larger chunks give no further speedup.
   while (length(chunk <- resp_stream_raw(resp, kb = 1024L)) > 0) {
-    writeBin(chunk, con)
-    if (spilled) next
+    if (spilled) {
+      writeBin(chunk, con)
+      next
+    }
+    chunks[[length(chunks) + 1L]] <- chunk
     # length() of a raw vector = number of bytes
     bytes_in_memory <- bytes_in_memory + length(chunk)
     if (bytes_in_memory > stream_threshold_bytes) {
       path <- tempfile()
       cli::cli_inform(c("i" = "Streaming response to temporary file at {.file {path}}."))
-      file_con <- file(path, "wb")
-      writeBin(rawConnectionValue(con), file_con) # flush what we have so far
-      try(close(con), silent = TRUE)
-      con <- file_con
+      con <- file(path, "wb")
+      for (ch in chunks) writeBin(ch, con) # flush what we have so far, chunk by chunk
+      chunks <- NULL
       spilled <- TRUE
     }
   }
 
   if (!spilled) {
     success <- TRUE
-    return(new_inmem_response(resp, rawConnectionValue(con)))
+    body_raw <- if (length(chunks) == 0) raw(0) else do.call(c, chunks)
+    return(new_inmem_response(resp, body_raw))
   }
   close(con)
+  con <- NULL
   success <- TRUE
   new_inmem_response(resp, raw(0), body_path = path)
 }
