@@ -33,13 +33,16 @@ meta_nssp$nssp$time_value_range
 
 ### Basic Queries
 
-We can pull the latest snapshot of a signal.
+We can pull the latest snapshot of a signal. We bound the request with
+`reference_time` to keep the download small; leaving it at the default `"*"`
+fetches the full history.
 
 ```{r snapshot-example}
 nssp_data <- epidata_snapshot(
   source = "nssp",
   signal = "pct_ed_visits_influenza",
-  geo_type = "state"
+  geo_type = "state",
+  reference_time = epirange("2024-10-01", "2025-01-01")
 )
 head(nssp_data)
 ```
@@ -64,20 +67,22 @@ pa_ca_data <- epidata_snapshot(
   signal = "pct_ed_visits_influenza",
   geo_type = "state",
   geo_values = c("PA", "CA"),
-  as_of = "2025-01-01" # fetch data as it was known on this date
+  reference_time = epirange("2024-10-01", "2025-01-01"),
+  snapshot_date = "2025-01-01" # fetch data as it was known on this date
 )
 head(pa_ca_data)
 ```
 
 ### Archive Queries
 
-If you want to track how data for a specific time period was revised over time, you can use `epidata_archive()`.
+If you want to track how data for a specific time period was revised over time, you can use `epidata_archive()`. Archive queries return every revision of each observation, so bounding `reference_time` matters even more here — the full archive of a signal can be enormous.
 
 ```{r archive-example}
 archive_data <- epidata_archive(
   source = "nssp",
   signal = "pct_ed_visits_influenza",
-  geo_type = "state"
+  geo_type = "state",
+  reference_time = epirange("2024-12-01", "2025-01-01")
 )
 head(archive_data)
 ```
@@ -96,7 +101,8 @@ meta_nhsn$nhsn$time_value_range
 nhsn_data <- epidata_snapshot(
   source = "nhsn",
   signal = "confirmed_admissions_flu_ew",
-  geo_type = "state"
+  geo_type = "state",
+  reference_time = epirange("2024-10-01", "2025-01-01")
 )
 head(nhsn_data)
 
@@ -109,7 +115,8 @@ meta_pophive$pophive$time_value_range
 pophive_data <- epidata_snapshot(
   source = "pophive",
   signal = "covid_pct_ed",
-  geo_type = "state"
+  geo_type = "state",
+  reference_time = epirange("2024-10-01", "2025-01-01")
 )
 head(pophive_data)
 
@@ -122,7 +129,8 @@ meta_nwss$nwss$time_value_range
 nwss_data <- epidata_snapshot(
   source = "nwss",
   signal = "covid_avg_conc",
-  geo_type = "sewershed"
+  geo_type = "sewershed",
+  reference_time = epirange("2024-12-01", "2025-01-01")
 )
 head(nwss_data)
 ```
