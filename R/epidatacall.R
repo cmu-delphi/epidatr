@@ -43,9 +43,13 @@
 #' - For `create_epidata_call`: an `epidata_call` object
 #'
 #' @importFrom purrr map_chr map_lgl
-create_epidata_call <- function(endpoint, params, meta = NULL,
-                                api_version = c("classic", "cast"),
-                                response_format = c("classic", "json", "csv")) {
+create_epidata_call <- function(
+  endpoint,
+  params,
+  meta = NULL,
+  api_version = c("classic", "cast"),
+  response_format = c("classic", "json", "csv")
+) {
   checkmate::assert_character(endpoint, len = 1)
   checkmate::assert_list(params)
   checkmate::assert_list(meta, null.ok = TRUE)
@@ -218,17 +222,42 @@ fetch_args_list <- function(
   rlang::check_dots_empty()
 
   assert_character(fields, null.ok = TRUE, any.missing = FALSE)
-  assert_logical(disable_date_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  assert_logical(disable_data_frame_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  assert_logical(disable_missing_meta_warning, null.ok = FALSE, len = 1L, any.missing = FALSE)
+  assert_logical(
+    disable_date_parsing,
+    null.ok = FALSE,
+    len = 1L,
+    any.missing = FALSE
+  )
+  assert_logical(
+    disable_data_frame_parsing,
+    null.ok = FALSE,
+    len = 1L,
+    any.missing = FALSE
+  )
+  assert_logical(
+    disable_missing_meta_warning,
+    null.ok = FALSE,
+    len = 1L,
+    any.missing = FALSE
+  )
   assert_logical(return_empty, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  assert_numeric(timeout_seconds, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_numeric(stream_threshold_bytes, null.ok = FALSE, len = 1L, any.missing = FALSE, lower = 0)
   assert_character(download_path, null.ok = TRUE, len = 1L, any.missing = FALSE)
+  assert_numeric(
+    timeout_seconds,
+    null.ok = FALSE,
+    len = 1L,
+    any.missing = FALSE
+  )
   assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
   assert_logical(refresh_cache, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  assert_numeric(reference_week_day, null.ok = FALSE, len = 1L, any.missing = FALSE)
+  assert_numeric(
+    reference_week_day,
+    null.ok = FALSE,
+    len = 1L,
+    any.missing = FALSE
+  )
 
   structure(
     list(
@@ -283,7 +312,8 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 
   # If cacheable and the value is in cache, return the cached value.
   is_cachable <- check_is_cachable(epidata_call, fetch_args)
-  should_write_cache <- is_cachable || (fetch_args$refresh_cache && is_cache_enabled())
+  should_write_cache <- is_cachable ||
+    (fetch_args$refresh_cache && is_cache_enabled())
 
   if (should_write_cache) {
     target <- request_url(epidata_call, "json", fetch_args$fields)
@@ -312,7 +342,8 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
         fetch_args$disable_date_parsing,
         fetch_args$reference_week_day,
         warn_missing_meta = !isTRUE(fetch_args$disable_missing_meta_warning)
-      ) %>% tibble::as_tibble()
+      ) %>%
+        tibble::as_tibble()
     }
   })
 
@@ -336,7 +367,11 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 #' @return
 #' - For `request_epidata`: a JSON-like list
 #' @keywords internal
-request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simplify = TRUE) {
+request_epidata <- function(
+  epidata_call,
+  fetch_args = fetch_args_list(),
+  simplify = TRUE
+) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
 

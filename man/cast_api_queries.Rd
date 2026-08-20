@@ -56,11 +56,15 @@ epidata(
 Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available sources.}
 
 \item{signals}{character vector. One or more signals to query for the given
-source. Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available signals.}
+source; comma-joined strings (e.g., \code{"sig1,sig2"}) are also accepted. Use
+\code{\link[=epidata_meta]{epidata_meta()}} to discover available signals. A separate API request is
+made per signal and geo type (the cast-API only accepts one of each per
+request) and the results are combined.}
 
-\item{geo_type}{string. The geography type to query (e.g., \code{"state"},
-\code{"nation"}, \code{"county"}). Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available
-geo types for a given source and signal.}
+\item{geo_type}{character vector. One or more geography types to query
+(e.g., \code{"state"}, \code{"nation"}, \code{"county"}); comma-joined strings are also
+accepted. Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available geo types for a given
+source and signal.}
 
 \item{geo_values}{character. The geographies to return. Defaults to all
 ("*") geographies within requested geographic resolution (see:
@@ -122,6 +126,20 @@ e.g. NWSS: \url{https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.
 \code{snapshot_date} to retrieve data as it appeared on a specific date, or
 \code{report_time} to query the archive by when data was reported. If neither is
 supplied, \code{epidata} returns the latest available snapshot.
+}
+
+\section{Empty results}{
+
+An invalid \code{geo_type} or \code{signals} value for the given \code{source} raises an
+error (class \code{epidatr__epidata__invalid_geo_type} or
+\code{epidatr__epidata__invalid_signals} respectively), looked up via
+\code{\link[=epidata_meta]{epidata_meta()}}. Otherwise, an empty result warns rather than failing
+silently: a warning of class \code{epidatr__empty_signals} if only some of the
+requested signals returned no data, or \code{epidatr__empty_result} if the whole
+query came back empty (whether because the server had no matching rows, or
+because the local \code{geo_values}/\code{reference_time} filters dropped everything
+the server returned). Pass \code{fetch_args_list(return_empty = TRUE)} to
+suppress these errors and warnings and get an empty tibble back instead.
 }
 
 \section{See also}{

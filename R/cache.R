@@ -103,19 +103,27 @@ cache_environ$cache_args <- NULL
 #' @import cachem
 #' @import glue
 #' @importFrom utils sessionInfo
-set_cache <- function(cache_dir = NULL,
-                      days = NULL,
-                      max_size = NULL,
-                      logfile = NULL,
-                      confirm = TRUE,
-                      startup = FALSE) {
+set_cache <- function(
+  cache_dir = NULL,
+  days = NULL,
+  max_size = NULL,
+  logfile = NULL,
+  confirm = TRUE,
+  startup = FALSE
+) {
   if (is.null(cache_dir)) {
-    cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR", unset = rappdirs::user_cache_dir("R", version = "epidatr"))
+    cache_dir <- Sys.getenv(
+      "EPIDATR_CACHE_DIR",
+      unset = rappdirs::user_cache_dir("R", version = "epidatr")
+    )
   } else if (is.null(cache_dir)) {
     # earlier version, so no tools
     cache_dir <- Sys.getenv("EPIDATR_CACHE_DIR")
     if (cache_dir == "") {
-      cli::cli_abort("no valid EPIDATR_CACHE_DIR", class = "epidatr_cache_error")
+      cli::cli_abort(
+        "no valid EPIDATR_CACHE_DIR",
+        class = "epidatr_cache_error"
+      )
     }
   }
   stopifnot(is.character(cache_dir))
@@ -123,7 +131,8 @@ set_cache <- function(cache_dir = NULL,
     days <- Sys.getenv("EPIDATR_CACHE_MAX_AGE_DAYS", unset = 1) %>% as.numeric()
   }
   if (is.null(max_size)) {
-    max_size <- Sys.getenv("EPIDATR_CACHE_MAX_SIZE_MB", unset = 1024) %>% as.numeric()
+    max_size <- Sys.getenv("EPIDATR_CACHE_MAX_SIZE_MB", unset = 1024) %>%
+      as.numeric()
   }
   if (is.null(logfile)) {
     logfile <- Sys.getenv("EPIDATR_CACHE_LOGFILE", unset = "logfile.txt")
@@ -141,7 +150,11 @@ set_cache <- function(cache_dir = NULL,
         "viable directory has been set. Create one? (yes|no(default)) "
       ))
       repeat {
-        valid_user_input <- ifelse(grepl("yes|no", user_input), sub(".*(yes|no).*", "\\1", user_input), NA)
+        valid_user_input <- ifelse(
+          grepl("yes|no", user_input),
+          sub(".*(yes|no).*", "\\1", user_input),
+          NA
+        )
         if (user_input == "") {
           valid_user_input <- ""
         }
@@ -180,13 +193,16 @@ set_cache <- function(cache_dir = NULL,
     )
   }
 
-  cli::cli_inform(c(
-    "!" = "epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not intended).",
-    "i" = "The cache directory is {cache_dir}.",
-    "i" = "The cache will be cleared after {days} day{ifelse(days>1,'s','')}
+  cli::cli_inform(
+    c(
+      "!" = "epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not intended).",
+      "i" = "The cache directory is {cache_dir}.",
+      "i" = "The cache will be cleared after {days} day{ifelse(days>1,'s','')}
            and will be pruned if it exceeds {max_size} MB.",
-    "i" = "The log of cache transactions is stored at {file.path(cache_dir, logfile)}."
-  ), class = if (startup) "packageStartupMessage" else NULL)
+      "i" = "The log of cache transactions is stored at {file.path(cache_dir, logfile)}."
+    ),
+    class = if (startup) "packageStartupMessage" else NULL
+  )
 }
 
 #' Manually reset the cache, deleting all currently saved data and starting afresh

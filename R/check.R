@@ -6,7 +6,13 @@
 assert_character_param <- function(name, value, len = NULL, required = TRUE) {
   null_ok <- !required
   assert_integerish(len, null.ok = TRUE, .var.name = "len")
-  assert_character(value, null.ok = null_ok, len = len, any.missing = FALSE, .var.name = name)
+  assert_character(
+    value,
+    null.ok = null_ok,
+    len = len,
+    any.missing = FALSE,
+    .var.name = name
+  )
 }
 
 #' Allows integer-like vectors
@@ -15,7 +21,13 @@ assert_character_param <- function(name, value, len = NULL, required = TRUE) {
 assert_integerish_param <- function(name, value, len = NULL, required = TRUE) {
   null_ok <- !required
   assert_integerish(len, null.ok = TRUE, .var.name = "len")
-  assert_integerish(value, null.ok = null_ok, len = len, any.missing = FALSE, .var.name = name)
+  assert_integerish(
+    value,
+    null.ok = null_ok,
+    len = len,
+    any.missing = FALSE,
+    .var.name = name
+  )
 }
 
 #' Allows a vector of date_like params: date, character, or integer-like
@@ -149,7 +161,9 @@ validate_version_query <- function(version) {
   }
 
   operator <- "="
-  if (is.character(version) && length(version) == 1 && grepl("^[<>=]", version)) {
+  if (
+    is.character(version) && length(version) == 1 && grepl("^[<>=]", version)
+  ) {
     operator <- substr(version, 1, 1)
     version <- substr(version, 2, nchar(version))
   } else if (inherits(version, "EpiRange")) {
@@ -179,7 +193,10 @@ validate_version_query <- function(version) {
 #' helper to convert a date wildcard ("*") to an appropriate epirange
 #'
 #' @keywords internal
-get_wildcard_equivalent_dates <- function(time_value, time_type = c("day", "week")) {
+get_wildcard_equivalent_dates <- function(
+  time_value,
+  time_type = c("day", "week")
+) {
   time_type <- match.arg(time_type)
 
   if (identical(time_value, "*")) {
