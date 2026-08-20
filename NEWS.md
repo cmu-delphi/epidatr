@@ -1,4 +1,4 @@
-# epidatr 1.3.3
+# epidatr 1.3.5
 
 ## Patches
 
@@ -7,6 +7,7 @@
 - Add a migration guide vignette (`vignette("migration-guide")`) mapping `pub_covidcast` arguments and columns to the new `epidata_snapshot`/`epidata_archive` functions, and update the README and pkgdown reference to lead with the new API.
 - Parse `ci_lower` and `ci_upper` data columns for some signals.
 - Improve CSV parsing performance by reading bytes directly.
+- `save_api_key()` no longer errors when called outside a project; it falls back to the user `.Renviron` (#339).
 
 # epidatr 1.2.4
 
