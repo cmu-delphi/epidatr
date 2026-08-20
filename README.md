@@ -38,36 +38,55 @@ also provide packages for downstream data processing
 
 ``` r
 library(epidatr)
-# Obtain the smoothed covid-like illness (CLI) signal from Delphi's US COVID-19
-# Trends and Impact Survey (CTIS), in partnership with Facebook, as it was on
-# April 10, 2021 for the US at the national level
-epidata <- pub_covidcast(
-  source = "fb-survey",
-  signals = "smoothed_cli",
-  geo_type = "nation",
-  time_type = "day",
-  geo_values = "us",
-  time_values = epirange(20210101, 20210601),
-  as_of = 20210601
+# Discover what a source offers: signals, geo types, and date ranges
+meta <- epidata_meta(source = "nssp")
+meta$nssp$signals
+#> [1] "pct_ed_visits_ari"                "pct_ed_visits_combined"          
+#> [3] "pct_ed_visits_covid"              "pct_ed_visits_influenza"         
+#> [5] "pct_ed_visits_rsv"                "smoothed_pct_ed_visits_combined" 
+#> [7] "smoothed_pct_ed_visits_covid"     "smoothed_pct_ed_visits_influenza"
+#> [9] "smoothed_pct_ed_visits_rsv"
+
+# Fetch the latest snapshot of NSSP influenza ED visit percentages by state
+flu <- epidata_snapshot(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state"
 )
-epidata
-#> # A tibble: 151 × 15
-#>    geo_value signal    source geo_type time_type time_value direction issue     
-#>    <chr>     <chr>     <chr>  <fct>    <fct>     <date>         <dbl> <date>    
-#>  1 us        smoothed… fb-su… nation   day       2021-01-01        NA 2021-01-06
-#>  2 us        smoothed… fb-su… nation   day       2021-01-02        NA 2021-01-07
-#>  3 us        smoothed… fb-su… nation   day       2021-01-03        NA 2021-01-08
-#>  4 us        smoothed… fb-su… nation   day       2021-01-04        NA 2021-01-09
-#>  5 us        smoothed… fb-su… nation   day       2021-01-05        NA 2021-01-10
-#>  6 us        smoothed… fb-su… nation   day       2021-01-06        NA 2021-01-29
-#>  7 us        smoothed… fb-su… nation   day       2021-01-07        NA 2021-01-29
-#>  8 us        smoothed… fb-su… nation   day       2021-01-08        NA 2021-01-29
-#>  9 us        smoothed… fb-su… nation   day       2021-01-09        NA 2021-01-29
-#> 10 us        smoothed… fb-su… nation   day       2021-01-10        NA 2021-01-29
-#> # ℹ 141 more rows
-#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
-#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
+flu
+#> # A tibble: 10,353 × 7
+#>    signal        report_time geo_type geo_value fill_method reference_time value
+#>    <chr>         <date>      <chr>    <chr>     <chr>       <date>         <dbl>
+#>  1 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-01     0.140
+#>  2 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-08     0.240
+#>  3 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-15     0.320
+#>  4 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-22     0.760
+#>  5 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-29     1.16 
+#>  6 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-05     1.94 
+#>  7 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-12     3.73 
+#>  8 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-19     6.82 
+#>  9 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-26     8.67 
+#> 10 pct_ed_visit… 2026-06-26  state    ak        source      2022-12-03     9.85 
+#> # ℹ 10,343 more rows
 ```
+
+## Which endpoint has my data?
+
+The Delphi Epidata API has three generations of endpoints, and this
+package has client functions for all of them:
+
+- **v5 (current):** `epidata_snapshot()`, `epidata_archive()`, and
+  `epidata_meta()`. Start here; sources are moving to v5 one at a time.
+- **v4 (covidcast):** `pub_covidcast()`. Still carries the sources that
+  have not moved to v5 yet.
+- **v3 (legacy):** the many other `pub_*` functions
+  (e.g. `pub_fluview()`, `pub_gft()`), one per dataset. Most of these
+  datasets are static or no longer updated; they remain available for
+  historical work.
+
+If you have existing `pub_covidcast()` code, see
+`vignette("migration-guide")` for the argument and column mapping to the
+v5 functions.
 
 ## Installation
 

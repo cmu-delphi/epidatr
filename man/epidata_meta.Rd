@@ -4,10 +4,11 @@
 \alias{epidata_meta}
 \title{Get cast-API source metadata}
 \usage{
-epidata_meta(source, fetch_args = fetch_args_list())
+epidata_meta(source = NULL, fetch_args = fetch_args_list())
 }
 \arguments{
-\item{source}{string. The data source to query.}
+\item{source}{string. The data source to query. If \code{NULL} (default), returns
+metadata for all available sources.}
 
 \item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}

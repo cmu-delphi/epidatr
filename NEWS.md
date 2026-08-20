@@ -1,8 +1,11 @@
-# epidatr 1.3.0
+# epidatr 1.2.4
 
 ## Changes
 
+- Added `epidata_aux()` to fetch V5-API auxiliary data, either directly by source or by merging it onto `epidata_snapshot()`/`epidata_archive()` output via a version-aware left join. When no key filters are supplied, it infers them from the base to keep the pull small.
+- `epidata_aux()`, `epidata_snapshot()`, and `epidata_archive()` now accept per-key filters as named `...` arguments. Each key takes one or more values, sent server-side to shrink the download.
 - Improve documentation, including descriptions for `save_api_key()` and endpoint parameters, and standardize parameter information (#324 and #334).
+- Add a migration guide vignette (`vignette("migration-guide")`) mapping `pub_covidcast` arguments and columns to the new `epidata_snapshot`/`epidata_archive` functions, and update the README and pkgdown reference to lead with the new API.
 - Modernize internal API architecture by migrating from `httr` to `httr2`.
 - Introduce a centralized validation system in `R/check.R` using `checkmate` to standardize input checking, date parsing, and API parameter formatting.
 - Refactor `epidata_call` and `do_request` to use `httr2` request objects, implement automatic GET-to-POST fallback, and add robust retry logic.
@@ -17,17 +20,12 @@
 
 ## Patches
 
+- `epidata_archive(report_time = ...)` now sends the `report_time_query` API parameter; the server renamed it from `version_query`, which it now rejects.
 - `last_update` in `pub_covidcast_meta` is now returned as a `POSIXct` object instead of an integer.
 - Improved efficiency of date parsing for API responses.
 - Migrate HTTP requests from `httr` to `httr2`.
 - Update endpoint examples to skip execution when required API keys or internet connectivity are unavailable, ensuring cleaner `R CMD check` results.
 - Add `lifecycle` to `DESCRIPTION` to properly manage function deprecations.
-
-
-# epidatr 1.2.4
-
-## Patches
-
 - Extend `check_is_recent` to support numeric date formats (#320).
 
 # epidatr 1.2.2

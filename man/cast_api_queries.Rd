@@ -72,7 +72,11 @@ Defaults to all (\code{"*"}). Filtered locally after the API call.}
 
 \item{time_values}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{reference_time} instead.}
 
-\item{...}{not used for values, forces later arguments to bind by name}
+\item{...}{Named filters on extra key columns beyond \code{geo_value}, such as
+\code{pcr_target = "sars-cov-2"} or \code{sample_index = c("a", "b")}. Each key
+accepts one or more values (matched as OR) and is sent server-side via the
+\code{extra_keys} API parameter to shrink the download. Passing more than 10
+values for a key warns. Unlike}
 
 \item{fill_method}{string. Optional filter to an imputation method.
 The API provides alternatives of the same signal differing in how
@@ -92,7 +96,7 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 \item{report_time}{Date, string, or \code{\link[=epirange]{epirange()}}. A query on the
 \code{report_time} column for the archive endpoint. Supports exact dates (e.g.,
 \code{"2025-10-16"}), operators (e.g., \code{"<2025-10-16"}), or an \code{\link[=epirange]{epirange()}}.
-Internally maps to the \code{version_query} API parameter.}
+Internally maps to the \code{report_time_query} API parameter.}
 
 \item{issues}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{report_time} instead.}
 }
@@ -108,6 +112,9 @@ available issues.
 \item \code{epidata} is a wrapper that routes to one of the above based
 on which versioning argument is supplied.
 }
+
+For a source's signals, geo types, and extra key columns, see its API docs,
+e.g. NWSS: \url{https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html}.
 }
 \section{Data Versioning}{
 

@@ -154,6 +154,10 @@ print.epidata_call <- function(x, ...) {
 #'   (non-tabular)
 #' @param return_empty boolean that allows returning an empty tibble if there is
 #'   no data
+#' @param disable_missing_meta_warning if `TRUE`, suppress the warning emitted
+#'   when the response contains columns not declared as expected epidata fields.
+#'   Useful for endpoints/signals that intentionally return extra, untyped
+#'   columns.
 #' @param timeout_seconds the maximum amount of time (in seconds) to wait for a
 #'   response from the API server
 #' @param stream_threshold_bytes the response body is accumulated in memory
@@ -183,6 +187,7 @@ fetch_args_list <- function(
   fields = NULL,
   disable_date_parsing = FALSE,
   disable_data_frame_parsing = FALSE,
+  disable_missing_meta_warning = FALSE,
   return_empty = FALSE,
   timeout_seconds = 15 * 60,
   stream_threshold_bytes = 500 * 1024^2,
@@ -215,6 +220,7 @@ fetch_args_list <- function(
   assert_character(fields, null.ok = TRUE, any.missing = FALSE)
   assert_logical(disable_date_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_logical(disable_data_frame_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
+  assert_logical(disable_missing_meta_warning, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_logical(return_empty, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_numeric(timeout_seconds, null.ok = FALSE, len = 1L, any.missing = FALSE)
   assert_numeric(stream_threshold_bytes, null.ok = FALSE, len = 1L, any.missing = FALSE, lower = 0)
@@ -229,6 +235,7 @@ fetch_args_list <- function(
       fields = fields,
       disable_date_parsing = disable_date_parsing,
       disable_data_frame_parsing = disable_data_frame_parsing,
+      disable_missing_meta_warning = disable_missing_meta_warning,
       return_empty = return_empty,
       timeout_seconds = timeout_seconds,
       stream_threshold_bytes = stream_threshold_bytes,
@@ -303,7 +310,8 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
         epidata_call,
         response_content,
         fetch_args$disable_date_parsing,
-        fetch_args$reference_week_day
+        fetch_args$reference_week_day,
+        warn_missing_meta = !isTRUE(fetch_args$disable_missing_meta_warning)
       ) %>% tibble::as_tibble()
     }
   })

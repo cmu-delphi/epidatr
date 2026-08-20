@@ -66,14 +66,13 @@ Open a release issue and then copy and follow this checklist in the issue (modif
 - [ ] `devtools::build_readme()`
 - [ ] `devtools::check_win_devel()`
 - [ ] Have maintainer ("cre" in description) check email for problems.
-- [ ] `revdepcheck::revdep_check(num_workers = 4)`.
-  - This may choke, it is very sensitive to the binary versions of packages on a given system. Either bypass or ask someone else to run it if you're concerned.
 - [ ] Update `cran-comments.md`
 - [ ] PR with any changes (and go through the list again) into `dev` and run through the list again.
 
 Submit to CRAN:
 
 - [ ] remove `Remotes` from the `DESCRIPTION`, as CRAN doesn't support it.
+- [ ] make sure there's no stray files in your local copy of the repository
 - [ ] `devtools::submit_cran()`.
 - [ ] Maintainer approves email.
 

@@ -225,7 +225,8 @@ parse_value <- function(info, value, disable_date_parsing = FALSE, reference_wee
 }
 
 #' @importFrom purrr map_chr
-parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE, reference_week_day = 1) {
+parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE, reference_week_day = 1,
+                             warn_missing_meta = TRUE) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   meta <- epidata_call$meta
   df <- as.data.frame(df)
@@ -237,7 +238,7 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE, ref
   meta_field_names <- map_chr(meta, "name")
   missing_fields <- setdiff(names(df), meta_field_names)
   if (
-    length(missing_fields) != 0
+    warn_missing_meta && length(missing_fields) != 0
   ) {
     cli::cli_warn(
       c(
