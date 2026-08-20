@@ -27,15 +27,20 @@ release_bullets <- function() {
 #' @examples
 #' avail_endpoints()
 avail_endpoints <- function() {
-  h <- help.search("endpoint",
-    package = "epidatr", fields = "concept",
+  h <- help.search(
+    "endpoint",
+    package = "epidatr",
+    fields = "concept",
     agrep = FALSE
   )$matches
-  tib <- tibble::tibble( # printing is much nicer than data.frame
+  tib <- tibble::tibble(
+    # printing is much nicer than data.frame
     Endpoint = paste0(h$Name, "()"),
     Description = h$Title
   )
-  cli::cli_inform(c("i" = "Data is available for the US only, unless otherwise specified"))
+  cli::cli_inform(c(
+    "i" = "Data is available for the US only, unless otherwise specified"
+  ))
   tib %>% print(n = 50)
 }
 
@@ -108,14 +113,22 @@ filter_by_timeset <- function(df, column, timeset) {
   # serializes as "2024-01-01", not its integer day-count.
   terms <- unlist(mapply(
     function(k, vals) paste0(k, ":", as.character(vals)),
-    names(key_filters), key_filters,
-    SIMPLIFY = FALSE, USE.NAMES = FALSE
+    names(key_filters),
+    key_filters,
+    SIMPLIFY = FALSE,
+    USE.NAMES = FALSE
   ))
   paste(terms, collapse = ",")
 }
 
 #' @keywords internal
-.cast_filter <- function(res, geo_values, reference_time, parsed_reference_times, report_time = NULL) {
+.cast_filter <- function(
+  res,
+  geo_values,
+  reference_time,
+  parsed_reference_times,
+  report_time = NULL
+) {
   if (!inherits(res, "data.frame")) {
     return(res)
   }
@@ -147,7 +160,14 @@ filter_by_timeset <- function(df, column, timeset) {
 #'   messages and for looking up `epidata_meta()`
 #' @param fetch_args a `fetch_args` object
 #' @keywords internal
-.check_cast_empty <- function(result, fetched, source, signals, geo_type, fetch_args) {
+.check_cast_empty <- function(
+  result,
+  fetched,
+  source,
+  signals,
+  geo_type,
+  fetch_args
+) {
   if (isTRUE(fetch_args$return_empty)) {
     return(invisible(NULL))
   }
@@ -163,10 +183,21 @@ filter_by_timeset <- function(df, column, timeset) {
   }
   meta <- NULL
   if (length(empty_signals) > 0 || length(empty_geo_types) > 0) {
-    meta <- tryCatch(epidata_meta(source, fetch_args = fetch_args)[[source]], error = function(e) NULL)
+    meta <- tryCatch(
+      epidata_meta(source, fetch_args = fetch_args)[[source]],
+      error = function(e) NULL
+    )
   }
-  bad_signals <- if (!is.null(meta)) setdiff(empty_signals, meta$signals) else character()
-  bad_geo_types <- if (!is.null(meta)) setdiff(empty_geo_types, meta$geo_types) else character()
+  bad_signals <- if (!is.null(meta)) {
+    setdiff(empty_signals, meta$signals)
+  } else {
+    character()
+  }
+  bad_geo_types <- if (!is.null(meta)) {
+    setdiff(empty_geo_types, meta$geo_types)
+  } else {
+    character()
+  }
 
   total_rows <- nrow(result)
   server_total <- nrow(fetched)
@@ -175,18 +206,30 @@ filter_by_timeset <- function(df, column, timeset) {
     # Partial result: warn about the empty parts, but never discard returned data.
     msg <- c()
     if (length(empty_signals) > 0) {
-      msg <- c(msg, "!" = "No data returned for signal{?s} {.val {empty_signals}}.")
+      msg <- c(
+        msg,
+        "!" = "No data returned for signal{?s} {.val {empty_signals}}."
+      )
     }
     if (length(empty_geo_types) > 0) {
-      msg <- c(msg, "!" = "No data returned for geo_type{?s} {.val {empty_geo_types}}.")
+      msg <- c(
+        msg,
+        "!" = "No data returned for geo_type{?s} {.val {empty_geo_types}}."
+      )
     }
     if (length(bad_signals) > 0) {
-      msg <- c(msg, "x" = "{.val {bad_signals}} {?is/are} not {?an /}available signal{?s} for \\
-        source {.val {source}}. Available signals: {.val {meta$signals}}.")
+      msg <- c(
+        msg,
+        "x" = "{.val {bad_signals}} {?is/are} not {?an /}available signal{?s} for \\
+        source {.val {source}}. Available signals: {.val {meta$signals}}."
+      )
     }
     if (length(bad_geo_types) > 0) {
-      msg <- c(msg, "x" = "{.val {bad_geo_types}} {?is/are} not {?an /}available geo_type{?s} for \\
-        source {.val {source}}. Available geo_types: {.val {meta$geo_types}}.")
+      msg <- c(
+        msg,
+        "x" = "{.val {bad_geo_types}} {?is/are} not {?an /}available geo_type{?s} for \\
+        source {.val {source}}. Available geo_types: {.val {meta$geo_types}}."
+      )
     }
     if (length(msg) > 0) {
       cli::cli_warn(msg, class = "epidatr__empty_signals")
@@ -221,8 +264,11 @@ filter_by_timeset <- function(df, column, timeset) {
 
   msg <- c("Query returned no rows.")
   if (!is.null(meta) && !is.null(meta$reference_time_range)) {
-    msg <- c(msg, "i" = "Source {.val {source}}'s reference_time range: \\
-      {meta$reference_time_range$first} to {meta$reference_time_range$latest}.")
+    msg <- c(
+      msg,
+      "i" = "Source {.val {source}}'s reference_time range: \\
+      {meta$reference_time_range$first} to {meta$reference_time_range$latest}."
+    )
   }
   cli::cli_warn(msg, class = "epidatr__empty_result")
   invisible(NULL)

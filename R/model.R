@@ -53,7 +53,13 @@ epirange <- function(from, to) {
   }
 
   if (nchar(from) != nchar(to)) {
-    stop(paste0("EpiRange error, from (", from, ") and to (", to, ") must be the same format"))
+    stop(paste0(
+      "EpiRange error, from (",
+      from,
+      ") and to (",
+      to,
+      ") must be the same format"
+    ))
   }
 
   if (to < from) {
@@ -95,10 +101,14 @@ print.EpiRange <- function(x, ...) {
   } else if (nchar(x$from) == 6) {
     date_type <- "Epiweeks" # nolint: object_usage_linter
     x$from <- paste0(
-      substr(x$from, 1, 4), "w", substr(x$from, 5, 6)
+      substr(x$from, 1, 4),
+      "w",
+      substr(x$from, 5, 6)
     )
     x$to <- paste0(
-      substr(x$to, 1, 4), "w", substr(x$to, 5, 6)
+      substr(x$to, 1, 4),
+      "w",
+      substr(x$to, 5, 6)
     )
   }
 
@@ -142,22 +152,27 @@ NULL
 #' @param description A description of the field's content.
 #' @param categories Categories for the field, if applicable.
 #' @keywords internal
-create_epidata_field_info <- function(name,
-                                      type,
-                                      description = "",
-                                      categories = c()) {
+create_epidata_field_info <- function(
+  name,
+  type,
+  description = "",
+  categories = c()
+) {
   checkmate::assert_character(name, len = 1)
   checkmate::assert_character(type, len = 1)
-  checkmate::assert_subset(type, c(
-    "text",
-    "int",
-    "float",
-    "date",
-    "timestamp",
-    "epiweek",
-    "categorical",
-    "bool"
-  ))
+  checkmate::assert_subset(
+    type,
+    c(
+      "text",
+      "int",
+      "float",
+      "date",
+      "timestamp",
+      "epiweek",
+      "categorical",
+      "bool"
+    )
+  )
   checkmate::assert_character(description, len = 1)
   structure(
     list(
@@ -189,16 +204,29 @@ print.EpidataFieldInfo <- function(x, ...) {
 #' @return The parsed value.
 #' @keywords internal
 #' @importFrom stats na.omit
-parse_value <- function(info, value, disable_date_parsing = FALSE, reference_week_day = 1) {
+parse_value <- function(
+  info,
+  value,
+  disable_date_parsing = FALSE,
+  reference_week_day = 1
+) {
   stopifnot(inherits(info, "EpidataFieldInfo"))
 
   if (is.null(value)) {
     return(value)
-  } else if (info$type == "date" && !disable_date_parsing && !inherits(value, "Date")) {
+  } else if (
+    info$type == "date" && !disable_date_parsing && !inherits(value, "Date")
+  ) {
     return(parse_api_date(value))
-  } else if (info$type == "timestamp" && !disable_date_parsing && !inherits(value, "POSIXt")) {
+  } else if (
+    info$type == "timestamp" &&
+      !disable_date_parsing &&
+      !inherits(value, "POSIXt")
+  ) {
     return(parse_api_timestamp_to_datetime(value))
-  } else if (info$type == "epiweek" && !disable_date_parsing && !inherits(value, "Date")) {
+  } else if (
+    info$type == "epiweek" && !disable_date_parsing && !inherits(value, "Date")
+  ) {
     return(parse_api_week(value, reference_week_day = reference_week_day))
   } else if (info$type == "bool") {
     return(as.logical(value))
@@ -225,8 +253,13 @@ parse_value <- function(info, value, disable_date_parsing = FALSE, reference_wee
 }
 
 #' @importFrom purrr map_chr
-parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE, reference_week_day = 1,
-                             warn_missing_meta = TRUE) {
+parse_data_frame <- function(
+  epidata_call,
+  df,
+  disable_date_parsing = FALSE,
+  reference_week_day = 1,
+  warn_missing_meta = TRUE
+) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   meta <- epidata_call$meta
   df <- as.data.frame(df)
@@ -237,9 +270,7 @@ parse_data_frame <- function(epidata_call, df, disable_date_parsing = FALSE, ref
 
   meta_field_names <- map_chr(meta, "name")
   missing_fields <- setdiff(names(df), meta_field_names)
-  if (
-    warn_missing_meta && length(missing_fields) != 0
-  ) {
+  if (warn_missing_meta && length(missing_fields) != 0) {
     cli::cli_warn(
       c(
         "Not all return columns are specified as expected epidata fields",
@@ -289,7 +320,9 @@ parse_api_date <- function(value) {
   # assume that all elements share the same format.
   for (fmt in formats) {
     is_missing <- is.na(res) & !is.na(value_char)
-    if (!any(is_missing)) break
+    if (!any(is_missing)) {
+      break
+    }
     attempt <- suppressWarnings(as.Date(value_char[is_missing], format = fmt))
     res[is_missing] <- attempt
   }
@@ -322,7 +355,11 @@ parse_api_week <- function(value, reference_week_day = 1) {
     res <- as.Date(rep(NA, length(v)))
     valid <- !is.na(years) & !is.na(weeks)
     if (any(valid)) {
-      res[valid] <- MMWRweek::MMWRweek2Date(years[valid], weeks[valid], MMWRday = reference_week_day)
+      res[valid] <- MMWRweek::MMWRweek2Date(
+        years[valid],
+        weeks[valid],
+        MMWRday = reference_week_day
+      )
     }
     return(res)
   }
