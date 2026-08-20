@@ -100,6 +100,17 @@ test_that("check_is_recent can handle both str and date inputs of various length
   # Old integer date
   old_int_date <- as.numeric(format(Sys.Date() - 14, "%Y%m%d"))
   expect_false(check_is_recent(old_int_date, 7))
+
+  # Boundary string dates
+  expect_true(check_is_recent(format(Sys.Date() - 7, format = "%Y%m%d"), 7))
+  expect_true(check_is_recent(format(Sys.Date() + 12, format = "%Y%m%d"), 7))
+
+  # epiranges: recent if any part of the range is within the window
+  day_str <- function(offset) format(Sys.Date() + offset, format = "%Y%m%d")
+  expect_false(check_is_recent(epirange(day_str(-12), day_str(-9)), 7))
+  expect_true(check_is_recent(epirange(day_str(-12), day_str(-2)), 7))
+  expect_true(check_is_recent(epirange(day_str(-2), day_str(0)), 7))
+  expect_true(check_is_recent(epirange(day_str(0), day_str(5)), 7))
 })
 
 test_that("get_wildcard_equivalent_dates works in basic cases", {

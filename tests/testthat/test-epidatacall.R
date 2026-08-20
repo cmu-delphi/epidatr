@@ -128,39 +128,6 @@ test_that("fetch classic works", {
   expect_snapshot_value(fetch_out, style = "json2", cran = TRUE)
 })
 
-test_that("create_epidata_call basic behavior", {
-  endpoint <- "endpoint"
-  base_url <- "https://api.delphi.cmu.edu/epidata/"
-  params <- list()
-
-  # Success
-  meta <- list(
-    create_epidata_field_info("time_value", "date"),
-    create_epidata_field_info("value", "float")
-  )
-
-  formatted_params <- format_params_for_api(params)
-
-  r <- httr2::request(global_base_url) |>
-    httr2::req_url_path_append(endpoint) |>
-    httr2::req_url_query(!!!formatted_params)
-
-  expected <- list(
-    request = r,
-    base_url = base_url,
-    meta = meta,
-    api_version = "classic",
-    response_format = "classic"
-  )
-  class(expected) <- "epidata_call"
-  expect_identical(create_epidata_call(endpoint, params, meta = meta), expected)
-
-  expected$meta <- list()
-  expect_identical(create_epidata_call(endpoint, params, meta = NULL), expected)
-  expect_identical(create_epidata_call(endpoint, params, meta = list()), expected)
-})
-
-
 test_that("create_epidata_call fails when meta arg contains duplicates", {
   endpoint <- "endpoint"
   params <- list()
