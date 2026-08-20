@@ -27,7 +27,7 @@ expect_live_call_parses <- function(thunk) {
   testthat::expect_no_warning(result <- thunk(fetch_args_list()))
   if (inherits(result, "data.frame")) {
     testthat::expect_gt(nrow(result), 0)
-    expect_meta_classes(result, call$meta)
+    expect_meta_classes(result, call$meta) # nolint: object_usage_linter.
   } else {
     # classic list endpoints (pub_delphi, pub_meta, pvt_meta_norostat)
     testthat::expect_gt(length(result), 0)
