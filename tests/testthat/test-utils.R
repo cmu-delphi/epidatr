@@ -3,7 +3,10 @@ test_that("format_item", {
   expect_identical(format_item("5"), "5")
   expect_identical(format_item("*"), "*")
   expect_identical(format_item(as.Date("2020-01-01")), "20200101")
-  expect_identical(format_item(as.Date("2020-01-01") + 0:1), "20200101,20200102")
+  expect_identical(
+    format_item(as.Date("2020-01-01") + 0:1),
+    "20200101,20200102"
+  )
   expect_identical(format_item(epirange(201501, 201601)), "201501-201601")
 })
 
@@ -12,7 +15,10 @@ test_that("format_list", {
   expect_identical(format_list("5"), "5")
   expect_identical(format_list("*"), "*")
   expect_identical(format_list(as.Date("2020-01-01")), "20200101")
-  expect_identical(format_list(as.Date("2020-01-01") + 0:1), "20200101,20200102")
+  expect_identical(
+    format_list(as.Date("2020-01-01") + 0:1),
+    "20200101,20200102"
+  )
   expect_identical(format_list(c(5, 6)), "5,6")
   expect_identical(format_list(c("5", "6")), "5,6")
   expect_identical(format_list(c("*", "*")), "*,*")
@@ -24,22 +30,40 @@ test_that("format_list", {
 test_that("check_is_cachable can handle both str and date inputs of various lengths", {
   fetch_args <- fetch_args_list()
 
-  expect_no_error(check_is_cachable(create_epidata_call("e", list()), fetch_args))
+  expect_no_error(check_is_cachable(
+    create_epidata_call("e", list()),
+    fetch_args
+  ))
 
   # as_of string
-  expect_no_error(check_is_cachable(create_epidata_call("e", list(as_of = "2022-01-01")), fetch_args))
+  expect_no_error(check_is_cachable(
+    create_epidata_call("e", list(as_of = "2022-01-01")),
+    fetch_args
+  ))
 
   # as_of date
-  expect_no_error(check_is_cachable(create_epidata_call("e", list(as_of = as.Date("2022-01-01"))), fetch_args))
+  expect_no_error(check_is_cachable(
+    create_epidata_call("e", list(as_of = as.Date("2022-01-01"))),
+    fetch_args
+  ))
 
   # issues single string
-  expect_no_error(check_is_cachable(create_epidata_call("e", list(issues = "2022-01-01")), fetch_args))
+  expect_no_error(check_is_cachable(
+    create_epidata_call("e", list(issues = "2022-01-01")),
+    fetch_args
+  ))
 
   # issues string vector
-  expect_no_error(check_is_cachable(create_epidata_call("e", list(issues = c("2022-01-01", "2022-02-01"))), fetch_args))
+  expect_no_error(check_is_cachable(
+    create_epidata_call("e", list(issues = c("2022-01-01", "2022-02-01"))),
+    fetch_args
+  ))
 
   # issues single date
-  expect_no_error(check_is_cachable(create_epidata_call("e", list(issues = as.Date("2022-01-01"))), fetch_args))
+  expect_no_error(check_is_cachable(
+    create_epidata_call("e", list(issues = as.Date("2022-01-01"))),
+    fetch_args
+  ))
 
   # issues date vector
   expect_no_error(check_is_cachable(
@@ -129,7 +153,10 @@ test_that("get_wildcard_equivalent_dates works in basic cases", {
   result <- get_wildcard_equivalent_dates(epirange(20200201, 20201031), "day")
   expect_identical(result, epirange(20200201, 20201031))
 
-  result <- get_wildcard_equivalent_dates(epirange("20200201", "20201031"), "day")
+  result <- get_wildcard_equivalent_dates(
+    epirange("20200201", "20201031"),
+    "day"
+  )
   expect_identical(result, epirange("20200201", "20201031"))
 
   # Day wildcard
