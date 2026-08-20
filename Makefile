@@ -8,6 +8,8 @@ test:
 	Rscript -e "devtools::test()"
 test-live:
 	EPIDATR_LIVE_TEST=TRUE Rscript -e "devtools::test(filter = 'live')"
+update-fixtures:
+	Rscript data-raw/update_fixtures.R
 coverage:
 	Rscript -e "devtools::test_coverage()"
 document:
