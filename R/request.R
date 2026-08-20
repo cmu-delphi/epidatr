@@ -132,7 +132,7 @@ do_request <- function(
 perform_and_read <- function(req,
                              stream_threshold_bytes = Inf,
                              download_path = NULL) {
-  resp <- httr2::req_perform_connection(req)
+  resp <- req_perform_connection(req)
   on.exit(close(resp), add = TRUE)
 
   # Errors are small and must stay in memory
@@ -141,38 +141,47 @@ perform_and_read <- function(req,
     download_path <- NULL
   }
 
-  # Holds chunks in memory until they exceed the threshold,
-  # then spilling to a file.
-  # `con` is non-NULL once we have switched to writing on disk.
-  chunks <- list()
-  bytes <- 0
+  # `con` accumulates the body until we spill to disk
   path <- download_path
-  con <- if (is.null(path)) NULL else file(path, "wb")
+  con <- if (is.null(path)) rawConnection(raw(0), "r+") else file(path, "wb")
+  spilled <- !is.null(path)
+  success <- FALSE
+  on.exit(
+    {
+      try(close(con), silent = TRUE)
+      if (!success && spilled && is.null(download_path)) try(unlink(path), silent = TRUE)
+    },
+    add = TRUE
+  )
+
+  # Bytes buffered in memory so far. Then stop incrementing once spilled to disk.
+  bytes_in_memory <- 0
 
   # 8 MB chunks: benchmarking showed smaller chunks (e.g. 1 MB) spend most of
   # the time in per-call R<->curl overhead; 8 MB roughly halves streaming time
   # with negligible extra memory, and larger chunks give no further speedup.
-  while (length(chunk <- httr2::resp_stream_raw(resp, kb = 1024L)) > 0) {
-    if (!is.null(con)) {
-      writeBin(chunk, con)
-      next
-    }
-    chunks[[length(chunks) + 1L]] <- chunk
+  while (length(chunk <- resp_stream_raw(resp, kb = 1024L)) > 0) {
+    writeBin(chunk, con)
+    if (spilled) next
     # length() of a raw vector = number of bytes
-    bytes <- bytes + length(chunk)
-    if (bytes > stream_threshold_bytes) {
+    bytes_in_memory <- bytes_in_memory + length(chunk)
+    if (bytes_in_memory > stream_threshold_bytes) {
       path <- tempfile()
       cli::cli_inform(c("i" = "Streaming response to temporary file at {.file {path}}."))
-      con <- file(path, "wb")
-      writeBin(vctrs::list_unchop(chunks), con) # flush what we have so far
-      chunks <- NULL
+      file_con <- file(path, "wb")
+      writeBin(rawConnectionValue(con), file_con) # flush what we have so far
+      try(close(con), silent = TRUE)
+      con <- file_con
+      spilled <- TRUE
     }
   }
 
-  if (is.null(con)) {
-    return(new_inmem_response(resp, vctrs::list_unchop(chunks) %||% raw(0)))
+  if (!spilled) {
+    success <- TRUE
+    return(new_inmem_response(resp, rawConnectionValue(con)))
   }
   close(con)
+  success <- TRUE
   new_inmem_response(resp, raw(0), body_path = path)
 }
 
