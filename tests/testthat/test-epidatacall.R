@@ -32,29 +32,41 @@ test_that("large responses stream to disk and parse identically to in-memory", {
     api_version = "classic",
     response_format = "csv"
   )
+  raw_bytes <- charToRaw(csv_data)
+  make_stream_mock <- function() {
+    sent <- FALSE
+    function(...) {
+      if (!sent) {
+        sent <<- TRUE
+        return(raw_bytes)
+      }
+      raw(0)
+    }
+  }
 
-  in_mem <- with_mocked_response(csv_data, request_epidata(call))
-
-  tmp <- tempfile()
-  writeLines(csv_data, tmp)
   local_mocked_bindings(
-    perform_and_read = function(req, ...) {
-      resp <- create_mock_response("", headers = list("content-type" = "text/csv"))
-      resp$body_path <- tmp
-      resp
-    },
+    req_perform_connection = function(...) create_mock_response("", headers = list("content-type" = "text/csv")),
+    resp_stream_raw = make_stream_mock(),
     .package = "epidatr"
   )
-  from_disk <- request_epidata(call)
+  in_mem <- request_epidata(call)
+
+  local_mocked_bindings(
+    req_perform_connection = function(...) create_mock_response("", headers = list("content-type" = "text/csv")),
+    resp_stream_raw = make_stream_mock(),
+    .package = "epidatr"
+  )
+  expect_message(
+    from_disk <- request_epidata(call, fetch_args_list(stream_threshold_bytes = 1)),
+    "Streaming response to temporary file"
+  )
 
   expect_equal(from_disk, in_mem)
-  # temp file is cleaned up after parsing
-  expect_false(file.exists(tmp))
 })
 
 test_that("perform_and_read messages when streaming to a temp file", {
   # verify cli_inform message when streaming threshold is exceeded
-  req <- httr2::request("http://example.com")
+  req <- httr2::request("http://perform-and-read-test.invalid")
   local_mocked_bindings(
     req_perform_connection = function(...) create_mock_response(""),
     resp_stream_raw = local({
@@ -73,6 +85,28 @@ test_that("perform_and_read messages when streaming to a temp file", {
   expect_message(
     perform_and_read(req, stream_threshold_bytes = 10),
     "Streaming response to temporary file"
+  )
+})
+
+test_that("perform_and_read cleans up the connection and temp file on a mid-stream error", {
+  req <- httr2::request("http://perform-and-read-test.invalid")
+  local_mocked_bindings(
+    req_perform_connection = function(...) create_mock_response(""),
+    resp_stream_raw = local({
+      n <- 0
+      function(...) {
+        n <<- n + 1
+        if (n == 1) {
+          return(raw(20))
+        }
+        stop("simulated connection reset")
+      }
+    }),
+    .package = "epidatr"
+  )
+  expect_error(
+    perform_and_read(req, stream_threshold_bytes = 10),
+    "simulated connection reset"
   )
 })
 
