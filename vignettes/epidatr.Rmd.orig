@@ -1,0 +1,300 @@
+---
+title: "Get started with epidatr"
+output:
+  rmarkdown::html_vignette:
+    code_folding: show
+vignette: >
+  %\VignetteIndexEntry{Get started with epidatr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{ggplot2}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.path = "img/epidatr-")
+options(tibble.print_min = 4L, tibble.print_max = 4L, max.print = 4L)
+```
+
+The epidatr package provides access to all the endpoints of the [Delphi Epidata
+API](https://cmu-delphi.github.io/delphi-epidata/), and can be used to make
+requests for specific signals on specific dates and in select geographic
+regions.
+
+
+## Setup
+
+### Installation
+
+You can install the stable version of this package from CRAN:
+
+```R
+install.packages("epidatr")
+pak::pkg_install("epidatr")
+renv::install("epidatr")
+```
+
+Or if you want the development version, install from GitHub:
+
+```R
+# Install the dev version using `pak` or `remotes`
+pak::pkg_install("cmu-delphi/epidatr@dev")
+remotes::install_github("cmu-delphi/epidatr", ref = "dev")
+renv::install("cmu-delphi/epidatr@dev")
+```
+
+### API Keys
+
+The Delphi API requires a (free) API key for full functionality. While most
+endpoints are available without one, there are
+[limits on API usage for anonymous users](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html),
+including a rate limit.
+
+To generate your key,
+[register for a pseudo-anonymous account](https://api.delphi.cmu.edu/epidata/admin/registration_form).
+See the `save_api_key()` function documentation for details on how to set up
+`epidatr` to use your API key.
+
+_Note_ that private endpoints (i.e. those prefixed with `pvt_`) require a
+separate key that needs to be passed as an argument. These endpoints require
+specific data use agreements to access.
+
+
+## Basic Usage
+
+Fetching data from the Delphi Epidata API is simple. Suppose we are
+interested in the
+[`covidcast` endpoint](https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html),
+which provides access to a
+[wide range of data](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html)
+on COVID-19. Reviewing the endpoint documentation, we see that we
+[need to specify](https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html#constructing-api-queries)
+a data source name, a signal name, a geographic level, a time resolution, and
+the location and times of interest.
+
+The `pub_covidcast()` function lets us access the `covidcast` endpoint:
+
+```{r}
+library(epidatr)
+library(dplyr)
+
+# Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
+# signal from the COVID-19 Trends and Impact survey for the US
+epidata <- pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "nation",
+  time_type = "day",
+  geo_values = "us",
+  time_values = epirange(20210105, 20210410)
+)
+knitr::kable(head(epidata))
+```
+
+`pub_covidcast()` returns a `tibble`. (Here we’re using `knitr::kable()` to make
+it more readable.) Each row represents one observation in Pennsylvania on one
+day. The state abbreviation is given in the `geo_value` column, the date in
+the `time_value` column. Here `value` is the requested signal -- in this
+case, the smoothed estimate of the percentage of people with COVID-like
+illness, based on the symptom surveys, and `stderr` is its standard error.
+
+The Epidata API makes signals available at different geographic levels,
+depending on the endpoint. To request signals for all states instead of the
+entire US, we use the `geo_type` argument paired with `*` for the
+`geo_values` argument. (Only some endpoints allow for the use of `*` to
+access data at all locations. Check the help for a given endpoint to see if
+it supports `*`.)
+
+```{r}
+# Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
+# signal from the COVID-19 Trends and Impact survey for all states
+pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = "*",
+  time_values = epirange(20210105, 20210410)
+)
+```
+
+Alternatively, we can fetch the full time series for a subset of states by
+listing out the desired locations in the `geo_value` argument and using `*`
+in the `time_values` argument:
+
+```{r}
+# Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
+# signal from the COVID-19 Trends and Impact survey for Pennsylvania
+pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = c("pa", "ca", "fl"),
+  time_values = "*"
+)
+```
+
+## Getting versioned data
+
+The Epidata API stores a historical record of all data, including corrections
+and updates, which is particularly useful for accurately backtesting
+forecasting models. To retrieve versioned data, we can use the `as_of`
+argument, which fetches the data as it was known on a specific date.
+
+```{r}
+# Obtain the smoothed covid-like illness (CLI) signal from the COVID-19
+# Trends and Impact survey for Pennsylvania as it was on 2021-06-01
+pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = "pa",
+  time_values = epirange(20210105, 20210410),
+  as_of = "2021-06-01"
+)
+```
+
+We can also request all versions of the data issued within a specific time range using the `issues` argument. `issues` can also take a single date.
+
+```{r}
+# See how the estimate for a SINGLE day (March 1, 2021) evolved
+# by fetching all issues reported between March and April 2021.
+pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = "pa",
+  time_values = "2021-03-01",
+  issues = epirange("2021-03-01", "2021-04-30")
+)
+```
+
+Finally, we can use the `lag` argument to request only data that was reported a certain number of days after the event.
+
+```{r}
+# Fetch survey data for January 2021, but ONLY include data
+# that was issued exactly 2 days after it was collected.
+pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = "pa",
+  time_values = epirange(20210101, 20210131),
+  lag = 2
+)
+```
+
+See `vignette("versioned-data")` for details and more ways to specify versioned data.
+
+
+## Plotting
+
+Because the output data is in a standard `tibble` format, we can easily plot
+it using `ggplot2`:
+
+```{r, out.height="65%"}
+library(ggplot2)
+ggplot(epidata, aes(x = time_value, y = value)) +
+  geom_line() +
+  labs(
+    title = "Smoothed CLI from Facebook Survey",
+    subtitle = "PA, 2021",
+    x = "Date",
+    y = "CLI"
+  )
+```
+
+`ggplot2` can also be used to [create choropleths](https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html).
+
+
+```{r, class.source = "fold-hide", out.height="65%"}
+library(maps)
+
+# Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
+# signal from the COVID-19 Trends and Impact survey for all states on a single day
+cli_states <- pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_cli",
+  geo_type = "state",
+  time_type = "day",
+  geo_values = "*",
+  time_values = 20210410
+)
+
+# Get a mapping of states to longitude/latitude coordinates
+states_map <- map_data("state")
+
+# Convert state abbreviations into state names
+cli_states <- mutate(
+  cli_states,
+  state = ifelse(
+    geo_value == "dc",
+    "district of columbia",
+    state.name[match(geo_value, tolower(state.abb))] %>% tolower()
+  )
+)
+
+# Add coordinates for each state
+cli_states <- left_join(states_map, cli_states, by = c("region" = "state"))
+
+# Plot
+ggplot(cli_states, aes(x = long, y = lat, group = group, fill = value)) +
+  geom_polygon(colour = "black", linewidth = 0.2) +
+  coord_map("polyconic") +
+  labs(
+    title = "Smoothed CLI from Facebook Survey",
+    subtitle = "All states, 2021-04-10",
+    x = "Longitude",
+    y = "Latitude"
+  )
+```
+
+
+## Finding locations of interest
+
+Most data is only available for the US. Select endpoints report other countries at the national and/or regional levels. Endpoint descriptions explicitly state when they cover non-US locations.
+
+For endpoints that report US data, see the
+[geographic coding documentation](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html)
+for available geographic levels.
+
+
+### International data
+
+International data is available via
+
+- `pub_dengue_nowcast` (North and South America)
+- `pub_ecdc_ili` (Europe)
+- `pub_kcdc_ili` (Korea)
+- `pub_nidss_dengue` (Taiwan)
+- `pub_nidss_flu` (Taiwan)
+- `pub_paho_dengue` (North and South America)
+- `pvt_dengue_sensors` (North and South America)
+
+
+## Finding data sources and signals of interest
+
+Above we used data from [Delphi’s symptom surveys](https://delphi.cmu.edu/covid19/ctis/),
+but the Epidata API includes numerous data streams: medical claims data, cases
+and deaths, mobility, and many others. This can make it a challenge to find
+the data stream that you are most interested in.
+
+The Epidata documentation lists all the data sources and signals available
+through the API for [COVID-19](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html)
+and for [other diseases](https://cmu-delphi.github.io/delphi-epidata/api/README.html#source-specific-parameters).
+
+You can also use the `avail_endpoints()` function to get a table of endpoint functions:
+
+```{r, eval = FALSE}
+avail_endpoints()
+```
+
+```{r, echo = FALSE}
+invisible(capture.output(endpts <- avail_endpoints()))
+knitr::kable(endpts)
+```
+
+See `vignette("signal-discovery")` for more information.

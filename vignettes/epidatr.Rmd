@@ -10,10 +10,7 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-```{r, echo = FALSE, message = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = identical(Sys.getenv("NOT_CRAN"), "true"))
-options(tibble.print_min = 4L, tibble.print_max = 4L, max.print = 4L)
-```
+
 
 The epidatr package provides access to all the endpoints of the [Delphi Epidata
 API](https://cmu-delphi.github.io/delphi-epidata/), and can be used to make
@@ -73,9 +70,18 @@ the location and times of interest.
 
 The `pub_covidcast()` function lets us access the `covidcast` endpoint:
 
-```{r}
+
+``` r
 library(epidatr)
 library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
 
 # Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
 # signal from the COVID-19 Trends and Impact survey for the US
@@ -89,6 +95,19 @@ epidata <- pub_covidcast(
 )
 knitr::kable(head(epidata))
 ```
+
+
+
+|geo_value |signal       |source    |geo_type |time_type |time_value | direction|issue      | lag| missing_value| missing_stderr| missing_sample_size|    value|    stderr| sample_size|
+|:---------|:------------|:---------|:--------|:---------|:----------|---------:|:----------|---:|-------------:|--------------:|-------------------:|--------:|---------:|-----------:|
+|us        |smoothed_cli |fb-survey |nation   |day       |2021-01-05 |        NA|2021-01-10 |   5|             0|              0|                   0| 1.184132| 0.0162137|      360654|
+|us        |smoothed_cli |fb-survey |nation   |day       |2021-01-06 |        NA|2021-01-29 |  23|             0|              0|                   0| 1.179046| 0.0162516|      356720|
+|us        |smoothed_cli |fb-survey |nation   |day       |2021-01-07 |        NA|2021-01-29 |  22|             0|              0|                   0| 1.197495| 0.0165100|      351906|
+|us        |smoothed_cli |fb-survey |nation   |day       |2021-01-08 |        NA|2021-01-29 |  21|             0|              0|                   0| 1.218064| 0.0167278|      348471|
+|us        |smoothed_cli |fb-survey |nation   |day       |2021-01-09 |        NA|2021-01-29 |  20|             0|              0|                   0| 1.219899| 0.0168694|      342855|
+|us        |smoothed_cli |fb-survey |nation   |day       |2021-01-10 |        NA|2021-01-29 |  19|             0|              0|                   0| 1.231889| 0.0171074|      336455|
+
+
 
 `pub_covidcast()` returns a `tibble`. (Here we’re using `knitr::kable()` to make
 it more readable.) Each row represents one observation in Pennsylvania on one
@@ -104,7 +123,8 @@ entire US, we use the `geo_type` argument paired with `*` for the
 access data at all locations. Check the help for a given endpoint to see if
 it supports `*`.)
 
-```{r}
+
+``` r
 # Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
 # signal from the COVID-19 Trends and Impact survey for all states
 pub_covidcast(
@@ -115,13 +135,24 @@ pub_covidcast(
   geo_values = "*",
   time_values = epirange(20210105, 20210410)
 )
+#> # A tibble: 4,896 × 15
+#>   geo_value signal     source geo_type time_type time_value direction issue     
+#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#> 1 ak        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10
+#> 2 al        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10
+#> 3 ar        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10
+#> 4 az        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10
+#> # ℹ 4,892 more rows
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
 
 Alternatively, we can fetch the full time series for a subset of states by
 listing out the desired locations in the `geo_value` argument and using `*`
 in the `time_values` argument:
 
-```{r}
+
+``` r
 # Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
 # signal from the COVID-19 Trends and Impact survey for Pennsylvania
 pub_covidcast(
@@ -132,6 +163,16 @@ pub_covidcast(
   geo_values = c("pa", "ca", "fl"),
   time_values = "*"
 )
+#> # A tibble: 2,439 × 15
+#>   geo_value signal     source geo_type time_type time_value direction issue     
+#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#> 1 ca        smoothed_… fb-su… state    day       2020-04-06        NA 2020-09-03
+#> 2 fl        smoothed_… fb-su… state    day       2020-04-06        NA 2020-09-03
+#> 3 pa        smoothed_… fb-su… state    day       2020-04-06        NA 2020-09-03
+#> 4 ca        smoothed_… fb-su… state    day       2020-04-07        NA 2020-09-03
+#> # ℹ 2,435 more rows
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
 
 ## Getting versioned data
@@ -141,7 +182,8 @@ and updates, which is particularly useful for accurately backtesting
 forecasting models. To retrieve versioned data, we can use the `as_of`
 argument, which fetches the data as it was known on a specific date.
 
-```{r}
+
+``` r
 # Obtain the smoothed covid-like illness (CLI) signal from the COVID-19
 # Trends and Impact survey for Pennsylvania as it was on 2021-06-01
 pub_covidcast(
@@ -153,11 +195,22 @@ pub_covidcast(
   time_values = epirange(20210105, 20210410),
   as_of = "2021-06-01"
 )
+#> # A tibble: 96 × 15
+#>   geo_value signal     source geo_type time_type time_value direction issue     
+#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#> 1 pa        smoothed_… fb-su… state    day       2021-01-05        NA 2021-01-10
+#> 2 pa        smoothed_… fb-su… state    day       2021-01-06        NA 2021-01-29
+#> 3 pa        smoothed_… fb-su… state    day       2021-01-07        NA 2021-01-29
+#> 4 pa        smoothed_… fb-su… state    day       2021-01-08        NA 2021-01-29
+#> # ℹ 92 more rows
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
 
 We can also request all versions of the data issued within a specific time range using the `issues` argument. `issues` can also take a single date.
 
-```{r}
+
+``` r
 # See how the estimate for a SINGLE day (March 1, 2021) evolved
 # by fetching all issues reported between March and April 2021.
 pub_covidcast(
@@ -169,11 +222,22 @@ pub_covidcast(
   time_values = "2021-03-01",
   issues = epirange("2021-03-01", "2021-04-30")
 )
+#> # A tibble: 6 × 15
+#>   geo_value signal     source geo_type time_type time_value direction issue     
+#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#> 1 pa        smoothed_… fb-su… state    day       2021-03-01        NA 2021-03-02
+#> 2 pa        smoothed_… fb-su… state    day       2021-03-01        NA 2021-03-03
+#> 3 pa        smoothed_… fb-su… state    day       2021-03-01        NA 2021-03-04
+#> 4 pa        smoothed_… fb-su… state    day       2021-03-01        NA 2021-03-05
+#> # ℹ 2 more rows
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
 
 Finally, we can use the `lag` argument to request only data that was reported a certain number of days after the event.
 
-```{r}
+
+``` r
 # Fetch survey data for January 2021, but ONLY include data
 # that was issued exactly 2 days after it was collected.
 pub_covidcast(
@@ -185,6 +249,16 @@ pub_covidcast(
   time_values = epirange(20210101, 20210131),
   lag = 2
 )
+#> # A tibble: 31 × 15
+#>   geo_value signal     source geo_type time_type time_value direction issue     
+#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#> 1 pa        smoothed_… fb-su… state    day       2021-01-01        NA 2021-01-03
+#> 2 pa        smoothed_… fb-su… state    day       2021-01-02        NA 2021-01-04
+#> 3 pa        smoothed_… fb-su… state    day       2021-01-03        NA 2021-01-05
+#> 4 pa        smoothed_… fb-su… state    day       2021-01-04        NA 2021-01-06
+#> # ℹ 27 more rows
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
 
 See `vignette("versioned-data")` for details and more ways to specify versioned data.
@@ -195,7 +269,8 @@ See `vignette("versioned-data")` for details and more ways to specify versioned 
 Because the output data is in a standard `tibble` format, we can easily plot
 it using `ggplot2`:
 
-```{r, out.height="65%"}
+
+``` r
 library(ggplot2)
 ggplot(epidata, aes(x = time_value, y = value)) +
   geom_line() +
@@ -207,10 +282,16 @@ ggplot(epidata, aes(x = time_value, y = value)) +
   )
 ```
 
+<div class="figure">
+<img src="img/epidatr-unnamed-chunk-8-1.png" alt="plot of chunk unnamed-chunk-8" height="65%" />
+<p class="caption">plot of chunk unnamed-chunk-8</p>
+</div>
+
 `ggplot2` can also be used to [create choropleths](https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html).
 
 
-```{r, class.source = "fold-hide", out.height="65%"}
+
+```{.r .fold-hide}
 library(maps)
 
 # Obtain the most up-to-date version of the smoothed covid-like illness (CLI)
@@ -252,6 +333,11 @@ ggplot(cli_states, aes(x = long, y = lat, group = group, fill = value)) +
   )
 ```
 
+<div class="figure">
+<img src="img/epidatr-unnamed-chunk-9-1.png" alt="plot of chunk unnamed-chunk-9" height="65%" />
+<p class="caption">plot of chunk unnamed-chunk-9</p>
+</div>
+
 
 ## Finding locations of interest
 
@@ -288,13 +374,52 @@ and for [other diseases](https://cmu-delphi.github.io/delphi-epidata/api/README.
 
 You can also use the `avail_endpoints()` function to get a table of endpoint functions:
 
-```{r, eval = FALSE}
+
+``` r
 avail_endpoints()
 ```
 
-```{r, echo = FALSE}
-invisible(capture.output(endpts <- avail_endpoints()))
-knitr::kable(endpts)
+
 ```
+#> ℹ Data is available for the US only, unless otherwise specified
+```
+
+
+
+|Endpoint                          |Description                                                        |
+|:---------------------------------|:------------------------------------------------------------------|
+|cast_api_queries()                |cast-API snapshot and archive queries                              |
+|epidata_aux()                     |Fetch V5 auxiliary data                                            |
+|epidata_meta()                    |Get cast-API source metadata                                       |
+|pub_covid_hosp_facility()         |COVID hospitalizations by facility                                 |
+|pub_covid_hosp_facility_lookup()  |Helper for finding COVID hospitalization facilities                |
+|pub_covid_hosp_state_timeseries() |COVID hospitalizations by state                                    |
+|pub_covidcast()                   |Various COVID and flu signals via the COVIDcast endpoint           |
+|pub_covidcast_meta()              |Metadata for the COVIDcast endpoint                                |
+|pub_delphi()                      |Delphi's ILINet outpatient doctor visits forecasts                 |
+|pub_dengue_nowcast()              |Delphi's PAHO dengue nowcasts (North and South America)            |
+|pub_ecdc_ili()                    |ECDC ILI incidence (Europe)                                        |
+|pub_flusurv()                     |CDC FluSurv flu hospitalizations                                   |
+|pub_fluview()                     |CDC FluView ILINet outpatient doctor visits                        |
+|pub_fluview_clinical()            |CDC FluView flu tests from clinical labs                           |
+|pub_fluview_meta()                |Metadata for the FluView endpoint                                  |
+|pub_gft()                         |Google Flu Trends flu search volume                                |
+|pub_kcdc_ili()                    |KCDC ILI incidence (Korea)                                         |
+|pub_meta()                        |Metadata for the Delphi Epidata API                                |
+|pub_nidss_dengue()                |NIDSS dengue cases (Taiwan)                                        |
+|pub_nidss_flu()                   |NIDSS flu doctor visits (Taiwan)                                   |
+|pub_nowcast()                     |Delphi's ILI Nearby nowcasts                                       |
+|pub_paho_dengue()                 |PAHO dengue data (North and South America)                         |
+|pub_wiki()                        |Wikipedia webpage counts by article                                |
+|pvt_cdc()                         |CDC total and by topic webpage visits                              |
+|pvt_dengue_sensors()              |PAHO dengue digital surveillance sensors (North and South America) |
+|pvt_ght()                         |Google Health Trends health topics search volume                   |
+|pvt_meta_norostat()               |Metadata for the NoroSTAT endpoint                                 |
+|pvt_norostat()                    |CDC NoroSTAT norovirus outbreaks                                   |
+|pvt_quidel()                      |Quidel COVID-19 and influenza testing data                         |
+|pvt_sensors()                     |Influenza and dengue digital surveillance sensors                  |
+|pvt_twitter()                     |HealthTweets total and influenza-related tweets                    |
+
+
 
 See `vignette("signal-discovery")` for more information.

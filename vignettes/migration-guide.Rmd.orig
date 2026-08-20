@@ -9,10 +9,11 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
 
-
-
-``` r
+```{r setup, message = FALSE, eval = TRUE}
 library(epidatr)
 ```
 
@@ -82,11 +83,9 @@ adds its own columns, such as `ci_lower` and `ci_upper`. Use the metadata or
 the [documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
  to see which value columns a source returns:
 
-
-``` r
+```{r value-columns}
 meta_sleepcycle <- epidata_meta(source = "sleepcycle")
 meta_sleepcycle$sleepcycle$value_columns
-#> [1] "ci_lower" "ci_upper" "value"
 ```
 
 ## A query, before and after
@@ -94,8 +93,7 @@ meta_sleepcycle$sleepcycle$value_columns
 Fetching NSSP influenza ED visit percentages for two states, as the data
 looked on January 1, 2025:
 
-
-``` r
+```{r before}
 old <- pub_covidcast(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
@@ -106,20 +104,9 @@ old <- pub_covidcast(
   as_of = 20250101
 )
 head(old)
-#> # A tibble: 6 × 15
-#>   geo_value signal     source geo_type time_type time_value direction issue     
-#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
-#> 1 ca        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-16
-#> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-16
-#> 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-16
-#> 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-16
-#> # ℹ 2 more rows
-#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
-#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
 
-
-``` r
+```{r after}
 new <- epidata_snapshot(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
@@ -129,14 +116,6 @@ new <- epidata_snapshot(
   snapshot_date = "2025-01-01"
 )
 head(new)
-#> # A tibble: 6 × 7
-#>   signal         report_time geo_type geo_value fill_method reference_time value
-#>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
-#> 1 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-05     0.140
-#> 2 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-12     0.140
-#> 3 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-19     0.160
-#> 4 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-26     0.200
-#> # ℹ 2 more rows
 ```
 
 ## Revision history queries
@@ -144,8 +123,7 @@ head(new)
 Where you used to pass `issues` to `pub_covidcast()`, use
 `epidata_archive()` with `report_time`:
 
-
-``` r
+```{r archive}
 revisions <- epidata_archive(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
@@ -155,20 +133,11 @@ revisions <- epidata_archive(
   report_time = "<2025-06-01"
 )
 head(revisions)
-#> # A tibble: 6 × 7
-#>   signal        report_time geo_type geo_value fill_method reference_time  value
-#>   <chr>         <date>      <chr>    <chr>     <chr>       <date>          <dbl>
-#> 1 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-05     0.0500
-#> 2 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-12     0.0700
-#> 3 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-19     0.0800
-#> 4 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-26     0.130 
-#> # ℹ 2 more rows
 ```
 
 If you filtered by `lag`, fetch the archive and filter afterwards:
 
-
-``` r
+```{r lag, eval = FALSE}
 revisions[revisions$report_time - revisions$reference_time <= 7, ]
 ```
 
@@ -178,15 +147,10 @@ Use `epidata_meta()` to see what a source offers in the new API. It returns
 signals, geo types, and the available `reference_time` and `report_time`
 ranges:
 
-
-``` r
+```{r meta}
 meta <- epidata_meta(source = "nssp")
 meta$nssp$signals
-#> [1] "pct_ed_visits_ari"       "pct_ed_visits_combined" 
-#> [3] "pct_ed_visits_covid"     "pct_ed_visits_influenza"
-#>  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]
 meta$nssp$time_value_range
-#> NULL
 ```
 
 If `epidata_meta()` does not know the source yet, keep using

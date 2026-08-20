@@ -12,6 +12,11 @@ coverage:
 	Rscript -e "devtools::test_coverage()"
 document:
 	Rscript -e "devtools::document()"
+# Re-knit vignettes/*.Rmd.orig (live API calls) into the committed static .Rmd
+.PHONY: vignettes
+vignettes:
+	Rscript -e "devtools::install(quick = TRUE, upgrade = 'never')"
+	Rscript vignettes/precompile.R
 build: document
 	Rscript -e "devtools::build()"
 check:
