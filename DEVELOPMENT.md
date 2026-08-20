@@ -3,6 +3,7 @@
 ```r
 pak::pkg_install(c('devtools', 'pkgdown', 'styler', 'lintr')) # install dev dependencies
 devtools::install_deps(dependencies = TRUE) # install package dependencies
+pak::local_install_deps(dependencies = "Config/Needs/precompile") # vignette-knitting deps
 devtools::document() # generate package meta data and man files
 devtools::build() # build package
 ```
@@ -24,8 +25,10 @@ calls, so they are knitted ahead of time into the static `vignettes/*.Rmd`
 files that `R CMD build`, CI, and CRAN render without any network access.
 Both files are committed.
 
-To edit a vignette, change its `.Rmd.orig` and re-knit (requires network and
-the current package code installed):
+To edit a vignette, change its `.Rmd.orig` and re-knit. This requires network,
+the current package code installed, and the knitting-only packages listed in
+the `Config/Needs/precompile` field of DESCRIPTION (they are deliberately not
+Suggests, so CI never installs them):
 
 ```bash
 make vignettes                                # all vignettes
