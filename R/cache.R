@@ -17,7 +17,7 @@ cache_environ$cache_args <- NULL
 #' The typical recommended workflow for using the cache is to set the
 #'   environmental variables `EPIDATR_USE_CACHE=TRUE` and
 #'   `EPIDATR_CACHE_DIRECTORY="/your/directory/here"`in your `.Renviron`, for
-#'   example by calling `usethis::edit_r_environ()`.
+#'   example by calling `file.edit("~/.Renviron")`.
 #' See the parameters below for some more configurables if you're so inclined.
 #'
 #' `set_cache` (re)defines the cache to use in a particular R session. This does

@@ -6,7 +6,6 @@ output:
 vignette: >
   %\VignetteIndexEntry{Get started with epidatr}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{ggplot2}
   \usepackage[utf8]{inputenc}
 ---
 

@@ -1,5 +1,5 @@
 install:
-	Rscript -e "install.packages(c('devtools', 'pkgdown', 'webshot', 'textshaping', 'styler', 'lintr'));devtools::install_deps(dependencies = TRUE)"
+	Rscript -e "install.packages(c('pak', 'devtools', 'pkgdown', 'webshot', 'textshaping', 'styler', 'lintr'));devtools::install_deps(dependencies = TRUE);pak::local_install_deps(dependencies = 'Config/Needs/precompile')"
 lint:
 	Rscript -e "devtools::load_all();lintr::lint_package()"
 format:
