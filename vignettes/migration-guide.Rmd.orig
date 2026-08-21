@@ -17,13 +17,17 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 library(epidatr)
 ```
 
-The Delphi Epidata API is moving from the covidcast endpoint (API v4, served
-by `pub_covidcast()`) to a new set of endpoints (API v5, served by
-`epidata_snapshot()`, `epidata_archive()`, and `epidata_meta()`). The
+The Delphi Epidata API is moving from its V4 endpoints (the covidcast
+endpoint (served by `pub_covidcast()`), as well as `pub_fluview()`,
+`pub_flusurv()`, and `pvt_quidel()`) to a new set of V5 endpoints, served by
+`epidata_snapshot()`, `epidata_archive()`, and `epidata_meta()`. The
 transition is in progress: sources are moving to the new API one at a time,
-and `pub_covidcast()` still works for sources that have not moved yet. New
-analyses should start with the new functions and fall back to
-`pub_covidcast()` only when a source is not yet available there.
+and the V4 functions still work for sources that have not moved yet. New
+analyses should start with the new functions and fall back to a V4 function
+only when a source is not yet available there.
+
+For the current list of sources and indicators available on the new API, see the
+[V5 signals documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html).
 
 This guide maps the old interface onto the new one.
 

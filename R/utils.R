@@ -11,6 +11,22 @@ release_bullets <- function() {
   )
 }
 
+#' Warn that a V4 endpoint is being phased out in favor of the V5 API
+#' @param fn_name string. Name of the calling function, used to throttle the
+#'   warning and to point users at the right place in the migration guide.
+#' @keywords internal
+warn_v4_sunset <- function(fn_name) {
+  cli::cli_warn(
+    c(
+      "{.fn {fn_name}} uses the V4 Epidata API, which is being phased out in favor of the V5 API.",
+      "i" = "V4 support is tentatively ending the week of 2026-09-28.",
+      "i" = "See {.code vignette(\"migration-guide\")} for the V5 endpoints and how to move to them."
+    ),
+    .frequency = "regularly",
+    .frequency_id = paste0("epidatr.v4_sunset.", fn_name)
+  )
+}
+
 #' List all available Epidata API endpoints
 #'
 #' @description
