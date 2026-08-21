@@ -65,6 +65,17 @@ test_that("parse_data_frame handles NA values and missing meta", {
   expect_identical(parse_data_frame(epidata_call, mock_df), mock_df)
 })
 
+test_that("parse_value coerces all-NA text fields to character", {
+  # jsonlite simplifies an all-null JSON column to logical NA; the text type
+  # promises character (seen live: covid_hosp's geocoded_state)
+  info <- create_epidata_field_info("geocoded_state", "text")
+  expect_identical(
+    parse_value(info, c(NA, NA)),
+    c(NA_character_, NA_character_)
+  )
+  expect_identical(parse_value(info, c("ca", "fl")), c("ca", "fl"))
+})
+
 test_that("parse invalid time", {
   value <- list(3)
   value$class <- "my nonexistant class"

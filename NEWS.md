@@ -8,6 +8,7 @@
 - Parse `ci_lower` and `ci_upper` data columns for some signals.
 - Improve CSV parsing performance by reading bytes directly.
 - `save_api_key()` no longer errors when called outside a project; it falls back to the user `.Renviron` (#339).
+- Text fields are now always parsed as character; previously an all-NA column (e.g. `geocoded_state` in the `covid_hosp` endpoints) came back as logical.
 
 # epidatr 1.2.4
 

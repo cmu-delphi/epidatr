@@ -248,6 +248,9 @@ parse_value <- function(
     return(as.double(value))
   } else if (info$type == "categorical") {
     return(factor(value, levels = info$categories))
+  } else if (info$type == "text") {
+    # An all-NA JSON column arrives as logical; keep the promised type.
+    return(as.character(value))
   }
   value
 }
