@@ -53,6 +53,7 @@
 <li>Improve CSV parsing performance by reading bytes directly.</li>
 <li>
 <code><a href="../reference/get_api_key.html">save_api_key()</a></code> no longer errors when called outside a project; it falls back to the user <code>.Renviron</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/339" class="external-link">#339</a>).</li>
+<li>Text fields are now always parsed as character; previously an all-NA column (e.g. <code>geocoded_state</code> in the <code>covid_hosp</code> endpoints) came back as logical.</li>
 </ul></div>
 </div>
     <div class="section level2">

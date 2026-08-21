@@ -105,7 +105,7 @@ pub_covid_hosp_state_timeseries(
 )
 #> # A tibble: 51 × 118
 #>    state geocoded_state issue      date       critical_staffing_shortage_today…¹
-#>    <chr> <lgl>          <date>     <date>     <lgl>                             
+#>    <chr> <chr>          <date>     <date>     <lgl>                             
 #>  1 FL    NA             2024-05-03 2020-03-12 FALSE                             
 #>  2 FL    NA             2024-05-03 2020-03-13 FALSE                             
 #>  3 FL    NA             2024-05-03 2020-03-14 FALSE                             

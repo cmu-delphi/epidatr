@@ -24,6 +24,9 @@
   no longer errors when called outside a project; it falls back to the
   user `.Renviron`
   ([\#339](https://github.com/cmu-delphi/epidatr/issues/339)).
+- Text fields are now always parsed as character; previously an all-NA
+  column (e.g. `geocoded_state` in the `covid_hosp` endpoints) came back
+  as logical.
 
 ## epidatr 1.2.4
 
