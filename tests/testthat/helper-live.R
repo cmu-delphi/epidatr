@@ -17,6 +17,14 @@ skip_unless_live <- function() {
   }
 }
 
+# Gate for pvt_* endpoints, which need an API key with private-endpoint
+# access. Skip them with `make test-live pvt=FALSE` (sets EPIDATR_TEST_PVT).
+skip_unless_pvt <- function() {
+  if (isFALSE(as.logical(Sys.getenv("EPIDATR_TEST_PVT", "TRUE")))) {
+    testthat::skip("EPIDATR_TEST_PVT=FALSE: skipping private endpoints")
+  }
+}
+
 # Live contract check for one endpoint_calls() row: the endpoint returns
 # non-empty data, the fetch is warning-free (so schema drift surfacing as
 # epidatr__missing_meta_fields or epidatr__int_nonzero_decimal_digits fails the

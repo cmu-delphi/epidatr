@@ -6,8 +6,10 @@ format:
 	Rscript -e "styler::style_pkg()"
 test:
 	Rscript -e "devtools::test()"
+# Set pvt=FALSE to skip the pvt_* endpoints (they need a key with private access).
+pvt ?= TRUE
 test-live:
-	EPIDATR_LIVE_TEST=TRUE Rscript -e "devtools::test(filter = 'live')"
+	EPIDATR_LIVE_TEST=TRUE EPIDATR_TEST_PVT=$(pvt) Rscript -e "devtools::test(filter = 'live')"
 update-fixtures:
 	Rscript data-raw/update_fixtures.R
 coverage:

@@ -15,6 +15,9 @@ for (endpoint_row in endpoint_calls(auth = Sys.getenv("DELPHI_EPIDATA_KEY"))) {
     }
     test_that(paste0("live: ", row$name), {
       skip_unless_live()
+      if (startsWith(row$name, "pvt")) {
+        skip_unless_pvt()
+      }
       expect_live_call_parses(row$call)
     })
   })
