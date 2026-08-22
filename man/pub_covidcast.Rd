@@ -56,8 +56,8 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 \code{\link[tibble:tibble]{tibble::tibble}}
 }
 \description{
-This is a V4 endpoint, which is being phased out in favor of the V5 API
-(tentatively the week of 2026-09-28). The new API can be accessed via the
+This is a V4 endpoint. Starting in October 2026, it is tentatively
+deprecated in favor of the V5 API. The new API can be accessed via the
 \code{\link[=epidata_snapshot]{epidata_snapshot()}}, \code{\link[=epidata_archive]{epidata_archive()}}, and \code{\link[=epidata_meta]{epidata_meta()}} functions.
 For more details on the changes, refer to \code{vignette("migration-guide")},
 and visit the \href{https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html}{V5 signals documentation}

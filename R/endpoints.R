@@ -1128,8 +1128,8 @@ pub_covid_hosp_state_timeseries <- function(
 #' Metadata for the COVIDcast endpoint
 #'
 #' @description
-#' This is a V4 endpoint, which is being phased out in favor of the V5 API
-#' (tentatively the week of 2026-09-28). The new API can be accessed via the
+#' This is a V4 endpoint. Starting in October 2026, it is tentatively
+#' deprecated in favor of the V5 API. The new API can be accessed via the
 #' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
 #' For more details on the changes, refer to `vignette("migration-guide")`,
 #' and visit the [V5 signals
@@ -1239,8 +1239,8 @@ pub_covidcast_meta <- function(
 #' Various COVID and flu signals via the COVIDcast endpoint
 #'
 #' @description
-#' This is a V4 endpoint, which is being phased out in favor of the V5 API
-#' (tentatively the week of 2026-09-28). The new API can be accessed via the
+#' This is a V4 endpoint. Starting in October 2026, it is tentatively
+#' deprecated in favor of the V5 API. The new API can be accessed via the
 #' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
 #' For more details on the changes, refer to `vignette("migration-guide")`,
 #' and visit the [V5 signals
@@ -2262,8 +2262,8 @@ pub_ecdc_ili <- function(
 
 #' CDC FluSurv flu hospitalizations
 #' @description
-#' This is a V4 endpoint, which is being phased out in favor of the V5 API
-#' (tentatively the week of 2026-09-28). The new API can be accessed via the
+#' This is a V4 endpoint. Starting in October 2026, it is tentatively
+#' deprecated in favor of the V5 API. The new API can be accessed via the
 #' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
 #' For more details on the changes, refer to `vignette("migration-guide")`,
 #' and visit the [V5 signals
@@ -2463,8 +2463,8 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 
 #' CDC FluView ILINet outpatient doctor visits
 #' @description
-#' This is a V4 endpoint, which is being phased out in favor of the V5 API
-#' (tentatively the week of 2026-09-28). The new API can be accessed via the
+#' This is a V4 endpoint. Starting in October 2026, it is tentatively
+#' deprecated in favor of the V5 API. The new API can be accessed via the
 #' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
 #' For more details on the changes, refer to `vignette("migration-guide")`,
 #' and visit the [V5 signals
@@ -3024,8 +3024,8 @@ pub_paho_dengue <- function(
 
 #' Quidel COVID-19 and influenza testing data
 #' @description
-#' This is a V4 endpoint, which is being phased out in favor of the V5 API
-#' (tentatively the week of 2026-09-28). The new API can be accessed via the
+#' This is a V4 endpoint. Starting in October 2026, it is tentatively
+#' deprecated in favor of the V5 API. The new API can be accessed via the
 #' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
 #' For more details on the changes, refer to `vignette("migration-guide")`,
 #' and visit the [V5 signals

@@ -1,10 +1,10 @@
-# epidatr 1.3.5
+# epidatr 1.3.6
 
 ## Patches
 
 - `pub_covidcast()`, `pub_covidcast_meta()`, `pub_fluview()`, `pub_flusurv()`,
-  and `pvt_quidel()` now warn that they use the V4 Epidata API, which is
-  tentatively being phased out the week of 2026-09-28. See
+  and `pvt_quidel()` now warn that they use the V4 Epidata API. Starting in
+  October 2026, it is tentatively deprecated in favor of the V5 API. See
   `vignette("migration-guide")` for the V5 replacements.
 - `epidata_snapshot()` and `epidata_archive()` now issue one request per signal instead of joining `signals` with a comma, which the cast-API server silently matched against nothing (#354).
 - `epidata_archive(report_time = ...)` now sends the `report_time_query` API parameter; the server renamed it from `version_query`, which it now rejects.

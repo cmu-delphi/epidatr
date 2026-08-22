@@ -109,6 +109,12 @@ old <- pub_covidcast(
   time_values = epirange(202440, 202501),
   as_of = 20250101
 )
+#> Warning: `pub_covidcast()` uses the V4 Epidata API.
+#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5
+#>   API.
+#> ℹ See `vignette("migration-guide")` for the V5 endpoints and how to move to
+#>   them.
+#> This warning is displayed once every 8 hours.
 head(old)
 #> # A tibble: 6 × 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     

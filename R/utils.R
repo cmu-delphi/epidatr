@@ -18,8 +18,8 @@ release_bullets <- function() {
 warn_v4_sunset <- function(fn_name) {
   cli::cli_warn(
     c(
-      "{.fn {fn_name}} uses the V4 Epidata API, which is being phased out in favor of the V5 API.",
-      "i" = "V4 support is tentatively ending the week of 2026-09-28.",
+      "{.fn {fn_name}} uses the V4 Epidata API.",
+      "i" = "Starting in October 2026, V4 is tentatively deprecated in favor of the V5 API.",
       "i" = "See {.code vignette(\"migration-guide\")} for the V5 endpoints and how to move to them."
     ),
     .frequency = "regularly",
