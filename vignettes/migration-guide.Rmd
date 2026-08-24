@@ -111,16 +111,23 @@ old <- pub_covidcast(
   time_values = epirange(202440, 202501),
   as_of = 20250101
 )
+#> Warning: `pub_covidcast()` uses the V4 Epidata API.
+#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5
+#>   API.
+#> ℹ See `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the
+#>   V5 endpoints and how to move to them.
+#> This warning is displayed once every 8 hours.
 head(old)
 #> # A tibble: 6 × 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     
 #>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
-#> 1 ca        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-16
-#> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-16
-#> 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-16
-#> 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-16
-#> 5 ca        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-08-16
-#> 6 pa        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-08-16
+#> 1 ca        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-23
+#> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-23
+#> 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-23
+#> 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-23
+#> 5 ca        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-08-23
+#> 6 pa        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-08-23
 #> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
 #> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```

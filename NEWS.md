@@ -1,4 +1,4 @@
-# epidatr 1.3.6
+# epidatr 1.4.0
 
 ## Patches
 

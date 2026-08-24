@@ -20,7 +20,7 @@ warn_v4_sunset <- function(fn_name) {
     c(
       "{.fn {fn_name}} uses the V4 Epidata API.",
       "i" = "Starting in October 2026, V4 is tentatively deprecated in favor of the V5 API.",
-      "i" = "See {.code vignette(\"migration-guide\")} for the V5 endpoints and how to move to them."
+      "i" = "See {.code vignette(\"migration-guide\")} (or {.url https://cmu-delphi.github.io/epidatr/articles/migration-guide.html}) for the V5 endpoints and how to move to them."
     ),
     .frequency = "regularly",
     .frequency_id = paste0("epidatr.v4_sunset.", fn_name)
