@@ -87,6 +87,8 @@ pvt_cdc <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pvt_cdc")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -160,6 +162,7 @@ pub_covid_hosp_facility_lookup <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_covid_hosp_facility_lookup")
 
   assert_character_param("state", state, len = 1, required = FALSE)
   assert_character_param("ccn", ccn, len = 1, required = FALSE)
@@ -265,6 +268,7 @@ pub_covid_hosp_facility <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_covid_hosp_facility")
 
   collection_weeks <- get_wildcard_equivalent_dates(collection_weeks, "day")
 
@@ -713,6 +717,7 @@ pub_covid_hosp_state_timeseries <- function(
 ) {
   # Check parameters
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_covid_hosp_state_timeseries")
 
   if (missing(states)) {
     cli::cli_abort(
@@ -2084,6 +2089,8 @@ pub_delphi <- function(
   epiweek,
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pub_delphi")
+
   assert_character_param("system", system)
   epiweek <- validate_timeset_input("epiweek", epiweek, len = 1)
 
@@ -2122,6 +2129,8 @@ pub_dengue_nowcast <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pub_dengue_nowcast")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
@@ -2170,6 +2179,8 @@ pvt_dengue_sensors <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pvt_dengue_sensors")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -2229,6 +2240,7 @@ pub_ecdc_ili <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_ecdc_ili")
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
@@ -2599,6 +2611,8 @@ pub_gft <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pub_gft")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
@@ -2649,6 +2663,8 @@ pvt_ght <- function(
   query,
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pvt_ght")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -2701,6 +2717,7 @@ pub_kcdc_ili <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_kcdc_ili")
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
@@ -2747,6 +2764,8 @@ pub_kcdc_ili <- function(
 #' @keywords endpoint
 #' @export
 pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
+  note_frozen_endpoint("pvt_meta_norostat")
+
   assert_character_param("auth", auth, len = 1)
 
   create_epidata_call(
@@ -2812,6 +2831,8 @@ pub_nidss_dengue <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pub_nidss_dengue")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
@@ -2861,6 +2882,7 @@ pub_nidss_flu <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_nidss_flu")
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
@@ -2927,6 +2949,8 @@ pvt_norostat <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pvt_norostat")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -2972,6 +2996,8 @@ pub_nowcast <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pub_nowcast")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
@@ -3018,6 +3044,7 @@ pub_paho_dengue <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_paho_dengue")
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
@@ -3155,6 +3182,8 @@ pvt_sensors <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pvt_sensors")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -3215,6 +3244,7 @@ pvt_twitter <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pvt_twitter")
 
   time_type <- match.arg(time_type)
   if (time_type == "day") {
@@ -3298,6 +3328,7 @@ pub_wiki <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_wiki")
 
   time_type <- match.arg(time_type)
   if (time_type == "day") {

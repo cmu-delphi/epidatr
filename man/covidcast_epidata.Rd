@@ -65,7 +65,8 @@ the \code{pub_covidcast()} function. Simply use the \verb{$call} attribute of th
 #>   API.
 #> i See `vignette("migration-guide")` (or
 #>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the
-#>   V5 endpoints and how to move to them.
+#>   V5 endpoints and how to move to them. Old data will remain available for at
+#>   least a year, however new ingestion will end.
 #> This warning is displayed once every 8 hours.
 #> # A tibble: 6 x 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     

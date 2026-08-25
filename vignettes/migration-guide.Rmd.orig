@@ -164,3 +164,36 @@ If `epidata_meta()` does not know the source yet, keep using
 back after package updates. The
 [API mailing list](https://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api)
 announces sources as they move.
+
+## Endpoints kept for historical reference
+
+Not every V4 endpoint is moving to V5. The functions below cover data
+sources whose collection has already ended (e.g. Google Flu Trends, the
+Twitter/HealthTweets signal, the various nowcasts). They are not part of the
+V4-to-V5 transition, so they are not deprecated and will keep working. The
+historical data they return is frozen and will remain available. They will
+just no longer receive new data.
+
+| Function | Data source |
+|---|---|
+| `pvt_cdc()` | CDC total and by-topic webpage visits |
+| `pub_covid_hosp_facility_lookup()` | COVID hospitalization facility lookup |
+| `pub_covid_hosp_facility()` | COVID hospitalizations by facility |
+| `pub_covid_hosp_state_timeseries()` | COVID hospitalizations by state |
+| `pub_delphi()` | Delphi's ILINet outpatient doctor visits forecasts |
+| `pub_dengue_nowcast()` | Delphi's PAHO dengue nowcasts (Americas) |
+| `pvt_dengue_sensors()` | PAHO dengue digital surveillance sensors (Americas) |
+| `pub_ecdc_ili()` | ECDC ILI incidence (Europe) |
+| `pub_gft()` | Google Flu Trends flu search volume |
+| `pvt_ght()` | Google Health Trends health topics search volume |
+| `pub_kcdc_ili()` | KCDC ILI incidence (Korea) |
+| `pvt_meta_norostat()` | Metadata for the NoroSTAT endpoint |
+| `pub_nidss_dengue()` | NIDSS dengue cases (Taiwan) |
+| `pub_nidss_flu()` | NIDSS flu doctor visits (Taiwan) |
+| `pvt_norostat()` | CDC NoroSTAT norovirus outbreaks |
+| `pub_nowcast()` | Delphi's ILI Nearby nowcasts |
+| `pub_paho_dengue()` | PAHO dengue data (Americas) |
+| `pvt_sensors()` | Influenza and dengue digital surveillance sensors |
+| `pvt_twitter()` | HealthTweets total and influenza-related tweets |
+| `pub_wiki()` | Wikipedia webpage counts by article |
+
