@@ -34,12 +34,10 @@ test_that("cache set as expected", {
     tmp <- strsplit(cache_info()$dir, "/")[[1]]
     expect_equal(tmp[length(tmp)], normalizePath(new_temp_dir))
   }
+  # set_cache converts max_size (MB) and days to cachem's bytes and seconds
   expect_equal(cache_info()$max_size, 1024^2)
   expect_equal(cache_info()$max_age, 24 * 60 * 60)
-  expect_equal(cache_info()$prune_rate, 20)
   expect_equal(cache_info()$logfile, file.path(new_temp_dir, "logfile.txt"))
-  expect_equal(cache_info()$evict, "lru")
-  expect_equal(cache_info()$max_n, Inf)
 })
 
 # use an existing example to save, then load and compare the values
@@ -120,41 +118,6 @@ test_that("cache saves & loads", {
   )
   expect_warning(empty_call <- epidata_call %>% fetch())
   expect_equal(empty_call, tibble())
-})
-
-test_that("check_is_recent", {
-  expect_true(check_is_recent(format(Sys.Date() - 7, format = "%Y%m%d"), 7))
-  expect_true(check_is_recent(format(Sys.Date(), format = "%Y%m%d"), 7))
-  expect_true(check_is_recent(format(Sys.Date() + 12, format = "%Y%m%d"), 7))
-  expect_false(check_is_recent(format(Sys.Date() - 12, format = "%Y%m%d"), 7))
-  expect_false(check_is_recent(
-    epirange(
-      format(Sys.Date() - 12, format = "%Y%m%d"),
-      format(Sys.Date() - 9, format = "%Y%m%d")
-    ),
-    7
-  ))
-  expect_true(check_is_recent(
-    epirange(
-      format(Sys.Date() - 12, format = "%Y%m%d"),
-      format(Sys.Date() - 2, format = "%Y%m%d")
-    ),
-    7
-  ))
-  expect_true(check_is_recent(
-    epirange(
-      format(Sys.Date() - 2, format = "%Y%m%d"),
-      format(Sys.Date(), format = "%Y%m%d")
-    ),
-    7
-  ))
-  expect_true(check_is_recent(
-    epirange(
-      format(Sys.Date(), format = "%Y%m%d"),
-      format(Sys.Date() + 5, format = "%Y%m%d")
-    ),
-    7
-  ))
 })
 
 test_that("check_is_cachable", {

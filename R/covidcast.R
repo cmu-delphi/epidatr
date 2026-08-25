@@ -12,13 +12,15 @@ parse_signal <- function(signal, base_url) {
   # Inner callable returned per signal: fetches covidcast data for the bound
   # source/signal/time_type, taking geo_type, geo_values, time_values, and the
   # versioning args (as_of, issues, lag). Returns an epidata_call.
-  signal$call <- function(geo_type,
-                          geo_values,
-                          time_values,
-                          as_of = NULL,
-                          issues = NULL,
-                          lag = NULL,
-                          fetch_args = fetch_args_list()) {
+  signal$call <- function(
+    geo_type,
+    geo_values,
+    time_values,
+    as_of = NULL,
+    issues = NULL,
+    lag = NULL,
+    fetch_args = fetch_args_list()
+  ) {
     stopifnot(is.character(geo_type) & length(geo_type) == 1)
 
     pub_covidcast(
@@ -48,7 +50,10 @@ print.covidcast_data_signal <- function(x, ...) {
 
 parse_source <- function(source, base_url) {
   class(source) <- c("covidcast_data_source", class(source))
-  signals <- do.call(c, unname(lapply(source$signals, parse_signal, base_url = base_url)))
+  signals <- do.call(
+    c,
+    unname(lapply(source$signals, parse_signal, base_url = base_url))
+  )
   class(signals) <- c("covidcast_data_signal_list", class(signals))
   source$signals <- signals
   r <- list()
@@ -63,9 +68,17 @@ parse_source <- function(source, base_url) {
 as_tibble.covidcast_data_signal_list <- function(x, ...) {
   tib <- list()
   chr_fields <- c(
-    "source", "signal", "name", "short_description",
-    "description", "time_type", "time_label", "value_label",
-    "format", "category", "high_values_are"
+    "source",
+    "signal",
+    "name",
+    "short_description",
+    "description",
+    "time_type",
+    "time_label",
+    "value_label",
+    "format",
+    "category",
+    "high_values_are"
   )
   for (field in chr_fields) {
     tib[[field]] <- unname(map_chr(x, field, .default = ""))
@@ -131,23 +144,36 @@ print.covidcast_data_source <- function(x, ...) {
 #' @importFrom jsonlite fromJSON
 #' @return An instance of `covidcast_epidata`
 #' @export
-covidcast_epidata <- function(base_url = global_base_url, timeout_seconds = 30) {
+covidcast_epidata <- function(
+  base_url = global_base_url,
+  timeout_seconds = 30
+) {
   # covidcast_meta and covidcast/meta are two different endpoints...
   res <- create_epidata_call("covidcast/meta", list()) %>%
-    do_request(format_type = "json", timeout_seconds = timeout_seconds, fields = NULL)
+    do_request(
+      format_type = "json",
+      timeout_seconds = timeout_seconds,
+      fields = NULL
+    )
 
   response_content <- httr2::resp_body_json(res, simplifyDataFrame = FALSE)
 
-  sources <- do.call(c, lapply(response_content, parse_source, base_url = base_url))
+  sources <- do.call(
+    c,
+    lapply(response_content, parse_source, base_url = base_url)
+  )
   class(sources) <- c("covidcast_data_source_list", class(sources))
 
-  all_signals <- do.call(c, unname(
-    lapply(sources, function(x) {
-      l <- c(x$signals)
-      names(l) <- paste(x$source, names(l), sep = ":")
-      l
-    })
-  ))
+  all_signals <- do.call(
+    c,
+    unname(
+      lapply(sources, function(x) {
+        l <- c(x$signals)
+        names(l) <- paste(x$source, names(l), sep = ":")
+        l
+      })
+    )
+  )
   class(all_signals) <- c("covidcast_data_signal_list", class(all_signals))
   structure(
     list(

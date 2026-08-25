@@ -1,7 +1,40 @@
+# epidatr 1.3.0
+
+## Deprecations
+
+- `pub_covidcast()`, `pub_covidcast_meta()`, `pub_fluview()`,
+  `pub_fluview_clinical()`, `pub_fluview_meta()`, `pub_flusurv()`,
+  `pub_meta()`, and `pvt_quidel()` now warn that they use the V4 Epidata
+  API. Starting in October 2026, it is tentatively deprecated in favor of
+  the V5 API. See `vignette("migration-guide")` for the V5 replacements.
+- The remaining V4 endpoints whose data sources are no longer updated
+  (`pvt_cdc()`, `pub_covid_hosp_facility_lookup()`,
+  `pub_covid_hosp_facility()`, `pub_covid_hosp_state_timeseries()`,
+  `pub_delphi()`, `pub_dengue_nowcast()`, `pvt_dengue_sensors()`,
+  `pub_ecdc_ili()`, `pub_gft()`, `pvt_ght()`, `pub_kcdc_ili()`,
+  `pvt_meta_norostat()`, `pub_nidss_dengue()`, `pub_nidss_flu()`,
+  `pvt_norostat()`, `pub_nowcast()`, `pub_paho_dengue()`, `pvt_sensors()`,
+  `pvt_twitter()`, and `pub_wiki()`) now emit a quieter informational note
+  (not a warning) explaining that they are frozen rather than deprecated.
+  They are not moving to V5 and will keep working, but will not receive new
+  data. See the "Endpoints kept for historical reference" section of
+  `vignette("migration-guide")` for the full list.
+
+## Patches
+- `epidata_snapshot()` and `epidata_archive()` now issue one request per signal instead of joining `signals` with a comma, which the cast-API server silently matched against nothing (#354).
+- `epidata_archive(report_time = ...)` now sends the `report_time_query` API parameter; the server renamed it from `version_query`, which it now rejects.
+- Add a migration guide vignette (`vignette("migration-guide")`) mapping `pub_covidcast` arguments and columns to the new `epidata_snapshot`/`epidata_archive` functions, and update the README and pkgdown reference to lead with the new API.
+- Parse `ci_lower` and `ci_upper` data columns for some signals.
+- Improve CSV parsing performance by reading bytes directly.
+- `save_api_key()` no longer errors when called outside a project; it falls back to the user `.Renviron` (#339).
+- Text fields are now always parsed as character; previously an all-NA column (e.g. `geocoded_state` in the `covid_hosp` endpoints) came back as logical.
+
 # epidatr 1.2.4
 
 ## Changes
 
+- Added `epidata_aux()` to fetch V5-API auxiliary data, either directly by source or by merging it onto `epidata_snapshot()`/`epidata_archive()` output via a version-aware left join. When no key filters are supplied, it infers them from the base to keep the pull small.
+- `epidata_aux()`, `epidata_snapshot()`, and `epidata_archive()` now accept per-key filters as named `...` arguments. Each key takes one or more values, sent server-side to shrink the download.
 - Improve documentation, including descriptions for `save_api_key()` and endpoint parameters, and standardize parameter information (#324 and #334).
 - Modernize internal API architecture by migrating from `httr` to `httr2`.
 - Introduce a centralized validation system in `R/check.R` using `checkmate` to standardize input checking, date parsing, and API parameter formatting.

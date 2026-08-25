@@ -19,8 +19,13 @@
 #' @importFrom httr2 req_body_form req_url req_url_query
 #' @importFrom xml2 read_html xml_find_all xml_text
 #' @keywords internal
-do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), timeout_seconds, fields,
-                       http_method = c("GET", "POST")) {
+do_request <- function(
+  epidata_call,
+  format_type = c("json", "csv", "classic"),
+  timeout_seconds,
+  fields,
+  http_method = c("GET", "POST")
+) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   format_type <- rlang::arg_match(format_type)
   http_method <- rlang::arg_match(http_method)
@@ -50,14 +55,14 @@ do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), 
     httr2::req_retry(
       max_tries = 3,
       is_transient = function(resp) {
-        httr2::resp_status(resp) %in% c(
-          429, # Too Many Requests
-          500, # Internal Server Error
-          502, # Bad Gateway
-          503, # Service Unavailable
-          504  # Gateway Timeout
-        )
-
+        httr2::resp_status(resp) %in%
+          c(
+            429, # Too Many Requests
+            500, # Internal Server Error
+            502, # Bad Gateway
+            503, # Service Unavailable
+            504 # Gateway Timeout
+          )
       }
     ) %>%
     # Use requested method.
@@ -84,12 +89,19 @@ do_request <- function(epidata_call, format_type = c("json", "csv", "classic"), 
   if (httr2::resp_is_error(res)) {
     # 500, 429, 401 are possible
     msg <- "fetch data from API"
-    if (identical(httr2::resp_content_type(res), "text/html") && httr2::resp_has_body(res)) {
+    if (
+      identical(httr2::resp_content_type(res), "text/html") &&
+        httr2::resp_has_body(res)
+    ) {
       # grab the error information out of the returned HTML document
-      msg <- paste(msg, ":", xml2::xml_text(xml2::xml_find_all(
-        xml2::read_html(httr2::resp_body_string(res)),
-        "//p"
-      )))
+      msg <- paste(
+        msg,
+        ":",
+        xml2::xml_text(xml2::xml_find_all(
+          xml2::read_html(httr2::resp_body_string(res)),
+          "//p"
+        ))
+      )
     }
     httr2::resp_check_status(res, info = msg)
   }

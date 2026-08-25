@@ -43,9 +43,13 @@
 #' - For `create_epidata_call`: an `epidata_call` object
 #'
 #' @importFrom purrr map_chr map_lgl
-create_epidata_call <- function(endpoint, params, meta = NULL,
-                                api_version = c("classic", "cast"),
-                                response_format = c("classic", "json", "csv")) {
+create_epidata_call <- function(
+  endpoint,
+  params,
+  meta = NULL,
+  api_version = c("classic", "cast"),
+  response_format = c("classic", "json", "csv")
+) {
   checkmate::assert_character(endpoint, len = 1)
   checkmate::assert_list(params)
   checkmate::assert_list(meta, null.ok = TRUE)
@@ -154,6 +158,10 @@ print.epidata_call <- function(x, ...) {
 #'   (non-tabular)
 #' @param return_empty boolean that allows returning an empty tibble if there is
 #'   no data
+#' @param disable_missing_meta_warning if `TRUE`, suppress the warning emitted
+#'   when the response contains columns not declared as expected epidata fields.
+#'   Useful for endpoints/signals that intentionally return extra, untyped
+#'   columns.
 #' @param timeout_seconds the maximum amount of time (in seconds) to wait for a
 #'   response from the API server
 #' @param base_url base URL to use; by default `NULL`, which means the global
@@ -176,6 +184,7 @@ fetch_args_list <- function(
   fields = NULL,
   disable_date_parsing = FALSE,
   disable_data_frame_parsing = FALSE,
+  disable_missing_meta_warning = FALSE,
   return_empty = FALSE,
   timeout_seconds = 15 * 60,
   base_url = NULL,
@@ -204,20 +213,47 @@ fetch_args_list <- function(
   rlang::check_dots_empty()
 
   assert_character(fields, null.ok = TRUE, any.missing = FALSE)
-  assert_logical(disable_date_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  assert_logical(disable_data_frame_parsing, null.ok = FALSE, len = 1L, any.missing = FALSE)
+  assert_logical(
+    disable_date_parsing,
+    null.ok = FALSE,
+    len = 1L,
+    any.missing = FALSE
+  )
+  assert_logical(
+    disable_data_frame_parsing,
+    null.ok = FALSE,
+    len = 1L,
+    any.missing = FALSE
+  )
+  assert_logical(
+    disable_missing_meta_warning,
+    null.ok = FALSE,
+    len = 1L,
+    any.missing = FALSE
+  )
   assert_logical(return_empty, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  assert_numeric(timeout_seconds, null.ok = FALSE, len = 1L, any.missing = FALSE)
+  assert_numeric(
+    timeout_seconds,
+    null.ok = FALSE,
+    len = 1L,
+    any.missing = FALSE
+  )
   assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
   assert_logical(refresh_cache, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  assert_numeric(reference_week_day, null.ok = FALSE, len = 1L, any.missing = FALSE)
+  assert_numeric(
+    reference_week_day,
+    null.ok = FALSE,
+    len = 1L,
+    any.missing = FALSE
+  )
 
   structure(
     list(
       fields = fields,
       disable_date_parsing = disable_date_parsing,
       disable_data_frame_parsing = disable_data_frame_parsing,
+      disable_missing_meta_warning = disable_missing_meta_warning,
       return_empty = return_empty,
       timeout_seconds = timeout_seconds,
       base_url = base_url,
@@ -263,7 +299,8 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 
   # If cacheable and the value is in cache, return the cached value.
   is_cachable <- check_is_cachable(epidata_call, fetch_args)
-  should_write_cache <- is_cachable || (fetch_args$refresh_cache && is_cache_enabled())
+  should_write_cache <- is_cachable ||
+    (fetch_args$refresh_cache && is_cache_enabled())
 
   if (should_write_cache) {
     target <- request_url(epidata_call, "json", fetch_args$fields)
@@ -290,8 +327,10 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
         epidata_call,
         response_content,
         fetch_args$disable_date_parsing,
-        fetch_args$reference_week_day
-      ) %>% tibble::as_tibble()
+        fetch_args$reference_week_day,
+        warn_missing_meta = !isTRUE(fetch_args$disable_missing_meta_warning)
+      ) %>%
+        tibble::as_tibble()
     }
   })
 
@@ -315,7 +354,11 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 #' @return
 #' - For `request_epidata`: a JSON-like list
 #' @keywords internal
-request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simplify = TRUE) {
+request_epidata <- function(
+  epidata_call,
+  fetch_args = fetch_args_list(),
+  simplify = TRUE
+) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
 
@@ -335,13 +378,24 @@ request_epidata <- function(epidata_call, fetch_args = fetch_args_list(), simpli
   )
 
   if (epidata_call$response_format == "csv") {
-    return(readr::read_csv(I(httr2::resp_body_string(res)),
-                           col_types = readr::cols(.default = "c"),
-                           show_col_types = FALSE))
+    # Pass raw bytes straight to read_csv() instead of resp_body_string().
+    # This avoids copying the whole response body through readBin/iconv/paste first.
+    # `datasource()` is internal to readr. It dispatches on
+    # is.raw() before ever considering I()/AsIs, so raw input needs no wrapper
+    # https://github.com/tidyverse/readr/blob/main/R/source.R
+    return(readr::read_csv(
+      httr2::resp_body_raw(res),
+      col_types = readr::cols(.default = "c"),
+      show_col_types = FALSE
+    ))
   }
 
   # JSON parsing (both "json" and "classic")
-  response_content <- httr2::resp_body_json(res, simplifyVector = simplify, simplifyDataFrame = simplify)
+  response_content <- httr2::resp_body_json(
+    res,
+    simplifyVector = simplify,
+    simplifyDataFrame = simplify
+  )
 
   if (epidata_call$response_format == "json") {
     return(response_content)

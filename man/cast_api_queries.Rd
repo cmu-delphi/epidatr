@@ -56,11 +56,15 @@ epidata(
 Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available sources.}
 
 \item{signals}{character vector. One or more signals to query for the given
-source. Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available signals.}
+source; comma-joined strings (e.g., \code{"sig1,sig2"}) are also accepted. Use
+\code{\link[=epidata_meta]{epidata_meta()}} to discover available signals. A separate API request is
+made per signal and geo type (the cast-API only accepts one of each per
+request) and the results are combined.}
 
-\item{geo_type}{string. The geography type to query (e.g., \code{"state"},
-\code{"nation"}, \code{"county"}). Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available
-geo types for a given source and signal.}
+\item{geo_type}{character vector. One or more geography types to query
+(e.g., \code{"state"}, \code{"nation"}, \code{"county"}); comma-joined strings are also
+accepted. Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available geo types for a given
+source and signal.}
 
 \item{geo_values}{character. The geographies to return. Defaults to all
 ("*") geographies within requested geographic resolution (see:
@@ -72,7 +76,11 @@ Defaults to all (\code{"*"}). Filtered locally after the API call.}
 
 \item{time_values}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{reference_time} instead.}
 
-\item{...}{not used for values, forces later arguments to bind by name}
+\item{...}{Named filters on extra key columns beyond \code{geo_value}, such as
+\code{pcr_target = "sars-cov-2"} or \code{sample_index = c("a", "b")}. Each key
+accepts one or more values (matched as OR) and is sent server-side via the
+\code{extra_keys} API parameter to shrink the download. Passing more than 10
+values for a key warns. Unlike}
 
 \item{fill_method}{string. Optional filter to an imputation method.
 The API provides alternatives of the same signal differing in how
@@ -92,7 +100,7 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 \item{report_time}{Date, string, or \code{\link[=epirange]{epirange()}}. A query on the
 \code{report_time} column for the archive endpoint. Supports exact dates (e.g.,
 \code{"2025-10-16"}), operators (e.g., \code{"<2025-10-16"}), or an \code{\link[=epirange]{epirange()}}.
-Internally maps to the \code{version_query} API parameter.}
+Internally maps to the \code{report_time_query} API parameter.}
 
 \item{issues}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{report_time} instead.}
 }
@@ -108,6 +116,9 @@ available issues.
 \item \code{epidata} is a wrapper that routes to one of the above based
 on which versioning argument is supplied.
 }
+
+For a source's signals, geo types, and extra key columns, see its API docs,
+e.g. NWSS: \url{https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html}.
 }
 \section{Data Versioning}{
 
@@ -115,6 +126,20 @@ on which versioning argument is supplied.
 \code{snapshot_date} to retrieve data as it appeared on a specific date, or
 \code{report_time} to query the archive by when data was reported. If neither is
 supplied, \code{epidata} returns the latest available snapshot.
+}
+
+\section{Empty results}{
+
+An invalid \code{geo_type} or \code{signals} value for the given \code{source} raises an
+error (class \code{epidatr__epidata__invalid_geo_type} or
+\code{epidatr__epidata__invalid_signals} respectively), looked up via
+\code{\link[=epidata_meta]{epidata_meta()}}. Otherwise, an empty result warns rather than failing
+silently: a warning of class \code{epidatr__empty_signals} if only some of the
+requested signals returned no data, or \code{epidatr__empty_result} if the whole
+query came back empty (whether because the server had no matching rows, or
+because the local \code{geo_values}/\code{reference_time} filters dropped everything
+the server returned). Pass \code{fetch_args_list(return_empty = TRUE)} to
+suppress these errors and warnings and get an empty tibble back instead.
 }
 
 \section{See also}{

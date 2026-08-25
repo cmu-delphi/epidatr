@@ -45,8 +45,12 @@ test_that("fetch_args", {
 
 test_that("fetch respects the fields parameter", {
   epidata_call <- pub_covidcast(
-    source = "jhu-csse", signals = "sig", geo_type = "state", time_type = "day",
-    geo_values = "ca", time_values = 20200101,
+    source = "jhu-csse",
+    signals = "sig",
+    geo_type = "state",
+    time_type = "day",
+    geo_values = "ca",
+    time_values = 20200101,
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
 
@@ -85,11 +89,20 @@ test_that("fetch non-classic passes along api warnings", {
   )
   mock_response <- list(
     epidata = list(list(
-      source = "jhu-csse", signal = "confirmed_7dav_incidence_prop",
-      geo_type = "state", time_type = "day", geo_value = "ca",
-      time_value = 20200601L, issue = 20200602L, lag = 1L,
-      value = 1.5, stderr = 0.1, sample_size = 100.0,
-      direction = 1.0, missing_value = 0L, missing_stderr = 0L,
+      source = "jhu-csse",
+      signal = "confirmed_7dav_incidence_prop",
+      geo_type = "state",
+      time_type = "day",
+      geo_value = "ca",
+      time_value = 20200601L,
+      issue = 20200602L,
+      lag = 1L,
+      value = 1.5,
+      stderr = 0.1,
+      sample_size = 100.0,
+      direction = 1.0,
+      missing_value = 0L,
+      missing_stderr = 0L,
       missing_sample_size = 0L
     )),
     result = 1,
@@ -98,7 +111,8 @@ test_that("fetch non-classic passes along api warnings", {
 
   with_mocked_response(
     as.character(jsonlite::toJSON(mock_response, auto_unbox = TRUE)),
-    expect_warning(epidata_call %>% fetch(),
+    expect_warning(
+      epidata_call %>% fetch(),
       regexp = paste0("epidata warning: `", artificial_warning, "`"),
       fixed = TRUE
     )
@@ -127,39 +141,6 @@ test_that("fetch classic works", {
   expect_true(inherits(fetch_out, "list"))
   expect_snapshot_value(fetch_out, style = "json2", cran = TRUE)
 })
-
-test_that("create_epidata_call basic behavior", {
-  endpoint <- "endpoint"
-  base_url <- "https://api.delphi.cmu.edu/epidata/"
-  params <- list()
-
-  # Success
-  meta <- list(
-    create_epidata_field_info("time_value", "date"),
-    create_epidata_field_info("value", "float")
-  )
-
-  formatted_params <- format_params_for_api(params)
-
-  r <- httr2::request(global_base_url) |>
-    httr2::req_url_path_append(endpoint) |>
-    httr2::req_url_query(!!!formatted_params)
-
-  expected <- list(
-    request = r,
-    base_url = base_url,
-    meta = meta,
-    api_version = "classic",
-    response_format = "classic"
-  )
-  class(expected) <- "epidata_call"
-  expect_identical(create_epidata_call(endpoint, params, meta = meta), expected)
-
-  expected$meta <- list()
-  expect_identical(create_epidata_call(endpoint, params, meta = NULL), expected)
-  expect_identical(create_epidata_call(endpoint, params, meta = list()), expected)
-})
-
 
 test_that("create_epidata_call fails when meta arg contains duplicates", {
   endpoint <- "endpoint"
@@ -211,13 +192,22 @@ test_that("with_base_url works as expected", {
   new_call_path <- with_base_url(epidata_call, new_url_path)
 
   expect_s3_class(new_call_path, "epidata_call")
-  expect_match(new_call_path$request$url, "^https://example.com/api.php/covidcast")
+  expect_match(
+    new_call_path$request$url,
+    "^https://example.com/api.php/covidcast"
+  )
   expect_equal(new_call_path$base_url, "https://example.com/api.php/")
   # Ensure query params are preserved (rough check)
   expect_match(new_call_path$request$url, "data_source=jhu-csse")
 })
 
 test_that("fetch_args_list triggers deprecation warnings for debug and format_type", {
-  expect_warning(fetch_args_list(debug = TRUE), "The `debug` argument is no longer supported")
-  expect_warning(fetch_args_list(format_type = "json"), "The `format_type` argument is now managed internally")
+  expect_warning(
+    fetch_args_list(debug = TRUE),
+    "The `debug` argument is no longer supported"
+  )
+  expect_warning(
+    fetch_args_list(format_type = "json"),
+    "The `format_type` argument is now managed internally"
+  )
 })

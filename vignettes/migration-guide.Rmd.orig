@@ -1,0 +1,199 @@
+---
+title: "Migrating from pub_covidcast to the new Epidata API"
+output:
+  rmarkdown::html_vignette:
+    code_folding: show
+vignette: >
+  %\VignetteIndexEntry{Migrating from pub_covidcast to the new Epidata API}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r setup, message = FALSE, eval = TRUE}
+library(epidatr)
+```
+
+The Delphi Epidata API is moving from its V4 endpoints (`pub_covidcast()`
+and other `{pub/pvt}_*` endpoints, such as `pub_fluview()`, `pub_flusurv()`,
+and `pvt_quidel()`) to a new set of V5 endpoints, served by
+`epidata_snapshot()`, `epidata_archive()`, and `epidata_meta()`. The
+transition is in progress: sources are moving to the new API one at a time,
+and the V4 functions still work for sources that have not moved yet. New
+analyses should start with the new functions and fall back to a V4 function
+only when a source is not yet available there.
+
+For the current list of sources and indicators available on the new API, see the
+[V5 signals documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html).
+
+This guide walks through `pub_covidcast()`'s arguments and columns in
+detail, since it's the most widely used V4 endpoint, but the mapping is the
+same for the other `{pub/pvt}_*` endpoints.
+
+## Function mapping
+
+| Old | New | Purpose |
+|---|---|---|
+| `pub_covidcast()` | `epidata_snapshot()` | Data as it appeared on a given date (or the latest) |
+| `pub_covidcast(issues = ...)` | `epidata_archive()` | Full revision history of a signal |
+| `pub_covidcast_meta()`, `covidcast_epidata()` | `epidata_meta()` | Discover sources, signals, geo types, and date ranges |
+
+`epidata()` is a convenience wrapper that routes to `epidata_snapshot()` or
+`epidata_archive()` based on which versioning argument you pass.
+
+## Argument changes
+
+| `pub_covidcast()` argument | New argument | Notes |
+|---|---|---|
+| `source`, `signals`, `geo_type`, `geo_values` | same | |
+| `time_type` | none | Dropped. Times in the new API are always `Date`s. |
+| `time_values` | `reference_time` | Accepts dates or `epirange()`. Filtered locally after the fetch. |
+| `as_of` | `snapshot_date` | `epidata_snapshot()` only. `NULL` returns the latest data. |
+| `issues` | `report_time` | `epidata_archive()` only. Accepts exact dates, operators like `"<2025-10-16"`, or `epirange()`. |
+| `lag` | none | Compute it yourself: `report_time - reference_time`. |
+
+The new functions also add `fill_method`, which has no covidcast equivalent.
+Some sources publish several variants of the same signal that differ in how
+nulls were handled during geographic aggregation: `"source"` (raw source
+data, no imputation), `"fill_ave"` (nulls filled with the average of
+neighboring values), and `"fill_zero"` (nulls filled with zero). The default
+`NULL` returns all variants, so filter on this column (or pass the argument)
+if you want exactly one time series per location.
+
+## Column changes
+
+| `pub_covidcast()` column | New column | Notes |
+|---|---|---|
+| `geo_value`, `geo_type`, `signal`, `value` | same | |
+| `time_value` | `reference_time` | The date the value describes. Always a `Date`. |
+| `issue` | `report_time` | The date the value was published. Present in both snapshot and archive output. |
+| `source` | dropped | You queried by source; add it back with `dplyr::mutate()` if you bind rows across sources. |
+| `time_type` | dropped | No longer needed since times are `Date`s. |
+| `lag` | dropped | Compute as `report_time - reference_time`. |
+| `direction` | dropped | Was already deprecated in the covidcast API. |
+| `stderr`, `sample_size` | `ci_lower`, `ci_upper` | Uncertainty is now expressed as confidence interval bounds on `value` instead of a standard error. Populated only for sources that publish them. See below. |
+| `missing_value`, `missing_stderr`, `missing_sample_size` | dropped | Missingness is now expressed through `fill_method` variants and plain `NA`s. |
+| none | `fill_method` | Which null-handling variant of the signal this row belongs to. See above. |
+
+Some sources also carry extra columns in the new API, for example `age_group`
+(pophive) and `nwss_source`, `sample_index`, `pcr_target` (nwss).
+
+### Uncertainty columns
+
+The covidcast columns `stderr` and `sample_size` have no fixed replacement.
+The shared schema carries only `value`; a source that quantifies uncertainty
+adds its own columns, such as `ci_lower` and `ci_upper`. Use the metadata or 
+the [documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
+ to see which value columns a source returns:
+
+```{r value-columns}
+meta_sleepcycle <- epidata_meta(source = "sleepcycle")
+meta_sleepcycle$sleepcycle$value_columns
+```
+
+## A query, before and after
+
+Fetching NSSP influenza ED visit percentages for two states, as the data
+looked on January 1, 2025:
+
+```{r before}
+old <- pub_covidcast(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  time_type = "week",
+  geo_values = c("pa", "ca"),
+  time_values = epirange(202440, 202501),
+  as_of = 20250101
+)
+head(old)
+```
+
+```{r after}
+new <- epidata_snapshot(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  geo_values = c("pa", "ca"),
+  reference_time = epirange("2024-10-01", "2025-01-01"),
+  snapshot_date = "2025-01-01"
+)
+head(new)
+```
+
+## Revision history queries
+
+Where you used to pass `issues` to `pub_covidcast()`, use
+`epidata_archive()` with `report_time`:
+
+```{r archive}
+revisions <- epidata_archive(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = epirange("2024-10-01", "2025-01-01"),
+  report_time = "<2025-06-01"
+)
+head(revisions)
+```
+
+If you filtered by `lag`, fetch the archive and filter afterwards:
+
+```{r lag, eval = FALSE}
+revisions[revisions$report_time - revisions$reference_time <= 7, ]
+```
+
+## Checking whether a source has moved
+
+Use `epidata_meta()` to see what a source offers in the new API. It returns
+signals, geo types, and the available `reference_time` and `report_time`
+ranges:
+
+```{r meta}
+meta <- epidata_meta(source = "nssp")
+meta$nssp$signals
+meta$nssp$time_value_range
+```
+
+If `epidata_meta()` does not know the source yet, keep using
+`pub_covidcast()` (or the relevant `{pub/pvt}_*` function) for it and check
+back after package updates. The
+[API mailing list](https://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api)
+announces sources as they move.
+
+## Endpoints kept for historical reference
+
+Not every V4 endpoint is moving to V5. The functions below cover data
+sources whose collection has already ended (e.g. Google Flu Trends, the
+Twitter/HealthTweets signal, the various nowcasts). They are not part of the
+V4-to-V5 transition, so they are not deprecated and will keep working. The
+historical data they return is frozen and will remain available. They will
+just no longer receive new data.
+
+| Function | Data source |
+|---|---|
+| `pvt_cdc()` | CDC total and by-topic webpage visits |
+| `pub_covid_hosp_facility_lookup()` | COVID hospitalization facility lookup |
+| `pub_covid_hosp_facility()` | COVID hospitalizations by facility |
+| `pub_covid_hosp_state_timeseries()` | COVID hospitalizations by state |
+| `pub_delphi()` | Delphi's ILINet outpatient doctor visits forecasts |
+| `pub_dengue_nowcast()` | Delphi's PAHO dengue nowcasts (Americas) |
+| `pvt_dengue_sensors()` | PAHO dengue digital surveillance sensors (Americas) |
+| `pub_ecdc_ili()` | ECDC ILI incidence (Europe) |
+| `pub_gft()` | Google Flu Trends flu search volume |
+| `pvt_ght()` | Google Health Trends health topics search volume |
+| `pub_kcdc_ili()` | KCDC ILI incidence (Korea) |
+| `pvt_meta_norostat()` | Metadata for the NoroSTAT endpoint |
+| `pub_nidss_dengue()` | NIDSS dengue cases (Taiwan) |
+| `pub_nidss_flu()` | NIDSS flu doctor visits (Taiwan) |
+| `pvt_norostat()` | CDC NoroSTAT norovirus outbreaks |
+| `pub_nowcast()` | Delphi's ILI Nearby nowcasts |
+| `pub_paho_dengue()` | PAHO dengue data (Americas) |
+| `pvt_sensors()` | Influenza and dengue digital surveillance sensors |
+| `pvt_twitter()` | HealthTweets total and influenza-related tweets |
+| `pub_wiki()` | Wikipedia webpage counts by article |
+

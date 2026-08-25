@@ -64,9 +64,19 @@ save_api_key <- function() {
   )
   readline()
 
-  if (file.exists(usethis::proj_path(".Renviron"))) {
-    usethis::edit_r_environ(scope = "project")
+  # Prefer a project-level .Renviron in the working directory; fall back to
+  # the user-level one R reads at startup (see ?Startup).
+  if (file.exists(".Renviron")) {
+    path <- ".Renviron"
+  } else {
+    path <- path.expand(file.path("~", ".Renviron"))
+    if (!file.exists(path)) {
+      file.create(path)
+    }
+  }
+  utils::file.edit(path)
 
+  if (path == ".Renviron") {
     cat("\n\n")
     cli::cli_inform(
       c(
@@ -74,7 +84,6 @@ save_api_key <- function() {
         file (add it to .gitignore or equivalents)."
       )
     )
-  } else {
-    usethis::edit_r_environ(scope = "user")
   }
+  cli::cli_inform(c("i" = "Restart R for the change to take effect."))
 }
