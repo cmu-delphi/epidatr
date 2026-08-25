@@ -94,7 +94,7 @@ Open a release issue and then copy and follow this checklist in the issue (modif
 - [ ] `devtools::check_win_devel()`
 - [ ] Have maintainer ("cre" in description) check email for problems.
 - [ ] Update `cran-comments.md`
-- [ ] PR with any changes (and go through the list again) into `dev` and run through the list again.
+- [ ] PR with any changes (and go through the list again) into `main` and run through the list again.
 
 Submit to CRAN:
 
