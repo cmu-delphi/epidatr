@@ -1,6 +1,6 @@
-# epidatr 1.4.0
+# epidatr 1.3.0
 
-## Patches
+## Deprecations
 
 - `pub_covidcast()`, `pub_covidcast_meta()`, `pub_fluview()`,
   `pub_fluview_clinical()`, `pub_fluview_meta()`, `pub_flusurv()`,
@@ -19,6 +19,8 @@
   They are not moving to V5 and will keep working, but will not receive new
   data. See the "Endpoints kept for historical reference" section of
   `vignette("migration-guide")` for the full list.
+
+## Patches
 - `epidata_snapshot()` and `epidata_archive()` now issue one request per signal instead of joining `signals` with a comma, which the cast-API server silently matched against nothing (#354).
 - `epidata_archive(report_time = ...)` now sends the `report_time_query` API parameter; the server renamed it from `version_query`, which it now rejects.
 - Add a migration guide vignette (`vignette("migration-guide")`) mapping `pub_covidcast` arguments and columns to the new `epidata_snapshot`/`epidata_archive` functions, and update the README and pkgdown reference to lead with the new API.
