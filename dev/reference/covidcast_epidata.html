@@ -9,7 +9,7 @@ The covidcast_epidata() function fetches a list of all signals, and returns
 an object containing fields for every signal:
 epidata &amp;lt;- covidcast_epidata()
 epidata$signals
-#&amp;gt; # A tibble: 520 x 3
+#&amp;gt; # A tibble: 538 x 3
 #&amp;gt;    source        signal                        short_description
 #&amp;gt;    &amp;lt;chr&amp;gt;         &amp;lt;chr&amp;gt;                         &amp;lt;chr&amp;gt;
 #&amp;gt;  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~
@@ -22,7 +22,7 @@ epidata$signals
 #&amp;gt;  8 chng          7dav_outpatient_covid         Ratio of outpatient doctor visit~
 #&amp;gt;  9 covid-act-now pcr_specimen_positivity_rate  Proportion of PCR specimens test~
 #&amp;gt; 10 covid-act-now pcr_specimen_total_tests      Total number of PCR specimens te~
-#&amp;gt; # i 510 more rows
+#&amp;gt; # i 528 more rows
 
 If you use an editor that supports tab completion, such as RStudio, type
 epidata$signals$ and wait for the tab completion popup. You will be able
@@ -38,6 +38,14 @@ These objects can be used directly to fetch data, without requiring us to use
 the pub_covidcast() function. Simply use the $call attribute of the object:
 epidata$signals$`fb-survey:smoothed_cli`$call(&quot;state&quot;, &quot;pa&quot;,
                                               epirange(20210405, 20210410))
+#&amp;gt; Warning: `pub_covidcast()` uses the V4 Epidata API.
+#&amp;gt; i Starting in October 2026, V4 is tentatively deprecated in favor of the V5
+#&amp;gt;   API.
+#&amp;gt; i See `vignette(&quot;migration-guide&quot;)` (or
+#&amp;gt;   &amp;lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html&amp;gt;) for the
+#&amp;gt;   V5 endpoints and how to move to them. Old data will remain available for at
+#&amp;gt;   least a year, however new ingestion will end.
+#&amp;gt; This warning is displayed once every 8 hours.
 #&amp;gt; # A tibble: 6 x 15
 #&amp;gt;   geo_value signal     source geo_type time_type time_value direction issue
 #&amp;gt;   &amp;lt;chr&amp;gt;     &amp;lt;chr&amp;gt;      &amp;lt;chr&amp;gt;  &amp;lt;fct&amp;gt;    &amp;lt;fct&amp;gt;     &amp;lt;date&amp;gt;         &amp;lt;dbl&amp;gt; &amp;lt;date&amp;gt;
@@ -59,7 +67,7 @@ The covidcast_epidata() function fetches a list of all signals, and returns
 an object containing fields for every signal:
 epidata &amp;lt;- covidcast_epidata()
 epidata$signals
-#&amp;gt; # A tibble: 520 x 3
+#&amp;gt; # A tibble: 538 x 3
 #&amp;gt;    source        signal                        short_description
 #&amp;gt;    &amp;lt;chr&amp;gt;         &amp;lt;chr&amp;gt;                         &amp;lt;chr&amp;gt;
 #&amp;gt;  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~
@@ -72,7 +80,7 @@ epidata$signals
 #&amp;gt;  8 chng          7dav_outpatient_covid         Ratio of outpatient doctor visit~
 #&amp;gt;  9 covid-act-now pcr_specimen_positivity_rate  Proportion of PCR specimens test~
 #&amp;gt; 10 covid-act-now pcr_specimen_total_tests      Total number of PCR specimens te~
-#&amp;gt; # i 510 more rows
+#&amp;gt; # i 528 more rows
 
 If you use an editor that supports tab completion, such as RStudio, type
 epidata$signals$ and wait for the tab completion popup. You will be able
@@ -88,6 +96,14 @@ These objects can be used directly to fetch data, without requiring us to use
 the pub_covidcast() function. Simply use the $call attribute of the object:
 epidata$signals$`fb-survey:smoothed_cli`$call(&quot;state&quot;, &quot;pa&quot;,
                                               epirange(20210405, 20210410))
+#&amp;gt; Warning: `pub_covidcast()` uses the V4 Epidata API.
+#&amp;gt; i Starting in October 2026, V4 is tentatively deprecated in favor of the V5
+#&amp;gt;   API.
+#&amp;gt; i See `vignette(&quot;migration-guide&quot;)` (or
+#&amp;gt;   &amp;lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html&amp;gt;) for the
+#&amp;gt;   V5 endpoints and how to move to them. Old data will remain available for at
+#&amp;gt;   least a year, however new ingestion will end.
+#&amp;gt; This warning is displayed once every 8 hours.
 #&amp;gt; # A tibble: 6 x 15
 #&amp;gt;   geo_value signal     source geo_type time_type time_value direction issue
 #&amp;gt;   &amp;lt;chr&amp;gt;     &amp;lt;chr&amp;gt;      &amp;lt;chr&amp;gt;  &amp;lt;fct&amp;gt;    &amp;lt;fct&amp;gt;     &amp;lt;date&amp;gt;         &amp;lt;dbl&amp;gt; &amp;lt;date&amp;gt;
@@ -107,7 +123,7 @@ epidata$signals$`fb-survey:smoothed_cli`$call(&quot;state&quot;, &quot;pa&quot;,
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.5</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -152,7 +168,7 @@ leaving R.</p>
 an object containing fields for every signal:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covidcast_epidata.html">covidcast_epidata</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">epidata</span><span class="op">$</span><span class="va">signals</span></span>
-<span><span class="co">#&gt; # A tibble: 520 x 3</span></span>
+<span><span class="co">#&gt; # A tibble: 538 x 3</span></span>
 <span><span class="co">#&gt;    source        signal                        short_description</span></span>
 <span><span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;                         &lt;chr&gt;</span></span>
 <span><span class="co">#&gt;  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~</span></span>
@@ -165,7 +181,7 @@ an object containing fields for every signal:</p>
 <span><span class="co">#&gt;  8 chng          7dav_outpatient_covid         Ratio of outpatient doctor visit~</span></span>
 <span><span class="co">#&gt;  9 covid-act-now pcr_specimen_positivity_rate  Proportion of PCR specimens test~</span></span>
 <span><span class="co">#&gt; 10 covid-act-now pcr_specimen_total_tests      Total number of PCR specimens te~</span></span>
-<span><span class="co">#&gt; # i 510 more rows</span></span></code></pre><p></p></div>
+<span><span class="co">#&gt; # i 528 more rows</span></span></code></pre><p></p></div>
 <p>If you use an editor that supports tab completion, such as RStudio, type
 <code>epidata$signals$</code> and wait for the tab completion popup. You will be able
 to type the name of signals and have the autocomplete feature select them
@@ -179,6 +195,14 @@ to access them we rely on the backtick operator:</p>
 the <code><a href="pub_covidcast.html">pub_covidcast()</a></code> function. Simply use the <code>$call</code> attribute of the object:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">epidata</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">`fb-survey:smoothed_cli`</span><span class="op">$</span><span class="fu">call</span><span class="op">(</span><span class="st">"state"</span>, <span class="st">"pa"</span>,</span>
 <span>                                              <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: `pub_covidcast()` uses the V4 Epidata API.</span></span>
+<span><span class="co">#&gt; i Starting in October 2026, V4 is tentatively deprecated in favor of the V5</span></span>
+<span><span class="co">#&gt;   API.</span></span>
+<span><span class="co">#&gt; i See `vignette("migration-guide")` (or</span></span>
+<span><span class="co">#&gt;   &lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html&gt;) for the</span></span>
+<span><span class="co">#&gt;   V5 endpoints and how to move to them. Old data will remain available for at</span></span>
+<span><span class="co">#&gt;   least a year, however new ingestion will end.</span></span>
+<span><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
 <span><span class="co">#&gt; # A tibble: 6 x 15</span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;</span></span>

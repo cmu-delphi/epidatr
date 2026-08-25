@@ -93,6 +93,13 @@ For example queries showing how to discover signals and build calls, see
 ``` r
 
 pub_paho_dengue(regions = "ca", epiweeks = epirange(201401, 201501))
+#> `pub_paho_dengue()` covers a data source that is no longer updated.
+#> ℹ Historical data remains available, but no new data is being ingested.
+#> ℹ See the "Endpoints kept for historical reference" section of
+#>   `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference>)
+#>   for details.
+#> This message is displayed once per session.
 #> # A tibble: 54 × 11
 #>    release_date region serotype issue      epiweek      lag total_pop num_dengue
 #>    <date>       <chr>  <chr>    <date>     <date>     <dbl>     <dbl>      <dbl>

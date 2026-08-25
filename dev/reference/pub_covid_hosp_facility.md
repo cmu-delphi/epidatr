@@ -78,6 +78,13 @@ pub_covid_hosp_facility(
   hospital_pks = "100075",
   collection_weeks = epirange(20200101, 20200501)
 )
+#> `pub_covid_hosp_facility()` covers a data source that is no longer updated.
+#> ℹ Historical data remains available, but no new data is being ingested.
+#> ℹ See the "Endpoints kept for historical reference" section of
+#>   `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference>)
+#>   for details.
+#> This message is displayed once per session.
 #> # A tibble: 12 × 113
 #>    hospital_pk state ccn    hospital_name   address city  zip   hospital_subtype
 #>    <chr>       <chr> <chr>  <chr>           <chr>   <chr> <chr> <chr>           

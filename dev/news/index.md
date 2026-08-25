@@ -1,9 +1,50 @@
 # Changelog
 
-## epidatr 1.3.5
+## epidatr 1.4.0
 
 ### Patches
 
+- [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md),
+  [`pub_covidcast_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast_meta.md),
+  [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md),
+  [`pub_fluview_clinical()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview_clinical.md),
+  [`pub_fluview_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview_meta.md),
+  [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md),
+  [`pub_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_meta.md),
+  and
+  [`pvt_quidel()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_quidel.md)
+  now warn that they use the V4 Epidata API. Starting in October 2026,
+  it is tentatively deprecated in favor of the V5 API. See
+  [`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md)
+  for the V5 replacements.
+- The remaining V4 endpoints whose data sources are no longer updated
+  ([`pvt_cdc()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_cdc.md),
+  [`pub_covid_hosp_facility_lookup()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility_lookup.md),
+  [`pub_covid_hosp_facility()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility.md),
+  [`pub_covid_hosp_state_timeseries()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_state_timeseries.md),
+  [`pub_delphi()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_delphi.md),
+  [`pub_dengue_nowcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_dengue_nowcast.md),
+  [`pvt_dengue_sensors()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_dengue_sensors.md),
+  [`pub_ecdc_ili()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_ecdc_ili.md),
+  [`pub_gft()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_gft.md),
+  [`pvt_ght()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_ght.md),
+  [`pub_kcdc_ili()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_kcdc_ili.md),
+  [`pvt_meta_norostat()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_meta_norostat.md),
+  [`pub_nidss_dengue()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_nidss_dengue.md),
+  [`pub_nidss_flu()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_nidss_flu.md),
+  [`pvt_norostat()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_norostat.md),
+  [`pub_nowcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_nowcast.md),
+  [`pub_paho_dengue()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_paho_dengue.md),
+  [`pvt_sensors()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_sensors.md),
+  [`pvt_twitter()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_twitter.md),
+  and
+  [`pub_wiki()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_wiki.md))
+  now emit a quieter informational note (not a warning) explaining that
+  they are frozen rather than deprecated. They are not moving to V5 and
+  will keep working, but will not receive new data. See the “Endpoints
+  kept for historical reference” section of
+  [`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md)
+  for the full list.
 - [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
   and
   [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)

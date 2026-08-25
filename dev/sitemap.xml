@@ -45,6 +45,7 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/get_wildcard_equivalent_dates.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/index.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/is_cache_enabled.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/note_frozen_endpoint.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/parse_api_week.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/parse_signal.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/parse_value.html</loc></url>
@@ -85,6 +86,7 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/validate_date_input.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/validate_timeset_input.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/validate_version_query.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/warn_v4_sunset.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/with_base_url.html</loc></url>
 </urlset>
 

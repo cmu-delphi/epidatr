@@ -1,5 +1,17 @@
 # Quidel COVID-19 and influenza testing data
 
+This is a V4 endpoint. Starting in October 2026, it is tentatively
+deprecated in favor of the V5 API. The new API can be accessed via the
+[`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+[`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+and
+[`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)
+functions. For more details on the changes, refer to
+[`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md),
+and visit the [V5 signals
+documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
+to see which sources are currently available.
+
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/quidel.html>
 
 Data provided by Quidel Corp., which contains flu lab test results.

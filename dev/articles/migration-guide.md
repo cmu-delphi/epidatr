@@ -5,23 +5,32 @@
 library(epidatr)
 ```
 
-The Delphi Epidata API is moving from the covidcast endpoint (API v4,
-served by
-[`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md))
-to a new set of endpoints (API v5, served by
+The Delphi Epidata API is moving from its V4 endpoints
+([`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
+and other `{pub/pvt}_*` endpoints, such as
+[`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md),
+[`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md),
+and
+[`pvt_quidel()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_quidel.md))
+to a new set of V5 endpoints, served by
 [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
 [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
 and
-[`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)).
+[`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md).
 The transition is in progress: sources are moving to the new API one at
-a time, and
-[`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
-still works for sources that have not moved yet. New analyses should
-start with the new functions and fall back to
-[`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
-only when a source is not yet available there.
+a time, and the V4 functions still work for sources that have not moved
+yet. New analyses should start with the new functions and fall back to a
+V4 function only when a source is not yet available there.
 
-This guide maps the old interface onto the new one.
+For the current list of sources and indicators available on the new API,
+see the [V5 signals
+documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html).
+
+This guide walks through
+[`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)’s
+arguments and columns in detail, since it’s the most widely used V4
+endpoint, but the mapping is the same for the other `{pub/pvt}_*`
+endpoints.
 
 ## Function mapping
 
@@ -113,11 +122,12 @@ head(old)
 #> # A tibble: 6 × 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     
 #>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
-#> 1 ca        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-16
-#> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-16
-#> 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-16
-#> 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-16
-#> # ℹ 2 more rows
+#> 1 ca        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-23
+#> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-23
+#> 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-23
+#> 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-23
+#> 5 ca        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-08-23
+#> 6 pa        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-08-23
 #> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
 #> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
@@ -140,7 +150,8 @@ head(new)
 #> 2 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-12     0.140
 #> 3 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-19     0.160
 #> 4 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-26     0.200
-#> # ℹ 2 more rows
+#> 5 pct_ed_visits… 2024-12-27  state    ca        source      2024-11-02     0.25 
+#> 6 pct_ed_visits… 2024-12-27  state    ca        source      2024-11-09     0.310
 ```
 
 ## Revision history queries
@@ -169,7 +180,8 @@ head(revisions)
 #> 2 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-12     0.0700
 #> 3 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-19     0.0800
 #> 4 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-26     0.130 
-#> # ℹ 2 more rows
+#> 5 pct_ed_visit… 2024-11-08  state    pa        source      2024-11-02     0.140 
+#> 6 pct_ed_visit… 2024-11-23  state    pa        source      2024-10-05     0.0500
 ```
 
 If you filtered by `lag`, fetch the archive and filter afterwards:
@@ -190,9 +202,11 @@ types, and the available `reference_time` and `report_time` ranges:
 
 meta <- epidata_meta(source = "nssp")
 meta$nssp$signals
-#> [1] "pct_ed_visits_ari"       "pct_ed_visits_combined" 
-#> [3] "pct_ed_visits_covid"     "pct_ed_visits_influenza"
-#>  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]
+#> [1] "pct_ed_visits_ari"                "pct_ed_visits_combined"          
+#> [3] "pct_ed_visits_covid"              "pct_ed_visits_influenza"         
+#> [5] "pct_ed_visits_rsv"                "smoothed_pct_ed_visits_combined" 
+#> [7] "smoothed_pct_ed_visits_covid"     "smoothed_pct_ed_visits_influenza"
+#> [9] "smoothed_pct_ed_visits_rsv"
 meta$nssp$time_value_range
 #> NULL
 ```
@@ -201,6 +215,39 @@ If
 [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)
 does not know the source yet, keep using
 [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
-for it and check back after package updates. The [API mailing
+(or the relevant `{pub/pvt}_*` function) for it and check back after
+package updates. The [API mailing
 list](https://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api)
 announces sources as they move.
+
+## Endpoints kept for historical reference
+
+Not every V4 endpoint is moving to V5. The functions below cover data
+sources whose collection has already ended (e.g. Google Flu Trends, the
+Twitter/HealthTweets signal, the various nowcasts). They are not part of
+the V4-to-V5 transition, so they are not deprecated and will keep
+working. The historical data they return is frozen and will remain
+available. They will just no longer receive new data.
+
+| Function | Data source |
+|----|----|
+| [`pvt_cdc()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_cdc.md) | CDC total and by-topic webpage visits |
+| [`pub_covid_hosp_facility_lookup()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility_lookup.md) | COVID hospitalization facility lookup |
+| [`pub_covid_hosp_facility()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility.md) | COVID hospitalizations by facility |
+| [`pub_covid_hosp_state_timeseries()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_state_timeseries.md) | COVID hospitalizations by state |
+| [`pub_delphi()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_delphi.md) | Delphi’s ILINet outpatient doctor visits forecasts |
+| [`pub_dengue_nowcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_dengue_nowcast.md) | Delphi’s PAHO dengue nowcasts (Americas) |
+| [`pvt_dengue_sensors()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_dengue_sensors.md) | PAHO dengue digital surveillance sensors (Americas) |
+| [`pub_ecdc_ili()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_ecdc_ili.md) | ECDC ILI incidence (Europe) |
+| [`pub_gft()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_gft.md) | Google Flu Trends flu search volume |
+| [`pvt_ght()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_ght.md) | Google Health Trends health topics search volume |
+| [`pub_kcdc_ili()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_kcdc_ili.md) | KCDC ILI incidence (Korea) |
+| [`pvt_meta_norostat()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_meta_norostat.md) | Metadata for the NoroSTAT endpoint |
+| [`pub_nidss_dengue()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_nidss_dengue.md) | NIDSS dengue cases (Taiwan) |
+| [`pub_nidss_flu()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_nidss_flu.md) | NIDSS flu doctor visits (Taiwan) |
+| [`pvt_norostat()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_norostat.md) | CDC NoroSTAT norovirus outbreaks |
+| [`pub_nowcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_nowcast.md) | Delphi’s ILI Nearby nowcasts |
+| [`pub_paho_dengue()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_paho_dengue.md) | PAHO dengue data (Americas) |
+| [`pvt_sensors()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_sensors.md) | Influenza and dengue digital surveillance sensors |
+| [`pvt_twitter()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_twitter.md) | HealthTweets total and influenza-related tweets |
+| [`pub_wiki()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_wiki.md) | Wikipedia webpage counts by article |
