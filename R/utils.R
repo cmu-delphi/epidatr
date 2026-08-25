@@ -26,7 +26,8 @@ warn_v4_sunset <- function(fn_name) {
        for at least a year, but new ingestion will end."
     ),
     .frequency = "regularly",
-    .frequency_id = paste0("epidatr.v4_sunset.", fn_name)
+    .frequency_id = paste0("epidatr.v4_sunset.", fn_name),
+    .class = "epidatr_v4_sunset_warning"
   )
 }
 
