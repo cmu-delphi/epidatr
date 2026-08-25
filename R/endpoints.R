@@ -87,6 +87,8 @@ pvt_cdc <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pvt_cdc")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -160,6 +162,7 @@ pub_covid_hosp_facility_lookup <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_covid_hosp_facility_lookup")
 
   assert_character_param("state", state, len = 1, required = FALSE)
   assert_character_param("ccn", ccn, len = 1, required = FALSE)
@@ -265,6 +268,7 @@ pub_covid_hosp_facility <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_covid_hosp_facility")
 
   collection_weeks <- get_wildcard_equivalent_dates(collection_weeks, "day")
 
@@ -713,6 +717,7 @@ pub_covid_hosp_state_timeseries <- function(
 ) {
   # Check parameters
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_covid_hosp_state_timeseries")
 
   if (missing(states)) {
     cli::cli_abort(
@@ -1127,6 +1132,7 @@ pub_covid_hosp_state_timeseries <- function(
 
 #' Metadata for the COVIDcast endpoint
 #'
+#' @template v4-sunset
 #' @description
 #' API docs:
 #' <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html>.
@@ -1176,6 +1182,8 @@ pub_covidcast_meta <- function(
   geo_type = NULL,
   fetch_args = fetch_args_list()
 ) {
+  warn_v4_sunset("pub_covidcast_meta")
+
   assert_character_param("signals", signals, required = FALSE)
   assert_character_param("time_type", time_type, len = 1, required = FALSE)
   assert_character_param("geo_type", geo_type, len = 1, required = FALSE)
@@ -1228,6 +1236,7 @@ pub_covidcast_meta <- function(
 
 #' Various COVID and flu signals via the COVIDcast endpoint
 #'
+#' @template v4-sunset
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>
 #'
@@ -1287,6 +1296,7 @@ pub_covidcast <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  warn_v4_sunset("pub_covidcast")
 
   # Check parameters
   if (
@@ -2065,6 +2075,8 @@ pub_delphi <- function(
   epiweek,
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pub_delphi")
+
   assert_character_param("system", system)
   epiweek <- validate_timeset_input("epiweek", epiweek, len = 1)
 
@@ -2103,6 +2115,8 @@ pub_dengue_nowcast <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pub_dengue_nowcast")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
@@ -2151,6 +2165,8 @@ pvt_dengue_sensors <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pvt_dengue_sensors")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -2210,6 +2226,7 @@ pub_ecdc_ili <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_ecdc_ili")
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
@@ -2242,6 +2259,7 @@ pub_ecdc_ili <- function(
 }
 
 #' CDC FluSurv flu hospitalizations
+#' @template v4-sunset
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>.
 #'
@@ -2277,6 +2295,7 @@ pub_flusurv <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  warn_v4_sunset("pub_flusurv")
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
@@ -2337,6 +2356,7 @@ pub_flusurv <- function(
 }
 
 #' CDC FluView flu tests from clinical labs
+#' @template v4-sunset
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html>
 #'
@@ -2368,6 +2388,7 @@ pub_fluview_clinical <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  warn_v4_sunset("pub_fluview_clinical")
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
@@ -2406,6 +2427,14 @@ pub_fluview_clinical <- function(
 
 #' Metadata for the FluView endpoint
 #' @description
+#' This is a V4 endpoint. Starting in October 2026, it is tentatively
+#' deprecated in favor of the V5 API. The new API can be accessed via the
+#' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
+#' For more details on the changes, refer to `vignette("migration-guide")`,
+#' and visit the [V5 signals
+#' documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
+#' to see which sources are currently available.
+#'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
 #'
 #' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
@@ -2420,6 +2449,8 @@ pub_fluview_clinical <- function(
 #' @keywords endpoint
 #' @export
 pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
+  warn_v4_sunset("pub_fluview_meta")
+
   create_epidata_call(
     "fluview_meta/",
     list(),
@@ -2434,6 +2465,7 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 
 
 #' CDC FluView ILINet outpatient doctor visits
+#' @template v4-sunset
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>. For
 #'
@@ -2469,6 +2501,7 @@ pub_fluview <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  warn_v4_sunset("pub_fluview")
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
@@ -2543,6 +2576,8 @@ pub_gft <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pub_gft")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
@@ -2593,6 +2628,8 @@ pvt_ght <- function(
   query,
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pvt_ght")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -2645,6 +2682,7 @@ pub_kcdc_ili <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_kcdc_ili")
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
@@ -2691,6 +2729,8 @@ pub_kcdc_ili <- function(
 #' @keywords endpoint
 #' @export
 pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
+  note_frozen_endpoint("pvt_meta_norostat")
+
   assert_character_param("auth", auth, len = 1)
 
   create_epidata_call(
@@ -2702,6 +2742,14 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 
 #' Metadata for the Delphi Epidata API
 #' @description
+#' This is a V4 endpoint. Starting in October 2026, it is tentatively
+#' deprecated in favor of the V5 API. The new API can be accessed via the
+#' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
+#' For more details on the changes, refer to `vignette("migration-guide")`,
+#' and visit the [V5 signals
+#' documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
+#' to see which sources are currently available.
+#'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta.html>
 #'
 #' @inheritParams .epidatr_shared_params
@@ -2711,6 +2759,8 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 #' @keywords endpoint
 #' @export
 pub_meta <- function(fetch_args = fetch_args_list()) {
+  warn_v4_sunset("pub_meta")
+
   create_epidata_call("meta/", list()) %>%
     request_epidata(fetch_args = fetch_args, simplify = FALSE)
 }
@@ -2746,6 +2796,8 @@ pub_nidss_dengue <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pub_nidss_dengue")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
@@ -2795,6 +2847,7 @@ pub_nidss_flu <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_nidss_flu")
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
@@ -2861,6 +2914,8 @@ pvt_norostat <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pvt_norostat")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -2906,6 +2961,8 @@ pub_nowcast <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pub_nowcast")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("locations", locations)
@@ -2952,6 +3009,7 @@ pub_paho_dengue <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_paho_dengue")
 
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
@@ -2986,6 +3044,7 @@ pub_paho_dengue <- function(
 }
 
 #' Quidel COVID-19 and influenza testing data
+#' @template v4-sunset
 #' @description
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/quidel.html>
 #'
@@ -3014,6 +3073,8 @@ pvt_quidel <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  warn_v4_sunset("pvt_quidel")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -3079,6 +3140,8 @@ pvt_sensors <- function(
   epiweeks = "*",
   fetch_args = fetch_args_list()
 ) {
+  note_frozen_endpoint("pvt_sensors")
+
   epiweeks <- get_wildcard_equivalent_dates(epiweeks, "week")
 
   assert_character_param("auth", auth, len = 1)
@@ -3139,6 +3202,7 @@ pvt_twitter <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pvt_twitter")
 
   time_type <- match.arg(time_type)
   if (time_type == "day") {
@@ -3222,6 +3286,7 @@ pub_wiki <- function(
   fetch_args = fetch_args_list()
 ) {
   rlang::check_dots_empty()
+  note_frozen_endpoint("pub_wiki")
 
   time_type <- match.arg(time_type)
   if (time_type == "day") {

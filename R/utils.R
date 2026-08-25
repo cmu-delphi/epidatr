@@ -11,6 +11,45 @@ release_bullets <- function() {
   )
 }
 
+#' Warn that a V4 endpoint is being phased out in favor of the V5 API
+#' @param fn_name string. Name of the calling function, used to throttle the
+#'   warning and to point users at the right place in the migration guide.
+#' @keywords internal
+warn_v4_sunset <- function(fn_name) {
+  cli::cli_warn(
+    c(
+      "{.fn {fn_name}} uses the V4 Epidata API.",
+      "i" = "Starting in October 2026, V4 is tentatively deprecated in favor of the V5 API.",
+      "i" = "See {.code vignette(\"migration-guide\")} (or {.url \\
+       https://cmu-delphi.github.io/epidatr/articles/migration-guide.html}) \\
+       for the V5 endpoints and how to move to them. Old data will remain available \\
+       for at least a year, but new ingestion will end."
+    ),
+    .frequency = "regularly",
+    .frequency_id = paste0("epidatr.v4_sunset.", fn_name),
+    .class = "epidatr_v4_sunset_warning"
+  )
+}
+
+#' Note that an endpoint's data source is no longer updated
+#' @param fn_name string. Name of the calling function, used to throttle the
+#'   note.
+#' @keywords internal
+note_frozen_endpoint <- function(fn_name) {
+  cli::cli_inform(
+    c(
+      "{.fn {fn_name}} covers a data source that is no longer updated.",
+      "i" = "Historical data remains available, but no new data is being ingested.",
+      "i" = "See the \"Endpoints kept for historical reference\" section of \\
+       {.code vignette(\"migration-guide\")} (or {.url \\
+       https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference}) \\
+       for details."
+    ),
+    .frequency = "once",
+    .frequency_id = paste0("epidatr.frozen_endpoint.", fn_name)
+  )
+}
+
 #' List all available Epidata API endpoints
 #'
 #' @description

@@ -56,6 +56,13 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 \code{\link[tibble:tibble]{tibble::tibble}}
 }
 \description{
+This is a V4 endpoint. Starting in October 2026, it is tentatively
+deprecated in favor of the V5 API. The new API can be accessed via the
+\code{\link[=epidata_snapshot]{epidata_snapshot()}}, \code{\link[=epidata_archive]{epidata_archive()}}, and \code{\link[=epidata_meta]{epidata_meta()}} functions.
+For more details on the changes, refer to \code{vignette("migration-guide")},
+and visit the \href{https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html}{V5 signals documentation}
+to see which sources are currently available.
+
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html}
 
 The primary endpoint for fetching COVID-19 data, providing access to a wide
