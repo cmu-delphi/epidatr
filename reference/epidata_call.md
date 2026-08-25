@@ -82,6 +82,14 @@ call <- pub_covidcast(
   geo_values = c("ca", "fl"),
   fetch_args = fetch_args_list(dry_run = TRUE)
 )
+#> Warning: `pub_covidcast()` uses the V4 Epidata API.
+#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5
+#>   API.
+#> ℹ See `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the
+#>   V5 endpoints and how to move to them. Old data will remain available for at
+#>   least a year, but new ingestion will end.
+#> This warning is displayed once every 8 hours.
 call %>% fetch()
 #> # A tibble: 124 × 15
 #>    geo_value signal    source geo_type time_type time_value direction issue     

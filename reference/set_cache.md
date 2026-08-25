@@ -7,10 +7,8 @@ environmental variables for a persistent cache. The typical recommended
 workflow for using the cache is to set the environmental variables
 `EPIDATR_USE_CACHE=TRUE` and
 `EPIDATR_CACHE_DIRECTORY="/your/directory/here"`in your `.Renviron`, for
-example by calling
-[`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html).
-See the parameters below for some more configurables if you're so
-inclined.
+example by calling `file.edit("~/.Renviron")`. See the parameters below
+for some more configurables if you're so inclined.
 
 `set_cache` (re)defines the cache to use in a particular R session. This
 does not clear existing data at any previous location, but instead
@@ -137,8 +135,8 @@ set_cache(
 )
 #> ! epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not
 #>   intended).
-#> ℹ The cache directory is /tmp/RtmpoK9xfz.
+#> ℹ The cache directory is /tmp/RtmpC7r6QC.
 #> ℹ The cache will be cleared after 14 days and will be pruned if it exceeds 512
 #>   MB.
-#> ℹ The log of cache transactions is stored at /tmp/RtmpoK9xfz/logs.txt.
+#> ℹ The log of cache transactions is stored at /tmp/RtmpC7r6QC/logs.txt.
 ```

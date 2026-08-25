@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,7 +19,8 @@
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/migration-guide.html">Migrating from pub_covidcast to the new Epidata API</a></li>
+    <li><a class="dropdown-item" href="../articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
     <li><a class="dropdown-item" href="../articles/v5-api-demo.html">epidatr v5 API demo</a></li>
     <li><a class="dropdown-item" href="../articles/versioned-data.html">Understanding and accessing versioned data</a></li>
   </ul></li>
@@ -39,32 +40,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="data-source-and-signal-discovery">Data source and signal discovery<a class="anchor" aria-label="anchor" href="#data-source-and-signal-discovery"></a></h2>
+      <h2 id="query-the-new-epidata-api-v-">Query the new Epidata API (v5)<a class="anchor" aria-label="anchor" href="#query-the-new-epidata-api-v-"></a></h2>
 
-      <div class="section-desc"><p>Quickly explore endpoints, and API signal and source names</p></div>
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="avail_endpoints.html">avail_endpoints()</a></code>
-
-        </dt>
-        <dd>List all available Epidata API endpoints</dd>
-
-        <dt>
-
-          <code><a href="covidcast_epidata.html">covidcast_epidata()</a></code>
-
-        </dt>
-        <dd>Creates the COVIDcast Epidata autocomplete helper</dd>
-      </dl></div><div class="section level2">
-      <h2 id="make-api-requests">Make API requests<a class="anchor" aria-label="anchor" href="#make-api-requests"></a></h2>
-
-      <div class="section-desc"><p>Query Delphi Epidata endpoints</p></div>
+      <div class="section-desc"><p>The current API. Sources are moving here from the covidcast endpoint; see <code><a href="../articles/migration-guide.html">vignette("migration-guide")</a></code> for how to update covidcast queries.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -73,17 +51,10 @@
 
       <dl><dt>
 
-          <code><a href="epidata_call.html">create_epidata_call()</a></code> <code><a href="epidata_call.html">fetch()</a></code>
+          <code><a href="epidata_meta.html">epidata_meta()</a></code>
 
         </dt>
-        <dd>An abstraction that holds information needed to make an epidata request</dd>
-
-        <dt>
-
-          <code><a href="fetch_args_list.html">fetch_args_list()</a></code>
-
-        </dt>
-        <dd>Set custom API request parameters</dd>
+        <dd>Get cast-API source metadata</dd>
 
         <dt>
 
@@ -94,12 +65,51 @@
 
         <dt>
 
-          <code><a href="epidata_meta.html">epidata_meta()</a></code>
+          <code><a href="epidata_aux.html">epidata_aux()</a></code>
 
         </dt>
-        <dd>Get cast-API source metadata</dd>
+        <dd>Fetch V5 auxiliary data</dd>
+      </dl></div><div class="section level2">
+      <h2 id="query-the-covidcast-endpoint-v-">Query the covidcast endpoint (v4)<a class="anchor" aria-label="anchor" href="#query-the-covidcast-endpoint-v-"></a></h2>
+
+      <div class="section-desc"><p>The previous main endpoint. Still carries the sources that have not moved to v5 yet.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="pub_covidcast.html">pub_covidcast()</a></code>
+
+        </dt>
+        <dd>Various COVID and flu signals via the COVIDcast endpoint</dd>
 
         <dt>
+
+          <code><a href="pub_covidcast_meta.html">pub_covidcast_meta()</a></code>
+
+        </dt>
+        <dd>Metadata for the COVIDcast endpoint</dd>
+
+        <dt>
+
+          <code><a href="covidcast_epidata.html">covidcast_epidata()</a></code>
+
+        </dt>
+        <dd>Creates the COVIDcast Epidata autocomplete helper</dd>
+      </dl></div><div class="section level2">
+      <h2 id="query-legacy-endpoints-v-">Query legacy endpoints (v3)<a class="anchor" aria-label="anchor" href="#query-legacy-endpoints-v-"></a></h2>
+
+      <div class="section-desc"><p>Older endpoints, each with its own dataset. Most are static or no longer updated.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="pub_covid_hosp_facility.html">pub_covid_hosp_facility()</a></code>
 
@@ -119,20 +129,6 @@
 
         </dt>
         <dd>COVID hospitalizations by state</dd>
-
-        <dt>
-
-          <code><a href="pub_covidcast.html">pub_covidcast()</a></code>
-
-        </dt>
-        <dd>Various COVID and flu signals via the COVIDcast endpoint</dd>
-
-        <dt>
-
-          <code><a href="pub_covidcast_meta.html">pub_covidcast_meta()</a></code>
-
-        </dt>
-        <dd>Metadata for the COVIDcast endpoint</dd>
 
         <dt>
 
@@ -238,6 +234,36 @@
 
         </dt>
         <dd>Wikipedia webpage counts by article</dd>
+      </dl></div><div class="section level2">
+      <h2 id="make-api-requests">Make API requests<a class="anchor" aria-label="anchor" href="#make-api-requests"></a></h2>
+
+      <div class="section-desc"><p>Discover endpoints and control how queries are built and fetched</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="avail_endpoints.html">avail_endpoints()</a></code>
+
+        </dt>
+        <dd>List all available Epidata API endpoints</dd>
+
+        <dt>
+
+          <code><a href="epidata_call.html">create_epidata_call()</a></code> <code><a href="epidata_call.html">fetch()</a></code>
+
+        </dt>
+        <dd>An abstraction that holds information needed to make an epidata request</dd>
+
+        <dt>
+
+          <code><a href="fetch_args_list.html">fetch_args_list()</a></code>
+
+        </dt>
+        <dd>Set custom API request parameters</dd>
       </dl></div><div class="section level2">
       <h2 id="configuration-and-utilities">Configuration and utilities<a class="anchor" aria-label="anchor" href="#configuration-and-utilities"></a></h2>
 

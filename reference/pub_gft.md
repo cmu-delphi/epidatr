@@ -58,6 +58,13 @@ For example queries showing how to discover signals and build calls, see
 ``` r
 
 pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
+#> `pub_gft()` covers a data source that is no longer updated.
+#> ℹ Historical data remains available, but no new data is being ingested.
+#> ℹ See the "Endpoints kept for historical reference" section of
+#>   `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference>)
+#>   for details.
+#> This message is displayed once per session.
 #> # A tibble: 189 × 3
 #>    location epiweek      num
 #>    <chr>    <date>     <dbl>

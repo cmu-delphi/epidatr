@@ -13,6 +13,7 @@ fetch_args_list(
   fields = NULL,
   disable_date_parsing = FALSE,
   disable_data_frame_parsing = FALSE,
+  disable_missing_meta_warning = FALSE,
   return_empty = FALSE,
   timeout_seconds = 15 * 60,
   base_url = NULL,
@@ -45,6 +46,12 @@ fetch_args_list(
 
   disable automatic conversion to data frame; this is only supported by
   endpoints that only support the 'classic' format (non-tabular)
+
+- disable_missing_meta_warning:
+
+  if `TRUE`, suppress the warning emitted when the response contains
+  columns not declared as expected epidata fields. Useful for
+  endpoints/signals that intentionally return extra, untyped columns.
 
 - return_empty:
 

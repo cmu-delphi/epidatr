@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="index.html">epidatr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
+<li><a class="dropdown-item" href="articles/migration-guide.html">Migrating from pub_covidcast to the new Epidata API</a></li>
+    <li><a class="dropdown-item" href="articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
     <li><a class="dropdown-item" href="articles/v5-api-demo.html">epidatr v5 API demo</a></li>
     <li><a class="dropdown-item" href="articles/versioned-data.html">Understanding and accessing versioned data</a></li>
   </ul>
@@ -69,35 +70,50 @@
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cmu-delphi.github.io/epidatr/">epidatr</a></span><span class="op">)</span></span>
-<span><span class="co"># Obtain the smoothed covid-like illness (CLI) signal from Delphi's US COVID-19</span></span>
-<span><span class="co"># Trends and Impact Survey (CTIS), in partnership with Facebook, as it was on</span></span>
-<span><span class="co"># April 10, 2021 for the US at the national level</span></span>
-<span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/pub_covidcast.html">pub_covidcast</a></span><span class="op">(</span></span>
-<span>  source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
-<span>  signals <span class="op">=</span> <span class="st">"smoothed_cli"</span>,</span>
-<span>  geo_type <span class="op">=</span> <span class="st">"nation"</span>,</span>
-<span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
-<span>  geo_values <span class="op">=</span> <span class="st">"us"</span>,</span>
-<span>  time_values <span class="op">=</span> <span class="fu"><a href="reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210101</span>, <span class="fl">20210601</span><span class="op">)</span>,</span>
-<span>  as_of <span class="op">=</span> <span class="fl">20210601</span></span>
+<span><span class="co"># Discover what a source offers: signals, geo types, and date ranges</span></span>
+<span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/epidata_meta.html">epidata_meta</a></span><span class="op">(</span>source <span class="op">=</span> <span class="st">"nssp"</span><span class="op">)</span></span>
+<span><span class="va">meta</span><span class="op">$</span><span class="va">nssp</span><span class="op">$</span><span class="va">signals</span></span>
+<span><span class="co">#&gt; [1] "pct_ed_visits_ari"                "pct_ed_visits_combined"          </span></span>
+<span><span class="co">#&gt; [3] "pct_ed_visits_covid"              "pct_ed_visits_influenza"         </span></span>
+<span><span class="co">#&gt; [5] "pct_ed_visits_rsv"                "smoothed_pct_ed_visits_combined" </span></span>
+<span><span class="co">#&gt; [7] "smoothed_pct_ed_visits_covid"     "smoothed_pct_ed_visits_influenza"</span></span>
+<span><span class="co">#&gt; [9] "smoothed_pct_ed_visits_rsv"</span></span>
+<span></span>
+<span><span class="co"># Fetch the latest snapshot of NSSP influenza ED visit percentages by state</span></span>
+<span><span class="va">flu</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cast_api_queries.html">epidata_snapshot</a></span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="st">"nssp"</span>,</span>
+<span>  signals <span class="op">=</span> <span class="st">"pct_ed_visits_influenza"</span>,</span>
+<span>  geo_type <span class="op">=</span> <span class="st">"state"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">epidata</span></span>
-<span><span class="co">#&gt; # A tibble: 151 × 15</span></span>
-<span><span class="co">#&gt;    geo_value signal    source geo_type time_type time_value direction issue     </span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
-<span><span class="co">#&gt;  1 us        smoothed… fb-su… nation   day       2021-01-01        NA 2021-01-06</span></span>
-<span><span class="co">#&gt;  2 us        smoothed… fb-su… nation   day       2021-01-02        NA 2021-01-07</span></span>
-<span><span class="co">#&gt;  3 us        smoothed… fb-su… nation   day       2021-01-03        NA 2021-01-08</span></span>
-<span><span class="co">#&gt;  4 us        smoothed… fb-su… nation   day       2021-01-04        NA 2021-01-09</span></span>
-<span><span class="co">#&gt;  5 us        smoothed… fb-su… nation   day       2021-01-05        NA 2021-01-10</span></span>
-<span><span class="co">#&gt;  6 us        smoothed… fb-su… nation   day       2021-01-06        NA 2021-01-29</span></span>
-<span><span class="co">#&gt;  7 us        smoothed… fb-su… nation   day       2021-01-07        NA 2021-01-29</span></span>
-<span><span class="co">#&gt;  8 us        smoothed… fb-su… nation   day       2021-01-08        NA 2021-01-29</span></span>
-<span><span class="co">#&gt;  9 us        smoothed… fb-su… nation   day       2021-01-09        NA 2021-01-29</span></span>
-<span><span class="co">#&gt; 10 us        smoothed… fb-su… nation   day       2021-01-10        NA 2021-01-29</span></span>
-<span><span class="co">#&gt; # ℹ 141 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
+<span><span class="va">flu</span></span>
+<span><span class="co">#&gt; # A tibble: 10,353 × 7</span></span>
+<span><span class="co">#&gt;    signal        report_time geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;         &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-01     0.140</span></span>
+<span><span class="co">#&gt;  2 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-08     0.240</span></span>
+<span><span class="co">#&gt;  3 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-15     0.320</span></span>
+<span><span class="co">#&gt;  4 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-22     0.760</span></span>
+<span><span class="co">#&gt;  5 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-29     1.16 </span></span>
+<span><span class="co">#&gt;  6 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-05     1.94 </span></span>
+<span><span class="co">#&gt;  7 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-12     3.73 </span></span>
+<span><span class="co">#&gt;  8 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-19     6.82 </span></span>
+<span><span class="co">#&gt;  9 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-26     8.67 </span></span>
+<span><span class="co">#&gt; 10 pct_ed_visit… 2026-06-26  state    ak        source      2022-12-03     9.85 </span></span>
+<span><span class="co">#&gt; # ℹ 10,343 more rows</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="which-endpoint-has-my-data">Which endpoint has my data?<a class="anchor" aria-label="anchor" href="#which-endpoint-has-my-data"></a>
+</h2>
+<p>The Delphi Epidata API has three generations of endpoints, and this package has client functions for all of them:</p>
+<ul>
+<li>
+<strong>v5 (current):</strong> <code><a href="reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="reference/epidata_meta.html">epidata_meta()</a></code>. Start here; sources are moving to v5 one at a time.</li>
+<li>
+<strong>v4 (covidcast):</strong> <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code>. Still carries the sources that have not moved to v5 yet.</li>
+<li>
+<strong>v3 (legacy):</strong> the many other <code>pub_*</code> functions (e.g. <code><a href="reference/pub_fluview.html">pub_fluview()</a></code>, <code><a href="reference/pub_gft.html">pub_gft()</a></code>), one per dataset. Most of these datasets are static or no longer updated; they remain available for historical work.</li>
+</ul>
+<p>If you have existing <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code> code, see <code><a href="articles/migration-guide.html">vignette("migration-guide")</a></code> for the argument and column mapping to the v5 functions.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>

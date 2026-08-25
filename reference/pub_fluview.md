@@ -1,5 +1,17 @@
 # CDC FluView ILINet outpatient doctor visits
 
+This is a V4 endpoint. Starting in October 2026, it is tentatively
+deprecated in favor of the V5 API. The new API can be accessed via the
+[`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/reference/cast_api_queries.md),
+[`epidata_archive()`](https://cmu-delphi.github.io/epidatr/reference/cast_api_queries.md),
+and
+[`epidata_meta()`](https://cmu-delphi.github.io/epidatr/reference/epidata_meta.md)
+functions. For more details on the changes, refer to
+[`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/articles/migration-guide.md),
+and visit the [V5 signals
+documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
+to see which sources are currently available.
+
 API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>. For
 
@@ -114,6 +126,14 @@ For example queries showing how to discover signals and build calls, see
 ``` r
 
 pub_fluview(regions = "nat", epiweeks = epirange(201201, 202005))
+#> Warning: `pub_fluview()` uses the V4 Epidata API.
+#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5
+#>   API.
+#> ℹ See `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the
+#>   V5 endpoints and how to move to them. Old data will remain available for at
+#>   least a year, but new ingestion will end.
+#> This warning is displayed once every 8 hours.
 #> # A tibble: 422 × 16
 #>    release_date region issue      epiweek      lag num_ili num_patients
 #>    <date>       <chr>  <date>     <date>     <dbl>   <dbl>        <dbl>

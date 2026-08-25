@@ -103,9 +103,17 @@ pub_covid_hosp_state_timeseries(
   states = "fl",
   dates = epirange(20200101, 20200501)
 )
+#> `pub_covid_hosp_state_timeseries()` covers a data source that is no longer
+#> updated.
+#> ℹ Historical data remains available, but no new data is being ingested.
+#> ℹ See the "Endpoints kept for historical reference" section of
+#>   `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference>)
+#>   for details.
+#> This message is displayed once per session.
 #> # A tibble: 51 × 118
 #>    state geocoded_state issue      date       critical_staffing_shortage_today…¹
-#>    <chr> <lgl>          <date>     <date>     <lgl>                             
+#>    <chr> <chr>          <date>     <date>     <lgl>                             
 #>  1 FL    NA             2024-05-03 2020-03-12 FALSE                             
 #>  2 FL    NA             2024-05-03 2020-03-13 FALSE                             
 #>  3 FL    NA             2024-05-03 2020-03-14 FALSE                             

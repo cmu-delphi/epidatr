@@ -46,6 +46,14 @@ function. Simply use the `$call` attribute of the object:
 
     epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa",
                                                   epirange(20210405, 20210410))
+    #> Warning: `pub_covidcast()` uses the V4 Epidata API.
+    #> i Starting in October 2026, V4 is tentatively deprecated in favor of the V5
+    #>   API.
+    #> i See `vignette("migration-guide")` (or
+    #>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the
+    #>   V5 endpoints and how to move to them. Old data will remain available for at
+    #>   least a year, however new ingestion will end.
+    #> This warning is displayed once every 8 hours.
     #> # A tibble: 6 x 15
     #>   geo_value signal     source geo_type time_type time_value direction issue
     #>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>

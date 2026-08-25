@@ -6,6 +6,7 @@
 
 pak::pkg_install(c('devtools', 'pkgdown', 'styler', 'lintr')) # install dev dependencies
 devtools::install_deps(dependencies = TRUE) # install package dependencies
+pak::local_install_deps(dependencies = "Config/Needs/precompile") # vignette-knitting deps
 devtools::document() # generate package meta data and man files
 devtools::build() # build package
 ```
@@ -20,6 +21,33 @@ lintr::lint_package() # lint code
 devtools::test() # test package
 devtools::check() # check package for errors
 ```
+
+## Vignettes are precompiled
+
+The editable vignette sources are `vignettes/*.Rmd.orig`. They make live
+API calls, so they are knitted ahead of time into the static
+`vignettes/*.Rmd` files that `R CMD build`, CI, and CRAN render without
+any network access. Both files are committed.
+
+To edit a vignette, change its `.Rmd.orig` and re-knit. This requires
+network, the current package code installed, and the knitting-only
+packages listed in the `Config/Needs/precompile` field of DESCRIPTION
+(they are deliberately not Suggests, so CI never installs them):
+
+``` bash
+make vignettes                                # all vignettes
+Rscript vignettes/precompile.R v5-api-demo    # just one
+```
+
+Review the resulting `.Rmd` diff — it contains the real API output, so
+it also acts as a snapshot of API behavior. Re-knit whenever a
+`.Rmd.orig`, the package’s output formatting, or relevant API behavior
+changes.
+
+Because fetched output is committed and published, chunks calling
+private endpoints (`pvt_*`) or anything requiring restricted access must
+stay `eval = FALSE` in the `.Rmd.orig` sources. Prefer knitting without
+`DELPHI_EPIDATA_KEY` set so a private call cannot succeed by accident.
 
 ## Developing the documentation site
 
@@ -92,12 +120,6 @@ up.
 
 Have maintainer (“cre” in description) check email for problems.
 
-`revdepcheck::revdep_check(num_workers = 4)`.
-
-- This may choke, it is very sensitive to the binary versions of
-  packages on a given system. Either bypass or ask someone else to run
-  it if you’re concerned.
-
 Update `cran-comments.md`
 
 PR with any changes (and go through the list again) into `dev` and run
@@ -106,6 +128,8 @@ through the list again.
 Submit to CRAN:
 
 remove `Remotes` from the `DESCRIPTION`, as CRAN doesn’t support it.
+
+make sure there’s no stray files in your local copy of the repository
 
 `devtools::submit_cran()`.
 

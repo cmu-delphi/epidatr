@@ -1,40 +1,44 @@
 # Package index
 
-## Data source and signal discovery
+## Query the new Epidata API (v5)
 
-Quickly explore endpoints, and API signal and source names
+The current API. Sources are moving here from the covidcast endpoint;
+see
+[`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/articles/migration-guide.md)
+for how to update covidcast queries.
 
-- [`avail_endpoints()`](https://cmu-delphi.github.io/epidatr/reference/avail_endpoints.md)
-  : List all available Epidata API endpoints
-- [`covidcast_epidata()`](https://cmu-delphi.github.io/epidatr/reference/covidcast_epidata.md)
-  : Creates the COVIDcast Epidata autocomplete helper
-
-## Make API requests
-
-Query Delphi Epidata endpoints
-
-- [`create_epidata_call()`](https://cmu-delphi.github.io/epidatr/reference/epidata_call.md)
-  [`fetch()`](https://cmu-delphi.github.io/epidatr/reference/epidata_call.md)
-  : An abstraction that holds information needed to make an epidata
-  request
-- [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md)
-  : Set custom API request parameters
+- [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/reference/epidata_meta.md)
+  : Get cast-API source metadata
 - [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/reference/cast_api_queries.md)
   [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/reference/cast_api_queries.md)
   [`epidata()`](https://cmu-delphi.github.io/epidatr/reference/cast_api_queries.md)
   : cast-API snapshot and archive queries
-- [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/reference/epidata_meta.md)
-  : Get cast-API source metadata
+- [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/reference/epidata_aux.md)
+  : Fetch V5 auxiliary data
+
+## Query the covidcast endpoint (v4)
+
+The previous main endpoint. Still carries the sources that have not
+moved to v5 yet.
+
+- [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/reference/pub_covidcast.md)
+  : Various COVID and flu signals via the COVIDcast endpoint
+- [`pub_covidcast_meta()`](https://cmu-delphi.github.io/epidatr/reference/pub_covidcast_meta.md)
+  : Metadata for the COVIDcast endpoint
+- [`covidcast_epidata()`](https://cmu-delphi.github.io/epidatr/reference/covidcast_epidata.md)
+  : Creates the COVIDcast Epidata autocomplete helper
+
+## Query legacy endpoints (v3)
+
+Older endpoints, each with its own dataset. Most are static or no longer
+updated.
+
 - [`pub_covid_hosp_facility()`](https://cmu-delphi.github.io/epidatr/reference/pub_covid_hosp_facility.md)
   : COVID hospitalizations by facility
 - [`pub_covid_hosp_facility_lookup()`](https://cmu-delphi.github.io/epidatr/reference/pub_covid_hosp_facility_lookup.md)
   : Helper for finding COVID hospitalization facilities
 - [`pub_covid_hosp_state_timeseries()`](https://cmu-delphi.github.io/epidatr/reference/pub_covid_hosp_state_timeseries.md)
   : COVID hospitalizations by state
-- [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/reference/pub_covidcast.md)
-  : Various COVID and flu signals via the COVIDcast endpoint
-- [`pub_covidcast_meta()`](https://cmu-delphi.github.io/epidatr/reference/pub_covidcast_meta.md)
-  : Metadata for the COVIDcast endpoint
 - [`pub_delphi()`](https://cmu-delphi.github.io/epidatr/reference/pub_delphi.md)
   : Delphi's ILINet outpatient doctor visits forecasts
 - [`pub_dengue_nowcast()`](https://cmu-delphi.github.io/epidatr/reference/pub_dengue_nowcast.md)
@@ -65,6 +69,19 @@ Query Delphi Epidata endpoints
   : PAHO dengue data (North and South America)
 - [`pub_wiki()`](https://cmu-delphi.github.io/epidatr/reference/pub_wiki.md)
   : Wikipedia webpage counts by article
+
+## Make API requests
+
+Discover endpoints and control how queries are built and fetched
+
+- [`avail_endpoints()`](https://cmu-delphi.github.io/epidatr/reference/avail_endpoints.md)
+  : List all available Epidata API endpoints
+- [`create_epidata_call()`](https://cmu-delphi.github.io/epidatr/reference/epidata_call.md)
+  [`fetch()`](https://cmu-delphi.github.io/epidatr/reference/epidata_call.md)
+  : An abstraction that holds information needed to make an epidata
+  request
+- [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/reference/fetch_args_list.md)
+  : Set custom API request parameters
 
 ## Configuration and utilities
 

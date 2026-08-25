@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,8 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
+<li><a class="dropdown-item" href="../articles/migration-guide.html">Migrating from pub_covidcast to the new Epidata API</a></li>
+    <li><a class="dropdown-item" href="../articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
     <li><a class="dropdown-item" href="../articles/v5-api-demo.html">epidatr v5 API demo</a></li>
     <li><a class="dropdown-item" href="../articles/versioned-data.html">Understanding and accessing versioned data</a></li>
   </ul>
@@ -143,122 +144,126 @@ non-US locations:</p>
 <td align="left">cast-API snapshot and archive queries</td>
 </tr>
 <tr class="even">
+<td align="left">epidata_aux()</td>
+<td align="left">Fetch V5 auxiliary data</td>
+</tr>
+<tr class="odd">
 <td align="left">epidata_meta()</td>
 <td align="left">Get cast-API source metadata</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_covid_hosp_facility()</td>
 <td align="left">COVID hospitalizations by facility</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_covid_hosp_facility_lookup()</td>
 <td align="left">Helper for finding COVID hospitalization
 facilities</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_covid_hosp_state_timeseries()</td>
 <td align="left">COVID hospitalizations by state</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_covidcast()</td>
 <td align="left">Various COVID and flu signals via the COVIDcast
 endpoint</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_covidcast_meta()</td>
 <td align="left">Metadata for the COVIDcast endpoint</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_delphi()</td>
 <td align="left">Delphi’s ILINet outpatient doctor visits forecasts</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_dengue_nowcast()</td>
 <td align="left">Delphi’s PAHO dengue nowcasts (North and South
 America)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_ecdc_ili()</td>
 <td align="left">ECDC ILI incidence (Europe)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_flusurv()</td>
 <td align="left">CDC FluSurv flu hospitalizations</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_fluview()</td>
 <td align="left">CDC FluView ILINet outpatient doctor visits</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_fluview_clinical()</td>
 <td align="left">CDC FluView flu tests from clinical labs</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_fluview_meta()</td>
 <td align="left">Metadata for the FluView endpoint</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_gft()</td>
 <td align="left">Google Flu Trends flu search volume</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_kcdc_ili()</td>
 <td align="left">KCDC ILI incidence (Korea)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_meta()</td>
 <td align="left">Metadata for the Delphi Epidata API</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_nidss_dengue()</td>
 <td align="left">NIDSS dengue cases (Taiwan)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_nidss_flu()</td>
 <td align="left">NIDSS flu doctor visits (Taiwan)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_nowcast()</td>
 <td align="left">Delphi’s ILI Nearby nowcasts</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pub_paho_dengue()</td>
 <td align="left">PAHO dengue data (North and South America)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pub_wiki()</td>
 <td align="left">Wikipedia webpage counts by article</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pvt_cdc()</td>
 <td align="left">CDC total and by topic webpage visits</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pvt_dengue_sensors()</td>
 <td align="left">PAHO dengue digital surveillance sensors (North and
 South America)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pvt_ght()</td>
 <td align="left">Google Health Trends health topics search volume</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pvt_meta_norostat()</td>
 <td align="left">Metadata for the NoroSTAT endpoint</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pvt_norostat()</td>
 <td align="left">CDC NoroSTAT norovirus outbreaks</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pvt_quidel()</td>
 <td align="left">Quidel COVID-19 and influenza testing data</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">pvt_sensors()</td>
 <td align="left">Influenza and dengue digital surveillance sensors</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pvt_twitter()</td>
 <td align="left">HealthTweets total and influenza-related tweets</td>
 </tr>
@@ -274,24 +279,24 @@ The function describes all available data sources and signals:</p>
 <span><span class="co">#&gt; [1] "Change Healthcare"</span></span>
 <span><span class="co">#&gt; [1] "chng"</span></span>
 <span><span class="co">#&gt; [1] "Change Healthcare is a healthcare technology company that aggregates medical claims data from many healthcare providers. This source includes aggregated counts of claims with confirmed COVID-19 or COVID-related symptoms. All claims data has been de-identified in accordance with HIPAA privacy regulations. "</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 2</span></span></span>
+<span><span class="co">#&gt; # A tibble: 8 × 2</span></span>
 <span><span class="co">#&gt;   signal                        short_description                               </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> smoothed_outpatient_cli       Estimated percentage of outpatient doctor visit…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> smoothed_adj_outpatient_cli   Estimated percentage of outpatient doctor visit…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> smoothed_outpatient_covid     COVID-Confirmed Doctor Visits                   </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits                   </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more rows</span></span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                         &lt;chr&gt;                                           </span></span>
+<span><span class="co">#&gt; 1 smoothed_outpatient_cli       Estimated percentage of outpatient doctor visit…</span></span>
+<span><span class="co">#&gt; 2 smoothed_adj_outpatient_cli   Estimated percentage of outpatient doctor visit…</span></span>
+<span><span class="co">#&gt; 3 smoothed_outpatient_covid     COVID-Confirmed Doctor Visits                   </span></span>
+<span><span class="co">#&gt; 4 smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits                   </span></span>
+<span><span class="co">#&gt; # ℹ 4 more rows</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $`covid-act-now`</span></span>
 <span><span class="co">#&gt; [1] "Covid Act Now (CAN)"</span></span>
 <span><span class="co">#&gt; [1] "covid-act-now"</span></span>
 <span><span class="co">#&gt; [1] "COVID Act Now (CAN) tracks COVID-19 testing statistics, such as positivity rates and total tests performed. This source only includes CAN data from the CDC's COVID-19 Integrated County View."</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 2</span></span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 2</span></span>
 <span><span class="co">#&gt;   signal                       short_description                                </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> pcr_specimen_positivity_rate Proportion of PCR specimens tested that have a p…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> pcr_specimen_total_tests     Total number of PCR specimens tested</span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;                        &lt;chr&gt;                                            </span></span>
+<span><span class="co">#&gt; 1 pcr_specimen_positivity_rate Proportion of PCR specimens tested that have a p…</span></span>
+<span><span class="co">#&gt; 2 pcr_specimen_total_tests     Total number of PCR specimens tested</span></span></code></pre></div>
 <p>Each source is included as an entry in the
 <code>covid_sources$sources</code> list, associated with a
 <code>tibble</code> describing included signals.</p>
@@ -300,14 +305,14 @@ type <code>covid_sources$source$</code> and wait for the tab completion
 popup. You will be able to browse the list of data sources.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">covid_sources</span><span class="op">$</span><span class="va">signals</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 520 × 3</span></span></span>
+<span><span class="co">#&gt; # A tibble: 538 × 3</span></span>
 <span><span class="co">#&gt;   source signal                        short_description                        </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> chng   smoothed_outpatient_cli       Estimated percentage of outpatient docto…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> chng   smoothed_adj_outpatient_cli   Estimated percentage of outpatient docto…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> chng   smoothed_outpatient_covid     COVID-Confirmed Doctor Visits            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> chng   smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits            </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 516 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;                         &lt;chr&gt;                                    </span></span>
+<span><span class="co">#&gt; 1 chng   smoothed_outpatient_cli       Estimated percentage of outpatient docto…</span></span>
+<span><span class="co">#&gt; 2 chng   smoothed_adj_outpatient_cli   Estimated percentage of outpatient docto…</span></span>
+<span><span class="co">#&gt; 3 chng   smoothed_outpatient_covid     COVID-Confirmed Doctor Visits            </span></span>
+<span><span class="co">#&gt; 4 chng   smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits            </span></span>
+<span><span class="co">#&gt; # ℹ 534 more rows</span></span></code></pre></div>
 <p>If you use an editor that supports tab completion, type
 <code>covid_sources$signals$</code> and wait for the tab completion
 popup. You will be able to type the name of signals and have the
@@ -489,16 +494,16 @@ The example below is for Orange County, California.</p>
 <span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20201221</span>, <span class="fl">20201225</span><span class="op">)</span>,</span>
 <span>  geo_values <span class="op">=</span> <span class="st">"06059"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 15</span></span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 15</span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 06059     smoothed_… fb-su… county   day       2020-12-21        <span style="color: #BB0000;">NA</span> 2020-12-22</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 06059     smoothed_… fb-su… county   day       2020-12-22        <span style="color: #BB0000;">NA</span> 2020-12-23</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 06059     smoothed_… fb-su… county   day       2020-12-23        <span style="color: #BB0000;">NA</span> 2020-12-24</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 06059     smoothed_… fb-su… county   day       2020-12-24        <span style="color: #BB0000;">NA</span> 2020-12-25</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more row</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span><span class="co">#&gt; 1 06059     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22</span></span>
+<span><span class="co">#&gt; 2 06059     smoothed_… fb-su… county   day       2020-12-22        NA 2020-12-23</span></span>
+<span><span class="co">#&gt; 3 06059     smoothed_… fb-su… county   day       2020-12-23        NA 2020-12-24</span></span>
+<span><span class="co">#&gt; 4 06059     smoothed_… fb-su… county   day       2020-12-24        NA 2020-12-25</span></span>
+<span><span class="co">#&gt; # ℹ 1 more row</span></span>
+<span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
 <p>The <code>covidcast</code> endpoint supports <code>*</code> in its
 time and geo fields:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -510,16 +515,16 @@ time and geo fields:</p>
 <span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20201221</span>, <span class="fl">20201225</span><span class="op">)</span>,</span>
 <span>  geo_values <span class="op">=</span> <span class="st">"*"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,025 × 15</span></span></span>
+<span><span class="co">#&gt; # A tibble: 2,025 × 15</span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 01000     smoothed_… fb-su… county   day       2020-12-21        <span style="color: #BB0000;">NA</span> 2020-12-22</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 01073     smoothed_… fb-su… county   day       2020-12-21        <span style="color: #BB0000;">NA</span> 2020-12-22</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 01089     smoothed_… fb-su… county   day       2020-12-21        <span style="color: #BB0000;">NA</span> 2020-12-22</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 01097     smoothed_… fb-su… county   day       2020-12-21        <span style="color: #BB0000;">NA</span> 2020-12-22</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,021 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span><span class="co">#&gt; 1 01000     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22</span></span>
+<span><span class="co">#&gt; 2 01073     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22</span></span>
+<span><span class="co">#&gt; 3 01089     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22</span></span>
+<span><span class="co">#&gt; 4 01097     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22</span></span>
+<span><span class="co">#&gt; # ℹ 2,021 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="other-covid-endpoints">Other Covid Endpoints<a class="anchor" aria-label="anchor" href="#other-covid-endpoints"></a>
@@ -530,27 +535,27 @@ time and geo fields:</p>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html</a></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_covid_hosp_facility_lookup.html">pub_covid_hosp_facility_lookup</a></span><span class="op">(</span>city <span class="op">=</span> <span class="st">"southlake"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 10</span></span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 10</span></span>
 <span><span class="co">#&gt;   hospital_pk state ccn    hospital_name    address city  zip   hospital_subtype</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 450888      TX    450888 TEXAS HEALTH HA… 1545 E… SOUT… 76092 Short Term      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 670132      TX    670132 METHODIST SOUTH… 421 E … SOUT… 76092 Short Term      </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: fips_code &lt;chr&gt;, is_metro_micro &lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;           </span></span>
+<span><span class="co">#&gt; 1 450888      TX    450888 TEXAS HEALTH HA… 1545 E… SOUT… 76092 Short Term      </span></span>
+<span><span class="co">#&gt; 2 670132      TX    670132 METHODIST SOUTH… 421 E … SOUT… 76092 Short Term      </span></span>
+<span><span class="co">#&gt; # ℹ 2 more variables: fips_code &lt;chr&gt;, is_metro_micro &lt;dbl&gt;</span></span>
 <span><span class="fu"><a href="../reference/pub_covid_hosp_facility_lookup.html">pub_covid_hosp_facility_lookup</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"WY"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 34 × 10</span></span></span>
+<span><span class="co">#&gt; # A tibble: 34 × 10</span></span>
 <span><span class="co">#&gt;   hospital_pk     state ccn   hospital_name address city  zip   hospital_subtype</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 100 LANCASTER … WY    2020… 42091         <span style="color: #BB0000;">NA</span>      [C39… MAIN  390195          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2333 BIDDLE AVE WY    2020… 26163         POINT … [C23… HENRY 230146          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2333 BIDDLE AV… WY    2020… 26163         POINT … [C23… SELEC 232031          </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 2752 CENTURY B… WY    2020… 42011         POINT … [C39… SURGI 390316          </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 30 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: fips_code &lt;chr&gt;, is_metro_micro &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;           &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;           </span></span>
+<span><span class="co">#&gt; 1 100 LANCASTER … WY    2020… 42091         &lt;NA&gt;    [C39… MAIN  390195          </span></span>
+<span><span class="co">#&gt; 2 2333 BIDDLE AVE WY    2020… 26163         POINT … [C23… HENRY 230146          </span></span>
+<span><span class="co">#&gt; 3 2333 BIDDLE AV… WY    2020… 26163         POINT … [C23… SELEC 232031          </span></span>
+<span><span class="co">#&gt; 4 2752 CENTURY B… WY    2020… 42011         POINT … [C39… SURGI 390316          </span></span>
+<span><span class="co">#&gt; # ℹ 30 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 2 more variables: fips_code &lt;chr&gt;, is_metro_micro &lt;dbl&gt;</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># A non-example (there is no city called New York in Wyoming)</span></span>
 <span><span class="fu"><a href="../reference/pub_covid_hosp_facility_lookup.html">pub_covid_hosp_facility_lookup</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"WY"</span>, city <span class="op">=</span> <span class="st">"New York"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `pub_covid_hosp_facility_lookup()`:</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> only one of `state`, `ccn`, `city`, `zip`, or `fips_code` can be specified</span></span></code></pre></div>
+<span><span class="co">#&gt; Error in `pub_covid_hosp_facility_lookup()`:</span></span>
+<span><span class="co">#&gt; ! only one of `state`, `ccn`, `city`, `zip`, or `fips_code` can be specified</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="covid-19-hospitalization-by-facility">COVID-19 Hospitalization by Facility<a class="anchor" aria-label="anchor" href="#covid-19-hospitalization-by-facility"></a>
@@ -561,20 +566,20 @@ time and geo fields:</p>
 <span>  hospital_pks <span class="op">=</span> <span class="st">"100075"</span>,</span>
 <span>  collection_weeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20200101</span>, <span class="fl">20200501</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 113</span></span></span>
+<span><span class="co">#&gt; # A tibble: 12 × 113</span></span>
 <span><span class="co">#&gt;   hospital_pk state ccn    hospital_name    address city  zip   hospital_subtype</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 8 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 105 more variables: fips_code &lt;chr&gt;, geocoded_hospital_address &lt;chr&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   hhs_ids &lt;chr&gt;, publication_date &lt;date&gt;, collection_week &lt;date&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   is_metro_micro &lt;lgl&gt;, total_beds_7_day_sum &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   all_adult_hospital_beds_7_day_sum &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   all_adult_hospital_inpatient_beds_7_day_sum &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   inpatient_beds_used_7_day_sum &lt;dbl&gt;, …</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;           </span></span>
+<span><span class="co">#&gt; 1 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      </span></span>
+<span><span class="co">#&gt; 2 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      </span></span>
+<span><span class="co">#&gt; 3 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      </span></span>
+<span><span class="co">#&gt; 4 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      </span></span>
+<span><span class="co">#&gt; # ℹ 8 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 105 more variables: fips_code &lt;chr&gt;, geocoded_hospital_address &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   hhs_ids &lt;chr&gt;, publication_date &lt;date&gt;, collection_week &lt;date&gt;,</span></span>
+<span><span class="co">#&gt; #   is_metro_micro &lt;lgl&gt;, total_beds_7_day_sum &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   all_adult_hospital_beds_7_day_sum &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   all_adult_hospital_inpatient_beds_7_day_sum &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   inpatient_beds_used_7_day_sum &lt;dbl&gt;, …</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="covid-19-hospitalization-by-state">COVID-19 Hospitalization by State<a class="anchor" aria-label="anchor" href="#covid-19-hospitalization-by-state"></a>
@@ -582,17 +587,17 @@ time and geo fields:</p>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html</a></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_covid_hosp_state_timeseries.html">pub_covid_hosp_state_timeseries</a></span><span class="op">(</span>states <span class="op">=</span> <span class="st">"MA"</span>, dates <span class="op">=</span> <span class="st">"20200510"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 118</span></span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 118</span></span>
 <span><span class="co">#&gt;   state geocoded_state issue      date       critical_staffing_shortage_today_…¹</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>                              </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> MA    <span style="color: #BB0000;">NA</span>             2024-05-03 2020-05-10 FALSE                              </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ abbreviated name: ¹​critical_staffing_shortage_today_yes</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 113 more variables: critical_staffing_shortage_today_no &lt;lgl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   critical_staffing_shortage_today_not_reported &lt;lgl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   critical_staffing_shortage_anticipated_within_week_yes &lt;lgl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   critical_staffing_shortage_anticipated_within_week_no &lt;lgl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   critical_staffing_shortage_anticipated_within_week_not_reported &lt;lgl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   hospital_onset_covid &lt;dbl&gt;, hospital_onset_covid_coverage &lt;dbl&gt;, …</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;lgl&gt;          &lt;date&gt;     &lt;date&gt;     &lt;lgl&gt;                              </span></span>
+<span><span class="co">#&gt; 1 MA    NA             2024-05-03 2020-05-10 FALSE                              </span></span>
+<span><span class="co">#&gt; # ℹ abbreviated name: ¹​critical_staffing_shortage_today_yes</span></span>
+<span><span class="co">#&gt; # ℹ 113 more variables: critical_staffing_shortage_today_no &lt;lgl&gt;,</span></span>
+<span><span class="co">#&gt; #   critical_staffing_shortage_today_not_reported &lt;lgl&gt;,</span></span>
+<span><span class="co">#&gt; #   critical_staffing_shortage_anticipated_within_week_yes &lt;lgl&gt;,</span></span>
+<span><span class="co">#&gt; #   critical_staffing_shortage_anticipated_within_week_no &lt;lgl&gt;,</span></span>
+<span><span class="co">#&gt; #   critical_staffing_shortage_anticipated_within_week_not_reported &lt;lgl&gt;,</span></span>
+<span><span class="co">#&gt; #   hospital_onset_covid &lt;dbl&gt;, hospital_onset_covid_coverage &lt;dbl&gt;, …</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -614,17 +619,17 @@ time and geo fields:</p>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html</a></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_flusurv.html">pub_flusurv</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fl">202001</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 34</span></span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 34</span></span>
 <span><span class="co">#&gt;   release_date location season issue      epiweek      lag rate_age_0 rate_age_1</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2025-11-03   CA       2019-… 2025-09-14 2019-12-29   298        8.6        0.8</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 26 more variables: rate_age_2 &lt;dbl&gt;, rate_age_3 &lt;dbl&gt;, rate_age_4 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   rate_overall &lt;dbl&gt;, rate_age_5 &lt;dbl&gt;, rate_age_6 &lt;dbl&gt;, rate_age_7 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   rate_age_18t29 &lt;dbl&gt;, rate_age_30t39 &lt;dbl&gt;, rate_age_40t49 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   rate_age_5t11 &lt;dbl&gt;, rate_age_12t17 &lt;dbl&gt;, rate_age_lt18 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   rate_age_gte18 &lt;dbl&gt;, rate_age_1t4 &lt;dbl&gt;, rate_age_gte75 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   rate_age_0tlt1 &lt;dbl&gt;, rate_race_white &lt;dbl&gt;, rate_race_black &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   rate_race_hisp &lt;dbl&gt;, rate_race_asian &lt;dbl&gt;, rate_race_natamer &lt;dbl&gt;, …</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;    &lt;chr&gt;  &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2025-11-03   CA       2019-… 2025-09-14 2019-12-29   298        8.6        0.8</span></span>
+<span><span class="co">#&gt; # ℹ 26 more variables: rate_age_2 &lt;dbl&gt;, rate_age_3 &lt;dbl&gt;, rate_age_4 &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   rate_overall &lt;dbl&gt;, rate_age_5 &lt;dbl&gt;, rate_age_6 &lt;dbl&gt;, rate_age_7 &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   rate_age_18t29 &lt;dbl&gt;, rate_age_30t39 &lt;dbl&gt;, rate_age_40t49 &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   rate_age_5t11 &lt;dbl&gt;, rate_age_12t17 &lt;dbl&gt;, rate_age_lt18 &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   rate_age_gte18 &lt;dbl&gt;, rate_age_1t4 &lt;dbl&gt;, rate_age_gte75 &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   rate_age_0tlt1 &lt;dbl&gt;, rate_race_white &lt;dbl&gt;, rate_race_black &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   rate_race_hisp &lt;dbl&gt;, rate_race_asian &lt;dbl&gt;, rate_race_natamer &lt;dbl&gt;, …</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="fluview-data">Fluview data<a class="anchor" aria-label="anchor" href="#fluview-data"></a>
@@ -632,17 +637,17 @@ time and geo fields:</p>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/fluview.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/fluview.html</a></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_fluview.html">pub_fluview</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"nat"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201201</span>, <span class="fl">202001</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 418 × 16</span></span></span>
+<span><span class="co">#&gt; # A tibble: 418 × 16</span></span>
 <span><span class="co">#&gt;   release_date region issue      epiweek      lag num_ili num_patients</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2017-10-24   nat    2017-10-01 2012-01-01   300   <span style="text-decoration: underline;">11</span>992       <span style="text-decoration: underline;">678</span>631</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2017-10-24   nat    2017-10-01 2012-01-08   299   <span style="text-decoration: underline;">11</span>543       <span style="text-decoration: underline;">747</span>894</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2017-10-24   nat    2017-10-01 2012-01-15   298   <span style="text-decoration: underline;">11</span>939       <span style="text-decoration: underline;">724</span>623</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 2017-10-24   nat    2017-10-01 2012-01-22   297   <span style="text-decoration: underline;">13</span>209       <span style="text-decoration: underline;">784</span>244</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 414 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 9 more variables: num_providers &lt;dbl&gt;, num_age_0 &lt;dbl&gt;, num_age_1 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   num_age_2 &lt;dbl&gt;, num_age_3 &lt;dbl&gt;, num_age_4 &lt;dbl&gt;, num_age_5 &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   wili &lt;dbl&gt;, ili &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;  &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;   &lt;dbl&gt;        &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2017-10-24   nat    2017-10-01 2012-01-01   300   11992       678631</span></span>
+<span><span class="co">#&gt; 2 2017-10-24   nat    2017-10-01 2012-01-08   299   11543       747894</span></span>
+<span><span class="co">#&gt; 3 2017-10-24   nat    2017-10-01 2012-01-15   298   11939       724623</span></span>
+<span><span class="co">#&gt; 4 2017-10-24   nat    2017-10-01 2012-01-22   297   13209       784244</span></span>
+<span><span class="co">#&gt; # ℹ 414 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 9 more variables: num_providers &lt;dbl&gt;, num_age_0 &lt;dbl&gt;, num_age_1 &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   num_age_2 &lt;dbl&gt;, num_age_3 &lt;dbl&gt;, num_age_4 &lt;dbl&gt;, num_age_5 &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   wili &lt;dbl&gt;, ili &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="fluview-virological-data-from-clinical-labs">Fluview virological data from clinical labs<a class="anchor" aria-label="anchor" href="#fluview-virological-data-from-clinical-labs"></a>
@@ -650,16 +655,16 @@ time and geo fields:</p>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html</a></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_fluview_clinical.html">pub_fluview_clinical</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"nat"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201601</span>, <span class="fl">201701</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 14 × 11</span></span></span>
+<span><span class="co">#&gt; # A tibble: 14 × 11</span></span>
 <span><span class="co">#&gt;   release_date region issue      epiweek      lag total_specimens total_a</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2018-10-08   nat    2018-09-23 2016-10-02   103           <span style="text-decoration: underline;">13</span>380     120</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2018-10-08   nat    2018-09-23 2016-10-09   102           <span style="text-decoration: underline;">14</span>053     108</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2018-10-08   nat    2018-09-23 2016-10-16   101           <span style="text-decoration: underline;">15</span>110     115</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 2018-10-08   nat    2018-09-23 2016-10-23   100           <span style="text-decoration: underline;">15</span>312     143</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 10 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: total_b &lt;dbl&gt;, percent_positive &lt;dbl&gt;, percent_a &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   percent_b &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;  &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;           &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2018-10-08   nat    2018-09-23 2016-10-02   103           13380     120</span></span>
+<span><span class="co">#&gt; 2 2018-10-08   nat    2018-09-23 2016-10-09   102           14053     108</span></span>
+<span><span class="co">#&gt; 3 2018-10-08   nat    2018-09-23 2016-10-16   101           15110     115</span></span>
+<span><span class="co">#&gt; 4 2018-10-08   nat    2018-09-23 2016-10-23   100           15312     143</span></span>
+<span><span class="co">#&gt; # ℹ 10 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 4 more variables: total_b &lt;dbl&gt;, percent_positive &lt;dbl&gt;, percent_a &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   percent_b &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="fluview-metadata">Fluview metadata<a class="anchor" aria-label="anchor" href="#fluview-metadata"></a>
@@ -667,10 +672,10 @@ time and geo fields:</p>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html</a></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_fluview_meta.html">pub_fluview_meta</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 3</span></span>
 <span><span class="co">#&gt;   latest_update latest_issue table_rows</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2026-05-29    2026-05-17      2<span style="text-decoration: underline;">765</span>829</span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;date&gt;        &lt;date&gt;            &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2026-08-14    2026-08-02      2837197</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="google-flu-trends-data">Google Flu Trends data<a class="anchor" aria-label="anchor" href="#google-flu-trends-data"></a>
@@ -678,14 +683,14 @@ time and geo fields:</p>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/gft.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/gft.html</a></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_gft.html">pub_gft</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"hhs1"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201201</span>, <span class="fl">202001</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 189 × 3</span></span></span>
+<span><span class="co">#&gt; # A tibble: 189 × 3</span></span>
 <span><span class="co">#&gt;   location epiweek      num</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> hhs1     2012-01-01  <span style="text-decoration: underline;">1</span>567</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> hhs1     2012-01-08  <span style="text-decoration: underline;">1</span>339</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> hhs1     2012-01-15  <span style="text-decoration: underline;">1</span>220</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> hhs1     2012-01-22  <span style="text-decoration: underline;">1</span>271</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 185 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 hhs1     2012-01-01  1567</span></span>
+<span><span class="co">#&gt; 2 hhs1     2012-01-08  1339</span></span>
+<span><span class="co">#&gt; 3 hhs1     2012-01-15  1220</span></span>
+<span><span class="co">#&gt; 4 hhs1     2012-01-22  1271</span></span>
+<span><span class="co">#&gt; # ℹ 185 more rows</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="ecdc-ili">ECDC ILI<a class="anchor" aria-label="anchor" href="#ecdc-ili"></a>
@@ -693,10 +698,10 @@ time and geo fields:</p>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html</a></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_ecdc_ili.html">pub_ecdc_ili</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"Armenia"</span>, epiweeks <span class="op">=</span> <span class="fl">201840</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 6</span></span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 6</span></span>
 <span><span class="co">#&gt;   release_date region  issue      epiweek      lag incidence_rate</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2020-03-26   Armenia 2020-03-15 2018-09-30    76              0</span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;   &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;          &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2020-03-26   Armenia 2020-03-15 2018-09-30    76              0</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="kcdc-ili">KCDC ILI<a class="anchor" aria-label="anchor" href="#kcdc-ili"></a>
@@ -704,10 +709,10 @@ time and geo fields:</p>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html</a></p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_kcdc_ili.html">pub_kcdc_ili</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"ROK"</span>, epiweeks <span class="op">=</span> <span class="fl">200436</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 6</span></span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 6</span></span>
 <span><span class="co">#&gt;   release_date region issue      epiweek      lag   ili</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2020-11-03   ROK    2020-11-01 2004-09-05   843   0.6</span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;  &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2020-11-03   ROK    2020-11-01 2004-09-05   843   0.6</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="nidss-flu">NIDSS Flu<a class="anchor" aria-label="anchor" href="#nidss-flu"></a>
@@ -715,14 +720,14 @@ time and geo fields:</p>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html</a></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_nidss_flu.html">pub_nidss_flu</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"taipei"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200901</span>, <span class="fl">201301</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 209 × 7</span></span></span>
+<span><span class="co">#&gt; # A tibble: 209 × 7</span></span>
 <span><span class="co">#&gt;   release_date region issue      epiweek      lag visits   ili</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2015-08-04   Taipei 2015-07-26 2009-01-04   342  <span style="text-decoration: underline;">17</span>021  1.14</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2015-08-04   Taipei 2015-07-26 2009-01-11   341  <span style="text-decoration: underline;">20</span>250  1.28</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2015-08-04   Taipei 2015-07-26 2009-01-18   340  <span style="text-decoration: underline;">26</span>337  1.36</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 2015-08-04   Taipei 2015-07-26 2009-01-25   339   <span style="text-decoration: underline;">8</span>508  1.68</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 205 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;  &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2015-08-04   Taipei 2015-07-26 2009-01-04   342  17021  1.14</span></span>
+<span><span class="co">#&gt; 2 2015-08-04   Taipei 2015-07-26 2009-01-11   341  20250  1.28</span></span>
+<span><span class="co">#&gt; 3 2015-08-04   Taipei 2015-07-26 2009-01-18   340  26337  1.36</span></span>
+<span><span class="co">#&gt; 4 2015-08-04   Taipei 2015-07-26 2009-01-25   339   8508  1.68</span></span>
+<span><span class="co">#&gt; # ℹ 205 more rows</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="ili-nearby-nowcast">ILI Nearby Nowcast<a class="anchor" aria-label="anchor" href="#ili-nearby-nowcast"></a>
@@ -730,14 +735,14 @@ time and geo fields:</p>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html</a></p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_nowcast.html">pub_nowcast</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202201</span>, <span class="fl">202319</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 36 × 4</span></span></span>
+<span><span class="co">#&gt; # A tibble: 36 × 4</span></span>
 <span><span class="co">#&gt;   location epiweek    value   std</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ca       2022-01-02  3.63 0.276</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ca       2022-01-09  3.54 0.276</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ca       2022-01-16  3.51 0.276</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> ca       2022-01-23  2.51 0.279</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 32 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 ca       2022-01-02  3.63 0.276</span></span>
+<span><span class="co">#&gt; 2 ca       2022-01-09  3.54 0.276</span></span>
+<span><span class="co">#&gt; 3 ca       2022-01-16  3.51 0.276</span></span>
+<span><span class="co">#&gt; 4 ca       2022-01-23  2.51 0.279</span></span>
+<span><span class="co">#&gt; # ℹ 32 more rows</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -749,14 +754,14 @@ time and geo fields:</p>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html</a></p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_dengue_nowcast.html">pub_dengue_nowcast</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"pr"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201401</span>, <span class="fl">202301</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 320 × 4</span></span></span>
+<span><span class="co">#&gt; # A tibble: 320 × 4</span></span>
 <span><span class="co">#&gt;   location epiweek    value   std</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> pr       2014-02-23  92.7  547.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> pr       2014-03-02  96.8  601.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> pr       2014-03-09  93.5  655.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> pr       2014-03-16  87.8  707.</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 316 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pr       2014-02-23  92.7  547.</span></span>
+<span><span class="co">#&gt; 2 pr       2014-03-02  96.8  601.</span></span>
+<span><span class="co">#&gt; 3 pr       2014-03-09  93.5  655.</span></span>
+<span><span class="co">#&gt; 4 pr       2014-03-16  87.8  707.</span></span>
+<span><span class="co">#&gt; # ℹ 316 more rows</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="nidss-dengue">NIDSS dengue<a class="anchor" aria-label="anchor" href="#nidss-dengue"></a>
@@ -764,14 +769,14 @@ time and geo fields:</p>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html</a></p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_nidss_dengue.html">pub_nidss_dengue</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"taipei"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200301</span>, <span class="fl">201301</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 523 × 3</span></span></span>
+<span><span class="co">#&gt; # A tibble: 523 × 3</span></span>
 <span><span class="co">#&gt;   location epiweek    count</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Taipei   2002-12-29     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Taipei   2003-01-05     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Taipei   2003-01-12     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Taipei   2003-01-19     1</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 519 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 Taipei   2002-12-29     0</span></span>
+<span><span class="co">#&gt; 2 Taipei   2003-01-05     1</span></span>
+<span><span class="co">#&gt; 3 Taipei   2003-01-12     0</span></span>
+<span><span class="co">#&gt; 4 Taipei   2003-01-19     1</span></span>
+<span><span class="co">#&gt; # ℹ 519 more rows</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -780,15 +785,15 @@ time and geo fields:</p>
 <p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html</a></p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_paho_dengue.html">pub_paho_dengue</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200201</span>, <span class="fl">202319</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 342 × 11</span></span></span>
+<span><span class="co">#&gt; # A tibble: 342 × 11</span></span>
 <span><span class="co">#&gt;   release_date region serotype issue      epiweek      lag total_pop num_dengue</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2020-08-07   CA     <span style="color: #949494;">"</span>  <span style="color: #949494;">"</span>     2020-08-02 2013-12-29   344         0          0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2020-08-07   CA     <span style="color: #949494;">"</span>  <span style="color: #949494;">"</span>     2020-08-02 2014-01-05   343         0          0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2020-08-07   CA     <span style="color: #949494;">"</span>  <span style="color: #949494;">"</span>     2020-08-02 2014-01-12   342         0          0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 2020-08-07   CA     <span style="color: #949494;">"</span>  <span style="color: #949494;">"</span>     2020-08-02 2014-01-19   341         0          0</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 338 more rows</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: num_severe &lt;dbl&gt;, num_deaths &lt;dbl&gt;, incidence_rate &lt;dbl&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;  &lt;chr&gt;    &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2020-08-07   CA     "  "     2020-08-02 2013-12-29   344         0          0</span></span>
+<span><span class="co">#&gt; 2 2020-08-07   CA     "  "     2020-08-02 2014-01-05   343         0          0</span></span>
+<span><span class="co">#&gt; 3 2020-08-07   CA     "  "     2020-08-02 2014-01-12   342         0          0</span></span>
+<span><span class="co">#&gt; 4 2020-08-07   CA     "  "     2020-08-02 2014-01-19   341         0          0</span></span>
+<span><span class="co">#&gt; # ℹ 338 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 3 more variables: num_severe &lt;dbl&gt;, num_deaths &lt;dbl&gt;, incidence_rate &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="other-endpoints">Other Endpoints<a class="anchor" aria-label="anchor" href="#other-endpoints"></a>
@@ -804,14 +809,14 @@ time and geo fields:</p>
 <span>  time_type <span class="op">=</span> <span class="st">"week"</span>,</span>
 <span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202001</span>, <span class="fl">202319</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 64 × 6</span></span></span>
+<span><span class="co">#&gt; # A tibble: 64 × 6</span></span>
 <span><span class="co">#&gt;   article   count     total  hour epiweek    value</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> influenza  <span style="text-decoration: underline;">6</span>516 663<span style="text-decoration: underline;">604</span>044    -<span style="color: #BB0000;">1</span> 2019-12-29  9.82</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> influenza <span style="text-decoration: underline;">10</span>244 789<span style="text-decoration: underline;">885</span>521    -<span style="color: #BB0000;">1</span> 2020-01-05 13.0 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> influenza <span style="text-decoration: underline;">10</span>728 783<span style="text-decoration: underline;">760</span>384    -<span style="color: #BB0000;">1</span> 2020-01-12 13.7 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> influenza <span style="text-decoration: underline;">24</span>843 785<span style="text-decoration: underline;">222</span>292    -<span style="color: #BB0000;">1</span> 2020-01-19 31.6 </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 60 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 influenza  6516 663604044    -1 2019-12-29  9.82</span></span>
+<span><span class="co">#&gt; 2 influenza 10244 789885521    -1 2020-01-05 13.0 </span></span>
+<span><span class="co">#&gt; 3 influenza 10728 783760384    -1 2020-01-12 13.7 </span></span>
+<span><span class="co">#&gt; 4 influenza 24843 785222292    -1 2020-01-19 31.6 </span></span>
+<span><span class="co">#&gt; # ℹ 60 more rows</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">

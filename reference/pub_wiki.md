@@ -88,6 +88,13 @@ pub_wiki(
   time_type = "week",
   time_values = epirange(201501, 201601)
 )
+#> `pub_wiki()` covers a data source that is no longer updated.
+#> ℹ Historical data remains available, but no new data is being ingested.
+#> ℹ See the "Endpoints kept for historical reference" section of
+#>   `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference>)
+#>   for details.
+#> This message is displayed once per session.
 #> # A tibble: 53 × 6
 #>    article         count      total  hour epiweek    value
 #>    <chr>           <dbl>      <dbl> <dbl> <date>     <dbl>

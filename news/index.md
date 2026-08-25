@@ -2,8 +2,95 @@
 
 ## epidatr 1.3.0
 
+### Deprecations
+
+- [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/reference/pub_covidcast.md),
+  [`pub_covidcast_meta()`](https://cmu-delphi.github.io/epidatr/reference/pub_covidcast_meta.md),
+  [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/reference/pub_fluview.md),
+  [`pub_fluview_clinical()`](https://cmu-delphi.github.io/epidatr/reference/pub_fluview_clinical.md),
+  [`pub_fluview_meta()`](https://cmu-delphi.github.io/epidatr/reference/pub_fluview_meta.md),
+  [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/reference/pub_flusurv.md),
+  [`pub_meta()`](https://cmu-delphi.github.io/epidatr/reference/pub_meta.md),
+  and
+  [`pvt_quidel()`](https://cmu-delphi.github.io/epidatr/reference/pvt_quidel.md)
+  now warn that they use the V4 Epidata API. Starting in October 2026,
+  it is tentatively deprecated in favor of the V5 API. See
+  [`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/articles/migration-guide.md)
+  for the V5 replacements.
+- The remaining V4 endpoints whose data sources are no longer updated
+  ([`pvt_cdc()`](https://cmu-delphi.github.io/epidatr/reference/pvt_cdc.md),
+  [`pub_covid_hosp_facility_lookup()`](https://cmu-delphi.github.io/epidatr/reference/pub_covid_hosp_facility_lookup.md),
+  [`pub_covid_hosp_facility()`](https://cmu-delphi.github.io/epidatr/reference/pub_covid_hosp_facility.md),
+  [`pub_covid_hosp_state_timeseries()`](https://cmu-delphi.github.io/epidatr/reference/pub_covid_hosp_state_timeseries.md),
+  [`pub_delphi()`](https://cmu-delphi.github.io/epidatr/reference/pub_delphi.md),
+  [`pub_dengue_nowcast()`](https://cmu-delphi.github.io/epidatr/reference/pub_dengue_nowcast.md),
+  [`pvt_dengue_sensors()`](https://cmu-delphi.github.io/epidatr/reference/pvt_dengue_sensors.md),
+  [`pub_ecdc_ili()`](https://cmu-delphi.github.io/epidatr/reference/pub_ecdc_ili.md),
+  [`pub_gft()`](https://cmu-delphi.github.io/epidatr/reference/pub_gft.md),
+  [`pvt_ght()`](https://cmu-delphi.github.io/epidatr/reference/pvt_ght.md),
+  [`pub_kcdc_ili()`](https://cmu-delphi.github.io/epidatr/reference/pub_kcdc_ili.md),
+  [`pvt_meta_norostat()`](https://cmu-delphi.github.io/epidatr/reference/pvt_meta_norostat.md),
+  [`pub_nidss_dengue()`](https://cmu-delphi.github.io/epidatr/reference/pub_nidss_dengue.md),
+  [`pub_nidss_flu()`](https://cmu-delphi.github.io/epidatr/reference/pub_nidss_flu.md),
+  [`pvt_norostat()`](https://cmu-delphi.github.io/epidatr/reference/pvt_norostat.md),
+  [`pub_nowcast()`](https://cmu-delphi.github.io/epidatr/reference/pub_nowcast.md),
+  [`pub_paho_dengue()`](https://cmu-delphi.github.io/epidatr/reference/pub_paho_dengue.md),
+  [`pvt_sensors()`](https://cmu-delphi.github.io/epidatr/reference/pvt_sensors.md),
+  [`pvt_twitter()`](https://cmu-delphi.github.io/epidatr/reference/pvt_twitter.md),
+  and
+  [`pub_wiki()`](https://cmu-delphi.github.io/epidatr/reference/pub_wiki.md))
+  now emit a quieter informational note (not a warning) explaining that
+  they are frozen rather than deprecated. They are not moving to V5 and
+  will keep working, but will not receive new data. See the “Endpoints
+  kept for historical reference” section of
+  [`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/articles/migration-guide.md)
+  for the full list.
+
+### Patches
+
+- [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/reference/cast_api_queries.md)
+  and
+  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/reference/cast_api_queries.md)
+  now issue one request per signal instead of joining `signals` with a
+  comma, which the cast-API server silently matched against nothing
+  ([\#354](https://github.com/cmu-delphi/epidatr/issues/354)).
+- `epidata_archive(report_time = ...)` now sends the `report_time_query`
+  API parameter; the server renamed it from `version_query`, which it
+  now rejects.
+- Add a migration guide vignette
+  ([`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/articles/migration-guide.md))
+  mapping `pub_covidcast` arguments and columns to the new
+  `epidata_snapshot`/`epidata_archive` functions, and update the README
+  and pkgdown reference to lead with the new API.
+- Parse `ci_lower` and `ci_upper` data columns for some signals.
+- Improve CSV parsing performance by reading bytes directly.
+- [`save_api_key()`](https://cmu-delphi.github.io/epidatr/reference/get_api_key.md)
+  no longer errors when called outside a project; it falls back to the
+  user `.Renviron`
+  ([\#339](https://github.com/cmu-delphi/epidatr/issues/339)).
+- Text fields are now always parsed as character; previously an all-NA
+  column (e.g. `geocoded_state` in the `covid_hosp` endpoints) came back
+  as logical.
+
+## epidatr 1.2.4
+
+CRAN release: 2026-06-02
+
 ### Changes
 
+- Added
+  [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/reference/epidata_aux.md)
+  to fetch V5-API auxiliary data, either directly by source or by
+  merging it onto
+  [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/reference/cast_api_queries.md)/[`epidata_archive()`](https://cmu-delphi.github.io/epidatr/reference/cast_api_queries.md)
+  output via a version-aware left join. When no key filters are
+  supplied, it infers them from the base to keep the pull small.
+- [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/reference/epidata_aux.md),
+  [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/reference/cast_api_queries.md),
+  and
+  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/reference/cast_api_queries.md)
+  now accept per-key filters as named `...` arguments. Each key takes
+  one or more values, sent server-side to shrink the download.
 - Improve documentation, including descriptions for
   [`save_api_key()`](https://cmu-delphi.github.io/epidatr/reference/get_api_key.md)
   and endpoint parameters, and standardize parameter information
@@ -41,11 +128,6 @@
   results.
 - Add `lifecycle` to `DESCRIPTION` to properly manage function
   deprecations.
-
-## epidatr 1.2.4
-
-### Patches
-
 - Extend `check_is_recent` to support numeric date formats
   ([\#320](https://github.com/cmu-delphi/epidatr/issues/320)).
 

@@ -280,7 +280,9 @@ ggplot(epidata, aes(x = time_value, y = value)) +
   )
 ```
 
-![](epidatr_files/figure-html/unnamed-chunk-8-1.png)
+![plot of chunk unnamed-chunk-8](img/epidatr-unnamed-chunk-8-1.png)
+
+plot of chunk unnamed-chunk-8
 
 `ggplot2` can also be used to [create
 choropleths](https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html).
@@ -328,7 +330,9 @@ ggplot(cli_states, aes(x = long, y = lat, group = group, fill = value)) +
   )
 ```
 
-![](epidatr_files/figure-html/unnamed-chunk-9-1.png)
+![plot of chunk unnamed-chunk-9](img/epidatr-unnamed-chunk-9-1.png)
+
+plot of chunk unnamed-chunk-9
 
 ## Finding locations of interest
 
@@ -380,6 +384,7 @@ avail_endpoints()
 | Endpoint | Description |
 |:---|:---|
 | cast_api_queries() | cast-API snapshot and archive queries |
+| epidata_aux() | Fetch V5 auxiliary data |
 | epidata_meta() | Get cast-API source metadata |
 | pub_covid_hosp_facility() | COVID hospitalizations by facility |
 | pub_covid_hosp_facility_lookup() | Helper for finding COVID hospitalization facilities |
