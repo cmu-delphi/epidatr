@@ -1,8 +1,8 @@
 # Changelog
 
-## epidatr 1.4.0
+## epidatr 1.3.0
 
-### Patches
+### Deprecations
 
 - [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md),
   [`pub_covidcast_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast_meta.md),
@@ -45,6 +45,9 @@
   kept for historical reference” section of
   [`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md)
   for the full list.
+
+### Patches
+
 - [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
   and
   [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
