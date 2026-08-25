@@ -1132,15 +1132,8 @@ pub_covid_hosp_state_timeseries <- function(
 
 #' Metadata for the COVIDcast endpoint
 #'
+#' @template v4-sunset
 #' @description
-#' This is a V4 endpoint. Starting in October 2026, it is tentatively
-#' deprecated in favor of the V5 API. The new API can be accessed via the
-#' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
-#' For more details on the changes, refer to `vignette("migration-guide")`,
-#' and visit the [V5 signals
-#' documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
-#' to see which sources are currently available.
-#'
 #' API docs:
 #' <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_meta.html>.
 #'
@@ -1243,15 +1236,8 @@ pub_covidcast_meta <- function(
 
 #' Various COVID and flu signals via the COVIDcast endpoint
 #'
+#' @template v4-sunset
 #' @description
-#' This is a V4 endpoint. Starting in October 2026, it is tentatively
-#' deprecated in favor of the V5 API. The new API can be accessed via the
-#' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
-#' For more details on the changes, refer to `vignette("migration-guide")`,
-#' and visit the [V5 signals
-#' documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
-#' to see which sources are currently available.
-#'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>
 #'
 #' The primary endpoint for fetching COVID-19 data, providing access to a wide
@@ -2273,15 +2259,8 @@ pub_ecdc_ili <- function(
 }
 
 #' CDC FluSurv flu hospitalizations
+#' @template v4-sunset
 #' @description
-#' This is a V4 endpoint. Starting in October 2026, it is tentatively
-#' deprecated in favor of the V5 API. The new API can be accessed via the
-#' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
-#' For more details on the changes, refer to `vignette("migration-guide")`,
-#' and visit the [V5 signals
-#' documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
-#' to see which sources are currently available.
-#'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>.
 #'
 #' Obtain information on influenza hospitalization rates from the Center of Disease
@@ -2377,15 +2356,8 @@ pub_flusurv <- function(
 }
 
 #' CDC FluView flu tests from clinical labs
+#' @template v4-sunset
 #' @description
-#' This is a V4 endpoint. Starting in October 2026, it is tentatively
-#' deprecated in favor of the V5 API. The new API can be accessed via the
-#' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
-#' For more details on the changes, refer to `vignette("migration-guide")`,
-#' and visit the [V5 signals
-#' documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
-#' to see which sources are currently available.
-#'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html>
 #'
 #' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
@@ -2493,15 +2465,8 @@ pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
 
 
 #' CDC FluView ILINet outpatient doctor visits
+#' @template v4-sunset
 #' @description
-#' This is a V4 endpoint. Starting in October 2026, it is tentatively
-#' deprecated in favor of the V5 API. The new API can be accessed via the
-#' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
-#' For more details on the changes, refer to `vignette("migration-guide")`,
-#' and visit the [V5 signals
-#' documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
-#' to see which sources are currently available.
-#'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>. For
 #'
 #' Obtains information on outpatient inluenza-like-illness (ILI) from U.S.
@@ -3079,15 +3044,8 @@ pub_paho_dengue <- function(
 }
 
 #' Quidel COVID-19 and influenza testing data
+#' @template v4-sunset
 #' @description
-#' This is a V4 endpoint. Starting in October 2026, it is tentatively
-#' deprecated in favor of the V5 API. The new API can be accessed via the
-#' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
-#' For more details on the changes, refer to `vignette("migration-guide")`,
-#' and visit the [V5 signals
-#' documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
-#' to see which sources are currently available.
-#'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/quidel.html>
 #'
 #' Data provided by Quidel Corp., which contains flu lab test results.
