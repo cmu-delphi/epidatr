@@ -22,7 +22,9 @@ warn_v4_sunset <- function(fn_name) {
       "i" = "Starting in October 2026, V4 is tentatively deprecated in favor of the V5 API.",
       "i" = "See {.code vignette(\"migration-guide\")} (or {.url \\
        https://cmu-delphi.github.io/epidatr/articles/migration-guide.html}) \\
-       for the V5 endpoints and how to move to them."
+       for the V5 endpoints and how to move to them. Old data will remain available \\
+       for at least a year, however new ingestion will end."
+
     ),
     .frequency = "regularly",
     .frequency_id = paste0("epidatr.v4_sunset.", fn_name)
