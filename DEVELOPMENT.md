@@ -122,7 +122,7 @@ Have maintainer (“cre” in description) check email for problems.
 
 Update `cran-comments.md`
 
-PR with any changes (and go through the list again) into `dev` and run
+PR with any changes (and go through the list again) into `main` and run
 through the list again.
 
 Submit to CRAN:
