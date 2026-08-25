@@ -2443,6 +2443,14 @@ pub_fluview_clinical <- function(
 
 #' Metadata for the FluView endpoint
 #' @description
+#' This is a V4 endpoint. Starting in October 2026, it is tentatively
+#' deprecated in favor of the V5 API. The new API can be accessed via the
+#' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
+#' For more details on the changes, refer to `vignette("migration-guide")`,
+#' and visit the [V5 signals
+#' documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
+#' to see which sources are currently available.
+#'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
 #'
 #' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
@@ -2457,6 +2465,8 @@ pub_fluview_clinical <- function(
 #' @keywords endpoint
 #' @export
 pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
+  warn_v4_sunset("pub_fluview_meta")
+
   create_epidata_call(
     "fluview_meta/",
     list(),
@@ -2748,6 +2758,14 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 
 #' Metadata for the Delphi Epidata API
 #' @description
+#' This is a V4 endpoint. Starting in October 2026, it is tentatively
+#' deprecated in favor of the V5 API. The new API can be accessed via the
+#' [epidata_snapshot()], [epidata_archive()], and [epidata_meta()] functions.
+#' For more details on the changes, refer to `vignette("migration-guide")`,
+#' and visit the [V5 signals
+#' documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
+#' to see which sources are currently available.
+#'
 #' API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta.html>
 #'
 #' @inheritParams .epidatr_shared_params
@@ -2757,6 +2775,8 @@ pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {
 #' @keywords endpoint
 #' @export
 pub_meta <- function(fetch_args = fetch_args_list()) {
+  warn_v4_sunset("pub_meta")
+
   create_epidata_call("meta/", list()) %>%
     request_epidata(fetch_args = fetch_args, simplify = FALSE)
 }
