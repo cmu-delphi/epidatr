@@ -26,21 +26,21 @@ for (endpoint_row in endpoint_calls(auth = Sys.getenv("DELPHI_EPIDATA_KEY"))) {
 # ---- epidata_* (cast API) ----
 # TODO: Happy to add more, this is a starting point.
 cast_queries <- tibble::tribble(
-  ~source   , ~signal                   , ~geo_type   ,
-  "nssp"    , "pct_ed_visits_influenza" , "state"     ,
-  "nssp"    , "pct_ed_visits_influenza" , "hhs"       ,
+  ~source, ~signal, ~geo_type,
+  "nssp", "pct_ed_visits_influenza", "state",
+  "nssp", "pct_ed_visits_influenza", "hhs",
   # TODO: Ignore county until row limits are in-place server side.
   # "nssp",     "pct_ed_visits_influenza",         "county",
   # TODO: Nhsn is currently without data.
   # "nhsn",     "confirmed_admissions_flu_ew",         "state",
   # "nhsn",     "confirmed_admissions_flu_ew",         "hhs",
   # "nhsn",     "confirmed_admissions_flu_ew",         "national",
-  "pophive" , "flu_pct_ed"              , "state"     ,
-  "pophive" , "flu_pct_ed"              , "hhs"       ,
-  "pophive" , "flu_n_ed"                , "state"     ,
-  "pophive" , "flu_n_ed"                , "hhs"       ,
-  "pophive" , "flu_n_ed"                , "nation"    ,
-  "nwss"    , "covid_avg_conc"          , "sewershed" ,
+  "pophive", "flu_pct_ed", "state",
+  "pophive", "flu_pct_ed", "hhs",
+  "pophive", "flu_n_ed", "state",
+  "pophive", "flu_n_ed", "hhs",
+  "pophive", "flu_n_ed", "nation",
+  "nwss", "covid_avg_conc", "sewershed",
 )
 
 test_that("cast versioning args reach the server (snapshot_date, report_time_query)", {
