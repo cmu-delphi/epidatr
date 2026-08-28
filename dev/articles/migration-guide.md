@@ -217,7 +217,7 @@ does not know the source yet, keep using
 [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
 (or the relevant `{pub/pvt}_*` function) for it and check back after
 package updates. The [API mailing
-list](https://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api)
+list](http://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api)
 announces sources as they move.
 
 ## Endpoints kept for historical reference
