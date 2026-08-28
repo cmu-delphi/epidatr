@@ -92,7 +92,7 @@ test_that("cast versioning args reach the server (snapshot_date, report_time_que
 test_that("epidata_meta returns signals + geo_types for each cast source", {
   skip_unless_live()
   for (src in unique(cast_queries$source)) {
-    source_meta <- epidata_meta(source = src)[[src]]
+    source_meta <- epidata_meta(source = src)
     expect_type(source_meta, "list")
     expect_true(length(source_meta$signals) > 0)
     expect_true(length(source_meta$geo_types) > 0)

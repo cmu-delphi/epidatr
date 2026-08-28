@@ -1417,22 +1417,28 @@ pub_covidcast <- function(
 #' available signals and geo types.
 #'
 #' @param source string. The data source to query. If `NULL` (default), returns
-#'   metadata for all available sources.
+#'   metadata for all available sources. If specified, returns metadata for
+#'   the given source.
 #' @inheritParams .epidatr_shared_params
-#' @return list
+#' @return list. If `source` is `NULL`, a named list of source metadata objects.
+#'   If `source` is specified, the metadata list for that source.
 #' @seealso [epidata_snapshot()], [epidata_archive()], [epidata()], [epirange()]
 #' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
   assert_character_param("source", source, len = 1, required = FALSE)
-  create_epidata_call(
+  res <- create_epidata_call(
     endpoint = "metadata/",
     params = list(source = source),
     api_version = "cast",
     response_format = "json"
   ) %>%
     request_epidata(fetch_args = fetch_args)
+  if (!is.null(source) && is.list(res) && !isTRUE(fetch_args$dry_run) && source %in% names(res)) {
+    res <- res[[source]]
+  }
+  res
 }
 
 #' cast-API snapshot and archive queries
