@@ -203,7 +203,7 @@ meta$nssp$time_value_range
 If `epidata_meta()` does not know the source yet, keep using
 `pub_covidcast()` (or the relevant `{pub/pvt}_*` function) for it and check
 back after package updates. The
-[API mailing list](https://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api)
+[API mailing list](http://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api)
 announces sources as they move.
 
 ## Endpoints kept for historical reference
