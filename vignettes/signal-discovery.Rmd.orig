@@ -16,51 +16,122 @@ library(dplyr)
 
 The Epidata API includes numerous data streams -- medical claims data, cases and deaths, mobility, and many others -- covering different geographic regions. This can make it a challenge to find the data stream that you are most interested in.
 
-Example queries with all the endpoint functions available in this package are
-given [below](#example-queries).
+Data streams fall into three categories: V5 sources, migrating endpoints, and historical endpoints (which include international sources and private endpoints requiring authentication).
 
 
-## Using the documentation
+## V5 sources
 
-The Epidata documentation lists all the data sources and signals available
-through the API for
-[COVID-19](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html) and
-for [other diseases](https://cmu-delphi.github.io/delphi-epidata/api/README.html#source-specific-parameters).
-The site also includes a search tool if you have a keyword (e.g. "Taiwan") in mind.
+The V5 API is the primary interface for active epidemiological surveillance data.
 
+### Online documentation and EpiPortal
 
-## Signal metadata
+The online documentation lists all data sources and signals available through the [Delphi V5 API](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html).
 
-Some endpoints have partner metadata available that provides information about
-the signals that are available, for example, what time ranges they are
-available for, and when they have been updated.
+For an interactive visual exploration, the [Delphi EpiPortal](https://delphi.cmu.edu/epiportal/) lets you filter sources and signals by disease, pathogen, geography, and date range, view live preview charts, and copy query code.
 
-```{r, echo = FALSE}
-suppressMessages(invisible(capture.output(endpts <- avail_endpoints())))
-filter(endpts, endsWith(Endpoint, "_meta()")) %>% knitr::kable()
+### Exploring metadata with `epidata_meta()`
+
+For sources on the modern V5 API (queried with `epidata_snapshot()` and `epidata_archive()`), `epidata_meta()` is the primary metadata lookup.
+
+Called with no arguments, it lists all active V5 sources:
+
+```{r}
+meta <- epidata_meta()
+
+names(meta)
 ```
 
-## Interactive tooling
+Called with `source = ...`, it reports that source's available signals, supported geographic levels, reference date ranges, and version history:
 
-We provide a couple `epidatr` functions to help find data sources and signals.
+```{r}
+nssp_meta <- epidata_meta(source = "nssp")
 
-The `avail_endpoints()` function lists endpoints, each of which, except for
-COVIDcast, corresponds to a single data source. `avail_endpoints()` outputs a
-`tibble` of endpoints and brief descriptions, which explicitly state when they
-cover non-US locations:
-
-```{r, eval = FALSE}
-avail_endpoints()
+nssp_meta$signals
+nssp_meta$geo_types
+nssp_meta$time_value_range
+nssp_meta$version_range
 ```
 
-```{r, echo = FALSE}
-suppressMessages(invisible(capture.output(endpts <- avail_endpoints())))
-knitr::kable(endpts)
+You can also convert the metadata into a tabular summary to search across all sources using `dplyr`:
+
+```{r}
+signals_df <- bind_rows(
+  lapply(names(meta), function(src) {
+    tibble(
+      source = src,
+      signals = meta[[src]]$signals,
+      geo_types = paste(meta[[src]]$geo_types, collapse = ", ")
+    )
+  })
+)
+
+# Search for signals related to influenza
+signals_df %>%
+  filter(grepl("flu", signals, ignore.case = TRUE))
 ```
 
-The `covidcast_epidata()` function lets you look more in-depth at the data
-sources available through the COVIDcast endpoint. The function describes
-all available data sources and signals:
+### Example queries for V5 sources
+
+The V5 API uses `epidata_snapshot()` to fetch data as of a given moment (latest by default) and `epidata_archive()` to fetch the full revision history. See `vignette("epidatr")` for a general introduction and `vignette("versioned-data")` for details on versioning.
+
+Here are examples across several major V5 surveillance streams:
+
+```{r v5-examples}
+# NSSP: Influenza emergency department visits
+epidata_snapshot(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = epirange("2024-10-01", "2024-10-15")
+)
+
+# NHSN: Confirmed influenza hospital admissions
+epidata_snapshot(
+  source = "nhsn",
+  signals = "confirmed_admissions_flu_ew",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = epirange("2024-10-01", "2024-10-21")
+)
+
+# POPHIVE: Outpatient COVID-19 emergency visits
+epidata_snapshot(
+  source = "pophive",
+  signals = "covid_pct_ed",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = epirange("2024-10-01", "2024-10-15")
+)
+
+# NWSS: Wastewater SARS-CoV-2 concentrations
+epidata_snapshot(
+  source = "nwss",
+  signals = "covid_avg_conc",
+  geo_type = "sewershed",
+  geo_values = "128",
+  reference_time = epirange("2024-12-01", "2024-12-15")
+)
+
+# Archive: Revision history for a single reference date
+epidata_archive(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = "2024-12-07",
+  report_time = epirange("2024-12-01", "2024-12-15")
+)
+```
+
+
+## Migrating endpoints
+
+Datasets that originated in the legacy API like `pub_covidcast()`, `pub_covidcast_meta()`, `pub_fluview()`, `pub_fluview_clinical()`, `pub_fluview_meta()`, `pub_flusurv()`, and `pub_meta()` are transitioning to V5.
+
+### Exploring legacy COVIDcast sources with `covidcast_epidata()`
+
+For datasets still queried through the legacy `pub_covidcast()` function, `covidcast_epidata()` describes all available COVIDcast data sources and signals:
 
 ```{r}
 covid_sources <- covidcast_epidata()
@@ -91,298 +162,144 @@ we rely on the backtick operator:
 covid_sources$signals$`fb-survey:smoothed_cli`
 ```
 
-These signal objects can be used directly to fetch data, without requiring us to use
-the `pub_covidcast()` function. Simply use the `$call` attribute of the object:
+### Example legacy query
 
-```{r}
-epidata <- covid_sources$signals$`fb-survey:smoothed_cli`$call(
-  "state", "pa", epirange(20210405, 20210410)
-)
-knitr::kable(epidata)
-```
-
-
-## Example Queries
-
-### COVIDcast Main Endpoint
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>
-
-County geo_values are [FIPS codes](https://en.wikipedia.org/wiki/List_of_United_States_FIPS_codes_by_county) and are discussed in the API docs [here](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html). The example below is for Orange County, California.
+Legacy endpoints remain accessible while their sources transition:
 
 ```{r}
 pub_covidcast(
   source = "fb-survey",
   signals = "smoothed_accept_covid_vaccine",
-  geo_type = "county",
+  geo_type = "state",
   time_type = "day",
   time_values = epirange(20201221, 20201225),
-  geo_values = "06059"
+  geo_values = "pa"
 )
 ```
 
-The `covidcast` endpoint supports `*` in its time and geo fields:
+See `vignette("migration-guide")` for the argument mapping from V4 to V5.
 
-```{r}
-pub_covidcast(
-  source = "fb-survey",
-  signals = "smoothed_accept_covid_vaccine",
-  geo_type = "county",
-  time_type = "day",
-  time_values = epirange(20201221, 20201225),
-  geo_values = "*"
-)
+
+## Historical endpoints
+
+Some datasets are not moving to V5 because data collection has ended. These endpoints remain available for historical reference using their original `pub_*` and `pvt_*` functions.
+
+### Exploring package endpoints with `avail_endpoints()`
+
+The `avail_endpoints()` function lists all endpoint functions in the package and provides brief descriptions, explicitly noting which endpoints cover non-US locations:
+
+<details id="available-endpoints">
+<summary>View all historical package endpoints</summary>
+
+```{r, eval = FALSE}
+avail_endpoints()
 ```
 
-### Other Covid Endpoints
-
-#### COVID-19 Hospitalization: Facility Lookup
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html>
-
-```{r}
-pub_covid_hosp_facility_lookup(city = "southlake")
-pub_covid_hosp_facility_lookup(state = "WY")
+```{r, echo = FALSE}
+suppressMessages(invisible(capture.output(endpts <- avail_endpoints())))
+knitr::kable(endpts)
 ```
 
-```{r, error = TRUE}
-# A non-example (there is no city called New York in Wyoming)
-pub_covid_hosp_facility_lookup(state = "WY", city = "New York")
-```
+</details>
 
-#### COVID-19 Hospitalization by Facility
+### Domestic historical sources
 
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
+These endpoints provide completed historical collections within the United States:
 
 ```{r}
-pub_covid_hosp_facility(
-  hospital_pks = "100075",
-  collection_weeks = epirange(20200101, 20200501)
-)
-```
+# Google Flu Trends: Historical flu search volume
+pub_gft(locations = "hhs1", epiweeks = epirange(201401, 201404))
 
-#### COVID-19 Hospitalization by State
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>
-
-```{r}
-pub_covid_hosp_state_timeseries(states = "MA", dates = "20200510")
-```
-
-### Flu Endpoints
-
-#### Delphi's ILINet forecasts
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/delphi.html>
-
-```{r}
-del <- pub_delphi(system = "ec", epiweek = 201501)
-names(del[[1L]]$forecast)
-```
-
-#### FluSurv hospitalization data
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>
-
-```{r}
-pub_flusurv(locations = "ca", epiweeks = 202001)
-```
-
-#### Fluview data
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>
-
-```{r}
-pub_fluview(regions = "nat", epiweeks = epirange(201201, 202001))
-```
-
-#### Fluview virological data from clinical labs
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html>
-
-```{r}
-pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
-```
-
-#### Fluview metadata
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
-
-```{r}
-pub_fluview_meta()
-```
-
-#### Google Flu Trends data
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/gft.html>
-
-```{r}
-pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
-```
-
-#### ECDC ILI
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>
-
-```{r}
-pub_ecdc_ili(regions = "Armenia", epiweeks = 201840)
-```
-
-#### KCDC ILI
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html>
-
-```{r}
-pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
-```
-
-#### NIDSS Flu
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
-
-```{r}
-pub_nidss_flu(regions = "taipei", epiweeks = epirange(200901, 201301))
-```
-
-#### ILI Nearby Nowcast
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>
-
-```{r}
-pub_nowcast(locations = "ca", epiweeks = epirange(202201, 202319))
-```
-
-### Dengue Endpoints
-
-#### Delphi's Dengue Nowcast
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html>
-
-```{r}
-pub_dengue_nowcast(locations = "pr", epiweeks = epirange(201401, 202301))
-```
-
-#### NIDSS dengue
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html>
-
-```{r}
-pub_nidss_dengue(locations = "taipei", epiweeks = epirange(200301, 201301))
-```
-
-### PAHO Dengue
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html>
-
-```{r}
-pub_paho_dengue(regions = "ca", epiweeks = epirange(200201, 202319))
-```
-
-### Other Endpoints
-
-#### Wikipedia Access
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
-
-```{r}
+# Wikipedia: Article page view counts
 pub_wiki(
-  language = "en",
   articles = "influenza",
-  time_type = "week",
-  time_values = epirange(202001, 202319)
+  time_type = "day",
+  time_values = epirange(20200101, 20200105)
+)
+
+# COVID-19 hospitalizations: State-level timeseries as of a historical date
+pub_covid_hosp_state_timeseries(
+  states = "pa",
+  dates = epirange(20210101, 20210105)
 )
 ```
 
-### Private methods
+### International sources
 
-These require private access keys to use (separate from the Delphi Epidata API key).
-To actually run these locally, you will need to store these secrets in your `.Reviron` file, or set them as environmental variables.
+A subset of historical endpoints provide surveillance data outside the United States:
+
+<details id="international-endpoints">
+<summary>Examples of international endpoints</summary>
+
+```{r}
+# PAHO Dengue: Surveillance in the Americas
+pub_paho_dengue(regions = "ca", epiweeks = epirange(202001, 202004))
+
+# ECDC ILI: Influenza-like illness in Europe
+pub_ecdc_ili(regions = "austria", epiweeks = epirange(201901, 201904))
+
+# Taiwan CDC NIDSS: Influenza outpatient visits
+pub_nidss_flu(regions = "nationwide", epiweeks = epirange(201801, 201804))
+
+# Taiwan CDC NIDSS: Dengue cases
+pub_nidss_dengue(locations = "nationwide", epiweeks = epirange(201801, 201804))
+
+# PAHO Dengue Nowcasts: Delphi nowcast estimates for the Americas
+pub_dengue_nowcast(locations = "ca", epiweeks = epirange(202001, 202004))
+```
+
+</details>
+
+### Private endpoints
 
 <details id="private-endpoints">
-
 <summary>Usage of private endpoints</summary>
 
-#### CDC
+Some private endpoints require a dedicated secret key passed via the `auth` argument (separate from the standard Epidata API key). Store these in your `.Renviron` file or environment variables:
 
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/cdc.html>
-
-```{r, eval = FALSE}
-pvt_cdc(auth = Sys.getenv("SECRET_API_AUTH_CDC"), epiweeks = epirange(202003, 202304), locations = "ma")
-```
-
-#### Dengue Digital Surveillance Sensors
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html>
-
-```{r, eval = FALSE}
-pvt_dengue_sensors(
-  auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
-  names = "ght",
-  locations = "ag",
-  epiweeks = epirange(201404, 202004)
+```r
+# CDC Web Metrics: Website traffic for select topics
+pvt_cdc(
+  auth = Sys.getenv("SECRET_API_AUTH_CDC"),
+  epiweeks = epirange(202003, 202304),
+  locations = "ma"
 )
-```
 
-#### Google Health Trends
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
-
-```{r, eval = FALSE}
-pvt_ght(
-  auth = Sys.getenv("SECRET_API_AUTH_GHT"),
-  epiweeks = epirange(199301, 202304),
-  locations = "ma",
-  query = "how to get over the flu"
-)
-```
-
-#### NoroSTAT metadata
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html>
-
-```{r, eval = FALSE}
-pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
-```
-
-#### NoroSTAT data
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
-
-```{r, eval = FALSE}
-pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "1", epiweeks = 201233)
-```
-
-#### Quidel Influenza testing
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/quidel.html>
-
-```{r, eval = FALSE}
-pvt_quidel(auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"), locations = "hhs1", epiweeks = epirange(200301, 202105))
-```
-
-#### Sensors
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
-
-```{r, eval = FALSE}
+# Digital Surveillance Sensors: Delphi sensor estimates
 pvt_sensors(
   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
-  names = "sar3",
+  names = "delphi",
   locations = "nat",
-  epiweeks = epirange(200301, 202105)
+  epiweeks = epirange(202001, 202010)
 )
-```
 
-#### Twitter
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/twitter.html>
-
-```{r, eval = FALSE}
+# Twitter / HealthTweets: Influenza and total tweet counts
 pvt_twitter(
   auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
-  locations = "nat",
-  time_type = "week",
-  time_values = epirange(200301, 202105)
+  locations = "hhs1",
+  dates = epirange(20200101, 20200115)
+)
+
+# Google Health Trends: Search queries
+pvt_ght(
+  auth = Sys.getenv("SECRET_API_AUTH_GHT"),
+  locations = "ca",
+  query = "cough",
+  dates = epirange(20200101, 20200115)
+)
+
+# CDC NoroSTAT: Norovirus outbreak data
+pvt_norostat(
+  auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"),
+  location = "midatl",
+  epiweeks = epirange(202001, 202010)
+)
+
+# PAHO Dengue Sensors: Digital dengue surveillance
+pvt_dengue_sensors(
+  auth = Sys.getenv("SECRET_API_AUTH_DENGUE_SENSORS"),
+  locations = "ca",
+  epiweeks = epirange(202001, 202010)
 )
 ```
 
