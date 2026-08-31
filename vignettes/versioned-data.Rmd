@@ -8,9 +8,6 @@ vignette: >
 ---
 
 
-```
-## Warning: package 'dplyr' was built under R version 4.5.2
-```
 
 
 The Epidata API records not just each signal's estimate for a given location
@@ -42,7 +39,7 @@ the `snapshot_date` argument with `epidata_snapshot()`:
 
 
 ``` r
-epidata <- epidata_snapshot(
+past_snapshot <- epidata_snapshot(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
   geo_type = "state",
@@ -50,7 +47,7 @@ epidata <- epidata_snapshot(
   reference_time = "2024-12-07",
   snapshot_date = "2024-12-14"
 )
-knitr::kable(epidata)
+knitr::kable(past_snapshot)
 ```
 
 
@@ -66,14 +63,14 @@ specify `snapshot_date`, we get the most recent estimate available:
 
 
 ``` r
-epidata <- epidata_snapshot(
+latest_snapshot <- epidata_snapshot(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
   geo_type = "state",
   geo_values = "pa",
   reference_time = "2024-12-07"
 )
-knitr::kable(epidata)
+knitr::kable(latest_snapshot)
 ```
 
 
@@ -99,7 +96,7 @@ versions reported in a certain time period:
 
 
 ``` r
-epidata <- epidata_archive(
+archive_data <- epidata_archive(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
   geo_type = "state",
@@ -107,7 +104,7 @@ epidata <- epidata_archive(
   reference_time = "2024-12-07",
   report_time = epirange("2024-12-01", "2025-01-15")
 )
-knitr::kable(epidata)
+knitr::kable(archive_data)
 ```
 
 
@@ -158,11 +155,11 @@ In the V5 API, reporting lag is computed directly as the difference between
 
 
 ``` r
-epidata_with_lag <- epidata %>%
+archive_with_lag <- archive_data %>%
   mutate(lag_days = as.integer(report_time - reference_time)) %>%
   select(signal, reference_time, report_time, lag_days, value)
 
-knitr::kable(epidata_with_lag)
+knitr::kable(archive_with_lag)
 ```
 
 
@@ -183,7 +180,7 @@ If your analysis requires filtering data to a specific maximum reporting lag
 
 
 ``` r
-epidata_with_lag %>%
+archive_with_lag %>%
   filter(lag_days <= 14)
 #> # A tibble: 2 × 5
 #>   signal                  reference_time report_time lag_days value
@@ -210,14 +207,6 @@ pub_covidcast(
   time_values = epirange(20201221, 20201225),
   as_of = 20201231
 )
-#> Warning: `pub_covidcast()` uses the V4 Epidata API.
-#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5
-#>   API.
-#> ℹ See `vignette("migration-guide")` (or
-#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the
-#>   V5 endpoints and how to move to them. Old data will remain available for at
-#>   least a year, but new ingestion will end.
-#> This warning is displayed once every 8 hours.
 #> # A tibble: 5 × 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     
 #>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    

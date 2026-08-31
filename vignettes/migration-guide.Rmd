@@ -122,10 +122,10 @@ head(old)
 #> # A tibble: 6 × 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     
 #>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
-#> 1 ca        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-23
-#> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-23
-#> 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-23
-#> 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-23
+#> 1 ca        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-30
+#> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-30
+#> 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-30
+#> 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-30
 #> # ℹ 2 more rows
 #> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
 #> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>

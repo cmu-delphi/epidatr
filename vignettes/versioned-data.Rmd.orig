@@ -43,7 +43,7 @@ First, we can request the data that was available *as of* a specific date, using
 the `snapshot_date` argument with `epidata_snapshot()`:
 
 ```{r}
-epidata <- epidata_snapshot(
+past_snapshot <- epidata_snapshot(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
   geo_type = "state",
@@ -51,24 +51,24 @@ epidata <- epidata_snapshot(
   reference_time = "2024-12-07",
   snapshot_date = "2024-12-14"
 )
-knitr::kable(epidata)
+knitr::kable(past_snapshot)
 ```
 
-This shows that an estimate of about 0.55% was known as of December 14. If we don't
+This shows that an estimate of about `r sprintf("%.2f%%", past_snapshot$value)` was known as of December 14. If we don't
 specify `snapshot_date`, we get the most recent estimate available:
 
 ```{r}
-epidata <- epidata_snapshot(
+latest_snapshot <- epidata_snapshot(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
   geo_type = "state",
   geo_values = "pa",
   reference_time = "2024-12-07"
 )
-knitr::kable(epidata)
+knitr::kable(latest_snapshot)
 ```
 
-Note the change in the estimate, from 0.55% to 0.57%, reflecting new data that
+Note the change in the estimate, from `r sprintf("%.2f%%", past_snapshot$value)` to `r sprintf("%.2f%%", latest_snapshot$value)`, reflecting new data that
 became available after December 14 about visits *occurring on* December 7. This
 illustrates the importance of version tracking, particularly for forecasting
 tasks. To backtest a forecasting model on past data, it is important to use the
@@ -82,7 +82,7 @@ By using `epidata_archive()` with the `report_time` argument, we can request all
 versions reported in a certain time period:
 
 ```{r}
-epidata <- epidata_archive(
+archive_data <- epidata_archive(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
   geo_type = "state",
@@ -90,7 +90,7 @@ epidata <- epidata_archive(
   reference_time = "2024-12-07",
   report_time = epirange("2024-12-01", "2025-01-15")
 )
-knitr::kable(epidata)
+knitr::kable(archive_data)
 ```
 
 This estimate was updated several times as new data for December 7th arrived.
@@ -121,11 +121,11 @@ In the V5 API, reporting lag is computed directly as the difference between
 `report_time` (the publication date) and `reference_time` (the observation date):
 
 ```{r}
-epidata_with_lag <- epidata %>%
+archive_with_lag <- archive_data %>%
   mutate(lag_days = as.integer(report_time - reference_time)) %>%
   select(signal, reference_time, report_time, lag_days, value)
 
-knitr::kable(epidata_with_lag)
+knitr::kable(archive_with_lag)
 ```
 
 If your analysis requires filtering data to a specific maximum reporting lag
@@ -133,7 +133,7 @@ If your analysis requires filtering data to a specific maximum reporting lag
 `lag_days`:
 
 ```{r}
-epidata_with_lag %>%
+archive_with_lag %>%
   filter(lag_days <= 14)
 ```
 

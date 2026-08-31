@@ -31,7 +31,7 @@ For an interactive visual exploration, the [Delphi EpiPortal](https://delphi.cmu
 
 ### Exploring metadata with `epidata_meta()`
 
-For sources on the modern V5 API (queried with `epidata_snapshot()` and `epidata_archive()`), `epidata_meta()` is the primary metadata lookup.
+For sources on the V5 API (queried with `epidata_snapshot()` and `epidata_archive()`), `epidata_meta()` is the primary metadata lookup.
 
 Called with no arguments, it lists all active V5 sources:
 
@@ -188,9 +188,6 @@ Some datasets are not moving to V5 because data collection has ended. These endp
 
 The `avail_endpoints()` function lists all endpoint functions in the package and provides brief descriptions, explicitly noting which endpoints cover non-US locations:
 
-<details id="available-endpoints">
-<summary>View all historical package endpoints</summary>
-
 ```{r, eval = FALSE}
 avail_endpoints()
 ```
@@ -199,8 +196,6 @@ avail_endpoints()
 suppressMessages(invisible(capture.output(endpts <- avail_endpoints())))
 knitr::kable(endpts)
 ```
-
-</details>
 
 ### Domestic historical sources
 
@@ -238,6 +233,9 @@ pub_paho_dengue(regions = "ca", epiweeks = epirange(202001, 202004))
 # ECDC ILI: Influenza-like illness in Europe
 pub_ecdc_ili(regions = "austria", epiweeks = epirange(201901, 201904))
 
+# KCDC ILI: Influenza-like illness in South Korea
+pub_kcdc_ili(regions = "ROK", epiweeks = epirange(201801, 201804))
+
 # Taiwan CDC NIDSS: Influenza outpatient visits
 pub_nidss_flu(regions = "nationwide", epiweeks = epirange(201801, 201804))
 
@@ -252,10 +250,10 @@ pub_dengue_nowcast(locations = "ca", epiweeks = epirange(202001, 202004))
 
 ### Private endpoints
 
+Some private endpoints require a dedicated secret key passed via the `auth` argument (separate from the standard Epidata API key). Store these in your `.Renviron` file or environment variables:
+
 <details id="private-endpoints">
 <summary>Usage of private endpoints</summary>
-
-Some private endpoints require a dedicated secret key passed via the `auth` argument (separate from the standard Epidata API key). Store these in your `.Renviron` file or environment variables:
 
 ```r
 # CDC Web Metrics: Website traffic for select topics
