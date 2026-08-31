@@ -91,7 +91,7 @@ the [documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.h
 
 ``` r
 meta_sleepcycle <- epidata_meta(source = "sleepcycle")
-meta_sleepcycle$sleepcycle$value_columns
+meta_sleepcycle$value_columns
 #> [1] "ci_lower" "ci_upper" "value"
 ```
 
@@ -111,6 +111,13 @@ old <- pub_covidcast(
   time_values = epirange(202440, 202501),
   as_of = 20250101
 )
+#> Warning: `pub_covidcast()` uses the V4 Epidata API.
+#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5 API.
+#> ℹ See `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the V5
+#>   endpoints and how to move to them. Old data will remain available for at least a year,
+#>   but new ingestion will end.
+#> This warning is displayed once every 8 hours.
 head(old)
 #> # A tibble: 6 × 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     
@@ -119,8 +126,7 @@ head(old)
 #> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-23
 #> 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-23
 #> 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-23
-#> 5 ca        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-08-23
-#> 6 pa        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-08-23
+#> # ℹ 2 more rows
 #> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
 #> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
@@ -143,8 +149,7 @@ head(new)
 #> 2 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-12     0.140
 #> 3 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-19     0.160
 #> 4 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-26     0.200
-#> 5 pct_ed_visits… 2024-12-27  state    ca        source      2024-11-02     0.25 
-#> 6 pct_ed_visits… 2024-12-27  state    ca        source      2024-11-09     0.310
+#> # ℹ 2 more rows
 ```
 
 ## Revision history queries
@@ -170,8 +175,7 @@ head(revisions)
 #> 2 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-12     0.0700
 #> 3 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-19     0.0800
 #> 4 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-26     0.130 
-#> 5 pct_ed_visit… 2024-11-08  state    pa        source      2024-11-02     0.140 
-#> 6 pct_ed_visit… 2024-11-23  state    pa        source      2024-10-05     0.0500
+#> # ℹ 2 more rows
 ```
 
 If you filtered by `lag`, fetch the archive and filter afterwards:
@@ -190,20 +194,18 @@ ranges:
 
 ``` r
 meta <- epidata_meta(source = "nssp")
-meta$nssp$signals
-#> [1] "pct_ed_visits_ari"                "pct_ed_visits_combined"          
-#> [3] "pct_ed_visits_covid"              "pct_ed_visits_influenza"         
-#> [5] "pct_ed_visits_rsv"                "smoothed_pct_ed_visits_combined" 
-#> [7] "smoothed_pct_ed_visits_covid"     "smoothed_pct_ed_visits_influenza"
-#> [9] "smoothed_pct_ed_visits_rsv"
-meta$nssp$time_value_range
+meta$signals
+#> [1] "pct_ed_visits_ari"       "pct_ed_visits_combined" 
+#> [3] "pct_ed_visits_covid"     "pct_ed_visits_influenza"
+#>  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]
+meta$time_value_range
 #> NULL
 ```
 
 If `epidata_meta()` does not know the source yet, keep using
 `pub_covidcast()` (or the relevant `{pub/pvt}_*` function) for it and check
 back after package updates. The
-[API mailing list](http://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api)
+[API mailing list](https://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api)
 announces sources as they move.
 
 ## Endpoints kept for historical reference
