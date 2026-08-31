@@ -40,7 +40,7 @@ also provide packages for downstream data processing
 library(epidatr)
 # Discover what a source offers: signals, geo types, and date ranges
 meta <- epidata_meta(source = "nssp")
-meta$nssp$signals
+meta$signals
 #> [1] "pct_ed_visits_ari"                "pct_ed_visits_combined"          
 #> [3] "pct_ed_visits_covid"              "pct_ed_visits_influenza"         
 #> [5] "pct_ed_visits_rsv"                "smoothed_pct_ed_visits_combined" 
@@ -54,7 +54,7 @@ flu <- epidata_snapshot(
   geo_type = "state"
 )
 flu
-#> # A tibble: 10,353 × 7
+#> # A tibble: 10,404 × 7
 #>    signal        report_time geo_type geo_value fill_method reference_time value
 #>    <chr>         <date>      <chr>    <chr>     <chr>       <date>         <dbl>
 #>  1 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-01     0.140
@@ -67,7 +67,7 @@ flu
 #>  8 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-19     6.82 
 #>  9 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-26     8.67 
 #> 10 pct_ed_visit… 2026-06-26  state    ak        source      2022-12-03     9.85 
-#> # ℹ 10,343 more rows
+#> # ℹ 10,394 more rows
 ```
 
 ## Which endpoint has my data?

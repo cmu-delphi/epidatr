@@ -55,7 +55,7 @@ suppressPackageStartupMessages(library(epidatr))
 library(epidatr)
 # Discover what a source offers: signals, geo types, and date ranges
 meta <- epidata_meta(source = "nssp")
-meta$nssp$signals
+meta$signals
 
 # Fetch the latest snapshot of NSSP influenza ED visit percentages by state
 flu <- epidata_snapshot(
