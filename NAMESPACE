@@ -58,51 +58,69 @@ export(save_api_key)
 export(set_cache)
 import(cachem)
 import(glue)
-importFrom(MMWRweek,MMWRweek)
-importFrom(MMWRweek,MMWRweek2Date)
+importFrom(MMWRweek,
+  MMWRweek,
+  MMWRweek2Date
+)
 importFrom(cachem,is.key_missing)
-importFrom(checkmate,assert)
-importFrom(checkmate,assert_character)
-importFrom(checkmate,assert_integerish)
-importFrom(checkmate,assert_logical)
-importFrom(checkmate,assert_numeric)
-importFrom(checkmate,check_character)
-importFrom(checkmate,check_class)
-importFrom(checkmate,check_date)
-importFrom(checkmate,check_integerish)
-importFrom(checkmate,check_list)
-importFrom(checkmate,check_names)
-importFrom(checkmate,test_character)
-importFrom(checkmate,test_class)
-importFrom(checkmate,test_date)
-importFrom(checkmate,test_integerish)
-importFrom(checkmate,test_list)
-importFrom(cli,cli_abort)
-importFrom(cli,cli_warn)
-importFrom(httr2,req_auth_basic)
-importFrom(httr2,req_body_form)
-importFrom(httr2,req_error)
-importFrom(httr2,req_headers)
-importFrom(httr2,req_method)
-importFrom(httr2,req_perform)
-importFrom(httr2,req_retry)
-importFrom(httr2,req_timeout)
-importFrom(httr2,req_url)
-importFrom(httr2,req_url_query)
-importFrom(httr2,req_user_agent)
-importFrom(httr2,resp_status)
+importFrom(checkmate,
+  assert,
+  assert_character,
+  assert_integerish,
+  assert_logical,
+  assert_numeric,
+  check_character,
+  check_class,
+  check_date,
+  check_integerish,
+  check_list,
+  check_names,
+  test_character,
+  test_class,
+  test_date,
+  test_integerish,
+  test_list
+)
+importFrom(cli,
+  cli_abort,
+  cli_warn
+)
+importFrom(httr2,
+  req_auth_basic,
+  req_body_form,
+  req_error,
+  req_headers,
+  req_method,
+  req_perform,
+  req_retry,
+  req_timeout,
+  req_url,
+  req_url_query,
+  req_user_agent,
+  resp_status
+)
 importFrom(jsonlite,fromJSON)
 importFrom(magrittr,"%>%")
 importFrom(openssl,md5)
-importFrom(purrr,map_chr)
-importFrom(purrr,map_lgl)
-importFrom(rlang,dots_list)
-importFrom(rlang,inject)
+importFrom(purrr,
+  map_chr,
+  map_lgl
+)
+importFrom(rlang,
+  dots_list,
+  inject
+)
 importFrom(stats,na.omit)
-importFrom(tibble,as_tibble)
-importFrom(tibble,tibble)
-importFrom(utils,help.search)
-importFrom(utils,sessionInfo)
-importFrom(xml2,read_html)
-importFrom(xml2,xml_find_all)
-importFrom(xml2,xml_text)
+importFrom(tibble,
+  as_tibble,
+  tibble
+)
+importFrom(utils,
+  help.search,
+  sessionInfo
+)
+importFrom(xml2,
+  read_html,
+  xml_find_all,
+  xml_text
+)
