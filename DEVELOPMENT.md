@@ -32,7 +32,7 @@ Suggests, so CI never installs them):
 
 ```bash
 make vignettes                                # all vignettes
-Rscript vignettes/precompile.R v5-api-demo    # just one
+Rscript vignettes/precompile.R signal-discovery # just one
 ```
 
 Review the resulting `.Rmd` diff — it contains the real API output, so it

@@ -223,7 +223,7 @@ filter_by_timeset <- function(df, column, timeset) {
   meta <- NULL
   if (length(empty_signals) > 0 || length(empty_geo_types) > 0) {
     meta <- tryCatch(
-      epidata_meta(source, fetch_args = fetch_args)[[source]],
+      epidata_meta(source, fetch_args = fetch_args),
       error = function(e) NULL
     )
   }
