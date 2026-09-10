@@ -1770,28 +1770,27 @@ epidata_archive <- function(
 #'   source is recovered automatically).
 #' @param reference_time [`timeset`]. Reference time to return (filters on the
 #'   `reference_time` column). Supports individual dates or [`epirange()`].
-#'   Base-pull mode only (when `source` is a string).
+#'   Only used when `source` is a string.
 #' @param snapshot_date Date, `"latest"`, or `NULL`. Return auxiliary data as
 #'   it appeared on this date (one row per key, the most recent version active
 #'   on that date). `"latest"` uses today's date. Use `NULL` (default) to
 #'   return the full version history filtered by `report_time`. Mutually
-#'   exclusive with `report_time`. Base-pull mode only (when `source` is a
-#'   string).
+#'   exclusive with `report_time`. Only used when `source` is a string.
 #' @param report_time String or [`epirange()`] specifying the version of the
 #'   auxiliary data to retrieve. Accepts comparison operators (e.g.,
 #'   `"<2025-10-16"`, `">=2025-10-16"`) or an [`epirange()`] for an inclusive
 #'   date range. Bare dates and the `"="` operator are not accepted — use
 #'   `snapshot_date` for point-in-time data. Mutually exclusive with
-#'   `snapshot_date`. Base-pull mode only (when `source` is a string).
+#'   `snapshot_date`. Only used when `source` is a string.
 #' @param issues `r lifecycle::badge("deprecated")` Use `report_time` instead.
 #' @param time_values `r lifecycle::badge("deprecated")` Use `reference_time` instead.
 #' @param ... Named filters on the auxiliary key columns, such as
 #'   `pcr_target = "sars-cov-2"` or `geo_value = c("ca", "ny")`. Each key accepts
 #'   one or more values (matched as OR); they are serialized as repeated
 #'   `key:value` terms server-side to keep the aux pull small. Passing more than
-#'   10 values for a key warns, since the request URL may get too long. In
-#'   merge mode, when no filters are given, they are inferred from the base:
-#'   each key it narrows to at most 10 distinct values is filtered to those.
+#'   10 values for a key warns, since the request URL may get too long. When
+#'   `source` is a tibble and no filters are given, they are inferred from the
+#'   base: each key it narrows to at most 10 distinct values is filtered to those.
 #' @param columns A character vector of columns to return. By default, all columns are returned.
 #' @inheritParams .epidatr_shared_params
 #' @return A [`tibble::tibble`].
