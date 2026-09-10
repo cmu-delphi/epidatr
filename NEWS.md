@@ -1,3 +1,12 @@
+# epidatr 1.3.1
+
+## Breaking changes
+- `epidata_archive()` and `epidata_aux()`: passing a bare date or the `"="` operator to `report_time` now errors. Use a comparison operator (e.g. `"<2025-01-01"`) or an `epirange()` instead.
+
+## New features
+- `epidata_aux()` gains a `snapshot_date` argument (date, `"latest"`, or `NULL`) for retrieving auxiliary data as it appeared on a specific date. Mutually exclusive with `report_time`.
+- `epidata_archive()` and `epidata_aux()`: `epirange()` values for `report_time` are now filtered server-side using the cast-API's inclusive range syntax; the local lower-bound filter has been removed.
+
 # epidatr 1.3.0
 
 ## Deprecations
