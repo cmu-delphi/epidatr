@@ -45,13 +45,13 @@ fixture_specs <- function() {
         fetch_args = fa
       )
     }),
-    # cast CSV, archive endpoint (exact report_time -> one version slice)
+    # cast CSV, archive endpoint (single-day range for one version slice)
     spec("cast-archive.csv", "text/csv", function(fa) {
       epidata_archive(
         source = "nssp",
         signals = "pct_ed_visits_influenza",
         geo_type = "nation",
-        report_time = "2024-12-27",
+        report_time = epirange("2024-12-27", "2024-12-27"),
         fetch_args = fa
       )
     }),

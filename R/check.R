@@ -150,37 +150,65 @@ format_params_for_api <- function(params) {
   })
 }
 
-#' Helper to format the 'version' argument for the CAST API version_query
-#' @param version the version argument containing operator and date, exact date,
-#' or numeric date
-#' @return a formatted version_query string (e.g., "<2025-10-16", "=2025-10-16")
+#' Helper to format the 'version' argument for the CAST API version_query.
+#'
+#' @param version A comparison string (e.g. `"<2025-10-16"`, `">=2025-10-16"`)
+#'   or an [`epirange()`].
+#' @return A formatted `report_time_query` string: a comparison like
+#'   `"<2025-10-16"`, or an inclusive range like `"2024-01-01:2024-03-31"`.
 #' @keywords internal
 validate_version_query <- function(version) {
   if (is.null(version) || identical(version, "*")) {
     return(NULL)
   }
 
-  operator <- "="
-  if (
-    is.character(version) && length(version) == 1 && grepl("^[<>=]", version)
-  ) {
-    operator <- substr(version, 1, 1)
-    version <- substr(version, 2, nchar(version))
-  } else if (inherits(version, "EpiRange")) {
-    # Lower bound is filtered out locally
-    operator <- "<"
-    version <- version$to
+  if (inherits(version, "EpiRange")) {
+    assert_date_param("version$from", version$from, len = 1L, required = TRUE)
+    assert_date_param("version$to", version$to, len = 1L, required = TRUE)
+    from_date <- format(parse_api_date(version$from), "%Y-%m-%d")
+    to_date <- format(parse_api_date(version$to), "%Y-%m-%d")
+    return(paste0(from_date, ":", to_date))
   }
 
-  # Validate and standardize the date part
+  operator <- NULL
+  if (is.character(version) && length(version) == 1 && grepl("^(<=?|>=?|=)", version)) {
+    op_match <- regmatches(version, regexpr("^(<=?|>=?|=)", version))
+    operator <- op_match
+    version <- substr(version, nchar(op_match) + 1L, nchar(version))
+  }
+
+  if (is.null(operator)) {
+    cli::cli_abort(
+      c(
+        "A bare date is not a valid {.arg report_time} value.",
+        "i" = "Use a comparison like {.code \"<{version}\"} or a range like
+          {.code epirange(from, \"{version}\")}.",
+        "i" = "For data as it appeared on a specific date, use {.arg snapshot_date} instead."
+      ),
+      class = "epidatr__invalid_version_query"
+    )
+  }
+
+  if (operator == "=") {
+    cli::cli_abort(
+      c(
+        "The {.code =} operator is not supported for {.arg report_time}.",
+        "i" = "Use a comparison like {.code \"<{version}\"} or a range like
+          {.code epirange(from, \"{version}\")}.",
+        "i" = "For data as it appeared on a specific date, use {.arg snapshot_date} instead."
+      ),
+      class = "epidatr__invalid_version_query"
+    )
+  }
+
   assert_date_param("version", version, len = 1L, required = FALSE)
   formatted_date <- format(parse_api_date(version), "%Y-%m-%d")
 
   if (is.na(formatted_date)) {
     cli::cli_abort(
       paste0(
-        "Invalid `version` format. Must be a single date, an `EpiRange`, ",
-        "or a character string with an operator (e.g., '<2025-10-16')."
+        "Invalid `version` format. Must be a comparison string with an operator ",
+        "(e.g., '<2025-10-16', '>=2025-10-16') or an `epirange()`."
       ),
       class = "epidatr__invalid_version_query"
     )
