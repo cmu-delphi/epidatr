@@ -248,7 +248,7 @@ test_that("epidata validations and deprecations", {
       source = "nssp",
       signals = "sig1",
       geo_type = "state",
-      issues = "2024-01-01",
+      issues = "<2024-01-01",
       fetch_args = fetch_args_list(dry_run = TRUE)
     ),
     regexp = "Use `report_time` instead"
@@ -277,35 +277,50 @@ test_that("epidata validations and deprecations", {
   )
 })
 
-test_that("epidata_archive local EpiRange filtering for report_time works", {
-  csv_data <- paste0(
-    "signal,geo_value,reference_time,value,report_time\n",
-    "sig1,ca,2024-01-01,10.0,2024-01-01\n",
-    "sig1,ca,2024-01-01,11.0,2024-01-02\n",
-    "sig1,ca,2024-01-01,12.0,2024-01-03"
-  )
+test_that("epidata_archive sends EpiRange as server-side range query", {
+  seen_urls <- character()
+
+  # Single-date range: server returns only the matching row
   local_mocked_bindings(
-    req_perform = function(req, ...) to_httr2_response(csv_data),
+    req_perform = function(req, ...) {
+      seen_urls <<- c(seen_urls, req$url)
+      to_httr2_response(paste0(
+        "signal,geo_value,reference_time,value,report_time\n",
+        "sig1,ca,2024-01-01,11.0,2024-01-02"
+      ))
+    },
     .package = "httr2"
   )
-
-  # Filter with a range that excludes the first and last dates
   res <- epidata_archive(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
     report_time = epirange("2024-01-02", "2024-01-02")
   )
+  expect_true(grepl("report_time_query=2024-01-02%3A2024-01-02", seen_urls[1]))
   expect_equal(nrow(res), 1)
   expect_equal(as.character(res$report_time), "2024-01-02")
 
-  # Filter with a wider range
+  # Wider range: server returns both matching rows
+  seen_urls <- character()
+  local_mocked_bindings(
+    req_perform = function(req, ...) {
+      seen_urls <<- c(seen_urls, req$url)
+      to_httr2_response(paste0(
+        "signal,geo_value,reference_time,value,report_time\n",
+        "sig1,ca,2024-01-01,10.0,2024-01-01\n",
+        "sig1,ca,2024-01-01,11.0,2024-01-02"
+      ))
+    },
+    .package = "httr2"
+  )
   res_wide <- epidata_archive(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
     report_time = epirange("2024-01-01", "2024-01-02")
   )
+  expect_true(grepl("report_time_query=2024-01-01%3A2024-01-02", seen_urls[1]))
   expect_equal(nrow(res_wide), 2)
   expect_true(all(res_wide$report_time %in% as.Date(c("2024-01-01", "2024-01-02"))))
 })
@@ -591,7 +606,7 @@ test_that("epidata_aux base-pull builds the call, serializes key filters via ...
   )
   # deprecated aliases map to their replacements
   expect_warning(
-    epidata_aux("nwss", issues = "2024-01-01", fetch_args = fetch_args_list(dry_run = TRUE)),
+    epidata_aux("nwss", issues = "<2024-01-01", fetch_args = fetch_args_list(dry_run = TRUE)),
     regexp = "Use `report_time` instead"
   )
   expect_warning(

@@ -50,26 +50,25 @@ test_that("assert_timeset_param", {
 })
 
 test_that("validate_version_query", {
-  expect_equal(validate_version_query("2024-01-01"), "=2024-01-01")
-  expect_equal(validate_version_query("20240101"), "=2024-01-01")
-  expect_equal(validate_version_query(20240101), "=2024-01-01")
-  expect_equal(validate_version_query(as.Date("2024-01-01")), "=2024-01-01")
-
-  # Preserves operators
+  # Comparison operators are preserved
   expect_equal(validate_version_query("<2024-01-01"), "<2024-01-01")
   expect_equal(validate_version_query(">2024-01-01"), ">2024-01-01")
-  expect_equal(validate_version_query("=2024-01-01"), "=2024-01-01")
+  expect_equal(validate_version_query("<=2024-01-01"), "<=2024-01-01")
+  expect_equal(validate_version_query(">=2024-01-01"), ">=2024-01-01")
 
-  # EpiRange mapping
-  expect_equal(validate_version_query(epirange("2024-01-01", "2024-01-05")), "<2024-01-05")
+  # EpiRange maps to inclusive server-side range
+  expect_equal(validate_version_query(epirange("2024-01-01", "2024-01-05")), "2024-01-01:2024-01-05")
 
-  # Invalid version queries
-  expect_error(
-    validate_version_query("not-a-date"),
-    class = "epidatr__invalid_version_query"
-  )
-  expect_error(
-    validate_version_query("<not-a-date"),
-    class = "epidatr__invalid_version_query"
-  )
+  # Bare dates are rejected — use snapshot_date for point-in-time
+  expect_error(validate_version_query("2024-01-01"), class = "epidatr__invalid_version_query")
+  expect_error(validate_version_query("20240101"), class = "epidatr__invalid_version_query")
+  expect_error(validate_version_query(20240101), class = "epidatr__invalid_version_query")
+  expect_error(validate_version_query(as.Date("2024-01-01")), class = "epidatr__invalid_version_query")
+
+  # Explicit '=' is also rejected
+  expect_error(validate_version_query("=2024-01-01"), class = "epidatr__invalid_version_query")
+
+  # Other invalid inputs
+  expect_error(validate_version_query("not-a-date"), class = "epidatr__invalid_version_query")
+  expect_error(validate_version_query("<not-a-date"), class = "epidatr__invalid_version_query")
 })
