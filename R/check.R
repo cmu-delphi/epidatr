@@ -181,7 +181,8 @@ validate_version_query <- function(version) {
     cli::cli_abort(
       c(
         "A bare date is not a valid {.arg report_time} value.",
-        "i" = "Use a comparison operator like {.code \"<{version}\"} or a range like {.code epirange(from, \"{version}\")}.",
+        "i" = "Use a comparison like {.code \"<{version}\"} or a range like
+          {.code epirange(from, \"{version}\")}.",
         "i" = "For data as it appeared on a specific date, use {.arg snapshot_date} instead."
       ),
       class = "epidatr__invalid_version_query"
@@ -192,7 +193,8 @@ validate_version_query <- function(version) {
     cli::cli_abort(
       c(
         "The {.code =} operator is not supported for {.arg report_time}.",
-        "i" = "Use a comparison operator like {.code \"<{version}\"} or a range like {.code epirange(from, \"{version}\")}.",
+        "i" = "Use a comparison like {.code \"<{version}\"} or a range like
+          {.code epirange(from, \"{version}\")}.",
         "i" = "For data as it appeared on a specific date, use {.arg snapshot_date} instead."
       ),
       class = "epidatr__invalid_version_query"

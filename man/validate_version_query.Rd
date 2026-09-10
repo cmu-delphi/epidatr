@@ -2,18 +2,19 @@
 % Please edit documentation in R/check.R
 \name{validate_version_query}
 \alias{validate_version_query}
-\title{Helper to format the 'version' argument for the CAST API version_query}
+\title{Helper to format the 'version' argument for the CAST API version_query.}
 \usage{
 validate_version_query(version)
 }
 \arguments{
-\item{version}{the version argument containing operator and date, exact date,
-or numeric date}
+\item{version}{A comparison string (e.g. \code{"<2025-10-16"}, \code{">=2025-10-16"})
+or an \code{\link[=epirange]{epirange()}}.}
 }
 \value{
-a formatted version_query string (e.g., "<2025-10-16", "=2025-10-16")
+A formatted \code{report_time_query} string: a comparison like
+\code{"<2025-10-16"}, or an inclusive range like \code{"2024-01-01:2024-03-31"}.
 }
 \description{
-Helper to format the 'version' argument for the CAST API version_query
+Helper to format the 'version' argument for the CAST API version_query.
 }
 \keyword{internal}
