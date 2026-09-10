@@ -1771,11 +1771,12 @@ epidata_archive <- function(
 #' @param reference_time [`timeset`]. Reference time to return (filters on the
 #'   `reference_time` column). Supports individual dates or [`epirange()`].
 #'   Base-pull mode only (when `source` is a string).
-#' @param snapshot_date Date or `NULL`. Return auxiliary data as it appeared
-#'   on this date (one row per key, the most recent version active on that
-#'   date). Use `NULL` (default) to return the full version history filtered
-#'   by `report_time`. Mutually exclusive with `report_time`.
-#'   Base-pull mode only (when `source` is a string).
+#' @param snapshot_date Date, `"latest"`, or `NULL`. Return auxiliary data as
+#'   it appeared on this date (one row per key, the most recent version active
+#'   on that date). `"latest"` uses today's date. Use `NULL` (default) to
+#'   return the full version history filtered by `report_time`. Mutually
+#'   exclusive with `report_time`. Base-pull mode only (when `source` is a
+#'   string).
 #' @param report_time String or [`epirange()`] specifying the version of the
 #'   auxiliary data to retrieve. Accepts comparison operators (e.g.,
 #'   `"<2025-10-16"`, `">=2025-10-16"`) or an [`epirange()`] for an inclusive
@@ -1851,6 +1852,10 @@ epidata_aux.default <- function(
     "reference_time",
     reference_time
   )
+
+  if (identical(snapshot_date, "latest")) {
+    snapshot_date <- Sys.Date()
+  }
 
   if (!is.null(snapshot_date)) {
     assert_date_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
