@@ -1,3 +1,9 @@
+# epidatr 1.3.1
+
+## Documentation
+
+- Updated vignettes (`epidatr`, `signal-discovery`, and `versioned-data`) to focus on V5 API workflows. Remove and redirect `v5-api-demo` vignette.
+
 # epidatr 1.3.0
 
 ## Deprecations

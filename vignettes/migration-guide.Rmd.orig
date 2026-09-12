@@ -91,7 +91,7 @@ the [documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.h
 
 ```{r value-columns}
 meta_sleepcycle <- epidata_meta(source = "sleepcycle")
-meta_sleepcycle$sleepcycle$value_columns
+meta_sleepcycle$value_columns
 ```
 
 ## A query, before and after
@@ -155,8 +155,8 @@ ranges:
 
 ```{r meta}
 meta <- epidata_meta(source = "nssp")
-meta$nssp$signals
-meta$nssp$time_value_range
+meta$signals
+meta$time_value_range
 ```
 
 If `epidata_meta()` does not know the source yet, keep using

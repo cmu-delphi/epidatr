@@ -11,44 +11,277 @@ vignette: >
 
 The Epidata API includes numerous data streams -- medical claims data, cases and deaths, mobility, and many others -- covering different geographic regions. This can make it a challenge to find the data stream that you are most interested in.
 
-Example queries with all the endpoint functions available in this package are
-given [below](#example-queries).
+Data streams fall into three categories: V5 sources, migrating endpoints, and historical endpoints (which include international sources and private endpoints requiring authentication).
 
 
-## Using the documentation
+## V5 sources
 
-The Epidata documentation lists all the data sources and signals available
-through the API for
-[COVID-19](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html) and
-for [other diseases](https://cmu-delphi.github.io/delphi-epidata/api/README.html#source-specific-parameters).
-The site also includes a search tool if you have a keyword (e.g. "Taiwan") in mind.
+The V5 API is the primary interface for active epidemiological surveillance data.
 
+### Online documentation and EpiPortal
 
-## Signal metadata
+The online documentation lists all data sources and signals available through the [Delphi V5 API](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html).
 
-Some endpoints have partner metadata available that provides information about
-the signals that are available, for example, what time ranges they are
-available for, and when they have been updated.
+For an interactive visual exploration, the [Delphi EpiPortal](https://delphi.cmu.edu/epiportal/) lets you filter sources and signals by disease, pathogen, geography, and date range, view live preview charts, and copy query code.
 
+### Exploring metadata with `epidata_meta()`
 
+For sources on the V5 API (queried with `epidata_snapshot()` and `epidata_archive()`), `epidata_meta()` is the primary metadata lookup.
 
-|Endpoint             |Description                         |
-|:--------------------|:-----------------------------------|
-|epidata_meta()       |Get cast-API source metadata        |
-|pub_covidcast_meta() |Metadata for the COVIDcast endpoint |
-|pub_fluview_meta()   |Metadata for the FluView endpoint   |
-|pub_meta()           |Metadata for the Delphi Epidata API |
+Called with no arguments, it lists all active V5 sources:
 
 
+``` r
+meta <- epidata_meta()
 
-## Interactive tooling
+names(meta)
+#> [1] "nssp"    "nhsn"    "pophive" "nwss"   
+#>  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]
+```
 
-We provide a couple `epidatr` functions to help find data sources and signals.
+Called with `source = ...`, it reports that source's available signals, supported geographic levels, reference date ranges, and version history:
 
-The `avail_endpoints()` function lists endpoints, each of which, except for
-COVIDcast, corresponds to a single data source. `avail_endpoints()` outputs a
-`tibble` of endpoints and brief descriptions, which explicitly state when they
-cover non-US locations:
+
+``` r
+nssp_meta <- epidata_meta(source = "nssp")
+
+nssp_meta$signals
+#> [1] "pct_ed_visits_ari"       "pct_ed_visits_combined" 
+#> [3] "pct_ed_visits_covid"     "pct_ed_visits_influenza"
+#>  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]
+nssp_meta$geo_types
+#> [1] "census_division" "census_region"   "county"          "hhs"            
+#>  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]
+nssp_meta$time_value_range
+#> NULL
+nssp_meta$version_range
+#> NULL
+```
+
+You can also convert the metadata into a tabular summary to search across all sources using `dplyr`:
+
+
+``` r
+signals_df <- bind_rows(
+  lapply(names(meta), function(src) {
+    tibble(
+      source = src,
+      signals = meta[[src]]$signals,
+      geo_types = paste(meta[[src]]$geo_types, collapse = ", ")
+    )
+  })
+)
+
+# Search for signals related to influenza
+signals_df %>%
+  filter(grepl("flu", signals, ignore.case = TRUE))
+#> # A tibble: 23 × 3
+#>   source signals                             geo_types                          
+#>   <chr>  <chr>                               <chr>                              
+#> 1 nssp   pct_ed_visits_influenza             census_division, census_region, co…
+#> 2 nssp   smoothed_pct_ed_visits_influenza    census_division, census_region, co…
+#> 3 nhsn   confirmed_admissions_flu_ew         census_division, census_region, hh…
+#> 4 nhsn   hosprep_confirmed_admissions_flu_ew census_division, census_region, hh…
+#> # ℹ 19 more rows
+```
+
+### Example queries for V5 sources
+
+The V5 API uses `epidata_snapshot()` to fetch data as of a given moment (latest by default) and `epidata_archive()` to fetch the full revision history. See `vignette("epidatr")` for a general introduction and `vignette("versioned-data")` for details on versioning.
+
+Here are examples across several major V5 surveillance streams:
+
+
+``` r
+# NSSP: Influenza emergency department visits
+epidata_snapshot(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = epirange("2024-10-01", "2024-10-15")
+)
+#> # A tibble: 2 × 7
+#>   signal        report_time geo_type geo_value fill_method reference_time  value
+#>   <chr>         <date>      <chr>    <chr>     <chr>       <date>          <dbl>
+#> 1 pct_ed_visit… 2026-06-26  state    pa        source      2024-10-05     0.0500
+#> 2 pct_ed_visit… 2026-06-26  state    pa        source      2024-10-12     0.0700
+
+# NHSN: Confirmed influenza hospital admissions
+epidata_snapshot(
+  source = "nhsn",
+  signals = "confirmed_admissions_flu_ew",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = epirange("2024-10-01", "2024-10-21")
+)
+#> # A tibble: 3 × 7
+#>   signal         report_time geo_type geo_value fill_method reference_time value
+#>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 confirmed_adm… 2026-06-26  state    pa        source      2024-10-19         6
+#> 2 confirmed_adm… 2026-06-26  state    pa        source      2024-10-12        26
+#> 3 confirmed_adm… 2026-06-26  state    pa        source      2024-10-05        61
+
+# POPHIVE: Outpatient COVID-19 emergency visits
+epidata_snapshot(
+  source = "pophive",
+  signals = "covid_pct_ed",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = epirange("2024-10-01", "2024-10-15")
+)
+#> # A tibble: 14 × 8
+#>   signal     report_time geo_type geo_value fill_method reference_time age_group
+#>   <chr>      <date>      <chr>    <chr>     <chr>       <date>         <chr>    
+#> 1 covid_pct… 2026-07-31  state    pa        source      2024-10-12     50-64    
+#> 2 covid_pct… 2026-08-14  state    pa        source      2024-10-05     <1       
+#> 3 covid_pct… 2026-08-14  state    pa        source      2024-10-05     1-4      
+#> 4 covid_pct… 2026-08-14  state    pa        source      2024-10-05     18-49    
+#> # ℹ 10 more rows
+#> # ℹ 1 more variable: value <dbl>
+
+# NWSS: Wastewater SARS-CoV-2 concentrations
+epidata_snapshot(
+  source = "nwss",
+  signals = "covid_avg_conc",
+  geo_type = "sewershed",
+  geo_values = "128",
+  reference_time = epirange("2024-12-01", "2024-12-15")
+)
+#> # A tibble: 4 × 10
+#>   signal   report_time geo_type geo_value fill_method reference_time nwss_source
+#>   <chr>    <date>      <chr>    <chr>     <chr>       <date>         <chr>      
+#> 1 covid_a… 2026-06-26  sewersh… 128       source      2024-12-03     CDC_Verily 
+#> 2 covid_a… 2026-06-26  sewersh… 128       source      2024-12-12     CDC_Verily 
+#> 3 covid_a… 2026-06-26  sewersh… 128       source      2024-12-10     CDC_Verily 
+#> 4 covid_a… 2026-06-26  sewersh… 128       source      2024-12-05     CDC_Verily 
+#> # ℹ 3 more variables: sample_index <chr>, pcr_target <chr>, value <dbl>
+
+# Archive: Revision history for a single reference date
+epidata_archive(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = "2024-12-07",
+  report_time = epirange("2024-12-01", "2024-12-15")
+)
+#> # A tibble: 1 × 7
+#>   signal         report_time geo_type geo_value fill_method reference_time value
+#>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_ed_visits… 2024-12-13  state    pa        source      2024-12-07     0.550
+```
+
+
+## Migrating endpoints
+
+Datasets that originated in the legacy API like `pub_covidcast()`, `pub_covidcast_meta()`, `pub_fluview()`, `pub_fluview_clinical()`, `pub_fluview_meta()`, `pub_flusurv()`, and `pub_meta()` are transitioning to V5.
+
+### Exploring legacy COVIDcast sources with `covidcast_epidata()`
+
+For datasets still queried through the legacy `pub_covidcast()` function, `covidcast_epidata()` describes all available COVIDcast data sources and signals:
+
+
+``` r
+covid_sources <- covidcast_epidata()
+head(covid_sources$sources, n = 2)
+#> $chng
+#> [1] "Change Healthcare"
+#> [1] "chng"
+#> [1] "Change Healthcare is a healthcare technology company that aggregates medical claims data from many healthcare providers. This source includes aggregated counts of claims with confirmed COVID-19 or COVID-related symptoms. All claims data has been de-identified in accordance with HIPAA privacy regulations. "
+#> # A tibble: 8 × 2
+#>   signal                        short_description                               
+#>   <chr>                         <chr>                                           
+#> 1 smoothed_outpatient_cli       Estimated percentage of outpatient doctor visit…
+#> 2 smoothed_adj_outpatient_cli   Estimated percentage of outpatient doctor visit…
+#> 3 smoothed_outpatient_covid     COVID-Confirmed Doctor Visits                   
+#> 4 smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits                   
+#> # ℹ 4 more rows
+#> 
+#> $`covid-act-now`
+#> [1] "Covid Act Now (CAN)"
+#> [1] "covid-act-now"
+#> [1] "COVID Act Now (CAN) tracks COVID-19 testing statistics, such as positivity rates and total tests performed. This source only includes CAN data from the CDC's COVID-19 Integrated County View."
+#> # A tibble: 2 × 2
+#>   signal                       short_description                                
+#>   <chr>                        <chr>                                            
+#> 1 pcr_specimen_positivity_rate Proportion of PCR specimens tested that have a p…
+#> 2 pcr_specimen_total_tests     Total number of PCR specimens tested
+```
+
+Each source is included as an entry in the `covid_sources$sources` list, associated
+with a `tibble` describing included signals.
+
+If you use an editor that supports tab completion, such as RStudio, type
+`covid_sources$source$` and wait for the tab completion popup. You will be able to
+browse the list of data sources.
+
+
+``` r
+covid_sources$signals
+#> # A tibble: 520 × 3
+#>   source signal                        short_description                        
+#>   <chr>  <chr>                         <chr>                                    
+#> 1 chng   smoothed_outpatient_cli       Estimated percentage of outpatient docto…
+#> 2 chng   smoothed_adj_outpatient_cli   Estimated percentage of outpatient docto…
+#> 3 chng   smoothed_outpatient_covid     COVID-Confirmed Doctor Visits            
+#> 4 chng   smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits            
+#> # ℹ 516 more rows
+```
+
+If you use an editor that supports tab completion, type
+`covid_sources$signals$` and wait for the tab completion popup. You will be
+able to type the name of signals and have the autocomplete feature select
+them from the list for you. In the tab-completion popup, signal names are
+prefixed with the name of the data source for filtering convenience.
+
+_Note_ that some signal names have dashes in them, so to access them
+we rely on the backtick operator:
+
+
+``` r
+covid_sources$signals$`fb-survey:smoothed_cli`
+#> [1] "COVID-Like Symptoms (Unweighted 7-day average)"
+#> [1] "fb-survey:smoothed_cli"
+#> [1] "Estimated percentage of people with COVID-like illness "
+```
+
+### Example legacy query
+
+Legacy endpoints remain accessible while their sources transition:
+
+
+``` r
+pub_covidcast(
+  source = "fb-survey",
+  signals = "smoothed_accept_covid_vaccine",
+  geo_type = "state",
+  time_type = "day",
+  time_values = epirange(20201221, 20201225),
+  geo_values = "pa"
+)
+#> # A tibble: 5 × 15
+#>   geo_value signal     source geo_type time_type time_value direction issue     
+#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#> 1 pa        smoothed_… fb-su… state    day       2020-12-21        NA 2020-12-22
+#> 2 pa        smoothed_… fb-su… state    day       2020-12-22        NA 2020-12-23
+#> 3 pa        smoothed_… fb-su… state    day       2020-12-23        NA 2020-12-24
+#> 4 pa        smoothed_… fb-su… state    day       2020-12-24        NA 2020-12-25
+#> # ℹ 1 more row
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
+```
+
+See `vignette("migration-guide")` for the argument mapping from V4 to V5.
+
+
+## Historical endpoints
+
+Some datasets are not moving to V5 because data collection has ended. These endpoints remain available for historical reference using their original `pub_*` and `pvt_*` functions.
+
+### Exploring package endpoints with `avail_endpoints()`
+
+The `avail_endpoints()` function lists all endpoint functions in the package and provides brief descriptions, explicitly noting which endpoints cover non-US locations:
 
 
 ``` r
@@ -93,574 +326,238 @@ avail_endpoints()
 
 
 
-The `covidcast_epidata()` function lets you look more in-depth at the data
-sources available through the COVIDcast endpoint. The function describes
-all available data sources and signals:
+### Domestic historical sources
+
+These endpoints provide completed historical collections within the United States:
 
 
 ``` r
-covid_sources <- covidcast_epidata()
-head(covid_sources$sources, n = 2)
-#> $chng
-#> [1] "Change Healthcare"
-#> [1] "chng"
-#> [1] "Change Healthcare is a healthcare technology company that aggregates medical claims data from many healthcare providers. This source includes aggregated counts of claims with confirmed COVID-19 or COVID-related symptoms. All claims data has been de-identified in accordance with HIPAA privacy regulations. "
-#> # A tibble: 8 × 2
-#>   signal                        short_description                               
-#>   <chr>                         <chr>                                           
-#> 1 smoothed_outpatient_cli       Estimated percentage of outpatient doctor visit…
-#> 2 smoothed_adj_outpatient_cli   Estimated percentage of outpatient doctor visit…
-#> 3 smoothed_outpatient_covid     COVID-Confirmed Doctor Visits                   
-#> 4 smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits                   
-#> # ℹ 4 more rows
-#> 
-#> $`covid-act-now`
-#> [1] "Covid Act Now (CAN)"
-#> [1] "covid-act-now"
-#> [1] "COVID Act Now (CAN) tracks COVID-19 testing statistics, such as positivity rates and total tests performed. This source only includes CAN data from the CDC's COVID-19 Integrated County View."
-#> # A tibble: 2 × 2
-#>   signal                       short_description                                
-#>   <chr>                        <chr>                                            
-#> 1 pcr_specimen_positivity_rate Proportion of PCR specimens tested that have a p…
-#> 2 pcr_specimen_total_tests     Total number of PCR specimens tested
-```
+# Google Flu Trends: Historical flu search volume
+pub_gft(locations = "hhs1", epiweeks = epirange(201401, 201404))
+#> `pub_gft()` covers a data source that is no longer updated.
+#> ℹ Historical data remains available, but no new data is being ingested.
+#> ℹ See the "Endpoints kept for historical reference" section of
+#>   `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference>)
+#>   for details.
+#> This message is displayed once per session.
+#> # A tibble: 4 × 3
+#>   location epiweek      num
+#>   <chr>    <date>     <dbl>
+#> 1 hhs1     2013-12-29  1918
+#> 2 hhs1     2014-01-05  2114
+#> 3 hhs1     2014-01-12  2294
+#> 4 hhs1     2014-01-19  1896
 
-Each source is included as an entry in the `covid_sources$sources` list, associated
-with a `tibble` describing included signals.
-
-If you use an editor that supports tab completion, such as RStudio, type
-`covid_sources$source$` and wait for the tab completion popup. You will be able to
-browse the list of data sources.
-
-
-``` r
-covid_sources$signals
-#> # A tibble: 538 × 3
-#>   source signal                        short_description                        
-#>   <chr>  <chr>                         <chr>                                    
-#> 1 chng   smoothed_outpatient_cli       Estimated percentage of outpatient docto…
-#> 2 chng   smoothed_adj_outpatient_cli   Estimated percentage of outpatient docto…
-#> 3 chng   smoothed_outpatient_covid     COVID-Confirmed Doctor Visits            
-#> 4 chng   smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits            
-#> # ℹ 534 more rows
-```
-
-If you use an editor that supports tab completion, type
-`covid_sources$signals$` and wait for the tab completion popup. You will be
-able to type the name of signals and have the autocomplete feature select
-them from the list for you. In the tab-completion popup, signal names are
-prefixed with the name of the data source for filtering convenience.
-
-_Note_ that some signal names have dashes in them, so to access them
-we rely on the backtick operator:
-
-
-``` r
-covid_sources$signals$`fb-survey:smoothed_cli`
-#> [1] "COVID-Like Symptoms (Unweighted 7-day average)"
-#> [1] "fb-survey:smoothed_cli"
-#> [1] "Estimated percentage of people with COVID-like illness "
-```
-
-These signal objects can be used directly to fetch data, without requiring us to use
-the `pub_covidcast()` function. Simply use the `$call` attribute of the object:
-
-
-``` r
-epidata <- covid_sources$signals$`fb-survey:smoothed_cli`$call(
-  "state", "pa", epirange(20210405, 20210410)
-)
-knitr::kable(epidata)
-```
-
-
-
-|geo_value |signal       |source    |geo_type |time_type |time_value | direction|issue      | lag| missing_value| missing_stderr| missing_sample_size|     value|    stderr| sample_size|
-|:---------|:------------|:---------|:--------|:---------|:----------|---------:|:----------|---:|-------------:|--------------:|-------------------:|---------:|---------:|-----------:|
-|pa        |smoothed_cli |fb-survey |state    |day       |2021-04-05 |        NA|2021-04-10 |   5|             0|              0|                   0| 0.7157576| 0.0729992|    10894.01|
-|pa        |smoothed_cli |fb-survey |state    |day       |2021-04-06 |        NA|2021-04-11 |   5|             0|              0|                   0| 0.6932097| 0.0708692|    10862.01|
-|pa        |smoothed_cli |fb-survey |state    |day       |2021-04-07 |        NA|2021-04-12 |   5|             0|              0|                   0| 0.6859343| 0.0706536|    10790.01|
-|pa        |smoothed_cli |fb-survey |state    |day       |2021-04-08 |        NA|2021-04-13 |   5|             0|              0|                   0| 0.6815110| 0.0713939|    10731.00|
-|pa        |smoothed_cli |fb-survey |state    |day       |2021-04-09 |        NA|2021-04-14 |   5|             0|              0|                   0| 0.7094162| 0.0721616|    10590.00|
-|pa        |smoothed_cli |fb-survey |state    |day       |2021-04-10 |        NA|2021-04-15 |   5|             0|              0|                   0| 0.7762399| 0.0760370|    10492.01|
-
-
-
-
-## Example Queries
-
-### COVIDcast Main Endpoint
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>
-
-County geo_values are [FIPS codes](https://en.wikipedia.org/wiki/List_of_United_States_FIPS_codes_by_county) and are discussed in the API docs [here](https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html). The example below is for Orange County, California.
-
-
-``` r
-pub_covidcast(
-  source = "fb-survey",
-  signals = "smoothed_accept_covid_vaccine",
-  geo_type = "county",
+# Wikipedia: Article page view counts
+pub_wiki(
+  articles = "influenza",
   time_type = "day",
-  time_values = epirange(20201221, 20201225),
-  geo_values = "06059"
+  time_values = epirange(20200101, 20200105)
 )
-#> # A tibble: 5 × 15
-#>   geo_value signal     source geo_type time_type time_value direction issue     
-#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
-#> 1 06059     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22
-#> 2 06059     smoothed_… fb-su… county   day       2020-12-22        NA 2020-12-23
-#> 3 06059     smoothed_… fb-su… county   day       2020-12-23        NA 2020-12-24
-#> 4 06059     smoothed_… fb-su… county   day       2020-12-24        NA 2020-12-25
+#> `pub_wiki()` covers a data source that is no longer updated.
+#> ℹ Historical data remains available, but no new data is being ingested.
+#> ℹ See the "Endpoints kept for historical reference" section of
+#>   `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference>)
+#>   for details.
+#> This message is displayed once per session.
+#> # A tibble: 5 × 6
+#>   article   date       count     total  hour value
+#>   <chr>     <date>     <dbl>     <dbl> <dbl> <dbl>
+#> 1 influenza 2020-01-01   676  82359844    -1  8.21
+#> 2 influenza 2020-01-02  1171 105590677    -1 11.1 
+#> 3 influenza 2020-01-03  1127 106237989    -1 10.6 
+#> 4 influenza 2020-01-04   967  91328987    -1 10.6 
 #> # ℹ 1 more row
-#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
-#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
-```
 
-The `covidcast` endpoint supports `*` in its time and geo fields:
-
-
-``` r
-pub_covidcast(
-  source = "fb-survey",
-  signals = "smoothed_accept_covid_vaccine",
-  geo_type = "county",
-  time_type = "day",
-  time_values = epirange(20201221, 20201225),
-  geo_values = "*"
+# COVID-19 hospitalizations: State-level timeseries as of a historical date
+pub_covid_hosp_state_timeseries(
+  states = "pa",
+  dates = epirange(20210101, 20210105)
 )
-#> # A tibble: 2,025 × 15
-#>   geo_value signal     source geo_type time_type time_value direction issue     
-#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
-#> 1 01000     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22
-#> 2 01073     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22
-#> 3 01089     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22
-#> 4 01097     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22
-#> # ℹ 2,021 more rows
-#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
-#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
-```
-
-### Other Covid Endpoints
-
-#### COVID-19 Hospitalization: Facility Lookup
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html>
-
-
-``` r
-pub_covid_hosp_facility_lookup(city = "southlake")
-#> # A tibble: 2 × 10
-#>   hospital_pk state ccn    hospital_name    address city  zip   hospital_subtype
-#>   <chr>       <chr> <chr>  <chr>            <chr>   <chr> <chr> <chr>           
-#> 1 450888      TX    450888 TEXAS HEALTH HA… 1545 E… SOUT… 76092 Short Term      
-#> 2 670132      TX    670132 METHODIST SOUTH… 421 E … SOUT… 76092 Short Term      
-#> # ℹ 2 more variables: fips_code <chr>, is_metro_micro <dbl>
-pub_covid_hosp_facility_lookup(state = "WY")
-#> # A tibble: 34 × 10
-#>   hospital_pk     state ccn   hospital_name address city  zip   hospital_subtype
-#>   <chr>           <chr> <chr> <chr>         <chr>   <chr> <chr> <chr>           
-#> 1 100 LANCASTER … WY    2020… 42091         <NA>    [C39… MAIN  390195          
-#> 2 2333 BIDDLE AVE WY    2020… 26163         POINT … [C23… HENRY 230146          
-#> 3 2333 BIDDLE AV… WY    2020… 26163         POINT … [C23… SELEC 232031          
-#> 4 2752 CENTURY B… WY    2020… 42011         POINT … [C39… SURGI 390316          
-#> # ℹ 30 more rows
-#> # ℹ 2 more variables: fips_code <chr>, is_metro_micro <dbl>
-```
-
-
-``` r
-# A non-example (there is no city called New York in Wyoming)
-pub_covid_hosp_facility_lookup(state = "WY", city = "New York")
-#> Error in `pub_covid_hosp_facility_lookup()`:
-#> ! only one of `state`, `ccn`, `city`, `zip`, or `fips_code` can be specified
-```
-
-#### COVID-19 Hospitalization by Facility
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html>
-
-
-``` r
-pub_covid_hosp_facility(
-  hospital_pks = "100075",
-  collection_weeks = epirange(20200101, 20200501)
-)
-#> # A tibble: 12 × 113
-#>   hospital_pk state ccn    hospital_name    address city  zip   hospital_subtype
-#>   <chr>       <chr> <chr>  <chr>            <chr>   <chr> <chr> <chr>           
-#> 1 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      
-#> 2 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      
-#> 3 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      
-#> 4 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      
-#> # ℹ 8 more rows
-#> # ℹ 105 more variables: fips_code <chr>, geocoded_hospital_address <chr>,
-#> #   hhs_ids <chr>, publication_date <date>, collection_week <date>,
-#> #   is_metro_micro <lgl>, total_beds_7_day_sum <dbl>,
-#> #   all_adult_hospital_beds_7_day_sum <dbl>,
-#> #   all_adult_hospital_inpatient_beds_7_day_sum <dbl>,
-#> #   inpatient_beds_used_7_day_sum <dbl>, …
-```
-
-#### COVID-19 Hospitalization by State
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html>
-
-
-``` r
-pub_covid_hosp_state_timeseries(states = "MA", dates = "20200510")
-#> # A tibble: 1 × 118
+#> `pub_covid_hosp_state_timeseries()` covers a data source that is no longer updated.
+#> ℹ Historical data remains available, but no new data is being ingested.
+#> ℹ See the "Endpoints kept for historical reference" section of
+#>   `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference>)
+#>   for details.
+#> This message is displayed once per session.
+#> # A tibble: 5 × 118
 #>   state geocoded_state issue      date       critical_staffing_shortage_today_…¹
-#>   <chr> <lgl>          <date>     <date>     <lgl>                              
-#> 1 MA    NA             2024-05-03 2020-05-10 FALSE                              
+#>   <chr> <chr>          <date>     <date>     <lgl>                              
+#> 1 PA    <NA>           2024-05-03 2021-01-01 TRUE                               
+#> 2 PA    <NA>           2024-05-03 2021-01-02 TRUE                               
+#> 3 PA    <NA>           2024-05-03 2021-01-03 TRUE                               
+#> 4 PA    <NA>           2024-05-03 2021-01-04 TRUE                               
+#> # ℹ 1 more row
 #> # ℹ abbreviated name: ¹​critical_staffing_shortage_today_yes
 #> # ℹ 113 more variables: critical_staffing_shortage_today_no <lgl>,
 #> #   critical_staffing_shortage_today_not_reported <lgl>,
 #> #   critical_staffing_shortage_anticipated_within_week_yes <lgl>,
 #> #   critical_staffing_shortage_anticipated_within_week_no <lgl>,
-#> #   critical_staffing_shortage_anticipated_within_week_not_reported <lgl>,
-#> #   hospital_onset_covid <dbl>, hospital_onset_covid_coverage <dbl>, …
+#> #   critical_staffing_shortage_anticipated_within_week_not_reported <lgl>, …
 ```
 
-### Flu Endpoints
+### International sources
 
-#### Delphi's ILINet forecasts
+A subset of historical endpoints provide surveillance data outside the United States:
 
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/delphi.html>
+<details id="international-endpoints">
+<summary>Examples of international endpoints</summary>
 
 
 ``` r
-del <- pub_delphi(system = "ec", epiweek = 201501)
-names(del[[1L]]$forecast)
-#> [1] "_version"  "baselines" "data"      "epiweek"  
-#>  [ reached 'max' / getOption("max.print") -- omitted 6 entries ]
-```
-
-#### FluSurv hospitalization data
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html>
-
-
-``` r
-pub_flusurv(locations = "ca", epiweeks = 202001)
-#> # A tibble: 1 × 34
-#>   release_date location season issue      epiweek      lag rate_age_0 rate_age_1
-#>   <date>       <chr>    <chr>  <date>     <date>     <dbl>      <dbl>      <dbl>
-#> 1 2025-11-03   CA       2019-… 2025-09-14 2019-12-29   298        8.6        0.8
-#> # ℹ 26 more variables: rate_age_2 <dbl>, rate_age_3 <dbl>, rate_age_4 <dbl>,
-#> #   rate_overall <dbl>, rate_age_5 <dbl>, rate_age_6 <dbl>, rate_age_7 <dbl>,
-#> #   rate_age_18t29 <dbl>, rate_age_30t39 <dbl>, rate_age_40t49 <dbl>,
-#> #   rate_age_5t11 <dbl>, rate_age_12t17 <dbl>, rate_age_lt18 <dbl>,
-#> #   rate_age_gte18 <dbl>, rate_age_1t4 <dbl>, rate_age_gte75 <dbl>,
-#> #   rate_age_0tlt1 <dbl>, rate_race_white <dbl>, rate_race_black <dbl>,
-#> #   rate_race_hisp <dbl>, rate_race_asian <dbl>, rate_race_natamer <dbl>, …
-```
-
-#### Fluview data
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview.html>
-
-
-``` r
-pub_fluview(regions = "nat", epiweeks = epirange(201201, 202001))
-#> # A tibble: 418 × 16
-#>   release_date region issue      epiweek      lag num_ili num_patients
-#>   <date>       <chr>  <date>     <date>     <dbl>   <dbl>        <dbl>
-#> 1 2017-10-24   nat    2017-10-01 2012-01-01   300   11992       678631
-#> 2 2017-10-24   nat    2017-10-01 2012-01-08   299   11543       747894
-#> 3 2017-10-24   nat    2017-10-01 2012-01-15   298   11939       724623
-#> 4 2017-10-24   nat    2017-10-01 2012-01-22   297   13209       784244
-#> # ℹ 414 more rows
-#> # ℹ 9 more variables: num_providers <dbl>, num_age_0 <dbl>, num_age_1 <dbl>,
-#> #   num_age_2 <dbl>, num_age_3 <dbl>, num_age_4 <dbl>, num_age_5 <dbl>,
-#> #   wili <dbl>, ili <dbl>
-```
-
-#### Fluview virological data from clinical labs
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html>
-
-
-``` r
-pub_fluview_clinical(regions = "nat", epiweeks = epirange(201601, 201701))
-#> # A tibble: 14 × 11
-#>   release_date region issue      epiweek      lag total_specimens total_a
-#>   <date>       <chr>  <date>     <date>     <dbl>           <dbl>   <dbl>
-#> 1 2018-10-08   nat    2018-09-23 2016-10-02   103           13380     120
-#> 2 2018-10-08   nat    2018-09-23 2016-10-09   102           14053     108
-#> 3 2018-10-08   nat    2018-09-23 2016-10-16   101           15110     115
-#> 4 2018-10-08   nat    2018-09-23 2016-10-23   100           15312     143
-#> # ℹ 10 more rows
-#> # ℹ 4 more variables: total_b <dbl>, percent_positive <dbl>, percent_a <dbl>,
-#> #   percent_b <dbl>
-```
-
-#### Fluview metadata
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html>
-
-
-``` r
-pub_fluview_meta()
-#> # A tibble: 1 × 3
-#>   latest_update latest_issue table_rows
-#>   <date>        <date>            <dbl>
-#> 1 2026-08-14    2026-08-02      2837197
-```
-
-#### Google Flu Trends data
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/gft.html>
-
-
-``` r
-pub_gft(locations = "hhs1", epiweeks = epirange(201201, 202001))
-#> # A tibble: 189 × 3
-#>   location epiweek      num
-#>   <chr>    <date>     <dbl>
-#> 1 hhs1     2012-01-01  1567
-#> 2 hhs1     2012-01-08  1339
-#> 3 hhs1     2012-01-15  1220
-#> 4 hhs1     2012-01-22  1271
-#> # ℹ 185 more rows
-```
-
-#### ECDC ILI
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html>
-
-
-``` r
-pub_ecdc_ili(regions = "Armenia", epiweeks = 201840)
-#> # A tibble: 1 × 6
-#>   release_date region  issue      epiweek      lag incidence_rate
-#>   <date>       <chr>   <date>     <date>     <dbl>          <dbl>
-#> 1 2020-03-26   Armenia 2020-03-15 2018-09-30    76              0
-```
-
-#### KCDC ILI
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html>
-
-
-``` r
-pub_kcdc_ili(regions = "ROK", epiweeks = 200436)
-#> # A tibble: 1 × 6
-#>   release_date region issue      epiweek      lag   ili
-#>   <date>       <chr>  <date>     <date>     <dbl> <dbl>
-#> 1 2020-11-03   ROK    2020-11-01 2004-09-05   843   0.6
-```
-
-#### NIDSS Flu
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html>
-
-
-``` r
-pub_nidss_flu(regions = "taipei", epiweeks = epirange(200901, 201301))
-#> # A tibble: 209 × 7
-#>   release_date region issue      epiweek      lag visits   ili
-#>   <date>       <chr>  <date>     <date>     <dbl>  <dbl> <dbl>
-#> 1 2015-08-04   Taipei 2015-07-26 2009-01-04   342  17021  1.14
-#> 2 2015-08-04   Taipei 2015-07-26 2009-01-11   341  20250  1.28
-#> 3 2015-08-04   Taipei 2015-07-26 2009-01-18   340  26337  1.36
-#> 4 2015-08-04   Taipei 2015-07-26 2009-01-25   339   8508  1.68
-#> # ℹ 205 more rows
-```
-
-#### ILI Nearby Nowcast
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html>
-
-
-``` r
-pub_nowcast(locations = "ca", epiweeks = epirange(202201, 202319))
-#> # A tibble: 36 × 4
-#>   location epiweek    value   std
-#>   <chr>    <date>     <dbl> <dbl>
-#> 1 ca       2022-01-02  3.63 0.276
-#> 2 ca       2022-01-09  3.54 0.276
-#> 3 ca       2022-01-16  3.51 0.276
-#> 4 ca       2022-01-23  2.51 0.279
-#> # ℹ 32 more rows
-```
-
-### Dengue Endpoints
-
-#### Delphi's Dengue Nowcast
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html>
-
-
-``` r
-pub_dengue_nowcast(locations = "pr", epiweeks = epirange(201401, 202301))
-#> # A tibble: 320 × 4
-#>   location epiweek    value   std
-#>   <chr>    <date>     <dbl> <dbl>
-#> 1 pr       2014-02-23  92.7  547.
-#> 2 pr       2014-03-02  96.8  601.
-#> 3 pr       2014-03-09  93.5  655.
-#> 4 pr       2014-03-16  87.8  707.
-#> # ℹ 316 more rows
-```
-
-#### NIDSS dengue
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html>
-
-
-``` r
-pub_nidss_dengue(locations = "taipei", epiweeks = epirange(200301, 201301))
-#> # A tibble: 523 × 3
-#>   location epiweek    count
-#>   <chr>    <date>     <dbl>
-#> 1 Taipei   2002-12-29     0
-#> 2 Taipei   2003-01-05     1
-#> 3 Taipei   2003-01-12     0
-#> 4 Taipei   2003-01-19     1
-#> # ℹ 519 more rows
-```
-
-### PAHO Dengue
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html>
-
-
-``` r
-pub_paho_dengue(regions = "ca", epiweeks = epirange(200201, 202319))
-#> # A tibble: 342 × 11
+# PAHO Dengue: Surveillance in the Americas
+pub_paho_dengue(regions = "ca", epiweeks = epirange(202001, 202004))
+#> `pub_paho_dengue()` covers a data source that is no longer updated.
+#> ℹ Historical data remains available, but no new data is being ingested.
+#> ℹ See the "Endpoints kept for historical reference" section of
+#>   `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference>)
+#>   for details.
+#> This message is displayed once per session.
+#> # A tibble: 4 × 11
 #>   release_date region serotype issue      epiweek      lag total_pop num_dengue
 #>   <date>       <chr>  <chr>    <date>     <date>     <dbl>     <dbl>      <dbl>
-#> 1 2020-08-07   CA     "  "     2020-08-02 2013-12-29   344         0          0
-#> 2 2020-08-07   CA     "  "     2020-08-02 2014-01-05   343         0          0
-#> 3 2020-08-07   CA     "  "     2020-08-02 2014-01-12   342         0          0
-#> 4 2020-08-07   CA     "  "     2020-08-02 2014-01-19   341         0          0
-#> # ℹ 338 more rows
+#> 1 2020-08-07   CA     "  "     2020-08-02 2019-12-29    31         0          0
+#> 2 2020-08-07   CA     "  "     2020-08-02 2020-01-05    30         0          0
+#> 3 2020-08-07   CA     "  "     2020-08-02 2020-01-12    29         0          0
+#> 4 2020-08-07   CA     "  "     2020-08-02 2020-01-19    28         0          0
 #> # ℹ 3 more variables: num_severe <dbl>, num_deaths <dbl>, incidence_rate <dbl>
+
+# ECDC ILI: Influenza-like illness in Europe
+pub_ecdc_ili(regions = "austria", epiweeks = epirange(201901, 201904))
+#> `pub_ecdc_ili()` covers a data source that is no longer updated.
+#> ℹ Historical data remains available, but no new data is being ingested.
+#> ℹ See the "Endpoints kept for historical reference" section of
+#>   `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference>)
+#>   for details.
+#> This message is displayed once per session.
+#> # A tibble: 3 × 6
+#>   release_date region  issue      epiweek      lag incidence_rate
+#>   <date>       <chr>   <date>     <date>     <dbl>          <dbl>
+#> 1 2020-03-26   Austria 2020-03-15 2019-01-06    62           787.
+#> 2 2020-03-26   Austria 2020-03-15 2019-01-13    61           855.
+#> 3 2020-03-26   Austria 2020-03-15 2019-01-20    60          1022.
+
+# KCDC ILI: Influenza-like illness in South Korea
+pub_kcdc_ili(regions = "ROK", epiweeks = epirange(201801, 201804))
+#> `pub_kcdc_ili()` covers a data source that is no longer updated.
+#> ℹ Historical data remains available, but no new data is being ingested.
+#> ℹ See the "Endpoints kept for historical reference" section of
+#>   `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference>)
+#>   for details.
+#> This message is displayed once per session.
+#> # A tibble: 4 × 6
+#>   release_date region issue      epiweek      lag   ili
+#>   <date>       <chr>  <date>     <date>     <dbl> <dbl>
+#> 1 2020-11-03   ROK    2020-11-01 2017-12-31   148  71.8
+#> 2 2020-11-03   ROK    2020-11-01 2018-01-07   147  72.1
+#> 3 2020-11-03   ROK    2020-11-01 2018-01-14   146  69  
+#> 4 2020-11-03   ROK    2020-11-01 2018-01-21   145  59.6
+
+# Taiwan CDC NIDSS: Influenza outpatient visits
+pub_nidss_flu(regions = "nationwide", epiweeks = epirange(201801, 201804))
+#> `pub_nidss_flu()` covers a data source that is no longer updated.
+#> ℹ Historical data remains available, but no new data is being ingested.
+#> ℹ See the "Endpoints kept for historical reference" section of
+#>   `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference>)
+#>   for details.
+#> This message is displayed once per session.
+#> # A tibble: 4 × 7
+#>   release_date region     issue      epiweek      lag visits   ili
+#>   <date>       <chr>      <date>     <date>     <dbl>  <dbl> <dbl>
+#> 1 2018-03-12   Nationwide 2018-03-04 2017-12-31     9  84227  1.71
+#> 2 2018-03-12   Nationwide 2018-03-04 2018-01-07     8  86865  1.71
+#> 3 2018-03-12   Nationwide 2018-03-04 2018-01-14     7 111976  2.03
+#> 4 2018-03-12   Nationwide 2018-03-04 2018-01-21     6 117080  2.15
+
+# Taiwan CDC NIDSS: Dengue cases
+pub_nidss_dengue(locations = "nationwide", epiweeks = epirange(201801, 201804))
+#> `pub_nidss_dengue()` covers a data source that is no longer updated.
+#> ℹ Historical data remains available, but no new data is being ingested.
+#> ℹ See the "Endpoints kept for historical reference" section of
+#>   `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference>)
+#>   for details.
+#> This message is displayed once per session.
+#> # A tibble: 4 × 3
+#>   location   epiweek    count
+#>   <chr>      <date>     <dbl>
+#> 1 nationwide 2017-12-31     0
+#> 2 nationwide 2018-01-07     2
+#> 3 nationwide 2018-01-14     2
+#> 4 nationwide 2018-01-21     0
+
+# PAHO Dengue Nowcasts: Delphi nowcast estimates for the Americas
+pub_dengue_nowcast(locations = "ca", epiweeks = epirange(202001, 202004))
+#> `pub_dengue_nowcast()` covers a data source that is no longer updated.
+#> ℹ Historical data remains available, but no new data is being ingested.
+#> ℹ See the "Endpoints kept for historical reference" section of
+#>   `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference>)
+#>   for details.
+#> This message is displayed once per session.
+#> Warning: epidata warning: `no results`
+#> # A tibble: 0 × 0
 ```
 
-### Other Endpoints
+</details>
 
-#### Wikipedia Access
+### Private endpoints
 
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/wiki.html>
-
-
-``` r
-pub_wiki(
-  language = "en",
-  articles = "influenza",
-  time_type = "week",
-  time_values = epirange(202001, 202319)
-)
-#> # A tibble: 64 × 6
-#>   article   count     total  hour epiweek    value
-#>   <chr>     <dbl>     <dbl> <dbl> <date>     <dbl>
-#> 1 influenza  6516 663604044    -1 2019-12-29  9.82
-#> 2 influenza 10244 789885521    -1 2020-01-05 13.0 
-#> 3 influenza 10728 783760384    -1 2020-01-12 13.7 
-#> 4 influenza 24843 785222292    -1 2020-01-19 31.6 
-#> # ℹ 60 more rows
-```
-
-### Private methods
-
-These require private access keys to use (separate from the Delphi Epidata API key).
-To actually run these locally, you will need to store these secrets in your `.Reviron` file, or set them as environmental variables.
+Some private endpoints require a dedicated secret key passed via the `auth` argument (separate from the standard Epidata API key). Store these in your `.Renviron` file or environment variables:
 
 <details id="private-endpoints">
-
 <summary>Usage of private endpoints</summary>
 
-#### CDC
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/cdc.html>
-
-
-``` r
-pvt_cdc(auth = Sys.getenv("SECRET_API_AUTH_CDC"), epiweeks = epirange(202003, 202304), locations = "ma")
-```
-
-#### Dengue Digital Surveillance Sensors
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html>
-
-
-``` r
-pvt_dengue_sensors(
-  auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
-  names = "ght",
-  locations = "ag",
-  epiweeks = epirange(201404, 202004)
+```r
+# CDC Web Metrics: Website traffic for select topics
+pvt_cdc(
+  auth = Sys.getenv("SECRET_API_AUTH_CDC"),
+  epiweeks = epirange(202003, 202304),
+  locations = "ma"
 )
-```
 
-#### Google Health Trends
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/ght.html>
-
-
-``` r
-pvt_ght(
-  auth = Sys.getenv("SECRET_API_AUTH_GHT"),
-  epiweeks = epirange(199301, 202304),
-  locations = "ma",
-  query = "how to get over the flu"
-)
-```
-
-#### NoroSTAT metadata
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html>
-
-
-``` r
-pvt_meta_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"))
-```
-
-#### NoroSTAT data
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/norostat.html>
-
-
-``` r
-pvt_norostat(auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"), locations = "1", epiweeks = 201233)
-```
-
-#### Quidel Influenza testing
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/quidel.html>
-
-
-``` r
-pvt_quidel(auth = Sys.getenv("SECRET_API_AUTH_QUIDEL"), locations = "hhs1", epiweeks = epirange(200301, 202105))
-```
-
-#### Sensors
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
-
-
-``` r
+# Digital Surveillance Sensors: Delphi sensor estimates
 pvt_sensors(
   auth = Sys.getenv("SECRET_API_AUTH_SENSORS"),
-  names = "sar3",
+  names = "delphi",
   locations = "nat",
-  epiweeks = epirange(200301, 202105)
+  epiweeks = epirange(202001, 202010)
 )
-```
 
-#### Twitter
-
-API docs: <https://cmu-delphi.github.io/delphi-epidata/api/twitter.html>
-
-
-``` r
+# Twitter / HealthTweets: Influenza and total tweet counts
 pvt_twitter(
   auth = Sys.getenv("SECRET_API_AUTH_TWITTER"),
-  locations = "nat",
-  time_type = "week",
-  time_values = epirange(200301, 202105)
+  locations = "hhs1",
+  dates = epirange(20200101, 20200115)
+)
+
+# Google Health Trends: Search queries
+pvt_ght(
+  auth = Sys.getenv("SECRET_API_AUTH_GHT"),
+  locations = "ca",
+  query = "cough",
+  dates = epirange(20200101, 20200115)
+)
+
+# CDC NoroSTAT: Norovirus outbreak data
+pvt_norostat(
+  auth = Sys.getenv("SECRET_API_AUTH_NOROSTAT"),
+  location = "midatl",
+  epiweeks = epirange(202001, 202010)
+)
+
+# PAHO Dengue Sensors: Digital dengue surveillance
+pvt_dengue_sensors(
+  auth = Sys.getenv("SECRET_API_AUTH_DENGUE_SENSORS"),
+  locations = "ca",
+  epiweeks = epirange(202001, 202010)
 )
 ```
 

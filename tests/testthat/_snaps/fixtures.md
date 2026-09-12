@@ -128,27 +128,26 @@
     Code
       str(result, max.level = 3)
     Output
-      List of 1
-       $ nssp:List of 8
-        ..$ report_time_range   :List of 2
-        .. ..$ latest: chr "2026-08-19T00:00:00"
-        .. ..$ first : chr "2024-04-18T00:00:00"
-        ..$ reference_time_range:List of 2
-        .. ..$ latest: chr "2026-08-15"
-        .. ..$ first : chr "2022-10-01"
-        ..$ signals             : chr [1:9] "pct_ed_visits_ari" "pct_ed_visits_combined" "pct_ed_visits_covid" "pct_ed_visits_influenza" ...
-        ..$ geo_types           : chr [1:9] "census_division" "census_region" "county" "hhs" ...
-        ..$ key_columns         : chr [1:6] "signal" "report_time" "geo_type" "geo_value" ...
-        ..$ extra_key_columns   : list()
-        ..$ value_columns       : chr "value"
-        ..$ column_types        :List of 7
-        .. ..$ report_time   : chr "timestamp without time zone"
-        .. ..$ signal        : chr "text"
-        .. ..$ geo_type      : chr "text"
-        .. ..$ geo_value     : chr "text"
-        .. ..$ fill_method   : chr "text"
-        .. ..$ reference_time: chr "date"
-        .. ..$ value         : chr "double precision"
+      List of 8
+       $ report_time_range   :List of 2
+        ..$ latest: chr "2026-08-19T00:00:00"
+        ..$ first : chr "2024-04-18T00:00:00"
+       $ reference_time_range:List of 2
+        ..$ latest: chr "2026-08-15"
+        ..$ first : chr "2022-10-01"
+       $ signals             : chr [1:9] "pct_ed_visits_ari" "pct_ed_visits_combined" "pct_ed_visits_covid" "pct_ed_visits_influenza" ...
+       $ geo_types           : chr [1:9] "census_division" "census_region" "county" "hhs" ...
+       $ key_columns         : chr [1:6] "signal" "report_time" "geo_type" "geo_value" ...
+       $ extra_key_columns   : list()
+       $ value_columns       : chr "value"
+       $ column_types        :List of 7
+        ..$ report_time   : chr "timestamp without time zone"
+        ..$ signal        : chr "text"
+        ..$ geo_type      : chr "text"
+        ..$ geo_value     : chr "text"
+        ..$ fill_method   : chr "text"
+        ..$ reference_time: chr "date"
+        ..$ value         : chr "double precision"
 
 # fixture parses: aux-data.csv
 
