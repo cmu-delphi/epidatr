@@ -1478,6 +1478,8 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #'   Internally maps to the `report_time_query` API parameter.
 #' @param issues `r lifecycle::badge("deprecated")` Use `report_time` instead.
 #' @param time_values `r lifecycle::badge("deprecated")` Use `reference_time` instead.
+#' @param limit integer or `NULL`. Maximum number of rows to return. `NULL`
+#'   (default) or `-1` requests no limit.
 #' @param ... Named filters on extra key columns beyond `geo_value`, such as
 #'   `pcr_target = "sars-cov-2"` or `sample_index = c("a", "b")`. Each key
 #'   accepts one or more values (matched as OR) and is sent server-side via the
@@ -1522,6 +1524,7 @@ epidata_snapshot <- function(
   fill_method = NULL,
   snapshot_date = NULL,
   as_of = lifecycle::deprecated(),
+  limit = NULL,
   fetch_args = fetch_args_list()
 ) {
   if (missing(source) || missing(signals) || missing(geo_type)) {
@@ -1532,6 +1535,7 @@ epidata_snapshot <- function(
   }
 
   extra_keys <- .serialize_key_filters(rlang::list2(...))
+  assert_limit_param(limit)
 
   if (lifecycle::is_present(as_of)) {
     lifecycle::deprecate_warn(
@@ -1587,7 +1591,8 @@ epidata_snapshot <- function(
         geo_type = g,
         fill_method = fill_method,
         snapshot_date = snapshot_date,
-        extra_keys = extra_keys
+        extra_keys = extra_keys,
+        limit = limit
       ),
       meta = list(
         create_epidata_field_info("signal", "text"),
@@ -1637,6 +1642,7 @@ epidata_archive <- function(
   fill_method = NULL,
   report_time = "*",
   issues = lifecycle::deprecated(),
+  limit = NULL,
   fetch_args = fetch_args_list()
 ) {
   if (missing(source) || missing(signals) || missing(geo_type)) {
@@ -1647,6 +1653,7 @@ epidata_archive <- function(
   }
 
   extra_keys <- .serialize_key_filters(rlang::list2(...))
+  assert_limit_param(limit)
 
   assert_character_param("source", source, len = 1)
   assert_character_param("signals", signals)
@@ -1698,7 +1705,8 @@ epidata_archive <- function(
         geo_type = g,
         fill_method = fill_method,
         report_time_query = version_query,
-        extra_keys = extra_keys
+        extra_keys = extra_keys,
+        limit = limit
       ),
       meta = list(
         create_epidata_field_info("signal", "text"),
@@ -1786,6 +1794,9 @@ epidata_archive <- function(
 #'   merge mode, when no filters are given, they are inferred from the base:
 #'   each key it narrows to at most 10 distinct values is filtered to those.
 #' @param columns A character vector of columns to return. By default, all columns are returned.
+#' @param limit integer or `NULL`. Maximum number of rows to return. `NULL`
+#'   (default) or `-1` requests no limit. Base-pull mode only (when `source`
+#'   is a string).
 #' @inheritParams .epidatr_shared_params
 #' @return A [`tibble::tibble`].
 #' @seealso [epidata_snapshot()], [epidata_archive()], [epidata_meta()]
@@ -1805,10 +1816,12 @@ epidata_aux.default <- function(
   report_time = "*",
   issues = lifecycle::deprecated(),
   columns = NULL,
+  limit = NULL,
   fetch_args = fetch_args_list()
 ) {
   key_filters <- rlang::list2(...)
   assert_character_param("source", source, len = 1)
+  assert_limit_param(limit)
 
   if (lifecycle::is_present(time_values)) {
     lifecycle::deprecate_warn(
@@ -1853,7 +1866,8 @@ epidata_aux.default <- function(
       source = source,
       report_time_query = report_time_query,
       filtered_keys = filtered_keys,
-      columns = columns
+      columns = columns,
+      limit = limit
     ),
     # Only the aux key columns are typed (nwss's schema).
     # Extend for new aux sources whose keys differ.
@@ -2010,6 +2024,7 @@ epidata <- function(
   as_of = lifecycle::deprecated(),
   report_time = NULL,
   issues = lifecycle::deprecated(),
+  limit = NULL,
   fetch_args = fetch_args_list()
 ) {
   if (
@@ -2039,6 +2054,7 @@ epidata <- function(
       fill_method = fill_method,
       report_time = if (!is.null(report_time)) report_time else "*",
       issues = issues,
+      limit = limit,
       fetch_args = fetch_args
     )
   } else {
@@ -2053,6 +2069,7 @@ epidata <- function(
       fill_method = fill_method,
       snapshot_date = snapshot_date,
       as_of = as_of,
+      limit = limit,
       fetch_args = fetch_args
     )
   }

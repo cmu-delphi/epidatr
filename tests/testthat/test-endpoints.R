@@ -195,6 +195,30 @@ test_that("epidata* and epidata_meta work as expected", {
   expect_equal(nrow(res_time_range), 2)
 })
 
+test_that("limit is forwarded to the cast-API request and validated", {
+  fa <- fetch_args_list(dry_run = TRUE)
+  calls <- list(
+    epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", limit = 100, fetch_args = fa),
+    epidata_archive(source = "nssp", signals = "sig1", geo_type = "state", limit = 100, fetch_args = fa),
+    epidata_aux("nwss", limit = 100, fetch_args = fa),
+    epidata(source = "nssp", signals = "sig1", geo_type = "state", limit = 100, fetch_args = fa)
+  )
+  for (call in calls) expect_match(call$request$url, "limit=100")
+
+  # NULL (default) omits the param entirely
+  no_limit <- epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", fetch_args = fa)
+  expect_no_match(no_limit$request$url, "limit=")
+
+  expect_error(
+    epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", limit = 0),
+    class = "epidatr__invalid_limit"
+  )
+  expect_error(
+    epidata_archive(source = "nssp", signals = "sig1", geo_type = "state", limit = -2),
+    class = "epidatr__invalid_limit"
+  )
+})
+
 test_that("snapshot/archive/epidata send ... key filters server-side as extra_keys", {
   snap <- epidata_snapshot(
     source = "nwss", signals = "sig1", geo_type = "county",
