@@ -175,6 +175,12 @@ print.epidata_call <- function(x, ...) {
 #' @param reference_week_day the day of the week to use as the reference day
 #'   when parsing epiweeks to dates (happens if `disable_date_parsing` is `FALSE`)
 #'   Defaults to 1 Sunday (the first day of the week).
+#' @param limit integer or `NULL`. cast-API only (`epidata_snapshot()`,
+#'   `epidata_archive()`, `epidata_aux()`, `epidata()`): maximum number of rows
+#'   to return. `NULL` (default) or `-1` requests no limit. The underlying
+#'   query has no stable sort order, so `limit` does not guarantee the same
+#'   rows (or even the same count) across repeated calls; use it only to
+#'   preview or debug a query, never as a substitute for filtering.
 #' @return A `fetch_args` object containing all the specified options
 #' @export
 #' @aliases fetch_args
@@ -192,7 +198,8 @@ fetch_args_list <- function(
   debug = lifecycle::deprecated(),
   format_type = lifecycle::deprecated(),
   refresh_cache = FALSE,
-  reference_week_day = 1
+  reference_week_day = 1,
+  limit = NULL
 ) {
   # Deprecation warnings
   if (lifecycle::is_present(debug)) {
@@ -247,6 +254,7 @@ fetch_args_list <- function(
     len = 1L,
     any.missing = FALSE
   )
+  assert_limit_param(limit)
 
   structure(
     list(
@@ -259,7 +267,8 @@ fetch_args_list <- function(
       base_url = base_url,
       dry_run = dry_run,
       refresh_cache = refresh_cache,
-      reference_week_day = reference_week_day
+      reference_week_day = reference_week_day,
+      limit = limit
     ),
     class = "fetch_args"
   )
@@ -270,6 +279,21 @@ print.fetch_args <- function(x, ...) {
   cli::cli_h1("<fetch_args> object:")
   # Print all non-class fields.
   cli::cli_dl(x[attr(x, "names")])
+}
+
+#' Warn that `limit` has no effect outside the V5 cast-API endpoints
+#' @keywords internal
+warn_limit_unsupported <- function(epidata_call, fetch_args) {
+  if (is.null(fetch_args$limit) || identical(epidata_call$api_version, "cast")) {
+    return(invisible())
+  }
+  cli::cli_warn(
+    "{.arg limit} is only supported by the V5 cast-API endpoints \\
+     ({.fn epidata_snapshot}, {.fn epidata_archive}, {.fn epidata_aux}, {.fn epidata}); ignored here.",
+    .frequency = "regularly",
+    .frequency_id = "epidatr.limit_ignored",
+    class = "epidatr__limit_ignored"
+  )
 }
 
 #' Fetches the data
@@ -288,6 +312,7 @@ print.fetch_args <- function(x, ...) {
 fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
+  warn_limit_unsupported(epidata_call, fetch_args)
 
   if (!is.null(fetch_args$base_url)) {
     epidata_call <- with_base_url(epidata_call, fetch_args$base_url)
@@ -361,6 +386,7 @@ request_epidata <- function(
 ) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
+  warn_limit_unsupported(epidata_call, fetch_args)
 
   if (!is.null(fetch_args$base_url)) {
     epidata_call <- with_base_url(epidata_call, fetch_args$base_url)

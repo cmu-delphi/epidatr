@@ -6,7 +6,7 @@
         "names": {
           "type": "character",
           "attributes": {},
-          "value": ["fields", "disable_date_parsing", "disable_data_frame_parsing", "disable_missing_meta_warning", "return_empty", "timeout_seconds", "base_url", "dry_run", "refresh_cache", "reference_week_day"]
+          "value": ["fields", "disable_date_parsing", "disable_data_frame_parsing", "disable_missing_meta_warning", "return_empty", "timeout_seconds", "base_url", "dry_run", "refresh_cache", "reference_week_day", "limit"]
         },
         "class": {
           "type": "character",
@@ -60,6 +60,9 @@
           "type": "double",
           "attributes": {},
           "value": [1]
+        },
+        {
+          "type": "NULL"
         }
       ]
     }
@@ -72,7 +75,7 @@
         "names": {
           "type": "character",
           "attributes": {},
-          "value": ["fields", "disable_date_parsing", "disable_data_frame_parsing", "disable_missing_meta_warning", "return_empty", "timeout_seconds", "base_url", "dry_run", "refresh_cache", "reference_week_day"]
+          "value": ["fields", "disable_date_parsing", "disable_data_frame_parsing", "disable_missing_meta_warning", "return_empty", "timeout_seconds", "base_url", "dry_run", "refresh_cache", "reference_week_day", "limit"]
         },
         "class": {
           "type": "character",
@@ -130,6 +133,9 @@
           "type": "double",
           "attributes": {},
           "value": [1]
+        },
+        {
+          "type": "NULL"
         }
       ]
     }
