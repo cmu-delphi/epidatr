@@ -1,3 +1,11 @@
+# epidatr 1.3.1
+
+## New features
+
+- `epidata_snapshot()`, `epidata_archive()`, `epidata_aux()` (base-pull mode),
+  and `epidata()` gain a `limit` argument, capping the number of rows
+  returned by the cast-API. Defaults to `NULL` (no limit). `-1` has the same effect.
+
 # epidatr 1.3.0
 
 ## Deprecations
