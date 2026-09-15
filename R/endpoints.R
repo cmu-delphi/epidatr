@@ -1453,9 +1453,9 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #'   Use [epidata_meta()] to discover available sources.
 #' @param signals character vector. One or more signals to query for the given
 #'   source; comma-joined strings (e.g., `"sig1,sig2"`) are also accepted. Use
-#'   [epidata_meta()] to discover available signals. A separate API request is
-#'   made per signal and geo type (the cast-API only accepts one of each per
-#'   request) and the results are combined.
+#'   [epidata_meta()] to discover available signals. All signals are sent
+#'   comma-joined in a single request per geo type (the cast-API only accepts
+#'   one geo type per request) and the results are combined.
 #' @param geo_type character vector. One or more geography types to query
 #'   (e.g., `"state"`, `"nation"`, `"county"`); comma-joined strings are also
 #'   accepted. Use [epidata_meta()] to discover available geo types for a given
@@ -1576,14 +1576,14 @@ epidata_snapshot <- function(
   signals <- unique(unlist(strsplit(signals, ",", fixed = TRUE)))
   geo_type <- unique(unlist(strsplit(geo_type, ",", fixed = TRUE)))
 
-  # One request per signal x geo_type: the cast-API accepts a single value of each per query.
-  combos <- expand.grid(signal = signals, geo_type = geo_type, stringsAsFactors = FALSE)
-  fetched <- purrr::map2(combos$signal, combos$geo_type, function(s, g) {
+  # One request per geo_type. The cast-API accepts a single geo_type per query,
+  # but signals are sent comma-joined in one request each.
+  fetched <- purrr::map(geo_type, function(g) {
     create_epidata_call(
       endpoint = "snapshot/",
       params = list(
         source = source,
-        signal = s,
+        signal = signals,
         geo_type = g,
         fill_method = fill_method,
         snapshot_date = snapshot_date,
@@ -1687,14 +1687,14 @@ epidata_archive <- function(
   signals <- unique(unlist(strsplit(signals, ",", fixed = TRUE)))
   geo_type <- unique(unlist(strsplit(geo_type, ",", fixed = TRUE)))
 
-  # One request per signal x geo_type: the cast-API accepts a single value of each per query.
-  combos <- expand.grid(signal = signals, geo_type = geo_type, stringsAsFactors = FALSE)
-  fetched <- purrr::map2(combos$signal, combos$geo_type, function(s, g) {
+  # One request per geo_type: the cast-API accepts a single geo_type per query,
+  # but signals are sent comma-joined in one request each.
+  fetched <- purrr::map(geo_type, function(g) {
     create_epidata_call(
       endpoint = "archive/",
       params = list(
         source = source,
-        signal = s,
+        signal = signals,
         geo_type = g,
         fill_method = fill_method,
         report_time_query = version_query,

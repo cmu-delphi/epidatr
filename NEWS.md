@@ -1,3 +1,8 @@
+# epidatr 1.3.1
+
+## Changes
+- `epidata_snapshot()` and `epidata_archive()` now send multiple `signals` comma-joined in a single request per `geo_type`, instead of issuing a separate request per signal (cmu-delphi/cast-api#103).
+
 # epidatr 1.3.0
 
 ## Deprecations
