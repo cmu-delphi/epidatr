@@ -14,6 +14,7 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_character_param.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_date_param.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_integerish_param.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_limit_param.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_timeset_param.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/avail_endpoints.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/cache_info.html</loc></url>
@@ -86,6 +87,7 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/validate_date_input.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/validate_timeset_input.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/validate_version_query.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/warn_limit_unsupported.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/warn_v4_sunset.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/with_base_url.html</loc></url>
 </urlset>

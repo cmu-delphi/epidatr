@@ -1,6 +1,25 @@
 # Changelog
 
+## epidatr 1.3.1
+
+### New features
+
+- [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
+  gains a `limit` argument, capping the number of rows the cast-API
+  returns for
+  [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+  [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md),
+  and
+  [`epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md).
+  Defaults to `NULL` (no limit); `-1` has the same effect. The
+  underlying query has no stable sort order, so `limit` does not
+  guarantee the same rows (or count) across repeated calls. Use it only
+  to preview or debug a query, not as a real filter.
+
 ## epidatr 1.3.0
+
+CRAN release: 2026-08-28
 
 ### Deprecations
 

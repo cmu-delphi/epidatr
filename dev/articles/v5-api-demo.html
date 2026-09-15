@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.0</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -316,7 +316,7 @@ signal pull.</p>
 <code class="sourceCode R"><span><span class="co"># Filter the base dataset to only one site, so the auxiliary</span></span>
 <span><span class="co"># pull stays small for this example</span></span>
 <span><span class="va">nwss_small</span> <span class="op">&lt;-</span> <span class="va">nwss_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">geo_value</span> <span class="op">==</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/nth.html" class="external-link">first</a></span><span class="op">(</span><span class="va">geo_value</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span><span class="va">geo_value</span> <span class="op">==</span> <span class="fu">first</span><span class="op">(</span><span class="va">geo_value</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">nwss_merged</span> <span class="op">&lt;-</span> <span class="va">nwss_small</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/epidata_aux.html">epidata_aux</a></span><span class="op">(</span><span class="op">)</span></span>

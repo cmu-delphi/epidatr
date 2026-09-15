@@ -21,7 +21,8 @@ fetch_args_list(
   debug = lifecycle::deprecated(),
   format_type = lifecycle::deprecated(),
   refresh_cache = FALSE,
-  reference_week_day = 1
+  reference_week_day = 1,
+  limit = NULL
 )
 ```
 
@@ -90,6 +91,19 @@ fetch_args_list(
   the day of the week to use as the reference day when parsing epiweeks
   to dates (happens if `disable_date_parsing` is `FALSE`) Defaults to 1
   Sunday (the first day of the week).
+
+- limit:
+
+  integer or `NULL`. cast-API only
+  ([`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+  [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md),
+  [`epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)):
+  maximum number of rows to return. `NULL` (default) or `-1` requests no
+  limit. The underlying query has no stable sort order, so `limit` does
+  not guarantee the same rows (or even the same count) across repeated
+  calls; use it only to preview or debug a query, never as a substitute
+  for filtering.
 
 ## Value
 

@@ -74,7 +74,7 @@ location.
 | `geo_value`, `geo_type`, `signal`, `value` | same |  |
 | `time_value` | `reference_time` | The date the value describes. Always a `Date`. |
 | `issue` | `report_time` | The date the value was published. Present in both snapshot and archive output. |
-| `source` | dropped | You queried by source; add it back with [`dplyr::mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) if you bind rows across sources. |
+| `source` | dropped | You queried by source; add it back with `dplyr::mutate()` if you bind rows across sources. |
 | `time_type` | dropped | No longer needed since times are `Date`s. |
 | `lag` | dropped | Compute as `report_time - reference_time`. |
 | `direction` | dropped | Was already deprecated in the covidcast API. |
