@@ -2,9 +2,12 @@
 
 ## New features
 
-- `epidata_snapshot()`, `epidata_archive()`, `epidata_aux()` (base-pull mode),
-  and `epidata()` gain a `limit` argument, capping the number of rows
-  returned by the cast-API. Defaults to `NULL` (no limit). `-1` has the same effect.
+- `fetch_args_list()` gains a `limit` argument, capping the number of rows
+  the cast-API returns for `epidata_snapshot()`, `epidata_archive()`,
+  `epidata_aux()`, and `epidata()`. Defaults to `NULL` (no limit); `-1` has
+  the same effect. The underlying query has no stable sort order, so `limit`
+  does not guarantee the same rows (or count) across repeated calls. Use it
+  only to preview or debug a query, not as a real filter.
 
 # epidatr 1.3.0
 

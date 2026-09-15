@@ -18,7 +18,6 @@ epidata_snapshot(
   fill_method = NULL,
   snapshot_date = NULL,
   as_of = lifecycle::deprecated(),
-  limit = NULL,
   fetch_args = fetch_args_list()
 )
 
@@ -33,7 +32,6 @@ epidata_archive(
   fill_method = NULL,
   report_time = "*",
   issues = lifecycle::deprecated(),
-  limit = NULL,
   fetch_args = fetch_args_list()
 )
 
@@ -50,7 +48,6 @@ epidata(
   as_of = lifecycle::deprecated(),
   report_time = NULL,
   issues = lifecycle::deprecated(),
-  limit = NULL,
   fetch_args = fetch_args_list()
 )
 }
@@ -96,9 +93,6 @@ the average of neighboring values, and \code{"fill_zero"} fills nulls with zero.
 latest available version.}
 
 \item{as_of}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{snapshot_date} instead.}
-
-\item{limit}{integer or \code{NULL}. Maximum number of rows to return. \code{NULL}
-(default) or \code{-1} requests no limit.}
 
 \item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}

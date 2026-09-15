@@ -195,27 +195,46 @@ test_that("epidata* and epidata_meta work as expected", {
   expect_equal(nrow(res_time_range), 2)
 })
 
-test_that("limit is forwarded to the cast-API request and validated", {
-  fa <- fetch_args_list(dry_run = TRUE)
+test_that("fetch_args_list(limit=) is forwarded to the cast-API request and validated", {
+  fa <- fetch_args_list(limit = 100, dry_run = TRUE)
   calls <- list(
-    epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", limit = 100, fetch_args = fa),
-    epidata_archive(source = "nssp", signals = "sig1", geo_type = "state", limit = 100, fetch_args = fa),
-    epidata_aux("nwss", limit = 100, fetch_args = fa),
-    epidata(source = "nssp", signals = "sig1", geo_type = "state", limit = 100, fetch_args = fa)
+    epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", fetch_args = fa),
+    epidata_archive(source = "nssp", signals = "sig1", geo_type = "state", fetch_args = fa),
+    epidata_aux("nwss", fetch_args = fa),
+    epidata(source = "nssp", signals = "sig1", geo_type = "state", fetch_args = fa)
   )
   for (call in calls) expect_match(call$request$url, "limit=100")
 
   # NULL (default) omits the param entirely
-  no_limit <- epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", fetch_args = fa)
+  no_limit <- epidata_snapshot(
+    source = "nssp", signals = "sig1", geo_type = "state",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
   expect_no_match(no_limit$request$url, "limit=")
 
-  expect_error(
-    epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", limit = 0),
-    class = "epidatr__invalid_limit"
+  expect_error(fetch_args_list(limit = 0), class = "epidatr__invalid_limit")
+  expect_error(fetch_args_list(limit = -2), class = "epidatr__invalid_limit")
+})
+
+test_that("limit warns when set on a non-cast (V4) endpoint and is silently ignored", {
+  expect_warning(
+    pub_covidcast(
+      source = "jhu-csse",
+      signals = "confirmed_7dav_incidence_prop",
+      time_type = "day",
+      geo_type = "state",
+      time_values = "*",
+      geo_values = "ca",
+      fetch_args = fetch_args_list(limit = 100, dry_run = TRUE)
+    ),
+    class = "epidatr__limit_ignored"
   )
-  expect_error(
-    epidata_archive(source = "nssp", signals = "sig1", geo_type = "state", limit = -2),
-    class = "epidatr__invalid_limit"
+
+  expect_no_warning(
+    epidata_snapshot(
+      source = "nssp", signals = "sig1", geo_type = "state",
+      fetch_args = fetch_args_list(limit = 100, dry_run = TRUE)
+    )
   )
 })
 
