@@ -16,6 +16,7 @@ epidata_aux(source, ...)
   report_time = "*",
   issues = lifecycle::deprecated(),
   columns = NULL,
+  limit = NULL,
   fetch_args = fetch_args_list()
 )
 
@@ -46,6 +47,10 @@ to retrieve. Base-pull mode only (when \code{source} is a string).}
 \item{issues}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{report_time} instead.}
 
 \item{columns}{A character vector of columns to return. By default, all columns are returned.}
+
+\item{limit}{integer or \code{NULL}. Maximum number of rows to return. \code{NULL}
+(default) or \code{-1} requests no limit. Base-pull mode only (when \code{source}
+is a string).}
 
 \item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}
