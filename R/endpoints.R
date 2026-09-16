@@ -1998,6 +1998,25 @@ epidata_aux.data.frame <- function(
   ))
   if (!inherits(aux, "data.frame")) {
     return(aux) # dry run: surface the aux call
+  has_versions <- ver %in% names(base) && !all(is.na(base[[ver]]))
+  is_snapshot <- identical(attr(base, "cast_kind"), "snapshot")
+  cutoff <- if (has_versions) max(base[[ver]], na.rm = TRUE) else NA
+
+  # When we use snapshot, we reuse the upper bound as a snapshot_date. 
+  version_arg <- if (is_snapshot && has_versions) {
+    list(snapshot_date = cutoff)
+  } else {
+    list(report_time = if (has_versions) paste0("<", format(cutoff + 1, "%Y-%m-%d")) else "*")
+  }
+  aux <- rlang::inject(epidata_aux(
+    src,
+    columns = columns,
+    fetch_args = fetch_args,
+    !!!version_arg,
+    !!!filters
+  ))
+  if (!inherits(aux, "data.frame")) {
+    return(aux) # dry run: surface the aux call
   }
 
   # Match each base dataset row to the aux version current at its report_time
