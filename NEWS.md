@@ -1,4 +1,8 @@
-# epidatr 1.3.1
+# epidatr 1.3.2
+
+## Patches
+
+- API errors now surface the server's actual message for both the V4 (classic) and V5 (cast) APIs.
 
 ## New features
 
