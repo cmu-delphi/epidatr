@@ -1,7 +1,17 @@
-# epidatr 1.3.1
+# epidatr 1.3.2
 
 ## Changes
-- `epidata_snapshot()` and `epidata_archive()` now send multiple `signals` comma-joined in a single request per `geo_type`, instead of issuing a separate request per signal (cmu-delphi/cast-api#103).
+- `epidata_snapshot()` and `epidata_archive()` now send multiple `signals` 
+  comma-joined in a single request per `geo_type`, instead of issuing a 
+  separate request per signal (cmu-delphi/cast-api#103).
+
+## New features
+- `fetch_args_list()` gains a `limit` argument, capping the number of rows
+  the cast-API returns for `epidata_snapshot()`, `epidata_archive()`,
+  `epidata_aux()`, and `epidata()`. Defaults to `NULL` (no limit); `-1` has
+  the same effect. The underlying query has no stable sort order, so `limit`
+  does not guarantee the same rows (or count) across repeated calls. Use it
+  only to preview or debug a query, not as a real filter.
 
 # epidatr 1.3.0
 

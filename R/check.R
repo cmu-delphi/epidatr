@@ -30,6 +30,19 @@ assert_integerish_param <- function(name, value, len = NULL, required = TRUE) {
   )
 }
 
+#' Allows the cast-API `limit` param: NULL (no limit), -1 (no limit), or a
+#' positive integer
+#' @keywords internal
+assert_limit_param <- function(value) {
+  assert_integerish_param("limit", value, len = 1, required = FALSE)
+  if (!is.null(value) && value != -1 && value < 1) {
+    cli::cli_abort(
+      "{.arg limit} must be -1 (no limit) or a positive integer",
+      class = "epidatr__invalid_limit"
+    )
+  }
+}
+
 #' Allows a vector of date_like params: date, character, or integer-like
 #' @importFrom checkmate check_date check_character check_integerish
 #' @keywords internal

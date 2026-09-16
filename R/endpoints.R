@@ -1587,7 +1587,8 @@ epidata_snapshot <- function(
         geo_type = g,
         fill_method = fill_method,
         snapshot_date = snapshot_date,
-        extra_keys = extra_keys
+        extra_keys = extra_keys,
+        limit = fetch_args$limit
       ),
       meta = list(
         create_epidata_field_info("signal", "text"),
@@ -1698,7 +1699,8 @@ epidata_archive <- function(
         geo_type = g,
         fill_method = fill_method,
         report_time_query = version_query,
-        extra_keys = extra_keys
+        extra_keys = extra_keys,
+        limit = fetch_args$limit
       ),
       meta = list(
         create_epidata_field_info("signal", "text"),
@@ -1853,7 +1855,8 @@ epidata_aux.default <- function(
       source = source,
       report_time_query = report_time_query,
       filtered_keys = filtered_keys,
-      columns = columns
+      columns = columns,
+      limit = fetch_args$limit
     ),
     # Only the aux key columns are typed (nwss's schema).
     # Extend for new aux sources whose keys differ.
