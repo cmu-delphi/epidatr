@@ -134,9 +134,9 @@ Use <code><a href="epidata_meta.html">epidata_meta()</a></code> to discover avai
 <dt id="arg-signals">signals<a class="anchor" aria-label="anchor" href="#arg-signals"></a></dt>
 <dd><p>character vector. One or more signals to query for the given
 source; comma-joined strings (e.g., <code>"sig1,sig2"</code>) are also accepted. Use
-<code><a href="epidata_meta.html">epidata_meta()</a></code> to discover available signals. A separate API request is
-made per signal and geo type (the cast-API only accepts one of each per
-request) and the results are combined.</p></dd>
+<code><a href="epidata_meta.html">epidata_meta()</a></code> to discover available signals. All signals are sent
+comma-joined in a single request per geo type (the cast-API only accepts
+one geo type per request) and the results are combined.</p></dd>
 
 
 <dt id="arg-geo-type">geo_type<a class="anchor" aria-label="anchor" href="#arg-geo-type"></a></dt>

@@ -74,9 +74,9 @@ epidata(
   character vector. One or more signals to query for the given source;
   comma-joined strings (e.g., `"sig1,sig2"`) are also accepted. Use
   [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)
-  to discover available signals. A separate API request is made per
-  signal and geo type (the cast-API only accepts one of each per
-  request) and the results are combined.
+  to discover available signals. All signals are sent comma-joined in a
+  single request per geo type (the cast-API only accepts one geo type
+  per request) and the results are combined.
 
 - geo_type:
 
