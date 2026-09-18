@@ -1,4 +1,8 @@
-# epidatr 1.3.2
+# epidatr 1.4.0
+
+## Patches
+
+- API errors now surface the server's actual message for both the V4 (classic) and V5 (cast) APIs.
 
 ## Changes
 - `epidata_snapshot()` and `epidata_archive()` now send multiple `signals` 

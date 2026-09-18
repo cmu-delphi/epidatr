@@ -67,7 +67,7 @@ do_request <- function(
     ) %>%
     # Use requested method.
     httr2::req_method(http_method) %>%
-    httr2::req_error(is_error = function(resp) FALSE)
+    httr2::req_error(is_error = function(resp) FALSE, body = error_body_message)
 
   # Do the request.
   res <- httr2::req_perform(req)
@@ -84,27 +84,54 @@ do_request <- function(
     res <- httr2::req_perform(req_post)
   }
 
-  # If there is an error, extract the message from the API into the error
-  # message if possible.
-  if (httr2::resp_is_error(res)) {
-    # 500, 429, 401 are possible
-    msg <- "fetch data from API"
-    if (
-      identical(httr2::resp_content_type(res), "text/html") &&
-        httr2::resp_has_body(res)
-    ) {
-      # grab the error information out of the returned HTML document
-      msg <- paste(
-        msg,
-        ":",
-        xml2::xml_text(xml2::xml_find_all(
-          xml2::read_html(httr2::resp_body_string(res)),
-          "//p"
-        ))
-      )
-    }
-    httr2::resp_check_status(res, info = msg)
-  }
+  # Error message extraction is handled by error_body_message().
+  httr2::resp_check_status(res)
 
   res
+}
+
+error_body_message <- function(resp) {
+  tryCatch(
+    {
+      if (!httr2::resp_has_body(resp)) {
+        return(NULL)
+      }
+      content_type <- httr2::resp_content_type(resp)
+      if (identical(content_type, "application/json")) {
+        # Regardless of the requested format type, an error response's body is
+        # JSON, in one of two shapes: {"message": "..."} or FastAPI's
+        # automatic validation errors under "detail"
+        body <- httr2::resp_body_json(resp, simplifyVector = FALSE)
+        if (is.character(body$message) && length(body$message) == 1) {
+          return(body$message)
+        }
+        detail <- body$detail
+        if (is.character(detail) && length(detail) == 1) {
+          return(detail)
+        }
+        if (is.list(detail) && length(detail) > 0) {
+          return(paste(
+            vapply(
+              detail,
+              function(d) {
+                if (is.character(d$msg) && length(d$msg) == 1) d$msg else "invalid value"
+              },
+              character(1)
+            ),
+            collapse = "; "
+          ))
+        }
+        NULL
+      } else if (identical(content_type, "text/html")) {
+        # grab the error information out of the returned HTML document
+        xml2::xml_text(xml2::xml_find_all(
+          xml2::read_html(httr2::resp_body_string(resp)),
+          "//p"
+        ))
+      } else {
+        NULL
+      }
+    },
+    error = function(e) NULL
+  )
 }
