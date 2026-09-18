@@ -1982,27 +1982,11 @@ epidata_aux.data.frame <- function(
   }
 
   # Never need aux versions newer than the newest base report_time
-  report_cut <- if (ver %in% names(base) && !all(is.na(base[[ver]]))) {
-    paste0("<", format(max(base[[ver]], na.rm = TRUE) + 1, "%Y-%m-%d"))
-  } else {
-    "*"
-  }
-
-  # Reuse the base-pull method to fetch aux
-  aux <- rlang::inject(epidata_aux(
-    src,
-    report_time = report_cut,
-    columns = columns,
-    fetch_args = fetch_args,
-    !!!filters
-  ))
-  if (!inherits(aux, "data.frame")) {
-    return(aux) # dry run: surface the aux call
   has_versions <- ver %in% names(base) && !all(is.na(base[[ver]]))
   is_snapshot <- identical(attr(base, "cast_kind"), "snapshot")
   cutoff <- if (has_versions) max(base[[ver]], na.rm = TRUE) else NA
 
-  # When we use snapshot, we reuse the upper bound as a snapshot_date. 
+  # When we use snapshot, we reuse the upper bound as a snapshot_date.
   version_arg <- if (is_snapshot && has_versions) {
     list(snapshot_date = cutoff)
   } else {
