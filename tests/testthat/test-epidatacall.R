@@ -17,10 +17,41 @@ test_that("fetch surfaces http errors", {
 
   with_mocked_response(
     create_mock_response(
+      '{"message": "invalid signal", "code": "validation_error"}',
+      status_code = 422L
+    ),
+    expect_error(
+      fetch(epidata_call),
+      regexp = "invalid signal",
+      class = "httr2_http_422"
+    )
+  )
+
+  with_mocked_response(
+    create_mock_response(
       '{"epidata": [], "message": "database error", "result": -1}',
       status_code = 500L
     ),
     expect_error(fetch(epidata_call), class = "httr2_http_500")
+  )
+
+  # FastAPI's own validation errors put a list of objects under "detail"
+  # rather than a plain string; this must not itself crash while formatting.
+  detail_body <- jsonlite::toJSON(
+    list(detail = list(list(
+      type = "literal_error",
+      loc = list("query", "source", 0),
+      msg = "Input should be 'nssp' or 'nwss'"
+    ))),
+    auto_unbox = TRUE
+  )
+  with_mocked_response(
+    create_mock_response(detail_body, status_code = 422L),
+    expect_error(
+      fetch(epidata_call),
+      regexp = "Input should be 'nssp' or 'nwss'",
+      class = "httr2_http_422"
+    )
   )
 })
 

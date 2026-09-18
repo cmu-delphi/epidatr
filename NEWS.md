@@ -1,4 +1,13 @@
-# epidatr 1.3.1
+# epidatr 1.4.0
+
+## Patches
+
+- API errors now surface the server's actual message for both the V4 (classic) and V5 (cast) APIs.
+
+## Changes
+- `epidata_snapshot()` and `epidata_archive()` now send multiple `signals` 
+  comma-joined in a single request per `geo_type`, instead of issuing a 
+  separate request per signal (cmu-delphi/cast-api#103).
 
 ## Breaking changes
 - `epidata_archive()` and `epidata_aux()`: passing a bare date or the `"="`
@@ -18,6 +27,12 @@
   same effect. The underlying query has no stable sort order, so `limit` does
   not guarantee the same rows (or count) across repeated calls. Use it only to
   preview or debug a query, not as a real filter.
+- `fetch_args_list()` gains a `limit` argument, capping the number of rows
+  the cast-API returns for `epidata_snapshot()`, `epidata_archive()`,
+  `epidata_aux()`, and `epidata()`. Defaults to `NULL` (no limit); `-1` has
+  the same effect. The underlying query has no stable sort order, so `limit`
+  does not guarantee the same rows (or count) across repeated calls. Use it
+  only to preview or debug a query, not as a real filter.
 
 # epidatr 1.3.0
 
