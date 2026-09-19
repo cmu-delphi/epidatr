@@ -15,7 +15,8 @@ epidata_meta(source = NULL, fetch_args = fetch_args_list())
 - source:
 
   string. The data source to query. If `NULL` (default), returns
-  metadata for all available sources.
+  metadata for all available sources. If specified, returns metadata for
+  the given source.
 
 - fetch_args:
 
@@ -28,7 +29,8 @@ epidata_meta(source = NULL, fetch_args = fetch_args_list())
 
 ## Value
 
-list
+list. If `source` is `NULL`, a named list of source metadata objects. If
+`source` is specified, the metadata list for that source.
 
 ## See also
 

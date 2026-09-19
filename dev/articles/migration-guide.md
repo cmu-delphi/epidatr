@@ -1,108 +1,156 @@
-# Migrating from pub_covidcast to the new Epidata API
+# V3/V4 to V5 Migration Guide
 
 ``` r
 
 library(epidatr)
 ```
 
-The Delphi Epidata API is moving from its V4 endpoints
-([`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
-and other `{pub/pvt}_*` endpoints, such as
-[`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md),
+The legacy Epidata APIs, including the V4 main endpoint
+([`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md))
+and V3 other endpoints
+([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md),
 [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md),
-and
-[`pvt_quidel()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_quidel.md))
-to a new set of V5 endpoints, served by
-[`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
-[`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
-and
-[`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md).
-The transition is in progress: sources are moving to the new API one at
-a time, and the V4 functions still work for sources that have not moved
-yet. New analyses should start with the new functions and fall back to a
-V4 function only when a source is not yet available there.
+[`pub_wiki()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_wiki.md),
+etc.), are transitioning to the V5 API. This transition is occurring
+source by source. All V3 and V4 sources will continue to operate until
+the migration is complete (tentatively scheduled for October 2026), and
+endpoints that are no longer updated will remain accessible on V3/V4.
+For new integrations, start directly on V5 and fall back to legacy
+endpoints only for sources that are not yet supported.
 
 For the current list of sources and indicators available on the new API,
 see the [V5 signals
 documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html).
 
-This guide walks through
-[`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)’s
-arguments and columns in detail, since it’s the most widely used V4
-endpoint, but the mapping is the same for the other `{pub/pvt}_*`
-endpoints.
+This guide walks through the transition from
+[`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
+and other legacy endpoints. While
+[`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
+is the most widely used legacy endpoint, V3 endpoints differ in their
+function names and parameter conventions. The tables below compare both
+V4
+([`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md))
+and V3 (using
+[`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md)
+as an example) to their V5 equivalents.
 
-## Function mapping
+## Endpoint mapping
 
-| Old | New | Purpose |
-|----|----|----|
-| [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md) | [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md) | Data as it appeared on a given date (or the latest) |
-| `pub_covidcast(issues = ...)` | [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md) | Full revision history of a signal |
-| [`pub_covidcast_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast_meta.md), [`covidcast_epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/covidcast_epidata.md) | [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md) | Discover sources, signals, geo types, and date ranges |
+The legacy endpoints split into several purpose-built V5 routes
+determined by query type. The “V3 (Other Endpoints)” column highlights
+examples
+([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md),
+[`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md),
+[`pub_wiki()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_wiki.md))
+to illustrate differences across endpoints. Refer to each endpoint’s
+documentation for specific behavior:
+
+| Task | V4 (`pub_covidcast`) | V3 (Other Endpoints) | V5 Equivalent |
+|----|----|----|----|
+| Fetch latest data or snapshot as of a past date | [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md) (default or with `as_of`) | Endpoint-specific ([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) has no `as_of`) | [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md) |
+| Fetch full revision history for a signal | `pub_covidcast(issues = ...)` | Supported by some ([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md), [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md) with `issues`) | [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md) |
+| Discover sources, signals, geo types, and date ranges | [`pub_covidcast_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast_meta.md), [`covidcast_epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/covidcast_epidata.md) | Shared meta for some ([`pub_fluview_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview_meta.md)) | [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md) |
+| Access source-specific auxiliary tables | none | none | [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md) |
+| Filter by publication lag | `pub_covidcast(lag = ...)` | Supported by some ([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md), [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md)) | none (compute `report_time - reference_time`) |
 
 [`epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
 is a convenience wrapper that routes to
-[`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
-or
 [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
-based on which versioning argument you pass.
+if you pass `report_time`, or to
+[`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+if you pass `snapshot_date` (or neither).
 
 ## Argument changes
 
-| [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md) argument | New argument | Notes |
-|----|----|----|
-| `source`, `signals`, `geo_type`, `geo_values` | same |  |
-| `time_type` | none | Dropped. Times in the new API are always `Date`s. |
-| `time_values` | `reference_time` | Accepts dates or [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md). Filtered locally after the fetch. |
-| `as_of` | `snapshot_date` | [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md) only. `NULL` returns the latest data. |
-| `issues` | `report_time` | [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md) only. Accepts exact dates, operators like `"<2025-10-16"`, or [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md). |
-| `lag` | none | Compute it yourself: `report_time - reference_time`. |
+Most
+[`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
+arguments carry over to V5 with the same name, but some have been
+renamed, dropped, or added. Historical V3 endpoints do not share
+argument names with
+[`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md).
+Arguments for
+[`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md)
+are shown below as an example, but consult each endpoint’s documentation
+for details:
+
+| V4 argument (`pub_covidcast`) | V3 (`pub_fluview`) | V5 argument | Notes |
+|----|----|----|----|
+| `source` (`data_source`) | not exposed (identified by function name [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md)) | `source` | Identifies the source dataset in V5 (replaces V4 `source` and V3 endpoint names). |
+| `signals` | none (implicit from endpoint) | `signals` | Identifies the specific signal name within the source. |
+| `geo_type` | not exposed ([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) supports only `regions`) | `geo_type` | Specifies geographic resolution (e.g., `state`, `county`, `hhs`, `nation`). |
+| `geo_values` | `regions` for [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) | `geo_values` | Removed from API query in V5 (queries return all locations for the requested `geo_type`). Filtered locally in R after the fetch. |
+| `time_type` | not exposed ([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) is always `epiweeks`) | none | Dropped. All V5 endpoints use standard calendar dates (`Date`). |
+| `time_values` | `epiweeks` for [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) | `reference_time` | Removed from API query in V5 (queries return all dates). Filtered locally in R after the fetch. |
+| `as_of` | none ([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) has no `as_of`) | `snapshot_date` | In V5, used only in [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md) to fetch data known as of a past date. `NULL` returns the latest data. |
+| `issues` | `issues` (where supported) | `report_time` | In V5, used only in [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md). Accepts operators like `"<2025-10-16>"`, or [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md). (For a single date, use [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)). |
+| `lag` | `lag` (where supported) | none | Removed in V5. You can compute it yourself: fetch from [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md) and filter by `report_time - reference_time`. See [filtering by lag](#lag). |
+| none | none | `fill_method` | New in V5. Selects the imputation method when aggregating sub-geographies (`"source"`, `"fill_ave"`, or `"fill_zero"`). See [below](#fill-method). |
+| none | none | `...` | New in V5. Filters on source-specific dimensions (such as `age_group` or `nwss_source`). |
 
 The new functions also add `fill_method`, which has no covidcast
 equivalent. Some sources publish several variants of the same signal
 that differ in how nulls were handled during geographic aggregation:
-`"source"` (raw source data, no imputation), `"fill_ave"` (nulls filled
-with the average of neighboring values), and `"fill_zero"` (nulls filled
-with zero). The default `NULL` returns all variants, so filter on this
-column (or pass the argument) if you want exactly one time series per
+
+- `"source"` is the raw source data, with no imputation
+- `"fill_ave"` has null values filled with the average of neighboring
+  values
+- `"fill_zero"` has null values filled with zero
+
+The default `NULL` returns all variants, so filter on this column (or
+pass a value to the argument) if you want exactly one time series per
 location.
 
 ## Column changes
 
-| [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md) column | New column | Notes |
-|----|----|----|
-| `geo_value`, `geo_type`, `signal`, `value` | same |  |
-| `time_value` | `reference_time` | The date the value describes. Always a `Date`. |
-| `issue` | `report_time` | The date the value was published. Present in both snapshot and archive output. |
-| `source` | dropped | You queried by source; add it back with `dplyr::mutate()` if you bind rows across sources. |
-| `time_type` | dropped | No longer needed since times are `Date`s. |
-| `lag` | dropped | Compute as `report_time - reference_time`. |
-| `direction` | dropped | Was already deprecated in the covidcast API. |
-| `stderr`, `sample_size` | `ci_lower`, `ci_upper` | Uncertainty is now expressed as confidence interval bounds on `value` instead of a standard error. Populated only for sources that publish them. See below. |
-| `missing_value`, `missing_stderr`, `missing_sample_size` | dropped | Missingness is now expressed through `fill_method` variants and plain `NA`s. |
-| none | `fill_method` | Which null-handling variant of the signal this row belongs to. See above. |
+Response fields follow a similar pattern. In the table below,
+[`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md)
+serves as an example of an endpoint with custom fields. Column names
+vary across legacy endpoints (for example,
+[`pub_wiki()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_wiki.md)
+returns `article`, `count`, and `hour`):
+
+| V4 column (`pub_covidcast`) | V3 (`pub_fluview`) | V5 column | Notes |
+|----|----|----|----|
+| `source` | not returned (implicit from endpoint) | dropped | Omitted in V5 responses because the source is already specified in the request. |
+| `signal` | none (implicit from endpoint) | `signal` | Identifies the signal name in V5. |
+| `value` | Endpoint-specific columns (e.g. `num_ili`, `wili`, `ili`) | `value` | Standardized metric value column across all V5 sources. |
+| not returned | not returned (implicit from endpoint) | `geo_type` | Explicitly included in V5 responses to identify geographic resolution. |
+| `geo_value` | `region` for [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) | `geo_value` | Standardized location identifier across all V5 responses. |
+| `time_value` | `epiweek` for [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) | `reference_time` | Standardized date in `YYYY-MM-DD` format representing the observation period. |
+| `issue` | `issue` (where returned) | `report_time` | Standardized date in `YYYY-MM-DD` format representing when the data point was published. Present in both snapshot and archive output. |
+| `lag` | `lag` (where returned) | dropped | Omitted in V5 responses. You can compute it yourself as `report_time - reference_time`. See [calculating reporting lag](https://cmu-delphi.github.io/epidatr/articles/versioned-data.html#calculating-reporting-lag). |
+| `direction` | none | dropped | Deprecated in V4 and dropped in V5. |
+| `stderr`, `sample_size` | none | `ci_lower`, `ci_upper` | Expresses uncertainty as explicit confidence interval bounds on `value` when provided by the data source. See [Uncertainty columns](#uncertainty-columns) below. |
+| `missing_value`, `missing_stderr`, `missing_sample_size` | none | dropped | Replaced in V5 by `fill_method` variants and plain `NA`s in `value`. |
+| none | none | `fill_method` | Indicates which null-handling imputation method was applied (`"source"`, `"fill_ave"`, or `"fill_zero"`). See [above](#fill-method). |
 
 Some sources also carry extra columns in the new API, for example
-`age_group` (pophive) and `nwss_source`, `sample_index`, `pcr_target`
-(nwss).
+`age_group`
+([pophive](https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/epic-cosmos.html))
+and `nwss_source`, `sample_index`, `pcr_target`
+([nwss](https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html)).
+For more information on whether the source you’re interested in provides
+extra columns, please visit that source’s documentation page.
 
 ### Uncertainty columns
 
 The covidcast columns `stderr` and `sample_size` have no fixed
 replacement. The shared schema carries only `value`; a source that
 quantifies uncertainty adds its own columns, such as `ci_lower` and
-`ci_upper`. Use the metadata or the
+`ci_upper`. Use the metadata function or the
 [documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
 to see which value columns a source returns:
 
 ``` r
 
 meta_sleepcycle <- epidata_meta(source = "sleepcycle")
-meta_sleepcycle$sleepcycle$value_columns
+meta_sleepcycle$value_columns
 #> [1] "ci_lower" "ci_upper" "value"
 ```
 
 ## A query, before and after
+
+### V4 query example: NSSP COVIDcast
 
 Fetching NSSP influenza ED visit percentages for two states, as the data
 looked on January 1, 2025:
@@ -118,16 +166,22 @@ old <- pub_covidcast(
   time_values = epirange(202440, 202501),
   as_of = 20250101
 )
+#> Warning: `pub_covidcast()` uses the V4 Epidata API.
+#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5 API.
+#> ℹ See `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the V5
+#>   endpoints and how to move to them. Old data will remain available for at least a
+#>   year, but new ingestion will end.
+#> This warning is displayed once every 8 hours.
 head(old)
 #> # A tibble: 6 × 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     
 #>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
-#> 1 ca        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-23
-#> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-08-23
-#> 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-23
-#> 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-08-23
-#> 5 ca        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-08-23
-#> 6 pa        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-08-23
+#> 1 ca        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-09-13
+#> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-09-13
+#> 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-09-13
+#> 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-09-13
+#> # ℹ 2 more rows
 #> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
 #> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
@@ -150,17 +204,105 @@ head(new)
 #> 2 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-12     0.140
 #> 3 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-19     0.160
 #> 4 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-26     0.200
-#> 5 pct_ed_visits… 2024-12-27  state    ca        source      2024-11-02     0.25 
-#> 6 pct_ed_visits… 2024-12-27  state    ca        source      2024-11-09     0.310
+#> # ℹ 2 more rows
+```
+
+Both queries return the same signal, just with renamed and reshaped
+columns:
+
+``` r
+
+names(old)
+#> [1] "geo_value" "signal"    "source"    "geo_type" 
+#>  [ reached 'max' / getOption("max.print") -- omitted 11 entries ]
+names(new)
+#> [1] "signal"      "report_time" "geo_type"    "geo_value"  
+#>  [ reached 'max' / getOption("max.print") -- omitted 3 entries ]
+```
+
+### V3 query example: FluView
+
+For V3 endpoints like
+[`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md),
+metric names that used to be separate columns (such as `num_ili`, `ili`,
+`wili`) become individual signal names queried via `signals`, and
+results are standardized into the single `value` column:
+
+``` r
+
+old_flu <- pub_fluview(
+  regions = "nat",
+  epiweeks = epirange(202440, 202445)
+)
+#> Warning: `pub_fluview()` uses the V4 Epidata API.
+#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5 API.
+#> ℹ See `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the V5
+#>   endpoints and how to move to them. Old data will remain available for at least a
+#>   year, but new ingestion will end.
+#> This warning is displayed once every 8 hours.
+head(old_flu[, c("release_date", "region", "epiweek", "wili", "ili")])
+#> # A tibble: 6 × 5
+#>   release_date region epiweek     wili   ili
+#>   <date>       <chr>  <date>     <dbl> <dbl>
+#> 1 2026-09-18   nat    2024-09-29  1.91  1.85
+#> 2 2026-09-18   nat    2024-10-06  2.02  1.94
+#> 3 2026-09-18   nat    2024-10-13  2.07  2.01
+#> 4 2026-09-18   nat    2024-10-20  2.22  2.16
+#> # ℹ 2 more rows
+```
+
+``` r
+
+new_flu <- epidata_snapshot(
+  source = "fluview_ilinet",
+  signals = "wili",
+  geo_type = "nation",
+  geo_values = "us",
+  reference_time = epirange("2024-10-01", "2024-11-15")
+)
+head(new_flu)
+#> # A tibble: 6 × 7
+#>   signal report_time geo_type geo_value fill_method reference_time value
+#>   <chr>  <date>      <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 wili   2025-09-12  nation   us        source      2024-10-12      2.02
+#> 2 wili   2025-09-12  nation   us        source      2024-10-19      2.07
+#> 3 wili   2025-09-12  nation   us        source      2024-10-26      2.22
+#> 4 wili   2025-09-12  nation   us        source      2024-11-02      2.32
+#> # ℹ 2 more rows
 ```
 
 ## Revision history queries
 
-Where you used to pass `issues` to
+Where you pass `issues` to
 [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md),
 use
 [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
 with `report_time`:
+
+``` r
+
+old_revisions <- pub_covidcast(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  time_type = "week",
+  geo_values = "pa",
+  time_values = epirange(202440, 202501),
+  issues = epirange(202440, 202522)
+)
+head(old_revisions)
+#> # A tibble: 6 × 15
+#>   geo_value signal     source geo_type time_type time_value direction issue     
+#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
+#> 1 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-11-03
+#> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-11-10
+#> 3 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-11-17
+#> 4 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-11-24
+#> # ℹ 2 more rows
+#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
+#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
+```
 
 ``` r
 
@@ -180,18 +322,25 @@ head(revisions)
 #> 2 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-12     0.0700
 #> 3 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-19     0.0800
 #> 4 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-26     0.130 
-#> 5 pct_ed_visit… 2024-11-08  state    pa        source      2024-11-02     0.140 
-#> 6 pct_ed_visit… 2024-11-23  state    pa        source      2024-10-05     0.0500
+#> # ℹ 2 more rows
 ```
 
-If you filtered by `lag`, fetch the archive and filter afterwards:
+If you filtered by `lag`, fetch the archive with
+[`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+and filter afterwards:
 
 ``` r
 
-revisions[revisions$report_time - revisions$reference_time <= 7, ]
+# For an exact lag (e.g., 7 days):
+revisions %>%
+  filter(as.integer(report_time - reference_time) == 7)
+
+# Or for maximum latency (e.g., at most 7 days of delay):
+revisions %>%
+  filter(as.integer(report_time - reference_time) <= 7)
 ```
 
-## Checking whether a source has moved
+## Checking whether a source is available
 
 Use
 [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)
@@ -201,14 +350,32 @@ types, and the available `reference_time` and `report_time` ranges:
 ``` r
 
 meta <- epidata_meta(source = "nssp")
-meta$nssp$signals
-#> [1] "pct_ed_visits_ari"                "pct_ed_visits_combined"          
-#> [3] "pct_ed_visits_covid"              "pct_ed_visits_influenza"         
-#> [5] "pct_ed_visits_rsv"                "smoothed_pct_ed_visits_combined" 
-#> [7] "smoothed_pct_ed_visits_covid"     "smoothed_pct_ed_visits_influenza"
-#> [9] "smoothed_pct_ed_visits_rsv"
-meta$nssp$time_value_range
-#> NULL
+
+# all the fields available for this source
+names(meta)
+#> [1] "report_time_range"    "reference_time_range" "signals"             
+#> [4] "geo_types"           
+#>  [ reached 'max' / getOption("max.print") -- omitted 4 entries ]
+
+meta$signals # available signal names
+#> [1] "pct_ed_visits_ari"       "pct_ed_visits_combined" 
+#> [3] "pct_ed_visits_covid"     "pct_ed_visits_influenza"
+#>  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]
+meta$geo_types # supported geography levels
+#> [1] "census_division" "census_region"   "county"          "hhs"            
+#>  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]
+meta$reference_time_range # earliest/latest reference_time available
+#> $latest
+#> [1] "2026-09-12"
+#> 
+#> $first
+#> [1] "2022-10-01"
+meta$report_time_range # earliest/latest report_time (publication date) available
+#> $latest
+#> [1] "2026-09-16T00:00:00"
+#> 
+#> $first
+#> [1] "2024-04-18T00:00:00"
 ```
 
 If
@@ -217,7 +384,7 @@ does not know the source yet, keep using
 [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
 (or the relevant `{pub/pvt}_*` function) for it and check back after
 package updates. The [API mailing
-list](http://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api)
+list](https://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api)
 announces sources as they move.
 
 ## Endpoints kept for historical reference

@@ -2,6 +2,12 @@
 
 ## epidatr 1.4.0
 
+### Documentation
+
+- Updated vignettes (`epidatr`, `signal-discovery`, and
+  `versioned-data`) to focus on V5 API workflows. Remove and redirect
+  `v5-api-demo` vignette.
+
 ### Patches
 
 - API errors now surface the server’s actual message for both the V4

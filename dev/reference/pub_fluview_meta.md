@@ -61,5 +61,5 @@ pub_fluview_meta()
 #> # A tibble: 1 × 3
 #>   latest_update latest_issue table_rows
 #>   <date>        <date>            <dbl>
-#> 1 2026-09-11    2026-08-30      2865129
+#> 1 2026-09-18    2026-09-06      2872277
 ```

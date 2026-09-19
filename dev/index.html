@@ -39,9 +39,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/migration-guide.html">Migrating from pub_covidcast to the new Epidata API</a></li>
+<li><a class="dropdown-item" href="articles/migration-guide.html">V3/V4 to V5 Migration Guide</a></li>
     <li><a class="dropdown-item" href="articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
-    <li><a class="dropdown-item" href="articles/v5-api-demo.html">epidatr v5 API demo</a></li>
     <li><a class="dropdown-item" href="articles/versioned-data.html">Understanding and accessing versioned data</a></li>
   </ul>
 </li>
@@ -64,16 +63,33 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Delphi Epidata API</a> provides real-time access to epidemiological surveillance data for influenza, COVID-19, and other diseases from both official government sources such as the <a href="https://www.cdc.gov/" class="external-link">Centers for Disease Control and Prevention (CDC)</a>, private partners such as <a href="https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/" class="external-link">Facebook (now Meta)</a> and <a href="https://business.optum.com/en/?src=chc" class="external-link">Change Healthcare</a>, and other public datasets like <a href="https://console.cloud.google.com/marketplace/product/bigquery-public-datasets/covid19-search-trends" class="external-link">Google Trends</a>. It is built and maintained by the Carnegie Mellon University <a href="https://delphi.cmu.edu/" class="external-link">Delphi Research Group</a>.</p>
-<p>This package is designed to streamline the downloading and usage of data from the Delphi Epidata API. It provides a simple R interface to the API, including functions for downloading data, parsing the results, and converting the data into a tidy format. The API stores a historical record of all data, including corrections and updates, which is particularly useful for accurately backtesting forecasting models. We also provide packages for downstream data processing (<a href="https://github.com/cmu-delphi/epiprocess" class="external-link">epiprocess</a>) and modeling (<a href="https://github.com/cmu-delphi/epipredict" class="external-link">epipredict</a>).</p>
+<p>The <a href="https://cmu-delphi.github.io/delphi-epidata/" class="external-link">Delphi Epidata API</a> provides real-time access to epidemiological surveillance data for influenza, COVID-19, and other diseases from official government sources such as the <a href="https://www.cdc.gov/" class="external-link">Centers for Disease Control and Prevention (CDC)</a> and <a href="https://console.cloud.google.com/marketplace/product/bigquery-public-datasets/covid19-search-trends" class="external-link">Google Trends</a>, and private partners such as <a href="https://about.meta.com/" class="external-link">Meta</a> and <a href="https://business.optum.com/en/?src=chc" class="external-link">Change Healthcare</a>. To learn more about the Meta partnership, check out <a href="https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/" class="external-link">this article</a>. It is built and maintained by the Carnegie Mellon University <a href="https://delphi.cmu.edu/" class="external-link">Delphi Research Group</a>.</p>
+<p>This package is designed to streamline the downloading and usage of data from the Delphi Epidata API. It provides a simple R interface to the API, including functions for downloading data, parsing the results, and converting the data into a tidy format. The package can also fetch the full historical record of a signal, including corrections and updates, which is particularly useful for accurately backtesting forecasting models. It can also fetch accessory data associated with a signal, such as source-specific metadata, via <code><a href="reference/epidata_aux.html">epidata_aux()</a></code>. We also provide packages for downstream data processing (<a href="https://github.com/cmu-delphi/epiprocess" class="external-link">epiprocess</a>) and modeling (<a href="https://github.com/cmu-delphi/epipredict" class="external-link">epipredict</a>).</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Install the CRAN version</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"epidatr"</span><span class="op">)</span></span>
+<span><span class="co"># Install the development version from the GitHub dev branch</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"cmu-delphi/epidatr@dev"</span><span class="op">)</span></span></code></pre></div>
+<p>Our CRAN listing is <a href="https://CRAN.R-project.org/package=epidatr/index.html" class="external-link">here</a>.</p>
+<div class="section level3">
+<h3 id="api-keys">API Keys<a class="anchor" aria-label="anchor" href="#api-keys"></a>
+</h3>
+<p>The Delphi API requires a (free) API key for full functionality. To generate your key, register for a pseudo-anonymous account <a href="https://api.delphi.cmu.edu/epidata/admin/registration_form" class="external-link">here</a> and see more discussion on the <a href="https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html" class="external-link">general API website</a>. The <code>epidatr</code> client will automatically look for this key in the environment variable <code>DELPHI_EPIDATA_KEY</code>. We recommend storing your key in your <code>.Renviron</code> file, which R will read by default.</p>
+<p>Note that for the time being, any private endpoints (i.e. those prefixed with <code>pvt</code>) will require a separate key that needs to be passed as an argument.</p>
+</div>
+</div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<p>To get started with <code>epidatr</code>, see <code><a href="articles/epidatr.html">vignette("epidatr")</a></code> or the <a href="https://cmu-delphi.github.io/epidatr/articles/epidatr.html">Getting Started guide</a>.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cmu-delphi.github.io/epidatr/">epidatr</a></span><span class="op">)</span></span>
 <span><span class="co"># Discover what a source offers: signals, geo types, and date ranges</span></span>
 <span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/epidata_meta.html">epidata_meta</a></span><span class="op">(</span>source <span class="op">=</span> <span class="st">"nssp"</span><span class="op">)</span></span>
-<span><span class="va">meta</span><span class="op">$</span><span class="va">nssp</span><span class="op">$</span><span class="va">signals</span></span>
+<span><span class="va">meta</span><span class="op">$</span><span class="va">signals</span></span>
 <span><span class="co">#&gt; [1] "pct_ed_visits_ari"                "pct_ed_visits_combined"          </span></span>
 <span><span class="co">#&gt; [3] "pct_ed_visits_covid"              "pct_ed_visits_influenza"         </span></span>
 <span><span class="co">#&gt; [5] "pct_ed_visits_rsv"                "smoothed_pct_ed_visits_combined" </span></span>
@@ -87,7 +103,7 @@
 <span>  geo_type <span class="op">=</span> <span class="st">"state"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">flu</span></span>
-<span><span class="co">#&gt; # A tibble: 10,353 × 7</span></span>
+<span><span class="co">#&gt; # A tibble: 10,506 × 7</span></span>
 <span><span class="co">#&gt;    signal        report_time geo_type geo_value fill_method reference_time value</span></span>
 <span><span class="co">#&gt;    &lt;chr&gt;         &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
 <span><span class="co">#&gt;  1 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-01     0.140</span></span>
@@ -100,7 +116,8 @@
 <span><span class="co">#&gt;  8 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-19     6.82 </span></span>
 <span><span class="co">#&gt;  9 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-26     8.67 </span></span>
 <span><span class="co">#&gt; 10 pct_ed_visit… 2026-06-26  state    ak        source      2022-12-03     9.85 </span></span>
-<span><span class="co">#&gt; # ℹ 10,343 more rows</span></span></code></pre></div>
+<span><span class="co">#&gt; # ℹ 10,496 more rows</span></span></code></pre></div>
+<p>This is just a glimpse of what <code>epidatr</code> can do. See the <a href="https://cmu-delphi.github.io/epidatr/articles/">Articles</a> for walkthroughs of specific tasks (finding signals, understanding versioned data, migrating from <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code>), and the <a href="https://cmu-delphi.github.io/epidatr/reference/">Reference</a> for the full list of functions and their arguments.</p>
 </div>
 <div class="section level2">
 <h2 id="which-endpoint-has-my-data">Which endpoint has my data?<a class="anchor" aria-label="anchor" href="#which-endpoint-has-my-data"></a>
@@ -117,36 +134,24 @@
 <p>If you have existing <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code> code, see <code><a href="articles/migration-guide.html">vignette("migration-guide")</a></code> for the argument and column mapping to the v5 functions.</p>
 </div>
 <div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<h2 id="migrating-from-covidcast-and-to-the-v5-api">Migrating from covidcast and to the V5 API<a class="anchor" aria-label="anchor" href="#migrating-from-covidcast-and-to-the-v5-api"></a>
 </h2>
-<p>Installing the package is straightforward.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Install the CRAN version</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"epidatr"</span><span class="op">)</span></span>
-<span><span class="co"># Install the development version from the GitHub dev branch</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"cmu-delphi/epidatr@dev"</span><span class="op">)</span></span></code></pre></div>
-<p>Our CRAN listing is <a href="https://CRAN.R-project.org/package=epidatr/index.html" class="external-link">here</a>.</p>
-<div class="section level3">
-<h3 id="api-keys">API Keys<a class="anchor" aria-label="anchor" href="#api-keys"></a>
-</h3>
-<p>The Delphi API requires a (free) API key for full functionality. To generate your key, register for a pseudo-anonymous account <a href="https://api.delphi.cmu.edu/epidata/admin/registration_form" class="external-link">here</a> and see more discussion on the <a href="https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html" class="external-link">general API website</a>. The <code>epidatr</code> client will automatically look for this key in the environment variable <code>DELPHI_EPIDATA_KEY</code>. We recommend storing your key in your <code>.Renviron</code> file, which R will read by default.</p>
-<p>Note that for the time being, the private endpoints (i.e. those prefixed with <code>pvt</code>) will require a separate key that needs to be passed as an argument.</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="for-users-of-the-covidcast-r-package">For users of the covidcast R package<a class="anchor" aria-label="anchor" href="#for-users-of-the-covidcast-r-package"></a>
-</h2>
-<p>The <code>covidcast</code> package is deprecated and will no longer be updated. The <code>epidatr</code> package is a complete rewrite of the <a href="https://cmu-delphi.github.io/covidcast/covidcastR/" class="external-link"><code>covidcast</code> package</a>, with a focus on speed, reliability, and ease of use. It also supports more endpoints and data sources than <code>covidcast</code>. When migrating from that package, you will need to use the <a href="https://cmu-delphi.github.io/epidatr/reference/pub_covidcast.html"><code>pub_covidcast</code></a> function in <code>epidatr</code>.</p>
+<p>If you are migrating existing workflows, there are two transitions to keep in mind:</p>
+<ul>
+<li>From the <code>covidcast</code> package to <code>epidatr</code>. The standalone <a href="https://cmu-delphi.github.io/covidcast/covidcastR/" class="external-link"><code>covidcast</code> package</a> is deprecated and superseded by <code>epidatr</code>, which is a complete rewrite offering better speed, reliability, and broader endpoint support.</li>
+<li>From V3/V4 endpoints to the V5 API. Within <code>epidatr</code>, <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code> and other V3/V4 endpoints are being deprecated as of October 2026. See the <a href="https://cmu-delphi.github.io/epidatr/articles/migration-guide.html">migration guide</a> (or <code><a href="articles/migration-guide.html">vignette("migration-guide")</a></code>). New code should use the current V5 functions (<code><a href="reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="reference/epidata_meta.html">epidata_meta()</a></code>), reserving <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code> only for sources that have not yet transitioned.</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="get-updates">Get updates<a class="anchor" aria-label="anchor" href="#get-updates"></a>
 </h2>
-<p><strong>You should consider subscribing to the <a href="https://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api" class="external-link">API mailing list</a></strong> to be notified of package updates, new data sources, corrections, and other updates.</p>
+<p><strong>You should consider subscribing to the <a href="https://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api" class="external-link">API mailing list</a></strong> to be notified of package updates, new data sources, corrections, and more.</p>
 </div>
 <div class="section level2">
 <h2 id="usage-terms-and-citation">Usage terms and citation<a class="anchor" aria-label="anchor" href="#usage-terms-and-citation"></a>
 </h2>
-<p>We request that if you use the <code>epidatr</code> package in your work, or use any of the data provided by the Delphi Epidata API through non-<code>covidcast</code> endpoints, that you cite us using the citation given by <a href="https://cmu-delphi.github.io/epidatr/dev/authors.html#citation"><code>citation("epidatr")</code></a>. If you use any of the data from the <code>covidcast</code> endpoint, please use the <a href="https://cmu-delphi.github.io/covidcast/covidcastR/authors.html#citation" class="external-link">COVIDcast citation</a> as well. See the <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_licensing.html" class="external-link">COVIDcast licensing documentation</a> and the <a href="https://cmu-delphi.github.io/delphi-epidata/api/README.html#data-licensing" class="external-link">licensing documentation for other endpoints</a> for information about citing the datasets provided by the API.</p>
+<p>If you use <code>epidatr</code> or data from the Delphi Epidata API in your work, please cite the package using <a href="https://cmu-delphi.github.io/epidatr/authors.html#citation"><code>citation("epidatr")</code></a>. If you use data that originated from the COVIDcast project (whether accessed via V5 endpoints or <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code>), please include the <a href="https://cmu-delphi.github.io/covidcast/covidcastR/authors.html#citation" class="external-link">COVIDcast citation</a> as well.</p>
+<p>Certain data sources have specific attribution and licensing terms. See the <a href="https://cmu-delphi.github.io/delphi-epidata/api/README.html#data-licensing" class="external-link">Epidata data licensing documentation</a> and the <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_licensing.html" class="external-link">COVIDcast licensing documentation</a> for information about citing specific datasets.</p>
 <p><strong>Warning:</strong> If you use data from the Epidata API to power a product, dashboard, app, or other service, please download the data you need and store it centrally rather than making API requests for every user. Our server resources are limited and cannot support high-volume interactive use.</p>
 <p>See also the <a href="https://delphi.cmu.edu/covidcast/terms-of-use/" class="external-link">Terms of Use</a>, noting that the data is a research product and not warranted for a particular purpose.</p>
 </div>
