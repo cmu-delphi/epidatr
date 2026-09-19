@@ -14,7 +14,8 @@ vignette: >
 The epidatr package provides access to all the endpoints of the [Delphi Epidata
 API](https://cmu-delphi.github.io/delphi-epidata/), and can be used to make
 requests for specific signals on specific dates and in select geographic
-regions.
+regions. It is widely used in epidemiological research, real-time forecasting
+models, and public health dashboards.
 
 
 ## Setup
@@ -24,17 +25,22 @@ regions.
 You can install the stable version of this package from CRAN:
 
 ```R
+# Install from CRAN
 install.packages("epidatr")
+# or using pak
 pak::pkg_install("epidatr")
+# or using renv
 renv::install("epidatr")
 ```
 
 Or if you want the development version, install from GitHub:
 
 ```R
-# Install the dev version using `pak` or `remotes`
+# Install the dev version using pak
 pak::pkg_install("cmu-delphi/epidatr@dev")
+# or using remotes
 remotes::install_github("cmu-delphi/epidatr", ref = "dev")
+# or using renv
 renv::install("cmu-delphi/epidatr@dev")
 ```
 
@@ -52,25 +58,24 @@ See the `save_api_key()` function documentation for details on how to set up
 
 ## The Delphi V5 API
 
-V5 has three categories of data access:
+Epidatr allows three categories of data access to the Delphi V5 API:
 
-- `epidata_snapshot()` time travels to how a dataset looked at a point in time.
-- `epidata_archive()` fetches all snapshots of a dataset prior to a point in time. Each row represents a "diff" (when the value for a specific key changed).
-- `epidata_aux()` accesses source-specific auxiliary tables containing metadata, laboratory protocols, or additional static keys (e.g., NWSS wastewater facility descriptions).
+- `epidata_snapshot()` provides a specific view of how a dataset looked at a point in time.
+- `epidata_archive()` fetches all versions of a dataset across time, representing the full revision history.
+- `epidata_aux()` accesses source-specific auxiliary tables containing metadata, laboratory protocols, or additional static keys (such as NWSS wastewater facility descriptions).
 
-Additionally, `epidata_meta()` provides access to metadata to list available sources, signals, geographic granularities, and date ranges.
+Additionally, `epidata_meta()` provides access to system metadata to list available sources, signals, geographic granularities, and date ranges.
 
 
 ## Basic Usage
 
-Fetching data from the Delphi Epidata API is simple. Suppose we are
-interested in the `nssp` source, which provides access to a
-[wide range of](https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nssp.html)
-emergency department visits data.
-To make a request of this source at a point in time, `epidata_snapshot()`
-needs a signal name and a geographic level.
+To make a request of a particular data source at a specific point in time,
+we'll use `epidata_snapshot()`. This function needs the source name, signal
+name, and a geographic level in order to complete a query.
 
-The `epidata_snapshot()` function lets us access the `nssp` source:
+Suppose we are interested in the `nssp` source, which provides access to a
+[wide range of](https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nssp.html)
+emergency department visits data:
 
 
 ``` r
@@ -109,41 +114,65 @@ knitr::kable(head(epidata))
 
 
 
-`epidata_snapshot()` returns a `tibble`. (Here we're using `knitr::kable()` to
-make it more readable.) Each row represents one observation for the US on one
-date. The location is given in the `geo_value` column, the date it describes
-in the `reference_time` column. Here `value` is the requested signal -- in
-this case, the percentage of emergency department visits with an influenza
-diagnosis, and `report_time` is the date this version of the value was
-published.
+`epidata_snapshot()` returns a [`tibble`](https://tibble.tidyverse.org/) (a
+modern reimagining of R's standard data frame that prints cleanly and preserves
+typed columns). (Here we're using `knitr::kable()` to make it more readable.)
+Each row represents one observation for the US on one date. The location is
+given in the `geo_value` column, the date it describes in the `reference_time`
+column, the value of the requested signal in `value`, and the publication date in
+`report_time`.
 
 The Delphi V5 API makes signals available at different geographic levels,
-depending on the source. To request signals for all states instead of the
-entire US, we use the `geo_type` argument. This automatically returns all 
-available data for that geo type. Check `epidata_meta("nssp")` for a given 
-source to see which geo types it supports.
+depending on the source. Use `epidata_meta("nssp")` for a given source to see
+which geo types it supports.
+
+To request signals for all states instead of the entire US, we use the
+`geo_type` argument. This automatically returns all available data for that geo
+type:
 
 
 ``` r
 # Obtain the latest snapshot of the influenza ED-visit percentage
-# from the NSSP source all available dates and states
+# from the NSSP source across all available dates and states
 epidata_snapshot(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
   geo_type = "state"
-  )
-#> # A tibble: 10,404 × 7
+)
+#> # A tibble: 10,557 × 7
 #>   signal         report_time geo_type geo_value fill_method reference_time value
 #>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
 #> 1 pct_ed_visits… 2026-06-26  state    ak        source      2022-10-01     0.140
 #> 2 pct_ed_visits… 2026-06-26  state    ak        source      2022-10-08     0.240
 #> 3 pct_ed_visits… 2026-06-26  state    ak        source      2022-10-15     0.320
 #> 4 pct_ed_visits… 2026-06-26  state    ak        source      2022-10-22     0.760
-#> # ℹ 10,400 more rows
+#> # ℹ 10,553 more rows
 ```
 
-Alternatively, we can fetch the time series for a subset of states and 
-reference dates listing out the desired locations in the `geo_values` 
+You can also query multiple signals in a single request by passing a vector to
+`signals`:
+
+
+``` r
+# Obtain both influenza and COVID-19 ED-visit percentages in a single query
+epidata_snapshot(
+  source = "nssp",
+  signals = c("pct_ed_visits_influenza", "pct_ed_visits_covid"),
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = epirange("2024-12-01", "2024-12-15")
+)
+#> # A tibble: 4 × 7
+#>   signal         report_time geo_type geo_value fill_method reference_time value
+#>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_ed_visits… 2026-06-26  state    pa        source      2024-12-07     0.75 
+#> 2 pct_ed_visits… 2026-06-26  state    pa        source      2024-12-07     0.570
+#> 3 pct_ed_visits… 2026-06-26  state    pa        source      2024-12-14     0.820
+#> 4 pct_ed_visits… 2026-06-26  state    pa        source      2024-12-14     0.870
+```
+
+Alternatively, we can fetch the time series for a subset of states and
+reference dates by listing out the desired locations in the `geo_values`
 argument and using a range in the `reference_time` argument:
 
 
@@ -172,8 +201,8 @@ epidata_snapshot(
 
 The Delphi V5 API stores a historical record of all data, including corrections
 and updates, which is particularly useful for accurately backtesting
-forecasting models. To retrieve versioned data, we can use the
-`snapshot_date` argument, which fetches the data as it was known on a
+forecasting models. To retrieve versioned data in `epidata_snapshot()`, we can
+use the `snapshot_date` argument, which fetches the data as it was known on a
 specific date.
 
 
@@ -199,9 +228,8 @@ epidata_snapshot(
 
 To request all versions of the data issued within a specific time range, we
 use `epidata_archive()` with the `report_time` argument. This parameter allows
-to fetch versions by exact dates (e.g., "2025-10-16"), operators (e.g.,
-"<2025-10-16"), or an epirange(). Internally maps to the `report_time_query`
-API parameter.
+us to fetch versions using comparison operators (e.g., `"<2025-01-15>"`) or an
+`epirange()`.
 
 
 ``` r
@@ -226,8 +254,7 @@ epidata_archive(
 ```
 
 See `vignette("versioned-data")` for details and more ways to specify
-versioned data, and `vignette("migration-guide")` for the full
-`pub_covidcast()` argument mapping.
+versioned data.
 
 
 ## Auxiliary data
@@ -236,9 +263,11 @@ Some sources include extra columns connected to the signal data, such as the
 population served by each NWSS sewershed or site metadata. `epidata_aux()`
 retrieves this auxiliary data, either on its own or merged onto a signal pull.
 
-You can pull auxiliary data directly by source. Named filters on key columns
-can be passed through `...` to limit the returned rows, and `columns` can be
-used to select specific fields:
+You can pull auxiliary data directly by source. To see what key columns you can
+filter on for a given source, consult that source's page in the
+[V5 signals documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html).
+Named filters on these key columns can be passed through `...` to limit the
+returned rows, and `columns` can be used to select specific fields:
 
 
 ``` r
@@ -270,7 +299,7 @@ left-joins it onto the shared key columns:
 
 
 ``` r
-# Fetch signal data for a specific sewershed and attach auxiliary metadata
+# Fetch signal data for a specific sewershed
 nwss_data <- epidata_snapshot(
   source = "nwss",
   signals = "covid_avg_conc",
@@ -278,7 +307,18 @@ nwss_data <- epidata_snapshot(
   geo_values = "128",
   reference_time = epirange("2024-12-01", "2025-01-01")
 )
+head(nwss_data)
+#> # A tibble: 6 × 10
+#>   signal   report_time geo_type geo_value fill_method reference_time nwss_source
+#>   <chr>    <date>      <chr>    <chr>     <chr>       <date>         <chr>      
+#> 1 covid_a… 2026-06-26  sewersh… 128       source      2024-12-19     CDC_Verily 
+#> 2 covid_a… 2026-06-26  sewersh… 128       source      2024-12-03     CDC_Verily 
+#> 3 covid_a… 2026-06-26  sewersh… 128       source      2024-12-17     CDC_Verily 
+#> 4 covid_a… 2026-06-26  sewersh… 128       source      2024-12-12     CDC_Verily 
+#> # ℹ 2 more rows
+#> # ℹ 3 more variables: sample_index <chr>, pcr_target <chr>, value <dbl>
 
+# Attach auxiliary metadata
 nwss_merged <- nwss_data %>%
   epidata_aux()
 head(nwss_merged)
@@ -306,7 +346,14 @@ from the base dataset.
 
 ### Server-side key filtering
 
-Sources with multi-dimensional keys (such as `nwss` which includes keys like `pcr_target`) support filtering on these keys directly in `epidata_snapshot()` and `epidata_archive()`.
+Beyond standard arguments (`source`, `signals`, `geo_type`), some sources include
+extra key dimensions that categorize the data (for example, `nwss` categorizes by
+`pcr_target`, and `pophive` categorizes by `age_group`). To see what key columns
+are available per source, consult that source's page in the
+[V5 signals documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html).
+You can pass these extra dimensions directly as named parameters to filter the query
+server-side:
+
 
 ``` r
 epidata_snapshot(
@@ -319,7 +366,10 @@ epidata_snapshot(
 
 ### Dry runs
 
-If you want to inspect the generated API request URL or query structure without actually fetching data, you can pass `dry_run = TRUE` via `fetch_args_list()`:
+If you want to inspect the generated API request URL underlying each function
+query without actually fetching data, you can pass `dry_run = TRUE` via
+`fetch_args_list()`. This works with `epidata_snapshot()`, `epidata_archive()`,
+and `epidata_aux()`:
 
 
 ``` r
@@ -331,7 +381,7 @@ dry_run_call <- epidata_snapshot(
 )
 dry_run_call
 #> 
-#> ── <epidata_call> object: ──────────────────────────────────────────────────────────────────
+#> ── <epidata_call> object: ──────────────────────────────────────────────────────
 #> • Pipe this object into `fetch()` to actually fetch the data
 #> • Request URL:
 #>   https://delphi.cmu.edu/epidata/v5/snapshot/?source=nssp&signal=pct_ed_visits_influenza&geo_type=state
@@ -347,6 +397,8 @@ it using `ggplot2`:
 ``` r
 library(ggplot2)
 #> Warning: package 'ggplot2' was built under R version 4.5.2
+
+# Plot the influenza ED-visit time series fetched earlier with epidata_snapshot()
 ggplot(epidata, aes(x = reference_time, y = value)) +
   geom_line() +
   labs(
@@ -358,15 +410,18 @@ ggplot(epidata, aes(x = reference_time, y = value)) +
 ```
 
 <div class="figure">
-<img src="img/epidatr-unnamed-chunk-11-1.png" alt="plot of chunk unnamed-chunk-11" width="700.0000032" height="65%" />
-<p class="caption">plot of chunk unnamed-chunk-11</p>
+<img src="img/epidatr-unnamed-chunk-12-1.png" alt="plot of chunk unnamed-chunk-12" width="700.0000032" height="65%" />
+<p class="caption">plot of chunk unnamed-chunk-12</p>
 </div>
 
-`ggplot2` can also be used to [create choropleths](https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html).
+`ggplot2` can also be used with `epidatr` and `maps` to [create choropleths](https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html):
 
 
 
 ```{.r .fold-hide}
+library(epidatr)
+library(dplyr)
+library(ggplot2)
 library(maps)
 
 # Obtain the latest snapshot of confirmed flu hospital admissions
@@ -408,8 +463,41 @@ ggplot(nhsn_states, aes(x = long, y = lat, group = group, fill = value)) +
 ```
 
 <div class="figure">
-<img src="img/epidatr-unnamed-chunk-12-1.png" alt="plot of chunk unnamed-chunk-12" width="700.0000032" height="65%" />
-<p class="caption">plot of chunk unnamed-chunk-12</p>
+<img src="img/epidatr-unnamed-chunk-13-1.png" alt="plot of chunk unnamed-chunk-13" width="700.0000032" height="65%" />
+<p class="caption">plot of chunk unnamed-chunk-13</p>
+</div>
+
+### Plotting revision histories
+
+We can also visualize revision histories from `epidata_archive()`. Each line
+shows what the time series looked like as of a different publication date:
+
+
+``` r
+# Fetch revision history for Pennsylvania influenza ED visits
+pa_revisions <- epidata_archive(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = epirange("2024-10-01", "2024-12-01"),
+  report_time = epirange("2024-11-01", "2025-01-01")
+)
+
+ggplot(pa_revisions, aes(x = reference_time, y = value, group = report_time, color = as.factor(report_time))) +
+  geom_line() +
+  labs(
+    title = "Revisions of NSSP influenza ED visits in Pennsylvania",
+    subtitle = "October-December 2024 estimates as reported across November 2024 - January 2025",
+    x = "Observation Date",
+    y = "% of ED visits",
+    color = "Report Date"
+  )
+```
+
+<div class="figure">
+<img src="img/epidatr-archive-plot-1.png" alt="plot of chunk archive-plot" width="700.0000032" height="65%" />
+<p class="caption">plot of chunk archive-plot</p>
 </div>
 
 
@@ -424,3 +512,4 @@ ggplot(nhsn_states, aes(x = long, y = lat, group = group, fill = value)) +
   - **Private endpoints** are restricted streams (e.g., CDC web metrics with `pvt_cdc()` and digital sensors with `pvt_sensors()`) that require dedicated secret authentication keys.
 
 See `vignette("signal-discovery")` for an in-depth guide to discovering signals, browsing metadata, and querying datasets across all these categories.
+
