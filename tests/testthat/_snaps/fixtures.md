@@ -85,10 +85,10 @@
       print(vapply(result, function(col) paste(class(col), collapse = "/"), character(
         1)))
     Output
-              signal    report_time       geo_type      geo_value    fill_method 
-         "character"         "Date"    "character"    "character"    "character" 
-      reference_time          value 
-              "Date"      "numeric" 
+                signal      report_time         geo_type        geo_value 
+           "character" "POSIXct/POSIXt"      "character"      "character" 
+           fill_method   reference_time            value 
+           "character"           "Date"        "numeric" 
     Code
       print(head(as.data.frame(result), 3))
     Output
@@ -107,10 +107,10 @@
       print(vapply(result, function(col) paste(class(col), collapse = "/"), character(
         1)))
     Output
-              signal    report_time       geo_type      geo_value    fill_method 
-         "character"         "Date"    "character"    "character"    "character" 
-      reference_time          value 
-              "Date"      "numeric" 
+                signal      report_time         geo_type        geo_value 
+           "character" "POSIXct/POSIXt"      "character"      "character" 
+           fill_method   reference_time            value 
+           "character"           "Date"        "numeric" 
     Code
       print(head(as.data.frame(result), 3))
     Output
@@ -130,8 +130,8 @@
     Output
       List of 8
        $ report_time_range   :List of 2
-        ..$ latest: chr "2026-08-19T00:00:00"
-        ..$ first : chr "2024-04-18T00:00:00"
+        ..$ latest: chr "2026-08-19T00:00:00Z"
+        ..$ first : chr "2024-04-18T00:00:00Z"
        $ reference_time_range:List of 2
         ..$ latest: chr "2026-08-15"
         ..$ first : chr "2022-10-01"
@@ -156,7 +156,7 @@
         1)))
     Output
                 report_time             geo_value        reference_time 
-                     "Date"           "character"                "Date" 
+           "POSIXct/POSIXt"           "character"                "Date" 
                 nwss_source          sample_index            pcr_target 
                 "character"           "character"           "character" 
       report_ts_nominal_end       state_territory           county_fips 
