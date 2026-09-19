@@ -12,18 +12,21 @@ vignette: >
 
 The Epidata API records not just each signal's estimate for a given location
 on a given day, but also *when* that estimate was made, and all updates to that
-estimate.
+estimate. This is particularly relevant for data sources that have updates or
+additional information coming in, due to reporting and data flow processes.
 
 For example, let's look at the [emergency department visits
-signal](https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nssp.html)
-from the `nssp` source, which estimates the percentage of emergency department
+signal](https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/nssp.html)
+from the [`nssp`](https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/nssp.html)
+source, which estimates the percentage of emergency department
 visits that are influenza-related. Consider a result row with `reference_time`
 2024-12-07 for `geo_values = "pa"`. This is an estimate for Pennsylvania on
 December 7, 2024. That estimate was first *reported* (published) on December 13,
 2024, the delay being due to the aggregation of data by our source and the time
 taken by the Epidata API to ingest the data provided. Later, the estimate for
 December 7th was updated, as additional visit data from December 7th arrived at
-our source and was reported to us. This constitutes a new *version* of the data.
+our source and was reported to us. This constitutes a new *version* of the
+data. Let's walk through how to look at that below.
 
 
 ### Data known "as of" a specific date
@@ -32,13 +35,15 @@ By default, endpoint functions fetch the most recent data available. This
 is the best option for users who simply want to graph the latest data or
 construct dashboards. But if we are interested in knowing *when* data was
 reported, we can request specific data versions using `snapshot_date` in
-`epidata_snapshot()` or `report_time` in `epidata_archive()`.
+`epidata_snapshot()`.
 
 First, we can request the data that was available *as of* a specific date, using
 the `snapshot_date` argument with `epidata_snapshot()`:
 
 
 ``` r
+# The percent of ED visits due to influenza from the NSSP source, for
+# 2024-12-07, as of 2024-12-14
 past_snapshot <- epidata_snapshot(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
@@ -82,20 +87,24 @@ knitr::kable(latest_snapshot)
 
 
 Note the change in the estimate, from 0.55% to 0.57%, reflecting new data that
-became available after December 14 about visits *occurring on* December 7. This
-illustrates the importance of version tracking, particularly for forecasting
-tasks. To backtest a forecasting model on past data, it is important to use the
-data that would have been available *at the time* the model was or would have
-been fit, not data that arrived much later.
+became available after December 14 about visits *occurring on* December 7.
+**This illustrates the importance of version tracking, particularly for
+forecasting tasks. To backtest a forecasting model on past data, it is
+important to use the data that would have been available *at the time* the
+model was or would have been fit, not data that arrived much later.**
 
 
 ### Multiple versions and revision histories
 
-By using `epidata_archive()` with the `report_time` argument, we can request all
-versions reported in a certain time period:
+Unlike `epidata_snapshot()`, `epidata_archive()` does not default to the
+latest data: by using it with the `report_time` argument, we can request all
+versions reported in a certain time period, and if `report_time` is omitted
+entirely, we get every version ever reported.
 
 
 ``` r
+# All versions of the percent of ED visits due to influenza from the NSSP
+# source, for 2024-12-07, reported between 2024-12-01 and 2025-01-15
 archive_data <- epidata_archive(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
@@ -126,11 +135,14 @@ Note that these results include only data reported between (inclusive)
 a query for reports between 2024-12-01 and 2025-01-15 will not include that
 value among its results.
 
-The `report_time` parameter also accepts comparison operators such as
-`"<2025-01-01"` or exact dates:
+The `report_time` parameter also accepts comparison operators (`<` and `>`,
+each strictly exclusive of the given date) or a range with `epirange()`.
+(Note: exact dates are not supported on `epidata_archive()`; use
+`epidata_snapshot(snapshot_date = ...)` if you need data as of a single date.)
 
 
 ``` r
+# Versions reported strictly before 2025-01-01
 epidata_archive(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
@@ -145,6 +157,24 @@ epidata_archive(
 #> 1 pct_ed_visits… 2024-12-13  state    pa        source      2024-12-07     0.550
 #> 2 pct_ed_visits… 2024-12-20  state    pa        source      2024-12-07     0.560
 #> 3 pct_ed_visits… 2024-12-27  state    pa        source      2024-12-07     0.560
+
+# Versions reported strictly after 2024-12-13
+epidata_archive(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = "2024-12-07",
+  report_time = ">2024-12-13"
+)
+#> # A tibble: 116 × 7
+#>   signal         report_time geo_type geo_value fill_method reference_time value
+#>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_ed_visits… 2024-12-20  state    pa        source      2024-12-07     0.560
+#> 2 pct_ed_visits… 2024-12-27  state    pa        source      2024-12-07     0.560
+#> 3 pct_ed_visits… 2025-01-03  state    pa        source      2024-12-07     0.560
+#> 4 pct_ed_visits… 2025-01-10  state    pa        source      2024-12-07     0.560
+#> # ℹ 112 more rows
 ```
 
 
@@ -189,35 +219,7 @@ archive_with_lag %>%
 #> 2 pct_ed_visits_influenza 2024-12-07     2024-12-20        13 0.560
 ```
 
-
-### Migrating from legacy endpoints
-
-For sources that have not yet transitioned from the legacy V4 API, versioning was
-specified via `pub_covidcast()` using `as_of`, `issues`, or `lag`:
-
-
-``` r
-# Legacy V4 query using `as_of`
-pub_covidcast(
-  source = "fb-survey",
-  signals = "smoothed_accept_covid_vaccine",
-  geo_type = "state",
-  geo_values = "pa",
-  time_type = "day",
-  time_values = epirange(20201221, 20201225),
-  as_of = 20201231
-)
-#> # A tibble: 5 × 15
-#>   geo_value signal     source geo_type time_type time_value direction issue     
-#>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
-#> 1 pa        smoothed_… fb-su… state    day       2020-12-21        NA 2020-12-22
-#> 2 pa        smoothed_… fb-su… state    day       2020-12-22        NA 2020-12-23
-#> 3 pa        smoothed_… fb-su… state    day       2020-12-23        NA 2020-12-24
-#> 4 pa        smoothed_… fb-su… state    day       2020-12-24        NA 2020-12-25
-#> # ℹ 1 more row
-#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
-#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
-```
-
-See `vignette("migration-guide")` for complete details on argument and column
-mappings between V4 and V5.
+For sources that have not yet transitioned from the legacy V4 API, versioning
+is specified differently; see `vignette("migration-guide")` for the argument
+and column mappings between V4 and V5, including worked before-and-after
+examples of revision history queries.
