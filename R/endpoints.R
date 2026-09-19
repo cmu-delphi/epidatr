@@ -1478,10 +1478,12 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #' @param snapshot_date Date or `NULL`. The snapshot date; `NULL` returns the
 #'   latest available version.
 #' @param as_of `r lifecycle::badge("deprecated")` Use `snapshot_date` instead.
-#' @param report_time Date, string, or [`epirange()`]. A query on the
-#'   `report_time` column for the archive endpoint. Supports exact dates (e.g.,
-#'   `"2025-10-16"`), operators (e.g., `"<2025-10-16"`), or an [`epirange()`].
-#'   Internally maps to the `report_time_query` API parameter.
+#' @param report_time String or [`epirange()`]. A filter on the `report_time`
+#'   column. Accepts comparison operators (e.g., `"<2025-10-16"`,
+#'   `">=2025-10-16"`) or an [`epirange()`] for an inclusive date range.
+#'   Bare dates and the `"="` operator are not accepted: use `snapshot_date`
+#'   for point-in-time data. Internally maps to the `report_time_query` API
+#'   parameter.
 #' @param issues `r lifecycle::badge("deprecated")` Use `report_time` instead.
 #' @param time_values `r lifecycle::badge("deprecated")` Use `reference_time` instead.
 #' @param ... Named filters on extra key columns beyond `geo_value`, such as
@@ -1735,12 +1737,7 @@ epidata_archive <- function(
 
   fetched <- vctrs::vec_rbind(!!!fetched)
   res <- fetched %>%
-    .cast_filter(
-      geo_values,
-      reference_time,
-      parsed_reference_times,
-      report_time = report_time
-    )
+    .cast_filter(geo_values, reference_time, parsed_reference_times)
   attr(res, "cast_source") <- source # lets epidata_aux() recover the source
   attr(res, "cast_kind") <- "archive" # per-row revision history -> as-of aux merge
 
@@ -1781,18 +1778,27 @@ epidata_archive <- function(
 #'   source is recovered automatically).
 #' @param reference_time [`timeset`]. Reference time to return (filters on the
 #'   `reference_time` column). Supports individual dates or [`epirange()`].
-#'   Base-pull mode only (when `source` is a string).
-#' @param report_time A date, string, or [epirange()] specifying the version of the auxiliary data
-#'   to retrieve. Base-pull mode only (when `source` is a string).
+#'   Only used when `source` is a string.
+#' @param snapshot_date Date, `"latest"`, or `NULL`. Return auxiliary data as
+#'   it appeared on this date (one row per key, the most recent version active
+#'   on that date). `"latest"` uses today's date. Use `NULL` (default) to
+#'   return the full version history filtered by `report_time`. Mutually
+#'   exclusive with `report_time`. Only used when `source` is a string.
+#' @param report_time String or [`epirange()`] specifying the version of the
+#'   auxiliary data to retrieve. Accepts comparison operators (e.g.,
+#'   `"<2025-10-16"`, `">=2025-10-16"`) or an [`epirange()`] for an inclusive
+#'   date range. Bare dates and the `"="` operator are not accepted — use
+#'   `snapshot_date` for point-in-time data. Mutually exclusive with
+#'   `snapshot_date`. Only used when `source` is a string.
 #' @param issues `r lifecycle::badge("deprecated")` Use `report_time` instead.
 #' @param time_values `r lifecycle::badge("deprecated")` Use `reference_time` instead.
 #' @param ... Named filters on the auxiliary key columns, such as
 #'   `pcr_target = "sars-cov-2"` or `geo_value = c("ca", "ny")`. Each key accepts
 #'   one or more values (matched as OR); they are serialized as repeated
 #'   `key:value` terms server-side to keep the aux pull small. Passing more than
-#'   10 values for a key warns, since the request URL may get too long. In
-#'   merge mode, when no filters are given, they are inferred from the base:
-#'   each key it narrows to at most 10 distinct values is filtered to those.
+#'   10 values for a key warns, since the request URL may get too long. When
+#'   `source` is a tibble and no filters are given, they are inferred from the
+#'   base: each key it narrows to at most 10 distinct values is filtered to those.
 #' @param columns A character vector of columns to return. By default, all columns are returned.
 #' @inheritParams .epidatr_shared_params
 #' @return A [`tibble::tibble`].
@@ -1810,6 +1816,7 @@ epidata_aux.default <- function(
   ...,
   reference_time = "*",
   time_values = lifecycle::deprecated(),
+  snapshot_date = NULL,
   report_time = "*",
   issues = lifecycle::deprecated(),
   columns = NULL,
@@ -1841,11 +1848,31 @@ epidata_aux.default <- function(
     report_time <- issues
   }
 
+  if (!is.null(snapshot_date) && !identical(report_time, "*")) {
+    cli::cli_abort(
+      "`snapshot_date` and `report_time` are mutually exclusive.",
+      class = "epidatr__epidata_aux__exclusive_version_args"
+    )
+  }
+
   parsed_reference_times <- validate_timeset_input(
     "reference_time",
     reference_time
   )
-  report_time_query <- validate_version_query(report_time)
+
+  if (identical(snapshot_date, "latest")) {
+    snapshot_date <- Sys.Date()
+  }
+
+  if (!is.null(snapshot_date)) {
+    assert_date_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
+    snapshot_date_str <- format(parse_api_date(snapshot_date), "%Y-%m-%d")
+    report_time_query <- NULL
+  } else {
+    snapshot_date_str <- NULL
+    report_time_query <- validate_version_query(report_time)
+  }
+
   filtered_keys <- .serialize_key_filters(key_filters)
   if (!is.null(columns)) {
     columns <- paste(columns, collapse = ",")
@@ -1859,6 +1886,7 @@ epidata_aux.default <- function(
     endpoint = "aux_data/",
     params = list(
       source = source,
+      snapshot_date = snapshot_date_str,
       report_time_query = report_time_query,
       filtered_keys = filtered_keys,
       columns = columns,
@@ -1878,12 +1906,7 @@ epidata_aux.default <- function(
     response_format = "csv"
   ) %>%
     fetch(fetch_args = fetch_args) %>%
-    .cast_filter(
-      "*",
-      reference_time,
-      parsed_reference_times,
-      report_time = report_time
-    )
+    .cast_filter("*", reference_time, parsed_reference_times)
 }
 
 #' @rdname epidata_aux
@@ -1965,18 +1988,21 @@ epidata_aux.data.frame <- function(
   }
 
   # Never need aux versions newer than the newest base report_time
-  report_cut <- if (ver %in% names(base) && !all(is.na(base[[ver]]))) {
-    paste0("<", format(max(base[[ver]], na.rm = TRUE) + 1, "%Y-%m-%d"))
-  } else {
-    "*"
-  }
+  has_versions <- ver %in% names(base) && !all(is.na(base[[ver]]))
+  is_snapshot <- identical(attr(base, "cast_kind"), "snapshot")
+  cutoff <- if (has_versions) max(base[[ver]], na.rm = TRUE) else NA
 
-  # Reuse the base-pull method to fetch aux
+  # When we use snapshot, we reuse the upper bound as a snapshot_date.
+  version_arg <- if (is_snapshot && has_versions) {
+    list(snapshot_date = cutoff)
+  } else {
+    list(report_time = if (has_versions) paste0("<", format(cutoff + 1, "%Y-%m-%d")) else "*")
+  }
   aux <- rlang::inject(epidata_aux(
     src,
-    report_time = report_cut,
     columns = columns,
     fetch_args = fetch_args,
+    !!!version_arg,
     !!!filters
   ))
   if (!inherits(aux, "data.frame")) {

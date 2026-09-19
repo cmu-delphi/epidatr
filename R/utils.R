@@ -165,8 +165,7 @@ filter_by_timeset <- function(df, column, timeset) {
   res,
   geo_values,
   reference_time,
-  parsed_reference_times,
-  report_time = NULL
+  parsed_reference_times
 ) {
   if (!inherits(res, "data.frame")) {
     return(res)
@@ -177,10 +176,6 @@ filter_by_timeset <- function(df, column, timeset) {
   }
   if (!identical(reference_time, "*")) {
     res <- filter_by_timeset(res, "reference_time", parsed_reference_times)
-  }
-  # EpiRange lower bound filter (upper bound handled by validate_version_query)
-  if (inherits(report_time, "EpiRange") && "report_time" %in% names(res)) {
-    res <- filter_by_timeset(res, "report_time", report_time)
   }
   res
 }

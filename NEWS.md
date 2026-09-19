@@ -13,7 +13,24 @@
   comma-joined in a single request per `geo_type`, instead of issuing a 
   separate request per signal (cmu-delphi/cast-api#103).
 
+## Breaking changes
+- `epidata_archive()` and `epidata_aux()`: passing a bare date or the `"="`
+  operator to `report_time` now errors. Use a comparison operator (e.g.
+  `"<2025-01-01"`) or an `epirange()` instead.
+
 ## New features
+- `epidata_aux()` gains a `snapshot_date` argument (date, `"latest"`, or `NULL`)
+  for retrieving auxiliary data as it appeared on a specific date. Mutually
+  exclusive with `report_time`.
+- `epidata_archive()` and `epidata_aux()`: `epirange()` values for `report_time`
+  are now filtered server-side using the cast-API's inclusive range syntax; the
+  local lower-bound filter has been removed.
+- `fetch_args_list()` gains a `limit` argument, capping the number of rows the
+  cast-API returns for `epidata_snapshot()`, `epidata_archive()`,
+  `epidata_aux()`, and `epidata()`. Defaults to `NULL` (no limit); `-1` has the
+  same effect. The underlying query has no stable sort order, so `limit` does
+  not guarantee the same rows (or count) across repeated calls. Use it only to
+  preview or debug a query, not as a real filter.
 - `fetch_args_list()` gains a `limit` argument, capping the number of rows
   the cast-API returns for `epidata_snapshot()`, `epidata_archive()`,
   `epidata_aux()`, and `epidata()`. Defaults to `NULL` (no limit); `-1` has
