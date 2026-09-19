@@ -28,8 +28,8 @@ For the current list of sources and indicators available on the new API, see the
 [V5 signals documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html).
 
 This guide walks through the transition from `pub_covidcast()` and other legacy
-endpoints. While `pub_covidcast()` is the most widely used legacy endpoint, historical
-V3 endpoints differ in their function names and parameter conventions. The tables
+endpoints. While `pub_covidcast()` is the most widely used legacy endpoint, V3
+endpoints differ in their function names and parameter conventions. The tables
 below compare both V4 (`pub_covidcast()`) and V3 (using `pub_fluview()` as an
 example) to their V5 equivalents.
 
@@ -148,12 +148,11 @@ old <- pub_covidcast(
   as_of = 20250101
 )
 #> Warning: `pub_covidcast()` uses the V4 Epidata API.
-#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5
-#>   API.
+#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5 API.
 #> ℹ See `vignette("migration-guide")` (or
-#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the
-#>   V5 endpoints and how to move to them. Old data will remain available for at
-#>   least a year, but new ingestion will end.
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the V5
+#>   endpoints and how to move to them. Old data will remain available for at least a
+#>   year, but new ingestion will end.
 #> This warning is displayed once every 8 hours.
 head(old)
 #> # A tibble: 6 × 15
@@ -214,12 +213,11 @@ old_flu <- pub_fluview(
   epiweeks = epirange(202440, 202445)
 )
 #> Warning: `pub_fluview()` uses the V4 Epidata API.
-#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5
-#>   API.
+#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5 API.
 #> ℹ See `vignette("migration-guide")` (or
-#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the
-#>   V5 endpoints and how to move to them. Old data will remain available for at
-#>   least a year, but new ingestion will end.
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the V5
+#>   endpoints and how to move to them. Old data will remain available for at least a
+#>   year, but new ingestion will end.
 #> This warning is displayed once every 8 hours.
 head(old_flu[, c("release_date", "region", "epiweek", "wili", "ili")])
 #> # A tibble: 6 × 5

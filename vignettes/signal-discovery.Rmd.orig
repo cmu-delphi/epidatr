@@ -14,9 +14,9 @@ library(epidatr)
 library(dplyr)
 ```
 
-The Epidata API includes numerous data streams -- medical claims data, cases and deaths, mobility, and many others -- covering different geographic regions. This can make it a challenge to find the data stream that you are most interested in.
+The Epidata API includes numerous data streams -- medical claims data, cases and deaths, wastewater concentrations, and many others -- covering different geographic regions. This can make it a challenge to find the data stream that you are most interested in.
 
-Data streams fall into three categories: V5 sources, migrating endpoints, and historical endpoints (which include international sources and private endpoints requiring authentication).
+Data streams fall into three categories: [V5 sources](#v5-sources), [migrating endpoints](#migrating-endpoints), and [historical endpoints](#historical-endpoints) (which include international sources and private endpoints requiring authentication).
 
 
 ## V5 sources
@@ -46,10 +46,13 @@ Called with `source = ...`, it reports that source's available signals, supporte
 ```{r}
 nssp_meta <- epidata_meta(source = "nssp")
 
-nssp_meta$signals
-nssp_meta$geo_types
-nssp_meta$time_value_range
-nssp_meta$version_range
+# all the fields available for this source
+names(nssp_meta)
+
+nssp_meta$signals # available signal names
+nssp_meta$geo_types # supported geography levels
+nssp_meta$reference_time_range # earliest/latest reference_time available
+nssp_meta$report_time_range # earliest/latest report_time (publication date) available
 ```
 
 You can also convert the metadata into a tabular summary to search across all sources using `dplyr`:
@@ -72,62 +75,63 @@ signals_df %>%
 
 ### Example queries for V5 sources
 
-The V5 API uses `epidata_snapshot()` to fetch data as of a given moment (latest by default) and `epidata_archive()` to fetch the full revision history. See `vignette("epidatr")` for a general introduction and `vignette("versioned-data")` for details on versioning.
+The V5 API uses `epidata_snapshot()` to fetch data as of a given moment (latest by default) and `epidata_archive()` to fetch the full revision history. See `vignette("epidatr")` for a general introduction to the package and its functions, and `vignette("versioned-data")` for details on versioning.
 
 Here are examples across several major V5 surveillance streams:
 
 ```{r v5-examples}
-# NSSP: Influenza emergency department visits
+# NSSP: Influenza emergency department visits, across multiple states
 epidata_snapshot(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
   geo_type = "state",
-  geo_values = "pa",
+  geo_values = c("pa", "ca"),
   reference_time = epirange("2024-10-01", "2024-10-15")
 )
 
-# NHSN: Confirmed influenza hospital admissions
+# NHSN: Confirmed hospital admissions, for multiple signals at once
 epidata_snapshot(
   source = "nhsn",
-  signals = "confirmed_admissions_flu_ew",
+  signals = c("confirmed_admissions_flu_ew", "confirmed_admissions_covid_ew"),
   geo_type = "state",
   geo_values = "pa",
   reference_time = epirange("2024-10-01", "2024-10-21")
 )
 
-# POPHIVE: Outpatient COVID-19 emergency visits
+# POPHIVE: Outpatient COVID-19 emergency visits, for a single exact reference date
 epidata_snapshot(
   source = "pophive",
   signals = "covid_pct_ed",
   geo_type = "state",
   geo_values = "pa",
-  reference_time = epirange("2024-10-01", "2024-10-15")
+  reference_time = "2024-10-05"
 )
 
-# NWSS: Wastewater SARS-CoV-2 concentrations
+# NWSS: Wastewater SARS-CoV-2 concentrations, for a set of specific dates rather than a range
 epidata_snapshot(
   source = "nwss",
   signals = "covid_avg_conc",
   geo_type = "sewershed",
   geo_values = "128",
-  reference_time = epirange("2024-12-01", "2024-12-15")
+  reference_time = c("2024-12-03", "2024-12-10")
 )
 
-# Archive: Revision history for a single reference date
+# Archive: Revision history for a single reference date, using a comparison
+# operator on report_time instead of an epirange()
 epidata_archive(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
   geo_type = "state",
   geo_values = "pa",
   reference_time = "2024-12-07",
-  report_time = epirange("2024-12-01", "2024-12-15")
+  report_time = "<2024-12-15"
 )
 ```
 
 
 ## Migrating endpoints
 
-Datasets that originated in the legacy API like `pub_covidcast()`, `pub_covidcast_meta()`, `pub_fluview()`, `pub_fluview_clinical()`, `pub_fluview_meta()`, `pub_flusurv()`, and `pub_meta()` are transitioning to V5.
+Datasets that originated in the legacy API like `pub_covidcast()`, `pub_covidcast_meta()`, `pub_fluview()`, `pub_fluview_clinical()`, `pub_fluview_meta()`, `pub_flusurv()`, and `pub_meta()` are transitioning to V5. Starting in October 2026, these V4 functions are tentatively deprecated in favor of V5: their historical data will remain available for at least a year, but new ingestion will end. `covidcast_epidata()`, which describes them, is not being retired outright, but will only keep describing frozen historical data once a source's V4 ingestion stops.
 
 ### Exploring legacy COVIDcast sources with `covidcast_epidata()`
 
@@ -143,7 +147,13 @@ with a `tibble` describing included signals.
 
 If you use an editor that supports tab completion, such as RStudio, type
 `covid_sources$source$` and wait for the tab completion popup. You will be able to
-browse the list of data sources.
+browse the list of data sources. Without tab completion, list them directly:
+
+```{r}
+names(covid_sources$sources)
+```
+
+You can also look at all the signals available across sources:
 
 ```{r}
 covid_sources$signals
@@ -155,7 +165,7 @@ able to type the name of signals and have the autocomplete feature select
 them from the list for you. In the tab-completion popup, signal names are
 prefixed with the name of the data source for filtering convenience.
 
-_Note_ that some signal names have dashes in them, so to access them
+Note that some signal names have dashes in them, so to access them
 we rely on the backtick operator:
 
 ```{r}
@@ -182,11 +192,11 @@ See `vignette("migration-guide")` for the argument mapping from V4 to V5.
 
 ## Historical endpoints
 
-Some datasets are not moving to V5 because data collection has ended. These endpoints remain available for historical reference using their original `pub_*` and `pvt_*` functions.
+Some datasets are not moving to V5 because data collection has ended. These endpoints remain available for historical reference using their original `pub_*` and `pvt_*` functions. For more information on the datasets that are and are not moving, please visit the [Endpoints kept for historical reference](https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference) section of the migration guide and the [Delphi V5 Sources and Signals](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html) documentation.
 
 ### Exploring package endpoints with `avail_endpoints()`
 
-The `avail_endpoints()` function lists all endpoint functions in the package and provides brief descriptions, explicitly noting which endpoints cover non-US locations:
+The `avail_endpoints()` function lists all endpoint functions (i.e. functions that query particular data sources within the API) in the package and provides brief descriptions, explicitly noting which endpoints cover non-US locations:
 
 ```{r, eval = FALSE}
 avail_endpoints()
@@ -197,9 +207,14 @@ suppressMessages(invisible(capture.output(endpts <- avail_endpoints())))
 knitr::kable(endpts)
 ```
 
-### Domestic historical sources
+`cast_api_queries()` groups `epidata_snapshot()`, `epidata_archive()`, and `epidata()`, which share a single documentation page; `epidata_meta()` and `epidata_aux()` each have their own page, so they get their own row.
 
-These endpoints provide completed historical collections within the United States:
+### Examples
+
+Some endpoints contain data within the United States only, some are international, and some are private and require additional access to query.
+
+<details id="domestic-endpoints">
+<summary>Domestic endpoints</summary>
 
 ```{r}
 # Google Flu Trends: Historical flu search volume
@@ -219,12 +234,10 @@ pub_covid_hosp_state_timeseries(
 )
 ```
 
-### International sources
-
-A subset of historical endpoints provide surveillance data outside the United States:
+</details>
 
 <details id="international-endpoints">
-<summary>Examples of international endpoints</summary>
+<summary>International endpoints</summary>
 
 ```{r}
 # PAHO Dengue: Surveillance in the Americas
@@ -248,12 +261,10 @@ pub_dengue_nowcast(locations = "ca", epiweeks = epirange(202001, 202004))
 
 </details>
 
-### Private endpoints
-
 Some private endpoints require a dedicated secret key passed via the `auth` argument (separate from the standard Epidata API key). Store these in your `.Renviron` file or environment variables:
 
 <details id="private-endpoints">
-<summary>Usage of private endpoints</summary>
+<summary>Private endpoints</summary>
 
 ```r
 # CDC Web Metrics: Website traffic for select topics
