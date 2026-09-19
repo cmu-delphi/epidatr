@@ -16,9 +16,8 @@ estimate. This is particularly relevant for data sources that have updates or
 additional information coming in, due to reporting and data flow processes.
 
 For example, let's look at the [emergency department visits
-signal](https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/nssp.html)
-from the [`nssp`](https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/nssp.html)
-source, which estimates the percentage of emergency department
+signal](https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nssp.html)
+from the `nssp` source, which estimates the percentage of emergency department
 visits that are influenza-related. Consider a result row with `reference_time`
 2024-12-07 for `geo_values = "pa"`. This is an estimate for Pennsylvania on
 December 7, 2024. That estimate was first *reported* (published) on December 13,
@@ -88,8 +87,8 @@ knitr::kable(latest_snapshot)
 
 Note the change in the estimate, from 0.55% to 0.57%, reflecting new data that
 became available after December 14 about visits *occurring on* December 7.
-**This illustrates the importance of version tracking, particularly for
-forecasting tasks. To backtest a forecasting model on past data, it is
+This illustrates the importance of version tracking, particularly for
+forecasting tasks. **To backtest a forecasting model on past data, it is
 important to use the data that would have been available *at the time* the
 model was or would have been fit, not data that arrived much later.**
 
@@ -220,6 +219,5 @@ archive_with_lag %>%
 ```
 
 For sources that have not yet transitioned from the legacy V4 API, versioning
-is specified differently; see `vignette("migration-guide")` for the argument
-and column mappings between V4 and V5, including worked before-and-after
-examples of revision history queries.
+is specified differently. See `vignette("migration-guide")` for the argument
+and column mappings between V4 and V5.
