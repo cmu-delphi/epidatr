@@ -134,7 +134,7 @@ test_that("epidata* and epidata_meta work as expected", {
   # Test epidata_meta
   res_meta <- epidata_meta(source = "nssp")
   expect_type(res_meta, "list")
-  expect_equal(res_meta$nssp$signals, c("sig1", "sig2"))
+  expect_equal(res_meta$signals, c("sig1", "sig2"))
 
   # Test epidata_snapshot basic fetch
   res <- epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state")
