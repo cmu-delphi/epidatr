@@ -1475,12 +1475,15 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #'   imputation or aggregation (raw source data), `"fill_ave"` fills nulls with
 #'   the average of neighboring values, and `"fill_zero"` fills nulls with zero.
 #'   `NULL` (default) returns all fill methods.
-#' @param snapshot_date Date or `NULL`. The snapshot date; `NULL` returns the
-#'   latest available version.
+#' @param snapshot_date Date, `POSIXt`, UTC timestamp string (e.g.
+#'   `"2025-10-16T13:45:00Z"`), or `NULL`. The snapshot returns the
+#'   version of the data that was current then. `NULL` returns the latest
+#'   available version.
 #' @param as_of `r lifecycle::badge("deprecated")` Use `snapshot_date` instead.
 #' @param report_time String or [`epirange()`]. A filter on the `report_time`
 #'   column. Accepts comparison operators (e.g., `"<2025-10-16"`,
-#'   `">=2025-10-16"`) or an [`epirange()`] for an inclusive date range.
+#'   `">=2025-10-16"`, or `"<=2025-10-16T13:45:00Z"` for a UTC timestamp
+#'   bound) or an [`epirange()`] for an inclusive date range.
 #'   Bare dates and the `"="` operator are not accepted: use `snapshot_date`
 #'   for point-in-time data. Internally maps to the `report_time_query` API
 #'   parameter.
@@ -1570,9 +1573,9 @@ epidata_snapshot <- function(
   assert_character_param("geo_type", geo_type)
   assert_character_param("geo_values", geo_values)
   assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
-  assert_date_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
+  assert_report_time_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
   if (!is.null(snapshot_date)) {
-    snapshot_date <- format(parse_api_date(snapshot_date), "%Y-%m-%d")
+    snapshot_date <- format_report_time_bound(snapshot_date)
   }
 
   parsed_reference_times <- validate_timeset_input(
@@ -1600,7 +1603,7 @@ epidata_snapshot <- function(
       ),
       meta = list(
         create_epidata_field_info("signal", "text"),
-        create_epidata_field_info("report_time", "date"),
+        create_epidata_field_info("report_time", "datetimetz"),
         create_epidata_field_info("geo_type", "text"),
         create_epidata_field_info("geo_value", "text"),
         create_epidata_field_info("fill_method", "text"),
@@ -1712,7 +1715,7 @@ epidata_archive <- function(
       ),
       meta = list(
         create_epidata_field_info("signal", "text"),
-        create_epidata_field_info("report_time", "date"),
+        create_epidata_field_info("report_time", "datetimetz"),
         create_epidata_field_info("geo_type", "text"),
         create_epidata_field_info("geo_value", "text"),
         create_epidata_field_info("fill_method", "text"),
@@ -1779,15 +1782,17 @@ epidata_archive <- function(
 #' @param reference_time [`timeset`]. Reference time to return (filters on the
 #'   `reference_time` column). Supports individual dates or [`epirange()`].
 #'   Only used when `source` is a string.
-#' @param snapshot_date Date, `"latest"`, or `NULL`. Return auxiliary data as
-#'   it appeared on this date (one row per key, the most recent version active
-#'   on that date). `"latest"` uses today's date. Use `NULL` (default) to
-#'   return the full version history filtered by `report_time`. Mutually
+#' @param snapshot_date Date, `POSIXt`, UTC timestamp string (e.g.
+#'   `"2025-10-16T13:45:00Z"`), `"latest"`, or `NULL`. Return auxiliary data
+#'   as it appeared at this date or instant (one row per key, the most recent
+#'   version active then). `"latest"` uses today's date. Use `NULL` (default)
+#'   to return the full version history filtered by `report_time`. Mutually
 #'   exclusive with `report_time`. Only used when `source` is a string.
 #' @param report_time String or [`epirange()`] specifying the version of the
 #'   auxiliary data to retrieve. Accepts comparison operators (e.g.,
-#'   `"<2025-10-16"`, `">=2025-10-16"`) or an [`epirange()`] for an inclusive
-#'   date range. Bare dates and the `"="` operator are not accepted — use
+#'   `"<2025-10-16"`, `">=2025-10-16"`, or `"<=2025-10-16T13:45:00Z"` for a
+#'   UTC timestamp bound) or an [`epirange()`] for an inclusive date range.
+#'   Bare dates and the `"="` operator are not accepted: use
 #'   `snapshot_date` for point-in-time data. Mutually exclusive with
 #'   `snapshot_date`. Only used when `source` is a string.
 #' @param issues `r lifecycle::badge("deprecated")` Use `report_time` instead.
@@ -1865,8 +1870,8 @@ epidata_aux.default <- function(
   }
 
   if (!is.null(snapshot_date)) {
-    assert_date_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
-    snapshot_date_str <- format(parse_api_date(snapshot_date), "%Y-%m-%d")
+    assert_report_time_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
+    snapshot_date_str <- format_report_time_bound(snapshot_date)
     report_time_query <- NULL
   } else {
     snapshot_date_str <- NULL
@@ -1895,7 +1900,7 @@ epidata_aux.default <- function(
     # Only the aux key columns are typed (nwss's schema).
     # Extend for new aux sources whose keys differ.
     meta = list(
-      create_epidata_field_info("report_time", "date"),
+      create_epidata_field_info("report_time", "datetimetz"),
       create_epidata_field_info("geo_value", "text"),
       create_epidata_field_info("reference_time", "date"),
       create_epidata_field_info("nwss_source", "text"),
@@ -1996,7 +2001,7 @@ epidata_aux.data.frame <- function(
   version_arg <- if (is_snapshot && has_versions) {
     list(snapshot_date = cutoff)
   } else {
-    list(report_time = if (has_versions) paste0("<", format(cutoff + 1, "%Y-%m-%d")) else "*")
+    list(report_time = if (has_versions) paste0("<=", format_report_time_bound(cutoff)) else "*")
   }
   aux <- rlang::inject(epidata_aux(
     src,
