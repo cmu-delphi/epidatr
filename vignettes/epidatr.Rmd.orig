@@ -374,13 +374,14 @@ ggplot(pa_revisions, aes(x = reference_time, y = value, group = report_time, col
 
 ## Available data sources and endpoints
 
-`epidatr` provides access to a broad ecosystem of epidemiological data streams:
+`epidatr` provides access to a broad collection of epidemiological data streams:
 
-- **V5 sources** provide access to active surveillance data queried via `epidata_snapshot()` and `epidata_archive()`. Discover them programmatically using `epidata_meta()` or interactively on the [Delphi EpiPortal](https://delphi.cmu.edu/epiportal/).
-- **Migrating endpoints** are legacy endpoints (such as `pub_covidcast()`, `pub_fluview()`, `pub_flusurv()`, and `pub_meta()`) transitioning to V5. See `vignette("migration-guide")` for argument mappings and migration details.
-- **Historical endpoints** provide access to datasets whose collection has ended (such as Google Flu Trends, Wikipedia article views, and historical hospitalization series) kept for retrospective analysis via `pub_*` functions.
-  - **International endpoints** are a subset of historical datasets that focus on surveillance outside the United States (e.g., PAHO dengue with `pub_paho_dengue()` and ECDC ILI with `pub_ecdc_ili()`).
-  - **Private endpoints** are restricted streams (e.g., CDC web metrics with `pvt_cdc()` and digital sensors with `pvt_sensors()`) that require dedicated secret authentication keys.
+- **V5 sources** serve active surveillance data through `epidata_snapshot()`, `epidata_archive()`, and `epidata_meta()`. You can discover them with `epidata_meta()` or interactively on the [Delphi EpiPortal](https://delphi.cmu.edu/epiportal/).
+- **Historical endpoints** provide access to datasets that are static and kept for retrospective analysis:
+  - **Recently migrated endpoints**: legacy endpoints that stopped receiving new data on September 30, 2026 when active surveillance transitioned to V5. This includes the V4 endpoint `pub_covidcast()` and V3 endpoints such as `pub_fluview()`, `pub_flusurv()`, and `pub_meta()`.
+  - **International endpoints**: historical datasets covering surveillance outside the United States (e.g., PAHO dengue with `pub_paho_dengue()` and ECDC ILI with `pub_ecdc_ili()`).
+  - **Private endpoints**: restricted streams (e.g., CDC web metrics with `pvt_cdc()` and digital sensors with `pvt_sensors()`) requiring dedicated authentication keys.
+  - Other completed datasets such as Google Flu Trends (`pub_gft()`) and Wikipedia article views (`pub_wiki()`).
 
-See `vignette("signal-discovery")` for an in-depth guide to discovering signals, browsing metadata, and querying datasets across all these categories.
+See `vignette("signal-discovery")` for an in-depth guide to discovering signals, browsing metadata, and querying datasets across these categories. If you have existing `pub_covidcast()` code, see `vignette("migration-guide")` for the argument and column mapping to the V5 functions.
 
