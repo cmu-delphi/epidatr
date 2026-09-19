@@ -55,8 +55,19 @@
 <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code> and <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> now send multiple <code>signals</code> comma-joined in a single request per <code>geo_type</code>, instead of issuing a separate request per signal (cmu-delphi/cast-api#103).</li>
 </ul></div>
 <div class="section level3">
+<h3 id="breaking-changes-1-4-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-4-0"></a></h3>
+<ul><li>
+<code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> and <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code>: passing a bare date or the <code>"="</code> operator to <code>report_time</code> now errors. Use a comparison operator (e.g. <code>"&lt;2025-01-01"</code>) or an <code><a href="../reference/epirange.html">epirange()</a></code> instead.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="new-features-1-4-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-4-0"></a></h3>
 <ul><li>
+<code><a href="../reference/epidata_aux.html">epidata_aux()</a></code> gains a <code>snapshot_date</code> argument (date, <code>"latest"</code>, or <code>NULL</code>) for retrieving auxiliary data as it appeared on a specific date. Mutually exclusive with <code>report_time</code>.</li>
+<li>
+<code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> and <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code>: <code><a href="../reference/epirange.html">epirange()</a></code> values for <code>report_time</code> are now filtered server-side using the cast-API’s inclusive range syntax; the local lower-bound filter has been removed.</li>
+<li>
+<code><a href="../reference/fetch_args_list.html">fetch_args_list()</a></code> gains a <code>limit</code> argument, capping the number of rows the cast-API returns for <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code>, and <code><a href="../reference/cast_api_queries.html">epidata()</a></code>. Defaults to <code>NULL</code> (no limit); <code>-1</code> has the same effect. The underlying query has no stable sort order, so <code>limit</code> does not guarantee the same rows (or count) across repeated calls. Use it only to preview or debug a query, not as a real filter.</li>
+<li>
 <code><a href="../reference/fetch_args_list.html">fetch_args_list()</a></code> gains a <code>limit</code> argument, capping the number of rows the cast-API returns for <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code>, and <code><a href="../reference/cast_api_queries.html">epidata()</a></code>. Defaults to <code>NULL</code> (no limit); <code>-1</code> has the same effect. The underlying query has no stable sort order, so <code>limit</code> does not guarantee the same rows (or count) across repeated calls. Use it only to preview or debug a query, not as a real filter.</li>
 </ul></div>
 </div>

@@ -26,6 +26,7 @@ epidata_aux(
   ...,
   reference_time = "*",
   time_values = lifecycle::deprecated(),
+  snapshot_date = NULL,
   report_time = "*",
   issues = lifecycle::deprecated(),
   columns = NULL,
@@ -54,8 +55,8 @@ epidata_aux(source, ..., columns = NULL, fetch_args = fetch_args_list())
   accepts one or more values (matched as OR); they are serialized as
   repeated `key:value` terms server-side to keep the aux pull small.
   Passing more than 10 values for a key warns, since the request URL may
-  get too long. In merge mode, when no filters are given, they are
-  inferred from the base: each key it narrows to at most 10 distinct
+  get too long. When `source` is a tibble and no filters are given, they
+  are inferred from the base: each key it narrows to at most 10 distinct
   values is filtered to those.
 
 - reference_time:
@@ -64,18 +65,30 @@ epidata_aux(source, ..., columns = NULL, fetch_args = fetch_args_list())
   Reference time to return (filters on the `reference_time` column).
   Supports individual dates or
   [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md).
-  Base-pull mode only (when `source` is a string).
+  Only used when `source` is a string.
 
 - time_values:
 
   **\[deprecated\]** Use `reference_time` instead.
 
+- snapshot_date:
+
+  Date, `"latest"`, or `NULL`. Return auxiliary data as it appeared on
+  this date (one row per key, the most recent version active on that
+  date). `"latest"` uses today's date. Use `NULL` (default) to return
+  the full version history filtered by `report_time`. Mutually exclusive
+  with `report_time`. Only used when `source` is a string.
+
 - report_time:
 
-  A date, string, or
+  String or
   [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
-  specifying the version of the auxiliary data to retrieve. Base-pull
-  mode only (when `source` is a string).
+  specifying the version of the auxiliary data to retrieve. Accepts
+  comparison operators (e.g., `"<2025-10-16"`, `">=2025-10-16"`) or an
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+  for an inclusive date range. Bare dates and the `"="` operator are not
+  accepted — use `snapshot_date` for point-in-time data. Mutually
+  exclusive with `snapshot_date`. Only used when `source` is a string.
 
 - issues:
 

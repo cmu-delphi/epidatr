@@ -141,13 +141,14 @@ epidata(
 
 - report_time:
 
-  Date, string, or
+  String or
   [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md).
-  A query on the `report_time` column for the archive endpoint. Supports
-  exact dates (e.g., `"2025-10-16"`), operators (e.g., `"<2025-10-16"`),
-  or an
-  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md).
-  Internally maps to the `report_time_query` API parameter.
+  A filter on the `report_time` column. Accepts comparison operators
+  (e.g., `"<2025-10-16"`, `">=2025-10-16"`) or an
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+  for an inclusive date range. Bare dates and the `"="` operator are not
+  accepted: use `snapshot_date` for point-in-time data. Internally maps
+  to the `report_time_query` API parameter.
 
 - issues:
 

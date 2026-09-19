@@ -22,8 +22,41 @@
   `geo_type`, instead of issuing a separate request per signal
   (cmu-delphi/cast-api#103).
 
+### Breaking changes
+
+- [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+  and
+  [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md):
+  passing a bare date or the `"="` operator to `report_time` now errors.
+  Use a comparison operator (e.g. `"<2025-01-01"`) or an
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+  instead.
+
 ### New features
 
+- [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md)
+  gains a `snapshot_date` argument (date, `"latest"`, or `NULL`) for
+  retrieving auxiliary data as it appeared on a specific date. Mutually
+  exclusive with `report_time`.
+- [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+  and
+  [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md):
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+  values for `report_time` are now filtered server-side using the
+  cast-API’s inclusive range syntax; the local lower-bound filter has
+  been removed.
+- [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
+  gains a `limit` argument, capping the number of rows the cast-API
+  returns for
+  [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+  [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md),
+  and
+  [`epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md).
+  Defaults to `NULL` (no limit); `-1` has the same effect. The
+  underlying query has no stable sort order, so `limit` does not
+  guarantee the same rows (or count) across repeated calls. Use it only
+  to preview or debug a query, not as a real filter.
 - [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
   gains a `limit` argument, capping the number of rows the cast-API
   returns for

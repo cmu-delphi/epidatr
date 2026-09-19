@@ -193,10 +193,12 @@ to <code><a href="epidata_call.html">fetch()</a></code>. See <code><a href="fetc
 
 
 <dt id="arg-report-time">report_time<a class="anchor" aria-label="anchor" href="#arg-report-time"></a></dt>
-<dd><p>Date, string, or <code><a href="epirange.html">epirange()</a></code>. A query on the
-<code>report_time</code> column for the archive endpoint. Supports exact dates (e.g.,
-<code>"2025-10-16"</code>), operators (e.g., <code>"&lt;2025-10-16"</code>), or an <code><a href="epirange.html">epirange()</a></code>.
-Internally maps to the <code>report_time_query</code> API parameter.</p></dd>
+<dd><p>String or <code><a href="epirange.html">epirange()</a></code>. A filter on the <code>report_time</code>
+column. Accepts comparison operators (e.g., <code>"&lt;2025-10-16"</code>,
+<code>"&gt;=2025-10-16"</code>) or an <code><a href="epirange.html">epirange()</a></code> for an inclusive date range.
+Bare dates and the <code>"="</code> operator are not accepted: use <code>snapshot_date</code>
+for point-in-time data. Internally maps to the <code>report_time_query</code> API
+parameter.</p></dd>
 
 
 <dt id="arg-issues">issues<a class="anchor" aria-label="anchor" href="#arg-issues"></a></dt>
