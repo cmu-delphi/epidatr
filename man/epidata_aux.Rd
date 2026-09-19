@@ -41,16 +41,18 @@ Only used when \code{source} is a string.}
 
 \item{time_values}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{reference_time} instead.}
 
-\item{snapshot_date}{Date, \code{"latest"}, or \code{NULL}. Return auxiliary data as
-it appeared on this date (one row per key, the most recent version active
-on that date). \code{"latest"} uses today's date. Use \code{NULL} (default) to
-return the full version history filtered by \code{report_time}. Mutually
+\item{snapshot_date}{Date, \code{POSIXt}, UTC timestamp string (e.g.
+\code{"2025-10-16T13:45:00Z"}), \code{"latest"}, or \code{NULL}. Return auxiliary data
+as it appeared at this date or instant (one row per key, the most recent
+version active then). \code{"latest"} uses today's date. Use \code{NULL} (default)
+to return the full version history filtered by \code{report_time}. Mutually
 exclusive with \code{report_time}. Only used when \code{source} is a string.}
 
 \item{report_time}{String or \code{\link[=epirange]{epirange()}} specifying the version of the
 auxiliary data to retrieve. Accepts comparison operators (e.g.,
-\code{"<2025-10-16"}, \code{">=2025-10-16"}) or an \code{\link[=epirange]{epirange()}} for an inclusive
-date range. Bare dates and the \code{"="} operator are not accepted — use
+\code{"<2025-10-16"}, \code{">=2025-10-16"}, or \code{"<=2025-10-16T13:45:00Z"} for a
+UTC timestamp bound) or an \code{\link[=epirange]{epirange()}} for an inclusive date range.
+Bare dates and the \code{"="} operator are not accepted: use
 \code{snapshot_date} for point-in-time data. Mutually exclusive with
 \code{snapshot_date}. Only used when \code{source} is a string.}
 
