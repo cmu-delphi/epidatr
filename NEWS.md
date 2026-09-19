@@ -1,11 +1,8 @@
-<<<<<<< HEAD
-# epidatr 1.3.1
+# epidatr 1.4.0
 
 ## Documentation
 
 - Updated vignettes (`epidatr`, `signal-discovery`, and `versioned-data`) to focus on V5 API workflows. Remove and redirect `v5-api-demo` vignette.
-=======
-# epidatr 1.4.0
 
 ## Patches
 
@@ -23,7 +20,7 @@
   the same effect. The underlying query has no stable sort order, so `limit`
   does not guarantee the same rows (or count) across repeated calls. Use it
   only to preview or debug a query, not as a real filter.
->>>>>>> dev
+
 
 # epidatr 1.3.0
 
