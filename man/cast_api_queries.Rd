@@ -57,9 +57,9 @@ Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available sources.}
 
 \item{signals}{character vector. One or more signals to query for the given
 source; comma-joined strings (e.g., \code{"sig1,sig2"}) are also accepted. Use
-\code{\link[=epidata_meta]{epidata_meta()}} to discover available signals. A separate API request is
-made per signal and geo type (the cast-API only accepts one of each per
-request) and the results are combined.}
+\code{\link[=epidata_meta]{epidata_meta()}} to discover available signals. All signals are sent
+comma-joined in a single request per geo type (the cast-API only accepts
+one geo type per request) and the results are combined.}
 
 \item{geo_type}{character vector. One or more geography types to query
 (e.g., \code{"state"}, \code{"nation"}, \code{"county"}); comma-joined strings are also

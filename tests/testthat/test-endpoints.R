@@ -195,6 +195,49 @@ test_that("epidata* and epidata_meta work as expected", {
   expect_equal(nrow(res_time_range), 2)
 })
 
+test_that("fetch_args_list(limit=) is forwarded to the cast-API request and validated", {
+  fa <- fetch_args_list(limit = 100, dry_run = TRUE)
+  calls <- list(
+    epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", fetch_args = fa),
+    epidata_archive(source = "nssp", signals = "sig1", geo_type = "state", fetch_args = fa),
+    epidata_aux("nwss", fetch_args = fa),
+    epidata(source = "nssp", signals = "sig1", geo_type = "state", fetch_args = fa)
+  )
+  for (call in calls) expect_match(call$request$url, "limit=100")
+
+  # NULL (default) omits the param entirely
+  no_limit <- epidata_snapshot(
+    source = "nssp", signals = "sig1", geo_type = "state",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_no_match(no_limit$request$url, "limit=")
+
+  expect_error(fetch_args_list(limit = 0), class = "epidatr__invalid_limit")
+  expect_error(fetch_args_list(limit = -2), class = "epidatr__invalid_limit")
+})
+
+test_that("limit warns when set on a non-cast (V4) endpoint and is silently ignored", {
+  expect_warning(
+    pub_covidcast(
+      source = "jhu-csse",
+      signals = "confirmed_7dav_incidence_prop",
+      time_type = "day",
+      geo_type = "state",
+      time_values = "*",
+      geo_values = "ca",
+      fetch_args = fetch_args_list(limit = 100, dry_run = TRUE)
+    ),
+    class = "epidatr__limit_ignored"
+  )
+
+  expect_no_warning(
+    epidata_snapshot(
+      source = "nssp", signals = "sig1", geo_type = "state",
+      fetch_args = fetch_args_list(limit = 100, dry_run = TRUE)
+    )
+  )
+})
+
 test_that("snapshot/archive/epidata send ... key filters server-side as extra_keys", {
   snap <- epidata_snapshot(
     source = "nwss", signals = "sig1", geo_type = "county",
@@ -310,75 +353,68 @@ test_that("epidata_archive local EpiRange filtering for report_time works", {
   expect_true(all(res_wide$report_time %in% as.Date(c("2024-01-01", "2024-01-02"))))
 })
 
-test_that("epidata_snapshot fans out one request per signal and combines results", {
+test_that("epidata_snapshot sends multiple signals comma-joined in a single request", {
   seen_urls <- character()
   handler <- function(req) {
     seen_urls <<- c(seen_urls, req$url)
-    if (grepl("signal=sig1", req$url)) {
-      "signal,geo_value,reference_time,value\nsig1,ca,2024-01-01,1.0"
-    } else if (grepl("signal=sig2", req$url)) {
-      "signal,geo_value,reference_time,value\nsig2,ca,2024-01-01,2.0"
-    } else {
-      stop("unexpected signal in url: ", req$url)
-    }
+    "signal,geo_value,reference_time,value\nsig1,ca,2024-01-01,1.0\nsig2,ca,2024-01-01,2.0"
   }
   with_mock_perform(handler, {
     res <- epidata_snapshot(source = "nssp", signals = c("sig1", "sig2"), geo_type = "state")
     expect_equal(sort(unique(res$signal)), c("sig1", "sig2"))
     expect_equal(nrow(res), 2)
   })
-  expect_length(seen_urls, 2)
-  # exactly one "signal=" term per request URL, no comma-joined signals
-  expect_true(all(vapply(seen_urls, function(u) length(gregexpr("signal=", u)[[1]]) == 1, logical(1))))
-  expect_false(any(grepl("sig1.{0,3}sig2|sig2.{0,3}sig1", seen_urls)))
+  expect_length(seen_urls, 1)
+  expect_match(seen_urls, "signal=sig1%2Csig2")
 })
 
-test_that("epidata_snapshot/epidata_archive dry_run returns a list of calls for multiple signals", {
-  calls <- epidata_snapshot(
+test_that("epidata_snapshot/epidata_archive dry_run returns one call per geo_type, signals comma-joined", {
+  # multiple signals, single geo_type: one call, signals comma-joined
+  single <- epidata_snapshot(
     source = "nssp", signals = c("sig1", "sig2"), geo_type = "state",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_s3_class(single, "epidata_call")
+  expect_match(single$request$url, "signal=sig1%2Csig2")
+
+  # multiple geo_types: one call per geo_type, each with all signals comma-joined
+  calls <- epidata_snapshot(
+    source = "nssp", signals = c("sig1", "sig2"), geo_type = c("state", "nation"),
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_type(calls, "list")
   expect_length(calls, 2)
   expect_s3_class(calls[[1]], "epidata_call")
   expect_s3_class(calls[[2]], "epidata_call")
-  expect_match(calls[[1]]$request$url, "signal=sig1")
-  expect_match(calls[[2]]$request$url, "signal=sig2")
-
-  # single signal keeps the old, backward-compatible behavior
-  single <- epidata_snapshot(
-    source = "nssp", signals = "sig1", geo_type = "state",
-    fetch_args = fetch_args_list(dry_run = TRUE)
-  )
-  expect_s3_class(single, "epidata_call")
+  expect_true(all(vapply(calls, function(call) grepl("signal=sig1%2Csig2", call$request$url), logical(1))))
+  expect_match(calls[[1]]$request$url, "geo_type=state")
+  expect_match(calls[[2]]$request$url, "geo_type=nation")
 
   arch_calls <- epidata_archive(
-    source = "nssp", signals = c("sig1", "sig2"), geo_type = "state",
+    source = "nssp", signals = c("sig1", "sig2"), geo_type = c("state", "nation"),
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_type(arch_calls, "list")
   expect_length(arch_calls, 2)
 })
 
-test_that("epidata_snapshot splits comma-joined signals/geo_type strings into separate requests", {
+test_that("epidata_snapshot splits comma-joined geo_type strings but keeps signals comma-joined", {
   calls <- epidata_snapshot(
     source = "nssp", signals = "sig1,sig2", geo_type = "state",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
-  expect_length(calls, 2)
-  expect_match(calls[[1]]$request$url, "signal=sig1")
-  expect_match(calls[[2]]$request$url, "signal=sig2")
+  expect_s3_class(calls, "epidata_call")
+  expect_match(calls$request$url, "signal=sig1%2Csig2")
 
   arch_calls <- epidata_archive(
     source = "nssp", signals = "sig1,sig2", geo_type = "state,nation",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
-  expect_length(arch_calls, 4)
+  expect_length(arch_calls, 2)
   urls <- vapply(arch_calls, function(call) call$request$url, character(1))
-  for (s in c("sig1", "sig2")) {
-    for (g in c("state", "nation")) {
-      expect_length(grep(sprintf("signal=%s.*geo_type=%s|geo_type=%s.*signal=%s", s, g, g, s), urls), 1)
-    }
+  expect_true(all(grepl("signal=sig1%2Csig2", urls)))
+  for (g in c("state", "nation")) {
+    expect_length(grep(sprintf("geo_type=%s", g), urls), 1)
   }
 })
 
@@ -500,12 +536,10 @@ test_that("epidata_snapshot warns epidatr__empty_signals when only some signals 
   handler <- function(req) {
     if (grepl("metadata/", req$url)) {
       as.character(meta_json)
-    } else if (grepl("signal=sig1", req$url)) {
-      "signal,geo_value,reference_time,value\nsig1,ca,2024-01-01,1.0"
-    } else if (grepl("signal=sig2", req$url)) {
-      "signal,geo_value,reference_time,value\n"
     } else {
-      stop("unexpected url: ", req$url)
+      # server returns rows only for the signals that have data, even when
+      # multiple signals are requested comma-joined in one query
+      "signal,geo_value,reference_time,value\nsig1,ca,2024-01-01,1.0"
     }
   }
   with_mock_perform(handler, {
