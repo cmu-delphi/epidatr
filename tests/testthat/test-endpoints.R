@@ -773,7 +773,7 @@ test_that("epidata_aux connected path: validation, empty base, dry_run cap/forwa
   snap_call <- epidata_aux(snapshot_base, pcr_target = "x", fetch_args = fetch_args_list(dry_run = TRUE))
   expect_match(snap_call$request$url, "snapshot_date=2024-05-20")
   expect_no_match(snap_call$request$url, "report_time_query=")
-  
+
   # remaining cases share one mocked schema (keys: report_time/geo_value/reference_time)
   local_mocked_bindings(
     req_perform = mock_aux_connected(
