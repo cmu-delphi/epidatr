@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,9 +19,8 @@
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/migration-guide.html">Migrating from pub_covidcast to the new Epidata API</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/migration-guide.html">V3/V4 to V5 Migration Guide</a></li>
     <li><a class="dropdown-item" href="../articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
-    <li><a class="dropdown-item" href="../articles/v5-api-demo.html">epidatr v5 API demo</a></li>
     <li><a class="dropdown-item" href="../articles/versioned-data.html">Understanding and accessing versioned data</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -41,7 +40,40 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.3.0" id="epidatr-130">epidatr 1.3.0<a class="anchor" aria-label="anchor" href="#epidatr-130"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.4.0" id="epidatr-140">epidatr 1.4.0<a class="anchor" aria-label="anchor" href="#epidatr-140"></a></h2>
+<div class="section level3">
+<h3 id="documentation-1-4-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-4-0"></a></h3>
+<ul><li>Updated vignettes (<code>epidatr</code>, <code>signal-discovery</code>, and <code>versioned-data</code>) to focus on V5 API workflows. Remove and redirect <code>v5-api-demo</code> vignette.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="patches-1-4-0">Patches<a class="anchor" aria-label="anchor" href="#patches-1-4-0"></a></h3>
+<ul><li>API errors now surface the server’s actual message for both the V4 (classic) and V5 (cast) APIs.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-1-4-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-4-0"></a></h3>
+<ul><li>
+<code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code> and <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> now send multiple <code>signals</code> comma-joined in a single request per <code>geo_type</code>, instead of issuing a separate request per signal (cmu-delphi/cast-api#103).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="breaking-changes-1-4-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-4-0"></a></h3>
+<ul><li>
+<code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> and <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code>: passing a bare date or the <code>"="</code> operator to <code>report_time</code> now errors. Use a comparison operator (e.g. <code>"&lt;2025-01-01"</code>) or an <code><a href="../reference/epirange.html">epirange()</a></code> instead.</li>
+<li>The cast-API’s <code>report_time</code> column and the <code>report_time_range</code> in <code><a href="../reference/epidata_meta.html">epidata_meta()</a></code> are now UTC timestamps (e.g. <code>2025-10-16T13:45:00Z</code>) rather than dates, so <code>report_time</code> now parses to a <code>POSIXct</code>. <code>report_time</code> and <code>snapshot_date</code> filters also accept a UTC timestamp string (with a trailing <code>Z</code>) or a <code>POSIXt</code>, in addition to a bare date, for exact-instant filtering (cmu-delphi/cast-api#123).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-1-4-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-4-0"></a></h3>
+<ul><li>
+<code><a href="../reference/epidata_aux.html">epidata_aux()</a></code> gains a <code>snapshot_date</code> argument (date, <code>"latest"</code>, or <code>NULL</code>) for retrieving auxiliary data as it appeared on a specific date. Mutually exclusive with <code>report_time</code>.</li>
+<li>
+<code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> and <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code>: <code><a href="../reference/epirange.html">epirange()</a></code> values for <code>report_time</code> are now filtered server-side using the cast-API’s inclusive range syntax; the local lower-bound filter has been removed.</li>
+<li>
+<code><a href="../reference/fetch_args_list.html">fetch_args_list()</a></code> gains a <code>limit</code> argument, capping the number of rows the cast-API returns for <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code>, and <code><a href="../reference/cast_api_queries.html">epidata()</a></code>. Defaults to <code>NULL</code> (no limit); <code>-1</code> has the same effect. The underlying query has no stable sort order, so <code>limit</code> does not guarantee the same rows (or count) across repeated calls. Use it only to preview or debug a query, not as a real filter.</li>
+<li>
+<code><a href="../reference/fetch_args_list.html">fetch_args_list()</a></code> gains a <code>limit</code> argument, capping the number of rows the cast-API returns for <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code>, and <code><a href="../reference/cast_api_queries.html">epidata()</a></code>. Defaults to <code>NULL</code> (no limit); <code>-1</code> has the same effect. The underlying query has no stable sort order, so <code>limit</code> does not guarantee the same rows (or count) across repeated calls. Use it only to preview or debug a query, not as a real filter.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.0" id="epidatr-130">epidatr 1.3.0<a class="anchor" aria-label="anchor" href="#epidatr-130"></a></h2><p class="text-muted">CRAN release: 2026-08-28</p>
 <div class="section level3">
 <h3 id="deprecations-1-3-0">Deprecations<a class="anchor" aria-label="anchor" href="#deprecations-1-3-0"></a></h3>
 <ul><li>

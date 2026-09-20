@@ -7,7 +7,6 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/articles/index.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/articles/migration-guide.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/articles/signal-discovery.html</loc></url>
-<url><loc>https://cmu-delphi.github.io/epidatr/articles/v5-api-demo.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/articles/versioned-data.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/authors.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/index.html</loc></url>
@@ -15,6 +14,8 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/assert_character_param.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/assert_date_param.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/assert_integerish_param.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/reference/assert_limit_param.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/reference/assert_report_time_param.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/assert_timeset_param.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/avail_endpoints.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/cache_info.html</loc></url>
@@ -42,11 +43,13 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/filter_by_timeset.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/format_item.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/format_list.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/reference/format_report_time_bound.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/get_api_key.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/get_wildcard_equivalent_dates.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/index.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/is_cache_enabled.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/note_frozen_endpoint.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/reference/parse_api_datetimetz.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/parse_api_week.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/parse_signal.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/parse_value.html</loc></url>
@@ -87,6 +90,7 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/validate_date_input.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/validate_timeset_input.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/validate_version_query.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/reference/warn_limit_unsupported.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/warn_v4_sunset.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/reference/with_base_url.html</loc></url>
 </urlset>

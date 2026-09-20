@@ -11,7 +11,7 @@ makes calls to the Epidata API."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,9 +23,8 @@ makes calls to the Epidata API."></head><body>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/migration-guide.html">Migrating from pub_covidcast to the new Epidata API</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/migration-guide.html">V3/V4 to V5 Migration Guide</a></li>
     <li><a class="dropdown-item" href="../articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
-    <li><a class="dropdown-item" href="../articles/v5-api-demo.html">epidatr v5 API demo</a></li>
     <li><a class="dropdown-item" href="../articles/versioned-data.html">Understanding and accessing versioned data</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -66,7 +65,8 @@ makes calls to the Epidata API.</p>
 <span>  debug <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  format_type <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  refresh_cache <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  reference_week_day <span class="op">=</span> <span class="fl">1</span></span>
+<span>  reference_week_day <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  limit <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -139,6 +139,15 @@ API, and update the cache, if it is enabled</p></dd>
 <dd><p>the day of the week to use as the reference day
 when parsing epiweeks to dates (happens if <code>disable_date_parsing</code> is <code>FALSE</code>)
 Defaults to 1 Sunday (the first day of the week).</p></dd>
+
+
+<dt id="arg-limit">limit<a class="anchor" aria-label="anchor" href="#arg-limit"></a></dt>
+<dd><p>integer or <code>NULL</code>. cast-API only (<code><a href="cast_api_queries.html">epidata_snapshot()</a></code>,
+<code><a href="cast_api_queries.html">epidata_archive()</a></code>, <code><a href="epidata_aux.html">epidata_aux()</a></code>, <code><a href="cast_api_queries.html">epidata()</a></code>): maximum number of rows
+to return. <code>NULL</code> (default) or <code>-1</code> requests no limit. The underlying
+query has no stable sort order, so <code>limit</code> does not guarantee the same
+rows (or even the same count) across repeated calls; use it only to
+preview or debug a query, never as a substitute for filtering.</p></dd>
 
 </dl></div>
     <div class="section level2">

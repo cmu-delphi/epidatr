@@ -74,9 +74,9 @@ epidata(
   character vector. One or more signals to query for the given source;
   comma-joined strings (e.g., `"sig1,sig2"`) are also accepted. Use
   [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/reference/epidata_meta.md)
-  to discover available signals. A separate API request is made per
-  signal and geo type (the cast-API only accepts one of each per
-  request) and the results are combined.
+  to discover available signals. All signals are sent comma-joined in a
+  single request per geo type (the cast-API only accepts one geo type
+  per request) and the results are combined.
 
 - geo_type:
 
@@ -123,7 +123,9 @@ epidata(
 
 - snapshot_date:
 
-  Date or `NULL`. The snapshot date; `NULL` returns the latest available
+  Date, `POSIXt`, UTC timestamp string (e.g. `"2025-10-16T13:45:00Z"`),
+  or `NULL`. The point in time to snapshot: returns the version of the
+  data that was current then. `NULL` returns the latest available
   version.
 
 - as_of:
@@ -141,13 +143,15 @@ epidata(
 
 - report_time:
 
-  Date, string, or
+  String or
   [`epirange()`](https://cmu-delphi.github.io/epidatr/reference/epirange.md).
-  A query on the `report_time` column for the archive endpoint. Supports
-  exact dates (e.g., `"2025-10-16"`), operators (e.g., `"<2025-10-16"`),
-  or an
-  [`epirange()`](https://cmu-delphi.github.io/epidatr/reference/epirange.md).
-  Internally maps to the `report_time_query` API parameter.
+  A filter on the `report_time` column. Accepts comparison operators
+  (e.g., `"<2025-10-16"`, `">=2025-10-16"`, or
+  `"<=2025-10-16T13:45:00Z"` for a UTC timestamp bound) or an
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/reference/epirange.md)
+  for an inclusive date range. Bare dates and the `"="` operator are not
+  accepted: use `snapshot_date` for point-in-time data. Internally maps
+  to the `report_time_query` API parameter.
 
 - issues:
 

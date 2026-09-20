@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,9 +36,8 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/migration-guide.html">Migrating from pub_covidcast to the new Epidata API</a></li>
+<li><a class="dropdown-item" href="../articles/migration-guide.html">V3/V4 to V5 Migration Guide</a></li>
     <li><a class="dropdown-item" href="../articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
-    <li><a class="dropdown-item" href="../articles/v5-api-demo.html">epidatr v5 API demo</a></li>
     <li><a class="dropdown-item" href="../articles/versioned-data.html">Understanding and accessing versioned data</a></li>
   </ul>
 </li>
@@ -72,62 +71,318 @@
     
     
 <p>The Epidata API includes numerous data streams – medical claims data,
-cases and deaths, mobility, and many others – covering different
-geographic regions. This can make it a challenge to find the data stream
-that you are most interested in.</p>
-<p>Example queries with all the endpoint functions available in this
-package are given <a href="#example-queries">below</a>.</p>
+cases and deaths, wastewater concentrations, and many others – covering
+different geographic regions. This can make it a challenge to find the
+data stream that you are most interested in.</p>
+<p>Data streams fall into three categories: <a href="#v5-sources">V5
+sources</a>, <a href="#migrating-endpoints">migrating endpoints</a>, and
+<a href="#historical-endpoints">historical endpoints</a> (which include
+international sources and private endpoints requiring
+authentication).</p>
 <div class="section level2">
-<h2 id="using-the-documentation">Using the documentation<a class="anchor" aria-label="anchor" href="#using-the-documentation"></a>
+<h2 id="v5-sources">V5 sources<a class="anchor" aria-label="anchor" href="#v5-sources"></a>
 </h2>
-<p>The Epidata documentation lists all the data sources and signals
-available through the API for <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html" class="external-link">COVID-19</a>
-and for <a href="https://cmu-delphi.github.io/delphi-epidata/api/README.html#source-specific-parameters" class="external-link">other
-diseases</a>. The site also includes a search tool if you have a keyword
-(e.g. “Taiwan”) in mind.</p>
+<p>The V5 API is the primary interface for active epidemiological
+surveillance data.</p>
+<div class="section level3">
+<h3 id="online-documentation-and-epiportal">Online documentation and EpiPortal<a class="anchor" aria-label="anchor" href="#online-documentation-and-epiportal"></a>
+</h3>
+<p>The online documentation lists all data sources and signals available
+through the <a href="https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html" class="external-link">Delphi
+V5 API</a>.</p>
+<p>For an interactive visual exploration, the <a href="https://delphi.cmu.edu/epiportal/" class="external-link">Delphi EpiPortal</a> lets you
+filter sources and signals by disease, pathogen, geography, and date
+range, view live preview charts, and copy query code.</p>
 </div>
-<div class="section level2">
-<h2 id="signal-metadata">Signal metadata<a class="anchor" aria-label="anchor" href="#signal-metadata"></a>
-</h2>
-<p>Some endpoints have partner metadata available that provides
-information about the signals that are available, for example, what time
-ranges they are available for, and when they have been updated.</p>
-<table class="table">
-<thead><tr class="header">
-<th align="left">Endpoint</th>
-<th align="left">Description</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">epidata_meta()</td>
-<td align="left">Get cast-API source metadata</td>
-</tr>
-<tr class="even">
-<td align="left">pub_covidcast_meta()</td>
-<td align="left">Metadata for the COVIDcast endpoint</td>
-</tr>
-<tr class="odd">
-<td align="left">pub_fluview_meta()</td>
-<td align="left">Metadata for the FluView endpoint</td>
-</tr>
-<tr class="even">
-<td align="left">pub_meta()</td>
-<td align="left">Metadata for the Delphi Epidata API</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level2">
-<h2 id="interactive-tooling">Interactive tooling<a class="anchor" aria-label="anchor" href="#interactive-tooling"></a>
-</h2>
-<p>We provide a couple <code>epidatr</code> functions to help find data
-sources and signals.</p>
-<p>The <code><a href="../reference/avail_endpoints.html">avail_endpoints()</a></code> function lists endpoints, each of
-which, except for COVIDcast, corresponds to a single data source.
-<code><a href="../reference/avail_endpoints.html">avail_endpoints()</a></code> outputs a <code>tibble</code> of
-endpoints and brief descriptions, which explicitly state when they cover
-non-US locations:</p>
+<div class="section level3">
+<h3 id="exploring-metadata-with-epidata_meta">Exploring metadata with <code>epidata_meta()</code><a class="anchor" aria-label="anchor" href="#exploring-metadata-with-epidata_meta"></a>
+</h3>
+<p>For sources on the V5 API (queried with
+<code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code> and <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>),
+<code><a href="../reference/epidata_meta.html">epidata_meta()</a></code> is the primary metadata lookup.</p>
+<p>Called with no arguments, it lists all active V5 sources:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/epidata_meta.html">epidata_meta</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">meta</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "nssp"    "nhsn"    "pophive" "nwss"   </span></span>
+<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 11 entries ]</span></span></code></pre></div>
+<p>Called with <code>source = ...</code>, it reports that source’s
+available signals, supported geographic levels, reference date ranges,
+and version history:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nssp_meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/epidata_meta.html">epidata_meta</a></span><span class="op">(</span>source <span class="op">=</span> <span class="st">"nssp"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># all the fields available for this source</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">nssp_meta</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "report_time_range"    "reference_time_range" "signals"             </span></span>
+<span><span class="co">#&gt; [4] "geo_types"           </span></span>
+<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 4 entries ]</span></span>
+<span></span>
+<span><span class="va">nssp_meta</span><span class="op">$</span><span class="va">signals</span> <span class="co"># available signal names</span></span>
+<span><span class="co">#&gt; [1] "pct_ed_visits_ari"       "pct_ed_visits_combined" </span></span>
+<span><span class="co">#&gt; [3] "pct_ed_visits_covid"     "pct_ed_visits_influenza"</span></span>
+<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]</span></span>
+<span><span class="va">nssp_meta</span><span class="op">$</span><span class="va">geo_types</span> <span class="co"># supported geography levels</span></span>
+<span><span class="co">#&gt; [1] "census_division" "census_region"   "county"          "hhs"            </span></span>
+<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]</span></span>
+<span><span class="va">nssp_meta</span><span class="op">$</span><span class="va">reference_time_range</span> <span class="co"># earliest/latest reference_time available</span></span>
+<span><span class="co">#&gt; $latest</span></span>
+<span><span class="co">#&gt; [1] "2026-09-12"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $first</span></span>
+<span><span class="co">#&gt; [1] "2022-10-01"</span></span>
+<span><span class="va">nssp_meta</span><span class="op">$</span><span class="va">report_time_range</span> <span class="co"># earliest/latest report_time (publication date) available</span></span>
+<span><span class="co">#&gt; $latest</span></span>
+<span><span class="co">#&gt; [1] "2026-09-16T00:00:00"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $first</span></span>
+<span><span class="co">#&gt; [1] "2024-04-18T00:00:00"</span></span></code></pre></div>
+<p>You can also convert the metadata into a tabular summary to search
+across all sources using <code>dplyr</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">signals_df</span> <span class="op">&lt;-</span> <span class="fu">bind_rows</span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">meta</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">src</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu">tibble</span><span class="op">(</span></span>
+<span>      source <span class="op">=</span> <span class="va">src</span>,</span>
+<span>      signals <span class="op">=</span> <span class="va">meta</span><span class="op">[[</span><span class="va">src</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">signals</span>,</span>
+<span>      geo_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">meta</span><span class="op">[[</span><span class="va">src</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">geo_types</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Search for signals related to influenza</span></span>
+<span><span class="va">signals_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"flu"</span>, <span class="va">signals</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 31 × 3</span></span>
+<span><span class="co">#&gt;   source signals                             geo_types                          </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;                               &lt;chr&gt;                              </span></span>
+<span><span class="co">#&gt; 1 nssp   pct_ed_visits_influenza             census_division, census_region, co…</span></span>
+<span><span class="co">#&gt; 2 nssp   smoothed_pct_ed_visits_influenza    census_division, census_region, co…</span></span>
+<span><span class="co">#&gt; 3 nhsn   confirmed_admissions_flu_ew         census_division, census_region, hh…</span></span>
+<span><span class="co">#&gt; 4 nhsn   hosprep_confirmed_admissions_flu_ew census_division, census_region, hh…</span></span>
+<span><span class="co">#&gt; # ℹ 27 more rows</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="example-queries-for-v5-sources">Example queries for V5 sources<a class="anchor" aria-label="anchor" href="#example-queries-for-v5-sources"></a>
+</h3>
+<p>The V5 API uses <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code> to fetch data as of a
+given moment (latest by default) and <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> to
+fetch the full revision history. See <code><a href="../articles/epidatr.html">vignette("epidatr")</a></code>
+for a general introduction to the package and its functions, and
+<code><a href="../articles/versioned-data.html">vignette("versioned-data")</a></code> for details on versioning.</p>
+<p>Here are examples across several major V5 surveillance streams:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># NSSP: Influenza emergency department visits, across multiple states</span></span>
+<span><span class="fu"><a href="../reference/cast_api_queries.html">epidata_snapshot</a></span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="st">"nssp"</span>,</span>
+<span>  signals <span class="op">=</span> <span class="st">"pct_ed_visits_influenza"</span>,</span>
+<span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
+<span>  geo_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pa"</span>, <span class="st">"ca"</span><span class="op">)</span>,</span>
+<span>  reference_time <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2024-10-01"</span>, <span class="st">"2024-10-15"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 7</span></span>
+<span><span class="co">#&gt;   signal        report_time geo_type geo_value fill_method reference_time  value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;         &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;          &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_ed_visit… 2026-06-26  state    ca        source      2024-10-05     0.140 </span></span>
+<span><span class="co">#&gt; 2 pct_ed_visit… 2026-06-26  state    ca        source      2024-10-12     0.140 </span></span>
+<span><span class="co">#&gt; 3 pct_ed_visit… 2026-06-26  state    pa        source      2024-10-05     0.0500</span></span>
+<span><span class="co">#&gt; 4 pct_ed_visit… 2026-06-26  state    pa        source      2024-10-12     0.0700</span></span>
+<span></span>
+<span><span class="co"># NHSN: Confirmed hospital admissions, for multiple signals at once</span></span>
+<span><span class="fu"><a href="../reference/cast_api_queries.html">epidata_snapshot</a></span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="st">"nhsn"</span>,</span>
+<span>  signals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"confirmed_admissions_flu_ew"</span>, <span class="st">"confirmed_admissions_covid_ew"</span><span class="op">)</span>,</span>
+<span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
+<span>  geo_values <span class="op">=</span> <span class="st">"pa"</span>,</span>
+<span>  reference_time <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2024-10-01"</span>, <span class="st">"2024-10-21"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 6 × 7</span></span>
+<span><span class="co">#&gt;   signal         report_time geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;          &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 confirmed_adm… 2026-06-26  state    pa        source      2024-10-19        45</span></span>
+<span><span class="co">#&gt; 2 confirmed_adm… 2026-06-26  state    pa        source      2024-10-12        15</span></span>
+<span><span class="co">#&gt; 3 confirmed_adm… 2026-06-26  state    pa        source      2024-10-05       468</span></span>
+<span><span class="co">#&gt; 4 confirmed_adm… 2026-06-26  state    pa        source      2024-10-19         6</span></span>
+<span><span class="co">#&gt; # ℹ 2 more rows</span></span>
+<span></span>
+<span><span class="co"># POPHIVE: Outpatient COVID-19 emergency visits, for a single exact reference date</span></span>
+<span><span class="fu"><a href="../reference/cast_api_queries.html">epidata_snapshot</a></span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="st">"pophive"</span>,</span>
+<span>  signals <span class="op">=</span> <span class="st">"covid_pct_ed"</span>,</span>
+<span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
+<span>  geo_values <span class="op">=</span> <span class="st">"pa"</span>,</span>
+<span>  reference_time <span class="op">=</span> <span class="st">"2024-10-05"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 7 × 8</span></span>
+<span><span class="co">#&gt;   signal     report_time geo_type geo_value fill_method reference_time age_group</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;      &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;chr&gt;    </span></span>
+<span><span class="co">#&gt; 1 covid_pct… 2026-08-14  state    pa        source      2024-10-05     &lt;1       </span></span>
+<span><span class="co">#&gt; 2 covid_pct… 2026-08-14  state    pa        source      2024-10-05     1-4      </span></span>
+<span><span class="co">#&gt; 3 covid_pct… 2026-08-14  state    pa        source      2024-10-05     18-49    </span></span>
+<span><span class="co">#&gt; 4 covid_pct… 2026-08-14  state    pa        source      2024-10-05     50-64    </span></span>
+<span><span class="co">#&gt; # ℹ 3 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: value &lt;dbl&gt;</span></span>
+<span></span>
+<span><span class="co"># NWSS: Wastewater SARS-CoV-2 concentrations, for a set of specific dates rather than a range</span></span>
+<span><span class="fu"><a href="../reference/cast_api_queries.html">epidata_snapshot</a></span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="st">"nwss"</span>,</span>
+<span>  signals <span class="op">=</span> <span class="st">"covid_avg_conc"</span>,</span>
+<span>  geo_type <span class="op">=</span> <span class="st">"sewershed"</span>,</span>
+<span>  geo_values <span class="op">=</span> <span class="st">"128"</span>,</span>
+<span>  reference_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2024-12-03"</span>, <span class="st">"2024-12-10"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 10</span></span>
+<span><span class="co">#&gt;   signal   report_time geo_type geo_value fill_method reference_time nwss_source</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;chr&gt;      </span></span>
+<span><span class="co">#&gt; 1 covid_a… 2026-06-26  sewersh… 128       source      2024-12-03     CDC_Verily </span></span>
+<span><span class="co">#&gt; 2 covid_a… 2026-06-26  sewersh… 128       source      2024-12-10     CDC_Verily </span></span>
+<span><span class="co">#&gt; # ℹ 3 more variables: sample_index &lt;chr&gt;, pcr_target &lt;chr&gt;, value &lt;dbl&gt;</span></span>
+<span></span>
+<span><span class="co"># Archive: Revision history for a single reference date, using a comparison</span></span>
+<span><span class="co"># operator on report_time instead of an epirange()</span></span>
+<span><span class="fu"><a href="../reference/cast_api_queries.html">epidata_archive</a></span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="st">"nssp"</span>,</span>
+<span>  signals <span class="op">=</span> <span class="st">"pct_ed_visits_influenza"</span>,</span>
+<span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
+<span>  geo_values <span class="op">=</span> <span class="st">"pa"</span>,</span>
+<span>  reference_time <span class="op">=</span> <span class="st">"2024-12-07"</span>,</span>
+<span>  report_time <span class="op">=</span> <span class="st">"&lt;2024-12-15"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 7</span></span>
+<span><span class="co">#&gt;   signal         report_time geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;          &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_ed_visits… 2024-12-13  state    pa        source      2024-12-07     0.550</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="migrating-endpoints">Migrating endpoints<a class="anchor" aria-label="anchor" href="#migrating-endpoints"></a>
+</h2>
+<p>Datasets that originated in the legacy API like
+<code><a href="../reference/pub_covidcast.html">pub_covidcast()</a></code>, <code><a href="../reference/pub_covidcast_meta.html">pub_covidcast_meta()</a></code>,
+<code><a href="../reference/pub_fluview.html">pub_fluview()</a></code>, <code><a href="../reference/pub_fluview_clinical.html">pub_fluview_clinical()</a></code>,
+<code><a href="../reference/pub_fluview_meta.html">pub_fluview_meta()</a></code>, <code><a href="../reference/pub_flusurv.html">pub_flusurv()</a></code>, and
+<code><a href="../reference/pub_meta.html">pub_meta()</a></code> are transitioning to V5. Starting in October
+2026, these V4 functions are tentatively deprecated in favor of V5:
+their historical data will remain available for at least a year, but new
+ingestion will end. <code><a href="../reference/covidcast_epidata.html">covidcast_epidata()</a></code>, which describes
+them, is not being retired outright, but will only keep describing
+frozen historical data once a source’s V4 ingestion stops.</p>
+<div class="section level3">
+<h3 id="exploring-legacy-covidcast-sources-with-covidcast_epidata">Exploring legacy COVIDcast sources with
+<code>covidcast_epidata()</code><a class="anchor" aria-label="anchor" href="#exploring-legacy-covidcast-sources-with-covidcast_epidata"></a>
+</h3>
+<p>For datasets still queried through the legacy
+<code><a href="../reference/pub_covidcast.html">pub_covidcast()</a></code> function, <code><a href="../reference/covidcast_epidata.html">covidcast_epidata()</a></code>
+describes all available COVIDcast data sources and signals:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">covid_sources</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covidcast_epidata.html">covidcast_epidata</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">covid_sources</span><span class="op">$</span><span class="va">sources</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $chng</span></span>
+<span><span class="co">#&gt; [1] "Change Healthcare"</span></span>
+<span><span class="co">#&gt; [1] "chng"</span></span>
+<span><span class="co">#&gt; [1] "Change Healthcare is a healthcare technology company that aggregates medical claims data from many healthcare providers. This source includes aggregated counts of claims with confirmed COVID-19 or COVID-related symptoms. All claims data has been de-identified in accordance with HIPAA privacy regulations. "</span></span>
+<span><span class="co">#&gt; # A tibble: 8 × 2</span></span>
+<span><span class="co">#&gt;   signal                        short_description                               </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                         &lt;chr&gt;                                           </span></span>
+<span><span class="co">#&gt; 1 smoothed_outpatient_cli       Estimated percentage of outpatient doctor visit…</span></span>
+<span><span class="co">#&gt; 2 smoothed_adj_outpatient_cli   Estimated percentage of outpatient doctor visit…</span></span>
+<span><span class="co">#&gt; 3 smoothed_outpatient_covid     COVID-Confirmed Doctor Visits                   </span></span>
+<span><span class="co">#&gt; 4 smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits                   </span></span>
+<span><span class="co">#&gt; # ℹ 4 more rows</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $`covid-act-now`</span></span>
+<span><span class="co">#&gt; [1] "Covid Act Now (CAN)"</span></span>
+<span><span class="co">#&gt; [1] "covid-act-now"</span></span>
+<span><span class="co">#&gt; [1] "COVID Act Now (CAN) tracks COVID-19 testing statistics, such as positivity rates and total tests performed. This source only includes CAN data from the CDC's COVID-19 Integrated County View."</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 2</span></span>
+<span><span class="co">#&gt;   signal                       short_description                                </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                        &lt;chr&gt;                                            </span></span>
+<span><span class="co">#&gt; 1 pcr_specimen_positivity_rate Proportion of PCR specimens tested that have a p…</span></span>
+<span><span class="co">#&gt; 2 pcr_specimen_total_tests     Total number of PCR specimens tested</span></span></code></pre></div>
+<p>Each source is included as an entry in the
+<code>covid_sources$sources</code> list, associated with a
+<code>tibble</code> describing included signals.</p>
+<p>If you use an editor that supports tab completion, such as RStudio,
+type <code>covid_sources$source$</code> and wait for the tab completion
+popup. You will be able to browse the list of data sources. Without tab
+completion, list them directly:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">covid_sources</span><span class="op">$</span><span class="va">sources</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "chng"          "covid-act-now" "doctor-visits" "fb-survey"    </span></span>
+<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 18 entries ]</span></span></code></pre></div>
+<p>You can also look at all the signals available across sources:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">covid_sources</span><span class="op">$</span><span class="va">signals</span></span>
+<span><span class="co">#&gt; # A tibble: 520 × 3</span></span>
+<span><span class="co">#&gt;   source signal                        short_description                        </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;                         &lt;chr&gt;                                    </span></span>
+<span><span class="co">#&gt; 1 chng   smoothed_outpatient_cli       Estimated percentage of outpatient docto…</span></span>
+<span><span class="co">#&gt; 2 chng   smoothed_adj_outpatient_cli   Estimated percentage of outpatient docto…</span></span>
+<span><span class="co">#&gt; 3 chng   smoothed_outpatient_covid     COVID-Confirmed Doctor Visits            </span></span>
+<span><span class="co">#&gt; 4 chng   smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits            </span></span>
+<span><span class="co">#&gt; # ℹ 516 more rows</span></span></code></pre></div>
+<p>If you use an editor that supports tab completion, type
+<code>covid_sources$signals$</code> and wait for the tab completion
+popup. You will be able to type the name of signals and have the
+autocomplete feature select them from the list for you. In the
+tab-completion popup, signal names are prefixed with the name of the
+data source for filtering convenience.</p>
+<p>Note that some signal names have dashes in them, so to access them we
+rely on the backtick operator:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">covid_sources</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">`fb-survey:smoothed_cli`</span></span>
+<span><span class="co">#&gt; [1] "COVID-Like Symptoms (Unweighted 7-day average)"</span></span>
+<span><span class="co">#&gt; [1] "fb-survey:smoothed_cli"</span></span>
+<span><span class="co">#&gt; [1] "Estimated percentage of people with COVID-like illness "</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="example-legacy-query">Example legacy query<a class="anchor" aria-label="anchor" href="#example-legacy-query"></a>
+</h3>
+<p>Legacy endpoints remain accessible while their sources
+transition:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_covidcast.html">pub_covidcast</a></span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
+<span>  signals <span class="op">=</span> <span class="st">"smoothed_accept_covid_vaccine"</span>,</span>
+<span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
+<span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
+<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20201221</span>, <span class="fl">20201225</span><span class="op">)</span>,</span>
+<span>  geo_values <span class="op">=</span> <span class="st">"pa"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 15</span></span>
+<span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
+<span><span class="co">#&gt; 1 pa        smoothed_… fb-su… state    day       2020-12-21        NA 2020-12-22</span></span>
+<span><span class="co">#&gt; 2 pa        smoothed_… fb-su… state    day       2020-12-22        NA 2020-12-23</span></span>
+<span><span class="co">#&gt; 3 pa        smoothed_… fb-su… state    day       2020-12-23        NA 2020-12-24</span></span>
+<span><span class="co">#&gt; 4 pa        smoothed_… fb-su… state    day       2020-12-24        NA 2020-12-25</span></span>
+<span><span class="co">#&gt; # ℹ 1 more row</span></span>
+<span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
+<p>See <code><a href="../articles/migration-guide.html">vignette("migration-guide")</a></code> for the argument mapping
+from V4 to V5.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="historical-endpoints">Historical endpoints<a class="anchor" aria-label="anchor" href="#historical-endpoints"></a>
+</h2>
+<p>Some datasets are not moving to V5 because data collection has ended.
+These endpoints remain available for historical reference using their
+original <code>pub_*</code> and <code>pvt_*</code> functions. For more
+information on the datasets that are and are not moving, please visit
+the <a href="https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference">Endpoints
+kept for historical reference</a> section of the migration guide and the
+<a href="https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html" class="external-link">Delphi
+V5 Sources and Signals</a> documentation.</p>
+<div class="section level3">
+<h3 id="exploring-package-endpoints-with-avail_endpoints">Exploring package endpoints with <code>avail_endpoints()</code><a class="anchor" aria-label="anchor" href="#exploring-package-endpoints-with-avail_endpoints"></a>
+</h3>
+<p>The <code><a href="../reference/avail_endpoints.html">avail_endpoints()</a></code> function lists all endpoint
+functions (i.e. functions that query particular data sources within the
+API) in the package and provides brief descriptions, explicitly noting
+which endpoints cover non-US locations:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/avail_endpoints.html">avail_endpoints</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -269,642 +524,235 @@ South America)</td>
 </tr>
 </tbody>
 </table>
-<p>The <code><a href="../reference/covidcast_epidata.html">covidcast_epidata()</a></code> function lets you look more
-in-depth at the data sources available through the COVIDcast endpoint.
-The function describes all available data sources and signals:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">covid_sources</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covidcast_epidata.html">covidcast_epidata</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">covid_sources</span><span class="op">$</span><span class="va">sources</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $chng</span></span>
-<span><span class="co">#&gt; [1] "Change Healthcare"</span></span>
-<span><span class="co">#&gt; [1] "chng"</span></span>
-<span><span class="co">#&gt; [1] "Change Healthcare is a healthcare technology company that aggregates medical claims data from many healthcare providers. This source includes aggregated counts of claims with confirmed COVID-19 or COVID-related symptoms. All claims data has been de-identified in accordance with HIPAA privacy regulations. "</span></span>
-<span><span class="co">#&gt; # A tibble: 8 × 2</span></span>
-<span><span class="co">#&gt;   signal                        short_description                               </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;                         &lt;chr&gt;                                           </span></span>
-<span><span class="co">#&gt; 1 smoothed_outpatient_cli       Estimated percentage of outpatient doctor visit…</span></span>
-<span><span class="co">#&gt; 2 smoothed_adj_outpatient_cli   Estimated percentage of outpatient doctor visit…</span></span>
-<span><span class="co">#&gt; 3 smoothed_outpatient_covid     COVID-Confirmed Doctor Visits                   </span></span>
-<span><span class="co">#&gt; 4 smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits                   </span></span>
-<span><span class="co">#&gt; # ℹ 4 more rows</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $`covid-act-now`</span></span>
-<span><span class="co">#&gt; [1] "Covid Act Now (CAN)"</span></span>
-<span><span class="co">#&gt; [1] "covid-act-now"</span></span>
-<span><span class="co">#&gt; [1] "COVID Act Now (CAN) tracks COVID-19 testing statistics, such as positivity rates and total tests performed. This source only includes CAN data from the CDC's COVID-19 Integrated County View."</span></span>
-<span><span class="co">#&gt; # A tibble: 2 × 2</span></span>
-<span><span class="co">#&gt;   signal                       short_description                                </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;                        &lt;chr&gt;                                            </span></span>
-<span><span class="co">#&gt; 1 pcr_specimen_positivity_rate Proportion of PCR specimens tested that have a p…</span></span>
-<span><span class="co">#&gt; 2 pcr_specimen_total_tests     Total number of PCR specimens tested</span></span></code></pre></div>
-<p>Each source is included as an entry in the
-<code>covid_sources$sources</code> list, associated with a
-<code>tibble</code> describing included signals.</p>
-<p>If you use an editor that supports tab completion, such as RStudio,
-type <code>covid_sources$source$</code> and wait for the tab completion
-popup. You will be able to browse the list of data sources.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">covid_sources</span><span class="op">$</span><span class="va">signals</span></span>
-<span><span class="co">#&gt; # A tibble: 538 × 3</span></span>
-<span><span class="co">#&gt;   source signal                        short_description                        </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;                         &lt;chr&gt;                                    </span></span>
-<span><span class="co">#&gt; 1 chng   smoothed_outpatient_cli       Estimated percentage of outpatient docto…</span></span>
-<span><span class="co">#&gt; 2 chng   smoothed_adj_outpatient_cli   Estimated percentage of outpatient docto…</span></span>
-<span><span class="co">#&gt; 3 chng   smoothed_outpatient_covid     COVID-Confirmed Doctor Visits            </span></span>
-<span><span class="co">#&gt; 4 chng   smoothed_adj_outpatient_covid COVID-Confirmed Doctor Visits            </span></span>
-<span><span class="co">#&gt; # ℹ 534 more rows</span></span></code></pre></div>
-<p>If you use an editor that supports tab completion, type
-<code>covid_sources$signals$</code> and wait for the tab completion
-popup. You will be able to type the name of signals and have the
-autocomplete feature select them from the list for you. In the
-tab-completion popup, signal names are prefixed with the name of the
-data source for filtering convenience.</p>
-<p><em>Note</em> that some signal names have dashes in them, so to
-access them we rely on the backtick operator:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">covid_sources</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">`fb-survey:smoothed_cli`</span></span>
-<span><span class="co">#&gt; [1] "COVID-Like Symptoms (Unweighted 7-day average)"</span></span>
-<span><span class="co">#&gt; [1] "fb-survey:smoothed_cli"</span></span>
-<span><span class="co">#&gt; [1] "Estimated percentage of people with COVID-like illness "</span></span></code></pre></div>
-<p>These signal objects can be used directly to fetch data, without
-requiring us to use the <code><a href="../reference/pub_covidcast.html">pub_covidcast()</a></code> function. Simply
-use the <code>$call</code> attribute of the object:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="va">covid_sources</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">`fb-survey:smoothed_cli`</span><span class="op">$</span><span class="fu">call</span><span class="op">(</span></span>
-<span>  <span class="st">"state"</span>, <span class="st">"pa"</span>, <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">epidata</span><span class="op">)</span></span></code></pre></div>
-<table style="width:100%;" class="table">
-<colgroup>
-<col width="5%">
-<col width="7%">
-<col width="5%">
-<col width="5%">
-<col width="5%">
-<col width="6%">
-<col width="5%">
-<col width="6%">
-<col width="2%">
-<col width="8%">
-<col width="8%">
-<col width="11%">
-<col width="5%">
-<col width="5%">
-<col width="7%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">geo_value</th>
-<th align="left">signal</th>
-<th align="left">source</th>
-<th align="left">geo_type</th>
-<th align="left">time_type</th>
-<th align="left">time_value</th>
-<th align="right">direction</th>
-<th align="left">issue</th>
-<th align="right">lag</th>
-<th align="right">missing_value</th>
-<th align="right">missing_stderr</th>
-<th align="right">missing_sample_size</th>
-<th align="right">value</th>
-<th align="right">stderr</th>
-<th align="right">sample_size</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_cli</td>
-<td align="left">fb-survey</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2021-04-05</td>
-<td align="right">NA</td>
-<td align="left">2021-04-10</td>
-<td align="right">5</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0.7157576</td>
-<td align="right">0.0729992</td>
-<td align="right">10894.01</td>
-</tr>
-<tr class="even">
-<td align="left">pa</td>
-<td align="left">smoothed_cli</td>
-<td align="left">fb-survey</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2021-04-06</td>
-<td align="right">NA</td>
-<td align="left">2021-04-11</td>
-<td align="right">5</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0.6932097</td>
-<td align="right">0.0708692</td>
-<td align="right">10862.01</td>
-</tr>
-<tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_cli</td>
-<td align="left">fb-survey</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2021-04-07</td>
-<td align="right">NA</td>
-<td align="left">2021-04-12</td>
-<td align="right">5</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0.6859343</td>
-<td align="right">0.0706536</td>
-<td align="right">10790.01</td>
-</tr>
-<tr class="even">
-<td align="left">pa</td>
-<td align="left">smoothed_cli</td>
-<td align="left">fb-survey</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2021-04-08</td>
-<td align="right">NA</td>
-<td align="left">2021-04-13</td>
-<td align="right">5</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0.6815110</td>
-<td align="right">0.0713939</td>
-<td align="right">10731.00</td>
-</tr>
-<tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_cli</td>
-<td align="left">fb-survey</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2021-04-09</td>
-<td align="right">NA</td>
-<td align="left">2021-04-14</td>
-<td align="right">5</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0.7094162</td>
-<td align="right">0.0721616</td>
-<td align="right">10590.00</td>
-</tr>
-<tr class="even">
-<td align="left">pa</td>
-<td align="left">smoothed_cli</td>
-<td align="left">fb-survey</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2021-04-10</td>
-<td align="right">NA</td>
-<td align="left">2021-04-15</td>
-<td align="right">5</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0.7762399</td>
-<td align="right">0.0760370</td>
-<td align="right">10492.01</td>
-</tr>
-</tbody>
-</table>
+<p><code><a href="../reference/cast_api_queries.html">cast_api_queries()</a></code> groups
+<code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, and
+<code><a href="../reference/cast_api_queries.html">epidata()</a></code>, which share a single documentation page;
+<code><a href="../reference/epidata_meta.html">epidata_meta()</a></code> and <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code> each have
+their own page, so they get their own row.</p>
 </div>
-<div class="section level2">
-<h2 id="example-queries">Example Queries<a class="anchor" aria-label="anchor" href="#example-queries"></a>
-</h2>
 <div class="section level3">
-<h3 id="covidcast-main-endpoint">COVIDcast Main Endpoint<a class="anchor" aria-label="anchor" href="#covidcast-main-endpoint"></a>
+<h3 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h3>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html</a></p>
-<p>County geo_values are <a href="https://en.wikipedia.org/wiki/List_of_United_States_FIPS_codes_by_county" class="external-link">FIPS
-codes</a> and are discussed in the API docs <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html" class="external-link">here</a>.
-The example below is for Orange County, California.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_covidcast.html">pub_covidcast</a></span><span class="op">(</span></span>
-<span>  source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
-<span>  signals <span class="op">=</span> <span class="st">"smoothed_accept_covid_vaccine"</span>,</span>
-<span>  geo_type <span class="op">=</span> <span class="st">"county"</span>,</span>
+<p>Some endpoints contain data within the United States only, some are
+international, and some are private and require additional access to
+query.</p>
+<details id="domestic-endpoints"><summary>
+Domestic endpoints
+</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Google Flu Trends: Historical flu search volume</span></span>
+<span><span class="fu"><a href="../reference/pub_gft.html">pub_gft</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"hhs1"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201401</span>, <span class="fl">201404</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `pub_gft()` covers a data source that is no longer updated.</span></span>
+<span><span class="co">#&gt; ℹ Historical data remains available, but no new data is being ingested.</span></span>
+<span><span class="co">#&gt; ℹ See the "Endpoints kept for historical reference" section of</span></span>
+<span><span class="co">#&gt;   `vignette("migration-guide")` (or</span></span>
+<span><span class="co">#&gt;   &lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference&gt;)</span></span>
+<span><span class="co">#&gt;   for details.</span></span>
+<span><span class="co">#&gt; This message is displayed once per session.</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 3</span></span>
+<span><span class="co">#&gt;   location epiweek      num</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 hhs1     2013-12-29  1918</span></span>
+<span><span class="co">#&gt; 2 hhs1     2014-01-05  2114</span></span>
+<span><span class="co">#&gt; 3 hhs1     2014-01-12  2294</span></span>
+<span><span class="co">#&gt; 4 hhs1     2014-01-19  1896</span></span>
+<span></span>
+<span><span class="co"># Wikipedia: Article page view counts</span></span>
+<span><span class="fu"><a href="../reference/pub_wiki.html">pub_wiki</a></span><span class="op">(</span></span>
+<span>  articles <span class="op">=</span> <span class="st">"influenza"</span>,</span>
 <span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
-<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20201221</span>, <span class="fl">20201225</span><span class="op">)</span>,</span>
-<span>  geo_values <span class="op">=</span> <span class="st">"06059"</span></span>
+<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20200101</span>, <span class="fl">20200105</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 5 × 15</span></span>
-<span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
-<span><span class="co">#&gt; 1 06059     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22</span></span>
-<span><span class="co">#&gt; 2 06059     smoothed_… fb-su… county   day       2020-12-22        NA 2020-12-23</span></span>
-<span><span class="co">#&gt; 3 06059     smoothed_… fb-su… county   day       2020-12-23        NA 2020-12-24</span></span>
-<span><span class="co">#&gt; 4 06059     smoothed_… fb-su… county   day       2020-12-24        NA 2020-12-25</span></span>
+<span><span class="co">#&gt; `pub_wiki()` covers a data source that is no longer updated.</span></span>
+<span><span class="co">#&gt; ℹ Historical data remains available, but no new data is being ingested.</span></span>
+<span><span class="co">#&gt; ℹ See the "Endpoints kept for historical reference" section of</span></span>
+<span><span class="co">#&gt;   `vignette("migration-guide")` (or</span></span>
+<span><span class="co">#&gt;   &lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference&gt;)</span></span>
+<span><span class="co">#&gt;   for details.</span></span>
+<span><span class="co">#&gt; This message is displayed once per session.</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 6</span></span>
+<span><span class="co">#&gt;   article   date       count     total  hour value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;date&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 influenza 2020-01-01   676  82359844    -1  8.21</span></span>
+<span><span class="co">#&gt; 2 influenza 2020-01-02  1171 105590677    -1 11.1 </span></span>
+<span><span class="co">#&gt; 3 influenza 2020-01-03  1127 106237989    -1 10.6 </span></span>
+<span><span class="co">#&gt; 4 influenza 2020-01-04   967  91328987    -1 10.6 </span></span>
 <span><span class="co">#&gt; # ℹ 1 more row</span></span>
-<span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
-<p>The <code>covidcast</code> endpoint supports <code>*</code> in its
-time and geo fields:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_covidcast.html">pub_covidcast</a></span><span class="op">(</span></span>
-<span>  source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
-<span>  signals <span class="op">=</span> <span class="st">"smoothed_accept_covid_vaccine"</span>,</span>
-<span>  geo_type <span class="op">=</span> <span class="st">"county"</span>,</span>
-<span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
-<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20201221</span>, <span class="fl">20201225</span><span class="op">)</span>,</span>
-<span>  geo_values <span class="op">=</span> <span class="st">"*"</span></span>
+<span></span>
+<span><span class="co"># COVID-19 hospitalizations: State-level timeseries as of a historical date</span></span>
+<span><span class="fu"><a href="../reference/pub_covid_hosp_state_timeseries.html">pub_covid_hosp_state_timeseries</a></span><span class="op">(</span></span>
+<span>  states <span class="op">=</span> <span class="st">"pa"</span>,</span>
+<span>  dates <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210101</span>, <span class="fl">20210105</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 2,025 × 15</span></span>
-<span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
-<span><span class="co">#&gt; 1 01000     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22</span></span>
-<span><span class="co">#&gt; 2 01073     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22</span></span>
-<span><span class="co">#&gt; 3 01089     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22</span></span>
-<span><span class="co">#&gt; 4 01097     smoothed_… fb-su… county   day       2020-12-21        NA 2020-12-22</span></span>
-<span><span class="co">#&gt; # ℹ 2,021 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="other-covid-endpoints">Other Covid Endpoints<a class="anchor" aria-label="anchor" href="#other-covid-endpoints"></a>
-</h3>
-<div class="section level4">
-<h4 id="covid-19-hospitalization-facility-lookup">COVID-19 Hospitalization: Facility Lookup<a class="anchor" aria-label="anchor" href="#covid-19-hospitalization-facility-lookup"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility_lookup.html</a></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_covid_hosp_facility_lookup.html">pub_covid_hosp_facility_lookup</a></span><span class="op">(</span>city <span class="op">=</span> <span class="st">"southlake"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 2 × 10</span></span>
-<span><span class="co">#&gt;   hospital_pk state ccn    hospital_name    address city  zip   hospital_subtype</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;           </span></span>
-<span><span class="co">#&gt; 1 450888      TX    450888 TEXAS HEALTH HA… 1545 E… SOUT… 76092 Short Term      </span></span>
-<span><span class="co">#&gt; 2 670132      TX    670132 METHODIST SOUTH… 421 E … SOUT… 76092 Short Term      </span></span>
-<span><span class="co">#&gt; # ℹ 2 more variables: fips_code &lt;chr&gt;, is_metro_micro &lt;dbl&gt;</span></span>
-<span><span class="fu"><a href="../reference/pub_covid_hosp_facility_lookup.html">pub_covid_hosp_facility_lookup</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"WY"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 34 × 10</span></span>
-<span><span class="co">#&gt;   hospital_pk     state ccn   hospital_name address city  zip   hospital_subtype</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;           &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;           </span></span>
-<span><span class="co">#&gt; 1 100 LANCASTER … WY    2020… 42091         &lt;NA&gt;    [C39… MAIN  390195          </span></span>
-<span><span class="co">#&gt; 2 2333 BIDDLE AVE WY    2020… 26163         POINT … [C23… HENRY 230146          </span></span>
-<span><span class="co">#&gt; 3 2333 BIDDLE AV… WY    2020… 26163         POINT … [C23… SELEC 232031          </span></span>
-<span><span class="co">#&gt; 4 2752 CENTURY B… WY    2020… 42011         POINT … [C39… SURGI 390316          </span></span>
-<span><span class="co">#&gt; # ℹ 30 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 2 more variables: fips_code &lt;chr&gt;, is_metro_micro &lt;dbl&gt;</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># A non-example (there is no city called New York in Wyoming)</span></span>
-<span><span class="fu"><a href="../reference/pub_covid_hosp_facility_lookup.html">pub_covid_hosp_facility_lookup</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">"WY"</span>, city <span class="op">=</span> <span class="st">"New York"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in `pub_covid_hosp_facility_lookup()`:</span></span>
-<span><span class="co">#&gt; ! only one of `state`, `ccn`, `city`, `zip`, or `fips_code` can be specified</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="covid-19-hospitalization-by-facility">COVID-19 Hospitalization by Facility<a class="anchor" aria-label="anchor" href="#covid-19-hospitalization-by-facility"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp_facility.html</a></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_covid_hosp_facility.html">pub_covid_hosp_facility</a></span><span class="op">(</span></span>
-<span>  hospital_pks <span class="op">=</span> <span class="st">"100075"</span>,</span>
-<span>  collection_weeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20200101</span>, <span class="fl">20200501</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 12 × 113</span></span>
-<span><span class="co">#&gt;   hospital_pk state ccn    hospital_name    address city  zip   hospital_subtype</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;           </span></span>
-<span><span class="co">#&gt; 1 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      </span></span>
-<span><span class="co">#&gt; 2 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      </span></span>
-<span><span class="co">#&gt; 3 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      </span></span>
-<span><span class="co">#&gt; 4 100075      FL    100075 ST JOSEPHS HOSP… 3001 W… TAMPA 33677 Short Term      </span></span>
-<span><span class="co">#&gt; # ℹ 8 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 105 more variables: fips_code &lt;chr&gt;, geocoded_hospital_address &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   hhs_ids &lt;chr&gt;, publication_date &lt;date&gt;, collection_week &lt;date&gt;,</span></span>
-<span><span class="co">#&gt; #   is_metro_micro &lt;lgl&gt;, total_beds_7_day_sum &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   all_adult_hospital_beds_7_day_sum &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   all_adult_hospital_inpatient_beds_7_day_sum &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   inpatient_beds_used_7_day_sum &lt;dbl&gt;, …</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="covid-19-hospitalization-by-state">COVID-19 Hospitalization by State<a class="anchor" aria-label="anchor" href="#covid-19-hospitalization-by-state"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/covid_hosp.html</a></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_covid_hosp_state_timeseries.html">pub_covid_hosp_state_timeseries</a></span><span class="op">(</span>states <span class="op">=</span> <span class="st">"MA"</span>, dates <span class="op">=</span> <span class="st">"20200510"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 1 × 118</span></span>
+<span><span class="co">#&gt; `pub_covid_hosp_state_timeseries()` covers a data source that is no longer updated.</span></span>
+<span><span class="co">#&gt; ℹ Historical data remains available, but no new data is being ingested.</span></span>
+<span><span class="co">#&gt; ℹ See the "Endpoints kept for historical reference" section of</span></span>
+<span><span class="co">#&gt;   `vignette("migration-guide")` (or</span></span>
+<span><span class="co">#&gt;   &lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference&gt;)</span></span>
+<span><span class="co">#&gt;   for details.</span></span>
+<span><span class="co">#&gt; This message is displayed once per session.</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 118</span></span>
 <span><span class="co">#&gt;   state geocoded_state issue      date       critical_staffing_shortage_today_…¹</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt; &lt;lgl&gt;          &lt;date&gt;     &lt;date&gt;     &lt;lgl&gt;                              </span></span>
-<span><span class="co">#&gt; 1 MA    NA             2024-05-03 2020-05-10 FALSE                              </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;          &lt;date&gt;     &lt;date&gt;     &lt;lgl&gt;                              </span></span>
+<span><span class="co">#&gt; 1 PA    &lt;NA&gt;           2024-05-03 2021-01-01 TRUE                               </span></span>
+<span><span class="co">#&gt; 2 PA    &lt;NA&gt;           2024-05-03 2021-01-02 TRUE                               </span></span>
+<span><span class="co">#&gt; 3 PA    &lt;NA&gt;           2024-05-03 2021-01-03 TRUE                               </span></span>
+<span><span class="co">#&gt; 4 PA    &lt;NA&gt;           2024-05-03 2021-01-04 TRUE                               </span></span>
+<span><span class="co">#&gt; # ℹ 1 more row</span></span>
 <span><span class="co">#&gt; # ℹ abbreviated name: ¹​critical_staffing_shortage_today_yes</span></span>
 <span><span class="co">#&gt; # ℹ 113 more variables: critical_staffing_shortage_today_no &lt;lgl&gt;,</span></span>
 <span><span class="co">#&gt; #   critical_staffing_shortage_today_not_reported &lt;lgl&gt;,</span></span>
 <span><span class="co">#&gt; #   critical_staffing_shortage_anticipated_within_week_yes &lt;lgl&gt;,</span></span>
 <span><span class="co">#&gt; #   critical_staffing_shortage_anticipated_within_week_no &lt;lgl&gt;,</span></span>
-<span><span class="co">#&gt; #   critical_staffing_shortage_anticipated_within_week_not_reported &lt;lgl&gt;,</span></span>
-<span><span class="co">#&gt; #   hospital_onset_covid &lt;dbl&gt;, hospital_onset_covid_coverage &lt;dbl&gt;, …</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level3">
-<h3 id="flu-endpoints">Flu Endpoints<a class="anchor" aria-label="anchor" href="#flu-endpoints"></a>
-</h3>
-<div class="section level4">
-<h4 id="delphis-ilinet-forecasts">Delphi’s ILINet forecasts<a class="anchor" aria-label="anchor" href="#delphis-ilinet-forecasts"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/delphi.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/delphi.html</a></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">del</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pub_delphi.html">pub_delphi</a></span><span class="op">(</span>system <span class="op">=</span> <span class="st">"ec"</span>, epiweek <span class="op">=</span> <span class="fl">201501</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">del</span><span class="op">[[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">forecast</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "_version"  "baselines" "data"      "epiweek"  </span></span>
-<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 6 entries ]</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="flusurv-hospitalization-data">FluSurv hospitalization data<a class="anchor" aria-label="anchor" href="#flusurv-hospitalization-data"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/flusurv.html</a></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_flusurv.html">pub_flusurv</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fl">202001</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 1 × 34</span></span>
-<span><span class="co">#&gt;   release_date location season issue      epiweek      lag rate_age_0 rate_age_1</span></span>
-<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;    &lt;chr&gt;  &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 2025-11-03   CA       2019-… 2025-09-14 2019-12-29   298        8.6        0.8</span></span>
-<span><span class="co">#&gt; # ℹ 26 more variables: rate_age_2 &lt;dbl&gt;, rate_age_3 &lt;dbl&gt;, rate_age_4 &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   rate_overall &lt;dbl&gt;, rate_age_5 &lt;dbl&gt;, rate_age_6 &lt;dbl&gt;, rate_age_7 &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   rate_age_18t29 &lt;dbl&gt;, rate_age_30t39 &lt;dbl&gt;, rate_age_40t49 &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   rate_age_5t11 &lt;dbl&gt;, rate_age_12t17 &lt;dbl&gt;, rate_age_lt18 &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   rate_age_gte18 &lt;dbl&gt;, rate_age_1t4 &lt;dbl&gt;, rate_age_gte75 &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   rate_age_0tlt1 &lt;dbl&gt;, rate_race_white &lt;dbl&gt;, rate_race_black &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   rate_race_hisp &lt;dbl&gt;, rate_race_asian &lt;dbl&gt;, rate_race_natamer &lt;dbl&gt;, …</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="fluview-data">Fluview data<a class="anchor" aria-label="anchor" href="#fluview-data"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/fluview.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/fluview.html</a></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_fluview.html">pub_fluview</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"nat"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201201</span>, <span class="fl">202001</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 418 × 16</span></span>
-<span><span class="co">#&gt;   release_date region issue      epiweek      lag num_ili num_patients</span></span>
-<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;  &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;   &lt;dbl&gt;        &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 2017-10-24   nat    2017-10-01 2012-01-01   300   11992       678631</span></span>
-<span><span class="co">#&gt; 2 2017-10-24   nat    2017-10-01 2012-01-08   299   11543       747894</span></span>
-<span><span class="co">#&gt; 3 2017-10-24   nat    2017-10-01 2012-01-15   298   11939       724623</span></span>
-<span><span class="co">#&gt; 4 2017-10-24   nat    2017-10-01 2012-01-22   297   13209       784244</span></span>
-<span><span class="co">#&gt; # ℹ 414 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 9 more variables: num_providers &lt;dbl&gt;, num_age_0 &lt;dbl&gt;, num_age_1 &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   num_age_2 &lt;dbl&gt;, num_age_3 &lt;dbl&gt;, num_age_4 &lt;dbl&gt;, num_age_5 &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   wili &lt;dbl&gt;, ili &lt;dbl&gt;</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="fluview-virological-data-from-clinical-labs">Fluview virological data from clinical labs<a class="anchor" aria-label="anchor" href="#fluview-virological-data-from-clinical-labs"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/fluview_clinical.html</a></p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_fluview_clinical.html">pub_fluview_clinical</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"nat"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201601</span>, <span class="fl">201701</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 14 × 11</span></span>
-<span><span class="co">#&gt;   release_date region issue      epiweek      lag total_specimens total_a</span></span>
-<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;  &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;           &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 2018-10-08   nat    2018-09-23 2016-10-02   103           13380     120</span></span>
-<span><span class="co">#&gt; 2 2018-10-08   nat    2018-09-23 2016-10-09   102           14053     108</span></span>
-<span><span class="co">#&gt; 3 2018-10-08   nat    2018-09-23 2016-10-16   101           15110     115</span></span>
-<span><span class="co">#&gt; 4 2018-10-08   nat    2018-09-23 2016-10-23   100           15312     143</span></span>
-<span><span class="co">#&gt; # ℹ 10 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 4 more variables: total_b &lt;dbl&gt;, percent_positive &lt;dbl&gt;, percent_a &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   percent_b &lt;dbl&gt;</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="fluview-metadata">Fluview metadata<a class="anchor" aria-label="anchor" href="#fluview-metadata"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html</a></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_fluview_meta.html">pub_fluview_meta</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 1 × 3</span></span>
-<span><span class="co">#&gt;   latest_update latest_issue table_rows</span></span>
-<span><span class="co">#&gt;   &lt;date&gt;        &lt;date&gt;            &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 2026-08-14    2026-08-02      2837197</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="google-flu-trends-data">Google Flu Trends data<a class="anchor" aria-label="anchor" href="#google-flu-trends-data"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/gft.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/gft.html</a></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_gft.html">pub_gft</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"hhs1"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201201</span>, <span class="fl">202001</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 189 × 3</span></span>
-<span><span class="co">#&gt;   location epiweek      num</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 hhs1     2012-01-01  1567</span></span>
-<span><span class="co">#&gt; 2 hhs1     2012-01-08  1339</span></span>
-<span><span class="co">#&gt; 3 hhs1     2012-01-15  1220</span></span>
-<span><span class="co">#&gt; 4 hhs1     2012-01-22  1271</span></span>
-<span><span class="co">#&gt; # ℹ 185 more rows</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="ecdc-ili">ECDC ILI<a class="anchor" aria-label="anchor" href="#ecdc-ili"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/ecdc_ili.html</a></p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_ecdc_ili.html">pub_ecdc_ili</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"Armenia"</span>, epiweeks <span class="op">=</span> <span class="fl">201840</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 1 × 6</span></span>
-<span><span class="co">#&gt;   release_date region  issue      epiweek      lag incidence_rate</span></span>
-<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;   &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;          &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 2020-03-26   Armenia 2020-03-15 2018-09-30    76              0</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="kcdc-ili">KCDC ILI<a class="anchor" aria-label="anchor" href="#kcdc-ili"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/kcdc_ili.html</a></p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_kcdc_ili.html">pub_kcdc_ili</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"ROK"</span>, epiweeks <span class="op">=</span> <span class="fl">200436</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 1 × 6</span></span>
-<span><span class="co">#&gt;   release_date region issue      epiweek      lag   ili</span></span>
-<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;  &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 2020-11-03   ROK    2020-11-01 2004-09-05   843   0.6</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="nidss-flu">NIDSS Flu<a class="anchor" aria-label="anchor" href="#nidss-flu"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/nidss_flu.html</a></p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_nidss_flu.html">pub_nidss_flu</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"taipei"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200901</span>, <span class="fl">201301</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 209 × 7</span></span>
-<span><span class="co">#&gt;   release_date region issue      epiweek      lag visits   ili</span></span>
-<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;  &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 2015-08-04   Taipei 2015-07-26 2009-01-04   342  17021  1.14</span></span>
-<span><span class="co">#&gt; 2 2015-08-04   Taipei 2015-07-26 2009-01-11   341  20250  1.28</span></span>
-<span><span class="co">#&gt; 3 2015-08-04   Taipei 2015-07-26 2009-01-18   340  26337  1.36</span></span>
-<span><span class="co">#&gt; 4 2015-08-04   Taipei 2015-07-26 2009-01-25   339   8508  1.68</span></span>
-<span><span class="co">#&gt; # ℹ 205 more rows</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="ili-nearby-nowcast">ILI Nearby Nowcast<a class="anchor" aria-label="anchor" href="#ili-nearby-nowcast"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/nowcast.html</a></p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_nowcast.html">pub_nowcast</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202201</span>, <span class="fl">202319</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 36 × 4</span></span>
-<span><span class="co">#&gt;   location epiweek    value   std</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 ca       2022-01-02  3.63 0.276</span></span>
-<span><span class="co">#&gt; 2 ca       2022-01-09  3.54 0.276</span></span>
-<span><span class="co">#&gt; 3 ca       2022-01-16  3.51 0.276</span></span>
-<span><span class="co">#&gt; 4 ca       2022-01-23  2.51 0.279</span></span>
-<span><span class="co">#&gt; # ℹ 32 more rows</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level3">
-<h3 id="dengue-endpoints">Dengue Endpoints<a class="anchor" aria-label="anchor" href="#dengue-endpoints"></a>
-</h3>
-<div class="section level4">
-<h4 id="delphis-dengue-nowcast">Delphi’s Dengue Nowcast<a class="anchor" aria-label="anchor" href="#delphis-dengue-nowcast"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/dengue_nowcast.html</a></p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_dengue_nowcast.html">pub_dengue_nowcast</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"pr"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201401</span>, <span class="fl">202301</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 320 × 4</span></span>
-<span><span class="co">#&gt;   location epiweek    value   std</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 pr       2014-02-23  92.7  547.</span></span>
-<span><span class="co">#&gt; 2 pr       2014-03-02  96.8  601.</span></span>
-<span><span class="co">#&gt; 3 pr       2014-03-09  93.5  655.</span></span>
-<span><span class="co">#&gt; 4 pr       2014-03-16  87.8  707.</span></span>
-<span><span class="co">#&gt; # ℹ 316 more rows</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="nidss-dengue">NIDSS dengue<a class="anchor" aria-label="anchor" href="#nidss-dengue"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/nidss_dengue.html</a></p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_nidss_dengue.html">pub_nidss_dengue</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"taipei"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200301</span>, <span class="fl">201301</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 523 × 3</span></span>
-<span><span class="co">#&gt;   location epiweek    count</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 Taipei   2002-12-29     0</span></span>
-<span><span class="co">#&gt; 2 Taipei   2003-01-05     1</span></span>
-<span><span class="co">#&gt; 3 Taipei   2003-01-12     0</span></span>
-<span><span class="co">#&gt; 4 Taipei   2003-01-19     1</span></span>
-<span><span class="co">#&gt; # ℹ 519 more rows</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level3">
-<h3 id="paho-dengue">PAHO Dengue<a class="anchor" aria-label="anchor" href="#paho-dengue"></a>
-</h3>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/paho_dengue.html</a></p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_paho_dengue.html">pub_paho_dengue</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200201</span>, <span class="fl">202319</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 342 × 11</span></span>
+<span><span class="co">#&gt; #   critical_staffing_shortage_anticipated_within_week_not_reported &lt;lgl&gt;, …</span></span></code></pre></div>
+</details><details id="international-endpoints"><summary>
+International endpoints
+</summary><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># PAHO Dengue: Surveillance in the Americas</span></span>
+<span><span class="fu"><a href="../reference/pub_paho_dengue.html">pub_paho_dengue</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202001</span>, <span class="fl">202004</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `pub_paho_dengue()` covers a data source that is no longer updated.</span></span>
+<span><span class="co">#&gt; ℹ Historical data remains available, but no new data is being ingested.</span></span>
+<span><span class="co">#&gt; ℹ See the "Endpoints kept for historical reference" section of</span></span>
+<span><span class="co">#&gt;   `vignette("migration-guide")` (or</span></span>
+<span><span class="co">#&gt;   &lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference&gt;)</span></span>
+<span><span class="co">#&gt;   for details.</span></span>
+<span><span class="co">#&gt; This message is displayed once per session.</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 11</span></span>
 <span><span class="co">#&gt;   release_date region serotype issue      epiweek      lag total_pop num_dengue</span></span>
 <span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;  &lt;chr&gt;    &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 2020-08-07   CA     "  "     2020-08-02 2013-12-29   344         0          0</span></span>
-<span><span class="co">#&gt; 2 2020-08-07   CA     "  "     2020-08-02 2014-01-05   343         0          0</span></span>
-<span><span class="co">#&gt; 3 2020-08-07   CA     "  "     2020-08-02 2014-01-12   342         0          0</span></span>
-<span><span class="co">#&gt; 4 2020-08-07   CA     "  "     2020-08-02 2014-01-19   341         0          0</span></span>
-<span><span class="co">#&gt; # ℹ 338 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 3 more variables: num_severe &lt;dbl&gt;, num_deaths &lt;dbl&gt;, incidence_rate &lt;dbl&gt;</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="other-endpoints">Other Endpoints<a class="anchor" aria-label="anchor" href="#other-endpoints"></a>
-</h3>
-<div class="section level4">
-<h4 id="wikipedia-access">Wikipedia Access<a class="anchor" aria-label="anchor" href="#wikipedia-access"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/wiki.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/wiki.html</a></p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_wiki.html">pub_wiki</a></span><span class="op">(</span></span>
-<span>  language <span class="op">=</span> <span class="st">"en"</span>,</span>
-<span>  articles <span class="op">=</span> <span class="st">"influenza"</span>,</span>
-<span>  time_type <span class="op">=</span> <span class="st">"week"</span>,</span>
-<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202001</span>, <span class="fl">202319</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 64 × 6</span></span>
-<span><span class="co">#&gt;   article   count     total  hour epiweek    value</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 influenza  6516 663604044    -1 2019-12-29  9.82</span></span>
-<span><span class="co">#&gt; 2 influenza 10244 789885521    -1 2020-01-05 13.0 </span></span>
-<span><span class="co">#&gt; 3 influenza 10728 783760384    -1 2020-01-12 13.7 </span></span>
-<span><span class="co">#&gt; 4 influenza 24843 785222292    -1 2020-01-19 31.6 </span></span>
-<span><span class="co">#&gt; # ℹ 60 more rows</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level3">
-<h3 id="private-methods">Private methods<a class="anchor" aria-label="anchor" href="#private-methods"></a>
-</h3>
-<p>These require private access keys to use (separate from the Delphi
-Epidata API key). To actually run these locally, you will need to store
-these secrets in your <code>.Reviron</code> file, or set them as
-environmental variables.</p>
+<span><span class="co">#&gt; 1 2020-08-07   CA     "  "     2020-08-02 2019-12-29    31         0          0</span></span>
+<span><span class="co">#&gt; 2 2020-08-07   CA     "  "     2020-08-02 2020-01-05    30         0          0</span></span>
+<span><span class="co">#&gt; 3 2020-08-07   CA     "  "     2020-08-02 2020-01-12    29         0          0</span></span>
+<span><span class="co">#&gt; 4 2020-08-07   CA     "  "     2020-08-02 2020-01-19    28         0          0</span></span>
+<span><span class="co">#&gt; # ℹ 3 more variables: num_severe &lt;dbl&gt;, num_deaths &lt;dbl&gt;, incidence_rate &lt;dbl&gt;</span></span>
+<span></span>
+<span><span class="co"># ECDC ILI: Influenza-like illness in Europe</span></span>
+<span><span class="fu"><a href="../reference/pub_ecdc_ili.html">pub_ecdc_ili</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"austria"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201901</span>, <span class="fl">201904</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `pub_ecdc_ili()` covers a data source that is no longer updated.</span></span>
+<span><span class="co">#&gt; ℹ Historical data remains available, but no new data is being ingested.</span></span>
+<span><span class="co">#&gt; ℹ See the "Endpoints kept for historical reference" section of</span></span>
+<span><span class="co">#&gt;   `vignette("migration-guide")` (or</span></span>
+<span><span class="co">#&gt;   &lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference&gt;)</span></span>
+<span><span class="co">#&gt;   for details.</span></span>
+<span><span class="co">#&gt; This message is displayed once per session.</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 6</span></span>
+<span><span class="co">#&gt;   release_date region  issue      epiweek      lag incidence_rate</span></span>
+<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;   &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;          &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2020-03-26   Austria 2020-03-15 2019-01-06    62           787.</span></span>
+<span><span class="co">#&gt; 2 2020-03-26   Austria 2020-03-15 2019-01-13    61           855.</span></span>
+<span><span class="co">#&gt; 3 2020-03-26   Austria 2020-03-15 2019-01-20    60          1022.</span></span>
+<span></span>
+<span><span class="co"># KCDC ILI: Influenza-like illness in South Korea</span></span>
+<span><span class="fu"><a href="../reference/pub_kcdc_ili.html">pub_kcdc_ili</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"ROK"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201801</span>, <span class="fl">201804</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `pub_kcdc_ili()` covers a data source that is no longer updated.</span></span>
+<span><span class="co">#&gt; ℹ Historical data remains available, but no new data is being ingested.</span></span>
+<span><span class="co">#&gt; ℹ See the "Endpoints kept for historical reference" section of</span></span>
+<span><span class="co">#&gt;   `vignette("migration-guide")` (or</span></span>
+<span><span class="co">#&gt;   &lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference&gt;)</span></span>
+<span><span class="co">#&gt;   for details.</span></span>
+<span><span class="co">#&gt; This message is displayed once per session.</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 6</span></span>
+<span><span class="co">#&gt;   release_date region issue      epiweek      lag   ili</span></span>
+<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;  &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2020-11-03   ROK    2020-11-01 2017-12-31   148  71.8</span></span>
+<span><span class="co">#&gt; 2 2020-11-03   ROK    2020-11-01 2018-01-07   147  72.1</span></span>
+<span><span class="co">#&gt; 3 2020-11-03   ROK    2020-11-01 2018-01-14   146  69  </span></span>
+<span><span class="co">#&gt; 4 2020-11-03   ROK    2020-11-01 2018-01-21   145  59.6</span></span>
+<span></span>
+<span><span class="co"># Taiwan CDC NIDSS: Influenza outpatient visits</span></span>
+<span><span class="fu"><a href="../reference/pub_nidss_flu.html">pub_nidss_flu</a></span><span class="op">(</span>regions <span class="op">=</span> <span class="st">"nationwide"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201801</span>, <span class="fl">201804</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `pub_nidss_flu()` covers a data source that is no longer updated.</span></span>
+<span><span class="co">#&gt; ℹ Historical data remains available, but no new data is being ingested.</span></span>
+<span><span class="co">#&gt; ℹ See the "Endpoints kept for historical reference" section of</span></span>
+<span><span class="co">#&gt;   `vignette("migration-guide")` (or</span></span>
+<span><span class="co">#&gt;   &lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference&gt;)</span></span>
+<span><span class="co">#&gt;   for details.</span></span>
+<span><span class="co">#&gt; This message is displayed once per session.</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 7</span></span>
+<span><span class="co">#&gt;   release_date region     issue      epiweek      lag visits   ili</span></span>
+<span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;      &lt;date&gt;     &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2018-03-12   Nationwide 2018-03-04 2017-12-31     9  84227  1.71</span></span>
+<span><span class="co">#&gt; 2 2018-03-12   Nationwide 2018-03-04 2018-01-07     8  86865  1.71</span></span>
+<span><span class="co">#&gt; 3 2018-03-12   Nationwide 2018-03-04 2018-01-14     7 111976  2.03</span></span>
+<span><span class="co">#&gt; 4 2018-03-12   Nationwide 2018-03-04 2018-01-21     6 117080  2.15</span></span>
+<span></span>
+<span><span class="co"># Taiwan CDC NIDSS: Dengue cases</span></span>
+<span><span class="fu"><a href="../reference/pub_nidss_dengue.html">pub_nidss_dengue</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"nationwide"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201801</span>, <span class="fl">201804</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `pub_nidss_dengue()` covers a data source that is no longer updated.</span></span>
+<span><span class="co">#&gt; ℹ Historical data remains available, but no new data is being ingested.</span></span>
+<span><span class="co">#&gt; ℹ See the "Endpoints kept for historical reference" section of</span></span>
+<span><span class="co">#&gt;   `vignette("migration-guide")` (or</span></span>
+<span><span class="co">#&gt;   &lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference&gt;)</span></span>
+<span><span class="co">#&gt;   for details.</span></span>
+<span><span class="co">#&gt; This message is displayed once per session.</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 3</span></span>
+<span><span class="co">#&gt;   location   epiweek    count</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;      &lt;date&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 nationwide 2017-12-31     0</span></span>
+<span><span class="co">#&gt; 2 nationwide 2018-01-07     2</span></span>
+<span><span class="co">#&gt; 3 nationwide 2018-01-14     2</span></span>
+<span><span class="co">#&gt; 4 nationwide 2018-01-21     0</span></span>
+<span></span>
+<span><span class="co"># PAHO Dengue Nowcasts: Delphi nowcast estimates for the Americas</span></span>
+<span><span class="fu"><a href="../reference/pub_dengue_nowcast.html">pub_dengue_nowcast</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202001</span>, <span class="fl">202004</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `pub_dengue_nowcast()` covers a data source that is no longer updated.</span></span>
+<span><span class="co">#&gt; ℹ Historical data remains available, but no new data is being ingested.</span></span>
+<span><span class="co">#&gt; ℹ See the "Endpoints kept for historical reference" section of</span></span>
+<span><span class="co">#&gt;   `vignette("migration-guide")` (or</span></span>
+<span><span class="co">#&gt;   &lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference&gt;)</span></span>
+<span><span class="co">#&gt;   for details.</span></span>
+<span><span class="co">#&gt; This message is displayed once per session.</span></span>
+<span><span class="co">#&gt; Warning: epidata warning: `no results`</span></span>
+<span><span class="co">#&gt; # A tibble: 0 × 0</span></span></code></pre></div>
+</details><p>Some private endpoints require a dedicated secret key passed via the
+<code>auth</code> argument (separate from the standard Epidata API key).
+Store these in your <code>.Renviron</code> file or environment
+variables:</p>
 <details id="private-endpoints"><summary>
-Usage of private endpoints
-</summary><div class="section level4">
-<h4 id="cdc">CDC<a class="anchor" aria-label="anchor" href="#cdc"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/cdc.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/cdc.html</a></p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_cdc.html">pvt_cdc</a></span><span class="op">(</span>auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_CDC"</span><span class="op">)</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202003</span>, <span class="fl">202304</span><span class="op">)</span>, locations <span class="op">=</span> <span class="st">"ma"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="dengue-digital-surveillance-sensors">Dengue Digital Surveillance Sensors<a class="anchor" aria-label="anchor" href="#dengue-digital-surveillance-sensors"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/dengue_sensors.html</a></p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_dengue_sensors.html">pvt_dengue_sensors</a></span><span class="op">(</span></span>
+Private endpoints
+</summary><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># CDC Web Metrics: Website traffic for select topics</span></span>
+<span><span class="fu"><a href="../reference/pvt_cdc.html">pvt_cdc</a></span><span class="op">(</span></span>
+<span>  auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_CDC"</span><span class="op">)</span>,</span>
+<span>  epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202003</span>, <span class="fl">202304</span><span class="op">)</span>,</span>
+<span>  locations <span class="op">=</span> <span class="st">"ma"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Digital Surveillance Sensors: Delphi sensor estimates</span></span>
+<span><span class="fu"><a href="../reference/pvt_sensors.html">pvt_sensors</a></span><span class="op">(</span></span>
 <span>  auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_SENSORS"</span><span class="op">)</span>,</span>
-<span>  names <span class="op">=</span> <span class="st">"ght"</span>,</span>
-<span>  locations <span class="op">=</span> <span class="st">"ag"</span>,</span>
-<span>  epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201404</span>, <span class="fl">202004</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="google-health-trends">Google Health Trends<a class="anchor" aria-label="anchor" href="#google-health-trends"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/ght.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/ght.html</a></p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_ght.html">pvt_ght</a></span><span class="op">(</span></span>
-<span>  auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_GHT"</span><span class="op">)</span>,</span>
-<span>  epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">199301</span>, <span class="fl">202304</span><span class="op">)</span>,</span>
-<span>  locations <span class="op">=</span> <span class="st">"ma"</span>,</span>
-<span>  query <span class="op">=</span> <span class="st">"how to get over the flu"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="norostat-metadata">NoroSTAT metadata<a class="anchor" aria-label="anchor" href="#norostat-metadata"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html</a></p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_meta_norostat.html">pvt_meta_norostat</a></span><span class="op">(</span>auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_NOROSTAT"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="norostat-data">NoroSTAT data<a class="anchor" aria-label="anchor" href="#norostat-data"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/norostat.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/norostat.html</a></p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_norostat.html">pvt_norostat</a></span><span class="op">(</span>auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_NOROSTAT"</span><span class="op">)</span>, locations <span class="op">=</span> <span class="st">"1"</span>, epiweeks <span class="op">=</span> <span class="fl">201233</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="quidel-influenza-testing">Quidel Influenza testing<a class="anchor" aria-label="anchor" href="#quidel-influenza-testing"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/quidel.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/quidel.html</a></p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_quidel.html">pvt_quidel</a></span><span class="op">(</span>auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_QUIDEL"</span><span class="op">)</span>, locations <span class="op">=</span> <span class="st">"hhs1"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200301</span>, <span class="fl">202105</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="sensors">Sensors<a class="anchor" aria-label="anchor" href="#sensors"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/sensors.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/sensors.html</a></p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_sensors.html">pvt_sensors</a></span><span class="op">(</span></span>
-<span>  auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_SENSORS"</span><span class="op">)</span>,</span>
-<span>  names <span class="op">=</span> <span class="st">"sar3"</span>,</span>
+<span>  names <span class="op">=</span> <span class="st">"delphi"</span>,</span>
 <span>  locations <span class="op">=</span> <span class="st">"nat"</span>,</span>
-<span>  epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200301</span>, <span class="fl">202105</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="twitter">Twitter<a class="anchor" aria-label="anchor" href="#twitter"></a>
-</h4>
-<p>API docs: <a href="https://cmu-delphi.github.io/delphi-epidata/api/twitter.html" class="external-link uri">https://cmu-delphi.github.io/delphi-epidata/api/twitter.html</a></p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pvt_twitter.html">pvt_twitter</a></span><span class="op">(</span></span>
+<span>  epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202001</span>, <span class="fl">202010</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Twitter / HealthTweets: Influenza and total tweet counts</span></span>
+<span><span class="fu"><a href="../reference/pvt_twitter.html">pvt_twitter</a></span><span class="op">(</span></span>
 <span>  auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_TWITTER"</span><span class="op">)</span>,</span>
-<span>  locations <span class="op">=</span> <span class="st">"nat"</span>,</span>
-<span>  time_type <span class="op">=</span> <span class="st">"week"</span>,</span>
-<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">200301</span>, <span class="fl">202105</span><span class="op">)</span></span>
+<span>  locations <span class="op">=</span> <span class="st">"hhs1"</span>,</span>
+<span>  dates <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20200101</span>, <span class="fl">20200115</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Google Health Trends: Search queries</span></span>
+<span><span class="fu"><a href="../reference/pvt_ght.html">pvt_ght</a></span><span class="op">(</span></span>
+<span>  auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_GHT"</span><span class="op">)</span>,</span>
+<span>  locations <span class="op">=</span> <span class="st">"ca"</span>,</span>
+<span>  query <span class="op">=</span> <span class="st">"cough"</span>,</span>
+<span>  dates <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20200101</span>, <span class="fl">20200115</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># CDC NoroSTAT: Norovirus outbreak data</span></span>
+<span><span class="fu"><a href="../reference/pvt_norostat.html">pvt_norostat</a></span><span class="op">(</span></span>
+<span>  auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_NOROSTAT"</span><span class="op">)</span>,</span>
+<span>  location <span class="op">=</span> <span class="st">"midatl"</span>,</span>
+<span>  epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202001</span>, <span class="fl">202010</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># PAHO Dengue Sensors: Digital dengue surveillance</span></span>
+<span><span class="fu"><a href="../reference/pvt_dengue_sensors.html">pvt_dengue_sensors</a></span><span class="op">(</span></span>
+<span>  auth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SECRET_API_AUTH_DENGUE_SENSORS"</span><span class="op">)</span>,</span>
+<span>  locations <span class="op">=</span> <span class="st">"ca"</span>,</span>
+<span>  epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202001</span>, <span class="fl">202010</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-
-</div>
 </details>
 </div>
 </div>

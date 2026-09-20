@@ -21,7 +21,7 @@ https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html."></head><b
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +33,8 @@ https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html."></head><b
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/migration-guide.html">Migrating from pub_covidcast to the new Epidata API</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/migration-guide.html">V3/V4 to V5 Migration Guide</a></li>
     <li><a class="dropdown-item" href="../articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
-    <li><a class="dropdown-item" href="../articles/v5-api-demo.html">epidatr v5 API demo</a></li>
     <li><a class="dropdown-item" href="../articles/versioned-data.html">Understanding and accessing versioned data</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -76,6 +75,7 @@ docs, e.g. NWSS:
 <span>  <span class="va">...</span>,</span>
 <span>  reference_time <span class="op">=</span> <span class="st">"*"</span>,</span>
 <span>  time_values <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  snapshot_date <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  report_time <span class="op">=</span> <span class="st">"*"</span>,</span>
 <span>  issues <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  columns <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -101,24 +101,38 @@ source is recovered automatically).</p></dd>
 <code>pcr_target = "sars-cov-2"</code> or <code>geo_value = c("ca", "ny")</code>. Each key accepts
 one or more values (matched as OR); they are serialized as repeated
 <code>key:value</code> terms server-side to keep the aux pull small. Passing more than
-10 values for a key warns, since the request URL may get too long. In
-merge mode, when no filters are given, they are inferred from the base:
-each key it narrows to at most 10 distinct values is filtered to those.</p></dd>
+10 values for a key warns, since the request URL may get too long. When
+<code>source</code> is a tibble and no filters are given, they are inferred from the
+base: each key it narrows to at most 10 distinct values is filtered to those.</p></dd>
 
 
 <dt id="arg-reference-time">reference_time<a class="anchor" aria-label="anchor" href="#arg-reference-time"></a></dt>
 <dd><p><code><a href="timeset.html">timeset</a></code>. Reference time to return (filters on the
 <code>reference_time</code> column). Supports individual dates or <code><a href="epirange.html">epirange()</a></code>.
-Base-pull mode only (when <code>source</code> is a string).</p></dd>
+Only used when <code>source</code> is a string.</p></dd>
 
 
 <dt id="arg-time-values">time_values<a class="anchor" aria-label="anchor" href="#arg-time-values"></a></dt>
 <dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Use <code>reference_time</code> instead.</p></dd>
 
 
+<dt id="arg-snapshot-date">snapshot_date<a class="anchor" aria-label="anchor" href="#arg-snapshot-date"></a></dt>
+<dd><p>Date, <code>POSIXt</code>, UTC timestamp string (e.g.
+<code>"2025-10-16T13:45:00Z"</code>), <code>"latest"</code>, or <code>NULL</code>. Return auxiliary data
+as it appeared at this date or instant (one row per key, the most recent
+version active then). <code>"latest"</code> uses today's date. Use <code>NULL</code> (default)
+to return the full version history filtered by <code>report_time</code>. Mutually
+exclusive with <code>report_time</code>. Only used when <code>source</code> is a string.</p></dd>
+
+
 <dt id="arg-report-time">report_time<a class="anchor" aria-label="anchor" href="#arg-report-time"></a></dt>
-<dd><p>A date, string, or <code><a href="epirange.html">epirange()</a></code> specifying the version of the auxiliary data
-to retrieve. Base-pull mode only (when <code>source</code> is a string).</p></dd>
+<dd><p>String or <code><a href="epirange.html">epirange()</a></code> specifying the version of the
+auxiliary data to retrieve. Accepts comparison operators (e.g.,
+<code>"&lt;2025-10-16"</code>, <code>"&gt;=2025-10-16"</code>, or <code>"&lt;=2025-10-16T13:45:00Z"</code> for a
+UTC timestamp bound) or an <code><a href="epirange.html">epirange()</a></code> for an inclusive date range.
+Bare dates and the <code>"="</code> operator are not accepted: use
+<code>snapshot_date</code> for point-in-time data. Mutually exclusive with
+<code>snapshot_date</code>. Only used when <code>source</code> is a string.</p></dd>
 
 
 <dt id="arg-issues">issues<a class="anchor" aria-label="anchor" href="#arg-issues"></a></dt>

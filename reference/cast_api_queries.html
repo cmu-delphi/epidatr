@@ -29,7 +29,7 @@ e.g. NWSS: https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html.
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,9 +41,8 @@ e.g. NWSS: https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html.
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/migration-guide.html">Migrating from pub_covidcast to the new Epidata API</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/migration-guide.html">V3/V4 to V5 Migration Guide</a></li>
     <li><a class="dropdown-item" href="../articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
-    <li><a class="dropdown-item" href="../articles/v5-api-demo.html">epidatr v5 API demo</a></li>
     <li><a class="dropdown-item" href="../articles/versioned-data.html">Understanding and accessing versioned data</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -134,9 +133,9 @@ Use <code><a href="epidata_meta.html">epidata_meta()</a></code> to discover avai
 <dt id="arg-signals">signals<a class="anchor" aria-label="anchor" href="#arg-signals"></a></dt>
 <dd><p>character vector. One or more signals to query for the given
 source; comma-joined strings (e.g., <code>"sig1,sig2"</code>) are also accepted. Use
-<code><a href="epidata_meta.html">epidata_meta()</a></code> to discover available signals. A separate API request is
-made per signal and geo type (the cast-API only accepts one of each per
-request) and the results are combined.</p></dd>
+<code><a href="epidata_meta.html">epidata_meta()</a></code> to discover available signals. All signals are sent
+comma-joined in a single request per geo type (the cast-API only accepts
+one geo type per request) and the results are combined.</p></dd>
 
 
 <dt id="arg-geo-type">geo_type<a class="anchor" aria-label="anchor" href="#arg-geo-type"></a></dt>
@@ -180,8 +179,10 @@ the average of neighboring values, and <code>"fill_zero"</code> fills nulls with
 
 
 <dt id="arg-snapshot-date">snapshot_date<a class="anchor" aria-label="anchor" href="#arg-snapshot-date"></a></dt>
-<dd><p>Date or <code>NULL</code>. The snapshot date; <code>NULL</code> returns the
-latest available version.</p></dd>
+<dd><p>Date, <code>POSIXt</code>, UTC timestamp string (e.g.
+<code>"2025-10-16T13:45:00Z"</code>), or <code>NULL</code>. The point in time to snapshot:
+returns the version of the data that was current then. <code>NULL</code> returns
+the latest available version.</p></dd>
 
 
 <dt id="arg-as-of">as_of<a class="anchor" aria-label="anchor" href="#arg-as-of"></a></dt>
@@ -194,10 +195,13 @@ to <code><a href="epidata_call.html">fetch()</a></code>. See <code><a href="fetc
 
 
 <dt id="arg-report-time">report_time<a class="anchor" aria-label="anchor" href="#arg-report-time"></a></dt>
-<dd><p>Date, string, or <code><a href="epirange.html">epirange()</a></code>. A query on the
-<code>report_time</code> column for the archive endpoint. Supports exact dates (e.g.,
-<code>"2025-10-16"</code>), operators (e.g., <code>"&lt;2025-10-16"</code>), or an <code><a href="epirange.html">epirange()</a></code>.
-Internally maps to the <code>report_time_query</code> API parameter.</p></dd>
+<dd><p>String or <code><a href="epirange.html">epirange()</a></code>. A filter on the <code>report_time</code>
+column. Accepts comparison operators (e.g., <code>"&lt;2025-10-16"</code>,
+<code>"&gt;=2025-10-16"</code>, or <code>"&lt;=2025-10-16T13:45:00Z"</code> for a UTC timestamp
+bound) or an <code><a href="epirange.html">epirange()</a></code> for an inclusive date range.
+Bare dates and the <code>"="</code> operator are not accepted: use <code>snapshot_date</code>
+for point-in-time data. Internally maps to the <code>report_time_query</code> API
+parameter.</p></dd>
 
 
 <dt id="arg-issues">issues<a class="anchor" aria-label="anchor" href="#arg-issues"></a></dt>

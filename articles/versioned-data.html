@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,9 +36,8 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/migration-guide.html">Migrating from pub_covidcast to the new Epidata API</a></li>
+<li><a class="dropdown-item" href="../articles/migration-guide.html">V3/V4 to V5 Migration Guide</a></li>
     <li><a class="dropdown-item" href="../articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
-    <li><a class="dropdown-item" href="../articles/v5-api-demo.html">epidatr v5 API demo</a></li>
     <li><a class="dropdown-item" href="../articles/versioned-data.html">Understanding and accessing versioned data</a></li>
   </ul>
 </li>
@@ -73,651 +72,332 @@
     
 <p>The Epidata API records not just each signal’s estimate for a given
 location on a given day, but also <em>when</em> that estimate was made,
-and all updates to that estimate.</p>
-<p>For example, let’s look at the <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/doctor-visits.html" class="external-link">doctor
-visits signal</a> from the <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast.html" class="external-link"><code>covidcast</code>
-endpoint</a>, which estimates the percentage of outpatient doctor visits
-that are COVID-related. Consider a result row with
-<code>time_value</code> 2020-05-01 for <code>geo_values = "pa"</code>.
-This is an estimate for Pennsylvania on May 1, 2020. That estimate was
-<em>issued</em> on May 5, 2020, the delay being due to the aggregation
-of data by our source and the time taken by the Epidata API to ingest
-the data provided. Later, the estimate for May 1st could be updated,
-perhaps because additional visit data from May 1st arrived at our source
-and was reported to us. This constitutes a new <em>issue</em> of the
-data.</p>
+and all updates to that estimate. This is particularly relevant for data
+sources that have updates or additional information coming in, due to
+reporting and data flow processes.</p>
+<p>For example, let’s look at the <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/nssp.html" class="external-link">emergency
+department visits signal</a> from the <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/nssp.html" class="external-link"><code>nssp</code></a>
+source, which estimates the percentage of emergency department visits
+that are influenza-related. Consider a result row with
+<code>reference_time</code> 2024-12-07 for
+<code>geo_values = "pa"</code>. This is an estimate for Pennsylvania on
+December 7, 2024. That estimate was first <em>reported</em> (published)
+on December 13, 2024, the delay being due to the aggregation of data by
+our source and the time taken by the Epidata API to ingest the data
+provided. Later, the estimate for December 7th was updated, as
+additional visit data from December 7th arrived at our source and was
+reported to us. This constitutes a new <em>version</em> of the data.
+Let’s walk through how to look at that below.</p>
 <div class="section level3">
 <h3 id="data-known-as-of-a-specific-date">Data known “as of” a specific date<a class="anchor" aria-label="anchor" href="#data-known-as-of-a-specific-date"></a>
 </h3>
-<p>By default, endpoint functions fetch the most recent issue available.
+<p>By default, endpoint functions fetch the most recent data available.
 This is the best option for users who simply want to graph the latest
 data or construct dashboards. But if we are interested in knowing
 <em>when</em> data was reported, we can request specific data versions
-using the <code>as_of</code>, <code>issues</code>, or <code>lag</code>
-arguments.</p>
-<p><em>Note</em> that these are mutually exclusive; only one can be
-specified at a time. Also, not all endpoints support all three
-parameters, so please check the documentation for that specific
-endpoint.</p>
+using <code>snapshot_date</code> in <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>.</p>
 <p>First, we can request the data that was available <em>as of</em> a
-specific date, using the <code>as_of</code> argument:</p>
+specific date, using the <code>snapshot_date</code> argument with
+<code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pub_covidcast.html">pub_covidcast</a></span><span class="op">(</span></span>
-<span>  source <span class="op">=</span> <span class="st">"doctor-visits"</span>,</span>
-<span>  signals <span class="op">=</span> <span class="st">"smoothed_adj_cli"</span>,</span>
-<span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
-<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2020-05-01"</span>, <span class="st">"2020-05-01"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="co"># The percent of ED visits due to influenza from the NSSP source, for</span></span>
+<span><span class="co"># 2024-12-07, as of 2024-12-14</span></span>
+<span><span class="va">past_snapshot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cast_api_queries.html">epidata_snapshot</a></span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="st">"nssp"</span>,</span>
+<span>  signals <span class="op">=</span> <span class="st">"pct_ed_visits_influenza"</span>,</span>
 <span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
 <span>  geo_values <span class="op">=</span> <span class="st">"pa"</span>,</span>
-<span>  as_of <span class="op">=</span> <span class="st">"2020-05-07"</span></span>
+<span>  reference_time <span class="op">=</span> <span class="st">"2024-12-07"</span>,</span>
+<span>  snapshot_date <span class="op">=</span> <span class="st">"2024-12-14"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">epidata</span><span class="op">)</span></span></code></pre></div>
-<table style="width:100%;" class="table">
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">past_snapshot</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
 <colgroup>
-<col width="5%">
-<col width="9%">
-<col width="8%">
-<col width="5%">
-<col width="5%">
-<col width="6%">
-<col width="5%">
-<col width="6%">
-<col width="2%">
-<col width="8%">
-<col width="8%">
+<col width="27%">
+<col width="13%">
+<col width="10%">
 <col width="11%">
-<col width="5%">
-<col width="4%">
+<col width="13%">
+<col width="17%">
 <col width="6%">
 </colgroup>
 <thead><tr class="header">
-<th align="left">geo_value</th>
 <th align="left">signal</th>
-<th align="left">source</th>
+<th align="left">report_time</th>
 <th align="left">geo_type</th>
-<th align="left">time_type</th>
-<th align="left">time_value</th>
-<th align="right">direction</th>
-<th align="left">issue</th>
-<th align="right">lag</th>
-<th align="right">missing_value</th>
-<th align="right">missing_stderr</th>
-<th align="right">missing_sample_size</th>
+<th align="left">geo_value</th>
+<th align="left">fill_method</th>
+<th align="left">reference_time</th>
 <th align="right">value</th>
-<th align="right">stderr</th>
-<th align="right">sample_size</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
+<td align="left">pct_ed_visits_influenza</td>
+<td align="left">2024-12-13</td>
 <td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-01</td>
-<td align="right">NA</td>
-<td align="left">2020-05-07</td>
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">2.581509</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="left">pa</td>
+<td align="left">source</td>
+<td align="left">2024-12-07</td>
+<td align="right">0.55</td>
 </tr></tbody>
 </table>
-<p>This shows that an estimate of about 2.3% was issued on May 7. If we
-don’t specify <code>as_of</code>, we get the most recent estimate
-available:</p>
+<p>This shows that an estimate of about 0.55% was known as of December
+14. If we don’t specify <code>snapshot_date</code>, we get the most
+recent estimate available:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pub_covidcast.html">pub_covidcast</a></span><span class="op">(</span></span>
-<span>  source <span class="op">=</span> <span class="st">"doctor-visits"</span>,</span>
-<span>  signals <span class="op">=</span> <span class="st">"smoothed_adj_cli"</span>,</span>
-<span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
-<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2020-05-01"</span>, <span class="st">"2020-05-01"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="va">latest_snapshot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cast_api_queries.html">epidata_snapshot</a></span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="st">"nssp"</span>,</span>
+<span>  signals <span class="op">=</span> <span class="st">"pct_ed_visits_influenza"</span>,</span>
 <span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
-<span>  geo_values <span class="op">=</span> <span class="st">"pa"</span></span>
+<span>  geo_values <span class="op">=</span> <span class="st">"pa"</span>,</span>
+<span>  reference_time <span class="op">=</span> <span class="st">"2024-12-07"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">epidata</span><span class="op">)</span></span></code></pre></div>
-<table style="width:100%;" class="table">
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">latest_snapshot</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
 <colgroup>
-<col width="5%">
-<col width="9%">
-<col width="8%">
-<col width="5%">
-<col width="5%">
-<col width="6%">
-<col width="5%">
-<col width="6%">
-<col width="2%">
-<col width="8%">
-<col width="8%">
+<col width="27%">
+<col width="13%">
+<col width="10%">
 <col width="11%">
-<col width="5%">
-<col width="4%">
+<col width="13%">
+<col width="17%">
 <col width="6%">
 </colgroup>
 <thead><tr class="header">
-<th align="left">geo_value</th>
 <th align="left">signal</th>
-<th align="left">source</th>
+<th align="left">report_time</th>
 <th align="left">geo_type</th>
-<th align="left">time_type</th>
-<th align="left">time_value</th>
-<th align="right">direction</th>
-<th align="left">issue</th>
-<th align="right">lag</th>
-<th align="right">missing_value</th>
-<th align="right">missing_stderr</th>
-<th align="right">missing_sample_size</th>
+<th align="left">geo_value</th>
+<th align="left">fill_method</th>
+<th align="left">reference_time</th>
 <th align="right">value</th>
-<th align="right">stderr</th>
-<th align="right">sample_size</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
+<td align="left">pct_ed_visits_influenza</td>
+<td align="left">2026-06-26</td>
 <td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-01</td>
-<td align="right">NA</td>
-<td align="left">2020-07-04</td>
-<td align="right">64</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">5.973572</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="left">pa</td>
+<td align="left">source</td>
+<td align="left">2024-12-07</td>
+<td align="right">0.57</td>
 </tr></tbody>
 </table>
-<p>Note the substantial change in the estimate, from less than 3% to
-almost 6%, reflecting new data that became available after May 7 about
-visits <em>occurring on</em> May 1. This illustrates the importance of
-issue date tracking, particularly for forecasting tasks. To backtest a
-forecasting model on past data, it is important to use the data that
-would have been available <em>at the time</em> the model was or would
-have been fit, not data that arrived much later.</p>
+<p>Note the change in the estimate, from 0.55% to 0.57%, reflecting new
+data that became available after December 14 about visits <em>occurring
+on</em> December 7. <strong>This illustrates the importance of version
+tracking, particularly for forecasting tasks. To backtest a forecasting
+model on past data, it is important to use the data that would have been
+available <em>at the time</em> the model was or would have been fit, not
+data that arrived much later.</strong></p>
 </div>
 <div class="section level3">
-<h3 id="multiple-issues-of-observations">Multiple issues of observations<a class="anchor" aria-label="anchor" href="#multiple-issues-of-observations"></a>
+<h3 id="multiple-versions-and-revision-histories">Multiple versions and revision histories<a class="anchor" aria-label="anchor" href="#multiple-versions-and-revision-histories"></a>
 </h3>
-<p>By using the <code>issues</code> argument, we can request all issues
-in a certain time period:</p>
+<p>Unlike <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>,
+<code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> does not default to the latest data: by
+using it with the <code>report_time</code> argument, we can request all
+versions reported in a certain time period, and if
+<code>report_time</code> is omitted entirely, we get every version ever
+reported.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pub_covidcast.html">pub_covidcast</a></span><span class="op">(</span></span>
-<span>  source <span class="op">=</span> <span class="st">"doctor-visits"</span>,</span>
-<span>  signals <span class="op">=</span> <span class="st">"smoothed_adj_cli"</span>,</span>
-<span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
-<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2020-05-01"</span>, <span class="st">"2020-05-01"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="co"># All versions of the percent of ED visits due to influenza from the NSSP</span></span>
+<span><span class="co"># source, for 2024-12-07, reported between 2024-12-01 and 2025-01-15</span></span>
+<span><span class="va">archive_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cast_api_queries.html">epidata_archive</a></span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="st">"nssp"</span>,</span>
+<span>  signals <span class="op">=</span> <span class="st">"pct_ed_visits_influenza"</span>,</span>
 <span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
 <span>  geo_values <span class="op">=</span> <span class="st">"pa"</span>,</span>
-<span>  issues <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2020-05-01"</span>, <span class="st">"2020-05-15"</span><span class="op">)</span></span>
+<span>  reference_time <span class="op">=</span> <span class="st">"2024-12-07"</span>,</span>
+<span>  report_time <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2024-12-01"</span>, <span class="st">"2025-01-15"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">epidata</span><span class="op">)</span></span></code></pre></div>
-<table style="width:100%;" class="table">
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">archive_data</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
 <colgroup>
-<col width="5%">
-<col width="9%">
-<col width="8%">
-<col width="5%">
-<col width="5%">
-<col width="6%">
-<col width="5%">
-<col width="6%">
-<col width="2%">
-<col width="8%">
-<col width="8%">
+<col width="27%">
+<col width="13%">
+<col width="10%">
 <col width="11%">
-<col width="5%">
-<col width="4%">
+<col width="13%">
+<col width="17%">
 <col width="6%">
 </colgroup>
 <thead><tr class="header">
-<th align="left">geo_value</th>
 <th align="left">signal</th>
-<th align="left">source</th>
+<th align="left">report_time</th>
 <th align="left">geo_type</th>
-<th align="left">time_type</th>
-<th align="left">time_value</th>
-<th align="right">direction</th>
-<th align="left">issue</th>
-<th align="right">lag</th>
-<th align="right">missing_value</th>
-<th align="right">missing_stderr</th>
-<th align="right">missing_sample_size</th>
+<th align="left">geo_value</th>
+<th align="left">fill_method</th>
+<th align="left">reference_time</th>
 <th align="right">value</th>
-<th align="right">stderr</th>
-<th align="right">sample_size</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
+<td align="left">pct_ed_visits_influenza</td>
+<td align="left">2024-12-13</td>
 <td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-01</td>
-<td align="right">NA</td>
-<td align="left">2020-05-07</td>
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">2.581509</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="left">pa</td>
+<td align="left">source</td>
+<td align="left">2024-12-07</td>
+<td align="right">0.55</td>
 </tr>
 <tr class="even">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
+<td align="left">pct_ed_visits_influenza</td>
+<td align="left">2024-12-20</td>
 <td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-01</td>
-<td align="right">NA</td>
-<td align="left">2020-05-08</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">3.278896</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="left">pa</td>
+<td align="left">source</td>
+<td align="left">2024-12-07</td>
+<td align="right">0.56</td>
 </tr>
 <tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
+<td align="left">pct_ed_visits_influenza</td>
+<td align="left">2024-12-27</td>
 <td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-01</td>
-<td align="right">NA</td>
-<td align="left">2020-05-09</td>
-<td align="right">8</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">3.321781</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="left">pa</td>
+<td align="left">source</td>
+<td align="left">2024-12-07</td>
+<td align="right">0.56</td>
 </tr>
 <tr class="even">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
+<td align="left">pct_ed_visits_influenza</td>
+<td align="left">2025-01-03</td>
 <td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-01</td>
-<td align="right">NA</td>
-<td align="left">2020-05-12</td>
-<td align="right">11</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">3.588683</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="left">pa</td>
+<td align="left">source</td>
+<td align="left">2024-12-07</td>
+<td align="right">0.56</td>
 </tr>
 <tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
+<td align="left">pct_ed_visits_influenza</td>
+<td align="left">2025-01-10</td>
 <td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-01</td>
-<td align="right">NA</td>
-<td align="left">2020-05-13</td>
-<td align="right">12</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">3.631978</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
 <td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-01</td>
-<td align="right">NA</td>
-<td align="left">2020-05-14</td>
-<td align="right">13</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">3.658009</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-01</td>
-<td align="right">NA</td>
-<td align="left">2020-05-15</td>
-<td align="right">14</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">3.662286</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="left">source</td>
+<td align="left">2024-12-07</td>
+<td align="right">0.56</td>
 </tr>
 </tbody>
 </table>
-<p>This estimate was clearly updated many times as new data for May 1st
+<p>This estimate was updated several times as new data for December 7th
 arrived.</p>
-<p>Note that these results include only data issued or updated between
-(inclusive) 2020-05-01 and 2020-05-15. If a value was first reported on
-2020-04-15, and never updated, a query for issues between 2020-05-01 and
-2020-05-15 will not include that value among its results.</p>
-<p>The <code>issues</code> parameter also accepts a list of dates.</p>
+<p>Note that these results include only data reported between
+(inclusive) 2024-12-01 and 2025-01-15. If a value was first reported
+outside this range, a query for reports between 2024-12-01 and
+2025-01-15 will not include that value among its results.</p>
+<p>The <code>report_time</code> parameter also accepts comparison
+operators (<code>&lt;</code> and <code>&gt;</code>, each strictly
+exclusive of the given date) or a range with <code><a href="../reference/epirange.html">epirange()</a></code>.
+(Note: exact dates are not supported on <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>;
+use <code>epidata_snapshot(snapshot_date = ...)</code> if you need data
+as of a single date.)</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_covidcast.html">pub_covidcast</a></span><span class="op">(</span></span>
-<span>  source <span class="op">=</span> <span class="st">"doctor-visits"</span>,</span>
-<span>  signals <span class="op">=</span> <span class="st">"smoothed_adj_cli"</span>,</span>
-<span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
-<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2020-05-01"</span>, <span class="st">"2020-05-01"</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="co"># Versions reported strictly before 2025-01-01</span></span>
+<span><span class="fu"><a href="../reference/cast_api_queries.html">epidata_archive</a></span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="st">"nssp"</span>,</span>
+<span>  signals <span class="op">=</span> <span class="st">"pct_ed_visits_influenza"</span>,</span>
 <span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
 <span>  geo_values <span class="op">=</span> <span class="st">"pa"</span>,</span>
-<span>  issues <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2020-05-07"</span>, <span class="st">"2020-05-09"</span>, <span class="st">"2020-05-15"</span><span class="op">)</span></span>
+<span>  reference_time <span class="op">=</span> <span class="st">"2024-12-07"</span>,</span>
+<span>  report_time <span class="op">=</span> <span class="st">"&lt;2025-01-01"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 3 × 15</span></span>
-<span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
-<span><span class="co">#&gt; 1 pa        smoothed_… docto… state    day       2020-05-01        NA 2020-05-07</span></span>
-<span><span class="co">#&gt; 2 pa        smoothed_… docto… state    day       2020-05-01        NA 2020-05-09</span></span>
-<span><span class="co">#&gt; 3 pa        smoothed_… docto… state    day       2020-05-01        NA 2020-05-15</span></span>
-<span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 3 × 7</span></span>
+<span><span class="co">#&gt;   signal         report_time geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;          &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_ed_visits… 2024-12-13  state    pa        source      2024-12-07     0.550</span></span>
+<span><span class="co">#&gt; 2 pct_ed_visits… 2024-12-20  state    pa        source      2024-12-07     0.560</span></span>
+<span><span class="co">#&gt; 3 pct_ed_visits… 2024-12-27  state    pa        source      2024-12-07     0.560</span></span>
+<span></span>
+<span><span class="co"># Versions reported strictly after 2024-12-13</span></span>
+<span><span class="fu"><a href="../reference/cast_api_queries.html">epidata_archive</a></span><span class="op">(</span></span>
+<span>  source <span class="op">=</span> <span class="st">"nssp"</span>,</span>
+<span>  signals <span class="op">=</span> <span class="st">"pct_ed_visits_influenza"</span>,</span>
+<span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
+<span>  geo_values <span class="op">=</span> <span class="st">"pa"</span>,</span>
+<span>  reference_time <span class="op">=</span> <span class="st">"2024-12-07"</span>,</span>
+<span>  report_time <span class="op">=</span> <span class="st">"&gt;2024-12-13"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 116 × 7</span></span>
+<span><span class="co">#&gt;   signal         report_time geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;          &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_ed_visits… 2024-12-20  state    pa        source      2024-12-07     0.560</span></span>
+<span><span class="co">#&gt; 2 pct_ed_visits… 2024-12-27  state    pa        source      2024-12-07     0.560</span></span>
+<span><span class="co">#&gt; 3 pct_ed_visits… 2025-01-03  state    pa        source      2024-12-07     0.560</span></span>
+<span><span class="co">#&gt; 4 pct_ed_visits… 2025-01-10  state    pa        source      2024-12-07     0.560</span></span>
+<span><span class="co">#&gt; # ℹ 112 more rows</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="observations-issued-with-a-specific-lag">Observations issued with a specific lag<a class="anchor" aria-label="anchor" href="#observations-issued-with-a-specific-lag"></a>
+<h3 id="calculating-reporting-lag">Calculating reporting lag<a class="anchor" aria-label="anchor" href="#calculating-reporting-lag"></a>
 </h3>
-<p>Finally, we can use the <code>lag</code> argument to request only
-data reported with a certain lag. For example, requesting a lag of 7
-days fetches only data issued exactly 7 days after the corresponding
-<code>time_value</code>:</p>
+<p>In the V5 API, reporting lag is computed directly as the difference
+between <code>report_time</code> (the publication date) and
+<code>reference_time</code> (the observation date):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pub_covidcast.html">pub_covidcast</a></span><span class="op">(</span></span>
-<span>  source <span class="op">=</span> <span class="st">"doctor-visits"</span>,</span>
-<span>  signals <span class="op">=</span> <span class="st">"smoothed_adj_cli"</span>,</span>
-<span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
-<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2020-05-01"</span>, <span class="st">"2020-05-07"</span><span class="op">)</span>,</span>
-<span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
-<span>  geo_values <span class="op">=</span> <span class="st">"pa"</span>,</span>
-<span>  lag <span class="op">=</span> <span class="fl">7</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">epidata</span><span class="op">)</span></span></code></pre></div>
-<table style="width:100%;" class="table">
-<colgroup>
-<col width="5%">
-<col width="9%">
-<col width="8%">
-<col width="5%">
-<col width="5%">
-<col width="6%">
-<col width="5%">
-<col width="6%">
-<col width="2%">
-<col width="8%">
-<col width="8%">
-<col width="11%">
-<col width="5%">
-<col width="4%">
-<col width="6%">
-</colgroup>
+<code class="sourceCode R"><span><span class="va">archive_with_lag</span> <span class="op">&lt;-</span> <span class="va">archive_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>lag_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">report_time</span> <span class="op">-</span> <span class="va">reference_time</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">signal</span>, <span class="va">reference_time</span>, <span class="va">report_time</span>, <span class="va">lag_days</span>, <span class="va">value</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">archive_with_lag</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
 <thead><tr class="header">
-<th align="left">geo_value</th>
 <th align="left">signal</th>
-<th align="left">source</th>
-<th align="left">geo_type</th>
-<th align="left">time_type</th>
-<th align="left">time_value</th>
-<th align="right">direction</th>
-<th align="left">issue</th>
-<th align="right">lag</th>
-<th align="right">missing_value</th>
-<th align="right">missing_stderr</th>
-<th align="right">missing_sample_size</th>
+<th align="left">reference_time</th>
+<th align="left">report_time</th>
+<th align="right">lag_days</th>
 <th align="right">value</th>
-<th align="right">stderr</th>
-<th align="right">sample_size</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-01</td>
-<td align="right">NA</td>
-<td align="left">2020-05-08</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">3.278896</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-02</td>
-<td align="right">NA</td>
-<td align="left">2020-05-09</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">3.225292</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-05</td>
-<td align="right">NA</td>
-<td align="left">2020-05-12</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">2.779908</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-06</td>
-<td align="right">NA</td>
-<td align="left">2020-05-13</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">2.557698</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-07</td>
-<td align="right">NA</td>
-<td align="left">2020-05-14</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">2.191677</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-</tbody>
-</table>
-<p>Note that though this query requested all values between 2020-05-01
-and 2020-05-07, May 3rd and May 4th were <em>not</em> included in the
-results set. This is because the query will only include a result for
-May 3rd if a value were issued on May 10th (a 7-day lag), but in fact
-the value was not updated on that day:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pub_covidcast.html">pub_covidcast</a></span><span class="op">(</span></span>
-<span>  source <span class="op">=</span> <span class="st">"doctor-visits"</span>,</span>
-<span>  signals <span class="op">=</span> <span class="st">"smoothed_adj_cli"</span>,</span>
-<span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span>
-<span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2020-05-03"</span>, <span class="st">"2020-05-03"</span><span class="op">)</span>,</span>
-<span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
-<span>  geo_values <span class="op">=</span> <span class="st">"pa"</span>,</span>
-<span>  issues <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2020-05-09"</span>, <span class="st">"2020-05-15"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">epidata</span><span class="op">)</span></span></code></pre></div>
-<table style="width:100%;" class="table">
-<colgroup>
-<col width="5%">
-<col width="9%">
-<col width="8%">
-<col width="5%">
-<col width="5%">
-<col width="6%">
-<col width="5%">
-<col width="6%">
-<col width="2%">
-<col width="8%">
-<col width="8%">
-<col width="11%">
-<col width="5%">
-<col width="4%">
-<col width="6%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">geo_value</th>
-<th align="left">signal</th>
-<th align="left">source</th>
-<th align="left">geo_type</th>
-<th align="left">time_type</th>
-<th align="left">time_value</th>
-<th align="right">direction</th>
-<th align="left">issue</th>
-<th align="right">lag</th>
-<th align="right">missing_value</th>
-<th align="right">missing_stderr</th>
-<th align="right">missing_sample_size</th>
-<th align="right">value</th>
-<th align="right">stderr</th>
-<th align="right">sample_size</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-03</td>
-<td align="right">NA</td>
-<td align="left">2020-05-09</td>
+<td align="left">pct_ed_visits_influenza</td>
+<td align="left">2024-12-07</td>
+<td align="left">2024-12-13</td>
 <td align="right">6</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">2.788618</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="right">0.55</td>
 </tr>
 <tr class="even">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-03</td>
-<td align="right">NA</td>
-<td align="left">2020-05-12</td>
-<td align="right">9</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">3.015368</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="left">pct_ed_visits_influenza</td>
+<td align="left">2024-12-07</td>
+<td align="left">2024-12-20</td>
+<td align="right">13</td>
+<td align="right">0.56</td>
 </tr>
 <tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-03</td>
-<td align="right">NA</td>
-<td align="left">2020-05-13</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">3.039310</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="left">pct_ed_visits_influenza</td>
+<td align="left">2024-12-07</td>
+<td align="left">2024-12-27</td>
+<td align="right">20</td>
+<td align="right">0.56</td>
 </tr>
 <tr class="even">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-03</td>
-<td align="right">NA</td>
-<td align="left">2020-05-14</td>
-<td align="right">11</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">3.021245</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="left">pct_ed_visits_influenza</td>
+<td align="left">2024-12-07</td>
+<td align="left">2025-01-03</td>
+<td align="right">27</td>
+<td align="right">0.56</td>
 </tr>
 <tr class="odd">
-<td align="left">pa</td>
-<td align="left">smoothed_adj_cli</td>
-<td align="left">doctor-visits</td>
-<td align="left">state</td>
-<td align="left">day</td>
-<td align="left">2020-05-03</td>
-<td align="right">NA</td>
-<td align="left">2020-05-15</td>
-<td align="right">12</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">3.048725</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
+<td align="left">pct_ed_visits_influenza</td>
+<td align="left">2024-12-07</td>
+<td align="left">2025-01-10</td>
+<td align="right">34</td>
+<td align="right">0.56</td>
 </tr>
 </tbody>
 </table>
+<p>If your analysis requires filtering data to a specific maximum
+reporting lag (for example, simulating data available with at most a
+14-day delay), filter by <code>lag_days</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">archive_with_lag</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">lag_days</span> <span class="op">&lt;=</span> <span class="fl">14</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 5</span></span>
+<span><span class="co">#&gt;   signal                  reference_time report_time lag_days value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;                   &lt;date&gt;         &lt;date&gt;         &lt;int&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_ed_visits_influenza 2024-12-07     2024-12-13         6 0.550</span></span>
+<span><span class="co">#&gt; 2 pct_ed_visits_influenza 2024-12-07     2024-12-20        13 0.560</span></span></code></pre></div>
+<p>For sources that have not yet transitioned from the legacy V4 API,
+versioning is specified differently; see
+<code><a href="../articles/migration-guide.html">vignette("migration-guide")</a></code> for the argument and column
+mappings between V4 and V5, including worked before-and-after examples
+of revision history queries.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

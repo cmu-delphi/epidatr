@@ -9,7 +9,7 @@ The covidcast_epidata() function fetches a list of all signals, and returns
 an object containing fields for every signal:
 epidata &amp;lt;- covidcast_epidata()
 epidata$signals
-#&amp;gt; # A tibble: 538 x 3
+#&amp;gt; # A tibble: 520 x 3
 #&amp;gt;    source        signal                        short_description
 #&amp;gt;    &amp;lt;chr&amp;gt;         &amp;lt;chr&amp;gt;                         &amp;lt;chr&amp;gt;
 #&amp;gt;  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~
@@ -22,7 +22,7 @@ epidata$signals
 #&amp;gt;  8 chng          7dav_outpatient_covid         Ratio of outpatient doctor visit~
 #&amp;gt;  9 covid-act-now pcr_specimen_positivity_rate  Proportion of PCR specimens test~
 #&amp;gt; 10 covid-act-now pcr_specimen_total_tests      Total number of PCR specimens te~
-#&amp;gt; # i 528 more rows
+#&amp;gt; # i 510 more rows
 
 If you use an editor that supports tab completion, such as RStudio, type
 epidata$signals$ and wait for the tab completion popup. You will be able
@@ -44,7 +44,7 @@ epidata$signals$`fb-survey:smoothed_cli`$call(&quot;state&quot;, &quot;pa&quot;,
 #&amp;gt; i See `vignette(&quot;migration-guide&quot;)` (or
 #&amp;gt;   &amp;lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html&amp;gt;) for the
 #&amp;gt;   V5 endpoints and how to move to them. Old data will remain available for at
-#&amp;gt;   least a year, however new ingestion will end.
+#&amp;gt;   least a year, but new ingestion will end.
 #&amp;gt; This warning is displayed once every 8 hours.
 #&amp;gt; # A tibble: 6 x 15
 #&amp;gt;   geo_value signal     source geo_type time_type time_value direction issue
@@ -67,7 +67,7 @@ The covidcast_epidata() function fetches a list of all signals, and returns
 an object containing fields for every signal:
 epidata &amp;lt;- covidcast_epidata()
 epidata$signals
-#&amp;gt; # A tibble: 538 x 3
+#&amp;gt; # A tibble: 520 x 3
 #&amp;gt;    source        signal                        short_description
 #&amp;gt;    &amp;lt;chr&amp;gt;         &amp;lt;chr&amp;gt;                         &amp;lt;chr&amp;gt;
 #&amp;gt;  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~
@@ -80,7 +80,7 @@ epidata$signals
 #&amp;gt;  8 chng          7dav_outpatient_covid         Ratio of outpatient doctor visit~
 #&amp;gt;  9 covid-act-now pcr_specimen_positivity_rate  Proportion of PCR specimens test~
 #&amp;gt; 10 covid-act-now pcr_specimen_total_tests      Total number of PCR specimens te~
-#&amp;gt; # i 528 more rows
+#&amp;gt; # i 510 more rows
 
 If you use an editor that supports tab completion, such as RStudio, type
 epidata$signals$ and wait for the tab completion popup. You will be able
@@ -102,7 +102,7 @@ epidata$signals$`fb-survey:smoothed_cli`$call(&quot;state&quot;, &quot;pa&quot;,
 #&amp;gt; i See `vignette(&quot;migration-guide&quot;)` (or
 #&amp;gt;   &amp;lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html&amp;gt;) for the
 #&amp;gt;   V5 endpoints and how to move to them. Old data will remain available for at
-#&amp;gt;   least a year, however new ingestion will end.
+#&amp;gt;   least a year, but new ingestion will end.
 #&amp;gt; This warning is displayed once every 8 hours.
 #&amp;gt; # A tibble: 6 x 15
 #&amp;gt;   geo_value signal     source geo_type time_type time_value direction issue
@@ -123,7 +123,7 @@ epidata$signals$`fb-survey:smoothed_cli`$call(&quot;state&quot;, &quot;pa&quot;,
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -135,9 +135,8 @@ epidata$signals$`fb-survey:smoothed_cli`$call(&quot;state&quot;, &quot;pa&quot;,
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/migration-guide.html">Migrating from pub_covidcast to the new Epidata API</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/migration-guide.html">V3/V4 to V5 Migration Guide</a></li>
     <li><a class="dropdown-item" href="../articles/signal-discovery.html">Finding data sources and signals of interest</a></li>
-    <li><a class="dropdown-item" href="../articles/v5-api-demo.html">epidatr v5 API demo</a></li>
     <li><a class="dropdown-item" href="../articles/versioned-data.html">Understanding and accessing versioned data</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -168,7 +167,7 @@ leaving R.</p>
 an object containing fields for every signal:</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">epidata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/covidcast_epidata.html">covidcast_epidata</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">epidata</span><span class="op">$</span><span class="va">signals</span></span>
-<span><span class="co">#&gt; # A tibble: 538 x 3</span></span>
+<span><span class="co">#&gt; # A tibble: 520 x 3</span></span>
 <span><span class="co">#&gt;    source        signal                        short_description</span></span>
 <span><span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;                         &lt;chr&gt;</span></span>
 <span><span class="co">#&gt;  1 chng          smoothed_outpatient_cli       Estimated percentage of outpatie~</span></span>
@@ -181,7 +180,7 @@ an object containing fields for every signal:</p>
 <span><span class="co">#&gt;  8 chng          7dav_outpatient_covid         Ratio of outpatient doctor visit~</span></span>
 <span><span class="co">#&gt;  9 covid-act-now pcr_specimen_positivity_rate  Proportion of PCR specimens test~</span></span>
 <span><span class="co">#&gt; 10 covid-act-now pcr_specimen_total_tests      Total number of PCR specimens te~</span></span>
-<span><span class="co">#&gt; # i 528 more rows</span></span></code></pre><p></p></div>
+<span><span class="co">#&gt; # i 510 more rows</span></span></code></pre><p></p></div>
 <p>If you use an editor that supports tab completion, such as RStudio, type
 <code>epidata$signals$</code> and wait for the tab completion popup. You will be able
 to type the name of signals and have the autocomplete feature select them
@@ -201,7 +200,7 @@ the <code><a href="pub_covidcast.html">pub_covidcast()</a></code> function. Simp
 <span><span class="co">#&gt; i See `vignette("migration-guide")` (or</span></span>
 <span><span class="co">#&gt;   &lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html&gt;) for the</span></span>
 <span><span class="co">#&gt;   V5 endpoints and how to move to them. Old data will remain available for at</span></span>
-<span><span class="co">#&gt;   least a year, however new ingestion will end.</span></span>
+<span><span class="co">#&gt;   least a year, but new ingestion will end.</span></span>
 <span><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
 <span><span class="co">#&gt; # A tibble: 6 x 15</span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue</span></span>
