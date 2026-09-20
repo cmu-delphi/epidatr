@@ -6,10 +6,15 @@ format:
 	Rscript -e "styler::style_pkg()"
 test:
 	Rscript -e "devtools::test()"
-# Set pvt=FALSE to skip the pvt_* endpoints (they need a key with private access).
-pvt ?= TRUE
+# Set pvt=TRUE to include pvt_* endpoints (requires a key with private access).
+# Set cast_url to point cast-API tests at a non-default server, e.g.:
+#   make test-live cast_url=https://development.delphi.cmu.edu/epidata/v5/
+pvt ?= FALSE
+cast_url ?=
 test-live:
-	EPIDATR_LIVE_TEST=TRUE EPIDATR_TEST_PVT=$(pvt) Rscript -e "devtools::test(filter = 'live')"
+	EPIDATR_LIVE_TEST=TRUE EPIDATR_TEST_PVT=$(pvt) EPIDATR_CAST_BASE_URL=$(cast_url) Rscript -e "devtools::test(filter = 'live')"
+test-live-cast:
+	EPIDATR_LIVE_TEST=TRUE EPIDATR_CAST_BASE_URL=$(cast_url) Rscript -e "devtools::test(filter = 'live-cast')"
 update-fixtures:
 	Rscript data-raw/update_fixtures.R
 coverage:
