@@ -17,12 +17,22 @@ skip_unless_live <- function() {
   }
 }
 
-# Gate for pvt_* endpoints, which need an API key with private-endpoint
-# access. Skip them with `make test-live pvt=FALSE` (sets EPIDATR_TEST_PVT).
+# Gate for pvt_* endpoints, which need an API key with private-endpoint access.
+# Skipped by default; opt in with `make test-live pvt=TRUE` (sets
+# EPIDATR_TEST_PVT=TRUE).
 skip_unless_pvt <- function() {
-  if (isFALSE(as.logical(Sys.getenv("EPIDATR_TEST_PVT", "TRUE")))) {
-    testthat::skip("EPIDATR_TEST_PVT=FALSE: skipping private endpoints")
+  if (!isTRUE(as.logical(Sys.getenv("EPIDATR_TEST_PVT", "FALSE")))) {
+    testthat::skip("set EPIDATR_TEST_PVT=TRUE to run private-endpoint tests")
   }
+}
+
+# Returns fetch_args_list() for cast-API calls, optionally overriding the
+# base URL via EPIDATR_CAST_BASE_URL (e.g. to point at the dev server).
+live_cast_fetch_args <- function(...) {
+  url <- Sys.getenv("EPIDATR_CAST_BASE_URL", unset = NA_character_)
+  args <- list(limit = 500L, ...)
+  if (!is.na(url) && nzchar(url)) args$base_url <- url
+  do.call(fetch_args_list, args)
 }
 
 # Live contract check for one endpoint_calls() row: the endpoint returns

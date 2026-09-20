@@ -58,6 +58,44 @@ assert_date_param <- function(name, value, len = NULL, required = TRUE) {
   )
 }
 
+#' Allows a report-time-family param (a `report_time` comparison bound or
+#' `snapshot_date`): date, character, integer-like, or `POSIXt`
+#' @importFrom checkmate check_class
+#' @keywords internal
+assert_report_time_param <- function(name, value, len = NULL, required = TRUE) {
+  null_ok <- !required
+  assert_integerish(len, null.ok = TRUE, .var.name = "len")
+  assert(
+    check_date(value, len = len, any.missing = FALSE, null.ok = null_ok),
+    check_character(value, len = len, any.missing = FALSE, null.ok = null_ok),
+    check_integerish(value, len = len, any.missing = FALSE, null.ok = null_ok),
+    check_class(value, "POSIXt", null.ok = null_ok),
+    combine = "or",
+    .var.name = name
+  )
+  if (!is.null(len) && inherits(value, "POSIXt") && length(value) != len) {
+    stop(sprintf("Assertion on '%s' failed: Must have length %d, but has length %d.", name, len, length(value)))
+  }
+}
+
+#' Format a report-time-family value the way the cast-API accepts it.
+#' @keywords internal
+format_report_time_bound <- function(value) {
+  utc_timestamp <- "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d{1,6})?)?Z$"
+  if (is.character(value) && length(value) == 1) {
+    if (grepl(utc_timestamp, value)) {
+      return(value)
+    }
+    if (grepl("T", value, fixed = TRUE)) {
+      return(NA_character_)
+    }
+  }
+  if (inherits(value, "POSIXt")) {
+    return(format(as.POSIXct(value, tz = "UTC"), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"))
+  }
+  format(parse_api_date(value), "%Y-%m-%d")
+}
+
 #' Allows a timeset param: a date vector, a character vector, an integer-like
 #' vector, or a single EpiRange
 #' @importFrom checkmate assert check_character check_date check_integerish check_class check_list check_names
@@ -165,10 +203,12 @@ format_params_for_api <- function(params) {
 
 #' Helper to format the 'version' argument for the CAST API version_query.
 #'
-#' @param version A comparison string (e.g. `"<2025-10-16"`, `">=2025-10-16"`)
-#'   or an [`epirange()`].
+#' @param version A comparison string (e.g. `"<2025-10-16"`, `">=2025-10-16"`,
+#'   or `"<=2025-10-16T13:45:00Z"` for a UTC timestamp bound) or an
+#'   [`epirange()`] (dates only).
 #' @return A formatted `report_time_query` string: a comparison like
-#'   `"<2025-10-16"`, or an inclusive range like `"2024-01-01:2024-03-31"`.
+#'   `"<2025-10-16"` or `"<=2025-10-16T13:45:00Z"`, or an inclusive range like
+#'   `"2024-01-01:2024-03-31"`.
 #' @keywords internal
 validate_version_query <- function(version) {
   if (is.null(version) || identical(version, "*")) {
@@ -214,20 +254,20 @@ validate_version_query <- function(version) {
     )
   }
 
-  assert_date_param("version", version, len = 1L, required = FALSE)
-  formatted_date <- format(parse_api_date(version), "%Y-%m-%d")
+  assert_report_time_param("version", version, len = 1L, required = FALSE)
+  formatted_bound <- format_report_time_bound(version)
 
-  if (is.na(formatted_date)) {
+  if (is.na(formatted_bound)) {
     cli::cli_abort(
       paste0(
         "Invalid `version` format. Must be a comparison string with an operator ",
-        "(e.g., '<2025-10-16', '>=2025-10-16') or an `epirange()`."
+        "(e.g., '<2025-10-16', '>=2025-10-16', or '<=2025-10-16T13:45:00Z') or an `epirange()`."
       ),
       class = "epidatr__invalid_version_query"
     )
   }
 
-  paste0(operator, formatted_date)
+  paste0(operator, formatted_bound)
 }
 
 
