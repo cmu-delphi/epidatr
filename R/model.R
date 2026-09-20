@@ -168,6 +168,7 @@ create_epidata_field_info <- function(
       "float",
       "date",
       "timestamp",
+      "datetimetz",
       "epiweek",
       "categorical",
       "bool"
@@ -224,6 +225,12 @@ parse_value <- function(
       !inherits(value, "POSIXt")
   ) {
     return(parse_api_timestamp_to_datetime(value))
+  } else if (
+    info$type == "datetimetz" &&
+      !disable_date_parsing &&
+      !inherits(value, "POSIXt")
+  ) {
+    return(parse_api_datetimetz(value))
   } else if (
     info$type == "epiweek" && !disable_date_parsing && !inherits(value, "Date")
   ) {
@@ -335,6 +342,13 @@ parse_api_date <- function(value) {
 #' @keywords internal
 parse_api_timestamp_to_datetime <- function(value) {
   as.POSIXct(as.numeric(value), origin = "1970-01-01")
+}
+
+#' Parses a cast-API UTC timestamp string (e.g. "2025-10-16T13:45:00Z") to a
+#' `POSIXct`
+#' @keywords internal
+parse_api_datetimetz <- function(value) {
+  as.POSIXct(as.character(value), format = "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
 }
 
 #' parse_api_week converts an integer to a date

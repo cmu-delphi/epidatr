@@ -1,3 +1,49 @@
+# epidatr 1.4.0
+
+## Documentation
+
+- Updated vignettes (`epidatr`, `signal-discovery`, and `versioned-data`) to focus on V5 API workflows. Remove and redirect `v5-api-demo` vignette.
+
+## Patches
+
+- API errors now surface the server's actual message for both the V4 (classic) and V5 (cast) APIs.
+
+## Changes
+- `epidata_snapshot()` and `epidata_archive()` now send multiple `signals` 
+  comma-joined in a single request per `geo_type`, instead of issuing a 
+  separate request per signal (cmu-delphi/cast-api#103).
+
+## Breaking changes
+- `epidata_archive()` and `epidata_aux()`: passing a bare date or the `"="`
+  operator to `report_time` now errors. Use a comparison operator (e.g.
+  `"<2025-01-01"`) or an `epirange()` instead.
+- The cast-API's `report_time` column and the `report_time_range` in
+  `epidata_meta()` are now UTC timestamps (e.g. `2025-10-16T13:45:00Z`)
+  rather than dates, so `report_time` now parses to a `POSIXct`. `report_time` and `snapshot_date` filters also accept a UTC
+  timestamp string (with a trailing `Z`) or a `POSIXt`, in addition to a bare
+  date, for exact-instant filtering (cmu-delphi/cast-api#123).
+
+## New features
+- `epidata_aux()` gains a `snapshot_date` argument (date, `"latest"`, or `NULL`)
+  for retrieving auxiliary data as it appeared on a specific date. Mutually
+  exclusive with `report_time`.
+- `epidata_archive()` and `epidata_aux()`: `epirange()` values for `report_time`
+  are now filtered server-side using the cast-API's inclusive range syntax; the
+  local lower-bound filter has been removed.
+- `fetch_args_list()` gains a `limit` argument, capping the number of rows the
+  cast-API returns for `epidata_snapshot()`, `epidata_archive()`,
+  `epidata_aux()`, and `epidata()`. Defaults to `NULL` (no limit); `-1` has the
+  same effect. The underlying query has no stable sort order, so `limit` does
+  not guarantee the same rows (or count) across repeated calls. Use it only to
+  preview or debug a query, not as a real filter.
+- `fetch_args_list()` gains a `limit` argument, capping the number of rows
+  the cast-API returns for `epidata_snapshot()`, `epidata_archive()`,
+  `epidata_aux()`, and `epidata()`. Defaults to `NULL` (no limit); `-1` has
+  the same effect. The underlying query has no stable sort order, so `limit`
+  does not guarantee the same rows (or count) across repeated calls. Use it
+  only to preview or debug a query, not as a real filter.
+
+
 # epidatr 1.3.0
 
 ## Deprecations

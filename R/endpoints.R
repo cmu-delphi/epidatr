@@ -1417,22 +1417,28 @@ pub_covidcast <- function(
 #' available signals and geo types.
 #'
 #' @param source string. The data source to query. If `NULL` (default), returns
-#'   metadata for all available sources.
+#'   metadata for all available sources. If specified, returns metadata for
+#'   the given source.
 #' @inheritParams .epidatr_shared_params
-#' @return list
+#' @return list. If `source` is `NULL`, a named list of source metadata objects.
+#'   If `source` is specified, the metadata list for that source.
 #' @seealso [epidata_snapshot()], [epidata_archive()], [epidata()], [epirange()]
 #' @inheritSection .epidatr_shared_params See also
 #' @keywords endpoint
 #' @export
 epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
   assert_character_param("source", source, len = 1, required = FALSE)
-  create_epidata_call(
+  res <- create_epidata_call(
     endpoint = "metadata/",
     params = list(source = source),
     api_version = "cast",
     response_format = "json"
   ) %>%
     request_epidata(fetch_args = fetch_args)
+  if (!is.null(source) && is.list(res) && !isTRUE(fetch_args$dry_run) && source %in% names(res)) {
+    res <- res[[source]]
+  }
+  res
 }
 
 #' cast-API snapshot and archive queries
@@ -1453,9 +1459,9 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #'   Use [epidata_meta()] to discover available sources.
 #' @param signals character vector. One or more signals to query for the given
 #'   source; comma-joined strings (e.g., `"sig1,sig2"`) are also accepted. Use
-#'   [epidata_meta()] to discover available signals. A separate API request is
-#'   made per signal and geo type (the cast-API only accepts one of each per
-#'   request) and the results are combined.
+#'   [epidata_meta()] to discover available signals. All signals are sent
+#'   comma-joined in a single request per geo type (the cast-API only accepts
+#'   one geo type per request) and the results are combined.
 #' @param geo_type character vector. One or more geography types to query
 #'   (e.g., `"state"`, `"nation"`, `"county"`); comma-joined strings are also
 #'   accepted. Use [epidata_meta()] to discover available geo types for a given
@@ -1469,13 +1475,18 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #'   imputation or aggregation (raw source data), `"fill_ave"` fills nulls with
 #'   the average of neighboring values, and `"fill_zero"` fills nulls with zero.
 #'   `NULL` (default) returns all fill methods.
-#' @param snapshot_date Date or `NULL`. The snapshot date; `NULL` returns the
-#'   latest available version.
+#' @param snapshot_date Date, `POSIXt`, UTC timestamp string (e.g.
+#'   `"2025-10-16T13:45:00Z"`), or `NULL`. The snapshot returns the
+#'   version of the data that was current then. `NULL` returns the latest
+#'   available version.
 #' @param as_of `r lifecycle::badge("deprecated")` Use `snapshot_date` instead.
-#' @param report_time Date, string, or [`epirange()`]. A query on the
-#'   `report_time` column for the archive endpoint. Supports exact dates (e.g.,
-#'   `"2025-10-16"`), operators (e.g., `"<2025-10-16"`), or an [`epirange()`].
-#'   Internally maps to the `report_time_query` API parameter.
+#' @param report_time String or [`epirange()`]. A filter on the `report_time`
+#'   column. Accepts comparison operators (e.g., `"<2025-10-16"`,
+#'   `">=2025-10-16"`, or `"<=2025-10-16T13:45:00Z"` for a UTC timestamp
+#'   bound) or an [`epirange()`] for an inclusive date range.
+#'   Bare dates and the `"="` operator are not accepted: use `snapshot_date`
+#'   for point-in-time data. Internally maps to the `report_time_query` API
+#'   parameter.
 #' @param issues `r lifecycle::badge("deprecated")` Use `report_time` instead.
 #' @param time_values `r lifecycle::badge("deprecated")` Use `reference_time` instead.
 #' @param ... Named filters on extra key columns beyond `geo_value`, such as
@@ -1562,9 +1573,9 @@ epidata_snapshot <- function(
   assert_character_param("geo_type", geo_type)
   assert_character_param("geo_values", geo_values)
   assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
-  assert_date_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
+  assert_report_time_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
   if (!is.null(snapshot_date)) {
-    snapshot_date <- format(parse_api_date(snapshot_date), "%Y-%m-%d")
+    snapshot_date <- format_report_time_bound(snapshot_date)
   }
 
   parsed_reference_times <- validate_timeset_input(
@@ -1576,22 +1587,23 @@ epidata_snapshot <- function(
   signals <- unique(unlist(strsplit(signals, ",", fixed = TRUE)))
   geo_type <- unique(unlist(strsplit(geo_type, ",", fixed = TRUE)))
 
-  # One request per signal x geo_type: the cast-API accepts a single value of each per query.
-  combos <- expand.grid(signal = signals, geo_type = geo_type, stringsAsFactors = FALSE)
-  fetched <- purrr::map2(combos$signal, combos$geo_type, function(s, g) {
+  # One request per geo_type. The cast-API accepts a single geo_type per query,
+  # but signals are sent comma-joined in one request each.
+  fetched <- purrr::map(geo_type, function(g) {
     create_epidata_call(
       endpoint = "snapshot/",
       params = list(
         source = source,
-        signal = s,
+        signal = signals,
         geo_type = g,
         fill_method = fill_method,
         snapshot_date = snapshot_date,
-        extra_keys = extra_keys
+        extra_keys = extra_keys,
+        limit = fetch_args$limit
       ),
       meta = list(
         create_epidata_field_info("signal", "text"),
-        create_epidata_field_info("report_time", "date"),
+        create_epidata_field_info("report_time", "datetimetz"),
         create_epidata_field_info("geo_type", "text"),
         create_epidata_field_info("geo_value", "text"),
         create_epidata_field_info("fill_method", "text"),
@@ -1687,22 +1699,23 @@ epidata_archive <- function(
   signals <- unique(unlist(strsplit(signals, ",", fixed = TRUE)))
   geo_type <- unique(unlist(strsplit(geo_type, ",", fixed = TRUE)))
 
-  # One request per signal x geo_type: the cast-API accepts a single value of each per query.
-  combos <- expand.grid(signal = signals, geo_type = geo_type, stringsAsFactors = FALSE)
-  fetched <- purrr::map2(combos$signal, combos$geo_type, function(s, g) {
+  # One request per geo_type: the cast-API accepts a single geo_type per query,
+  # but signals are sent comma-joined in one request each.
+  fetched <- purrr::map(geo_type, function(g) {
     create_epidata_call(
       endpoint = "archive/",
       params = list(
         source = source,
-        signal = s,
+        signal = signals,
         geo_type = g,
         fill_method = fill_method,
         report_time_query = version_query,
-        extra_keys = extra_keys
+        extra_keys = extra_keys,
+        limit = fetch_args$limit
       ),
       meta = list(
         create_epidata_field_info("signal", "text"),
-        create_epidata_field_info("report_time", "date"),
+        create_epidata_field_info("report_time", "datetimetz"),
         create_epidata_field_info("geo_type", "text"),
         create_epidata_field_info("geo_value", "text"),
         create_epidata_field_info("fill_method", "text"),
@@ -1727,12 +1740,7 @@ epidata_archive <- function(
 
   fetched <- vctrs::vec_rbind(!!!fetched)
   res <- fetched %>%
-    .cast_filter(
-      geo_values,
-      reference_time,
-      parsed_reference_times,
-      report_time = report_time
-    )
+    .cast_filter(geo_values, reference_time, parsed_reference_times)
   attr(res, "cast_source") <- source # lets epidata_aux() recover the source
   attr(res, "cast_kind") <- "archive" # per-row revision history -> as-of aux merge
 
@@ -1773,18 +1781,29 @@ epidata_archive <- function(
 #'   source is recovered automatically).
 #' @param reference_time [`timeset`]. Reference time to return (filters on the
 #'   `reference_time` column). Supports individual dates or [`epirange()`].
-#'   Base-pull mode only (when `source` is a string).
-#' @param report_time A date, string, or [epirange()] specifying the version of the auxiliary data
-#'   to retrieve. Base-pull mode only (when `source` is a string).
+#'   Only used when `source` is a string.
+#' @param snapshot_date Date, `POSIXt`, UTC timestamp string (e.g.
+#'   `"2025-10-16T13:45:00Z"`), `"latest"`, or `NULL`. Return auxiliary data
+#'   as it appeared at this date or instant (one row per key, the most recent
+#'   version active then). `"latest"` uses today's date. Use `NULL` (default)
+#'   to return the full version history filtered by `report_time`. Mutually
+#'   exclusive with `report_time`. Only used when `source` is a string.
+#' @param report_time String or [`epirange()`] specifying the version of the
+#'   auxiliary data to retrieve. Accepts comparison operators (e.g.,
+#'   `"<2025-10-16"`, `">=2025-10-16"`, or `"<=2025-10-16T13:45:00Z"` for a
+#'   UTC timestamp bound) or an [`epirange()`] for an inclusive date range.
+#'   Bare dates and the `"="` operator are not accepted: use
+#'   `snapshot_date` for point-in-time data. Mutually exclusive with
+#'   `snapshot_date`. Only used when `source` is a string.
 #' @param issues `r lifecycle::badge("deprecated")` Use `report_time` instead.
 #' @param time_values `r lifecycle::badge("deprecated")` Use `reference_time` instead.
 #' @param ... Named filters on the auxiliary key columns, such as
 #'   `pcr_target = "sars-cov-2"` or `geo_value = c("ca", "ny")`. Each key accepts
 #'   one or more values (matched as OR); they are serialized as repeated
 #'   `key:value` terms server-side to keep the aux pull small. Passing more than
-#'   10 values for a key warns, since the request URL may get too long. In
-#'   merge mode, when no filters are given, they are inferred from the base:
-#'   each key it narrows to at most 10 distinct values is filtered to those.
+#'   10 values for a key warns, since the request URL may get too long. When
+#'   `source` is a tibble and no filters are given, they are inferred from the
+#'   base: each key it narrows to at most 10 distinct values is filtered to those.
 #' @param columns A character vector of columns to return. By default, all columns are returned.
 #' @inheritParams .epidatr_shared_params
 #' @return A [`tibble::tibble`].
@@ -1802,6 +1821,7 @@ epidata_aux.default <- function(
   ...,
   reference_time = "*",
   time_values = lifecycle::deprecated(),
+  snapshot_date = NULL,
   report_time = "*",
   issues = lifecycle::deprecated(),
   columns = NULL,
@@ -1833,11 +1853,31 @@ epidata_aux.default <- function(
     report_time <- issues
   }
 
+  if (!is.null(snapshot_date) && !identical(report_time, "*")) {
+    cli::cli_abort(
+      "`snapshot_date` and `report_time` are mutually exclusive.",
+      class = "epidatr__epidata_aux__exclusive_version_args"
+    )
+  }
+
   parsed_reference_times <- validate_timeset_input(
     "reference_time",
     reference_time
   )
-  report_time_query <- validate_version_query(report_time)
+
+  if (identical(snapshot_date, "latest")) {
+    snapshot_date <- Sys.Date()
+  }
+
+  if (!is.null(snapshot_date)) {
+    assert_report_time_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
+    snapshot_date_str <- format_report_time_bound(snapshot_date)
+    report_time_query <- NULL
+  } else {
+    snapshot_date_str <- NULL
+    report_time_query <- validate_version_query(report_time)
+  }
+
   filtered_keys <- .serialize_key_filters(key_filters)
   if (!is.null(columns)) {
     columns <- paste(columns, collapse = ",")
@@ -1851,14 +1891,16 @@ epidata_aux.default <- function(
     endpoint = "aux_data/",
     params = list(
       source = source,
+      snapshot_date = snapshot_date_str,
       report_time_query = report_time_query,
       filtered_keys = filtered_keys,
-      columns = columns
+      columns = columns,
+      limit = fetch_args$limit
     ),
     # Only the aux key columns are typed (nwss's schema).
     # Extend for new aux sources whose keys differ.
     meta = list(
-      create_epidata_field_info("report_time", "date"),
+      create_epidata_field_info("report_time", "datetimetz"),
       create_epidata_field_info("geo_value", "text"),
       create_epidata_field_info("reference_time", "date"),
       create_epidata_field_info("nwss_source", "text"),
@@ -1869,12 +1911,7 @@ epidata_aux.default <- function(
     response_format = "csv"
   ) %>%
     fetch(fetch_args = fetch_args) %>%
-    .cast_filter(
-      "*",
-      reference_time,
-      parsed_reference_times,
-      report_time = report_time
-    )
+    .cast_filter("*", reference_time, parsed_reference_times)
 }
 
 #' @rdname epidata_aux
@@ -1956,18 +1993,21 @@ epidata_aux.data.frame <- function(
   }
 
   # Never need aux versions newer than the newest base report_time
-  report_cut <- if (ver %in% names(base) && !all(is.na(base[[ver]]))) {
-    paste0("<", format(max(base[[ver]], na.rm = TRUE) + 1, "%Y-%m-%d"))
-  } else {
-    "*"
-  }
+  has_versions <- ver %in% names(base) && !all(is.na(base[[ver]]))
+  is_snapshot <- identical(attr(base, "cast_kind"), "snapshot")
+  cutoff <- if (has_versions) max(base[[ver]], na.rm = TRUE) else NA
 
-  # Reuse the base-pull method to fetch aux
+  # When we use snapshot, we reuse the upper bound as a snapshot_date.
+  version_arg <- if (is_snapshot && has_versions) {
+    list(snapshot_date = cutoff)
+  } else {
+    list(report_time = if (has_versions) paste0("<=", format_report_time_bound(cutoff)) else "*")
+  }
   aux <- rlang::inject(epidata_aux(
     src,
-    report_time = report_cut,
     columns = columns,
     fetch_args = fetch_args,
+    !!!version_arg,
     !!!filters
   ))
   if (!inherits(aux, "data.frame")) {

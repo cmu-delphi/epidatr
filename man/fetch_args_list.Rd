@@ -18,7 +18,8 @@ fetch_args_list(
   debug = lifecycle::deprecated(),
   format_type = lifecycle::deprecated(),
   refresh_cache = FALSE,
-  reference_week_day = 1
+  reference_week_day = 1,
+  limit = NULL
 )
 }
 \arguments{
@@ -62,6 +63,13 @@ API, and update the cache, if it is enabled}
 \item{reference_week_day}{the day of the week to use as the reference day
 when parsing epiweeks to dates (happens if \code{disable_date_parsing} is \code{FALSE})
 Defaults to 1 Sunday (the first day of the week).}
+
+\item{limit}{integer or \code{NULL}. cast-API only (\code{epidata_snapshot()},
+\code{epidata_archive()}, \code{epidata_aux()}, \code{epidata()}): maximum number of rows
+to return. \code{NULL} (default) or \code{-1} requests no limit. The underlying
+query has no stable sort order, so \code{limit} does not guarantee the same
+rows (or even the same count) across repeated calls; use it only to
+preview or debug a query, never as a substitute for filtering.}
 }
 \value{
 A \code{fetch_args} object containing all the specified options

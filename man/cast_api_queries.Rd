@@ -57,9 +57,9 @@ Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available sources.}
 
 \item{signals}{character vector. One or more signals to query for the given
 source; comma-joined strings (e.g., \code{"sig1,sig2"}) are also accepted. Use
-\code{\link[=epidata_meta]{epidata_meta()}} to discover available signals. A separate API request is
-made per signal and geo type (the cast-API only accepts one of each per
-request) and the results are combined.}
+\code{\link[=epidata_meta]{epidata_meta()}} to discover available signals. All signals are sent
+comma-joined in a single request per geo type (the cast-API only accepts
+one geo type per request) and the results are combined.}
 
 \item{geo_type}{character vector. One or more geography types to query
 (e.g., \code{"state"}, \code{"nation"}, \code{"county"}); comma-joined strings are also
@@ -89,18 +89,23 @@ imputation or aggregation (raw source data), \code{"fill_ave"} fills nulls with
 the average of neighboring values, and \code{"fill_zero"} fills nulls with zero.
 \code{NULL} (default) returns all fill methods.}
 
-\item{snapshot_date}{Date or \code{NULL}. The snapshot date; \code{NULL} returns the
-latest available version.}
+\item{snapshot_date}{Date, \code{POSIXt}, UTC timestamp string (e.g.
+\code{"2025-10-16T13:45:00Z"}), or \code{NULL}. The point in time to snapshot:
+returns the version of the data that was current then. \code{NULL} returns
+the latest available version.}
 
 \item{as_of}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{snapshot_date} instead.}
 
 \item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}
 
-\item{report_time}{Date, string, or \code{\link[=epirange]{epirange()}}. A query on the
-\code{report_time} column for the archive endpoint. Supports exact dates (e.g.,
-\code{"2025-10-16"}), operators (e.g., \code{"<2025-10-16"}), or an \code{\link[=epirange]{epirange()}}.
-Internally maps to the \code{report_time_query} API parameter.}
+\item{report_time}{String or \code{\link[=epirange]{epirange()}}. A filter on the \code{report_time}
+column. Accepts comparison operators (e.g., \code{"<2025-10-16"},
+\code{">=2025-10-16"}, or \code{"<=2025-10-16T13:45:00Z"} for a UTC timestamp
+bound) or an \code{\link[=epirange]{epirange()}} for an inclusive date range.
+Bare dates and the \code{"="} operator are not accepted: use \code{snapshot_date}
+for point-in-time data. Internally maps to the \code{report_time_query} API
+parameter.}
 
 \item{issues}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{report_time} instead.}
 }

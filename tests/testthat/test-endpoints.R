@@ -134,7 +134,7 @@ test_that("epidata* and epidata_meta work as expected", {
   # Test epidata_meta
   res_meta <- epidata_meta(source = "nssp")
   expect_type(res_meta, "list")
-  expect_equal(res_meta$nssp$signals, c("sig1", "sig2"))
+  expect_equal(res_meta$signals, c("sig1", "sig2"))
 
   # Test epidata_snapshot basic fetch
   res <- epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state")
@@ -195,6 +195,49 @@ test_that("epidata* and epidata_meta work as expected", {
   expect_equal(nrow(res_time_range), 2)
 })
 
+test_that("fetch_args_list(limit=) is forwarded to the cast-API request and validated", {
+  fa <- fetch_args_list(limit = 100, dry_run = TRUE)
+  calls <- list(
+    epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", fetch_args = fa),
+    epidata_archive(source = "nssp", signals = "sig1", geo_type = "state", fetch_args = fa),
+    epidata_aux("nwss", fetch_args = fa),
+    epidata(source = "nssp", signals = "sig1", geo_type = "state", fetch_args = fa)
+  )
+  for (call in calls) expect_match(call$request$url, "limit=100")
+
+  # NULL (default) omits the param entirely
+  no_limit <- epidata_snapshot(
+    source = "nssp", signals = "sig1", geo_type = "state",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_no_match(no_limit$request$url, "limit=")
+
+  expect_error(fetch_args_list(limit = 0), class = "epidatr__invalid_limit")
+  expect_error(fetch_args_list(limit = -2), class = "epidatr__invalid_limit")
+})
+
+test_that("limit warns when set on a non-cast (V4) endpoint and is silently ignored", {
+  expect_warning(
+    pub_covidcast(
+      source = "jhu-csse",
+      signals = "confirmed_7dav_incidence_prop",
+      time_type = "day",
+      geo_type = "state",
+      time_values = "*",
+      geo_values = "ca",
+      fetch_args = fetch_args_list(limit = 100, dry_run = TRUE)
+    ),
+    class = "epidatr__limit_ignored"
+  )
+
+  expect_no_warning(
+    epidata_snapshot(
+      source = "nssp", signals = "sig1", geo_type = "state",
+      fetch_args = fetch_args_list(limit = 100, dry_run = TRUE)
+    )
+  )
+})
+
 test_that("snapshot/archive/epidata send ... key filters server-side as extra_keys", {
   snap <- epidata_snapshot(
     source = "nwss", signals = "sig1", geo_type = "county",
@@ -248,7 +291,7 @@ test_that("epidata validations and deprecations", {
       source = "nssp",
       signals = "sig1",
       geo_type = "state",
-      issues = "2024-01-01",
+      issues = "<2024-01-01",
       fetch_args = fetch_args_list(dry_run = TRUE)
     ),
     regexp = "Use `report_time` instead"
@@ -277,108 +320,116 @@ test_that("epidata validations and deprecations", {
   )
 })
 
-test_that("epidata_archive local EpiRange filtering for report_time works", {
-  csv_data <- paste0(
-    "signal,geo_value,reference_time,value,report_time\n",
-    "sig1,ca,2024-01-01,10.0,2024-01-01\n",
-    "sig1,ca,2024-01-01,11.0,2024-01-02\n",
-    "sig1,ca,2024-01-01,12.0,2024-01-03"
-  )
+test_that("epidata_archive sends EpiRange as server-side range query", {
+  seen_urls <- character()
+
+  # Single-date range: server returns only the matching row
   local_mocked_bindings(
-    req_perform = function(req, ...) to_httr2_response(csv_data),
+    req_perform = function(req, ...) {
+      seen_urls <<- c(seen_urls, req$url)
+      to_httr2_response(paste0(
+        "signal,geo_value,reference_time,value,report_time\n",
+        "sig1,ca,2024-01-01,11.0,2024-01-02T00:00:00Z"
+      ))
+    },
     .package = "httr2"
   )
-
-  # Filter with a range that excludes the first and last dates
   res <- epidata_archive(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
     report_time = epirange("2024-01-02", "2024-01-02")
   )
+  expect_true(grepl("report_time_query=2024-01-02%3A2024-01-02", seen_urls[1]))
   expect_equal(nrow(res), 1)
-  expect_equal(as.character(res$report_time), "2024-01-02")
+  expect_equal(res$report_time, as.POSIXct("2024-01-02", tz = "UTC"))
 
-  # Filter with a wider range
+  # Wider range: server returns both matching rows
+  seen_urls <- character()
+  local_mocked_bindings(
+    req_perform = function(req, ...) {
+      seen_urls <<- c(seen_urls, req$url)
+      to_httr2_response(paste0(
+        "signal,geo_value,reference_time,value,report_time\n",
+        "sig1,ca,2024-01-01,10.0,2024-01-01T00:00:00Z\n",
+        "sig1,ca,2024-01-01,11.0,2024-01-02T00:00:00Z"
+      ))
+    },
+    .package = "httr2"
+  )
   res_wide <- epidata_archive(
     source = "nssp",
     signals = "sig1",
     geo_type = "state",
     report_time = epirange("2024-01-01", "2024-01-02")
   )
+  expect_true(grepl("report_time_query=2024-01-01%3A2024-01-02", seen_urls[1]))
   expect_equal(nrow(res_wide), 2)
-  expect_true(all(res_wide$report_time %in% as.Date(c("2024-01-01", "2024-01-02"))))
+  expect_true(all(res_wide$report_time %in% as.POSIXct(c("2024-01-01", "2024-01-02"), tz = "UTC")))
 })
 
-test_that("epidata_snapshot fans out one request per signal and combines results", {
+test_that("epidata_snapshot sends multiple signals comma-joined in a single request", {
   seen_urls <- character()
   handler <- function(req) {
     seen_urls <<- c(seen_urls, req$url)
-    if (grepl("signal=sig1", req$url)) {
-      "signal,geo_value,reference_time,value\nsig1,ca,2024-01-01,1.0"
-    } else if (grepl("signal=sig2", req$url)) {
-      "signal,geo_value,reference_time,value\nsig2,ca,2024-01-01,2.0"
-    } else {
-      stop("unexpected signal in url: ", req$url)
-    }
+    "signal,geo_value,reference_time,value\nsig1,ca,2024-01-01,1.0\nsig2,ca,2024-01-01,2.0"
   }
   with_mock_perform(handler, {
     res <- epidata_snapshot(source = "nssp", signals = c("sig1", "sig2"), geo_type = "state")
     expect_equal(sort(unique(res$signal)), c("sig1", "sig2"))
     expect_equal(nrow(res), 2)
   })
-  expect_length(seen_urls, 2)
-  # exactly one "signal=" term per request URL, no comma-joined signals
-  expect_true(all(vapply(seen_urls, function(u) length(gregexpr("signal=", u)[[1]]) == 1, logical(1))))
-  expect_false(any(grepl("sig1.{0,3}sig2|sig2.{0,3}sig1", seen_urls)))
+  expect_length(seen_urls, 1)
+  expect_match(seen_urls, "signal=sig1%2Csig2")
 })
 
-test_that("epidata_snapshot/epidata_archive dry_run returns a list of calls for multiple signals", {
-  calls <- epidata_snapshot(
+test_that("epidata_snapshot/epidata_archive dry_run returns one call per geo_type, signals comma-joined", {
+  # multiple signals, single geo_type: one call, signals comma-joined
+  single <- epidata_snapshot(
     source = "nssp", signals = c("sig1", "sig2"), geo_type = "state",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_s3_class(single, "epidata_call")
+  expect_match(single$request$url, "signal=sig1%2Csig2")
+
+  # multiple geo_types: one call per geo_type, each with all signals comma-joined
+  calls <- epidata_snapshot(
+    source = "nssp", signals = c("sig1", "sig2"), geo_type = c("state", "nation"),
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_type(calls, "list")
   expect_length(calls, 2)
   expect_s3_class(calls[[1]], "epidata_call")
   expect_s3_class(calls[[2]], "epidata_call")
-  expect_match(calls[[1]]$request$url, "signal=sig1")
-  expect_match(calls[[2]]$request$url, "signal=sig2")
-
-  # single signal keeps the old, backward-compatible behavior
-  single <- epidata_snapshot(
-    source = "nssp", signals = "sig1", geo_type = "state",
-    fetch_args = fetch_args_list(dry_run = TRUE)
-  )
-  expect_s3_class(single, "epidata_call")
+  expect_true(all(vapply(calls, function(call) grepl("signal=sig1%2Csig2", call$request$url), logical(1))))
+  expect_match(calls[[1]]$request$url, "geo_type=state")
+  expect_match(calls[[2]]$request$url, "geo_type=nation")
 
   arch_calls <- epidata_archive(
-    source = "nssp", signals = c("sig1", "sig2"), geo_type = "state",
+    source = "nssp", signals = c("sig1", "sig2"), geo_type = c("state", "nation"),
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_type(arch_calls, "list")
   expect_length(arch_calls, 2)
 })
 
-test_that("epidata_snapshot splits comma-joined signals/geo_type strings into separate requests", {
+test_that("epidata_snapshot splits comma-joined geo_type strings but keeps signals comma-joined", {
   calls <- epidata_snapshot(
     source = "nssp", signals = "sig1,sig2", geo_type = "state",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
-  expect_length(calls, 2)
-  expect_match(calls[[1]]$request$url, "signal=sig1")
-  expect_match(calls[[2]]$request$url, "signal=sig2")
+  expect_s3_class(calls, "epidata_call")
+  expect_match(calls$request$url, "signal=sig1%2Csig2")
 
   arch_calls <- epidata_archive(
     source = "nssp", signals = "sig1,sig2", geo_type = "state,nation",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
-  expect_length(arch_calls, 4)
+  expect_length(arch_calls, 2)
   urls <- vapply(arch_calls, function(call) call$request$url, character(1))
-  for (s in c("sig1", "sig2")) {
-    for (g in c("state", "nation")) {
-      expect_length(grep(sprintf("signal=%s.*geo_type=%s|geo_type=%s.*signal=%s", s, g, g, s), urls), 1)
-    }
+  expect_true(all(grepl("signal=sig1%2Csig2", urls)))
+  for (g in c("state", "nation")) {
+    expect_length(grep(sprintf("geo_type=%s", g), urls), 1)
   }
 })
 
@@ -500,12 +551,10 @@ test_that("epidata_snapshot warns epidatr__empty_signals when only some signals 
   handler <- function(req) {
     if (grepl("metadata/", req$url)) {
       as.character(meta_json)
-    } else if (grepl("signal=sig1", req$url)) {
-      "signal,geo_value,reference_time,value\nsig1,ca,2024-01-01,1.0"
-    } else if (grepl("signal=sig2", req$url)) {
-      "signal,geo_value,reference_time,value\n"
     } else {
-      stop("unexpected url: ", req$url)
+      # server returns rows only for the signals that have data, even when
+      # multiple signals are requested comma-joined in one query
+      "signal,geo_value,reference_time,value\nsig1,ca,2024-01-01,1.0"
     }
   }
   with_mock_perform(handler, {
@@ -591,7 +640,7 @@ test_that("epidata_aux base-pull builds the call, serializes key filters via ...
   )
   # deprecated aliases map to their replacements
   expect_warning(
-    epidata_aux("nwss", issues = "2024-01-01", fetch_args = fetch_args_list(dry_run = TRUE)),
+    epidata_aux("nwss", issues = "<2024-01-01", fetch_args = fetch_args_list(dry_run = TRUE)),
     regexp = "Use `report_time` instead"
   )
   expect_warning(
@@ -619,11 +668,11 @@ mock_aux_connected <- function(keys, aux_csv) {
 aux_versions_keys <- c("report_time", "geo_value", "reference_time", "sample_index")
 aux_versions_csv <- paste(
   "report_time,geo_value,reference_time,sample_index,county_fips,population_served,label",
-  "2024-02-01,ca,2024-01-01,A,001,100,p1",
-  "2024-05-01,ca,2024-01-01,A,001,200,p2", # newer ca/01-01/A revision
-  "2024-02-01,ca,2024-01-08,A,001,300,p3",
-  "2024-01-01,ny,2024-01-01,B,001,350,p0",
-  "2024-04-01,ny,2024-01-01,B,001,400,p4", # newer ny revision (after 03-01)
+  "2024-02-01T00:00:00Z,ca,2024-01-01,A,001,100,p1",
+  "2024-05-01T00:00:00Z,ca,2024-01-01,A,001,200,p2", # newer ca/01-01/A revision
+  "2024-02-01T00:00:00Z,ca,2024-01-08,A,001,300,p3",
+  "2024-01-01T00:00:00Z,ny,2024-01-01,B,001,350,p0",
+  "2024-04-01T00:00:00Z,ny,2024-01-01,B,001,400,p4", # newer ny revision (after 03-01)
   sep = "\n"
 )
 
@@ -639,7 +688,7 @@ test_that("epidata_aux merge is version-aware: archive per-row vs snapshot unifo
     geo_value = c("ca", "ca", "ca", "ny", "tx"),
     reference_time = as.Date(c("2024-01-01", "2024-01-01", "2024-01-08", "2024-01-01", "2024-01-01")),
     sample_index = c("A", "A", "A", "B", "C"),
-    report_time = as.Date(c("2024-01-15", "2024-03-01", "2024-06-01", "2024-03-01", "2024-03-01")),
+    report_time = as.POSIXct(c("2024-01-15", "2024-03-01", "2024-06-01", "2024-03-01", "2024-03-01"), tz = "UTC"),
     county_fips = "999",
     value = 1:5
   )
@@ -659,7 +708,7 @@ test_that("epidata_aux merge is version-aware: archive per-row vs snapshot unifo
     geo_value = c("ca", "ca", "ny"),
     reference_time = as.Date(c("2024-01-01", "2024-01-08", "2024-01-01")),
     sample_index = c("A", "A", "B"),
-    report_time = as.Date(c("2024-03-01", "2024-06-01", "2024-03-01")),
+    report_time = as.POSIXct(c("2024-03-01", "2024-06-01", "2024-03-01"), tz = "UTC"),
     value = 1:3
   )
   attr(snapshot, "cast_source") <- "nwss"
@@ -676,14 +725,16 @@ test_that("epidata_aux infers multi-value key filters from the base (<= cap)", {
       to_httr2_response('{"nwss":{"key_columns":["report_time","geo_value"],"value_columns":[]}}')
     } else {
       seen$url <- req$url # capture the forwarded aux_data request
-      to_httr2_response("report_time,geo_value,population_served\n2024-02-01,ca,100\n2024-02-01,ny,200")
+      to_httr2_response(
+        "report_time,geo_value,population_served\n2024-02-01T00:00:00Z,ca,100\n2024-02-01T00:00:00Z,ny,200"
+      )
     }
   }
   local_mocked_bindings(req_perform = recorder, .package = "httr2")
 
   base <- tibble::tibble(
     geo_value = c("ca", "ny"), # two distinct values, under the cap -> both pinned
-    report_time = as.Date(c("2024-03-01", "2024-03-01")), value = 1:2
+    report_time = as.POSIXct(c("2024-03-01", "2024-03-01"), tz = "UTC"), value = 1:2
   )
   attr(base, "cast_source") <- "nwss"
   attr(base, "cast_kind") <- "snapshot"
@@ -704,20 +755,29 @@ test_that("epidata_aux connected path: validation, empty base, dry_run cap/forwa
   # empty base returns unchanged without any fetch
   empty <- tag(tibble::tibble(
     geo_value = character(), reference_time = as.Date(character()),
-    report_time = as.Date(character()), value = numeric()
+    report_time = as.POSIXct(character(), tz = "UTC"), value = numeric()
   ))
   expect_identical(epidata_aux(empty), empty)
 
   # dry_run surfaces the call: forwards explicit keys AND caps the pull at the
-  # base's newest report_time (max + 1 day); no schema fetch (would fail unmocked)
+  # base's newest report_time exactly. No more "day + 1" hack, now that
+  # report_time is a full timestamp and the API supports an exact "<=" bound.
+  # No schema fetch here (would fail unmocked).
   base <- tag(tibble::tibble(
     geo_value = "ca", reference_time = as.Date("2024-01-01"),
-    report_time = as.Date(c("2024-01-10", "2024-05-20")), value = c(1, 2)
+    report_time = as.POSIXct(c("2024-01-10", "2024-05-20"), tz = "UTC"), value = c(1, 2)
   ))
   call <- epidata_aux(base, pcr_target = "x", fetch_args = fetch_args_list(dry_run = TRUE))
   expect_s3_class(call, "epidata_call")
   expect_match(call$request$url, "pcr_target") # explicit ... keys forwarded
-  expect_match(call$request$url, "report_time_query=%3C2024-05-21") # capped, "<" -> %3C
+  # capped at the exact cutoff, "<=" -> %3C%3D, ":" -> %3A
+  expect_match(call$request$url, "report_time_query=%3C%3D2024-05-20T00%3A00%3A00Z")
+
+  snapshot_base <- base
+  attr(snapshot_base, "cast_kind") <- "snapshot"
+  snap_call <- epidata_aux(snapshot_base, pcr_target = "x", fetch_args = fetch_args_list(dry_run = TRUE))
+  expect_match(snap_call$request$url, "snapshot_date=2024-05-20T00%3A00%3A00Z")
+  expect_no_match(snap_call$request$url, "report_time_query=")
 
   # remaining cases share one mocked schema (keys: report_time/geo_value/reference_time)
   local_mocked_bindings(

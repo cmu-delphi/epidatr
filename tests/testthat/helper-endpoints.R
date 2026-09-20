@@ -413,6 +413,7 @@ meta_type_classes <- c(
   date = "Date",
   epiweek = "Date",
   timestamp = "POSIXct",
+  datetimetz = "POSIXct",
   int = "numeric",
   float = "numeric",
   bool = "logical",

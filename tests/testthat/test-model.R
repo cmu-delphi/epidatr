@@ -157,6 +157,27 @@ test_that("parse_api_timestamp_to_datetime works on timestamps", {
   expect_identical(parse_api_timestamp_to_datetime(NA), as.POSIXct(NA))
 })
 
+test_that("parse_api_datetimetz parses cast-API UTC timestamp strings", {
+  expect_equal(
+    parse_api_datetimetz("2025-10-16T13:45:00Z"),
+    as.POSIXct("2025-10-16 13:45:00", tz = "UTC")
+  )
+  # Vectorization
+  expect_equal(
+    parse_api_datetimetz(c("2025-10-16T13:45:00Z", "2025-10-17T00:00:00Z")),
+    as.POSIXct(c("2025-10-16 13:45:00", "2025-10-17 00:00:00"), tz = "UTC")
+  )
+  # Missing values
+  expect_equal(parse_api_datetimetz(NA), as.POSIXct(NA, tz = "UTC"))
+
+  # Wired up via the "datetimetz" field type
+  info <- create_epidata_field_info("report_time", "datetimetz")
+  expect_equal(
+    parse_value(info, "2025-10-16T13:45:00Z"),
+    as.POSIXct("2025-10-16 13:45:00", tz = "UTC")
+  )
+})
+
 test_that("parse_api_week returns the expected day of the week", {
   expect_identical(parse_api_week(202005) %>% weekdays(), "Sunday")
   expect_identical(parse_api_week(202005, 4) %>% weekdays(), "Wednesday")
