@@ -51,7 +51,7 @@ test_that("cast versioning args reach the server (snapshot_date, report_time_que
   expect_gt(nrow(arch_eq), 0)
   expect_true(all(as.Date(arch_eq$report_time, tz = "UTC") == one_day))
 
-  # epirange: upper bound goes server-side, lower bound is filtered locally
+  # epirange: both bounds go server-side as a "from:to" inclusive range
   arch_range <- epidata_archive(
     source = "nssp",
     signals = "pct_ed_visits_influenza",

@@ -42,6 +42,14 @@ test_that("assert_report_time_param", {
 
   expect_error(assert_report_time_param("name", NULL))
   expect_no_error(assert_report_time_param("name", NULL, required = FALSE))
+  # POSIXt length is enforced even though check_class lacks a len param
+  expect_error(
+    assert_report_time_param(
+      "name",
+      as.POSIXct(c("2020-01-01", "2020-01-02"), tz = "UTC"),
+      len = 1
+    )
+  )
 })
 
 test_that("format_report_time_bound", {

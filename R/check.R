@@ -73,6 +73,9 @@ assert_report_time_param <- function(name, value, len = NULL, required = TRUE) {
     combine = "or",
     .var.name = name
   )
+  if (!is.null(len) && inherits(value, "POSIXt") && length(value) != len) {
+    stop(sprintf("Assertion on '%s' failed: Must have length %d, but has length %d.", name, len, length(value)))
+  }
 }
 
 #' Format a report-time-family value the way the cast-API accepts it.
