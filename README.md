@@ -18,7 +18,7 @@ influenza, COVID-19, and other diseases from official government sources
 such as the [Centers for Disease Control and Prevention
 (CDC)](https://www.cdc.gov/) and [Google
 Trends](https://console.cloud.google.com/marketplace/product/bigquery-public-datasets/covid19-search-trends),
-and private partners such as [Meta](https://about.meta.com/) and [Change
+and private partners such as [Meta](https://www.meta.com/about/) and [Change
 Healthcare](https://business.optum.com/en/?src=chc). To learn more about
 the Meta partnership, check out [this
 article](https://delphi.cmu.edu/blog/2020/08/26/covid-19-symptom-surveys-through-facebook/).
