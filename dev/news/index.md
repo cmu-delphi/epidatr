@@ -31,6 +31,13 @@
   Use a comparison operator (e.g. `"<2025-01-01"`) or an
   [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
   instead.
+- The cast-API’s `report_time` column and the `report_time_range` in
+  [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)
+  are now UTC timestamps (e.g. `2025-10-16T13:45:00Z`) rather than
+  dates, so `report_time` now parses to a `POSIXct`. `report_time` and
+  `snapshot_date` filters also accept a UTC timestamp string (with a
+  trailing `Z`) or a `POSIXt`, in addition to a bare date, for
+  exact-instant filtering (cmu-delphi/cast-api#123).
 
 ### New features
 

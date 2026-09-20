@@ -73,9 +73,10 @@ epidata_aux(source, ..., columns = NULL, fetch_args = fetch_args_list())
 
 - snapshot_date:
 
-  Date, `"latest"`, or `NULL`. Return auxiliary data as it appeared on
-  this date (one row per key, the most recent version active on that
-  date). `"latest"` uses today's date. Use `NULL` (default) to return
+  Date, `POSIXt`, UTC timestamp string (e.g. `"2025-10-16T13:45:00Z"`),
+  `"latest"`, or `NULL`. Return auxiliary data as it appeared at this
+  date or instant (one row per key, the most recent version active
+  then). `"latest"` uses today's date. Use `NULL` (default) to return
   the full version history filtered by `report_time`. Mutually exclusive
   with `report_time`. Only used when `source` is a string.
 
@@ -84,10 +85,11 @@ epidata_aux(source, ..., columns = NULL, fetch_args = fetch_args_list())
   String or
   [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
   specifying the version of the auxiliary data to retrieve. Accepts
-  comparison operators (e.g., `"<2025-10-16"`, `">=2025-10-16"`) or an
+  comparison operators (e.g., `"<2025-10-16"`, `">=2025-10-16"`, or
+  `"<=2025-10-16T13:45:00Z"` for a UTC timestamp bound) or an
   [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
   for an inclusive date range. Bare dates and the `"="` operator are not
-  accepted — use `snapshot_date` for point-in-time data. Mutually
+  accepted: use `snapshot_date` for point-in-time data. Mutually
   exclusive with `snapshot_date`. Only used when `source` is a string.
 
 - issues:

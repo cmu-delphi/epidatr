@@ -29,7 +29,7 @@ e.g. NWSS: https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html.
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.2</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -179,8 +179,10 @@ the average of neighboring values, and <code>"fill_zero"</code> fills nulls with
 
 
 <dt id="arg-snapshot-date">snapshot_date<a class="anchor" aria-label="anchor" href="#arg-snapshot-date"></a></dt>
-<dd><p>Date or <code>NULL</code>. The snapshot date; <code>NULL</code> returns the
-latest available version.</p></dd>
+<dd><p>Date, <code>POSIXt</code>, UTC timestamp string (e.g.
+<code>"2025-10-16T13:45:00Z"</code>), or <code>NULL</code>. The point in time to snapshot:
+returns the version of the data that was current then. <code>NULL</code> returns
+the latest available version.</p></dd>
 
 
 <dt id="arg-as-of">as_of<a class="anchor" aria-label="anchor" href="#arg-as-of"></a></dt>
@@ -195,7 +197,8 @@ to <code><a href="epidata_call.html">fetch()</a></code>. See <code><a href="fetc
 <dt id="arg-report-time">report_time<a class="anchor" aria-label="anchor" href="#arg-report-time"></a></dt>
 <dd><p>String or <code><a href="epirange.html">epirange()</a></code>. A filter on the <code>report_time</code>
 column. Accepts comparison operators (e.g., <code>"&lt;2025-10-16"</code>,
-<code>"&gt;=2025-10-16"</code>) or an <code><a href="epirange.html">epirange()</a></code> for an inclusive date range.
+<code>"&gt;=2025-10-16"</code>, or <code>"&lt;=2025-10-16T13:45:00Z"</code> for a UTC timestamp
+bound) or an <code><a href="epirange.html">epirange()</a></code> for an inclusive date range.
 Bare dates and the <code>"="</code> operator are not accepted: use <code>snapshot_date</code>
 for point-in-time data. Internally maps to the <code>report_time_query</code> API
 parameter.</p></dd>

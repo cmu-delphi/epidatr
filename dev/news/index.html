@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.2</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,6 +58,7 @@
 <h3 id="breaking-changes-1-4-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-4-0"></a></h3>
 <ul><li>
 <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> and <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code>: passing a bare date or the <code>"="</code> operator to <code>report_time</code> now errors. Use a comparison operator (e.g. <code>"&lt;2025-01-01"</code>) or an <code><a href="../reference/epirange.html">epirange()</a></code> instead.</li>
+<li>The cast-API’s <code>report_time</code> column and the <code>report_time_range</code> in <code><a href="../reference/epidata_meta.html">epidata_meta()</a></code> are now UTC timestamps (e.g. <code>2025-10-16T13:45:00Z</code>) rather than dates, so <code>report_time</code> now parses to a <code>POSIXct</code>. <code>report_time</code> and <code>snapshot_date</code> filters also accept a UTC timestamp string (with a trailing <code>Z</code>) or a <code>POSIXt</code>, in addition to a bare date, for exact-instant filtering (cmu-delphi/cast-api#123).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-1-4-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-4-0"></a></h3>

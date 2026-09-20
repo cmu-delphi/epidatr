@@ -21,7 +21,7 @@ https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html."><meta nam
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.2</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,18 +117,20 @@ Only used when <code>source</code> is a string.</p></dd>
 
 
 <dt id="arg-snapshot-date">snapshot_date<a class="anchor" aria-label="anchor" href="#arg-snapshot-date"></a></dt>
-<dd><p>Date, <code>"latest"</code>, or <code>NULL</code>. Return auxiliary data as
-it appeared on this date (one row per key, the most recent version active
-on that date). <code>"latest"</code> uses today's date. Use <code>NULL</code> (default) to
-return the full version history filtered by <code>report_time</code>. Mutually
+<dd><p>Date, <code>POSIXt</code>, UTC timestamp string (e.g.
+<code>"2025-10-16T13:45:00Z"</code>), <code>"latest"</code>, or <code>NULL</code>. Return auxiliary data
+as it appeared at this date or instant (one row per key, the most recent
+version active then). <code>"latest"</code> uses today's date. Use <code>NULL</code> (default)
+to return the full version history filtered by <code>report_time</code>. Mutually
 exclusive with <code>report_time</code>. Only used when <code>source</code> is a string.</p></dd>
 
 
 <dt id="arg-report-time">report_time<a class="anchor" aria-label="anchor" href="#arg-report-time"></a></dt>
 <dd><p>String or <code><a href="epirange.html">epirange()</a></code> specifying the version of the
 auxiliary data to retrieve. Accepts comparison operators (e.g.,
-<code>"&lt;2025-10-16"</code>, <code>"&gt;=2025-10-16"</code>) or an <code><a href="epirange.html">epirange()</a></code> for an inclusive
-date range. Bare dates and the <code>"="</code> operator are not accepted — use
+<code>"&lt;2025-10-16"</code>, <code>"&gt;=2025-10-16"</code>, or <code>"&lt;=2025-10-16T13:45:00Z"</code> for a
+UTC timestamp bound) or an <code><a href="epirange.html">epirange()</a></code> for an inclusive date range.
+Bare dates and the <code>"="</code> operator are not accepted: use
 <code>snapshot_date</code> for point-in-time data. Mutually exclusive with
 <code>snapshot_date</code>. Only used when <code>source</code> is a string.</p></dd>
 
