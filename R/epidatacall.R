@@ -153,9 +153,9 @@ print.epidata_call <- function(x, ...) {
 #'   `time_value` and `value` fields or `c("-direction")` to return everything
 #'   except the direction field
 #' @param disable_date_parsing disable automatic date parsing
-#' @param disable_data_frame_parsing disable automatic conversion to data frame;
-#'   this is only supported by endpoints that only support the 'classic' format
-#'   (non-tabular)
+#' @param disable_data_frame_parsing if `TRUE`, return the raw response
+#'   instead of a parsed tibble. V4 endpoints return a nested list. V5
+#'   endpoints still return a data frame, but with all columns as character.
 #' @param return_empty boolean that allows returning an empty tibble if there is
 #'   no data
 #' @param disable_missing_meta_warning if `TRUE`, suppress the warning emitted
@@ -343,10 +343,16 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 
   # Otherwise fetch the data from the API.
   runtime <- system.time({
-    response_content <- request_epidata(epidata_call, fetch_args)
+    response_content <- request_epidata(
+      epidata_call,
+      fetch_args,
+      simplify = !fetch_args$disable_data_frame_parsing
+    )
 
     if (fetch_args$return_empty && length(response_content) == 0) {
       fetched <- tibble::tibble()
+    } else if (fetch_args$disable_data_frame_parsing) {
+      fetched <- response_content
     } else {
       fetched <- parse_data_frame(
         epidata_call,

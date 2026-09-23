@@ -90,9 +90,9 @@ the average of neighboring values, and \code{"fill_zero"} fills nulls with zero.
 \code{NULL} (default) returns all fill methods.}
 
 \item{snapshot_date}{Date, \code{POSIXt}, UTC timestamp string (e.g.
-\code{"2025-10-16T13:45:00Z"}), or \code{NULL}. The point in time to snapshot:
-returns the version of the data that was current then. \code{NULL} returns
-the latest available version.}
+\code{"2025-10-16T13:45:00Z"}), or \code{NULL}. The snapshot returns the
+version of the data that was current then. \code{NULL} returns the latest
+available version.}
 
 \item{as_of}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{snapshot_date} instead.}
 

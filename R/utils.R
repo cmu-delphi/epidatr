@@ -94,23 +94,23 @@ filter_by_timeset <- function(df, column, timeset) {
   }
 
   values <- df[[column]]
+  # Unparsed (e.g. `disable_data_frame_parsing`) columns are raw strings.
+  compare_values <- if (inherits(values, "Date")) values else parse_api_date(values)
 
   if (inherits(timeset, "EpiRange")) {
     from <- timeset$from
     to <- timeset$to
 
-    if (inherits(values, "Date")) {
-      if (all(nchar(from) == 8)) {
-        from <- parse_api_date(from)
-        to <- parse_api_date(to)
-      } else if (all(nchar(from) == 6)) {
-        from <- parse_api_week(from)
-        to <- parse_api_week(to)
-      }
+    if (all(nchar(from) == 8)) {
+      from <- parse_api_date(from)
+      to <- parse_api_date(to)
+    } else if (all(nchar(from) == 6)) {
+      from <- parse_api_week(from)
+      to <- parse_api_week(to)
     }
-    mask <- values >= from & values <= to
+    mask <- compare_values >= from & compare_values <= to
   } else {
-    if (inherits(values, "Date") && !inherits(timeset, "Date")) {
+    if (!inherits(timeset, "Date")) {
       # Handle cases where timeset is a vector of integers or strings
       if (all(nchar(timeset) == 8)) {
         timeset <- parse_api_date(timeset)
@@ -118,7 +118,7 @@ filter_by_timeset <- function(df, column, timeset) {
         timeset <- parse_api_week(timeset)
       }
     }
-    mask <- values %in% timeset
+    mask <- compare_values %in% timeset
   }
   df[mask, ]
 }

@@ -32,9 +32,9 @@ except the direction field}
 
 \item{disable_date_parsing}{disable automatic date parsing}
 
-\item{disable_data_frame_parsing}{disable automatic conversion to data frame;
-this is only supported by endpoints that only support the 'classic' format
-(non-tabular)}
+\item{disable_data_frame_parsing}{if \code{TRUE}, return the raw response
+instead of a parsed tibble. V4 endpoints return a nested list. V5 (cast)
+endpoints still return a data frame, but with all columns as character.}
 
 \item{disable_missing_meta_warning}{if \code{TRUE}, suppress the warning emitted
 when the response contains columns not declared as expected epidata fields.
