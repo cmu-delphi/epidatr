@@ -19,7 +19,7 @@ warn_v4_sunset <- function(fn_name) {
   cli::cli_warn(
     c(
       "{.fn {fn_name}} uses the V4 Epidata API.",
-      "i" = "As of September 30, 2026, V4 no longer receives new data. It still \\
+      "i" = "As of September 22, 2026, V4 no longer receives new data. It still \\
        serves the historical data it already has, but for current data you must use \\
        the V5 endpoints ({.fn epidata_snapshot}, {.fn epidata_archive}, \\
        {.fn epidata_meta}) with an up-to-date epidatr (and epiprocess, if you use it).",

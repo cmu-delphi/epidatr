@@ -61,7 +61,7 @@ the \code{pub_covidcast()} function. Simply use the \verb{$call} attribute of th
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{epidata$signals$`fb-survey:smoothed_cli`$call("state", "pa",
                                               epirange(20210405, 20210410))
 #> Warning: `pub_covidcast()` uses the V4 Epidata API.
-#> i As of September 30, 2026, V4 no longer receives new data. It still serves the
+#> i As of September 22, 2026, V4 no longer receives new data. It still serves the
 #>   historical data it already has, but for current data you must use the V5
 #>   endpoints (`epidata_snapshot()`, `epidata_archive()`, `epidata_meta()`) with
 #>   an up-to-date epidatr (and epiprocess, if you use it).

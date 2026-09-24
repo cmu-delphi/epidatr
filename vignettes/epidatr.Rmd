@@ -506,7 +506,7 @@ ggplot(pa_revisions, aes(x = reference_time, y = value, group = report_time, col
 
 - **V5 sources** serve active surveillance data through `epidata_snapshot()`, `epidata_archive()`, and `epidata_meta()`. You can discover them with `epidata_meta()` or interactively on the [Delphi EpiPortal](https://delphi.cmu.edu/epiportal/).
 - **Historical endpoints** provide access to datasets that are static and kept for retrospective analysis:
-  - **Recently migrated endpoints**: legacy endpoints that stopped receiving new data on September 30, 2026 when active surveillance transitioned to V5. This includes the V4 endpoint `pub_covidcast()` and V3 endpoints such as `pub_fluview()`, `pub_flusurv()`, and `pub_meta()`.
+  - **Recently migrated endpoints**: legacy endpoints that stopped receiving new data on September 22, 2026 when active surveillance transitioned to V5. This includes the V4 endpoint `pub_covidcast()` and V3 endpoints such as `pub_fluview()`, `pub_flusurv()`, and `pub_meta()`.
   - **International endpoints**: historical datasets covering surveillance outside the United States (e.g., PAHO dengue with `pub_paho_dengue()` and ECDC ILI with `pub_ecdc_ili()`).
   - **Private endpoints**: restricted streams (e.g., CDC web metrics with `pvt_cdc()` and digital sensors with `pvt_sensors()`) requiring dedicated authentication keys.
   - Other completed datasets such as Google Flu Trends (`pub_gft()`) and Wikipedia article views (`pub_wiki()`).

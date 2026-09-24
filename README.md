@@ -119,11 +119,11 @@ endpoints:
 - **V5 sources** serve active surveillance data through
   `epidata_snapshot()`, `epidata_archive()`, and `epidata_meta()`.
 - **V4 endpoint** `pub_covidcast()` is deprecated and stopped receiving
-  new data on September 30, 2026. It remains available to query
+  new data on September 22, 2026. It remains available to query
   historical data ingested before that date.
 - **V3 legacy endpoints** (such as `pub_fluview()`, `pub_gft()`, and
   `pub_wiki()`) cover specific datasets that are static or no longer
-  updated. Some stopped receiving new data on September 30, 2026 when
+  updated. Some stopped receiving new data on September 22, 2026 when
   active sources moved to V5, while others stopped updating earlier.
 
 If you have existing `pub_covidcast()` code, see
@@ -141,7 +141,7 @@ keep in mind:
   offering better speed, reliability, and broader endpoint support.
 - From V3/V4 endpoints to the V5 API. Within `epidatr`,
   `pub_covidcast()` and other V3/V4 endpoints are deprecated as of
-  September 30, 2026. See the [migration
+  September 22, 2026. See the [migration
   guide](https://cmu-delphi.github.io/epidatr/articles/migration-guide.html)
   (or `vignette("migration-guide")`). New code should use the current V5
   functions (`epidata_snapshot()`, `epidata_archive()`, and

@@ -40,7 +40,7 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-This is a V3/V4 endpoint. \strong{As of September 30, 2026, the V3 and V4 APIs no
+This is a V3/V4 endpoint. \strong{As of September 22, 2026, the V3 and V4 APIs no
 longer receive new data.} They still serve the historical data they already
 have, but current data is only added to the V5 API, accessed via the
 \code{\link[=epidata_snapshot]{epidata_snapshot()}}, \code{\link[=epidata_archive]{epidata_archive()}}, and \code{\link[=epidata_meta]{epidata_meta()}} functions.
