@@ -342,7 +342,7 @@ test_that("epidata_archive sends EpiRange as server-side range query", {
   )
   expect_true(grepl("report_time_query=2024-01-02%3A2024-01-02", seen_urls[1]))
   expect_equal(nrow(res), 1)
-  expect_equal(res$report_time, as.POSIXct("2024-01-02", tz = "UTC"))
+  expect_equal(res$report_time, as.Date("2024-01-02"))
 
   # Wider range: server returns both matching rows
   seen_urls <- character()
@@ -365,7 +365,7 @@ test_that("epidata_archive sends EpiRange as server-side range query", {
   )
   expect_true(grepl("report_time_query=2024-01-01%3A2024-01-02", seen_urls[1]))
   expect_equal(nrow(res_wide), 2)
-  expect_true(all(res_wide$report_time %in% as.POSIXct(c("2024-01-01", "2024-01-02"), tz = "UTC")))
+  expect_true(all(res_wide$report_time %in% as.Date(c("2024-01-01", "2024-01-02"))))
 })
 
 test_that("epidata_snapshot sends multiple signals comma-joined in a single request", {

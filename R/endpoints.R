@@ -1603,7 +1603,7 @@ epidata_snapshot <- function(
       ),
       meta = list(
         create_epidata_field_info("signal", "text"),
-        create_epidata_field_info("report_time", "datetimetz"),
+        create_epidata_field_info("report_time", "datetimetz_or_date"),
         create_epidata_field_info("geo_type", "text"),
         create_epidata_field_info("geo_value", "text"),
         create_epidata_field_info("fill_method", "text"),
@@ -1715,7 +1715,7 @@ epidata_archive <- function(
       ),
       meta = list(
         create_epidata_field_info("signal", "text"),
-        create_epidata_field_info("report_time", "datetimetz"),
+        create_epidata_field_info("report_time", "datetimetz_or_date"),
         create_epidata_field_info("geo_type", "text"),
         create_epidata_field_info("geo_value", "text"),
         create_epidata_field_info("fill_method", "text"),
@@ -1900,7 +1900,7 @@ epidata_aux.default <- function(
     # Only the aux key columns are typed (nwss's schema).
     # Extend for new aux sources whose keys differ.
     meta = list(
-      create_epidata_field_info("report_time", "datetimetz"),
+      create_epidata_field_info("report_time", "datetimetz_or_date"),
       create_epidata_field_info("geo_value", "text"),
       create_epidata_field_info("reference_time", "date"),
       create_epidata_field_info("nwss_source", "text"),

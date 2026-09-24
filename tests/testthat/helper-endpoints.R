@@ -414,6 +414,7 @@ meta_type_classes <- c(
   epiweek = "Date",
   timestamp = "POSIXct",
   datetimetz = "POSIXct",
+  datetimetz_or_date = c("POSIXct", "Date"),
   int = "numeric",
   float = "numeric",
   bool = "logical",
@@ -435,7 +436,7 @@ expect_meta_classes <- function(result, meta) {
         "column `%s` has class %s (expected %s for type '%s')",
         info$name,
         paste(class(result[[info$name]]), collapse = "/"),
-        expected,
+        paste(expected, collapse = " or "),
         info$type
       )
     )

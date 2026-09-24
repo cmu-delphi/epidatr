@@ -178,6 +178,17 @@ test_that("parse_api_datetimetz parses cast-API UTC timestamp strings", {
   )
 })
 
+test_that("parse_api_datetimetz_or_date falls back to Date when all midnight UTC", {
+  expect_equal(
+    parse_api_datetimetz_or_date(c("2025-10-16T00:00:00Z", NA)),
+    as.Date(c("2025-10-16", NA))
+  )
+  expect_equal(
+    parse_api_datetimetz_or_date(c("2025-10-16T00:00:00Z", "2025-10-17T13:45:00Z")),
+    as.POSIXct(c("2025-10-16 00:00:00", "2025-10-17 13:45:00"), tz = "UTC")
+  )
+})
+
 test_that("parse_api_week returns the expected day of the week", {
   expect_identical(parse_api_week(202005) %>% weekdays(), "Sunday")
   expect_identical(parse_api_week(202005, 4) %>% weekdays(), "Wednesday")

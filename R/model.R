@@ -169,6 +169,7 @@ create_epidata_field_info <- function(
       "date",
       "timestamp",
       "datetimetz",
+      "datetimetz_or_date",
       "epiweek",
       "categorical",
       "bool"
@@ -231,6 +232,12 @@ parse_value <- function(
       !inherits(value, "POSIXt")
   ) {
     return(parse_api_datetimetz(value))
+  } else if (
+    info$type == "datetimetz_or_date" &&
+      !disable_date_parsing &&
+      !inherits(value, c("Date", "POSIXt"))
+  ) {
+    return(parse_api_datetimetz_or_date(value))
   } else if (
     info$type == "epiweek" && !disable_date_parsing && !inherits(value, "Date")
   ) {
@@ -349,6 +356,19 @@ parse_api_timestamp_to_datetime <- function(value) {
 #' @keywords internal
 parse_api_datetimetz <- function(value) {
   as.POSIXct(as.character(value), format = "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+}
+
+#' Wraps [parse_api_datetimetz()], returning a `Date` when every value is
+#' midnight UTC
+#' @keywords internal
+parse_api_datetimetz_or_date <- function(value) {
+  res <- parse_api_datetimetz(value)
+  # Date-only versions arrive as midnight UTC but mean
+  # midnight ET. Mixed columns stay POSIXct.
+  if (all(is.na(res) | format(res, "%H:%M:%S") == "00:00:00")) {
+    return(as.Date(res, tz = "UTC"))
+  }
+  res
 }
 
 #' parse_api_week converts an integer to a date
