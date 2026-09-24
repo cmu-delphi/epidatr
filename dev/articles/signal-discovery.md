@@ -217,12 +217,12 @@ Datasets that originated in the legacy API like
 [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md),
 and
 [`pub_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_meta.md)
-are transitioning to V5. Starting in October 2026, these V4 functions
-are tentatively deprecated in favor of V5: their historical data will
-remain available for at least a year, but new ingestion will end.
+are deprecated as of September 22, 2026, and no longer receive new data.
+They continue to serve historical data ingested before that date. All
+active surveillance datasets are now served by V5 endpoints.
 [`covidcast_epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/covidcast_epidata.md),
-which describes them, is not being retired outright, but will only keep
-describing frozen historical data once a source’s V4 ingestion stops.
+which describes them, remains available to inspect metadata for these
+frozen historical sources.
 
 ### Exploring legacy COVIDcast sources with `covidcast_epidata()`
 
@@ -297,8 +297,8 @@ select them from the list for you. In the tab-completion popup, signal
 names are prefixed with the name of the data source for filtering
 convenience.
 
-Note that some signal names have dashes in them, so to access them we
-rely on the backtick operator:
+Some signal names contain dashes, so you must enclose them in backticks
+to access them by name:
 
 ``` r
 
@@ -310,7 +310,10 @@ covid_sources$signals$`fb-survey:smoothed_cli`
 
 ### Example legacy query
 
-Legacy endpoints remain accessible while their sources transition:
+The legacy V4 endpoint
+[`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
+is deprecated as of September 22, 2026, but remains accessible to query
+historical data:
 
 ``` r
 
@@ -464,7 +467,8 @@ pub_covid_hosp_state_timeseries(
   states = "pa",
   dates = epirange(20210101, 20210105)
 )
-#> `pub_covid_hosp_state_timeseries()` covers a data source that is no longer updated.
+#> `pub_covid_hosp_state_timeseries()` covers a data source that is no longer
+#> updated.
 #> ℹ Historical data remains available, but no new data is being ingested.
 #> ℹ See the "Endpoints kept for historical reference" section of
 #>   `vignette("migration-guide")` (or

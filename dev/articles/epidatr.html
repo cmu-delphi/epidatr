@@ -114,8 +114,8 @@ to use your API key.</p>
 <div class="section level2">
 <h2 id="the-delphi-v5-api">The Delphi V5 API<a class="anchor" aria-label="anchor" href="#the-delphi-v5-api"></a>
 </h2>
-<p>Epidatr allows three categories of data access to the Delphi V5
-API:</p>
+<p><code>epidatr</code> allows three categories of data access to the
+Delphi V5 API:</p>
 <ul>
 <li>
 <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code> provides a specific view of how a
@@ -899,42 +899,46 @@ plot of chunk archive-plot
 <div class="section level2">
 <h2 id="available-data-sources-and-endpoints">Available data sources and endpoints<a class="anchor" aria-label="anchor" href="#available-data-sources-and-endpoints"></a>
 </h2>
-<p><code>epidatr</code> provides access to a broad ecosystem of
+<p><code>epidatr</code> provides access to a broad collection of
 epidemiological data streams:</p>
 <ul>
 <li>
-<strong>V5 sources</strong> provide access to active surveillance
-data queried via <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code> and
-<code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>. Discover them programmatically using
+<strong>V5 sources</strong> serve active surveillance data through
+<code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, and
+<code><a href="../reference/epidata_meta.html">epidata_meta()</a></code>. You can discover them with
 <code><a href="../reference/epidata_meta.html">epidata_meta()</a></code> or interactively on the <a href="https://delphi.cmu.edu/epiportal/" class="external-link">Delphi EpiPortal</a>.</li>
 <li>
-<strong>Migrating endpoints</strong> are legacy endpoints (such as
-<code><a href="../reference/pub_covidcast.html">pub_covidcast()</a></code>, <code><a href="../reference/pub_fluview.html">pub_fluview()</a></code>,
-<code><a href="../reference/pub_flusurv.html">pub_flusurv()</a></code>, and <code><a href="../reference/pub_meta.html">pub_meta()</a></code>) transitioning
-to V5. See <code><a href="../articles/migration-guide.html">vignette("migration-guide")</a></code> for argument
-mappings and migration details.</li>
-<li>
 <strong>Historical endpoints</strong> provide access to datasets
-whose collection has ended (such as Google Flu Trends, Wikipedia article
-views, and historical hospitalization series) kept for retrospective
-analysis via <code>pub_*</code> functions.
+that are static and kept for retrospective analysis:
 <ul>
 <li>
-<strong>International endpoints</strong> are a subset of historical
-datasets that focus on surveillance outside the United States (e.g.,
-PAHO dengue with <code><a href="../reference/pub_paho_dengue.html">pub_paho_dengue()</a></code> and ECDC ILI with
+<strong>Recently migrated endpoints</strong>: legacy endpoints that
+stopped receiving new data on September 22, 2026 when active
+surveillance transitioned to V5. This includes the V4 endpoint
+<code><a href="../reference/pub_covidcast.html">pub_covidcast()</a></code> and V3 endpoints such as
+<code><a href="../reference/pub_fluview.html">pub_fluview()</a></code>, <code><a href="../reference/pub_flusurv.html">pub_flusurv()</a></code>, and
+<code><a href="../reference/pub_meta.html">pub_meta()</a></code>.</li>
+<li>
+<strong>International endpoints</strong>: historical datasets
+covering surveillance outside the United States (e.g., PAHO dengue with
+<code><a href="../reference/pub_paho_dengue.html">pub_paho_dengue()</a></code> and ECDC ILI with
 <code><a href="../reference/pub_ecdc_ili.html">pub_ecdc_ili()</a></code>).</li>
 <li>
-<strong>Private endpoints</strong> are restricted streams (e.g., CDC
+<strong>Private endpoints</strong>: restricted streams (e.g., CDC
 web metrics with <code><a href="../reference/pvt_cdc.html">pvt_cdc()</a></code> and digital sensors with
-<code><a href="../reference/pvt_sensors.html">pvt_sensors()</a></code>) that require dedicated secret authentication
+<code><a href="../reference/pvt_sensors.html">pvt_sensors()</a></code>) requiring dedicated authentication
 keys.</li>
+<li>Other completed datasets such as Google Flu Trends
+(<code><a href="../reference/pub_gft.html">pub_gft()</a></code>) and Wikipedia article views
+(<code><a href="../reference/pub_wiki.html">pub_wiki()</a></code>).</li>
 </ul>
 </li>
 </ul>
 <p>See <code><a href="../articles/signal-discovery.html">vignette("signal-discovery")</a></code> for an in-depth guide
 to discovering signals, browsing metadata, and querying datasets across
-all these categories.</p>
+these categories. If you have existing <code><a href="../reference/pub_covidcast.html">pub_covidcast()</a></code>
+code, see <code><a href="../articles/migration-guide.html">vignette("migration-guide")</a></code> for the argument and
+column mapping to the V5 functions.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

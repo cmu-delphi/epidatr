@@ -129,12 +129,13 @@ interest.</p>
 <span class="r-in"><span>  fetch_args <span class="op">=</span> <span class="fu"><a href="fetch_args_list.html">fetch_args_list</a></span><span class="op">(</span>dry_run <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`pub_covidcast()` uses the V4 Epidata API.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Starting in October 2026, V4 is tentatively deprecated in favor of the V5</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   API.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> As of September 22, 2026, V4 no longer receives new data. It still serves the</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   historical data it already has, but for current data you must use the V5</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   endpoints (`epidata_snapshot()`, `epidata_archive()`, `epidata_meta()`) with</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   an up-to-date epidatr (and epiprocess, if you use it).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> See `vignette("migration-guide")` (or</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB; font-style: italic;">&lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html&gt;</span>) for the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   V5 endpoints and how to move to them. Old data will remain available for at</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   least a year, but new ingestion will end.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   endpoint, argument, and column mapping.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
 <span class="r-in"><span><span class="va">call</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">fetch</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 124 × 15</span></span>

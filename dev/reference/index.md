@@ -22,9 +22,10 @@ The previous main endpoint. Still carries the sources that have not
 moved to v5 yet.
 
 - [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
-  : Various COVID and flu signals via the COVIDcast endpoint
+  **\[deprecated\]** : Various COVID and flu signals via the COVIDcast
+  endpoint
 - [`pub_covidcast_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast_meta.md)
-  : Metadata for the COVIDcast endpoint
+  **\[deprecated\]** : Metadata for the COVIDcast endpoint
 - [`covidcast_epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/covidcast_epidata.md)
   : Creates the COVIDcast Epidata autocomplete helper
 
@@ -34,41 +35,44 @@ Older endpoints, each with its own dataset. Most are static or no longer
 updated.
 
 - [`pub_covid_hosp_facility()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility.md)
-  : COVID hospitalizations by facility
+  **\[deprecated\]** : COVID hospitalizations by facility
 - [`pub_covid_hosp_facility_lookup()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility_lookup.md)
-  : Helper for finding COVID hospitalization facilities
+  **\[deprecated\]** : Helper for finding COVID hospitalization
+  facilities
 - [`pub_covid_hosp_state_timeseries()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_state_timeseries.md)
-  : COVID hospitalizations by state
+  **\[deprecated\]** : COVID hospitalizations by state
 - [`pub_delphi()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_delphi.md)
-  : Delphi's ILINet outpatient doctor visits forecasts
+  **\[deprecated\]** : Delphi's ILINet outpatient doctor visits
+  forecasts
 - [`pub_dengue_nowcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_dengue_nowcast.md)
-  : Delphi's PAHO dengue nowcasts (North and South America)
+  **\[deprecated\]** : Delphi's PAHO dengue nowcasts (North and South
+  America)
 - [`pub_ecdc_ili()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_ecdc_ili.md)
-  : ECDC ILI incidence (Europe)
+  **\[deprecated\]** : ECDC ILI incidence (Europe)
 - [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md)
-  : CDC FluSurv flu hospitalizations
+  **\[deprecated\]** : CDC FluSurv flu hospitalizations
 - [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md)
-  : CDC FluView ILINet outpatient doctor visits
+  **\[deprecated\]** : CDC FluView ILINet outpatient doctor visits
 - [`pub_fluview_clinical()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview_clinical.md)
-  : CDC FluView flu tests from clinical labs
+  **\[deprecated\]** : CDC FluView flu tests from clinical labs
 - [`pub_fluview_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview_meta.md)
-  : Metadata for the FluView endpoint
+  **\[deprecated\]** : Metadata for the FluView endpoint
 - [`pub_gft()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_gft.md)
-  : Google Flu Trends flu search volume
+  **\[deprecated\]** : Google Flu Trends flu search volume
 - [`pub_kcdc_ili()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_kcdc_ili.md)
-  : KCDC ILI incidence (Korea)
+  **\[deprecated\]** : KCDC ILI incidence (Korea)
 - [`pub_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_meta.md)
-  : Metadata for the Delphi Epidata API
+  **\[deprecated\]** : Metadata for the Delphi Epidata API
 - [`pub_nidss_dengue()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_nidss_dengue.md)
-  : NIDSS dengue cases (Taiwan)
+  **\[deprecated\]** : NIDSS dengue cases (Taiwan)
 - [`pub_nidss_flu()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_nidss_flu.md)
-  : NIDSS flu doctor visits (Taiwan)
+  **\[deprecated\]** : NIDSS flu doctor visits (Taiwan)
 - [`pub_nowcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_nowcast.md)
-  : Delphi's ILI Nearby nowcasts
+  **\[deprecated\]** : Delphi's ILI Nearby nowcasts
 - [`pub_paho_dengue()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_paho_dengue.md)
-  : PAHO dengue data (North and South America)
+  **\[deprecated\]** : PAHO dengue data (North and South America)
 - [`pub_wiki()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_wiki.md)
-  : Wikipedia webpage counts by article
+  **\[deprecated\]** : Wikipedia webpage counts by article
 
 ## Make API requests
 
@@ -114,18 +118,19 @@ Configure an optional persistent cache
 These endpoints require additional authorization to use
 
 - [`pvt_cdc()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_cdc.md)
-  : CDC total and by topic webpage visits
+  **\[deprecated\]** : CDC total and by topic webpage visits
 - [`pvt_dengue_sensors()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_dengue_sensors.md)
-  : PAHO dengue digital surveillance sensors (North and South America)
+  **\[deprecated\]** : PAHO dengue digital surveillance sensors (North
+  and South America)
 - [`pvt_ght()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_ght.md)
-  : Google Health Trends health topics search volume
+  **\[deprecated\]** : Google Health Trends health topics search volume
 - [`pvt_meta_norostat()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_meta_norostat.md)
-  : Metadata for the NoroSTAT endpoint
+  **\[deprecated\]** : Metadata for the NoroSTAT endpoint
 - [`pvt_norostat()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_norostat.md)
-  : CDC NoroSTAT norovirus outbreaks
+  **\[deprecated\]** : CDC NoroSTAT norovirus outbreaks
 - [`pvt_quidel()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_quidel.md)
-  : Quidel COVID-19 and influenza testing data
+  **\[deprecated\]** : Quidel COVID-19 and influenza testing data
 - [`pvt_sensors()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_sensors.md)
-  : Influenza and dengue digital surveillance sensors
+  **\[deprecated\]** : Influenza and dengue digital surveillance sensors
 - [`pvt_twitter()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_twitter.md)
-  : HealthTweets total and influenza-related tweets
+  **\[deprecated\]** : HealthTweets total and influenza-related tweets

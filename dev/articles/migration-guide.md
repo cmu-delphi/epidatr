@@ -5,18 +5,26 @@
 library(epidatr)
 ```
 
-The legacy Epidata APIs, including the V4 main endpoint
+The Delphi Epidata API has transitioned from its V4 endpoint
 ([`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md))
-and V3 other endpoints
-([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md),
+and legacy V3 endpoints (such as
+[`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md),
 [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md),
-[`pub_wiki()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_wiki.md),
-etc.), are transitioning to the V5 API. This transition is occurring
-source by source. All V3 and V4 sources will continue to operate until
-the migration is complete (tentatively scheduled for October 2026), and
-endpoints that are no longer updated will remain accessible on V3/V4.
-For new integrations, start directly on V5 and fall back to legacy
-endpoints only for sources that are not yet supported.
+and
+[`pvt_quidel()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_quidel.md))
+to a new set of V5 endpoints, served by
+[`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+[`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+[`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md),
+and
+[`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md).
+
+**As of September 22, 2026, the V3 and V4 APIs are deprecated and no
+longer receive new data.** They still serve historical data ingested
+before that date, so existing queries will not break, but any
+`{pub/pvt}_*` call that needs current data must use the V5 endpoints.
+The V5 API is now live for all ongoing datasets. New analyses should use
+the V5 functions.
 
 For the current list of sources and indicators available on the new API,
 see the [V5 signals
@@ -167,11 +175,13 @@ old <- pub_covidcast(
   as_of = 20250101
 )
 #> Warning: `pub_covidcast()` uses the V4 Epidata API.
-#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5 API.
+#> ℹ As of September 22, 2026, V4 no longer receives new data. It still serves the
+#>   historical data it already has, but for current data you must use the V5
+#>   endpoints (`epidata_snapshot()`, `epidata_archive()`, `epidata_meta()`) with
+#>   an up-to-date epidatr (and epiprocess, if you use it).
 #> ℹ See `vignette("migration-guide")` (or
-#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the V5
-#>   endpoints and how to move to them. Old data will remain available for at least a
-#>   year, but new ingestion will end.
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the
+#>   endpoint, argument, and column mapping.
 #> This warning is displayed once every 8 hours.
 head(old)
 #> # A tibble: 6 × 15
@@ -235,11 +245,13 @@ old_flu <- pub_fluview(
   epiweeks = epirange(202440, 202445)
 )
 #> Warning: `pub_fluview()` uses the V4 Epidata API.
-#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5 API.
+#> ℹ As of September 22, 2026, V4 no longer receives new data. It still serves the
+#>   historical data it already has, but for current data you must use the V5
+#>   endpoints (`epidata_snapshot()`, `epidata_archive()`, `epidata_meta()`) with
+#>   an up-to-date epidatr (and epiprocess, if you use it).
 #> ℹ See `vignette("migration-guide")` (or
-#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the V5
-#>   endpoints and how to move to them. Old data will remain available for at least a
-#>   year, but new ingestion will end.
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the
+#>   endpoint, argument, and column mapping.
 #> This warning is displayed once every 8 hours.
 head(old_flu[, c("release_date", "region", "epiweek", "wili", "ili")])
 #> # A tibble: 6 × 5
@@ -340,7 +352,7 @@ revisions %>%
   filter(as.integer(report_time - reference_time) <= 7)
 ```
 
-## Checking whether a source is available
+## Inspecting a source in the new API
 
 Use
 [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)
@@ -378,14 +390,15 @@ meta$report_time_range # earliest/latest report_time (publication date) availabl
 #> [1] "2024-04-18T00:00:00"
 ```
 
-If
+All ongoing datasets are now on the V5 API. If
 [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)
-does not know the source yet, keep using
-[`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
-(or the relevant `{pub/pvt}_*` function) for it and check back after
-package updates. The [API mailing
+does not recognize a source name, check the [V5 signals
+documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html)
+for its current name, or the [API mailing
 list](https://lists.andrew.cmu.edu/mailman/listinfo/delphi-covidcast-api)
-announces sources as they move.
+for announcements. A handful of legacy `{pub/pvt}_*` endpoints cover
+data sources that stopped updating before the transition. Those are
+listed below.
 
 ## Endpoints kept for historical reference
 

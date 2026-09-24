@@ -51,7 +51,7 @@ your API key.
 
 ## The Delphi V5 API
 
-Epidatr allows three categories of data access to the Delphi V5 API:
+`epidatr` allows three categories of data access to the Delphi V5 API:
 
 - [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
   provides a specific view of how a dataset looked at a point in time.
@@ -517,44 +517,50 @@ plot of chunk archive-plot
 
 ## Available data sources and endpoints
 
-`epidatr` provides access to a broad ecosystem of epidemiological data
+`epidatr` provides access to a broad collection of epidemiological data
 streams:
 
-- **V5 sources** provide access to active surveillance data queried via
-  [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+- **V5 sources** serve active surveillance data through
+  [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
   and
-  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md).
-  Discover them programmatically using
+  [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md).
+  You can discover them with
   [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)
   or interactively on the [Delphi
   EpiPortal](https://delphi.cmu.edu/epiportal/).
-- **Migrating endpoints** are legacy endpoints (such as
-  [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md),
-  [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md),
-  [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md),
-  and
-  [`pub_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_meta.md))
-  transitioning to V5. See
-  [`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md)
-  for argument mappings and migration details.
-- **Historical endpoints** provide access to datasets whose collection
-  has ended (such as Google Flu Trends, Wikipedia article views, and
-  historical hospitalization series) kept for retrospective analysis via
-  `pub_*` functions.
-  - **International endpoints** are a subset of historical datasets that
-    focus on surveillance outside the United States (e.g., PAHO dengue
-    with
+- **Historical endpoints** provide access to datasets that are static
+  and kept for retrospective analysis:
+  - **Recently migrated endpoints**: legacy endpoints that stopped
+    receiving new data on September 22, 2026 when active surveillance
+    transitioned to V5. This includes the V4 endpoint
+    [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
+    and V3 endpoints such as
+    [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md),
+    [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md),
+    and
+    [`pub_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_meta.md).
+  - **International endpoints**: historical datasets covering
+    surveillance outside the United States (e.g., PAHO dengue with
     [`pub_paho_dengue()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_paho_dengue.md)
     and ECDC ILI with
     [`pub_ecdc_ili()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_ecdc_ili.md)).
-  - **Private endpoints** are restricted streams (e.g., CDC web metrics
+  - **Private endpoints**: restricted streams (e.g., CDC web metrics
     with
     [`pvt_cdc()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_cdc.md)
     and digital sensors with
     [`pvt_sensors()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_sensors.md))
-    that require dedicated secret authentication keys.
+    requiring dedicated authentication keys.
+  - Other completed datasets such as Google Flu Trends
+    ([`pub_gft()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_gft.md))
+    and Wikipedia article views
+    ([`pub_wiki()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_wiki.md)).
 
 See
 [`vignette("signal-discovery")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md)
 for an in-depth guide to discovering signals, browsing metadata, and
-querying datasets across all these categories.
+querying datasets across these categories. If you have existing
+[`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
+code, see
+[`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md)
+for the argument and column mapping to the V5 functions.

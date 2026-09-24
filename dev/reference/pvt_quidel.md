@@ -1,7 +1,11 @@
 # Quidel COVID-19 and influenza testing data
 
-This is a V4 endpoint. Starting in October 2026, it is tentatively
-deprecated in favor of the V5 API. The new API can be accessed via the
+**\[deprecated\]**
+
+This is a V3/V4 endpoint. **As of September 22, 2026, the V3 and V4 APIs
+no longer receive new data.** They still serve the historical data they
+already have, but current data is only added to the V5 API, accessed via
+the
 [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
 [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
 and

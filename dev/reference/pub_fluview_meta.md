@@ -1,7 +1,11 @@
 # Metadata for the FluView endpoint
 
-This is a V4 endpoint. Starting in October 2026, it is tentatively
-deprecated in favor of the V5 API. The new API can be accessed via the
+**\[deprecated\]**
+
+This is a V3/V4 endpoint. **As of September 22, 2026, the V3 and V4 APIs
+no longer receive new data.** They still serve the historical data they
+already have, but current data is only added to the V5 API, accessed via
+the
 [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
 [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
 and
@@ -51,12 +55,13 @@ For example queries showing how to discover signals and build calls, see
 
 pub_fluview_meta()
 #> Warning: `pub_fluview_meta()` uses the V4 Epidata API.
-#> ℹ Starting in October 2026, V4 is tentatively deprecated in favor of the V5
-#>   API.
+#> ℹ As of September 22, 2026, V4 no longer receives new data. It still serves the
+#>   historical data it already has, but for current data you must use the V5
+#>   endpoints (`epidata_snapshot()`, `epidata_archive()`, `epidata_meta()`) with
+#>   an up-to-date epidatr (and epiprocess, if you use it).
 #> ℹ See `vignette("migration-guide")` (or
 #>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the
-#>   V5 endpoints and how to move to them. Old data will remain available for at
-#>   least a year, but new ingestion will end.
+#>   endpoint, argument, and column mapping.
 #> This warning is displayed once every 8 hours.
 #> # A tibble: 1 × 3
 #>   latest_update latest_issue table_rows

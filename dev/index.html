@@ -103,7 +103,7 @@
 <span>  geo_type <span class="op">=</span> <span class="st">"state"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">flu</span></span>
-<span><span class="co">#&gt; # A tibble: 10,506 × 7</span></span>
+<span><span class="co">#&gt; # A tibble: 10,557 × 7</span></span>
 <span><span class="co">#&gt;    signal        report_time geo_type geo_value fill_method reference_time value</span></span>
 <span><span class="co">#&gt;    &lt;chr&gt;         &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
 <span><span class="co">#&gt;  1 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-01     0.140</span></span>
@@ -116,22 +116,22 @@
 <span><span class="co">#&gt;  8 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-19     6.82 </span></span>
 <span><span class="co">#&gt;  9 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-26     8.67 </span></span>
 <span><span class="co">#&gt; 10 pct_ed_visit… 2026-06-26  state    ak        source      2022-12-03     9.85 </span></span>
-<span><span class="co">#&gt; # ℹ 10,496 more rows</span></span></code></pre></div>
+<span><span class="co">#&gt; # ℹ 10,547 more rows</span></span></code></pre></div>
 <p>This is just a glimpse of what <code>epidatr</code> can do. See the <a href="https://cmu-delphi.github.io/epidatr/articles/">Articles</a> for walkthroughs of specific tasks (finding signals, understanding versioned data, migrating from <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code>), and the <a href="https://cmu-delphi.github.io/epidatr/reference/">Reference</a> for the full list of functions and their arguments.</p>
 </div>
 <div class="section level2">
 <h2 id="which-endpoint-has-my-data">Which endpoint has my data?<a class="anchor" aria-label="anchor" href="#which-endpoint-has-my-data"></a>
 </h2>
-<p>The Delphi Epidata API has three generations of endpoints, and this package has client functions for all of them:</p>
+<p>The Delphi Epidata API provides access through three generations of endpoints:</p>
 <ul>
 <li>
-<strong>v5 (current):</strong> <code><a href="reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="reference/epidata_meta.html">epidata_meta()</a></code>. Start here; sources are moving to v5 one at a time.</li>
+<strong>V5 sources</strong> serve active surveillance data through <code><a href="reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="reference/epidata_meta.html">epidata_meta()</a></code>.</li>
 <li>
-<strong>v4 (covidcast):</strong> <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code>. Still carries the sources that have not moved to v5 yet.</li>
+<strong>V4 endpoint</strong> <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code> is deprecated and stopped receiving new data on September 22, 2026. It remains available to query historical data ingested before that date.</li>
 <li>
-<strong>v3 (legacy):</strong> the many other <code>pub_*</code> functions (e.g. <code><a href="reference/pub_fluview.html">pub_fluview()</a></code>, <code><a href="reference/pub_gft.html">pub_gft()</a></code>), one per dataset. Most of these datasets are static or no longer updated; they remain available for historical work.</li>
+<strong>V3 legacy endpoints</strong> (such as <code><a href="reference/pub_fluview.html">pub_fluview()</a></code>, <code><a href="reference/pub_gft.html">pub_gft()</a></code>, and <code><a href="reference/pub_wiki.html">pub_wiki()</a></code>) cover specific datasets that are static or no longer updated. Some stopped receiving new data on September 22, 2026 when active sources moved to V5, while others stopped updating earlier.</li>
 </ul>
-<p>If you have existing <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code> code, see <code><a href="articles/migration-guide.html">vignette("migration-guide")</a></code> for the argument and column mapping to the v5 functions.</p>
+<p>If you have existing <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code> code, see <code><a href="articles/migration-guide.html">vignette("migration-guide")</a></code> for the argument and column mapping to the V5 functions.</p>
 </div>
 <div class="section level2">
 <h2 id="migrating-from-covidcast-and-to-the-v5-api">Migrating from covidcast and to the V5 API<a class="anchor" aria-label="anchor" href="#migrating-from-covidcast-and-to-the-v5-api"></a>
@@ -139,7 +139,7 @@
 <p>If you are migrating existing workflows, there are two transitions to keep in mind:</p>
 <ul>
 <li>From the <code>covidcast</code> package to <code>epidatr</code>. The standalone <a href="https://cmu-delphi.github.io/covidcast/covidcastR/" class="external-link"><code>covidcast</code> package</a> is deprecated and superseded by <code>epidatr</code>, which is a complete rewrite offering better speed, reliability, and broader endpoint support.</li>
-<li>From V3/V4 endpoints to the V5 API. Within <code>epidatr</code>, <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code> and other V3/V4 endpoints are being deprecated as of October 2026. See the <a href="https://cmu-delphi.github.io/epidatr/articles/migration-guide.html">migration guide</a> (or <code><a href="articles/migration-guide.html">vignette("migration-guide")</a></code>). New code should use the current V5 functions (<code><a href="reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="reference/epidata_meta.html">epidata_meta()</a></code>), reserving <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code> only for sources that have not yet transitioned.</li>
+<li>From V3/V4 endpoints to the V5 API. Within <code>epidatr</code>, <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code> and other V3/V4 endpoints are deprecated as of September 22, 2026. See the <a href="https://cmu-delphi.github.io/epidatr/articles/migration-guide.html">migration guide</a> (or <code><a href="articles/migration-guide.html">vignette("migration-guide")</a></code>). New code should use the current V5 functions (<code><a href="reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="reference/epidata_meta.html">epidata_meta()</a></code>).</li>
 </ul>
 </div>
 <div class="section level2">

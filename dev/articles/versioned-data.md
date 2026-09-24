@@ -7,16 +7,14 @@ that have updates or additional information coming in, due to reporting
 and data flow processes.
 
 For example, let’s look at the [emergency department visits
-signal](https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/nssp.html)
-from the
-[`nssp`](https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/nssp.html)
-source, which estimates the percentage of emergency department visits
-that are influenza-related. Consider a result row with `reference_time`
-2024-12-07 for `geo_values = "pa"`. This is an estimate for Pennsylvania
-on December 7, 2024. That estimate was first *reported* (published) on
-December 13, 2024, the delay being due to the aggregation of data by our
-source and the time taken by the Epidata API to ingest the data
-provided. Later, the estimate for December 7th was updated, as
+signal](https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nssp.html)
+from the `nssp` source, which estimates the percentage of emergency
+department visits that are influenza-related. Consider a result row with
+`reference_time` 2024-12-07 for `geo_values = "pa"`. This is an estimate
+for Pennsylvania on December 7, 2024. That estimate was first *reported*
+(published) on December 13, 2024, the delay being due to the aggregation
+of data by our source and the time taken by the Epidata API to ingest
+the data provided. Later, the estimate for December 7th was updated, as
 additional visit data from December 7th arrived at our source and was
 reported to us. This constitutes a new *version* of the data. Let’s walk
 through how to look at that below.
@@ -75,8 +73,8 @@ knitr::kable(latest_snapshot)
 
 Note the change in the estimate, from 0.55% to 0.57%, reflecting new
 data that became available after December 14 about visits *occurring on*
-December 7. **This illustrates the importance of version tracking,
-particularly for forecasting tasks. To backtest a forecasting model on
+December 7. This illustrates the importance of version tracking,
+particularly for forecasting tasks. **To backtest a forecasting model on
 past data, it is important to use the data that would have been
 available *at the time* the model was or would have been fit, not data
 that arrived much later.**
@@ -206,7 +204,6 @@ archive_with_lag %>%
 ```
 
 For sources that have not yet transitioned from the legacy V4 API,
-versioning is specified differently; see
+versioning is specified differently. See
 [`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md)
-for the argument and column mappings between V4 and V5, including worked
-before-and-after examples of revision history queries.
+for the argument and column mappings between V4 and V5.

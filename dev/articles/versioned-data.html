@@ -76,10 +76,10 @@ location on a given day, but also <em>when</em> that estimate was made,
 and all updates to that estimate. This is particularly relevant for data
 sources that have updates or additional information coming in, due to
 reporting and data flow processes.</p>
-<p>For example, let’s look at the <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/nssp.html" class="external-link">emergency
-department visits signal</a> from the <a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/nssp.html" class="external-link"><code>nssp</code></a>
-source, which estimates the percentage of emergency department visits
-that are influenza-related. Consider a result row with
+<p>For example, let’s look at the <a href="https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nssp.html" class="external-link">emergency
+department visits signal</a> from the <code>nssp</code> source, which
+estimates the percentage of emergency department visits that are
+influenza-related. Consider a result row with
 <code>reference_time</code> 2024-12-07 for
 <code>geo_values = "pa"</code>. This is an estimate for Pennsylvania on
 December 7, 2024. That estimate was first <em>reported</em> (published)
@@ -184,8 +184,8 @@ recent estimate available:</p>
 </table>
 <p>Note the change in the estimate, from 0.55% to 0.57%, reflecting new
 data that became available after December 14 about visits <em>occurring
-on</em> December 7. <strong>This illustrates the importance of version
-tracking, particularly for forecasting tasks. To backtest a forecasting
+on</em> December 7. This illustrates the importance of version tracking,
+particularly for forecasting tasks. <strong>To backtest a forecasting
 model on past data, it is important to use the data that would have been
 available <em>at the time</em> the model was or would have been fit, not
 data that arrived much later.</strong></p>
@@ -395,10 +395,9 @@ reporting lag (for example, simulating data available with at most a
 <span><span class="co">#&gt; 1 pct_ed_visits_influenza 2024-12-07     2024-12-13         6 0.550</span></span>
 <span><span class="co">#&gt; 2 pct_ed_visits_influenza 2024-12-07     2024-12-20        13 0.560</span></span></code></pre></div>
 <p>For sources that have not yet transitioned from the legacy V4 API,
-versioning is specified differently; see
+versioning is specified differently. See
 <code><a href="../articles/migration-guide.html">vignette("migration-guide")</a></code> for the argument and column
-mappings between V4 and V5, including worked before-and-after examples
-of revision history queries.</p>
+mappings between V4 and V5.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

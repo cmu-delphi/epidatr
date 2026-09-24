@@ -39,12 +39,13 @@ the pub_covidcast() function. Simply use the $call attribute of the object:
 epidata$signals$`fb-survey:smoothed_cli`$call(&quot;state&quot;, &quot;pa&quot;,
                                               epirange(20210405, 20210410))
 #&amp;gt; Warning: `pub_covidcast()` uses the V4 Epidata API.
-#&amp;gt; i Starting in October 2026, V4 is tentatively deprecated in favor of the V5
-#&amp;gt;   API.
+#&amp;gt; i As of September 22, 2026, V4 no longer receives new data. It still serves the
+#&amp;gt;   historical data it already has, but for current data you must use the V5
+#&amp;gt;   endpoints (`epidata_snapshot()`, `epidata_archive()`, `epidata_meta()`) with
+#&amp;gt;   an up-to-date epidatr (and epiprocess, if you use it).
 #&amp;gt; i See `vignette(&quot;migration-guide&quot;)` (or
 #&amp;gt;   &amp;lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html&amp;gt;) for the
-#&amp;gt;   V5 endpoints and how to move to them. Old data will remain available for at
-#&amp;gt;   least a year, but new ingestion will end.
+#&amp;gt;   endpoint, argument, and column mapping.
 #&amp;gt; This warning is displayed once every 8 hours.
 #&amp;gt; # A tibble: 6 x 15
 #&amp;gt;   geo_value signal     source geo_type time_type time_value direction issue
@@ -97,12 +98,13 @@ the pub_covidcast() function. Simply use the $call attribute of the object:
 epidata$signals$`fb-survey:smoothed_cli`$call(&quot;state&quot;, &quot;pa&quot;,
                                               epirange(20210405, 20210410))
 #&amp;gt; Warning: `pub_covidcast()` uses the V4 Epidata API.
-#&amp;gt; i Starting in October 2026, V4 is tentatively deprecated in favor of the V5
-#&amp;gt;   API.
+#&amp;gt; i As of September 22, 2026, V4 no longer receives new data. It still serves the
+#&amp;gt;   historical data it already has, but for current data you must use the V5
+#&amp;gt;   endpoints (`epidata_snapshot()`, `epidata_archive()`, `epidata_meta()`) with
+#&amp;gt;   an up-to-date epidatr (and epiprocess, if you use it).
 #&amp;gt; i See `vignette(&quot;migration-guide&quot;)` (or
 #&amp;gt;   &amp;lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html&amp;gt;) for the
-#&amp;gt;   V5 endpoints and how to move to them. Old data will remain available for at
-#&amp;gt;   least a year, but new ingestion will end.
+#&amp;gt;   endpoint, argument, and column mapping.
 #&amp;gt; This warning is displayed once every 8 hours.
 #&amp;gt; # A tibble: 6 x 15
 #&amp;gt;   geo_value signal     source geo_type time_type time_value direction issue
@@ -195,12 +197,13 @@ the <code><a href="pub_covidcast.html">pub_covidcast()</a></code> function. Simp
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">epidata</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">`fb-survey:smoothed_cli`</span><span class="op">$</span><span class="fu">call</span><span class="op">(</span><span class="st">"state"</span>, <span class="st">"pa"</span>,</span>
 <span>                                              <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210405</span>, <span class="fl">20210410</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: `pub_covidcast()` uses the V4 Epidata API.</span></span>
-<span><span class="co">#&gt; i Starting in October 2026, V4 is tentatively deprecated in favor of the V5</span></span>
-<span><span class="co">#&gt;   API.</span></span>
+<span><span class="co">#&gt; i As of September 22, 2026, V4 no longer receives new data. It still serves the</span></span>
+<span><span class="co">#&gt;   historical data it already has, but for current data you must use the V5</span></span>
+<span><span class="co">#&gt;   endpoints (`epidata_snapshot()`, `epidata_archive()`, `epidata_meta()`) with</span></span>
+<span><span class="co">#&gt;   an up-to-date epidatr (and epiprocess, if you use it).</span></span>
 <span><span class="co">#&gt; i See `vignette("migration-guide")` (or</span></span>
 <span><span class="co">#&gt;   &lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html&gt;) for the</span></span>
-<span><span class="co">#&gt;   V5 endpoints and how to move to them. Old data will remain available for at</span></span>
-<span><span class="co">#&gt;   least a year, but new ingestion will end.</span></span>
+<span><span class="co">#&gt;   endpoint, argument, and column mapping.</span></span>
 <span><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
 <span><span class="co">#&gt; # A tibble: 6 x 15</span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue</span></span>

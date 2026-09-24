@@ -80,7 +80,7 @@ flu <- epidata_snapshot(
   geo_type = "state"
 )
 flu
-#> # A tibble: 10,506 × 7
+#> # A tibble: 10,557 × 7
 #>    signal        report_time geo_type geo_value fill_method reference_time value
 #>    <chr>         <date>      <chr>    <chr>     <chr>       <date>         <dbl>
 #>  1 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-01     0.140
@@ -93,7 +93,7 @@ flu
 #>  8 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-19     6.82 
 #>  9 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-26     8.67 
 #> 10 pct_ed_visit… 2026-06-26  state    ak        source      2022-12-03     9.85 
-#> # ℹ 10,496 more rows
+#> # ℹ 10,547 more rows
 ```
 
 This is just a glimpse of what `epidatr` can do. See the
@@ -106,29 +106,32 @@ the full list of functions and their arguments.
 
 ## Which endpoint has my data?
 
-The Delphi Epidata API has three generations of endpoints, and this
-package has client functions for all of them:
+The Delphi Epidata API provides access through three generations of
+endpoints:
 
-- **v5 (current):**
+- **V5 sources** serve active surveillance data through
   [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
   [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
   and
   [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md).
-  Start here; sources are moving to v5 one at a time.
-- **v4 (covidcast):**
-  [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md).
-  Still carries the sources that have not moved to v5 yet.
-- **v3 (legacy):** the many other `pub_*` functions
-  (e.g. [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md),
-  [`pub_gft()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_gft.md)),
-  one per dataset. Most of these datasets are static or no longer
-  updated; they remain available for historical work.
+- **V4 endpoint**
+  [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
+  is deprecated and stopped receiving new data on September 22, 2026. It
+  remains available to query historical data ingested before that date.
+- **V3 legacy endpoints** (such as
+  [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md),
+  [`pub_gft()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_gft.md),
+  and
+  [`pub_wiki()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_wiki.md))
+  cover specific datasets that are static or no longer updated. Some
+  stopped receiving new data on September 22, 2026 when active sources
+  moved to V5, while others stopped updating earlier.
 
 If you have existing
 [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
 code, see
 [`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md)
-for the argument and column mapping to the v5 functions.
+for the argument and column mapping to the V5 functions.
 
 ## Migrating from covidcast and to the V5 API
 
@@ -141,7 +144,7 @@ keep in mind:
   offering better speed, reliability, and broader endpoint support.
 - From V3/V4 endpoints to the V5 API. Within `epidatr`,
   [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
-  and other V3/V4 endpoints are being deprecated as of October 2026. See
+  and other V3/V4 endpoints are deprecated as of September 22, 2026. See
   the [migration
   guide](https://cmu-delphi.github.io/epidatr/articles/migration-guide.html)
   (or
@@ -150,10 +153,7 @@ keep in mind:
   ([`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
   [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
   and
-  [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)),
-  reserving
-  [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
-  only for sources that have not yet transitioned.
+  [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)).
 
 ## Get updates
 

@@ -1,5 +1,15 @@
 # Influenza and dengue digital surveillance sensors
 
+**\[deprecated\]**
+
+This endpoint was previously deprecated and remains available for
+historical reference. The underlying data source is no longer updated
+and no new data is being ingested. For more details, refer to the
+"Endpoints kept for historical reference" section of
+[`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md),
+and visit the [V5 signals
+documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html).
+
 API docs: <https://cmu-delphi.github.io/delphi-epidata/api/sensors.html>
 
 This is the documentation of the API for accessing the Digital

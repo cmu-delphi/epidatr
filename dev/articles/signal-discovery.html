@@ -263,12 +263,12 @@ for a general introduction to the package and its functions, and
 <code><a href="../reference/pub_covidcast.html">pub_covidcast()</a></code>, <code><a href="../reference/pub_covidcast_meta.html">pub_covidcast_meta()</a></code>,
 <code><a href="../reference/pub_fluview.html">pub_fluview()</a></code>, <code><a href="../reference/pub_fluview_clinical.html">pub_fluview_clinical()</a></code>,
 <code><a href="../reference/pub_fluview_meta.html">pub_fluview_meta()</a></code>, <code><a href="../reference/pub_flusurv.html">pub_flusurv()</a></code>, and
-<code><a href="../reference/pub_meta.html">pub_meta()</a></code> are transitioning to V5. Starting in October
-2026, these V4 functions are tentatively deprecated in favor of V5:
-their historical data will remain available for at least a year, but new
-ingestion will end. <code><a href="../reference/covidcast_epidata.html">covidcast_epidata()</a></code>, which describes
-them, is not being retired outright, but will only keep describing
-frozen historical data once a source’s V4 ingestion stops.</p>
+<code><a href="../reference/pub_meta.html">pub_meta()</a></code> are deprecated as of September 22, 2026, and no
+longer receive new data. They continue to serve historical data ingested
+before that date. All active surveillance datasets are now served by V5
+endpoints. <code><a href="../reference/covidcast_epidata.html">covidcast_epidata()</a></code>, which describes them,
+remains available to inspect metadata for these frozen historical
+sources.</p>
 <div class="section level3">
 <h3 id="exploring-legacy-covidcast-sources-with-covidcast_epidata">Exploring legacy COVIDcast sources with
 <code>covidcast_epidata()</code><a class="anchor" aria-label="anchor" href="#exploring-legacy-covidcast-sources-with-covidcast_epidata"></a>
@@ -329,8 +329,8 @@ popup. You will be able to type the name of signals and have the
 autocomplete feature select them from the list for you. In the
 tab-completion popup, signal names are prefixed with the name of the
 data source for filtering convenience.</p>
-<p>Note that some signal names have dashes in them, so to access them we
-rely on the backtick operator:</p>
+<p>Some signal names contain dashes, so you must enclose them in
+backticks to access them by name:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">covid_sources</span><span class="op">$</span><span class="va">signals</span><span class="op">$</span><span class="va">`fb-survey:smoothed_cli`</span></span>
 <span><span class="co">#&gt; [1] "COVID-Like Symptoms (Unweighted 7-day average)"</span></span>
@@ -340,8 +340,9 @@ rely on the backtick operator:</p>
 <div class="section level3">
 <h3 id="example-legacy-query">Example legacy query<a class="anchor" aria-label="anchor" href="#example-legacy-query"></a>
 </h3>
-<p>Legacy endpoints remain accessible while their sources
-transition:</p>
+<p>The legacy V4 endpoint <code><a href="../reference/pub_covidcast.html">pub_covidcast()</a></code> is deprecated as
+of September 22, 2026, but remains accessible to query historical
+data:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/pub_covidcast.html">pub_covidcast</a></span><span class="op">(</span></span>
 <span>  source <span class="op">=</span> <span class="st">"fb-survey"</span>,</span>
@@ -584,7 +585,8 @@ Domestic endpoints
 <span>  states <span class="op">=</span> <span class="st">"pa"</span>,</span>
 <span>  dates <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210101</span>, <span class="fl">20210105</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; `pub_covid_hosp_state_timeseries()` covers a data source that is no longer updated.</span></span>
+<span><span class="co">#&gt; `pub_covid_hosp_state_timeseries()` covers a data source that is no longer</span></span>
+<span><span class="co">#&gt; updated.</span></span>
 <span><span class="co">#&gt; ℹ Historical data remains available, but no new data is being ingested.</span></span>
 <span><span class="co">#&gt; ℹ See the "Endpoints kept for historical reference" section of</span></span>
 <span><span class="co">#&gt;   `vignette("migration-guide")` (or</span></span>

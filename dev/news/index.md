@@ -11,6 +11,47 @@
 
 CRAN release: 2026-09-21
 
+### Deprecations
+
+- The V4 Epidata API is deprecated and stopped receiving new data on
+  **September 22, 2026**. Legacy `pub_*` and `pvt_*` endpoints continue
+  to serve historical data for unmigrated sources, while all active
+  datasets are now served by V5 endpoints
+  ([`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+  [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md),
+  and
+  [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)).
+  Updated the `pub_*`/`pvt_*` V4 warnings, function documentation,
+  README, and
+  [`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md)
+  to reflect the completed transition.
+- Endpoints that were previously deprecated and remain available for
+  historical reference
+  ([`pvt_cdc()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_cdc.md),
+  [`pub_covid_hosp_facility_lookup()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility_lookup.md),
+  [`pub_covid_hosp_facility()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility.md),
+  [`pub_covid_hosp_state_timeseries()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_state_timeseries.md),
+  [`pub_delphi()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_delphi.md),
+  [`pub_dengue_nowcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_dengue_nowcast.md),
+  [`pvt_dengue_sensors()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_dengue_sensors.md),
+  [`pub_ecdc_ili()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_ecdc_ili.md),
+  [`pub_gft()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_gft.md),
+  [`pvt_ght()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_ght.md),
+  [`pub_kcdc_ili()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_kcdc_ili.md),
+  [`pvt_meta_norostat()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_meta_norostat.md),
+  [`pub_nidss_dengue()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_nidss_dengue.md),
+  [`pub_nidss_flu()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_nidss_flu.md),
+  [`pvt_norostat()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_norostat.md),
+  [`pub_nowcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_nowcast.md),
+  [`pub_paho_dengue()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_paho_dengue.md),
+  [`pvt_sensors()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_sensors.md),
+  [`pvt_twitter()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_twitter.md),
+  and
+  [`pub_wiki()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_wiki.md))
+  now inherit a corresponding deprecation description with a deprecation
+  badge in their documentation.
+
 ### Documentation
 
 - Updated vignettes (`epidatr`, `signal-discovery`, and
