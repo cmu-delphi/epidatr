@@ -31,3 +31,13 @@ build: document
 check:
 	Rscript -e "devtools::check(args = c('--no-manual', '--as-cran'), error_on = 'warning')"
 chores: format lint check
+# Tag a commit, push the tag, and publish a GitHub release with generated notes.
+# Defaults to the DESCRIPTION version at HEAD, e.g. `make release ref=origin/main draft=true`.
+version ?= $(shell sed -n 's/^Version: //p' DESCRIPTION)
+ref ?= HEAD
+draft ?= false
+.PHONY: release
+release:
+	git tag -a v$(version) $(ref) -m "epidatr $(version)"
+	git push origin v$(version)
+	gh release create v$(version) --verify-tag --generate-notes --title "epidatr $(version)" $(if $(filter true,$(draft)),--draft)

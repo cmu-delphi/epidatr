@@ -103,6 +103,28 @@ test_that("fetch respects the fields parameter", {
   expect_equal(res$value, 10)
 })
 
+test_that("disable_data_frame_parsing returns raw data", {
+  raw <- fetch_args_list(disable_data_frame_parsing = TRUE)
+  specs <- fixture_specs()
+
+  classic <- replay_fixture(specs[[1]], raw) # classic-covidcast.json
+  expect_false(is.data.frame(classic))
+
+  cast <- specs[[4]] # cast-snapshot.csv
+  cast$call <- function(fa) {
+    epidata_snapshot(
+      "nssp", "pct_ed_visits_influenza", "nation",
+      reference_time = epirange("20221001", "20221031"),
+      fetch_args = fa
+    )
+  }
+  # 5 October rows, still unparsed strings
+  expect_equal(
+    replay_fixture(cast, raw)$reference_time,
+    paste0("2022-10-", c("01", "08", "15", "22", "29"))
+  )
+})
+
 test_that("fetch non-classic passes along api warnings", {
   epidata_call <- pub_covidcast(
     source = "jhu-csse",
