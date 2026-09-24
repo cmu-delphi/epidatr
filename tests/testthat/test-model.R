@@ -178,15 +178,35 @@ test_that("parse_api_datetimetz parses cast-API UTC timestamp strings", {
   )
 })
 
-test_that("parse_api_datetimetz_or_date falls back to Date when all midnight UTC", {
-  expect_equal(
-    parse_api_datetimetz_or_date(c("2025-10-16T00:00:00Z", NA)),
-    as.Date(c("2025-10-16", NA))
-  )
-  expect_equal(
-    parse_api_datetimetz_or_date(c("2025-10-16T00:00:00Z", "2025-10-17T13:45:00Z")),
-    as.POSIXct(c("2025-10-16 00:00:00", "2025-10-17 13:45:00"), tz = "UTC")
-  )
+test_that("parse_api_datetimetz_or_date falls back to Date when all midnight UTC, in any session timezone", {
+  # Zones far from UTC in both directions, plus US Eastern.
+  for (tz in c("UTC", "America/New_York", "Pacific/Kiritimati", "Pacific/Pago_Pago")) {
+    withr::local_timezone(tz)
+    expect_equal(
+      parse_api_datetimetz_or_date(c("2025-10-16T00:00:00Z", "2025-12-31T00:00:00Z", NA)),
+      as.Date(c("2025-10-16", "2025-12-31", NA)),
+      info = tz
+    )
+    # US DST transition days
+    expect_equal(
+      parse_api_datetimetz_or_date(c("2025-03-09T00:00:00Z", "2025-11-02T00:00:00Z")),
+      as.Date(c("2025-03-09", "2025-11-02")),
+      info = tz
+    )
+    # One non-midnight value keeps the whole column POSIXct in UTC
+    expect_equal(
+      parse_api_datetimetz_or_date(c("2025-10-16T00:00:00Z", "2025-10-16T23:59:59Z")),
+      as.POSIXct(c("2025-10-16 00:00:00", "2025-10-16 23:59:59"), tz = "UTC"),
+      info = tz
+    )
+  }
+
+  expect_equal(parse_api_datetimetz_or_date(character(0)), as.Date(character(0)))
+  expect_equal(parse_api_datetimetz_or_date(c(NA, NA)), as.Date(c(NA, NA)))
+
+  # Wired up via the "datetimetz_or_date" field type
+  info <- create_epidata_field_info("report_time", "datetimetz_or_date")
+  expect_equal(parse_value(info, "2025-10-16T00:00:00Z"), as.Date("2025-10-16"))
 })
 
 test_that("parse_api_week returns the expected day of the week", {
