@@ -1,6 +1,15 @@
 # Changelog
 
+## epidatr 1.4.1
+
+### Patches
+
+- `fetch_args_list(disable_data_frame_parsing = TRUE)` now actually
+  disables data frame parsing again.
+
 ## epidatr 1.4.0
+
+CRAN release: 2026-09-21
 
 ### Documentation
 

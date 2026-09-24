@@ -124,9 +124,8 @@ epidata(
 - snapshot_date:
 
   Date, `POSIXt`, UTC timestamp string (e.g. `"2025-10-16T13:45:00Z"`),
-  or `NULL`. The point in time to snapshot: returns the version of the
-  data that was current then. `NULL` returns the latest available
-  version.
+  or `NULL`. The snapshot returns the version of the data that was
+  current then. `NULL` returns the latest available version.
 
 - as_of:
 
