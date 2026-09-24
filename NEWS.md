@@ -1,9 +1,17 @@
-# epidatr 1.4.1
+# epidatr 1.4.2
 
 ## Patches
 
 - `fetch_args_list(disable_data_frame_parsing = TRUE)` now actually disables
   data frame parsing again.
+
+## Changes
+
+- `report_time` from `epidata_snapshot()`, `epidata_archive()`, and
+  `epidata_aux()` parses to a `Date` when every value in the result is
+  midnight UTC, since those are date-only versions that really mean midnight
+  ET. Results with any non-midnight time stay `POSIXct`. This is temporary
+  until the API reports the right time.
 
 # epidatr 1.4.0
 
