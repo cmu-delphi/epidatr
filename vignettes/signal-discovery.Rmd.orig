@@ -131,7 +131,7 @@ epidata_archive(
 
 ## Migrating endpoints
 
-Datasets that originated in the legacy API like `pub_covidcast()`, `pub_covidcast_meta()`, `pub_fluview()`, `pub_fluview_clinical()`, `pub_fluview_meta()`, `pub_flusurv()`, and `pub_meta()` are transitioning to V5. Starting in October 2026, these V4 functions are tentatively deprecated in favor of V5: their historical data will remain available for at least a year, but new ingestion will end. `covidcast_epidata()`, which describes them, is not being retired outright, but will only keep describing frozen historical data once a source's V4 ingestion stops.
+Datasets that originated in the legacy API like `pub_covidcast()`, `pub_covidcast_meta()`, `pub_fluview()`, `pub_fluview_clinical()`, `pub_fluview_meta()`, `pub_flusurv()`, and `pub_meta()` are deprecated as of September 22, 2026, and no longer receive new data. They continue to serve historical data ingested before that date. All active surveillance datasets are now served by V5 endpoints. `covidcast_epidata()`, which describes them, remains available to inspect metadata for these frozen historical sources.
 
 ### Exploring legacy COVIDcast sources with `covidcast_epidata()`
 
@@ -165,8 +165,7 @@ able to type the name of signals and have the autocomplete feature select
 them from the list for you. In the tab-completion popup, signal names are
 prefixed with the name of the data source for filtering convenience.
 
-Note that some signal names have dashes in them, so to access them
-we rely on the backtick operator:
+Some signal names contain dashes, so you must enclose them in backticks to access them by name:
 
 ```{r}
 covid_sources$signals$`fb-survey:smoothed_cli`
@@ -174,7 +173,7 @@ covid_sources$signals$`fb-survey:smoothed_cli`
 
 ### Example legacy query
 
-Legacy endpoints remain accessible while their sources transition:
+The legacy V4 endpoint `pub_covidcast()` is deprecated as of September 22, 2026, but remains accessible to query historical data:
 
 ```{r}
 pub_covidcast(

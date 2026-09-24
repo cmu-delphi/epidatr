@@ -19,11 +19,13 @@ warn_v4_sunset <- function(fn_name) {
   cli::cli_warn(
     c(
       "{.fn {fn_name}} uses the V4 Epidata API.",
-      "i" = "Starting in October 2026, V4 is tentatively deprecated in favor of the V5 API.",
+      "i" = "As of September 22, 2026, V4 no longer receives new data. It still \\
+       serves the historical data it already has, but for current data you must use \\
+       the V5 endpoints ({.fn epidata_snapshot}, {.fn epidata_archive}, \\
+       {.fn epidata_meta}) with an up-to-date epidatr (and epiprocess, if you use it).",
       "i" = "See {.code vignette(\"migration-guide\")} (or {.url \\
        https://cmu-delphi.github.io/epidatr/articles/migration-guide.html}) \\
-       for the V5 endpoints and how to move to them. Old data will remain available \\
-       for at least a year, but new ingestion will end."
+       for the endpoint, argument, and column mapping."
     ),
     .frequency = "regularly",
     .frequency_id = paste0("epidatr.v4_sunset.", fn_name),

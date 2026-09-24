@@ -7,6 +7,11 @@
 
 # epidatr 1.4.0
 
+## Deprecations
+
+- The V4 Epidata API is deprecated and stopped receiving new data on **September 22, 2026**. Legacy `pub_*` and `pvt_*` endpoints continue to serve historical data for unmigrated sources, while all active datasets are now served by V5 endpoints (`epidata_snapshot()`, `epidata_archive()`, `epidata_aux()`, and `epidata_meta()`). Updated the `pub_*`/`pvt_*` V4 warnings, function documentation, README, and `vignette("migration-guide")` to reflect the completed transition.
+- Endpoints that were previously deprecated and remain available for historical reference (`pvt_cdc()`, `pub_covid_hosp_facility_lookup()`, `pub_covid_hosp_facility()`, `pub_covid_hosp_state_timeseries()`, `pub_delphi()`, `pub_dengue_nowcast()`, `pvt_dengue_sensors()`, `pub_ecdc_ili()`, `pub_gft()`, `pvt_ght()`, `pub_kcdc_ili()`, `pvt_meta_norostat()`, `pub_nidss_dengue()`, `pub_nidss_flu()`, `pvt_norostat()`, `pub_nowcast()`, `pub_paho_dengue()`, `pvt_sensors()`, `pvt_twitter()`, and `pub_wiki()`) now inherit a corresponding deprecation description with a deprecation badge in their documentation.
+
 ## Documentation
 
 - Updated vignettes (`epidatr`, `signal-discovery`, and `versioned-data`) to focus on V5 API workflows. Remove and redirect `v5-api-demo` vignette.

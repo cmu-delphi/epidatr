@@ -14,8 +14,11 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 \code{\link{list}}
 }
 \description{
-This is a V4 endpoint. Starting in October 2026, it is tentatively
-deprecated in favor of the V5 API. The new API can be accessed via the
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This is a V3/V4 endpoint. \strong{As of September 22, 2026, the V3 and V4 APIs no
+longer receive new data.} They still serve the historical data they already
+have, but current data is only added to the V5 API, accessed via the
 \code{\link[=epidata_snapshot]{epidata_snapshot()}}, \code{\link[=epidata_archive]{epidata_archive()}}, and \code{\link[=epidata_meta]{epidata_meta()}} functions.
 For more details on the changes, refer to \code{vignette("migration-guide")},
 and visit the \href{https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html}{V5 signals documentation}
