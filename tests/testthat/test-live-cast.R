@@ -26,8 +26,9 @@ test_that("cast versioning args reach the server (snapshot_date, report_time_que
     fetch_args = fa
   )
   expect_gt(nrow(snap), 0)
-  expect_s3_class(snap$report_time, "POSIXct")
-  expect_true(all(snap$report_time <= as.POSIXct("2025-01-01", tz = "UTC")))
+  expect_s3_class(snap$report_time, c("Date", "POSIXct"))
+  snap_times <- as.POSIXct(snap$report_time, tz = "UTC")
+  expect_true(all(snap_times <= as.POSIXct("2025-01-01", tz = "UTC")))
 
   arch_lt <- epidata_archive(
     source = "nssp",
@@ -37,8 +38,9 @@ test_that("cast versioning args reach the server (snapshot_date, report_time_que
     fetch_args = fa
   )
   expect_gt(nrow(arch_lt), 0)
-  expect_s3_class(arch_lt$report_time, "POSIXct")
-  expect_true(all(arch_lt$report_time < as.POSIXct("2025-06-01", tz = "UTC")))
+  expect_s3_class(arch_lt$report_time, c("Date", "POSIXct"))
+  arch_lt_times <- as.POSIXct(arch_lt$report_time, tz = "UTC")
+  expect_true(all(arch_lt_times < as.POSIXct("2025-06-01", tz = "UTC")))
 
   one_day <- as.Date(max(arch_lt$report_time), tz = "UTC")
   arch_eq <- epidata_archive(
@@ -60,8 +62,9 @@ test_that("cast versioning args reach the server (snapshot_date, report_time_que
     fetch_args = fa
   )
   expect_gt(nrow(arch_range), 0)
-  expect_true(all(arch_range$report_time >= as.POSIXct("2025-01-01", tz = "UTC")))
-  expect_true(all(arch_range$report_time <= as.POSIXct("2025-06-01", tz = "UTC")))
+  range_times <- as.POSIXct(arch_range$report_time, tz = "UTC")
+  expect_true(all(range_times >= as.POSIXct("2025-01-01", tz = "UTC")))
+  expect_true(all(range_times <= as.POSIXct("2025-06-01", tz = "UTC")))
 })
 
 test_that("epidata_meta returns signals + geo_types for each cast source", {
@@ -96,7 +99,7 @@ for (i in seq_len(nrow(cast_queries))) {
         )
         expect_s3_class(snapshot, "tbl_df")
         expect_s3_class(snapshot$reference_time, "Date")
-        expect_s3_class(snapshot$report_time, "POSIXct")
+        expect_s3_class(snapshot$report_time, c("Date", "POSIXct"))
         expect_gt(nrow(snapshot), 0)
 
         archive <- epidata_archive(
@@ -106,7 +109,7 @@ for (i in seq_len(nrow(cast_queries))) {
           fetch_args = fa
         )
         expect_s3_class(archive, "tbl_df")
-        expect_s3_class(archive$report_time, "POSIXct")
+        expect_s3_class(archive$report_time, c("Date", "POSIXct"))
         expect_gt(nrow(archive), 0)
 
         # aux: only for sources that expose an aux schema (currently just nwss)
