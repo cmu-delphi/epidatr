@@ -4,6 +4,9 @@
 
 - `fetch_args_list(disable_data_frame_parsing = TRUE)` now actually disables
   data frame parsing again.
+- `report_time` values the API returns as a bare date (`YYYY-MM-DD`) are now
+  parsed as a `Date` instead of `NA`. UTC timestamps are still parsed as
+  `POSIXct`.
 
 # epidatr 1.4.0
 
