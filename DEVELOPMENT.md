@@ -72,16 +72,12 @@ python -m http.server -d docs
 `DESCRIPTION` versions follow `major.minor.patch`. The CRAN version is always
 the latest release, and `dev` is always ahead of it.
 
-- You don't need to bump the version in your PR. After each merge into `dev`,
-  the `version-bump` workflow opens and immediately merges a bot PR with a patch
-  bump (e.g. 1.4.1 -> 1.4.2).
-- Label the PR `version:minor` or `version:major` to get a bigger bump
-  instead. Release prep for a new minor version is the usual case.
-- If the merged PR already changed `Version`, the workflow leaves it alone, so a
-  hand-set version always wins. `make bump level=minor` does the same edit
-  locally.
-- Write NEWS entries under a `# epidatr <version>` heading that matches the
-  version you are releasing. `make release-preflight` checks this.
+- You don't need to bump the patch version in your PR. After each merge into
+  `dev`, the `version-bump` workflow commits a patch bump straight to `dev`
+  (e.g. 1.4.1 -> 1.4.2).
+- For a minor or major bump, set the version by hand in your PR
+  (`make bump level=minor` does the edit). If a merge changed `Version`, the
+  workflow leaves it alone.
 
 See also the [PR template](.github/pull_request_template.md).
 
@@ -94,8 +90,8 @@ Prepare, on `dev`:
 
 - [ ] `make cran-status`: compare the `DESCRIPTION`, `CRAN-SUBMISSION`, and
   on-CRAN versions, and check the current CRAN check results for problems to fix.
-- [ ] Set the release version (`make bump level=minor`, or merge a PR labelled
-  `version:minor`) and [polish NEWS](https://style.tidyverse.org/news.html#news-release).
+- [ ] Set the release version by hand if it isn't a patch release
+  (`make bump level=minor` in a PR) and [polish NEWS](https://style.tidyverse.org/news.html#news-release).
 - [ ] Update `cran-comments.md`.
 - [ ] `make release-check`: preflight, `document`, URL check, README rebuild,
   and a CRAN-like `R CMD check` with incoming checks. Aim for 0 errors, 0

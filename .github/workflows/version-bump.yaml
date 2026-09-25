@@ -1,7 +1,6 @@
-# Bumps the DESCRIPTION version on dev after each merge, unless the merge
-# already changed it. Defaults to a patch bump; label the PR `version:minor` or
-# `version:major` for a bigger one. The dev ruleset requires PRs, so the bump
-# lands through a bot PR that is merged immediately. See DEVELOPMENT.md "Versioning".
+# Bumps the DESCRIPTION patch version on dev after each merge, unless the merge
+# already changed it. For a minor or major bump, set the version by hand in the
+# PR. See DEVELOPMENT.md "Versioning".
 on:
   push:
     branches: [dev]
@@ -10,7 +9,6 @@ name: version-bump
 
 permissions:
   contents: write
-  pull-requests: write
 
 # Queue runs so each bump starts from the previous run's commit.
 concurrency:
@@ -20,8 +18,6 @@ concurrency:
 jobs:
   bump:
     runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,12 +28,19 @@ jobs:
         id: check
         run: |
           before="${{ github.event.before }}"
+          after="${{ github.sha }}"
+          # If dev has moved on, the run for the newer push decides instead.
+          if [ "$(git rev-parse HEAD)" != "$after" ]; then
+            echo "dev has moved past $after; skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           if [ "$before" = "0000000000000000000000000000000000000000" ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           old=$(git show "$before:DESCRIPTION" | sed -n 's/^Version: //p')
-          new=$(git show "${{ github.sha }}:DESCRIPTION" | sed -n 's/^Version: //p')
+          new=$(git show "$after:DESCRIPTION" | sed -n 's/^Version: //p')
           echo "Version before push: $old, after push: $new"
           if [ "$old" != "$new" ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
@@ -45,31 +48,11 @@ jobs:
             echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Pick bump level from PR labels
-        id: level
+      - name: Bump and push to dev
         if: steps.check.outputs.skip == 'false'
         run: |
-          labels=$(gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" \
-            --jq '[.[].labels[].name] | join(",")')
-          echo "PR labels: $labels"
-          case ",$labels," in
-            *,version:major,*) level=major ;;
-            *,version:minor,*) level=minor ;;
-            *) level=patch ;;
-          esac
-          echo "level=$level" >> "$GITHUB_OUTPUT"
-
-      - name: Bump through a PR
-        if: steps.check.outputs.skip == 'false'
-        run: |
-          new=$(.github/scripts/bump-version.sh "${{ steps.level.outputs.level }}")
-          branch="chore/bump-version-$new"
+          new=$(.github/scripts/bump-version.sh patch)
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git switch -c "$branch"
           git commit -am "chore: bump version to $new"
-          git push origin "$branch"
-          gh pr create --base dev --head "$branch" \
-            --title "chore: bump version to $new" \
-            --body "Automatic ${{ steps.level.outputs.level }} bump after ${{ github.sha }}."
-          gh pr merge "$branch" --squash --delete-branch
+          git push origin HEAD:dev
