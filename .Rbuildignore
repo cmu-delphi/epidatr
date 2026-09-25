@@ -28,3 +28,6 @@
 ^vignettes/.*\.Rmd\.orig$
 ^vignettes/precompile\.R$
 ^man-roxygen$
+^\.urlignore$
+^\.agent-shell$
+^\.claude$
