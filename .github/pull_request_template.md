@@ -6,14 +6,12 @@ Please:
       PR).
 - [ ] Request a review from one of the current epidatr main reviewers:
       brookslogan, dshemetov, nmdefries, dsweber2.
-- [ ] Makes sure to bump the version number in `DESCRIPTION`. Always increment
-      the patch version number (the third number), unless you are making a
-      release PR from dev to main, in which case increment the minor version
-      number (the second number).
+- [ ] Don't bump the version in `DESCRIPTION`. CI adds a patch bump after
+      merge. Label the PR `version:minor` or `version:major` if it needs a
+      bigger bump.
 - [ ] Describe changes made in NEWS.md, making sure breaking changes
       (backwards-incompatible changes to the documented interface) are noted.
-      Collect the changes under the next release number (e.g. if you are on
-      1.7.2, then write your changes under the 1.8 heading).
+      Collect the changes under the heading for the next release.
 - [ ] If you changed any vignette (`vignettes/*.Rmd.orig`), re-knit with `make
       vignettes` and commit the regenerated `.Rmd` files and figures alongside
       the `.Rmd.orig` sources. See DEVELOPMENT.md.
