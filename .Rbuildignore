@@ -29,3 +29,5 @@
 ^vignettes/precompile\.R$
 ^man-roxygen$
 ^\.urlignore$
+^\.agent-shell$
+^\.claude$
