@@ -14,6 +14,7 @@ Please:
 - [ ] If you changed any vignette (`vignettes/*.Rmd.orig`), re-knit with `make
       vignettes` and commit the regenerated `.Rmd` files and figures alongside
       the `.Rmd.orig` sources. See DEVELOPMENT.md.
+- [ ] Prefer regular merge over squash merge.
 
 ### Change explanations for reviewer
 

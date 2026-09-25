@@ -7,6 +7,10 @@ level=${1:-patch}
 file=${2:-DESCRIPTION}
 
 current=$(sed -n 's/^Version: //p' "$file")
+if [[ ! $current =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "Expected a major.minor.patch Version in $file, got '$current'" >&2
+  exit 1
+fi
 IFS=. read -r major minor patch <<<"$current"
 case $level in
   major) major=$((major + 1)); minor=0; patch=0 ;;
