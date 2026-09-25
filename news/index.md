@@ -2,6 +2,8 @@
 
 ## epidatr 1.4.0
 
+CRAN release: 2026-09-21
+
 ### Documentation
 
 - Updated vignettes (`epidatr`, `signal-discovery`, and
