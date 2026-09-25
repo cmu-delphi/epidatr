@@ -104,16 +104,18 @@ Submit, from the tip of `main` with a clean working tree:
 - [ ] `make check-win` (and optionally `make check-mac`). The maintainer
   ("cre" in `DESCRIPTION`) gets the results by email.
 - [ ] `make submit`. It reruns the preflight, refuses to run anywhere except
-  `origin/main`, and asks confirmation questions. Afterwards it writes the
-  submitted version and SHA to `CRAN-SUBMISSION`.
+  `origin/main`, and asks confirmation questions. After a successful upload it
+  writes the version and SHA to `CRAN-SUBMISSION` and leaves it uncommitted.
 - [ ] The maintainer confirms the submission from the CRAN email.
 
-Wait for CRAN. If CRAN rejects the package, fix the problems through `dev` and
-then `main`, and submit again.
+Wait for CRAN. If CRAN rejects the package, discard the `CRAN-SUBMISSION`
+change (`git checkout CRAN-SUBMISSION`), fix the problems through `dev` and then
+`main`, and submit again.
 
 After acceptance:
 
-- [ ] Commit the updated `CRAN-SUBMISSION` on a branch off `main`.
+- [ ] Commit the updated `CRAN-SUBMISSION` on a branch off `main`, and open and
+  merge a PR for it into `main`.
 - [ ] `make backmerge` opens the `main` -> `dev` PR. Merge it.
 - [ ] `make release draft=true` tags the commit recorded in `CRAN-SUBMISSION`,
   pushes the tag, and creates a draft GitHub release. It refuses to run until
@@ -121,5 +123,5 @@ After acceptance:
 - [ ] Review the release notes on GitHub and publish them.
 
 If a submission was made without `make submit`, fix `CRAN-SUBMISSION` by hand
-with `make cran-submission version=X.Y.Z ref=<submitted commit>`.
-`make release-preflight` fails while the file is out of date.
+with `make cran-submission version=X.Y.Z ref=<submitted commit>`. `make
+cran-status` shows whether it matches CRAN.

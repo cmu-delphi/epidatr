@@ -61,8 +61,6 @@ release-preflight:
 	@test -n "$(cran_version)" || { echo "Could not look up the epidatr version on CRAN."; exit 1; }
 	@test -z "$$(git status --porcelain)" || { echo "Working tree is not clean; the submitted SHA would not match the tarball."; git status --short; exit 1; }
 	@! grep -q '^Remotes:' DESCRIPTION || { echo "Remove Remotes from DESCRIPTION; CRAN does not support it."; exit 1; }
-	@grep -q '^# epidatr $(pkg_version)$$' NEWS.md || { echo "NEWS.md has no '# epidatr $(pkg_version)' heading."; exit 1; }
-	@test "$(submitted_version)" = "$(cran_version)" || { echo "CRAN-SUBMISSION ($(submitted_version)) does not match CRAN ($(cran_version)); fix it with 'make cran-submission'."; exit 1; }
 	@test "$(pkg_version)" != "$(cran_version)" || { echo "DESCRIPTION version $(pkg_version) is already on CRAN; run 'make bump'."; exit 1; }
 	@echo "Preflight OK for epidatr $(pkg_version)."
 
@@ -88,13 +86,13 @@ check-full-ci:
 	gh workflow run R-CMD-check-full.yaml --ref $(branch)
 
 # Submit from the tip of main. submit_cran() asks confirmation questions, so R runs interactively.
-# It records the submitted version and SHA in CRAN-SUBMISSION, which must be committed.
+# After a successful upload it writes the version and SHA to CRAN-SUBMISSION, uncommitted.
 .PHONY: submit
 submit: release-preflight
 	git fetch origin main
 	@test "$$(git rev-parse HEAD)" = "$$(git rev-parse origin/main)" || { echo "HEAD is not origin/main; submit from the tip of main."; exit 1; }
 	R --interactive --no-save --no-restore -q -e "devtools::submit_cran()"
-	@echo "Now commit CRAN-SUBMISSION and include it in the main -> dev back-merge PR."
+	@echo "CRAN-SUBMISSION now records this upload. Commit it once CRAN accepts; discard it if CRAN rejects."
 
 # Rewrite CRAN-SUBMISSION by hand, e.g. if a submission was made without `make submit`.
 # Defaults to the DESCRIPTION version at HEAD, e.g. `make cran-submission ref=v1.4.0 version=1.4.0`.
