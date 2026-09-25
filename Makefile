@@ -52,7 +52,7 @@ cran-status:
 	@echo "DESCRIPTION:     $(pkg_version)"
 	@echo "CRAN-SUBMISSION: $(submitted_version) ($(submitted_sha))"
 	@echo "On CRAN:         $(cran_version)"
-	@Rscript -e "print(foghorn::cran_results(pkg = 'epidatr'))"
+	@Rscript -e "options(repos = c(CRAN = 'https://cloud.r-project.org', getOption('repos'))); print(foghorn::cran_results(pkg = 'epidatr'))"
 	@echo "Details: https://cran.r-project.org/web/checks/check_results_epidatr.html"
 
 # Fail fast on the release mistakes we have made before.
@@ -64,6 +64,29 @@ release-preflight:
 	@test "$(pkg_version)" != "$(cran_version)" || { echo "DESCRIPTION version $(pkg_version) is already on CRAN; run 'make bump'."; exit 1; }
 	@echo "Preflight OK for epidatr $(pkg_version)."
 
+# Untracked files (e.g. a local .Renviron) fail release-preflight's clean-tree
+# check even though they were never meant to be part of the release. Move them
+# out to the parent directory for the duration of the release and back after.
+extras_dir = ../.epidatr-release-extras
+.PHONY: stash-extras
+stash-extras:
+	@git status --porcelain | grep '^?? ' | cut -c4- | while IFS= read -r f; do \
+		echo "Stashing untracked $$f"; \
+		mkdir -p "$(extras_dir)/$$(dirname "$$f")"; \
+		mv "$$f" "$(extras_dir)/$$f"; \
+	done
+
+.PHONY: restore-extras
+restore-extras:
+	@test -d $(extras_dir) || exit 0
+	@(cd $(extras_dir) && find . -mindepth 1 \( -type f -o -type l \)) | sed 's|^\./||' | while IFS= read -r f; do \
+		echo "Restoring $$f"; \
+		mkdir -p "$$(dirname "$$f")"; \
+		mv "$(extras_dir)/$$f" "$$f"; \
+	done
+	@find $(extras_dir) -mindepth 1 -type d -empty -delete 2>/dev/null || true
+	@rmdir $(extras_dir) 2>/dev/null || true
+
 # CRAN-like local check, including incoming feasibility checks and the PDF manual.
 check-cran:
 	Rscript -e "devtools::check(manual = TRUE, remote = TRUE, incoming = TRUE, env_vars = c(NOT_CRAN = 'false'), error_on = 'warning')"
@@ -72,8 +95,17 @@ urlcheck:
 readme:
 	Rscript -e "devtools::build_readme()"
 # Everything local that should pass before submitting.
+# Stashes untracked files first so they don't trip the preflight clean-tree
+# check, and restores them on exit, success or failure.
 .PHONY: release-check
-release-check: release-preflight document urlcheck readme check-cran
+release-check:
+	@$(MAKE) stash-extras
+	@set -e; trap '$(MAKE) restore-extras' EXIT; \
+	$(MAKE) release-preflight; \
+	$(MAKE) document; \
+	$(MAKE) urlcheck; \
+	$(MAKE) readme; \
+	$(MAKE) check-cran
 
 # Remote checks; results are emailed to the maintainer.
 check-win:
@@ -87,12 +119,17 @@ check-full-ci:
 
 # Submit from the tip of main. submit_cran() asks confirmation questions, so R runs interactively.
 # After a successful upload it writes the version and SHA to CRAN-SUBMISSION, uncommitted.
+# Stashes untracked files first so they don't trip the preflight clean-tree
+# check, and restores them on exit, success or failure.
 .PHONY: submit
-submit: release-preflight
-	git fetch origin main
-	@test "$$(git rev-parse HEAD)" = "$$(git rev-parse origin/main)" || { echo "HEAD is not origin/main; submit from the tip of main."; exit 1; }
-	R --interactive --no-save --no-restore -q -e "devtools::submit_cran()"
-	@echo "CRAN-SUBMISSION now records this upload. Commit it once CRAN accepts; discard it if CRAN rejects."
+submit:
+	@$(MAKE) stash-extras
+	@set -e; trap '$(MAKE) restore-extras' EXIT; \
+	$(MAKE) release-preflight; \
+	git fetch origin main; \
+	test "$$(git rev-parse HEAD)" = "$$(git rev-parse origin/main)" || { echo "HEAD is not origin/main; submit from the tip of main."; exit 1; }; \
+	R --interactive --no-save --no-restore -q -e "devtools::submit_cran()"; \
+	echo "CRAN-SUBMISSION now records this upload. Commit it once CRAN accepts; discard it if CRAN rejects."
 
 # Rewrite CRAN-SUBMISSION by hand, e.g. if a submission was made without `make submit`.
 # Defaults to the DESCRIPTION version at HEAD, e.g. `make cran-submission ref=v1.4.0 version=1.4.0`.
