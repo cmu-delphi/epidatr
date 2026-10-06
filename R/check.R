@@ -81,6 +81,9 @@ assert_report_time_param <- function(name, value, len = NULL, required = TRUE) {
 #' Format a report-time-family value the way the cast-API accepts it.
 #' @keywords internal
 format_report_time_bound <- function(value) {
+  if (is.null(value)) {
+    return(NULL)
+  }
   utc_timestamp <- "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d{1,6})?)?Z$"
   if (is.character(value) && length(value) == 1) {
     if (grepl(utc_timestamp, value)) {
@@ -201,73 +204,45 @@ format_params_for_api <- function(params) {
   })
 }
 
-#' Helper to format the 'version' argument for the CAST API version_query.
+#' Format a cast-API time filter (`reference_times` or `report_time_query`).
 #'
-#' @param version A comparison string (e.g. `"<2025-10-16"`, `">=2025-10-16"`,
-#'   or `"<=2025-10-16T13:45:00Z"` for a UTC timestamp bound) or an
-#'   [`epirange()`] (dates only).
-#' @return A formatted `report_time_query` string: a comparison like
-#'   `"<2025-10-16"` or `"<=2025-10-16T13:45:00Z"`, or an inclusive range like
-#'   `"2024-01-01:2024-03-31"`.
+#' Accepts `"*"` or `NULL` (no filter), an [epirange()], plain dates or
+#' epiweeks, and filter expressions (`">=2024-01-01"`,
+#' `"2024-01-01:2024-03-31"`), which pass through for the API to validate.
+#' @param name argument name for error messages.
+#' @param bare_dates whether plain dates are allowed. `report_time` disallows them.
 #' @keywords internal
-validate_version_query <- function(version) {
-  if (is.null(version) || identical(version, "*")) {
+format_time_filter <- function(value, name, bare_dates = TRUE) {
+  if (is.null(value) || identical(value, "*")) {
     return(NULL)
   }
-
-  if (inherits(version, "EpiRange")) {
-    assert_date_param("version$from", version$from, len = 1L, required = TRUE)
-    assert_date_param("version$to", version$to, len = 1L, required = TRUE)
-    from_date <- format(parse_api_date(version$from), "%Y-%m-%d")
-    to_date <- format(parse_api_date(version$to), "%Y-%m-%d")
-    return(paste0(from_date, ":", to_date))
+  if (inherits(value, "EpiRange")) {
+    x <- c(value$from, value$to)
+    x <- if (all(nchar(x) == 6)) parse_api_week(x) else parse_api_date(x)
+    return(paste0(x[1], ":", x[2]))
   }
-
-  operator <- NULL
-  if (is.character(version) && length(version) == 1 && grepl("^(<=?|>=?|=)", version)) {
-    op_match <- regmatches(version, regexpr("^(<=?|>=?|=)", version))
-    operator <- op_match
-    version <- substr(version, nchar(op_match) + 1L, nchar(version))
+  # Expressions (">=2024-01-01", "2024-01-01:2024-03-31") pass through.
+  is_expr <- is.character(value) & grepl("^[<>=]|:", value)
+  out <- as.character(value)
+  # Plain dates and epiweeks become one-day "d:d" ranges; the API has no "=".
+  if (any(!is_expr)) {
+    if (!bare_dates) {
+      cli::cli_abort(
+        c(
+          "A bare date is not a valid {.arg {name}} value.",
+          "i" = "Use a comparison like {.code \"<{value[!is_expr][1]}\"} or a range like
+            {.code epirange(from, \"{value[!is_expr][1]}\")}.",
+          "i" = "For data as it appeared on a specific date, use {.arg snapshot_date} instead."
+        ),
+        class = "epidatr__invalid_version_query"
+      )
+    }
+    x <- validate_timeset_input(name, value[!is_expr])
+    x <- if (inherits(x, "Date")) x else if (all(nchar(x) == 6)) parse_api_week(x) else parse_api_date(x)
+    out[!is_expr] <- paste0(x, ":", x)
   }
-
-  if (is.null(operator)) {
-    cli::cli_abort(
-      c(
-        "A bare date is not a valid {.arg report_time} value.",
-        "i" = "Use a comparison like {.code \"<{version}\"} or a range like
-          {.code epirange(from, \"{version}\")}.",
-        "i" = "For data as it appeared on a specific date, use {.arg snapshot_date} instead."
-      ),
-      class = "epidatr__invalid_version_query"
-    )
-  }
-
-  if (operator == "=") {
-    cli::cli_abort(
-      c(
-        "The {.code =} operator is not supported for {.arg report_time}.",
-        "i" = "Use a comparison like {.code \"<{version}\"} or a range like
-          {.code epirange(from, \"{version}\")}.",
-        "i" = "For data as it appeared on a specific date, use {.arg snapshot_date} instead."
-      ),
-      class = "epidatr__invalid_version_query"
-    )
-  }
-
-  assert_report_time_param("version", version, len = 1L, required = FALSE)
-  formatted_bound <- format_report_time_bound(version)
-
-  if (is.na(formatted_bound)) {
-    cli::cli_abort(
-      paste0(
-        "Invalid `version` format. Must be a comparison string with an operator ",
-        "(e.g., '<2025-10-16', '>=2025-10-16', or '<=2025-10-16T13:45:00Z') or an `epirange()`."
-      ),
-      class = "epidatr__invalid_version_query"
-    )
-  }
-
-  paste0(operator, formatted_bound)
+  # The API ORs the expressions.
+  paste(unique(out), collapse = ",")
 }
 
 
