@@ -112,11 +112,11 @@
       pub_wiki day wildcard
         https://api.delphi.cmu.edu/epidata/wiki/?articles=avian_influenza&dates=10000101-30000101&language=en
       epidata_snapshot
-        https://delphi.cmu.edu/epidata/v5/snapshot/?source=nssp&signal=pct_ed_visits_influenza&geo_type=state&snapshot_date=2025-01-01
+        https://delphi.cmu.edu/epidata/v5/snapshot/?source=nssp&signal=pct_ed_visits_influenza&geo_type=state&geo_value=pa&snapshot_date=2025-01-01
       epidata_archive
-        https://delphi.cmu.edu/epidata/v5/archive/?source=nssp&signal=pct_ed_visits_influenza&geo_type=state&report_time_query=%3C2025-06-01
+        https://delphi.cmu.edu/epidata/v5/archive/?source=nssp&signal=pct_ed_visits_influenza&geo_type=state&geo_value=pa&report_time_query=%3C2025-06-01
       epidata_aux
         https://delphi.cmu.edu/epidata/v5/aux_data/?source=nwss&report_time_query=%3C2025-06-01&filtered_keys=pcr_target%3Asars-cov-2&columns=geo_value%2Cpopulation_served
       epidata dispatcher
-        https://delphi.cmu.edu/epidata/v5/archive/?source=nssp&signal=pct_ed_visits_influenza&geo_type=state
+        https://delphi.cmu.edu/epidata/v5/archive/?source=nssp&signal=pct_ed_visits_influenza&geo_type=state&geo_value=pa
 

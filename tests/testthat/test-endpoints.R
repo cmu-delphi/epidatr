@@ -143,15 +143,9 @@ test_that("epidata* and epidata_meta work as expected", {
   expect_equal(attr(res, "cast_source"), "nssp") # tag lets epidata_aux() recover source
   expect_equal(attr(res, "cast_kind"), "snapshot") # drives uniform vs as-of aux merge
 
-  # Test epidata_snapshot filtering
+  # geo_values and reference_time are filtered server-side, not locally
   res_filtered <- epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", geo_values = "ca")
-  expect_equal(nrow(res_filtered), 1)
-
-  res_time_filtered <- epidata_snapshot(
-    source = "nssp", signals = "sig1", geo_type = "state",
-    reference_time = as.Date("2024-01-01")
-  )
-  expect_equal(nrow(res_time_filtered), 2)
+  expect_equal(nrow(res_filtered), 2)
 
   # Test EpiRange mapping in report_time
   res_range <- epidata_archive(
@@ -184,15 +178,56 @@ test_that("epidata* and epidata_meta work as expected", {
   )
   expect_match(call_as_of_wildcard$request$url, "archive/")
   expect_no_match(call_as_of_wildcard$request$url, "snapshot_date=")
+})
 
-  # Test reference_time = epirange(...) mapping in epidata_snapshot
-  res_time_range <- epidata_snapshot(
-    source = "nssp",
-    signals = "sig1",
-    geo_type = "state",
-    reference_time = epirange("2024-01-01", "2024-01-01")
+test_that("geo_values and reference_time are sent as cast-API query params", {
+  fa <- fetch_args_list(dry_run = TRUE)
+  for (f in list(epidata_snapshot, epidata_archive)) {
+    url <- f(
+      source = "nssp", signals = "sig1", geo_type = "state",
+      geo_values = c("ca", "fl"), reference_time = epirange(20240101, 20240131), fetch_args = fa
+    )$request$url
+    expect_match(url, "geo_value=ca%2Cfl", fixed = TRUE)
+    expect_match(url, "reference_times=2024-01-01%3A2024-01-31", fixed = TRUE)
+
+    url <- f(source = "nssp", signals = "sig1", geo_type = "state", fetch_args = fa)$request$url
+    expect_no_match(url, "geo_value=|reference_times=")
+  }
+})
+
+test_that("format_geo_values() accepts vectors, lists, and comma-joined strings", {
+  for (g in list("ca,fl", c("ca", "fl"), list("ca", "fl"))) {
+    expect_equal(format_geo_values(g), "ca,fl")
+  }
+  # Passed through as written; the API trims, lowercases, and drops empties
+  expect_equal(format_geo_values(list("CA, fl", "fl")), "CA, fl,fl")
+  # Optional: these all mean "no filter"
+  for (g in list("*", c("ca", " * "), "ca,*", NULL, character(0))) {
+    expect_null(format_geo_values(g))
+  }
+  expect_error(format_geo_values(NA_character_))
+  expect_error(format_geo_values(list(1, 2)))
+})
+
+test_that("format_time_filter() maps timesets onto the cast-API grammar", {
+  ref <- function(x) format_time_filter(x, "reference_time")
+  expect_null(ref("*"))
+  # No equality operator in the API: single dates become one-day ranges, OR'd
+  expect_equal(
+    ref(as.Date(c("2024-01-01", "2024-01-08", "2024-01-01"))),
+    "2024-01-01:2024-01-01,2024-01-08:2024-01-08"
   )
-  expect_equal(nrow(res_time_range), 2)
+  expect_equal(ref(c("20240101", "20240102")), "2024-01-01:2024-01-01,2024-01-02:2024-01-02")
+  expect_equal(ref(epirange(20240101, 20240131)), "2024-01-01:2024-01-31")
+  # API grammar passes through, mixed with plain dates
+  expect_equal(
+    ref(c(">=2024-06-01", "2024-01-01:2024-03-31", "2024-01-01:", ":2024-03-31", "2024-05-05")),
+    ">=2024-06-01,2024-01-01:2024-03-31,2024-01-01:,:2024-03-31,2024-05-05:2024-05-05"
+  )
+  expect_equal(ref(c("<2024-01-01", "2024-02-01")), "<2024-01-01,2024-02-01:2024-02-01")
+  expect_error(ref("not-a-date"))
+  wk <- format(parse_api_week(c(202401, 202405)), "%Y-%m-%d")
+  expect_equal(ref(epirange(202401, 202405)), paste0(wk[1], ":", wk[2]))
 })
 
 test_that("fetch_args_list(limit=) is forwarded to the cast-API request and validated", {
@@ -504,22 +539,6 @@ test_that("epidata_snapshot warns generically on a valid-but-empty query", {
   with_mock_perform(handler, {
     expect_warning(
       epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state"),
-      class = "epidatr__empty_result"
-    )
-  })
-})
-
-test_that("epidata_snapshot warns on local-filter emptiness without ever calling epidata_meta", {
-  csv_data <- "signal,geo_value,reference_time,value\nsig1,ca,2024-01-01,1.0"
-  handler <- function(req) {
-    if (grepl("metadata/", req$url)) {
-      stop("metadata endpoint should not be requested when the server itself returned rows")
-    }
-    csv_data
-  }
-  with_mock_perform(handler, {
-    expect_warning(
-      epidata_snapshot(source = "nssp", signals = "sig1", geo_type = "state", geo_values = "zz"),
       class = "epidatr__empty_result"
     )
   })

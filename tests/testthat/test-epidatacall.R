@@ -112,15 +112,11 @@ test_that("disable_data_frame_parsing returns raw data", {
 
   cast <- specs[[4]] # cast-snapshot.csv
   cast$call <- function(fa) {
-    epidata_snapshot(
-      "nssp", "pct_ed_visits_influenza", "nation",
-      reference_time = epirange("20221001", "20221031"),
-      fetch_args = fa
-    )
+    epidata_snapshot("nssp", "pct_ed_visits_influenza", "nation", fetch_args = fa)
   }
-  # 5 October rows, still unparsed strings
+  # Still unparsed strings
   expect_equal(
-    replay_fixture(cast, raw)$reference_time,
+    head(replay_fixture(cast, raw)$reference_time, 5),
     paste0("2022-10-", c("01", "08", "15", "22", "29"))
   )
 })
