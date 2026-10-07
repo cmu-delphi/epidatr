@@ -11,7 +11,7 @@ epidata_aux(source, ...)
 \method{epidata_aux}{default}(
   source,
   ...,
-  reference_time = "*",
+  reference_time = NULL,
   time_values = lifecycle::deprecated(),
   snapshot_date = NULL,
   report_time = "*",
@@ -37,7 +37,8 @@ base: each key it narrows to at most 10 distinct values is filtered to those.}
 
 \item{reference_time}{\code{\link{timeset}}. Reference time to return (filters on the
 \code{reference_time} column). Supports individual dates or \code{\link[=epirange]{epirange()}}.
-Only used when \code{source} is a string.}
+\code{NULL} (default) or \code{"*"} returns all reference times. Only used when
+\code{source} is a string.}
 
 \item{time_values}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{reference_time} instead.}
 
