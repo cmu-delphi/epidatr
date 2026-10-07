@@ -1,5 +1,16 @@
 # epidatr 1.4.1
 
+## Changes
+
+- `epidata_snapshot()`, `epidata_archive()`, and `epidata()` now filter
+  `geo_values` and `reference_time` server-side via the cast-API `geo_value`
+  and `reference_times` parameters (cmu-delphi/cast-api#110).
+
+## Documentation
+
+- `fill_method` values are `"source"`, `"ave"`, and `"zero"` (previously
+  documented as `"fill_ave"` and `"fill_zero"`).
+
 ## Patches
 
 - `fetch_args_list(disable_data_frame_parsing = TRUE)` now actually disables

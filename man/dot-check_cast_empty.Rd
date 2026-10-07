@@ -4,12 +4,10 @@
 \alias{.check_cast_empty}
 \title{Diagnose an empty (or partially empty) cast-API result.}
 \usage{
-.check_cast_empty(result, fetched, source, signals, geo_type, fetch_args)
+.check_cast_empty(fetched, source, signals, geo_type, fetch_args)
 }
 \arguments{
-\item{result}{the filtered result (a data frame)}
-
-\item{fetched}{the combined server response before local filtering}
+\item{fetched}{the combined server response (a data frame)}
 
 \item{source, signals, geo_type}{the query parameters, for error/warning
 messages and for looking up \code{epidata_meta()}}
@@ -19,9 +17,7 @@ messages and for looking up \code{epidata_meta()}}
 \description{
 On a partial result (some rows returned), warns about the signals/geo_types
 that returned nothing, noting any that \code{epidata_meta()} says don't exist.
-On a fully empty result, errors on an invalid \code{geo_type}/\code{signals}, warns
-when the local \code{geo_values}/\code{reference_time} filters dropped every row the
-server returned, and warns generically otherwise. No-op when
-\code{fetch_args$return_empty} is \code{TRUE}.
+On a fully empty result, errors on an invalid \code{geo_type}/\code{signals} and warns
+generically otherwise. No-op when \code{fetch_args$return_empty} is \code{TRUE}.
 }
 \keyword{internal}
