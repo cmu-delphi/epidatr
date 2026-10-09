@@ -11,8 +11,8 @@ epidata_snapshot(
   source,
   signals,
   geo_type,
-  geo_values = "*",
-  reference_time = "*",
+  geo_values = NULL,
+  reference_time = NULL,
   time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
@@ -25,8 +25,8 @@ epidata_archive(
   source,
   signals,
   geo_type,
-  geo_values = "*",
-  reference_time = "*",
+  geo_values = NULL,
+  reference_time = NULL,
   time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
@@ -39,8 +39,8 @@ epidata(
   source,
   signals,
   geo_type,
-  geo_values = "*",
-  reference_time = "*",
+  geo_values = NULL,
+  reference_time = NULL,
   time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
@@ -66,13 +66,15 @@ one geo type per request) and the results are combined.}
 accepted. Use \code{\link[=epidata_meta]{epidata_meta()}} to discover available geo types for a given
 source and signal.}
 
-\item{geo_values}{character. The geographies to return. Defaults to all
-("*") geographies within requested geographic resolution (see:
-\url{https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html}.).}
+\item{geo_values}{Optional. Geographies to return, as a character vector,
+a list, or comma-joined strings (e.g., \code{"ca,fl"}). \code{NULL} (default) or
+\code{"*"} returns all geographies for the \code{geo_type}.}
 
 \item{reference_time}{\code{\link{timeset}}. Reference time to return (filters on the
-\code{reference_time} column). Supports individual dates or \code{\link[=epirange]{epirange()}}.
-Defaults to all (\code{"*"}). Filtered locally after the API call.}
+\code{reference_time} column). Supports individual dates, \code{\link[=epirange]{epirange()}}, or
+filter expressions like \code{">=2024-01-01"}, \code{"2024-01-01:2024-03-31"},
+\code{"2024-01-01:"}, and \code{":2024-03-31"}. Several values match as OR.
+\code{NULL} (default) or \code{"*"} returns all reference times.}
 
 \item{time_values}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{reference_time} instead.}
 
@@ -80,13 +82,13 @@ Defaults to all (\code{"*"}). Filtered locally after the API call.}
 \code{pcr_target = "sars-cov-2"} or \code{sample_index = c("a", "b")}. Each key
 accepts one or more values (matched as OR) and is sent server-side via the
 \code{extra_keys} API parameter to shrink the download. Passing more than 10
-values for a key warns. Unlike}
+values for a key warns.}
 
 \item{fill_method}{string. Optional filter to an imputation method.
 The API provides alternatives of the same signal differing in how
 nulls were handled during geographic aggregation: \code{"source"} means no
-imputation or aggregation (raw source data), \code{"fill_ave"} fills nulls with
-the average of neighboring values, and \code{"fill_zero"} fills nulls with zero.
+imputation or aggregation (raw source data), \code{"ave"} fills nulls with
+the average of neighboring values, and \code{"zero"} fills nulls with zero.
 \code{NULL} (default) returns all fill methods.}
 
 \item{snapshot_date}{Date, \code{POSIXt}, UTC timestamp string (e.g.
@@ -141,9 +143,7 @@ error (class \code{epidatr__epidata__invalid_geo_type} or
 \code{\link[=epidata_meta]{epidata_meta()}}. Otherwise, an empty result warns rather than failing
 silently: a warning of class \code{epidatr__empty_signals} if only some of the
 requested signals returned no data, or \code{epidatr__empty_result} if the whole
-query came back empty (whether because the server had no matching rows, or
-because the local \code{geo_values}/\code{reference_time} filters dropped everything
-the server returned). Pass \code{fetch_args_list(return_empty = TRUE)} to
+query came back empty. Pass \code{fetch_args_list(return_empty = TRUE)} to
 suppress these errors and warnings and get an empty tibble back instead.
 }
 

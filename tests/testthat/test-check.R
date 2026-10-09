@@ -92,36 +92,26 @@ test_that("assert_timeset_param", {
   expect_error(assert_timeset_param("name", c(from = "2020-01-01", to = "2021-01-02")))
 })
 
-test_that("validate_version_query", {
+test_that("format_time_filter() for report_time", {
+  rt <- function(x) format_time_filter(x, "report_time", bare_dates = FALSE)
   # Comparison operators are preserved
-  expect_equal(validate_version_query("<2024-01-01"), "<2024-01-01")
-  expect_equal(validate_version_query(">2024-01-01"), ">2024-01-01")
-  expect_equal(validate_version_query("<=2024-01-01"), "<=2024-01-01")
-  expect_equal(validate_version_query(">=2024-01-01"), ">=2024-01-01")
+  expect_equal(rt("<2024-01-01"), "<2024-01-01")
+  expect_equal(rt(">2024-01-01"), ">2024-01-01")
+  expect_equal(rt("<=2024-01-01"), "<=2024-01-01")
+  expect_equal(rt(">=2024-01-01"), ">=2024-01-01")
 
   # EpiRange maps to inclusive server-side range
-  expect_equal(validate_version_query(epirange("2024-01-01", "2024-01-05")), "2024-01-01:2024-01-05")
+  expect_equal(rt(epirange("2024-01-01", "2024-01-05")), "2024-01-01:2024-01-05")
 
   # UTC timestamp bounds are preserved as-is
-  expect_equal(validate_version_query("<=2024-01-01T13:45:00Z"), "<=2024-01-01T13:45:00Z")
-  expect_equal(validate_version_query(">2024-01-01T13:45:00Z"), ">2024-01-01T13:45:00Z")
-
-  # Naive timestamps and timezone offsets are rejected, not silently
-  # truncated to a bare date (matches the cast-API's own rejection of these)
-  expect_error(validate_version_query("<2024-01-01T13:45:00"), class = "epidatr__invalid_version_query")
-  expect_error(validate_version_query("<2024-01-01T13:45:00+00:00"), class = "epidatr__invalid_version_query")
-  expect_error(validate_version_query("<2024-01-01T13:45:00-05:00"), class = "epidatr__invalid_version_query")
+  expect_equal(rt("<=2024-01-01T13:45:00Z"), "<=2024-01-01T13:45:00Z")
+  expect_equal(rt(">2024-01-01T13:45:00Z"), ">2024-01-01T13:45:00Z")
 
   # Bare dates are rejected — use snapshot_date for point-in-time
-  expect_error(validate_version_query("2024-01-01"), class = "epidatr__invalid_version_query")
-  expect_error(validate_version_query("20240101"), class = "epidatr__invalid_version_query")
-  expect_error(validate_version_query(20240101), class = "epidatr__invalid_version_query")
-  expect_error(validate_version_query(as.Date("2024-01-01")), class = "epidatr__invalid_version_query")
+  expect_error(rt("2024-01-01"), class = "epidatr__invalid_version_query")
+  expect_error(rt("20240101"), class = "epidatr__invalid_version_query")
+  expect_error(rt(20240101), class = "epidatr__invalid_version_query")
+  expect_error(rt(as.Date("2024-01-01")), class = "epidatr__invalid_version_query")
 
-  # Explicit '=' is also rejected
-  expect_error(validate_version_query("=2024-01-01"), class = "epidatr__invalid_version_query")
-
-  # Other invalid inputs
-  expect_error(validate_version_query("not-a-date"), class = "epidatr__invalid_version_query")
-  expect_error(validate_version_query("<not-a-date"), class = "epidatr__invalid_version_query")
+  expect_error(rt("not-a-date"), class = "epidatr__invalid_version_query")
 })

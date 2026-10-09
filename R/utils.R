@@ -91,7 +91,7 @@ avail_endpoints <- function() {
 #' @param timeset the timeset to filter by
 #' @keywords internal
 filter_by_timeset <- function(df, column, timeset) {
-  if (identical(timeset, "*")) {
+  if (is.null(timeset) || identical(timeset, "*")) {
     return(df)
   }
 
@@ -162,42 +162,29 @@ filter_by_timeset <- function(df, column, timeset) {
   paste(terms, collapse = ",")
 }
 
+#' Format `geo_values` as the cast-API `geo_value` filter.
 #' @keywords internal
-.cast_filter <- function(
-  res,
-  geo_values,
-  reference_time,
-  parsed_reference_times
-) {
-  if (!inherits(res, "data.frame")) {
-    return(res)
+format_geo_values <- function(geo_values) {
+  geo_values <- unlist(geo_values)
+  assert_character_param("geo_values", geo_values, required = FALSE)
+  if (length(geo_values) == 0 || "*" %in% trimws(unlist(strsplit(geo_values, ",", fixed = TRUE)))) {
+    return(NULL)
   }
-  if (!identical(geo_values, "*")) {
-    actual_geo_values <- tolower(trimws(unlist(strsplit(geo_values, ","))))
-    res <- res[res$geo_value %in% actual_geo_values, ]
-  }
-  if (!identical(reference_time, "*")) {
-    res <- filter_by_timeset(res, "reference_time", parsed_reference_times)
-  }
-  res
+  paste(geo_values, collapse = ",")
 }
 
 #' Diagnose an empty (or partially empty) cast-API result.
 #'
 #' On a partial result (some rows returned), warns about the signals/geo_types
 #' that returned nothing, noting any that `epidata_meta()` says don't exist.
-#' On a fully empty result, errors on an invalid `geo_type`/`signals`, warns
-#' when the local `geo_values`/`reference_time` filters dropped every row the
-#' server returned, and warns generically otherwise. No-op when
-#' `fetch_args$return_empty` is `TRUE`.
-#' @param result the filtered result (a data frame)
-#' @param fetched the combined server response before local filtering
+#' On a fully empty result, errors on an invalid `geo_type`/`signals` and warns
+#' generically otherwise. No-op when `fetch_args$return_empty` is `TRUE`.
+#' @param fetched the combined server response (a data frame)
 #' @param source,signals,geo_type the query parameters, for error/warning
 #'   messages and for looking up `epidata_meta()`
 #' @param fetch_args a `fetch_args` object
 #' @keywords internal
 .check_cast_empty <- function(
-  result,
   fetched,
   source,
   signals,
@@ -235,10 +222,7 @@ filter_by_timeset <- function(df, column, timeset) {
     character()
   }
 
-  total_rows <- nrow(result)
-  server_total <- nrow(fetched)
-
-  if (total_rows > 0) {
+  if (nrow(fetched) > 0) {
     # Partial result: warn about the empty parts, but never discard returned data.
     msg <- c()
     if (length(empty_signals) > 0) {
@@ -273,7 +257,7 @@ filter_by_timeset <- function(df, column, timeset) {
     return(invisible(NULL))
   }
 
-  # From here, total_rows == 0: nothing to salvage, so invalid keys are an error.
+  # From here, the result is empty: nothing to salvage, so invalid keys are an error.
   if (length(bad_geo_types) > 0) {
     cli::cli_abort(
       "{.val {bad_geo_types}} {?is/are} not {?an /}available geo_type{?s} for source {.val {source}}. \\
@@ -287,15 +271,6 @@ filter_by_timeset <- function(df, column, timeset) {
        Available signals: {.val {meta$signals}}.",
       class = "epidatr__epidata__invalid_signals"
     )
-  }
-
-  if (server_total > 0) {
-    cli::cli_warn(
-      "The API returned {server_total} row{?s} total, but the local {.field geo_values}/\\
-       {.field reference_time} filters matched none of them.",
-      class = "epidatr__empty_result"
-    )
-    return(invisible(NULL))
   }
 
   msg <- c("Query returned no rows.")
