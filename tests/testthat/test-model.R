@@ -169,13 +169,28 @@ test_that("parse_api_datetimetz parses cast-API UTC timestamp strings", {
   )
   # Missing values
   expect_equal(parse_api_datetimetz(NA), as.POSIXct(NA, tz = "UTC"))
+})
+
+test_that("parse_date_or_datetimetz picks the parser per response", {
+  # What the cast-API serves now: date-stamped releases at noon UTC and real
+  # pull times as-is
+  timestamps <- c(NA, "2025-10-03T12:00:00Z", "2025-10-16T13:45:00Z")
+  expected <- as.POSIXct(
+    c(NA, "2025-10-03 12:00:00", "2025-10-16 13:45:00"),
+    tz = "UTC"
+  )
+  expect_equal(parse_date_or_datetimetz(timestamps), expected)
+  # What it will serve once report_time is a date
+  expect_equal(
+    parse_date_or_datetimetz(c(NA, "2025-10-17")),
+    as.Date(c(NA, "2025-10-17"))
+  )
+  # All missing
+  expect_equal(parse_date_or_datetimetz(NA), as.POSIXct(NA, tz = "UTC"))
 
   # Wired up via the "datetimetz" field type
   info <- create_epidata_field_info("report_time", "datetimetz")
-  expect_equal(
-    parse_value(info, "2025-10-16T13:45:00Z"),
-    as.POSIXct("2025-10-16 13:45:00", tz = "UTC")
-  )
+  expect_equal(parse_value(info, timestamps), expected)
 })
 
 test_that("parse_api_week returns the expected day of the week", {

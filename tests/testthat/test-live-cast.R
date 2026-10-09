@@ -27,7 +27,8 @@ test_that("cast versioning args reach the server (snapshot_date, report_time_que
   )
   expect_gt(nrow(snap), 0)
   expect_s3_class(snap$report_time, "POSIXct")
-  expect_true(all(snap$report_time <= as.POSIXct("2025-01-01", tz = "UTC")))
+  # Report time bounds are whole days (cast-api#134), so compare by UTC date
+  expect_true(all(as.Date(snap$report_time, tz = "UTC") <= as.Date("2025-01-01")))
 
   arch_lt <- epidata_archive(
     source = "nssp",
@@ -38,7 +39,7 @@ test_that("cast versioning args reach the server (snapshot_date, report_time_que
   )
   expect_gt(nrow(arch_lt), 0)
   expect_s3_class(arch_lt$report_time, "POSIXct")
-  expect_true(all(arch_lt$report_time < as.POSIXct("2025-06-01", tz = "UTC")))
+  expect_true(all(as.Date(arch_lt$report_time, tz = "UTC") < as.Date("2025-06-01")))
 
   one_day <- as.Date(max(arch_lt$report_time), tz = "UTC")
   arch_eq <- epidata_archive(
@@ -60,8 +61,8 @@ test_that("cast versioning args reach the server (snapshot_date, report_time_que
     fetch_args = fa
   )
   expect_gt(nrow(arch_range), 0)
-  expect_true(all(arch_range$report_time >= as.POSIXct("2025-01-01", tz = "UTC")))
-  expect_true(all(arch_range$report_time <= as.POSIXct("2025-06-01", tz = "UTC")))
+  expect_true(all(as.Date(arch_range$report_time, tz = "UTC") >= as.Date("2025-01-01")))
+  expect_true(all(as.Date(arch_range$report_time, tz = "UTC") <= as.Date("2025-06-01")))
 })
 
 test_that("epidata_meta returns signals + geo_types for each cast source", {
