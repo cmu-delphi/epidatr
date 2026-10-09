@@ -86,13 +86,13 @@ for details:
 | `source` (`data_source`) | not exposed (identified by function name [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md)) | `source` | Identifies the source dataset in V5 (replaces V4 `source` and V3 endpoint names). |
 | `signals` | none (implicit from endpoint) | `signals` | Identifies the specific signal name within the source. |
 | `geo_type` | not exposed ([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) supports only `regions`) | `geo_type` | Specifies geographic resolution (e.g., `state`, `county`, `hhs`, `nation`). |
-| `geo_values` | `regions` for [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) | `geo_values` | Removed from API query in V5 (queries return all locations for the requested `geo_type`). Filtered locally in R after the fetch. |
+| `geo_values` | `regions` for [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) | `geo_values` | Filtered server-side via the `geo_value` API parameter. |
 | `time_type` | not exposed ([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) is always `epiweeks`) | none | Dropped. All V5 endpoints use standard calendar dates (`Date`). |
-| `time_values` | `epiweeks` for [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) | `reference_time` | Removed from API query in V5 (queries return all dates). Filtered locally in R after the fetch. |
+| `time_values` | `epiweeks` for [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) | `reference_time` | Filtered server-side via the `reference_times` API parameter. |
 | `as_of` | none ([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) has no `as_of`) | `snapshot_date` | In V5, used only in [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md) to fetch data known as of a past date. `NULL` returns the latest data. |
 | `issues` | `issues` (where supported) | `report_time` | In V5, used only in [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md). Accepts operators like `"<2025-10-16>"`, or [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md). (For a single date, use [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)). |
 | `lag` | `lag` (where supported) | none | Removed in V5. You can compute it yourself: fetch from [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md) and filter by `report_time - reference_time`. See [filtering by lag](#lag). |
-| none | none | `fill_method` | New in V5. Selects the imputation method when aggregating sub-geographies (`"source"`, `"fill_ave"`, or `"fill_zero"`). See [below](#fill-method). |
+| none | none | `fill_method` | New in V5. Selects the imputation method when aggregating sub-geographies (`"source"`, `"ave"`, or `"zero"`). See [below](#fill-method). |
 | none | none | `...` | New in V5. Filters on source-specific dimensions (such as `age_group` or `nwss_source`). |
 
 The new functions also add `fill_method`, which has no covidcast
@@ -100,9 +100,8 @@ equivalent. Some sources publish several variants of the same signal
 that differ in how nulls were handled during geographic aggregation:
 
 - `"source"` is the raw source data, with no imputation
-- `"fill_ave"` has null values filled with the average of neighboring
-  values
-- `"fill_zero"` has null values filled with zero
+- `"ave"` has null values filled with the average of neighboring values
+- `"zero"` has null values filled with zero
 
 The default `NULL` returns all variants, so filter on this column (or
 pass a value to the argument) if you want exactly one time series per
@@ -130,7 +129,7 @@ returns `article`, `count`, and `hour`):
 | `direction` | none | dropped | Deprecated in V4 and dropped in V5. |
 | `stderr`, `sample_size` | none | `ci_lower`, `ci_upper` | Expresses uncertainty as explicit confidence interval bounds on `value` when provided by the data source. See [Uncertainty columns](#uncertainty-columns) below. |
 | `missing_value`, `missing_stderr`, `missing_sample_size` | none | dropped | Replaced in V5 by `fill_method` variants and plain `NA`s in `value`. |
-| none | none | `fill_method` | Indicates which null-handling imputation method was applied (`"source"`, `"fill_ave"`, or `"fill_zero"`). See [above](#fill-method). |
+| none | none | `fill_method` | Indicates which null-handling imputation method was applied (`"source"`, `"ave"`, or `"zero"`). See [above](#fill-method). |
 
 Some sources also carry extra columns in the new API, for example
 `age_group`
@@ -187,11 +186,12 @@ head(old)
 #> # A tibble: 6 × 15
 #>   geo_value signal     source geo_type time_type time_value direction issue     
 #>   <chr>     <chr>      <chr>  <fct>    <fct>     <date>         <dbl> <date>    
-#> 1 ca        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-09-13
-#> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-09-13
-#> 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-09-13
-#> 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-09-13
-#> # ℹ 2 more rows
+#> 1 ca        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-09-20
+#> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-09-20
+#> 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-09-20
+#> 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-09-20
+#> 5 ca        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-09-20
+#> 6 pa        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-09-20
 #> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
 #> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
@@ -208,13 +208,14 @@ new <- epidata_snapshot(
 )
 head(new)
 #> # A tibble: 6 × 7
-#>   signal         report_time geo_type geo_value fill_method reference_time value
-#>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
-#> 1 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-05     0.140
-#> 2 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-12     0.140
-#> 3 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-19     0.160
-#> 4 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-26     0.200
-#> # ℹ 2 more rows
+#>   signal report_time         geo_type geo_value fill_method reference_time value
+#>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_e… 2024-11-08 00:00:00 state    ca        source      2024-10-05     0.140
+#> 2 pct_e… 2024-11-08 00:00:00 state    ca        source      2024-10-12     0.140
+#> 3 pct_e… 2024-11-23 00:00:00 state    ca        source      2024-10-19     0.160
+#> 4 pct_e… 2024-11-08 00:00:00 state    ca        source      2024-10-26     0.200
+#> 5 pct_e… 2024-12-03 00:00:00 state    ca        source      2024-11-02     0.25 
+#> 6 pct_e… 2024-12-13 00:00:00 state    ca        source      2024-11-09     0.310
 ```
 
 Both queries return the same signal, just with renamed and reshaped
@@ -223,11 +224,14 @@ columns:
 ``` r
 
 names(old)
-#> [1] "geo_value" "signal"    "source"    "geo_type" 
-#>  [ reached 'max' / getOption("max.print") -- omitted 11 entries ]
+#>  [1] "geo_value"           "signal"              "source"             
+#>  [4] "geo_type"            "time_type"           "time_value"         
+#>  [7] "direction"           "issue"               "lag"                
+#> [10] "missing_value"       "missing_stderr"      "missing_sample_size"
+#> [13] "value"               "stderr"              "sample_size"
 names(new)
-#> [1] "signal"      "report_time" "geo_type"    "geo_value"  
-#>  [ reached 'max' / getOption("max.print") -- omitted 3 entries ]
+#> [1] "signal"         "report_time"    "geo_type"       "geo_value"     
+#> [5] "fill_method"    "reference_time" "value"
 ```
 
 ### V3 query example: FluView
@@ -257,11 +261,12 @@ head(old_flu[, c("release_date", "region", "epiweek", "wili", "ili")])
 #> # A tibble: 6 × 5
 #>   release_date region epiweek     wili   ili
 #>   <date>       <chr>  <date>     <dbl> <dbl>
-#> 1 2026-09-18   nat    2024-09-29  1.91  1.85
-#> 2 2026-09-18   nat    2024-10-06  2.02  1.94
-#> 3 2026-09-18   nat    2024-10-13  2.07  2.01
-#> 4 2026-09-18   nat    2024-10-20  2.22  2.16
-#> # ℹ 2 more rows
+#> 1 2026-10-02   nat    2024-09-29  1.91  1.85
+#> 2 2026-10-02   nat    2024-10-06  2.02  1.94
+#> 3 2026-10-02   nat    2024-10-13  2.07  2.01
+#> 4 2026-10-02   nat    2024-10-20  2.22  2.16
+#> 5 2026-10-02   nat    2024-10-27  2.32  2.23
+#> 6 2026-10-02   nat    2024-11-03  2.47  2.39
 ```
 
 ``` r
@@ -274,14 +279,16 @@ new_flu <- epidata_snapshot(
   reference_time = epirange("2024-10-01", "2024-11-15")
 )
 head(new_flu)
-#> # A tibble: 6 × 7
-#>   signal report_time geo_type geo_value fill_method reference_time value
-#>   <chr>  <date>      <chr>    <chr>     <chr>       <date>         <dbl>
-#> 1 wili   2025-09-12  nation   us        source      2024-10-12      2.02
-#> 2 wili   2025-09-12  nation   us        source      2024-10-19      2.07
-#> 3 wili   2025-09-12  nation   us        source      2024-10-26      2.22
-#> 4 wili   2025-09-12  nation   us        source      2024-11-02      2.32
-#> # ℹ 2 more rows
+#> # A tibble: 6 × 8
+#>   signal report_time         geo_type geo_value fill_method reference_time
+#>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>        
+#> 1 wili   2025-09-12 00:00:00 nation   us        source      2024-10-12    
+#> 2 wili   2025-09-12 00:00:00 nation   us        source      2024-10-19    
+#> 3 wili   2025-09-12 00:00:00 nation   us        source      2024-10-26    
+#> 4 wili   2025-09-12 00:00:00 nation   us        source      2024-11-02    
+#> 5 wili   2025-09-12 00:00:00 nation   us        source      2024-11-09    
+#> 6 wili   2025-11-14 00:00:00 nation   us        source      2024-10-05    
+#> # ℹ 2 more variables: age_group <chr>, value <dbl>
 ```
 
 ## Revision history queries
@@ -311,7 +318,8 @@ head(old_revisions)
 #> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-11-10
 #> 3 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-11-17
 #> 4 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-11-24
-#> # ℹ 2 more rows
+#> 5 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-12-01
+#> 6 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-12-08
 #> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
 #> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
@@ -328,13 +336,15 @@ revisions <- epidata_archive(
 )
 head(revisions)
 #> # A tibble: 6 × 7
-#>   signal        report_time geo_type geo_value fill_method reference_time  value
-#>   <chr>         <date>      <chr>    <chr>     <chr>       <date>          <dbl>
-#> 1 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-05     0.0500
-#> 2 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-12     0.0700
-#> 3 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-19     0.0800
-#> 4 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-26     0.130 
-#> # ℹ 2 more rows
+#>   signal       report_time         geo_type geo_value fill_method reference_time
+#>   <chr>        <dttm>              <chr>    <chr>     <chr>       <date>        
+#> 1 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-05    
+#> 2 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-12    
+#> 3 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-19    
+#> 4 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-26    
+#> 5 pct_ed_visi… 2024-11-23 00:00:00 state    pa        source      2024-11-02    
+#> 6 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-11-02    
+#> # ℹ 1 more variable: value <dbl>
 ```
 
 If you filtered by `lag`, fetch the archive with
@@ -366,28 +376,31 @@ meta <- epidata_meta(source = "nssp")
 # all the fields available for this source
 names(meta)
 #> [1] "report_time_range"    "reference_time_range" "signals"             
-#> [4] "geo_types"           
-#>  [ reached 'max' / getOption("max.print") -- omitted 4 entries ]
+#> [4] "geo_types"            "key_columns"          "extra_key_columns"   
+#> [7] "value_columns"        "column_types"
 
 meta$signals # available signal names
-#> [1] "pct_ed_visits_ari"       "pct_ed_visits_combined" 
-#> [3] "pct_ed_visits_covid"     "pct_ed_visits_influenza"
-#>  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]
+#> [1] "pct_ed_visits_ari"                "pct_ed_visits_combined"          
+#> [3] "pct_ed_visits_covid"              "pct_ed_visits_influenza"         
+#> [5] "pct_ed_visits_rsv"                "smoothed_pct_ed_visits_combined" 
+#> [7] "smoothed_pct_ed_visits_covid"     "smoothed_pct_ed_visits_influenza"
+#> [9] "smoothed_pct_ed_visits_rsv"
 meta$geo_types # supported geography levels
 #> [1] "census_division" "census_region"   "county"          "hhs"            
-#>  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]
+#> [5] "hrr"             "hsa_nci"         "msa"             "nation"         
+#> [9] "state"
 meta$reference_time_range # earliest/latest reference_time available
 #> $latest
-#> [1] "2026-09-12"
+#> [1] "2026-10-03"
 #> 
 #> $first
 #> [1] "2022-10-01"
 meta$report_time_range # earliest/latest report_time (publication date) available
 #> $latest
-#> [1] "2026-09-16T00:00:00"
+#> [1] "2026-10-07T00:00:00Z"
 #> 
 #> $first
-#> [1] "2024-04-18T00:00:00"
+#> [1] "2024-04-18T00:00:00Z"
 ```
 
 All ongoing datasets are now on the V5 API. If

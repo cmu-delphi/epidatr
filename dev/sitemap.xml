@@ -40,9 +40,11 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/epirange.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/filter_by_timeset.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/format_geo_values.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/format_item.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/format_list.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/format_report_time_bound.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/format_time_filter.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/get_api_key.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/get_wildcard_equivalent_dates.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/index.html</loc></url>
@@ -88,7 +90,6 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/timeset.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/validate_date_input.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/validate_timeset_input.html</loc></url>
-<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/validate_version_query.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/warn_limit_unsupported.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/warn_v4_sunset.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/with_base_url.html</loc></url>

@@ -46,8 +46,8 @@ fetch_args_list(
 - disable_data_frame_parsing:
 
   if `TRUE`, return the raw response instead of a parsed tibble. V4
-  endpoints return a nested list. V5 (cast) endpoints still return a
-  data frame, but with all columns as character.
+  endpoints return a nested list. V5 endpoints still return a data
+  frame, but with all columns as character.
 
 - disable_missing_meta_warning:
 

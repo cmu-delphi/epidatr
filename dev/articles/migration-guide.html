@@ -213,9 +213,8 @@ and V3 endpoint names).</td>
 <code>regions</code> for <code><a href="../reference/pub_fluview.html">pub_fluview()</a></code>
 </td>
 <td><code>geo_values</code></td>
-<td>Removed from API query in V5 (queries return all locations for the
-requested <code>geo_type</code>). Filtered locally in R after the
-fetch.</td>
+<td>Filtered server-side via the <code>geo_value</code> API
+parameter.</td>
 </tr>
 <tr class="odd">
 <td><code>time_type</code></td>
@@ -231,8 +230,8 @@ fetch.</td>
 <code>epiweeks</code> for <code><a href="../reference/pub_fluview.html">pub_fluview()</a></code>
 </td>
 <td><code>reference_time</code></td>
-<td>Removed from API query in V5 (queries return all dates). Filtered
-locally in R after the fetch.</td>
+<td>Filtered server-side via the <code>reference_times</code> API
+parameter.</td>
 </tr>
 <tr class="odd">
 <td><code>as_of</code></td>
@@ -266,8 +265,8 @@ by lag</a>.</td>
 <td>none</td>
 <td><code>fill_method</code></td>
 <td>New in V5. Selects the imputation method when aggregating
-sub-geographies (<code>"source"</code>, <code>"fill_ave"</code>, or
-<code>"fill_zero"</code>). See <a href="#fill-method">below</a>.</td>
+sub-geographies (<code>"source"</code>, <code>"ave"</code>, or
+<code>"zero"</code>). See <a href="#fill-method">below</a>.</td>
 </tr>
 <tr class="odd">
 <td>none</td>
@@ -288,10 +287,10 @@ aggregation:</p>
 <code>"source"</code> is the raw source data, with no
 imputation</li>
 <li>
-<code>"fill_ave"</code> has null values filled with the average of
+<code>"ave"</code> has null values filled with the average of
 neighboring values</li>
 <li>
-<code>"fill_zero"</code> has null values filled with zero</li>
+<code>"zero"</code> has null values filled with zero</li>
 </ul>
 <p>The default <code>NULL</code> returns all variants, so filter on this
 column (or pass a value to the argument) if you want exactly one time
@@ -413,8 +412,8 @@ reporting lag</a>.</td>
 <td>none</td>
 <td><code>fill_method</code></td>
 <td>Indicates which null-handling imputation method was applied
-(<code>"source"</code>, <code>"fill_ave"</code>, or
-<code>"fill_zero"</code>). See <a href="#fill-method">above</a>.</td>
+(<code>"source"</code>, <code>"ave"</code>, or <code>"zero"</code>). See
+<a href="#fill-method">above</a>.</td>
 </tr>
 </tbody>
 </table>
@@ -470,11 +469,12 @@ data looked on January 1, 2025:</p>
 <span><span class="co">#&gt; # A tibble: 6 × 15</span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
-<span><span class="co">#&gt; 1 ca        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-09-13</span></span>
-<span><span class="co">#&gt; 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-09-13</span></span>
-<span><span class="co">#&gt; 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-09-13</span></span>
-<span><span class="co">#&gt; 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-09-13</span></span>
-<span><span class="co">#&gt; # ℹ 2 more rows</span></span>
+<span><span class="co">#&gt; 1 ca        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-09-20</span></span>
+<span><span class="co">#&gt; 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-09-20</span></span>
+<span><span class="co">#&gt; 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-09-20</span></span>
+<span><span class="co">#&gt; 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-09-20</span></span>
+<span><span class="co">#&gt; 5 ca        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-09-20</span></span>
+<span><span class="co">#&gt; 6 pa        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-09-20</span></span>
 <span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
 <span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -488,22 +488,26 @@ data looked on January 1, 2025:</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">new</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 6 × 7</span></span>
-<span><span class="co">#&gt;   signal         report_time geo_type geo_value fill_method reference_time value</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;          &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-05     0.140</span></span>
-<span><span class="co">#&gt; 2 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-12     0.140</span></span>
-<span><span class="co">#&gt; 3 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-19     0.160</span></span>
-<span><span class="co">#&gt; 4 pct_ed_visits… 2024-12-27  state    ca        source      2024-10-26     0.200</span></span>
-<span><span class="co">#&gt; # ℹ 2 more rows</span></span></code></pre></div>
+<span><span class="co">#&gt;   signal report_time         geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_e… 2024-11-08 00:00:00 state    ca        source      2024-10-05     0.140</span></span>
+<span><span class="co">#&gt; 2 pct_e… 2024-11-08 00:00:00 state    ca        source      2024-10-12     0.140</span></span>
+<span><span class="co">#&gt; 3 pct_e… 2024-11-23 00:00:00 state    ca        source      2024-10-19     0.160</span></span>
+<span><span class="co">#&gt; 4 pct_e… 2024-11-08 00:00:00 state    ca        source      2024-10-26     0.200</span></span>
+<span><span class="co">#&gt; 5 pct_e… 2024-12-03 00:00:00 state    ca        source      2024-11-02     0.25 </span></span>
+<span><span class="co">#&gt; 6 pct_e… 2024-12-13 00:00:00 state    ca        source      2024-11-09     0.310</span></span></code></pre></div>
 <p>Both queries return the same signal, just with renamed and reshaped
 columns:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">old</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "geo_value" "signal"    "source"    "geo_type" </span></span>
-<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 11 entries ]</span></span>
+<span><span class="co">#&gt;  [1] "geo_value"           "signal"              "source"             </span></span>
+<span><span class="co">#&gt;  [4] "geo_type"            "time_type"           "time_value"         </span></span>
+<span><span class="co">#&gt;  [7] "direction"           "issue"               "lag"                </span></span>
+<span><span class="co">#&gt; [10] "missing_value"       "missing_stderr"      "missing_sample_size"</span></span>
+<span><span class="co">#&gt; [13] "value"               "stderr"              "sample_size"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">new</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "signal"      "report_time" "geo_type"    "geo_value"  </span></span>
-<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 3 entries ]</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "signal"         "report_time"    "geo_type"       "geo_value"     </span></span>
+<span><span class="co">#&gt; [5] "fill_method"    "reference_time" "value"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="v3-query-example-fluview">V3 query example: FluView<a class="anchor" aria-label="anchor" href="#v3-query-example-fluview"></a>
@@ -531,11 +535,12 @@ single <code>value</code> column:</p>
 <span><span class="co">#&gt; # A tibble: 6 × 5</span></span>
 <span><span class="co">#&gt;   release_date region epiweek     wili   ili</span></span>
 <span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;  &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 2026-09-18   nat    2024-09-29  1.91  1.85</span></span>
-<span><span class="co">#&gt; 2 2026-09-18   nat    2024-10-06  2.02  1.94</span></span>
-<span><span class="co">#&gt; 3 2026-09-18   nat    2024-10-13  2.07  2.01</span></span>
-<span><span class="co">#&gt; 4 2026-09-18   nat    2024-10-20  2.22  2.16</span></span>
-<span><span class="co">#&gt; # ℹ 2 more rows</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 2026-10-02   nat    2024-09-29  1.91  1.85</span></span>
+<span><span class="co">#&gt; 2 2026-10-02   nat    2024-10-06  2.02  1.94</span></span>
+<span><span class="co">#&gt; 3 2026-10-02   nat    2024-10-13  2.07  2.01</span></span>
+<span><span class="co">#&gt; 4 2026-10-02   nat    2024-10-20  2.22  2.16</span></span>
+<span><span class="co">#&gt; 5 2026-10-02   nat    2024-10-27  2.32  2.23</span></span>
+<span><span class="co">#&gt; 6 2026-10-02   nat    2024-11-03  2.47  2.39</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">new_flu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cast_api_queries.html">epidata_snapshot</a></span><span class="op">(</span></span>
 <span>  source <span class="op">=</span> <span class="st">"fluview_ilinet"</span>,</span>
@@ -545,14 +550,16 @@ single <code>value</code> column:</p>
 <span>  reference_time <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2024-10-01"</span>, <span class="st">"2024-11-15"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">new_flu</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 6 × 7</span></span>
-<span><span class="co">#&gt;   signal report_time geo_type geo_value fill_method reference_time value</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;  &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 wili   2025-09-12  nation   us        source      2024-10-12      2.02</span></span>
-<span><span class="co">#&gt; 2 wili   2025-09-12  nation   us        source      2024-10-19      2.07</span></span>
-<span><span class="co">#&gt; 3 wili   2025-09-12  nation   us        source      2024-10-26      2.22</span></span>
-<span><span class="co">#&gt; 4 wili   2025-09-12  nation   us        source      2024-11-02      2.32</span></span>
-<span><span class="co">#&gt; # ℹ 2 more rows</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 6 × 8</span></span>
+<span><span class="co">#&gt;   signal report_time         geo_type geo_value fill_method reference_time</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;        </span></span>
+<span><span class="co">#&gt; 1 wili   2025-09-12 00:00:00 nation   us        source      2024-10-12    </span></span>
+<span><span class="co">#&gt; 2 wili   2025-09-12 00:00:00 nation   us        source      2024-10-19    </span></span>
+<span><span class="co">#&gt; 3 wili   2025-09-12 00:00:00 nation   us        source      2024-10-26    </span></span>
+<span><span class="co">#&gt; 4 wili   2025-09-12 00:00:00 nation   us        source      2024-11-02    </span></span>
+<span><span class="co">#&gt; 5 wili   2025-09-12 00:00:00 nation   us        source      2024-11-09    </span></span>
+<span><span class="co">#&gt; 6 wili   2025-11-14 00:00:00 nation   us        source      2024-10-05    </span></span>
+<span><span class="co">#&gt; # ℹ 2 more variables: age_group &lt;chr&gt;, value &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -578,7 +585,8 @@ use <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></co
 <span><span class="co">#&gt; 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-11-10</span></span>
 <span><span class="co">#&gt; 3 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-11-17</span></span>
 <span><span class="co">#&gt; 4 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-11-24</span></span>
-<span><span class="co">#&gt; # ℹ 2 more rows</span></span>
+<span><span class="co">#&gt; 5 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-12-01</span></span>
+<span><span class="co">#&gt; 6 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-12-08</span></span>
 <span><span class="co">#&gt; # ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
 <span><span class="co">#&gt; #   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -592,13 +600,15 @@ use <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></co
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">revisions</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 6 × 7</span></span>
-<span><span class="co">#&gt;   signal        report_time geo_type geo_value fill_method reference_time  value</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;         &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;          &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-05     0.0500</span></span>
-<span><span class="co">#&gt; 2 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-12     0.0700</span></span>
-<span><span class="co">#&gt; 3 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-19     0.0800</span></span>
-<span><span class="co">#&gt; 4 pct_ed_visit… 2024-11-08  state    pa        source      2024-10-26     0.130 </span></span>
-<span><span class="co">#&gt; # ℹ 2 more rows</span></span></code></pre></div>
+<span><span class="co">#&gt;   signal       report_time         geo_type geo_value fill_method reference_time</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;        &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;        </span></span>
+<span><span class="co">#&gt; 1 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-05    </span></span>
+<span><span class="co">#&gt; 2 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-12    </span></span>
+<span><span class="co">#&gt; 3 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-19    </span></span>
+<span><span class="co">#&gt; 4 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-26    </span></span>
+<span><span class="co">#&gt; 5 pct_ed_visi… 2024-11-23 00:00:00 state    pa        source      2024-11-02    </span></span>
+<span><span class="co">#&gt; 6 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-11-02    </span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: value &lt;dbl&gt;</span></span></code></pre></div>
 <p><a id="lag"></a></p>
 <p>If you filtered by <code>lag</code>, fetch the archive with
 <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> and filter afterwards:</p>
@@ -623,28 +633,31 @@ new API. It returns signals, geo types, and the available
 <span><span class="co"># all the fields available for this source</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">meta</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "report_time_range"    "reference_time_range" "signals"             </span></span>
-<span><span class="co">#&gt; [4] "geo_types"           </span></span>
-<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 4 entries ]</span></span>
+<span><span class="co">#&gt; [4] "geo_types"            "key_columns"          "extra_key_columns"   </span></span>
+<span><span class="co">#&gt; [7] "value_columns"        "column_types"</span></span>
 <span></span>
 <span><span class="va">meta</span><span class="op">$</span><span class="va">signals</span> <span class="co"># available signal names</span></span>
-<span><span class="co">#&gt; [1] "pct_ed_visits_ari"       "pct_ed_visits_combined" </span></span>
-<span><span class="co">#&gt; [3] "pct_ed_visits_covid"     "pct_ed_visits_influenza"</span></span>
-<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]</span></span>
+<span><span class="co">#&gt; [1] "pct_ed_visits_ari"                "pct_ed_visits_combined"          </span></span>
+<span><span class="co">#&gt; [3] "pct_ed_visits_covid"              "pct_ed_visits_influenza"         </span></span>
+<span><span class="co">#&gt; [5] "pct_ed_visits_rsv"                "smoothed_pct_ed_visits_combined" </span></span>
+<span><span class="co">#&gt; [7] "smoothed_pct_ed_visits_covid"     "smoothed_pct_ed_visits_influenza"</span></span>
+<span><span class="co">#&gt; [9] "smoothed_pct_ed_visits_rsv"</span></span>
 <span><span class="va">meta</span><span class="op">$</span><span class="va">geo_types</span> <span class="co"># supported geography levels</span></span>
 <span><span class="co">#&gt; [1] "census_division" "census_region"   "county"          "hhs"            </span></span>
-<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]</span></span>
+<span><span class="co">#&gt; [5] "hrr"             "hsa_nci"         "msa"             "nation"         </span></span>
+<span><span class="co">#&gt; [9] "state"</span></span>
 <span><span class="va">meta</span><span class="op">$</span><span class="va">reference_time_range</span> <span class="co"># earliest/latest reference_time available</span></span>
 <span><span class="co">#&gt; $latest</span></span>
-<span><span class="co">#&gt; [1] "2026-09-12"</span></span>
+<span><span class="co">#&gt; [1] "2026-10-03"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $first</span></span>
 <span><span class="co">#&gt; [1] "2022-10-01"</span></span>
 <span><span class="va">meta</span><span class="op">$</span><span class="va">report_time_range</span> <span class="co"># earliest/latest report_time (publication date) available</span></span>
 <span><span class="co">#&gt; $latest</span></span>
-<span><span class="co">#&gt; [1] "2026-09-16T00:00:00"</span></span>
+<span><span class="co">#&gt; [1] "2026-10-07T00:00:00Z"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $first</span></span>
-<span><span class="co">#&gt; [1] "2024-04-18T00:00:00"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2024-04-18T00:00:00Z"</span></span></code></pre></div>
 <p>All ongoing datasets are now on the V5 API. If
 <code><a href="../reference/epidata_meta.html">epidata_meta()</a></code> does not recognize a source name, check the
 <a href="https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html" class="external-link">V5

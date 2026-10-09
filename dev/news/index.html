@@ -42,6 +42,16 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.1" id="epidatr-141">epidatr 1.4.1<a class="anchor" aria-label="anchor" href="#epidatr-141"></a></h2>
 <div class="section level3">
+<h3 id="changes-1-4-1">Changes<a class="anchor" aria-label="anchor" href="#changes-1-4-1"></a></h3>
+<ul><li>
+<code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="../reference/cast_api_queries.html">epidata()</a></code> now filter <code>geo_values</code> and <code>reference_time</code> server-side via the cast-API <code>geo_value</code> and <code>reference_times</code> parameters (cmu-delphi/cast-api#110).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-1-4-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-4-1"></a></h3>
+<ul><li>
+<code>fill_method</code> values are <code>"source"</code>, <code>"ave"</code>, and <code>"zero"</code> (previously documented as <code>"fill_ave"</code> and <code>"fill_zero"</code>).</li>
+</ul></div>
+<div class="section level3">
 <h3 id="patches-1-4-1">Patches<a class="anchor" aria-label="anchor" href="#patches-1-4-1"></a></h3>
 <ul><li>
 <code>fetch_args_list(disable_data_frame_parsing = TRUE)</code> now actually disables data frame parsing again.</li>

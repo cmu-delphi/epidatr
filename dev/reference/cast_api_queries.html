@@ -80,8 +80,8 @@ e.g. NWSS: <a href="https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/n
 <span>  <span class="va">source</span>,</span>
 <span>  <span class="va">signals</span>,</span>
 <span>  <span class="va">geo_type</span>,</span>
-<span>  geo_values <span class="op">=</span> <span class="st">"*"</span>,</span>
-<span>  reference_time <span class="op">=</span> <span class="st">"*"</span>,</span>
+<span>  geo_values <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  reference_time <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  time_values <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  fill_method <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -94,8 +94,8 @@ e.g. NWSS: <a href="https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/n
 <span>  <span class="va">source</span>,</span>
 <span>  <span class="va">signals</span>,</span>
 <span>  <span class="va">geo_type</span>,</span>
-<span>  geo_values <span class="op">=</span> <span class="st">"*"</span>,</span>
-<span>  reference_time <span class="op">=</span> <span class="st">"*"</span>,</span>
+<span>  geo_values <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  reference_time <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  time_values <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  fill_method <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -108,8 +108,8 @@ e.g. NWSS: <a href="https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/n
 <span>  <span class="va">source</span>,</span>
 <span>  <span class="va">signals</span>,</span>
 <span>  <span class="va">geo_type</span>,</span>
-<span>  geo_values <span class="op">=</span> <span class="st">"*"</span>,</span>
-<span>  reference_time <span class="op">=</span> <span class="st">"*"</span>,</span>
+<span>  geo_values <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  reference_time <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  time_values <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  fill_method <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -146,15 +146,17 @@ source and signal.</p></dd>
 
 
 <dt id="arg-geo-values">geo_values<a class="anchor" aria-label="anchor" href="#arg-geo-values"></a></dt>
-<dd><p>character. The geographies to return. Defaults to all
-("*") geographies within requested geographic resolution (see:
-<a href="https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html" class="external-link">https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html</a>.).</p></dd>
+<dd><p>Optional. Geographies to return, as a character vector,
+a list, or comma-joined strings (e.g., <code>"ca,fl"</code>). <code>NULL</code> (default) or
+<code>"*"</code> returns all geographies for the <code>geo_type</code>.</p></dd>
 
 
 <dt id="arg-reference-time">reference_time<a class="anchor" aria-label="anchor" href="#arg-reference-time"></a></dt>
 <dd><p><code><a href="timeset.html">timeset</a></code>. Reference time to return (filters on the
-<code>reference_time</code> column). Supports individual dates or <code><a href="epirange.html">epirange()</a></code>.
-Defaults to all (<code>"*"</code>). Filtered locally after the API call.</p></dd>
+<code>reference_time</code> column). Supports individual dates, <code><a href="epirange.html">epirange()</a></code>, or
+filter expressions like <code>"&gt;=2024-01-01"</code>, <code>"2024-01-01:2024-03-31"</code>,
+<code>"2024-01-01:"</code>, and <code>":2024-03-31"</code>. Several values match as OR.
+<code>NULL</code> (default) or <code>"*"</code> returns all reference times.</p></dd>
 
 
 <dt id="arg-time-values">time_values<a class="anchor" aria-label="anchor" href="#arg-time-values"></a></dt>
@@ -166,15 +168,15 @@ Defaults to all (<code>"*"</code>). Filtered locally after the API call.</p></dd
 <code>pcr_target = "sars-cov-2"</code> or <code>sample_index = c("a", "b")</code>. Each key
 accepts one or more values (matched as OR) and is sent server-side via the
 <code>extra_keys</code> API parameter to shrink the download. Passing more than 10
-values for a key warns. Unlike</p></dd>
+values for a key warns.</p></dd>
 
 
 <dt id="arg-fill-method">fill_method<a class="anchor" aria-label="anchor" href="#arg-fill-method"></a></dt>
 <dd><p>string. Optional filter to an imputation method.
 The API provides alternatives of the same signal differing in how
 nulls were handled during geographic aggregation: <code>"source"</code> means no
-imputation or aggregation (raw source data), <code>"fill_ave"</code> fills nulls with
-the average of neighboring values, and <code>"fill_zero"</code> fills nulls with zero.
+imputation or aggregation (raw source data), <code>"ave"</code> fills nulls with
+the average of neighboring values, and <code>"zero"</code> fills nulls with zero.
 <code>NULL</code> (default) returns all fill methods.</p></dd>
 
 
@@ -231,9 +233,7 @@ error (class <code>epidatr__epidata__invalid_geo_type</code> or
 <code><a href="epidata_meta.html">epidata_meta()</a></code>. Otherwise, an empty result warns rather than failing
 silently: a warning of class <code>epidatr__empty_signals</code> if only some of the
 requested signals returned no data, or <code>epidatr__empty_result</code> if the whole
-query came back empty (whether because the server had no matching rows, or
-because the local <code>geo_values</code>/<code>reference_time</code> filters dropped everything
-the server returned). Pass <code>fetch_args_list(return_empty = TRUE)</code> to
+query came back empty. Pass <code>fetch_args_list(return_empty = TRUE)</code> to
 suppress these errors and warnings and get an empty tibble back instead.</p>
     </div>
     <div class="section level2">

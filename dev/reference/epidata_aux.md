@@ -24,7 +24,7 @@ epidata_aux(source, ...)
 epidata_aux(
   source,
   ...,
-  reference_time = "*",
+  reference_time = NULL,
   time_values = lifecycle::deprecated(),
   snapshot_date = NULL,
   report_time = "*",
@@ -65,7 +65,8 @@ epidata_aux(source, ..., columns = NULL, fetch_args = fetch_args_list())
   Reference time to return (filters on the `reference_time` column).
   Supports individual dates or
   [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md).
-  Only used when `source` is a string.
+  `NULL` (default) or `"*"` returns all reference times. Only used when
+  `source` is a string.
 
 - time_values:
 

@@ -20,8 +20,8 @@ epidata_snapshot(
   source,
   signals,
   geo_type,
-  geo_values = "*",
-  reference_time = "*",
+  geo_values = NULL,
+  reference_time = NULL,
   time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
@@ -34,8 +34,8 @@ epidata_archive(
   source,
   signals,
   geo_type,
-  geo_values = "*",
-  reference_time = "*",
+  geo_values = NULL,
+  reference_time = NULL,
   time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
@@ -48,8 +48,8 @@ epidata(
   source,
   signals,
   geo_type,
-  geo_values = "*",
-  reference_time = "*",
+  geo_values = NULL,
+  reference_time = NULL,
   time_values = lifecycle::deprecated(),
   ...,
   fill_method = NULL,
@@ -88,17 +88,20 @@ epidata(
 
 - geo_values:
 
-  character. The geographies to return. Defaults to all ("\*")
-  geographies within requested geographic resolution (see:
-  <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_geography.html>.).
+  Optional. Geographies to return, as a character vector, a list, or
+  comma-joined strings (e.g., `"ca,fl"`). `NULL` (default) or `"*"`
+  returns all geographies for the `geo_type`.
 
 - reference_time:
 
   [`timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md).
   Reference time to return (filters on the `reference_time` column).
-  Supports individual dates or
-  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md).
-  Defaults to all (`"*"`). Filtered locally after the API call.
+  Supports individual dates,
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md),
+  or filter expressions like `">=2024-01-01"`,
+  `"2024-01-01:2024-03-31"`, `"2024-01-01:"`, and `":2024-03-31"`.
+  Several values match as OR. `NULL` (default) or `"*"` returns all
+  reference times.
 
 - time_values:
 
@@ -110,16 +113,16 @@ epidata(
   `pcr_target = "sars-cov-2"` or `sample_index = c("a", "b")`. Each key
   accepts one or more values (matched as OR) and is sent server-side via
   the `extra_keys` API parameter to shrink the download. Passing more
-  than 10 values for a key warns. Unlike
+  than 10 values for a key warns.
 
 - fill_method:
 
   string. Optional filter to an imputation method. The API provides
   alternatives of the same signal differing in how nulls were handled
   during geographic aggregation: `"source"` means no imputation or
-  aggregation (raw source data), `"fill_ave"` fills nulls with the
-  average of neighboring values, and `"fill_zero"` fills nulls with
-  zero. `NULL` (default) returns all fill methods.
+  aggregation (raw source data), `"ave"` fills nulls with the average of
+  neighboring values, and `"zero"` fills nulls with zero. `NULL`
+  (default) returns all fill methods.
 
 - snapshot_date:
 
@@ -176,10 +179,8 @@ an error (class `epidatr__epidata__invalid_geo_type` or
 Otherwise, an empty result warns rather than failing silently: a warning
 of class `epidatr__empty_signals` if only some of the requested signals
 returned no data, or `epidatr__empty_result` if the whole query came
-back empty (whether because the server had no matching rows, or because
-the local `geo_values`/`reference_time` filters dropped everything the
-server returned). Pass `fetch_args_list(return_empty = TRUE)` to
-suppress these errors and warnings and get an empty tibble back instead.
+back empty. Pass `fetch_args_list(return_empty = TRUE)` to suppress
+these errors and warnings and get an empty tibble back instead.
 
 ## See also
 
