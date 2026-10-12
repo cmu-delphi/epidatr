@@ -1,0 +1,58 @@
+# Bumps the DESCRIPTION patch version on dev after each merge, unless the merge
+# already changed it. For a minor or major bump, set the version by hand in the
+# PR. See DEVELOPMENT.md "Versioning".
+on:
+  push:
+    branches: [dev]
+
+name: version-bump
+
+permissions:
+  contents: write
+
+# Queue runs so each bump starts from the previous run's commit.
+concurrency:
+  group: version-bump
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev
+          fetch-depth: 0
+
+      - name: Check whether the push changed the version
+        id: check
+        run: |
+          before="${{ github.event.before }}"
+          after="${{ github.sha }}"
+          # If dev has moved on, the run for the newer push decides instead.
+          if [ "$(git rev-parse HEAD)" != "$after" ]; then
+            echo "dev has moved past $after; skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$before" = "0000000000000000000000000000000000000000" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          old=$(git show "$before:DESCRIPTION" | sed -n 's/^Version: //p')
+          new=$(git show "$after:DESCRIPTION" | sed -n 's/^Version: //p')
+          echo "Version before push: $old, after push: $new"
+          if [ "$old" != "$new" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Bump and push to dev
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          new=$(.github/scripts/bump-version.sh patch)
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: bump version to $new"
+          git push origin HEAD:dev
