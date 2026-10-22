@@ -43,7 +43,7 @@ get_api_key <- function() {
   cli::cli_warn(
     c(
       "No API key found. You will be limited to non-complex queries and encounter rate limits if you proceed.",
-      "i" = "See {.help save_api_key} for details on obtaining and setting API keys."
+      "i" = "See {.href [save_api_key()](https://cmu-delphi.github.io/epidatr/reference/save_api_key.html)} or run {.code ?epidatr::save_api_key} for details on obtaining and setting API keys."
     ),
     .frequency = "regularly",
     .frequency_id = "delphi.epidata.key"
