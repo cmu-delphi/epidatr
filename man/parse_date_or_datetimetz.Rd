@@ -8,7 +8,8 @@ date}
 parse_date_or_datetimetz(value)
 }
 \description{
-Timestamps go through \code{\link[=parse_api_datetimetz]{parse_api_datetimetz()}} to a UTC \code{POSIXct}. Bare
-dates (e.g. "2025-10-16") go through \code{parse_api_date()} to a \code{Date}.
+Timestamps go through \code{\link[=parse_api_datetimetz]{parse_api_datetimetz()}} to a UTC \code{POSIXct}. Anything
+else (e.g. "2025-10-16" or "20251016") goes through \code{parse_api_date()} to a
+\code{Date}. The first non-missing value decides the parser for the whole vector.
 }
 \keyword{internal}

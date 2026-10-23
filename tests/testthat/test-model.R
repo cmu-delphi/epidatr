@@ -185,6 +185,8 @@ test_that("parse_date_or_datetimetz picks the parser per response", {
     parse_date_or_datetimetz(c(NA, "2025-10-17")),
     as.Date(c(NA, "2025-10-17"))
   )
+  # Other formats parse_api_date supports
+  expect_equal(parse_date_or_datetimetz("20251017"), as.Date("2025-10-17"))
   # All missing
   expect_equal(parse_date_or_datetimetz(NA), as.POSIXct(NA, tz = "UTC"))
 

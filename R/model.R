@@ -354,15 +354,16 @@ parse_api_datetimetz <- function(value) {
 #' Parses a cast-API report time, which is either a UTC timestamp or a bare
 #' date
 #'
-#' Timestamps go through [parse_api_datetimetz()] to a UTC `POSIXct`. Bare
-#' dates (e.g. "2025-10-16") go through `parse_api_date()` to a `Date`.
+#' Timestamps go through [parse_api_datetimetz()] to a UTC `POSIXct`. Anything
+#' else (e.g. "2025-10-16" or "20251016") goes through `parse_api_date()` to a
+#' `Date`. The first non-missing value decides the parser for the whole vector.
 #' @keywords internal
 parse_date_or_datetimetz <- function(value) {
   first <- value[match(FALSE, is.na(value))]
-  if (isTRUE(grepl("^\\d{4}-\\d{2}-\\d{2}$", first))) {
-    parse_api_date(value)
-  } else {
+  if (is.na(first) || !is.na(parse_api_datetimetz(first))) {
     parse_api_datetimetz(value)
+  } else {
+    parse_api_date(value)
   }
 }
 
