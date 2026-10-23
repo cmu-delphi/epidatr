@@ -156,7 +156,11 @@ covidcast_epidata <- function(
       fields = NULL
     )
 
-  response_content <- httr2::resp_body_json(res, simplifyDataFrame = FALSE)
+  response_content <- read_body(
+    res,
+    function(src) jsonlite::fromJSON(src, simplifyDataFrame = FALSE),
+    from_download_path = FALSE
+  )
 
   sources <- do.call(
     c,
