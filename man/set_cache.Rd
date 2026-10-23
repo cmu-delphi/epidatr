@@ -49,7 +49,7 @@ variables for a persistent cache.
 The typical recommended workflow for using the cache is to set the
 environmental variables \code{EPIDATR_USE_CACHE=TRUE} and
 \code{EPIDATR_CACHE_DIRECTORY="/your/directory/here"}in your \code{.Renviron}, for
-example by calling \code{usethis::edit_r_environ()}.
+example by calling \code{file.edit("~/.Renviron")}.
 See the parameters below for some more configurables if you're so inclined.
 
 \code{set_cache} (re)defines the cache to use in a particular R session. This does

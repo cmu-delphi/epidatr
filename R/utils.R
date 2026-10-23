@@ -11,6 +11,47 @@ release_bullets <- function() {
   )
 }
 
+#' Warn that a V4 endpoint is being phased out in favor of the V5 API
+#' @param fn_name string. Name of the calling function, used to throttle the
+#'   warning and to point users at the right place in the migration guide.
+#' @keywords internal
+warn_v4_sunset <- function(fn_name) {
+  cli::cli_warn(
+    c(
+      "{.fn {fn_name}} uses the V4 Epidata API.",
+      "i" = "As of September 22, 2026, V4 no longer receives new data. It still \\
+       serves the historical data it already has, but for current data you must use \\
+       the V5 endpoints ({.fn epidata_snapshot}, {.fn epidata_archive}, \\
+       {.fn epidata_meta}) with an up-to-date epidatr (and epiprocess, if you use it).",
+      "i" = "See {.code vignette(\"migration-guide\")} (or {.url \\
+       https://cmu-delphi.github.io/epidatr/articles/migration-guide.html}) \\
+       for the endpoint, argument, and column mapping."
+    ),
+    .frequency = "regularly",
+    .frequency_id = paste0("epidatr.v4_sunset.", fn_name),
+    .class = "epidatr_v4_sunset_warning"
+  )
+}
+
+#' Note that an endpoint's data source is no longer updated
+#' @param fn_name string. Name of the calling function, used to throttle the
+#'   note.
+#' @keywords internal
+note_frozen_endpoint <- function(fn_name) {
+  cli::cli_inform(
+    c(
+      "{.fn {fn_name}} covers a data source that is no longer updated.",
+      "i" = "Historical data remains available, but no new data is being ingested.",
+      "i" = "See the \"Endpoints kept for historical reference\" section of \\
+       {.code vignette(\"migration-guide\")} (or {.url \\
+       https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference}) \\
+       for details."
+    ),
+    .frequency = "once",
+    .frequency_id = paste0("epidatr.frozen_endpoint.", fn_name)
+  )
+}
+
 #' List all available Epidata API endpoints
 #'
 #' @description
@@ -50,28 +91,28 @@ avail_endpoints <- function() {
 #' @param timeset the timeset to filter by
 #' @keywords internal
 filter_by_timeset <- function(df, column, timeset) {
-  if (identical(timeset, "*")) {
+  if (is.null(timeset) || identical(timeset, "*")) {
     return(df)
   }
 
   values <- df[[column]]
+  # Unparsed (e.g. `disable_data_frame_parsing`) columns are raw strings.
+  compare_values <- if (inherits(values, "Date")) values else parse_api_date(values)
 
   if (inherits(timeset, "EpiRange")) {
     from <- timeset$from
     to <- timeset$to
 
-    if (inherits(values, "Date")) {
-      if (all(nchar(from) == 8)) {
-        from <- parse_api_date(from)
-        to <- parse_api_date(to)
-      } else if (all(nchar(from) == 6)) {
-        from <- parse_api_week(from)
-        to <- parse_api_week(to)
-      }
+    if (all(nchar(from) == 8)) {
+      from <- parse_api_date(from)
+      to <- parse_api_date(to)
+    } else if (all(nchar(from) == 6)) {
+      from <- parse_api_week(from)
+      to <- parse_api_week(to)
     }
-    mask <- values >= from & values <= to
+    mask <- compare_values >= from & compare_values <= to
   } else {
-    if (inherits(values, "Date") && !inherits(timeset, "Date")) {
+    if (!inherits(timeset, "Date")) {
       # Handle cases where timeset is a vector of integers or strings
       if (all(nchar(timeset) == 8)) {
         timeset <- parse_api_date(timeset)
@@ -79,7 +120,7 @@ filter_by_timeset <- function(df, column, timeset) {
         timeset <- parse_api_week(timeset)
       }
     }
-    mask <- values %in% timeset
+    mask <- compare_values %in% timeset
   }
   df[mask, ]
 }
@@ -121,47 +162,29 @@ filter_by_timeset <- function(df, column, timeset) {
   paste(terms, collapse = ",")
 }
 
+#' Format `geo_values` as the cast-API `geo_value` filter.
 #' @keywords internal
-.cast_filter <- function(
-  res,
-  geo_values,
-  reference_time,
-  parsed_reference_times,
-  report_time = NULL
-) {
-  if (!inherits(res, "data.frame")) {
-    return(res)
+format_geo_values <- function(geo_values) {
+  geo_values <- unlist(geo_values)
+  assert_character_param("geo_values", geo_values, required = FALSE)
+  if (length(geo_values) == 0 || "*" %in% trimws(unlist(strsplit(geo_values, ",", fixed = TRUE)))) {
+    return(NULL)
   }
-  if (!identical(geo_values, "*")) {
-    actual_geo_values <- tolower(trimws(unlist(strsplit(geo_values, ","))))
-    res <- res[res$geo_value %in% actual_geo_values, ]
-  }
-  if (!identical(reference_time, "*")) {
-    res <- filter_by_timeset(res, "reference_time", parsed_reference_times)
-  }
-  # EpiRange lower bound filter (upper bound handled by validate_version_query)
-  if (inherits(report_time, "EpiRange") && "report_time" %in% names(res)) {
-    res <- filter_by_timeset(res, "report_time", report_time)
-  }
-  res
+  paste(geo_values, collapse = ",")
 }
 
 #' Diagnose an empty (or partially empty) cast-API result.
 #'
 #' On a partial result (some rows returned), warns about the signals/geo_types
 #' that returned nothing, noting any that `epidata_meta()` says don't exist.
-#' On a fully empty result, errors on an invalid `geo_type`/`signals`, warns
-#' when the local `geo_values`/`reference_time` filters dropped every row the
-#' server returned, and warns generically otherwise. No-op when
-#' `fetch_args$return_empty` is `TRUE`.
-#' @param result the filtered result (a data frame)
-#' @param fetched the combined server response before local filtering
+#' On a fully empty result, errors on an invalid `geo_type`/`signals` and warns
+#' generically otherwise. No-op when `fetch_args$return_empty` is `TRUE`.
+#' @param fetched the combined server response (a data frame)
 #' @param source,signals,geo_type the query parameters, for error/warning
 #'   messages and for looking up `epidata_meta()`
 #' @param fetch_args a `fetch_args` object
 #' @keywords internal
 .check_cast_empty <- function(
-  result,
   fetched,
   source,
   signals,
@@ -184,7 +207,7 @@ filter_by_timeset <- function(df, column, timeset) {
   meta <- NULL
   if (length(empty_signals) > 0 || length(empty_geo_types) > 0) {
     meta <- tryCatch(
-      epidata_meta(source, fetch_args = fetch_args)[[source]],
+      epidata_meta(source, fetch_args = fetch_args),
       error = function(e) NULL
     )
   }
@@ -199,10 +222,7 @@ filter_by_timeset <- function(df, column, timeset) {
     character()
   }
 
-  total_rows <- nrow(result)
-  server_total <- nrow(fetched)
-
-  if (total_rows > 0) {
+  if (nrow(fetched) > 0) {
     # Partial result: warn about the empty parts, but never discard returned data.
     msg <- c()
     if (length(empty_signals) > 0) {
@@ -237,7 +257,7 @@ filter_by_timeset <- function(df, column, timeset) {
     return(invisible(NULL))
   }
 
-  # From here, total_rows == 0: nothing to salvage, so invalid keys are an error.
+  # From here, the result is empty: nothing to salvage, so invalid keys are an error.
   if (length(bad_geo_types) > 0) {
     cli::cli_abort(
       "{.val {bad_geo_types}} {?is/are} not {?an /}available geo_type{?s} for source {.val {source}}. \\
@@ -251,15 +271,6 @@ filter_by_timeset <- function(df, column, timeset) {
        Available signals: {.val {meta$signals}}.",
       class = "epidatr__epidata__invalid_signals"
     )
-  }
-
-  if (server_total > 0) {
-    cli::cli_warn(
-      "The API returned {server_total} row{?s} total, but the local {.field geo_values}/\\
-       {.field reference_time} filters matched none of them.",
-      class = "epidatr__empty_result"
-    )
-    return(invisible(NULL))
   }
 
   msg <- c("Query returned no rows.")

@@ -10,6 +10,9 @@ template:
 
 url: https://cmu-delphi.github.io/epidatr/
 
+redirects:
+  - ["articles/v5-api-demo.html", "articles/epidatr.html"]
+
 home:
   links:
     - text: Get the Python client

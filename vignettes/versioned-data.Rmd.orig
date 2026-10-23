@@ -1,0 +1,163 @@
+---
+title: "Understanding and accessing versioned data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Understanding and accessing versioned data}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+options(tibble.print_min = 4L, tibble.print_max = 4L, max.print = 4L)
+library(epidatr)
+library(dplyr)
+```
+
+
+The Epidata API records not just each signal's estimate for a given location
+on a given day, but also *when* that estimate was made, and all updates to that
+estimate. This is particularly relevant for data sources that have updates or
+additional information coming in, due to reporting and data flow processes.
+
+For example, let's look at the [emergency department visits
+signal](https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nssp.html)
+from the `nssp` source, which estimates the percentage of emergency department
+visits that are influenza-related. Consider a result row with `reference_time`
+2024-12-07 for `geo_values = "pa"`. This is an estimate for Pennsylvania on
+December 7, 2024. That estimate was first *reported* (published) on December 13,
+2024, the delay being due to the aggregation of data by our source and the time
+taken by the Epidata API to ingest the data provided. Later, the estimate for
+December 7th was updated, as additional visit data from December 7th arrived at
+our source and was reported to us. This constitutes a new *version* of the
+data. Let's walk through how to look at that below.
+
+
+### Data known "as of" a specific date
+
+By default, endpoint functions fetch the most recent data available. This
+is the best option for users who simply want to graph the latest data or
+construct dashboards. But if we are interested in knowing *when* data was
+reported, we can request specific data versions using `snapshot_date` in
+`epidata_snapshot()`.
+
+First, we can request the data that was available *as of* a specific date, using
+the `snapshot_date` argument with `epidata_snapshot()`:
+
+```{r}
+# The percent of ED visits due to influenza from the NSSP source, for
+# 2024-12-07, as of 2024-12-14
+past_snapshot <- epidata_snapshot(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = "2024-12-07",
+  snapshot_date = "2024-12-14"
+)
+knitr::kable(past_snapshot)
+```
+
+This shows that an estimate of about `r sprintf("%.2f%%", past_snapshot$value)` was known as of December 14. If we don't
+specify `snapshot_date`, we get the most recent estimate available:
+
+```{r}
+latest_snapshot <- epidata_snapshot(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = "2024-12-07"
+)
+knitr::kable(latest_snapshot)
+```
+
+Note the change in the estimate, from `r sprintf("%.2f%%", past_snapshot$value)` to `r sprintf("%.2f%%", latest_snapshot$value)`, reflecting new data that
+became available after December 14 about visits *occurring on* December 7.
+This illustrates the importance of version tracking, particularly for
+forecasting tasks. **To backtest a forecasting model on past data, it is
+important to use the data that would have been available *at the time* the
+model was or would have been fit, not data that arrived much later.**
+
+
+### Multiple versions and revision histories
+
+Unlike `epidata_snapshot()`, `epidata_archive()` does not default to the
+latest data: by using it with the `report_time` argument, we can request all
+versions reported in a certain time period, and if `report_time` is omitted
+entirely, we get every version ever reported.
+
+```{r}
+# All versions of the percent of ED visits due to influenza from the NSSP
+# source, for 2024-12-07, reported between 2024-12-01 and 2025-01-15
+archive_data <- epidata_archive(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = "2024-12-07",
+  report_time = epirange("2024-12-01", "2025-01-15")
+)
+knitr::kable(archive_data)
+```
+
+This estimate was updated several times as new data for December 7th arrived.
+
+Note that these results include only data reported between (inclusive)
+2024-12-01 and 2025-01-15. If a value was first reported outside this range,
+a query for reports between 2024-12-01 and 2025-01-15 will not include that
+value among its results.
+
+The `report_time` parameter also accepts comparison operators (`<` and `>`,
+each strictly exclusive of the given date) or a range with `epirange()`.
+(Note: exact dates are not supported on `epidata_archive()`; use
+`epidata_snapshot(snapshot_date = ...)` if you need data as of a single date.)
+
+```{r}
+# Versions reported strictly before 2025-01-01
+epidata_archive(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = "2024-12-07",
+  report_time = "<2025-01-01"
+)
+
+# Versions reported strictly after 2024-12-13
+epidata_archive(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
+  geo_type = "state",
+  geo_values = "pa",
+  reference_time = "2024-12-07",
+  report_time = ">2024-12-13"
+)
+```
+
+
+### Calculating reporting lag
+
+In the V5 API, reporting lag is computed directly as the difference between
+`report_time` (the publication date) and `reference_time` (the observation date):
+
+```{r}
+archive_with_lag <- archive_data %>%
+  mutate(lag_days = as.integer(report_time - reference_time)) %>%
+  select(signal, reference_time, report_time, lag_days, value)
+
+knitr::kable(archive_with_lag)
+```
+
+If your analysis requires filtering data to a specific maximum reporting lag
+(for example, simulating data available with at most a 14-day delay), filter by
+`lag_days`:
+
+```{r}
+archive_with_lag %>%
+  filter(lag_days <= 14)
+```
+
+For sources that have not yet transitioned from the legacy V4 API, versioning
+is specified differently. See `vignette("migration-guide")` for the argument
+and column mappings between V4 and V5.

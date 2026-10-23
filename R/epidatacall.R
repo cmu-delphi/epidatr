@@ -153,9 +153,9 @@ print.epidata_call <- function(x, ...) {
 #'   `time_value` and `value` fields or `c("-direction")` to return everything
 #'   except the direction field
 #' @param disable_date_parsing disable automatic date parsing
-#' @param disable_data_frame_parsing disable automatic conversion to data frame;
-#'   this is only supported by endpoints that only support the 'classic' format
-#'   (non-tabular)
+#' @param disable_data_frame_parsing if `TRUE`, return the raw response
+#'   instead of a parsed tibble. V4 endpoints return a nested list. V5
+#'   endpoints still return a data frame, but with all columns as character.
 #' @param return_empty boolean that allows returning an empty tibble if there is
 #'   no data
 #' @param disable_missing_meta_warning if `TRUE`, suppress the warning emitted
@@ -182,6 +182,12 @@ print.epidata_call <- function(x, ...) {
 #' @param reference_week_day the day of the week to use as the reference day
 #'   when parsing epiweeks to dates (happens if `disable_date_parsing` is `FALSE`)
 #'   Defaults to 1 Sunday (the first day of the week).
+#' @param limit integer or `NULL`. cast-API only (`epidata_snapshot()`,
+#'   `epidata_archive()`, `epidata_aux()`, `epidata()`): maximum number of rows
+#'   to return. `NULL` (default) or `-1` requests no limit. The underlying
+#'   query has no stable sort order, so `limit` does not guarantee the same
+#'   rows (or even the same count) across repeated calls; use it only to
+#'   preview or debug a query, never as a substitute for filtering.
 #' @return A `fetch_args` object containing all the specified options
 #' @export
 #' @aliases fetch_args
@@ -201,7 +207,8 @@ fetch_args_list <- function(
   debug = lifecycle::deprecated(),
   format_type = lifecycle::deprecated(),
   refresh_cache = FALSE,
-  reference_week_day = 1
+  reference_week_day = 1,
+  limit = NULL
 ) {
   # Deprecation warnings
   if (lifecycle::is_present(debug)) {
@@ -258,6 +265,7 @@ fetch_args_list <- function(
     len = 1L,
     any.missing = FALSE
   )
+  assert_limit_param(limit)
 
   structure(
     list(
@@ -272,7 +280,8 @@ fetch_args_list <- function(
       base_url = base_url,
       dry_run = dry_run,
       refresh_cache = refresh_cache,
-      reference_week_day = reference_week_day
+      reference_week_day = reference_week_day,
+      limit = limit
     ),
     class = "fetch_args"
   )
@@ -283,6 +292,21 @@ print.fetch_args <- function(x, ...) {
   cli::cli_h1("<fetch_args> object:")
   # Print all non-class fields.
   cli::cli_dl(x[attr(x, "names")])
+}
+
+#' Warn that `limit` has no effect outside the V5 cast-API endpoints
+#' @keywords internal
+warn_limit_unsupported <- function(epidata_call, fetch_args) {
+  if (is.null(fetch_args$limit) || identical(epidata_call$api_version, "cast")) {
+    return(invisible())
+  }
+  cli::cli_warn(
+    "{.arg limit} is only supported by the V5 cast-API endpoints \\
+     ({.fn epidata_snapshot}, {.fn epidata_archive}, {.fn epidata_aux}, {.fn epidata}); ignored here.",
+    .frequency = "regularly",
+    .frequency_id = "epidatr.limit_ignored",
+    class = "epidatr__limit_ignored"
+  )
 }
 
 #' Fetches the data
@@ -301,6 +325,7 @@ print.fetch_args <- function(x, ...) {
 fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
+  warn_limit_unsupported(epidata_call, fetch_args)
 
   if (!is.null(fetch_args$base_url)) {
     epidata_call <- with_base_url(epidata_call, fetch_args$base_url)
@@ -331,10 +356,16 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 
   # Otherwise fetch the data from the API.
   runtime <- system.time({
-    response_content <- request_epidata(epidata_call, fetch_args)
+    response_content <- request_epidata(
+      epidata_call,
+      fetch_args,
+      simplify = !fetch_args$disable_data_frame_parsing
+    )
 
     if (fetch_args$return_empty && length(response_content) == 0) {
       fetched <- tibble::tibble()
+    } else if (fetch_args$disable_data_frame_parsing) {
+      fetched <- response_content
     } else {
       fetched <- parse_data_frame(
         epidata_call,
@@ -374,6 +405,7 @@ request_epidata <- function(
 ) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
+  warn_limit_unsupported(epidata_call, fetch_args)
 
   if (!is.null(fetch_args$base_url)) {
     epidata_call <- with_base_url(epidata_call, fetch_args$base_url)

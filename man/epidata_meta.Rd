@@ -8,13 +8,15 @@ epidata_meta(source = NULL, fetch_args = fetch_args_list())
 }
 \arguments{
 \item{source}{string. The data source to query. If \code{NULL} (default), returns
-metadata for all available sources.}
+metadata for all available sources. If specified, returns metadata for
+the given source.}
 
 \item{fetch_args}{\code{\link[=fetch_args_list]{fetch_args_list()}}. Additional arguments to pass
 to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
-list
+list. If \code{source} is \code{NULL}, a named list of source metadata objects.
+If \code{source} is specified, the metadata list for that source.
 }
 \description{
 \code{epidata_meta} returns source-level metadata from the cast-API,

@@ -9,8 +9,45 @@ skip_unless_live <- function() {
   if (!isTRUE(as.logical(Sys.getenv("EPIDATR_LIVE_TEST")))) {
     testthat::skip("set EPIDATR_LIVE_TEST=TRUE to run live tests")
   }
-  if (!curl::has_internet()) testthat::skip("no internet")
+  if (!curl::has_internet()) {
+    testthat::skip("no internet")
+  }
   if (Sys.getenv("DELPHI_EPIDATA_KEY") == "") {
     testthat::skip("DELPHI_EPIDATA_KEY not set")
+  }
+}
+
+# Gate for pvt_* endpoints, which need an API key with private-endpoint access.
+# Skipped by default; opt in with `make test-live pvt=TRUE` (sets
+# EPIDATR_TEST_PVT=TRUE).
+skip_unless_pvt <- function() {
+  if (!isTRUE(as.logical(Sys.getenv("EPIDATR_TEST_PVT", "FALSE")))) {
+    testthat::skip("set EPIDATR_TEST_PVT=TRUE to run private-endpoint tests")
+  }
+}
+
+# Returns fetch_args_list() for cast-API calls, optionally overriding the
+# base URL via EPIDATR_CAST_BASE_URL (e.g. to point at the dev server).
+live_cast_fetch_args <- function(...) {
+  url <- Sys.getenv("EPIDATR_CAST_BASE_URL", unset = NA_character_)
+  args <- list(limit = 500L, ...)
+  if (!is.na(url) && nzchar(url)) args$base_url <- url
+  do.call(fetch_args_list, args)
+}
+
+# Live contract check for one endpoint_calls() row: the endpoint returns
+# non-empty data, the fetch is warning-free (so schema drift surfacing as
+# epidatr__missing_meta_fields or epidatr__int_nonzero_decimal_digits fails the
+# test), and each column has the class its field metadata promises.
+expect_live_call_parses <- function(thunk) {
+  call <- thunk(fetch_args_list(dry_run = TRUE))
+  result <- NULL
+  testthat::expect_no_warning(result <- thunk(fetch_args_list()))
+  if (inherits(result, "data.frame")) {
+    testthat::expect_gt(nrow(result), 0)
+    expect_meta_classes(result, call$meta) # nolint: object_usage_linter.
+  } else {
+    # classic list endpoints (pub_delphi, pub_meta, pvt_meta_norostat)
+    testthat::expect_gt(length(result), 0)
   }
 }

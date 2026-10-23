@@ -65,6 +65,17 @@ test_that("parse_data_frame handles NA values and missing meta", {
   expect_identical(parse_data_frame(epidata_call, mock_df), mock_df)
 })
 
+test_that("parse_value coerces all-NA text fields to character", {
+  # jsonlite simplifies an all-null JSON column to logical NA; the text type
+  # promises character (seen live: covid_hosp's geocoded_state)
+  info <- create_epidata_field_info("geocoded_state", "text")
+  expect_identical(
+    parse_value(info, c(NA, NA)),
+    c(NA_character_, NA_character_)
+  )
+  expect_identical(parse_value(info, c("ca", "fl")), c("ca", "fl"))
+})
+
 test_that("parse invalid time", {
   value <- list(3)
   value$class <- "my nonexistant class"
@@ -144,6 +155,27 @@ test_that("parse_api_timestamp_to_datetime works on timestamps", {
   )
   # Missing values
   expect_identical(parse_api_timestamp_to_datetime(NA), as.POSIXct(NA))
+})
+
+test_that("parse_api_datetimetz parses cast-API UTC timestamp strings", {
+  expect_equal(
+    parse_api_datetimetz("2025-10-16T13:45:00Z"),
+    as.POSIXct("2025-10-16 13:45:00", tz = "UTC")
+  )
+  # Vectorization
+  expect_equal(
+    parse_api_datetimetz(c("2025-10-16T13:45:00Z", "2025-10-17T00:00:00Z")),
+    as.POSIXct(c("2025-10-16 13:45:00", "2025-10-17 00:00:00"), tz = "UTC")
+  )
+  # Missing values
+  expect_equal(parse_api_datetimetz(NA), as.POSIXct(NA, tz = "UTC"))
+
+  # Wired up via the "datetimetz" field type
+  info <- create_epidata_field_info("report_time", "datetimetz")
+  expect_equal(
+    parse_value(info, "2025-10-16T13:45:00Z"),
+    as.POSIXct("2025-10-16 13:45:00", tz = "UTC")
+  )
 })
 
 test_that("parse_api_week returns the expected day of the week", {

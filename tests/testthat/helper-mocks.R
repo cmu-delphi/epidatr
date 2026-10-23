@@ -1,5 +1,5 @@
 # Convert a raw JSON/CSV string (or pass-through an existing httr2_response)
-# into an httr2_response object suitable for mocking req_perform.
+# into an httr2_response object suitable for mocking perform_and_read.
 to_httr2_response <- function(obj) {
   if (inherits(obj, "httr2_response")) {
     return(obj)
@@ -20,12 +20,20 @@ to_httr2_response <- function(obj) {
   )
 }
 
-# Mock the perform-and-read seam to return a fixed response. `response` can be
-# an httr2_response (built via create_mock_response) or a raw JSON/CSV string.
+# Attaches the outgoing request to a mock response, mimicking what
+# httr2::req_perform() does for real, so response$request$policies
+# (e.g. the error_body callback set via req_error()) are available.
+attach_request <- function(resp, req) {
+  resp$request <- req
+  resp
+}
+
+# Mock the perform-and-read seam to return a fixed response. `response` can be an
+# httr2_response (built via create_mock_response) or a raw JSON/CSV string.
 with_mocked_response <- function(response, code) {
   resp <- to_httr2_response(response)
   testthat::local_mocked_bindings(
-    perform_and_read = function(req, ...) resp,
+    perform_and_read = function(req, ...) attach_request(resp, req),
     .package = "epidatr",
     .env = parent.frame()
   )
@@ -37,7 +45,7 @@ with_mocked_response <- function(response, code) {
 # call.
 with_mock_perform <- function(handler, code) {
   testthat::local_mocked_bindings(
-    perform_and_read = function(req, ...) to_httr2_response(handler(req)),
+    perform_and_read = function(req, ...) attach_request(to_httr2_response(handler(req)), req),
     .package = "epidatr",
     .env = parent.frame()
   )

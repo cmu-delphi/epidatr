@@ -1,13 +1,102 @@
-# epidatr 1.3.5
+# epidatr 1.4.1
+
+## Changes
+
+- `epidata_snapshot()`, `epidata_archive()`, and `epidata()` now filter
+  `geo_values` and `reference_time` server-side via the cast-API `geo_value`
+  and `reference_times` parameters (cmu-delphi/cast-api#110).
+
+## Documentation
+
+- `fill_method` values are `"source"`, `"ave"`, and `"zero"` (previously
+  documented as `"fill_ave"` and `"fill_zero"`).
 
 ## Patches
 
+- `fetch_args_list(disable_data_frame_parsing = TRUE)` now actually disables
+  data frame parsing again.
+
+# epidatr 1.4.0
+
+## Deprecations
+
+- The V4 Epidata API is deprecated and stopped receiving new data on **September 22, 2026**. Legacy `pub_*` and `pvt_*` endpoints continue to serve historical data for unmigrated sources, while all active datasets are now served by V5 endpoints (`epidata_snapshot()`, `epidata_archive()`, `epidata_aux()`, and `epidata_meta()`). Updated the `pub_*`/`pvt_*` V4 warnings, function documentation, README, and `vignette("migration-guide")` to reflect the completed transition.
+- Endpoints that were previously deprecated and remain available for historical reference (`pvt_cdc()`, `pub_covid_hosp_facility_lookup()`, `pub_covid_hosp_facility()`, `pub_covid_hosp_state_timeseries()`, `pub_delphi()`, `pub_dengue_nowcast()`, `pvt_dengue_sensors()`, `pub_ecdc_ili()`, `pub_gft()`, `pvt_ght()`, `pub_kcdc_ili()`, `pvt_meta_norostat()`, `pub_nidss_dengue()`, `pub_nidss_flu()`, `pvt_norostat()`, `pub_nowcast()`, `pub_paho_dengue()`, `pvt_sensors()`, `pvt_twitter()`, and `pub_wiki()`) now inherit a corresponding deprecation description with a deprecation badge in their documentation.
+
+## Documentation
+
+- Updated vignettes (`epidatr`, `signal-discovery`, and `versioned-data`) to focus on V5 API workflows. Remove and redirect `v5-api-demo` vignette.
+
+## Patches
+
+- API errors now surface the server's actual message for both the V4 (classic) and V5 (cast) APIs.
+
+## Changes
+- `epidata_snapshot()` and `epidata_archive()` now send multiple `signals` 
+  comma-joined in a single request per `geo_type`, instead of issuing a 
+  separate request per signal (cmu-delphi/cast-api#103).
+
+## Breaking changes
+- `epidata_archive()` and `epidata_aux()`: passing a bare date or the `"="`
+  operator to `report_time` now errors. Use a comparison operator (e.g.
+  `"<2025-01-01"`) or an `epirange()` instead.
+- The cast-API's `report_time` column and the `report_time_range` in
+  `epidata_meta()` are now UTC timestamps (e.g. `2025-10-16T13:45:00Z`)
+  rather than dates, so `report_time` now parses to a `POSIXct`. `report_time` and `snapshot_date` filters also accept a UTC
+  timestamp string (with a trailing `Z`) or a `POSIXt`, in addition to a bare
+  date, for exact-instant filtering (cmu-delphi/cast-api#123).
+
+## New features
+- `epidata_aux()` gains a `snapshot_date` argument (date, `"latest"`, or `NULL`)
+  for retrieving auxiliary data as it appeared on a specific date. Mutually
+  exclusive with `report_time`.
+- `epidata_archive()` and `epidata_aux()`: `epirange()` values for `report_time`
+  are now filtered server-side using the cast-API's inclusive range syntax; the
+  local lower-bound filter has been removed.
+- `fetch_args_list()` gains a `limit` argument, capping the number of rows the
+  cast-API returns for `epidata_snapshot()`, `epidata_archive()`,
+  `epidata_aux()`, and `epidata()`. Defaults to `NULL` (no limit); `-1` has the
+  same effect. The underlying query has no stable sort order, so `limit` does
+  not guarantee the same rows (or count) across repeated calls. Use it only to
+  preview or debug a query, not as a real filter.
+- `fetch_args_list()` gains a `limit` argument, capping the number of rows
+  the cast-API returns for `epidata_snapshot()`, `epidata_archive()`,
+  `epidata_aux()`, and `epidata()`. Defaults to `NULL` (no limit); `-1` has
+  the same effect. The underlying query has no stable sort order, so `limit`
+  does not guarantee the same rows (or count) across repeated calls. Use it
+  only to preview or debug a query, not as a real filter.
+
+
+# epidatr 1.3.0
+
+## Deprecations
+
+- `pub_covidcast()`, `pub_covidcast_meta()`, `pub_fluview()`,
+  `pub_fluview_clinical()`, `pub_fluview_meta()`, `pub_flusurv()`,
+  `pub_meta()`, and `pvt_quidel()` now warn that they use the V4 Epidata
+  API. Starting in October 2026, it is tentatively deprecated in favor of
+  the V5 API. See `vignette("migration-guide")` for the V5 replacements.
+- The remaining V4 endpoints whose data sources are no longer updated
+  (`pvt_cdc()`, `pub_covid_hosp_facility_lookup()`,
+  `pub_covid_hosp_facility()`, `pub_covid_hosp_state_timeseries()`,
+  `pub_delphi()`, `pub_dengue_nowcast()`, `pvt_dengue_sensors()`,
+  `pub_ecdc_ili()`, `pub_gft()`, `pvt_ght()`, `pub_kcdc_ili()`,
+  `pvt_meta_norostat()`, `pub_nidss_dengue()`, `pub_nidss_flu()`,
+  `pvt_norostat()`, `pub_nowcast()`, `pub_paho_dengue()`, `pvt_sensors()`,
+  `pvt_twitter()`, and `pub_wiki()`) now emit a quieter informational note
+  (not a warning) explaining that they are frozen rather than deprecated.
+  They are not moving to V5 and will keep working, but will not receive new
+  data. See the "Endpoints kept for historical reference" section of
+  `vignette("migration-guide")` for the full list.
+
+## Patches
 - `epidata_snapshot()` and `epidata_archive()` now issue one request per signal instead of joining `signals` with a comma, which the cast-API server silently matched against nothing (#354).
 - `epidata_archive(report_time = ...)` now sends the `report_time_query` API parameter; the server renamed it from `version_query`, which it now rejects.
 - Add a migration guide vignette (`vignette("migration-guide")`) mapping `pub_covidcast` arguments and columns to the new `epidata_snapshot`/`epidata_archive` functions, and update the README and pkgdown reference to lead with the new API.
 - Parse `ci_lower` and `ci_upper` data columns for some signals.
 - Improve CSV parsing performance by reading bytes directly.
 - `save_api_key()` no longer errors when called outside a project; it falls back to the user `.Renviron` (#339).
+- Text fields are now always parsed as character; previously an all-NA column (e.g. `geocoded_state` in the `covid_hosp` endpoints) came back as logical.
 
 # epidatr 1.2.4
 

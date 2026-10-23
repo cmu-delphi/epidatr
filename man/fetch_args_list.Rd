@@ -20,7 +20,8 @@ fetch_args_list(
   debug = lifecycle::deprecated(),
   format_type = lifecycle::deprecated(),
   refresh_cache = FALSE,
-  reference_week_day = 1
+  reference_week_day = 1,
+  limit = NULL
 )
 }
 \arguments{
@@ -33,9 +34,9 @@ except the direction field}
 
 \item{disable_date_parsing}{disable automatic date parsing}
 
-\item{disable_data_frame_parsing}{disable automatic conversion to data frame;
-this is only supported by endpoints that only support the 'classic' format
-(non-tabular)}
+\item{disable_data_frame_parsing}{if \code{TRUE}, return the raw response
+instead of a parsed tibble. V4 endpoints return a nested list. V5
+endpoints still return a data frame, but with all columns as character.}
 
 \item{disable_missing_meta_warning}{if \code{TRUE}, suppress the warning emitted
 when the response contains columns not declared as expected epidata fields.
@@ -48,14 +49,9 @@ no data}
 \item{timeout_seconds}{the maximum amount of time (in seconds) to wait for a
 response from the API server}
 
-\item{stream_threshold_bytes}{for large responses, avoid high peak memory
-use during fetching. The response body is read into memory until this many
-bytes have been received; once it crosses the threshold, the bytes so far
-and the remainder are streamed to a temp file and parsed from there. The
-decision uses the bytes actually received, so it is robust even when the
-server misreports or omits \code{Content-Length}. The returned object is a
-tibble either way. Set to \code{Inf} to always read into memory. Defaults to
-500 MiB.}
+\item{stream_threshold_bytes}{the response body is accumulated in memory
+until this many bytes have been received, then it is streamed to
+a temp file to keep peak memory low. \code{Inf} always reads into memory.}
 
 \item{download_path}{if not \code{NULL}, the raw response body is streamed to this
 file (regardless of size) and kept. Useful for very large pulls. If parsing
@@ -78,6 +74,13 @@ API, and update the cache, if it is enabled}
 \item{reference_week_day}{the day of the week to use as the reference day
 when parsing epiweeks to dates (happens if \code{disable_date_parsing} is \code{FALSE})
 Defaults to 1 Sunday (the first day of the week).}
+
+\item{limit}{integer or \code{NULL}. cast-API only (\code{epidata_snapshot()},
+\code{epidata_archive()}, \code{epidata_aux()}, \code{epidata()}): maximum number of rows
+to return. \code{NULL} (default) or \code{-1} requests no limit. The underlying
+query has no stable sort order, so \code{limit} does not guarantee the same
+rows (or even the same count) across repeated calls; use it only to
+preview or debug a query, never as a substitute for filtering.}
 }
 \value{
 A \code{fetch_args} object containing all the specified options

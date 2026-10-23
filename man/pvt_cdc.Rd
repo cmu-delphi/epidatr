@@ -25,6 +25,13 @@ to \code{fetch()}. See \code{fetch_args_list()} for details.}
 \code{\link[tibble:tibble]{tibble::tibble}}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+
+This endpoint was previously deprecated and remains available for historical
+reference. The underlying data source is no longer updated and no new data is
+being ingested. For more details, refer to the "Endpoints kept for historical
+reference" section of \code{vignette("migration-guide")}, and visit the \href{https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html}{V5 signals documentation}.
+
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/cdc.html}
 }
 \section{See also}{
