@@ -230,7 +230,7 @@ parse_value <- function(
       !disable_date_parsing &&
       !inherits(value, "POSIXt")
   ) {
-    return(parse_api_datetimetz(value))
+    return(parse_date_or_datetimetz(value))
   } else if (
     info$type == "epiweek" && !disable_date_parsing && !inherits(value, "Date")
   ) {
@@ -349,6 +349,22 @@ parse_api_timestamp_to_datetime <- function(value) {
 #' @keywords internal
 parse_api_datetimetz <- function(value) {
   as.POSIXct(as.character(value), format = "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+}
+
+#' Parses a cast-API report time, which is either a UTC timestamp or a bare
+#' date
+#'
+#' Timestamps go through [parse_api_datetimetz()] to a UTC `POSIXct`. Anything
+#' else (e.g. "2025-10-16" or "20251016") goes through `parse_api_date()` to a
+#' `Date`. The first non-missing value decides the parser for the whole vector.
+#' @keywords internal
+parse_date_or_datetimetz <- function(value) {
+  first <- value[match(FALSE, is.na(value))]
+  if (is.na(first) || !is.na(parse_api_datetimetz(first))) {
+    parse_api_datetimetz(value)
+  } else {
+    parse_api_date(value)
+  }
 }
 
 #' parse_api_week converts an integer to a date
