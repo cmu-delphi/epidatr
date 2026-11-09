@@ -28,7 +28,7 @@
       set_cache(startup = TRUE, confirm = FALSE),
       error = function(e) {
         cli::cli_inform(
-          c("!" = "epidatr cache is off.", "i" = conditionMessage(e)),
+          c("!" = "epidatr cache is off.", "i" = "{conditionMessage(e)}"),
           class = "packageStartupMessage"
         )
       }

@@ -26,8 +26,9 @@
     can now fire; it previously never did (#385).
   - `refresh_cache = TRUE` no longer writes entries that a default fetch would
     read back with different parsing, and a non-default `reference_week_day`
-    gets its own cache entry. An empty result allowed by `return_empty = TRUE`
-    is no longer cached (#388).
+    gets its own cache entry. An API error response that `return_empty = TRUE`
+    turned into an empty result is no longer cached, so a later default call
+    still raises the error (#388).
 - `fetch_args_list(disable_data_frame_parsing = TRUE)` now actually disables
   data frame parsing again.
 

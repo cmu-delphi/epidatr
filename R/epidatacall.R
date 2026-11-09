@@ -368,8 +368,9 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     }
   })
 
-  # Add to cache if appropriate. An empty result allowed by return_empty isn't
-  # stored, since a later default call should raise its error instead (#388).
+  # Add to cache if appropriate. With return_empty, an API error response also
+  # comes back empty; don't store it, so a later default call still raises the
+  # error instead of reading back an empty result (#388).
   if (should_write_cache && !empty_response) {
     cache_environ$epidatr_cache$set(hashed, list(fetched, Sys.time(), runtime))
   }

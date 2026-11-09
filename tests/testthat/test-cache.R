@@ -260,6 +260,9 @@ test_that("a bad cache setting doesn't stop the package loading (#396, #401)", {
   )
   expect_message(.onLoad(NULL, "epidatr"), "epidatr cache is off")
   expect_false(is_cache_enabled())
+  # braces in the bad value must not break the message itself
+  withr::local_envvar(EPIDATR_CACHE_MAX_AGE_DAYS = "{x}")
+  expect_message(.onLoad(NULL, "epidatr"), "epidatr cache is off")
 })
 
 covidcast_call_as_of <- function(as_of) {
