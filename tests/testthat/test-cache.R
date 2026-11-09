@@ -248,3 +248,38 @@ test_that("set_cache never prompts non-interactively and reports honestly (#401)
   expect_true(dir.exists(missing_dir))
   expect_true(is_cache_enabled())
 })
+
+covidcast_call_as_of <- function(as_of) {
+  pub_covidcast(
+    source = "jhu-csse",
+    signals = "confirmed_7dav_incidence_prop",
+    time_type = "day",
+    geo_type = "state",
+    time_values = epirange("2020-06-01", "2020-08-01"),
+    geo_values = "ca",
+    as_of = as_of,
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+}
+
+test_that("the stale-cache warning fires for recent versions (#385)", {
+  # It used to read epidata_call$params, which doesn't exist, so it never fired.
+  expect_warning(
+    check_for_cache_warnings(covidcast_call_as_of(Sys.Date()), fetch_args_list()),
+    class = "cache_recent_data"
+  )
+  expect_no_warning(
+    check_for_cache_warnings(covidcast_call_as_of("2022-01-01"), fetch_args_list())
+  )
+})
+
+test_that("latest_version_date reads dates, ranges, and epiweeks", {
+  expect_equal(latest_version_date("20220101"), as.Date("2022-01-01"))
+  expect_equal(latest_version_date("20220101-20220105"), as.Date("2022-01-05"))
+  expect_equal(latest_version_date("2024-12-01:2025-01-01"), as.Date("2025-01-01"))
+  expect_equal(latest_version_date("<2025-01-01"), as.Date("2025-01-01"))
+  expect_equal(latest_version_date("202001-202004"), as.Date("2020-01-25"))
+  expect_null(latest_version_date(NULL))
+  expect_null(latest_version_date("*"))
+})
+
