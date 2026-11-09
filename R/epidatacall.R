@@ -324,12 +324,14 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 
   # If cacheable and the value is in cache, return the cached value.
   is_cachable <- check_is_cachable(epidata_call, fetch_args)
-  should_write_cache <- is_cachable ||
-    (fetch_args$refresh_cache && is_cache_enabled())
+  # refresh_cache skips the read but should only write what a later default
+  # call could legitimately read back, so apply the same guards (#388).
+  fetch_args_no_refresh <- fetch_args
+  fetch_args_no_refresh$refresh_cache <- FALSE
+  should_write_cache <- check_is_cachable(epidata_call, fetch_args_no_refresh)
 
   if (should_write_cache) {
-    target <- request_url(epidata_call, "json", fetch_args$fields)
-    hashed <- openssl::md5(target)
+    hashed <- openssl::md5(cache_key(epidata_call, fetch_args))
   }
 
   if (is_cachable) {
@@ -371,6 +373,21 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
   }
 
   return(fetched)
+}
+
+#' Cache key for an epidata call
+#'
+#' The cache stores parsed tibbles, so the key must cover every fetch setting
+#' that changes parsing, not just the URL. `reference_week_day` changes how
+#' epiweeks become dates; it is appended only when it differs from the default
+#' so existing cache entries stay valid (#388).
+#' @keywords internal
+cache_key <- function(epidata_call, fetch_args) {
+  key <- request_url(epidata_call, "json", fetch_args$fields)
+  if (!isTRUE(fetch_args$reference_week_day == formals(fetch_args_list)$reference_week_day)) {
+    key <- paste0(key, "#reference_week_day=", fetch_args$reference_week_day)
+  }
+  key
 }
 
 #' Fetches the data.

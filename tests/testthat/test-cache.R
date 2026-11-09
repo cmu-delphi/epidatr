@@ -283,3 +283,41 @@ test_that("latest_version_date reads dates, ranges, and epiweeks", {
   expect_null(latest_version_date("*"))
 })
 
+test_that("refresh_cache only writes entries a default fetch may read (#388)", {
+  expect_message(test_set_cache(cache_dir = withr::local_tempdir()))
+  withr::defer(disable_cache())
+  call <- covidcast_call_as_of("2022-01-01")
+
+  # refresh_cache with a parse-changing setting must not write an entry that a
+  # later default fetch would read back.
+  epidata <- data.frame(
+    source = "jhu-csse", signal = "confirmed_7dav_incidence_prop",
+    geo_type = "state", time_type = "day", geo_value = "ca",
+    time_value = 20200601L, issue = 20200602L, lag = 1L, value = 1.5
+  )
+  requests <- 0
+  local_mocked_bindings(request_epidata = function(...) {
+    requests <<- requests + 1
+    epidata
+  })
+  fetch(call, fetch_args_list(refresh_cache = TRUE, disable_date_parsing = TRUE))
+  expect_length(cache_environ$epidatr_cache$keys(), 0)
+
+  # A default fetch caches, and a refresh rewrites the same entry.
+  first <- suppressWarnings(fetch(call))
+  expect_length(cache_environ$epidatr_cache$keys(), 1)
+  suppressWarnings(fetch(call))
+  expect_equal(requests, 2)
+  suppressWarnings(fetch(call, fetch_args_list(refresh_cache = TRUE)))
+  expect_equal(requests, 3)
+  expect_length(cache_environ$epidatr_cache$keys(), 1)
+  expect_s3_class(first$time_value, "Date")
+})
+
+test_that("the cache key includes a non-default reference_week_day (#388)", {
+  call <- covidcast_call_as_of("2022-01-01")
+  # The default keeps the plain-URL key so existing cache entries stay valid.
+  default_key <- cache_key(call, fetch_args_list())
+  expect_equal(default_key, request_url(call, "json"))
+  expect_false(default_key == cache_key(call, fetch_args_list(reference_week_day = 7)))
+})
