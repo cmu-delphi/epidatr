@@ -197,3 +197,32 @@ test_that("check_is_cachable", {
   expect_message(test_set_cache())
   check_fun(as_of = "2020-01-01", expected_result = TRUE)
 })
+
+test_that("set_cache validates days and max_size (#396)", {
+  withr::defer(disable_cache())
+  dir <- withr::local_tempdir()
+  # A fraction like "3/24" used to become NA, pass validation, and then make
+  # every cache read error inside cachem.
+  withr::local_envvar(EPIDATR_CACHE_MAX_AGE_DAYS = "3/24")
+  expect_error(
+    set_cache(cache_dir = dir, confirm = FALSE),
+    class = "epidatr__invalid_cache_setting"
+  )
+  withr::local_envvar(EPIDATR_CACHE_MAX_AGE_DAYS = "0.125")
+  expect_message(set_cache(cache_dir = dir, confirm = FALSE))
+  expect_equal(cache_info()$max_age, 0.125 * 24 * 60 * 60)
+
+  expect_error(
+    set_cache(cache_dir = dir, days = -1, confirm = FALSE),
+    class = "epidatr__invalid_cache_setting"
+  )
+  expect_error(
+    set_cache(cache_dir = dir, max_size = NA, confirm = FALSE),
+    class = "epidatr__invalid_cache_setting"
+  )
+  withr::local_envvar(EPIDATR_CACHE_MAX_SIZE_MB = "big")
+  expect_error(
+    set_cache(cache_dir = dir, confirm = FALSE),
+    class = "epidatr__invalid_cache_setting"
+  )
+})

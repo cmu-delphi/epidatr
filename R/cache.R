@@ -128,17 +128,17 @@ set_cache <- function(
   }
   stopifnot(is.character(cache_dir))
   if (is.null(days)) {
-    days <- Sys.getenv("EPIDATR_CACHE_MAX_AGE_DAYS", unset = 1) %>% as.numeric()
+    days <- Sys.getenv("EPIDATR_CACHE_MAX_AGE_DAYS", unset = "1")
   }
+  days <- as_cache_setting(days, "days", "EPIDATR_CACHE_MAX_AGE_DAYS")
   if (is.null(max_size)) {
-    max_size <- Sys.getenv("EPIDATR_CACHE_MAX_SIZE_MB", unset = 1024) %>%
-      as.numeric()
+    max_size <- Sys.getenv("EPIDATR_CACHE_MAX_SIZE_MB", unset = "1024")
   }
+  max_size <- as_cache_setting(max_size, "max_size", "EPIDATR_CACHE_MAX_SIZE_MB")
   if (is.null(logfile)) {
     logfile <- Sys.getenv("EPIDATR_CACHE_LOGFILE", unset = "logfile.txt")
   }
   stopifnot(is.character(logfile))
-  stopifnot(is.numeric(days), is.numeric(max_size))
   #
   # make sure that that directory exists and drag the user into that process
   cache_exists <- file.exists(cache_dir)
@@ -203,6 +203,28 @@ set_cache <- function(
     ),
     class = if (startup) "packageStartupMessage" else NULL
   )
+}
+
+#' Validate a numeric cache setting
+#'
+#' Coerces `value` (an argument or environment variable string) to a single
+#' positive number, aborting with an actionable message otherwise. A bare
+#' `as.numeric()` turns values like `"3/24"` into `NA`, which passes
+#' `is.numeric()` and later breaks every cache read inside cachem.
+#' @keywords internal
+as_cache_setting <- function(value, arg, env_var) {
+  num <- suppressWarnings(as.numeric(value))
+  if (length(num) != 1 || is.na(num) || !is.finite(num) || num <= 0) {
+    cli::cli_abort(
+      c(
+        "Cache setting {.arg {arg}} must be a single positive number, not {.val {value}}.",
+        "i" = "Set it with the {.arg {arg}} argument or the {.envvar {env_var}}
+          environment variable; fractions are fine (e.g. {.code 0.125} days is 3 hours)."
+      ),
+      class = "epidatr__invalid_cache_setting"
+    )
+  }
+  num
 }
 
 #' Manually reset the cache, deleting all currently saved data and starting afresh
