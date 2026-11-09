@@ -390,12 +390,13 @@ test_that("V5 calls for a fixed past version are cachable (A2)", {
   snap <- function(...) epidata_snapshot("nssp", "pct_ed_visits_influenza", "state", ..., fetch_args = dry)
   arch <- function(...) epidata_archive("nssp", "pct_ed_visits_influenza", "state", ..., fetch_args = dry)
   cachable <- function(call, fetch_args = fetch_args_list()) check_is_cachable(call, fetch_args)
+  two_days_ago <- format(utc_today() - 2)
   yesterday <- format(utc_today() - 1)
   today <- format(utc_today())
 
   # fixed past versions
   expect_true(cachable(snap(snapshot_date = "2025-01-01")))
-  expect_true(cachable(snap(snapshot_date = yesterday)))
+  expect_true(cachable(snap(snapshot_date = two_days_ago)))
   expect_true(cachable(arch(report_time = epirange("2024-12-01", "2025-01-01"))))
   expect_true(cachable(arch(report_time = "<2025-01-01")))
   expect_true(cachable(epidata_aux("nwss", report_time = "<2026-08-01", fetch_args = dry)))
@@ -403,6 +404,7 @@ test_that("V5 calls for a fixed past version are cachable (A2)", {
   # versions that can still change
   expect_false(cachable(snap())) # latest
   expect_false(cachable(snap(snapshot_date = today)))
+  expect_false(cachable(snap(snapshot_date = yesterday))) # one day of margin
   expect_false(cachable(arch())) # every version, including future ones
   expect_false(cachable(arch(report_time = "*")))
   expect_false(cachable(arch(report_time = ">2025-01-01")))
@@ -422,8 +424,9 @@ test_that("V5 calls for a fixed past version are cachable (A2)", {
 test_that("V5 cachability edge cases", {
   local_mocked_bindings(utc_today = function() as.Date("2026-11-08"))
   v5 <- function(...) check_is_cachable_v5(list(...))
-  # the cutoff is the UTC date: today's version can still change
-  expect_true(v5(snapshot_date = "2026-11-07"))
+  # the cutoff is the UTC date, with a day of margin for late loads
+  expect_true(v5(snapshot_date = "2026-11-06"))
+  expect_false(v5(snapshot_date = "2026-11-07"))
   expect_false(v5(snapshot_date = "2026-11-08"))
   expect_false(v5(snapshot_date = "2026-11-08T01:00:00Z"))
   # every OR'd condition needs an upper bound

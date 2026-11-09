@@ -471,9 +471,10 @@ check_is_cachable_v5 <- function(params) {
   } else {
     return(FALSE)
   }
-  # The API's dates are UTC, and a version dated today can still change until
-  # the UTC day is over.
-  !is.null(bound_date) && !is.na(bound_date) && bound_date < utc_today()
+  # The API's dates are UTC, and a version can still change until its UTC day
+  # is over. Allow one more day, since some sources stamp a nominal release
+  # time and a late load could still add rows dated that day.
+  !is.null(bound_date) && !is.na(bound_date) && bound_date < utc_today() - 1
 }
 
 #' Today's date in UTC, the time zone of the API's versions
@@ -496,7 +497,7 @@ check_for_cache_warnings <- function(epidata_call, fetch_args) {
   params <- httr2::url_parse(epidata_call$request$url)$query
   version_params <- c("as_of", "issues", "snapshot_date", "report_time_query")
   latest <- latest_version_date(unlist(params[intersect(names(params), version_params)]))
-  if (!is.null(latest) && latest >= Sys.Date() - 7) {
+  if (!is.null(latest) && latest >= utc_today() - 7) {
     cli::cli_warn(
       c(
         "Using cached results for a data version within the past week (or the
