@@ -390,8 +390,8 @@ test_that("V5 calls for a fixed past version are cachable (A2)", {
   snap <- function(...) epidata_snapshot("nssp", "pct_ed_visits_influenza", "state", ..., fetch_args = dry)
   arch <- function(...) epidata_archive("nssp", "pct_ed_visits_influenza", "state", ..., fetch_args = dry)
   cachable <- function(call, fetch_args = fetch_args_list()) check_is_cachable(call, fetch_args)
-  yesterday <- format(Sys.Date() - 1)
-  today <- format(Sys.Date())
+  yesterday <- format(utc_today() - 1)
+  today <- format(utc_today())
 
   # fixed past versions
   expect_true(cachable(snap(snapshot_date = "2025-01-01")))
@@ -407,6 +407,9 @@ test_that("V5 calls for a fixed past version are cachable (A2)", {
   expect_false(cachable(arch(report_time = "*")))
   expect_false(cachable(arch(report_time = ">2025-01-01")))
   expect_false(cachable(arch(report_time = epirange("2024-12-01", today))))
+  # comma-joined conditions are OR'd, so one open-ended part makes it open
+  expect_false(cachable(arch(report_time = c("<2024-01-01", ">2025-01-01"))))
+  expect_true(cachable(arch(report_time = c("<2024-01-01", "<=2024-06-01"))))
 
   # a row limit returns an unstable subset
   limited <- epidata_snapshot(
@@ -414,6 +417,28 @@ test_that("V5 calls for a fixed past version are cachable (A2)", {
     snapshot_date = "2025-01-01", fetch_args = fetch_args_list(dry_run = TRUE, limit = 5)
   )
   expect_false(cachable(limited))
+})
+
+test_that("V5 cachability edge cases", {
+  local_mocked_bindings(utc_today = function() as.Date("2026-11-08"))
+  v5 <- function(...) check_is_cachable_v5(list(...))
+  # the cutoff is the UTC date: today's version can still change
+  expect_true(v5(snapshot_date = "2026-11-07"))
+  expect_false(v5(snapshot_date = "2026-11-08"))
+  expect_false(v5(snapshot_date = "2026-11-08T01:00:00Z"))
+  # every OR'd condition needs an upper bound
+  expect_false(v5(report_time_query = "<2024-01-01,>2025-01-01"))
+  expect_false(v5(report_time_query = "2024-01-01:2024-02-01,>=2025-01-01"))
+  expect_true(v5(report_time_query = "<2024-01-01,2024-03-01:2024-04-01"))
+  # a range needs both ends, and dates must be real
+  expect_false(v5(report_time_query = "2024-01-01:"))
+  expect_false(v5(report_time_query = "<2024-02-30"))
+  expect_false(v5(report_time_query = "<2024-02-30,<2023-01-01"))
+  expect_true(v5(report_time_query = "2025-10-01T00:00:00Z:2025-10-16T13:45:00Z"))
+  # fractional seconds aren't an epiweek
+  expect_true(v5(snapshot_date = "2024-01-01T00:00:00.123456Z"))
+  expect_false(v5(report_time_query = "*"))
+  expect_false(v5())
 })
 
 test_that("a repeated V5 snapshot is served from the cache", {

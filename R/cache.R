@@ -404,11 +404,7 @@ check_is_cachable <- function(epidata_call, fetch_args) {
 #' latest as a `Date`, or `NULL` if there are none.
 #' @keywords internal
 latest_version_date <- function(values) {
-  tokens <- unlist(regmatches(
-    values,
-    # digit lookarounds rather than \\b, so "2025-10-16T13:45:00Z" matches
-    gregexpr("(?<!\\d)(\\d{4}-\\d{2}-\\d{2}|\\d{8}|\\d{6})(?!\\d)", values, perl = TRUE)
-  ))
+  tokens <- version_date_tokens(values)
   if (length(tokens) == 0) {
     return(NULL)
   }
@@ -419,6 +415,17 @@ latest_version_date <- function(values) {
     return(NULL)
   }
   max(dates, na.rm = TRUE)
+}
+
+#' Date-like tokens in versioning query parameters
+#' @keywords internal
+version_date_tokens <- function(values) {
+  unlist(regmatches(
+    values,
+    # Digit lookarounds rather than \\b, so "2025-10-16T13:45:00Z" matches;
+    # digits after "." are fractional seconds, not an epiweek.
+    gregexpr("(?<![\\d.])(\\d{4}-\\d{2}-\\d{2}|\\d{8}|\\d{6})(?!\\d)", values, perl = TRUE)
+  ))
 }
 
 #' Parse one date token from [latest_version_date()], or `NA` if invalid
@@ -446,20 +453,33 @@ check_is_cachable_v5 <- function(params) {
   if (!is.null(params$limit) && !identical(params$limit, "-1")) {
     return(FALSE)
   }
-  bound <- NULL
   if (!is.null(params$snapshot_date)) {
-    bound <- params$snapshot_date
+    bound_date <- latest_version_date(params$snapshot_date)
   } else if (!is.null(params$report_time_query)) {
-    query <- params$report_time_query
-    # "<date" and "start:end" have a fixed upper bound; ">date" doesn't.
-    if (startsWith(query, "<") || (grepl(":", query, fixed = TRUE) && !startsWith(query, ">"))) {
-      bound <- query
+    # Comma-separated conditions are OR'd by the API, so every one of them
+    # needs a fixed upper bound: "<date" or a "start:end" range.
+    parts <- strsplit(params$report_time_query, ",", fixed = TRUE)[[1]]
+    bounded <- vapply(parts, function(part) {
+      dates <- lapply(version_date_tokens(part), parse_version_token)
+      n_dates <- sum(!is.na(do.call(c, c(list(as.Date(NA)), dates))))
+      if (startsWith(part, "<")) n_dates >= 1 else !startsWith(part, ">") && n_dates >= 2
+    }, logical(1))
+    if (length(parts) == 0 || !all(bounded)) {
+      return(FALSE)
     }
+    bound_date <- latest_version_date(params$report_time_query)
+  } else {
+    return(FALSE)
   }
-  # Bounds may be dates or timestamps (e.g. "2025-10-16T13:45:00Z").
-  bound_date <- latest_version_date(bound)
-  # Data reported later today can still change a version bounded by today.
-  !is.null(bound_date) && bound_date < Sys.Date()
+  # The API's dates are UTC, and a version dated today can still change until
+  # the UTC day is over.
+  !is.null(bound_date) && !is.na(bound_date) && bound_date < utc_today()
+}
+
+#' Today's date in UTC, the time zone of the API's versions
+#' @keywords internal
+utc_today <- function() {
+  as.Date(Sys.time(), tz = "UTC")
 }
 
 #' Check for warnings for the cache
