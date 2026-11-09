@@ -91,8 +91,11 @@ cache_environ$cache_args <- NULL
 #' @param logfile where cachem's log of transactions is stored, relative to the
 #'   cache directory. By default, it is `"logfile.txt"`. The environmental
 #'   variable is `EPIDATR_CACHE_LOGFILE`.
-#' @param confirm whether to confirm directory creation. default is `TRUE`;
-#'   should only be set in non-interactive scripts
+#' @param confirm whether to ask before creating a missing `cache_dir`. Default
+#'   is `TRUE`. In non-interactive sessions there is no one to ask, so a missing
+#'   directory is not created and the cache stays off; set `confirm = FALSE` to
+#'   create it. When the cache is enabled at startup via `EPIDATR_USE_CACHE`, a
+#'   missing directory is created without asking.
 #' @param startup indicates whether the function is being called on
 #'   startup. Affects suppressability of the messages. Default is `FALSE`.
 #' @return [`NULL`] no return value, all effects are stored in the package
@@ -144,7 +147,10 @@ set_cache <- function(
   cache_exists <- file.exists(cache_dir)
   cache_usable <- file.access(cache_dir, mode = 6) == 0
   if (!(cache_exists)) {
-    if (confirm) {
+    if (confirm && !rlang::is_interactive()) {
+      # readline() can't prompt here; it would return "" and silently decline
+      valid_user_input <- "no"
+    } else if (confirm) {
       user_input <- readline(glue::glue(
         "there is no directory at {cache_dir}; the cache will be turned off until a ",
         "viable directory has been set. Create one? (yes|no(default)) "
@@ -174,10 +180,19 @@ set_cache <- function(
   }
 
   if (!cache_usable) {
-    print(glue::glue(
-      "The directory at {cache_dir} is not accessible; check permissions and/or use a different ",
-      "directory for the cache (see the `set_cache` documentation)."
-    ))
+    cli::cli_inform(
+      c(
+        "!" = "Could not set the epidatr cache: {cache_dir} does not exist or is not
+          accessible.",
+        "i" = if (!cache_exists) {
+          "Create it, or call {.code set_cache(confirm = FALSE)} to create it without asking."
+        } else {
+          "Check its permissions, or use a different directory (see {.fn set_cache})."
+        }
+      ),
+      class = if (startup) "packageStartupMessage" else NULL
+    )
+    return(invisible(NULL))
   } else if (cache_exists) {
     cache_environ$epidatr_cache <- cachem::cache_disk(
       dir = cache_dir,

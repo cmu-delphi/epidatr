@@ -226,3 +226,25 @@ test_that("set_cache validates days and max_size (#396)", {
     class = "epidatr__invalid_cache_setting"
   )
 })
+
+test_that("set_cache never prompts non-interactively and reports honestly (#401)", {
+  withr::defer(disable_cache())
+  missing_dir <- file.path(withr::local_tempdir(), "not-yet")
+  # confirm = TRUE can't prompt here, so the directory is not created, the
+  # cache stays off, and the message says so (it used to say "being used").
+  rlang::local_interactive(FALSE)
+  expect_message(
+    set_cache(cache_dir = missing_dir, confirm = TRUE),
+    "Could not set the epidatr cache"
+  )
+  expect_false(dir.exists(missing_dir))
+  expect_false(is_cache_enabled())
+
+  # confirm = FALSE (what .onLoad uses) creates the directory.
+  expect_message(
+    set_cache(cache_dir = missing_dir, confirm = FALSE),
+    "cache is being used"
+  )
+  expect_true(dir.exists(missing_dir))
+  expect_true(is_cache_enabled())
+})

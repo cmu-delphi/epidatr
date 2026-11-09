@@ -20,6 +20,8 @@
     cache_environ$use_cache <- FALSE
   }
   if (cache_environ$use_cache) {
-    set_cache(startup = TRUE)
+    # The user opted in via EPIDATR_USE_CACHE, so create a missing cache
+    # directory instead of prompting during library() (#401).
+    set_cache(startup = TRUE, confirm = FALSE)
   }
 }
