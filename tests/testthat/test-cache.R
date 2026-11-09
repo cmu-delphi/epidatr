@@ -263,6 +263,8 @@ covidcast_call_as_of <- function(as_of) {
 }
 
 test_that("the stale-cache warning fires for recent versions (#385)", {
+  # the warning is rate-limited per session; show it every time here
+  withr::local_options(rlib_warning_verbosity = "verbose")
   # It used to read epidata_call$params, which doesn't exist, so it never fired.
   expect_warning(
     check_for_cache_warnings(covidcast_call_as_of(Sys.Date()), fetch_args_list()),
