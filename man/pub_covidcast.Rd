@@ -92,12 +92,6 @@ See \code{vignette("versioned-data")} for details and more ways to specify
 versioned data.
 }
 
-\section{See also}{
-
-For example queries showing how to discover signals and build calls,
-see \code{vignette("signal-discovery", package = "epidatr")}.
-}
-
 \examples{
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
@@ -120,6 +114,6 @@ pub_covidcast(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=pub_covidcast_meta]{pub_covidcast_meta()}}, \code{\link[=covidcast_epidata]{covidcast_epidata()}}, \code{\link[=epirange]{epirange()}}
+\code{\link[=pub_covidcast_meta]{pub_covidcast_meta()}}, \code{\link[=covidcast_epidata]{covidcast_epidata()}}, \code{\link[=epirange]{epirange()}}, \code{vignette("signal-discovery")}
 }
 \keyword{endpoint}

@@ -40,8 +40,9 @@ reference:
       - epidata_aux
   - title: Query the covidcast endpoint (v4)
     desc: >
-      The previous main endpoint. Still carries the sources that have not
-      moved to v5 yet.
+      The previous main endpoint, frozen since September 22, 2026. It still
+      serves historical data but receives no new data; use the v5 functions
+      above for current data.
   - contents:
       - pub_covidcast
       - pub_covidcast_meta

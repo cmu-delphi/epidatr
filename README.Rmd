@@ -74,7 +74,7 @@ Note that for the time being, any private endpoints (i.e. those prefixed with
 To get started with `epidatr`, see `vignette("epidatr")` or the [Getting Started guide](https://cmu-delphi.github.io/epidatr/articles/epidatr.html).
 
 ```{r, echo=FALSE}
-# This is so that if you have USE_EPIDATR_CACHE=TRUE in your .Renviron, the
+# This is so that if you have EPIDATR_USE_CACHE=TRUE in your .Renviron, the
 # startup message does not get included in the README.md when you build this.
 suppressPackageStartupMessages(library(epidatr))
 ```

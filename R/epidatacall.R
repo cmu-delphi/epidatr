@@ -31,7 +31,7 @@
 #'   geo_values = c("ca", "fl"),
 #'   fetch_args = fetch_args_list(dry_run = TRUE)
 #' )
-#' call %>% fetch()
+#' call %>% fetch(fetch_args_list(dry_run = TRUE))
 #'
 #' @param endpoint the epidata endpoint to call
 #' @param params the parameters to pass to the epidata endpoint

@@ -66,6 +66,6 @@ call <- pub_covidcast(
   geo_values = c("ca", "fl"),
   fetch_args = fetch_args_list(dry_run = TRUE)
 )
-call \%>\% fetch()
+call \%>\% fetch(fetch_args_list(dry_run = TRUE))
 \dontshow{\}) # examplesIf}
 }

@@ -26,12 +26,6 @@ to see which sources are currently available.
 
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/fluview_meta.html}
 }
-\section{See also}{
-
-For example queries showing how to discover signals and build calls,
-see \code{vignette("signal-discovery", package = "epidatr")}.
-}
-
 \examples{
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
@@ -39,6 +33,6 @@ pub_fluview_meta()
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=pub_fluview]{pub_fluview()}}
+\code{\link[=pub_fluview]{pub_fluview()}}, \code{vignette("signal-discovery")}
 }
 \keyword{endpoint}
