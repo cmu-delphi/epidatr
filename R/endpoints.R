@@ -1550,8 +1550,8 @@ epidata_snapshot <- function(
   assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
   assert_report_time_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
   # Accept comma-joined signal/geo_type strings.
-  signals <- unique(unlist(strsplit(signals, ",", fixed = TRUE)))
-  geo_type <- unique(unlist(strsplit(geo_type, ",", fixed = TRUE)))
+  signals <- unique(trimws(unlist(strsplit(signals, ",", fixed = TRUE))))
+  geo_type <- unique(trimws(unlist(strsplit(geo_type, ",", fixed = TRUE))))
   # One request per geo_type. The cast-API accepts a single geo_type per query,
   # but signals are sent comma-joined in one request each.
   fetched <- lapply(geo_type, function(g) {
@@ -1647,8 +1647,8 @@ epidata_archive <- function(
     report_time <- issues
   }
   # Accept comma-joined signal/geo_type strings.
-  signals <- unique(unlist(strsplit(signals, ",", fixed = TRUE)))
-  geo_type <- unique(unlist(strsplit(geo_type, ",", fixed = TRUE)))
+  signals <- unique(trimws(unlist(strsplit(signals, ",", fixed = TRUE))))
+  geo_type <- unique(trimws(unlist(strsplit(geo_type, ",", fixed = TRUE))))
   # One request per geo_type: the cast-API accepts a single geo_type per query,
   # but signals are sent comma-joined in one request each.
   fetched <- lapply(geo_type, function(g) {
