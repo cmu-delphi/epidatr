@@ -32,8 +32,7 @@ home:
 reference:
   - title: Query the new Epidata API (v5)
     desc: >
-      The current API, serving all ongoing data sources;
-      see `vignette("migration-guide")` for how to update covidcast queries.
+      The current API. See `vignette("migration-guide")` for how to update covidcast queries.
   - contents:
       - epidata_meta
       - cast_api_queries
