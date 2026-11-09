@@ -351,7 +351,8 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
       simplify = !fetch_args$disable_data_frame_parsing
     )
 
-    if (fetch_args$return_empty && length(response_content) == 0) {
+    empty_response <- fetch_args$return_empty && length(response_content) == 0
+    if (empty_response) {
       fetched <- tibble::tibble()
     } else if (fetch_args$disable_data_frame_parsing) {
       fetched <- response_content
@@ -367,8 +368,9 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     }
   })
 
-  # Add to cache if appropriate.
-  if (should_write_cache) {
+  # Add to cache if appropriate. An empty result allowed by return_empty isn't
+  # stored, since a later default call should raise its error instead (#388).
+  if (should_write_cache && !empty_response) {
     cache_environ$epidatr_cache$set(hashed, list(fetched, Sys.time(), runtime))
   }
 

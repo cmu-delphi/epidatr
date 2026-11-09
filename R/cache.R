@@ -392,20 +392,29 @@ latest_version_date <- function(values) {
   if (length(tokens) == 0) {
     return(NULL)
   }
-  dates <- as.Date(rep(NA, length(tokens)))
-  dashed <- grepl("-", tokens)
-  dates[dashed] <- as.Date(tokens[dashed])
-  ymd <- !dashed & nchar(tokens) == 8
-  dates[ymd] <- as.Date(tokens[ymd], format = "%Y%m%d")
-  week <- !dashed & nchar(tokens) == 6
-  if (any(week)) {
-    # last day of the epiweek
-    dates[week] <- parse_api_week(tokens[week], reference_week_day = 7)
-  }
+  # A token that isn't a real date (e.g. "2024-02-30" or week 99) is ignored
+  # rather than raising an error here, before the request is even sent.
+  dates <- do.call(c, lapply(tokens, parse_version_token))
   if (all(is.na(dates))) {
     return(NULL)
   }
   max(dates, na.rm = TRUE)
+}
+
+#' Parse one date token from [latest_version_date()], or `NA` if invalid
+#' @keywords internal
+parse_version_token <- function(token) {
+  tryCatch(
+    if (grepl("-", token, fixed = TRUE)) {
+      as.Date(token, format = "%Y-%m-%d")
+    } else if (nchar(token) == 8) {
+      as.Date(token, format = "%Y%m%d")
+    } else {
+      # last day of the epiweek
+      parse_api_week(token, reference_week_day = 7)
+    },
+    error = function(e) as.Date(NA)
+  )
 }
 
 #' Check for warnings for the cache

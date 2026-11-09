@@ -22,6 +22,16 @@
   if (cache_environ$use_cache) {
     # The user opted in via EPIDATR_USE_CACHE, so create a missing cache
     # directory instead of prompting during library() (#401).
-    set_cache(startup = TRUE, confirm = FALSE)
+    # A bad cache setting shouldn't stop the package from loading; report it
+    # and leave the cache off.
+    tryCatch(
+      set_cache(startup = TRUE, confirm = FALSE),
+      error = function(e) {
+        cli::cli_inform(
+          c("!" = "epidatr cache is off.", "i" = conditionMessage(e)),
+          class = "packageStartupMessage"
+        )
+      }
+    )
   }
 }

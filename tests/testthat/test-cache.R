@@ -249,6 +249,19 @@ test_that("set_cache never prompts non-interactively and reports honestly (#401)
   expect_true(is_cache_enabled())
 })
 
+test_that("a bad cache setting doesn't stop the package loading (#396, #401)", {
+  old_use_cache <- cache_environ$use_cache
+  withr::defer(cache_environ$use_cache <- old_use_cache)
+  withr::defer(disable_cache())
+  withr::local_envvar(
+    EPIDATR_USE_CACHE = "TRUE",
+    EPIDATR_CACHE_DIR = withr::local_tempdir(),
+    EPIDATR_CACHE_MAX_AGE_DAYS = "3/24"
+  )
+  expect_message(.onLoad(NULL, "epidatr"), "epidatr cache is off")
+  expect_false(is_cache_enabled())
+})
+
 covidcast_call_as_of <- function(as_of) {
   pub_covidcast(
     source = "jhu-csse",
@@ -283,6 +296,10 @@ test_that("latest_version_date reads dates, ranges, and epiweeks", {
   expect_equal(latest_version_date("202001-202004"), as.Date("2020-01-25"))
   expect_null(latest_version_date(NULL))
   expect_null(latest_version_date("*"))
+  # Impossible dates are ignored instead of raising an error.
+  expect_null(latest_version_date("2024-02-30"))
+  expect_null(latest_version_date("202099"))
+  expect_equal(latest_version_date("20241301,20230101"), as.Date("2023-01-01"))
 })
 
 test_that("refresh_cache only writes entries a default fetch may read (#388)", {
@@ -316,10 +333,38 @@ test_that("refresh_cache only writes entries a default fetch may read (#388)", {
   expect_s3_class(first$time_value, "Date")
 })
 
+test_that("an empty result allowed by return_empty isn't cached (#388)", {
+  expect_message(test_set_cache(cache_dir = withr::local_tempdir()))
+  withr::defer(disable_cache())
+  local_mocked_bindings(request_epidata = function(...) list())
+  result <- suppressWarnings(
+    fetch(covidcast_call_as_of("2022-01-01"), fetch_args_list(return_empty = TRUE))
+  )
+  expect_equal(nrow(result), 0)
+  expect_length(cache_environ$epidatr_cache$keys(), 0)
+})
+
 test_that("the cache key includes a non-default reference_week_day (#388)", {
   call <- covidcast_call_as_of("2022-01-01")
   # The default keeps the plain-URL key so existing cache entries stay valid.
   default_key <- cache_key(call, fetch_args_list())
   expect_equal(default_key, request_url(call, "json"))
   expect_false(default_key == cache_key(call, fetch_args_list(reference_week_day = 7)))
+
+  # and fetch() uses it: a different reference_week_day doesn't hit the cache
+  expect_message(test_set_cache(cache_dir = withr::local_tempdir()))
+  withr::defer(disable_cache())
+  requests <- 0
+  local_mocked_bindings(request_epidata = function(...) {
+    requests <<- requests + 1
+    data.frame(
+      source = "jhu-csse", signal = "confirmed_7dav_incidence_prop",
+      geo_type = "state", time_type = "day", geo_value = "ca",
+      time_value = 20200601L, issue = 20200602L, lag = 1L, value = 1.5
+    )
+  })
+  suppressWarnings(fetch(call))
+  suppressWarnings(fetch(call, fetch_args_list(reference_week_day = 7)))
+  suppressWarnings(fetch(call, fetch_args_list(reference_week_day = 7)))
+  expect_equal(requests, 2)
 })
