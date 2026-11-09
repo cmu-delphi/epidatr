@@ -11,7 +11,7 @@ vignette: >
 
 ```{r, echo = FALSE, message = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.path = "img/epidatr-")
-options(tibble.print_min = 4L, tibble.print_max = 4L, max.print = 4L)
+options(tibble.print_min = 4L, tibble.print_max = 4L)
 ```
 
 The epidatr package provides access to all the endpoints of the [Delphi Epidata
@@ -172,7 +172,7 @@ epidata_snapshot(
 
 To request all versions of the data issued within a specific time range, we
 use `epidata_archive()` with the `report_time` argument. This parameter allows
-us to fetch versions using comparison operators (e.g., `"<2025-01-15>"`) or an
+us to fetch versions using comparison operators (e.g., `"<2025-01-15"`) or an
 `epirange()`.
 
 ```{r}
@@ -283,7 +283,7 @@ dry_run_call
 Because the output data is in a standard `tibble` format, we can easily plot
 it using `ggplot2`:
 
-```{r, out.height="65%"}
+```{r national-plot, out.height="65%", fig.alt = "Line chart of the weekly percentage of US emergency department visits due to influenza, from NSSP."}
 library(ggplot2)
 
 # Plot the influenza ED-visit time series fetched earlier with epidata_snapshot()
@@ -291,7 +291,9 @@ ggplot(epidata, aes(x = reference_time, y = value)) +
   geom_line() +
   labs(
     title = "Influenza ED visits from NSSP",
-    subtitle = "US, 2024-2025 season",
+    subtitle = paste0(
+      "US, ", min(epidata$reference_time), " to ", max(epidata$reference_time)
+    ),
     x = "Date",
     y = "% of ED visits"
   )
@@ -300,7 +302,7 @@ ggplot(epidata, aes(x = reference_time, y = value)) +
 `ggplot2` can also be used with `epidatr` and `maps` to [create choropleths](https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html):
 
 
-```{r, class.source = "fold-hide", out.height="65%"}
+```{r state-map, class.source = "fold-hide", out.height="65%", fig.alt = "US map of confirmed influenza hospital admissions by state for the week ending 2025-01-04, from NHSN."}
 library(epidatr)
 library(dplyr)
 library(ggplot2)
@@ -349,7 +351,7 @@ ggplot(nhsn_states, aes(x = long, y = lat, group = group, fill = value)) +
 We can also visualize revision histories from `epidata_archive()`. Each line
 shows what the time series looked like as of a different publication date:
 
-```{r archive-plot, out.height="65%"}
+```{r archive-plot, out.height="65%", fig.alt = "Line chart of Pennsylvania influenza ED-visit percentages for October-November 2024, colored by the date each value was reported."}
 # Fetch revision history for Pennsylvania influenza ED visits
 pa_revisions <- epidata_archive(
   source = "nssp",
