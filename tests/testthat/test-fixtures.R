@@ -26,7 +26,13 @@ for (fixture_spec in fixture_specs()) {
         })
       } else {
         expect_gt(length(result), 0)
-        expect_snapshot(str(result, max.level = 3))
+        # R 4.6 (r-devel as of Nov 2026) prints nested lists as `$ x: List of n`
+        # instead of `$ x:List of n`; normalize so the snapshot is the same on
+        # every R version.
+        expect_snapshot(
+          str(result, max.level = 3),
+          transform = function(lines) gsub(": List of ", ":List of ", lines, fixed = TRUE)
+        )
       }
     })
   })
