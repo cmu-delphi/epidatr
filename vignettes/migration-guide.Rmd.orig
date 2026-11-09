@@ -15,6 +15,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 ```{r setup, message = FALSE, eval = TRUE}
 library(epidatr)
+library(dplyr)
 ```
 
 The Delphi Epidata API has transitioned from its V4 endpoint (`pub_covidcast()`)
@@ -235,7 +236,7 @@ If you filtered by `lag`, fetch the archive with `epidata_archive()` and filter 
 revisions <- revisions %>%
   mutate(lag_days = as.integer(as.Date(report_time) - reference_time))
 
-# For an exact lag (e.g., the first report, 6 days after the reference week):
+# For an exact lag (e.g., values reported 6 days after the reference date):
 revisions %>%
   filter(lag_days == 6)
 

@@ -124,7 +124,9 @@ knitr::kable(archive_data)
 
 
 
-This estimate was updated several times as new data for December 7th arrived.
+This estimate was first reported on December 13th and revised on December 20th
+as more data for December 7th arrived. The archive lists a new row only when
+the value changes, so releases that left it unchanged don't appear.
 
 Note that these results include only data reported between (inclusive)
 2024-12-01 and 2025-01-15. If a value was first reported outside this range,
@@ -197,18 +199,17 @@ knitr::kable(archive_with_lag)
 
 
 If your analysis requires filtering data to a specific maximum reporting lag
-(for example, simulating data available with at most a 14-day delay), filter by
+(for example, simulating data available with at most a 7-day delay), filter by
 `lag_days`:
 
 
 ``` r
 archive_with_lag %>%
-  filter(lag_days <= 14)
-#> # A tibble: 2 × 5
+  filter(lag_days <= 7)
+#> # A tibble: 1 × 5
 #>   signal                  reference_time report_time         lag_days value
 #>   <chr>                   <date>         <dttm>                 <int> <dbl>
-#> 1 pct_ed_visits_influenza 2024-12-07     2024-12-20 12:00:00       13 0.560
-#> 2 pct_ed_visits_influenza 2024-12-07     2024-12-13 12:00:00        6 0.550
+#> 1 pct_ed_visits_influenza 2024-12-07     2024-12-13 12:00:00        6 0.550
 ```
 
 If you have code that uses the legacy V4 versioning arguments (`as_of`,

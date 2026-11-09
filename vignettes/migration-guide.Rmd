@@ -14,6 +14,7 @@ vignette: >
 
 ``` r
 library(epidatr)
+library(dplyr)
 ```
 
 The Delphi Epidata API has transitioned from its V4 endpoint (`pub_covidcast()`)
@@ -167,7 +168,8 @@ head(old)
 #> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2026-09-20
 #> 3 ca        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-09-20
 #> 4 pa        pct_ed_vi… nssp   state    week      2024-10-06        NA 2026-09-20
-#> # ℹ 2 more rows
+#> 5 ca        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-09-20
+#> 6 pa        pct_ed_vi… nssp   state    week      2024-10-13        NA 2026-09-20
 #> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
 #> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
@@ -190,7 +192,8 @@ head(new)
 #> 2 pct_e… 2024-11-08 12:00:00 state    ca        source      2024-10-12     0.140
 #> 3 pct_e… 2024-11-23 12:00:00 state    ca        source      2024-10-19     0.160
 #> 4 pct_e… 2024-11-08 12:00:00 state    ca        source      2024-10-26     0.200
-#> # ℹ 2 more rows
+#> 5 pct_e… 2024-12-03 12:00:00 state    ca        source      2024-11-02     0.25 
+#> 6 pct_e… 2024-12-13 12:00:00 state    ca        source      2024-11-09     0.310
 ```
 
 Both queries return the same signal, just with renamed and reshaped columns:
@@ -237,7 +240,8 @@ head(old_flu[, c("release_date", "region", "epiweek", "wili", "ili")])
 #> 2 2026-10-09   nat    2024-10-06  2.02  1.94
 #> 3 2026-10-09   nat    2024-10-13  2.07  2.01
 #> 4 2026-10-09   nat    2024-10-20  2.22  2.16
-#> # ℹ 2 more rows
+#> 5 2026-10-09   nat    2024-10-27  2.32  2.23
+#> 6 2026-10-09   nat    2024-11-03  2.47  2.39
 ```
 
 
@@ -257,7 +261,8 @@ head(new_flu)
 #> 2 wili   2025-09-12 12:00:00 nation   us        source      2024-10-19    
 #> 3 wili   2025-09-12 12:00:00 nation   us        source      2024-10-26    
 #> 4 wili   2025-09-12 12:00:00 nation   us        source      2024-11-02    
-#> # ℹ 2 more rows
+#> 5 wili   2025-09-12 12:00:00 nation   us        source      2024-11-09    
+#> 6 wili   2025-11-14 12:00:00 nation   us        source      2024-10-05    
 #> # ℹ 2 more variables: age_group <chr>, value <dbl>
 ```
 
@@ -285,7 +290,8 @@ head(old_revisions)
 #> 2 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-11-10
 #> 3 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-11-17
 #> 4 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-11-24
-#> # ℹ 2 more rows
+#> 5 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-12-01
+#> 6 pa        pct_ed_vi… nssp   state    week      2024-09-29        NA 2024-12-08
 #> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
 #> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
 ```
@@ -308,7 +314,8 @@ head(revisions)
 #> 2 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-10-12    
 #> 3 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-10-19    
 #> 4 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-10-26    
-#> # ℹ 2 more rows
+#> 5 pct_ed_visi… 2024-11-23 12:00:00 state    pa        source      2024-11-02    
+#> 6 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-11-02    
 #> # ℹ 1 more variable: value <dbl>
 ```
 
@@ -323,7 +330,7 @@ If you filtered by `lag`, fetch the archive with `epidata_archive()` and filter 
 revisions <- revisions %>%
   mutate(lag_days = as.integer(as.Date(report_time) - reference_time))
 
-# For an exact lag (e.g., the first report, 6 days after the reference week):
+# For an exact lag (e.g., values reported 6 days after the reference date):
 revisions %>%
   filter(lag_days == 6)
 #> # A tibble: 5 × 8
@@ -333,7 +340,7 @@ revisions %>%
 #> 2 pct_e… 2024-12-13 12:00:00 state    pa        source      2024-12-07     0.550
 #> 3 pct_e… 2024-12-20 12:00:00 state    pa        source      2024-12-14     0.850
 #> 4 pct_e… 2024-12-27 12:00:00 state    pa        source      2024-12-21     1.78 
-#> # ℹ 1 more row
+#> 5 pct_e… 2025-01-03 12:00:00 state    pa        source      2024-12-28     3.78 
 #> # ℹ 1 more variable: lag_days <int>
 
 # Or for maximum latency (e.g., at most 7 days of delay):
@@ -346,7 +353,9 @@ revisions %>%
 #> 2 pct_e… 2024-11-23 12:00:00 state    pa        source      2024-11-16     0.170
 #> 3 pct_e… 2024-12-07 12:00:00 state    pa        source      2024-11-30     0.350
 #> 4 pct_e… 2024-12-13 12:00:00 state    pa        source      2024-12-07     0.550
-#> # ℹ 3 more rows
+#> 5 pct_e… 2024-12-20 12:00:00 state    pa        source      2024-12-14     0.850
+#> 6 pct_e… 2024-12-27 12:00:00 state    pa        source      2024-12-21     1.78 
+#> 7 pct_e… 2025-01-03 12:00:00 state    pa        source      2024-12-28     3.78 
 #> # ℹ 1 more variable: lag_days <int>
 ```
 
