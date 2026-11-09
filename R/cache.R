@@ -33,9 +33,13 @@ cache_environ$cache_args <- NULL
 #' In both cases, these changes would only last for a single session (though the
 #'   deleted data would be gone permanently!).
 #'
-#' An important feature of the caching in this package is that only calls which
-#'   specify either `issues` before a certain date, or `as_of` before a certain
-#'   date will actually cache. For example the call
+#' An important feature of the caching in this package is that only calls for
+#'   a fixed past version of the data will actually cache. For V5 endpoints, that
+#'   means `epidata_snapshot()` with a `snapshot_date` before today, or
+#'   `epidata_archive()` with a `report_time` range (or `"<date"`) ending before
+#'   today; a "latest" snapshot or an open-ended archive won't cache. For legacy
+#'   endpoints, it means specifying either `issues` before a certain date, or
+#'   `as_of` before a certain date. For example the call
 #' ```
 #' pub_covidcast(
 #'   source = "jhu-csse",
@@ -344,7 +348,10 @@ check_is_recent <- function(dates, max_age) {
 
 #' Helper that checks whether a call is actually cachable
 #'
-#' The cacheable endpoints are those with `as_of` or `issues` parameters:
+#' A call is cachable when it asks for data as of a fixed point in the past,
+#' so later reports can't change the result.
+#'
+#' V3/V4 endpoints with an `as_of` or `issues` parameter (other than `"*"`):
 #' - pub_covidcast
 #' - pub_covid_hosp_state_timeseries
 #' - pub_ecdc_ili
@@ -355,6 +362,14 @@ check_is_recent <- function(dates, max_age) {
 #' - pub_nidss_flu
 #' - pub_paho_dengue
 #'
+#' V5 endpoints, when the version is bounded by a date before today:
+#' - `epidata_snapshot()` and `epidata_aux()` with `snapshot_date`
+#' - `epidata_archive()` and `epidata_aux()` with `report_time` given as an
+#'   `epirange()` or `"<date"` (not `">date"`, `"*"`, or omitted, which are
+#'   open-ended)
+#'
+#' V5 calls with a row `limit` are never cached, since the rows returned are
+#' not stable.
 #' @keywords internal
 check_is_cachable <- function(epidata_call, fetch_args) {
   params <- httr2::url_parse(epidata_call$request$url)$query
@@ -364,7 +379,7 @@ check_is_cachable <- function(epidata_call, fetch_args) {
     # Cache should be enabled
     is_cache_enabled() &&
       # Call should be cachable
-      (as_of_cachable || issues_cachable) &&
+      (as_of_cachable || issues_cachable || check_is_cachable_v5(params)) &&
       # This should not be a dry run
       !fetch_args$dry_run &&
       # Base url should be null
@@ -384,13 +399,15 @@ check_is_cachable <- function(epidata_call, fetch_args) {
 #' Latest date mentioned in versioning query parameters
 #'
 #' Extracts every date in `values` (`YYYY-MM-DD`, `YYYYMMDD`, or `YYYYWW`
-#' epiweeks, alone or inside ranges like `20220101-20220105`) and returns the
+#' epiweeks, alone, inside ranges like `20220101-20220105`, or at the start of
+#' timestamps like `2025-10-16T13:45:00Z`) and returns the
 #' latest as a `Date`, or `NULL` if there are none.
 #' @keywords internal
 latest_version_date <- function(values) {
   tokens <- unlist(regmatches(
     values,
-    gregexpr("\\b(\\d{4}-\\d{2}-\\d{2}|\\d{8}|\\d{6})\\b", values)
+    # digit lookarounds rather than \\b, so "2025-10-16T13:45:00Z" matches
+    gregexpr("(?<!\\d)(\\d{4}-\\d{2}-\\d{2}|\\d{8}|\\d{6})(?!\\d)", values, perl = TRUE)
   ))
   if (length(tokens) == 0) {
     return(NULL)
@@ -420,6 +437,31 @@ parse_version_token <- function(token) {
   )
 }
 
+#' V5 part of [check_is_cachable()]
+#'
+#' @param params the parsed query parameters of the request URL
+#' @keywords internal
+check_is_cachable_v5 <- function(params) {
+  # A limited query returns an unstable subset of rows.
+  if (!is.null(params$limit) && !identical(params$limit, "-1")) {
+    return(FALSE)
+  }
+  bound <- NULL
+  if (!is.null(params$snapshot_date)) {
+    bound <- params$snapshot_date
+  } else if (!is.null(params$report_time_query)) {
+    query <- params$report_time_query
+    # "<date" and "start:end" have a fixed upper bound; ">date" doesn't.
+    if (startsWith(query, "<") || (grepl(":", query, fixed = TRUE) && !startsWith(query, ">"))) {
+      bound <- query
+    }
+  }
+  # Bounds may be dates or timestamps (e.g. "2025-10-16T13:45:00Z").
+  bound_date <- latest_version_date(bound)
+  # Data reported later today can still change a version bounded by today.
+  !is.null(bound_date) && bound_date < Sys.Date()
+}
+
 #' Check for warnings for the cache
 #'
 #' @description
@@ -432,7 +474,7 @@ check_for_cache_warnings <- function(epidata_call, fetch_args) {
   # epidata_call has no `params` field; read the versioning parameters from the
   # request URL, as check_is_cachable() does (#385).
   params <- httr2::url_parse(epidata_call$request$url)$query
-  version_params <- c("as_of", "issues")
+  version_params <- c("as_of", "issues", "snapshot_date", "report_time_query")
   latest <- latest_version_date(unlist(params[intersect(names(params), version_params)]))
   if (!is.null(latest) && latest >= Sys.Date() - 7) {
     cli::cli_warn(

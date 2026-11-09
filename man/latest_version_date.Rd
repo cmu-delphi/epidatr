@@ -8,7 +8,8 @@ latest_version_date(values)
 }
 \description{
 Extracts every date in \code{values} (\code{YYYY-MM-DD}, \code{YYYYMMDD}, or \code{YYYYWW}
-epiweeks, alone or inside ranges like \code{20220101-20220105}) and returns the
+epiweeks, alone, inside ranges like \code{20220101-20220105}, or at the start of
+timestamps like \verb{2025-10-16T13:45:00Z}) and returns the
 latest as a \code{Date}, or \code{NULL} if there are none.
 }
 \keyword{internal}

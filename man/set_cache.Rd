@@ -68,9 +68,13 @@ Or if you know the data from 2 days ago is wrong, you could call
 In both cases, these changes would only last for a single session (though the
 deleted data would be gone permanently!).
 
-An important feature of the caching in this package is that only calls which
-specify either \code{issues} before a certain date, or \code{as_of} before a certain
-date will actually cache. For example the call
+An important feature of the caching in this package is that only calls for
+a fixed past version of the data will actually cache. For V5 endpoints, that
+means \code{epidata_snapshot()} with a \code{snapshot_date} before today, or
+\code{epidata_archive()} with a \code{report_time} range (or \code{"<date"}) ending before
+today; a "latest" snapshot or an open-ended archive won't cache. For legacy
+endpoints, it means specifying either \code{issues} before a certain date, or
+\code{as_of} before a certain date. For example the call
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{pub_covidcast(
   source = "jhu-csse",
