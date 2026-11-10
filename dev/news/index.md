@@ -21,6 +21,13 @@
 
 - `fetch_args_list(disable_data_frame_parsing = TRUE)` now actually
   disables data frame parsing again.
+- [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+  and
+  [`epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+  now trim whitespace around comma-joined `signals` and `geo_type`
+  values, so `"sig1, sig2"` works the same as `"sig1,sig2"`
+  ([\#407](https://github.com/cmu-delphi/epidatr/issues/407)).
 
 ## epidatr 1.4.0
 
@@ -117,18 +124,6 @@ CRAN release: 2026-09-21
   values for `report_time` are now filtered server-side using the
   cast-API’s inclusive range syntax; the local lower-bound filter has
   been removed.
-- [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
-  gains a `limit` argument, capping the number of rows the cast-API
-  returns for
-  [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
-  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
-  [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md),
-  and
-  [`epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md).
-  Defaults to `NULL` (no limit); `-1` has the same effect. The
-  underlying query has no stable sort order, so `limit` does not
-  guarantee the same rows (or count) across repeated calls. Use it only
-  to preview or debug a query, not as a real filter.
 - [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
   gains a `limit` argument, capping the number of rows the cast-API
   returns for
