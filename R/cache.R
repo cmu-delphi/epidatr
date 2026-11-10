@@ -91,8 +91,11 @@ cache_environ$cache_args <- NULL
 #' @param logfile where cachem's log of transactions is stored, relative to the
 #'   cache directory. By default, it is `"logfile.txt"`. The environmental
 #'   variable is `EPIDATR_CACHE_LOGFILE`.
-#' @param confirm whether to confirm directory creation. default is `TRUE`;
-#'   should only be set in non-interactive scripts
+#' @param confirm whether to ask before creating a missing `cache_dir`. Default
+#'   is `TRUE`. In non-interactive sessions there is no one to ask, so a missing
+#'   directory is not created and the cache stays off; set `confirm = FALSE` to
+#'   create it. When the cache is enabled at startup via `EPIDATR_USE_CACHE`, a
+#'   missing directory is created without asking.
 #' @param startup indicates whether the function is being called on
 #'   startup. Affects suppressability of the messages. Default is `FALSE`.
 #' @return [`NULL`] no return value, all effects are stored in the package
@@ -128,23 +131,26 @@ set_cache <- function(
   }
   stopifnot(is.character(cache_dir))
   if (is.null(days)) {
-    days <- Sys.getenv("EPIDATR_CACHE_MAX_AGE_DAYS", unset = 1) %>% as.numeric()
+    days <- Sys.getenv("EPIDATR_CACHE_MAX_AGE_DAYS", unset = "1")
   }
+  days <- as_cache_setting(days, "days", "EPIDATR_CACHE_MAX_AGE_DAYS")
   if (is.null(max_size)) {
-    max_size <- Sys.getenv("EPIDATR_CACHE_MAX_SIZE_MB", unset = 1024) %>%
-      as.numeric()
+    max_size <- Sys.getenv("EPIDATR_CACHE_MAX_SIZE_MB", unset = "1024")
   }
+  max_size <- as_cache_setting(max_size, "max_size", "EPIDATR_CACHE_MAX_SIZE_MB")
   if (is.null(logfile)) {
     logfile <- Sys.getenv("EPIDATR_CACHE_LOGFILE", unset = "logfile.txt")
   }
   stopifnot(is.character(logfile))
-  stopifnot(is.numeric(days), is.numeric(max_size))
   #
   # make sure that that directory exists and drag the user into that process
   cache_exists <- file.exists(cache_dir)
   cache_usable <- file.access(cache_dir, mode = 6) == 0
   if (!(cache_exists)) {
-    if (confirm) {
+    if (confirm && !rlang::is_interactive()) {
+      # readline() can't prompt here; it would return "" and silently decline
+      valid_user_input <- "no"
+    } else if (confirm) {
       user_input <- readline(glue::glue(
         "there is no directory at {cache_dir}; the cache will be turned off until a ",
         "viable directory has been set. Create one? (yes|no(default)) "
@@ -174,10 +180,19 @@ set_cache <- function(
   }
 
   if (!cache_usable) {
-    print(glue::glue(
-      "The directory at {cache_dir} is not accessible; check permissions and/or use a different ",
-      "directory for the cache (see the `set_cache` documentation)."
-    ))
+    cli::cli_inform(
+      c(
+        "!" = "Could not set the epidatr cache: {cache_dir} does not exist or is not
+          accessible.",
+        "i" = if (!cache_exists) {
+          "Create it, or call {.code set_cache(confirm = FALSE)} to create it without asking."
+        } else {
+          "Check its permissions, or use a different directory (see {.fn set_cache})."
+        }
+      ),
+      class = if (startup) "packageStartupMessage" else NULL
+    )
+    return(invisible(NULL))
   } else if (cache_exists) {
     cache_environ$epidatr_cache <- cachem::cache_disk(
       dir = cache_dir,
@@ -203,6 +218,31 @@ set_cache <- function(
     ),
     class = if (startup) "packageStartupMessage" else NULL
   )
+}
+
+#' Validate a numeric cache setting
+#'
+#' Coerces `value` (an argument or environment variable string) to a single
+#' positive number, aborting with an actionable message otherwise. A bare
+#' `as.numeric()` turns values like `"3/24"` into `NA`, which passes
+#' `is.numeric()` and later breaks every cache read inside cachem.
+#' @keywords internal
+as_cache_setting <- function(value, arg, env_var) {
+  num <- suppressWarnings(as.numeric(value))
+  if (length(num) != 1 || is.na(num) || !is.finite(num) || num <= 0) {
+    cli::cli_abort(
+      c(
+        "Cache setting {.arg {arg}} must be a single positive number, not {.val {value}}.",
+        "i" = paste0(
+          "Set it with the {.arg {arg}} argument or the ",
+          "{.envvar {env_var}} environment variable."
+        ),
+        "i" = if (arg == "days") "Fractions are fine (e.g. {.code 0.125} days is 3 hours)."
+      ),
+      class = "epidatr__invalid_cache_setting"
+    )
+  }
+  num
 }
 
 #' Manually reset the cache, deleting all currently saved data and starting afresh
@@ -341,6 +381,45 @@ check_is_cachable <- function(epidata_call, fetch_args) {
   return(is_cachable)
 }
 
+#' Latest date mentioned in versioning query parameters
+#'
+#' Extracts every date in `values` (`YYYY-MM-DD`, `YYYYMMDD`, or `YYYYWW`
+#' epiweeks, alone or inside ranges like `20220101-20220105`) and returns the
+#' latest as a `Date`, or `NULL` if there are none.
+#' @keywords internal
+latest_version_date <- function(values) {
+  tokens <- unlist(regmatches(
+    values,
+    gregexpr("\\b(\\d{4}-\\d{2}-\\d{2}|\\d{8}|\\d{6})\\b", values)
+  ))
+  if (length(tokens) == 0) {
+    return(NULL)
+  }
+  # A token that isn't a real date (e.g. "2024-02-30" or week 99) is ignored
+  # rather than raising an error here, before the request is even sent.
+  dates <- do.call(c, lapply(tokens, parse_version_token))
+  if (all(is.na(dates))) {
+    return(NULL)
+  }
+  max(dates, na.rm = TRUE)
+}
+
+#' Parse one date token from [latest_version_date()], or `NA` if invalid
+#' @keywords internal
+parse_version_token <- function(token) {
+  tryCatch(
+    if (grepl("-", token, fixed = TRUE)) {
+      as.Date(token, format = "%Y-%m-%d")
+    } else if (nchar(token) == 8) {
+      as.Date(token, format = "%Y%m%d")
+    } else {
+      # last day of the epiweek
+      parse_api_week(token, reference_week_day = 7)
+    },
+    error = function(e) as.Date(NA)
+  )
+}
+
 #' Check for warnings for the cache
 #'
 #' @description
@@ -350,17 +429,20 @@ check_is_cachable <- function(epidata_call, fetch_args) {
 #' @param fetch_args the args list for fetch as generated by [`fetch_args_list()`]
 #' @keywords internal
 check_for_cache_warnings <- function(epidata_call, fetch_args) {
-  as_of_recent <- check_is_recent(epidata_call$params$as_of, 7)
-  issues_recent <- check_is_recent(epidata_call$params$issues, 7)
-  if (as_of_recent || issues_recent) {
+  # epidata_call has no `params` field; read the versioning parameters from the
+  # request URL, as check_is_cachable() does (#385).
+  params <- httr2::url_parse(epidata_call$request$url)$query
+  version_params <- c("as_of", "issues")
+  latest <- latest_version_date(unlist(params[intersect(names(params), version_params)]))
+  if (!is.null(latest) && latest >= Sys.Date() - 7) {
     cli::cli_warn(
       c(
-        "Using cached results with `as_of` within the past week (or the future!).
-          This will likely result in an invalid cache. Consider",
-        "i" = "disabling the cache for this session with `disable_cache` or
-          permanently with environmental variable `EPIDATR_USE_CACHE=FALSE`",
-        "i" = "setting `EPIDATR_CACHE_MAX_AGE_DAYS={Sys.getenv('EPIDATR_CACHE_MAX_AGE_DAYS
-          ', unset = 1)}` to e.g. `3/24` (3 hours)."
+        "Using cached results for a data version within the past week (or the
+          future!). Newer reports may change these values, so the cache may be stale. Consider",
+        "i" = "disabling the cache for this session with `disable_cache()` or
+          permanently with the environment variable `EPIDATR_USE_CACHE=FALSE`, or",
+        "i" = "setting `EPIDATR_CACHE_MAX_AGE_DAYS` to a smaller value, e.g. `0.125`
+          (3 hours)."
       ),
       .frequency = "regularly",
       .frequency_id = "cache timing issues",

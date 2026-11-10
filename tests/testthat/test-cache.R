@@ -197,3 +197,183 @@ test_that("check_is_cachable", {
   expect_message(test_set_cache())
   check_fun(as_of = "2020-01-01", expected_result = TRUE)
 })
+
+test_that("set_cache validates days and max_size (#396)", {
+  withr::defer(disable_cache())
+  dir <- withr::local_tempdir()
+  # A fraction like "3/24" used to become NA, pass validation, and then make
+  # every cache read error inside cachem.
+  withr::local_envvar(EPIDATR_CACHE_MAX_AGE_DAYS = "3/24")
+  expect_error(
+    set_cache(cache_dir = dir, confirm = FALSE),
+    class = "epidatr__invalid_cache_setting"
+  )
+  withr::local_envvar(EPIDATR_CACHE_MAX_AGE_DAYS = "0.125")
+  expect_message(set_cache(cache_dir = dir, confirm = FALSE))
+  expect_equal(cache_info()$max_age, 0.125 * 24 * 60 * 60)
+
+  expect_error(
+    set_cache(cache_dir = dir, days = -1, confirm = FALSE),
+    class = "epidatr__invalid_cache_setting"
+  )
+  expect_error(
+    set_cache(cache_dir = dir, max_size = NA, confirm = FALSE),
+    class = "epidatr__invalid_cache_setting"
+  )
+  withr::local_envvar(EPIDATR_CACHE_MAX_SIZE_MB = "big")
+  expect_error(
+    set_cache(cache_dir = dir, confirm = FALSE),
+    class = "epidatr__invalid_cache_setting"
+  )
+  # the hint about fractions of a day is only for days
+  size_error <- tryCatch(set_cache(cache_dir = dir, confirm = FALSE), error = identity)
+  expect_false(grepl("days is 3 hours", conditionMessage(size_error), fixed = TRUE))
+  withr::local_envvar(EPIDATR_CACHE_MAX_SIZE_MB = "1024", EPIDATR_CACHE_MAX_AGE_DAYS = "3/24")
+  days_error <- tryCatch(set_cache(cache_dir = dir, confirm = FALSE), error = identity)
+  expect_true(grepl("days is 3 hours", conditionMessage(days_error), fixed = TRUE))
+})
+
+test_that("set_cache never prompts non-interactively and reports honestly (#401)", {
+  withr::defer(disable_cache())
+  missing_dir <- file.path(withr::local_tempdir(), "not-yet")
+  # confirm = TRUE can't prompt here, so the directory is not created, the
+  # cache stays off, and the message says so (it used to say "being used").
+  rlang::local_interactive(FALSE)
+  expect_message(
+    set_cache(cache_dir = missing_dir, confirm = TRUE),
+    "Could not set the epidatr cache"
+  )
+  expect_false(dir.exists(missing_dir))
+  expect_false(is_cache_enabled())
+
+  # confirm = FALSE (what .onLoad uses) creates the directory.
+  expect_message(
+    set_cache(cache_dir = missing_dir, confirm = FALSE),
+    "cache is being used"
+  )
+  expect_true(dir.exists(missing_dir))
+  expect_true(is_cache_enabled())
+})
+
+test_that("a bad cache setting doesn't stop the package loading (#396, #401)", {
+  old_use_cache <- cache_environ$use_cache
+  withr::defer(cache_environ$use_cache <- old_use_cache)
+  withr::defer(disable_cache())
+  withr::local_envvar(
+    EPIDATR_USE_CACHE = "TRUE",
+    EPIDATR_CACHE_DIR = withr::local_tempdir(),
+    EPIDATR_CACHE_MAX_AGE_DAYS = "3/24"
+  )
+  expect_message(.onLoad(NULL, "epidatr"), "epidatr cache is off")
+  expect_false(is_cache_enabled())
+  # braces in the bad value must not break the message itself
+  withr::local_envvar(EPIDATR_CACHE_MAX_AGE_DAYS = "{x}")
+  expect_message(.onLoad(NULL, "epidatr"), "epidatr cache is off")
+})
+
+covidcast_call_as_of <- function(as_of) {
+  pub_covidcast(
+    source = "jhu-csse",
+    signals = "confirmed_7dav_incidence_prop",
+    time_type = "day",
+    geo_type = "state",
+    time_values = epirange("2020-06-01", "2020-08-01"),
+    geo_values = "ca",
+    as_of = as_of,
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+}
+
+test_that("the stale-cache warning fires for recent versions (#385)", {
+  # the warning is rate-limited per session; show it every time here
+  withr::local_options(rlib_warning_verbosity = "verbose")
+  # It used to read epidata_call$params, which doesn't exist, so it never fired.
+  expect_warning(
+    check_for_cache_warnings(covidcast_call_as_of(Sys.Date()), fetch_args_list()),
+    class = "cache_recent_data"
+  )
+  expect_no_warning(
+    check_for_cache_warnings(covidcast_call_as_of("2022-01-01"), fetch_args_list())
+  )
+})
+
+test_that("latest_version_date reads dates, ranges, and epiweeks", {
+  expect_equal(latest_version_date("20220101"), as.Date("2022-01-01"))
+  expect_equal(latest_version_date("20220101-20220105"), as.Date("2022-01-05"))
+  expect_equal(latest_version_date("2024-12-01:2025-01-01"), as.Date("2025-01-01"))
+  expect_equal(latest_version_date("<2025-01-01"), as.Date("2025-01-01"))
+  expect_equal(latest_version_date("202001-202004"), as.Date("2020-01-25"))
+  expect_null(latest_version_date(NULL))
+  expect_null(latest_version_date("*"))
+  # Impossible dates are ignored instead of raising an error.
+  expect_null(latest_version_date("2024-02-30"))
+  expect_null(latest_version_date("202099"))
+  expect_equal(latest_version_date("20241301,20230101"), as.Date("2023-01-01"))
+})
+
+test_that("refresh_cache only writes entries a default fetch may read (#388)", {
+  expect_message(test_set_cache(cache_dir = withr::local_tempdir()))
+  withr::defer(disable_cache())
+  call <- covidcast_call_as_of("2022-01-01")
+
+  # refresh_cache with a parse-changing setting must not write an entry that a
+  # later default fetch would read back.
+  epidata <- data.frame(
+    source = "jhu-csse", signal = "confirmed_7dav_incidence_prop",
+    geo_type = "state", time_type = "day", geo_value = "ca",
+    time_value = 20200601L, issue = 20200602L, lag = 1L, value = 1.5
+  )
+  requests <- 0
+  local_mocked_bindings(request_epidata = function(...) {
+    requests <<- requests + 1
+    epidata
+  })
+  fetch(call, fetch_args_list(refresh_cache = TRUE, disable_date_parsing = TRUE))
+  expect_length(cache_environ$epidatr_cache$keys(), 0)
+
+  # A default fetch caches, and a refresh rewrites the same entry.
+  first <- suppressWarnings(fetch(call))
+  expect_length(cache_environ$epidatr_cache$keys(), 1)
+  suppressWarnings(fetch(call))
+  expect_equal(requests, 2)
+  suppressWarnings(fetch(call, fetch_args_list(refresh_cache = TRUE)))
+  expect_equal(requests, 3)
+  expect_length(cache_environ$epidatr_cache$keys(), 1)
+  expect_s3_class(first$time_value, "Date")
+})
+
+test_that("an empty result allowed by return_empty isn't cached (#388)", {
+  expect_message(test_set_cache(cache_dir = withr::local_tempdir()))
+  withr::defer(disable_cache())
+  local_mocked_bindings(request_epidata = function(...) list())
+  result <- suppressWarnings(
+    fetch(covidcast_call_as_of("2022-01-01"), fetch_args_list(return_empty = TRUE))
+  )
+  expect_equal(nrow(result), 0)
+  expect_length(cache_environ$epidatr_cache$keys(), 0)
+})
+
+test_that("the cache key includes a non-default reference_week_day (#388)", {
+  call <- covidcast_call_as_of("2022-01-01")
+  # The default keeps the plain-URL key so existing cache entries stay valid.
+  default_key <- cache_key(call, fetch_args_list())
+  expect_equal(default_key, request_url(call, "json"))
+  expect_false(default_key == cache_key(call, fetch_args_list(reference_week_day = 7)))
+
+  # and fetch() uses it: a different reference_week_day doesn't hit the cache
+  expect_message(test_set_cache(cache_dir = withr::local_tempdir()))
+  withr::defer(disable_cache())
+  requests <- 0
+  local_mocked_bindings(request_epidata = function(...) {
+    requests <<- requests + 1
+    data.frame(
+      source = "jhu-csse", signal = "confirmed_7dav_incidence_prop",
+      geo_type = "state", time_type = "day", geo_value = "ca",
+      time_value = 20200601L, issue = 20200602L, lag = 1L, value = 1.5
+    )
+  })
+  suppressWarnings(fetch(call))
+  suppressWarnings(fetch(call, fetch_args_list(reference_week_day = 7)))
+  suppressWarnings(fetch(call, fetch_args_list(reference_week_day = 7)))
+  expect_equal(requests, 2)
+})

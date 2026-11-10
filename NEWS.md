@@ -25,6 +25,22 @@
 
 ## Patches
 
+- Caching fixes:
+  - `set_cache()` now rejects a max age or size that isn't a positive number.
+    Previously `EPIDATR_CACHE_MAX_AGE_DAYS=3/24` became `NA` and made every
+    cached fetch fail (#396). An invalid setting at load time turns the cache
+    off with a message rather than stopping the package from loading.
+  - Loading the package with `EPIDATR_USE_CACHE=TRUE` creates a missing cache
+    directory instead of prompting, and `set_cache()` no longer prompts in
+    non-interactive sessions. When the cache can't be set, the message now says
+    so instead of claiming the cache is in use (#401).
+  - The warning about caching recent data versions (class `cache_recent_data`)
+    can now fire; it previously never did (#385).
+  - `refresh_cache = TRUE` no longer writes entries that a default fetch would
+    read back with different parsing, and a non-default `reference_week_day`
+    gets its own cache entry. An API error response that `return_empty = TRUE`
+    turned into an empty result is no longer cached, so a later default call
+    still raises the error (#388).
 - `fetch_args_list(disable_data_frame_parsing = TRUE)` now actually disables
   data frame parsing again.
 - `epidata_snapshot()`, `epidata_archive()`, and `epidata()` now trim

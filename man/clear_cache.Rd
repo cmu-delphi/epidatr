@@ -23,8 +23,11 @@ variable is \code{EPIDATR_CACHE_MAX_SIZE_MB}.}
     \item{\code{logfile}}{where cachem's log of transactions is stored, relative to the
 cache directory. By default, it is \code{"logfile.txt"}. The environmental
 variable is \code{EPIDATR_CACHE_LOGFILE}.}
-    \item{\code{confirm}}{whether to confirm directory creation. default is \code{TRUE};
-should only be set in non-interactive scripts}
+    \item{\code{confirm}}{whether to ask before creating a missing \code{cache_dir}. Default
+is \code{TRUE}. In non-interactive sessions there is no one to ask, so a missing
+directory is not created and the cache stays off; set \code{confirm = FALSE} to
+create it. When the cache is enabled at startup via \code{EPIDATR_USE_CACHE}, a
+missing directory is created without asking.}
     \item{\code{startup}}{indicates whether the function is being called on
 startup. Affects suppressability of the messages. Default is \code{FALSE}.}
   }}

@@ -31,8 +31,11 @@ variable is \code{EPIDATR_CACHE_MAX_SIZE_MB}.}
 cache directory. By default, it is \code{"logfile.txt"}. The environmental
 variable is \code{EPIDATR_CACHE_LOGFILE}.}
 
-\item{confirm}{whether to confirm directory creation. default is \code{TRUE};
-should only be set in non-interactive scripts}
+\item{confirm}{whether to ask before creating a missing \code{cache_dir}. Default
+is \code{TRUE}. In non-interactive sessions there is no one to ask, so a missing
+directory is not created and the cache stays off; set \code{confirm = FALSE} to
+create it. When the cache is enabled at startup via \code{EPIDATR_USE_CACHE}, a
+missing directory is created without asking.}
 
 \item{startup}{indicates whether the function is being called on
 startup. Affects suppressability of the messages. Default is \code{FALSE}.}
