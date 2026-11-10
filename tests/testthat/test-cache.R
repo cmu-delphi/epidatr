@@ -225,6 +225,12 @@ test_that("set_cache validates days and max_size (#396)", {
     set_cache(cache_dir = dir, confirm = FALSE),
     class = "epidatr__invalid_cache_setting"
   )
+  # the hint about fractions of a day is only for days
+  size_error <- tryCatch(set_cache(cache_dir = dir, confirm = FALSE), error = identity)
+  expect_false(grepl("days is 3 hours", conditionMessage(size_error), fixed = TRUE))
+  withr::local_envvar(EPIDATR_CACHE_MAX_SIZE_MB = "1024", EPIDATR_CACHE_MAX_AGE_DAYS = "3/24")
+  days_error <- tryCatch(set_cache(cache_dir = dir, confirm = FALSE), error = identity)
+  expect_true(grepl("days is 3 hours", conditionMessage(days_error), fixed = TRUE))
 })
 
 test_that("set_cache never prompts non-interactively and reports honestly (#401)", {
