@@ -1802,7 +1802,8 @@ epidata_aux.default <- function(
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time, required = FALSE)
 
   if (identical(snapshot_date, "latest")) {
-    snapshot_date <- Sys.Date()
+    # the API's dates are UTC; a local date can be a day behind
+    snapshot_date <- utc_today()
   }
 
   assert_report_time_param("snapshot_date", snapshot_date, len = 1, required = FALSE)

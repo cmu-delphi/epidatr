@@ -309,6 +309,11 @@ test_that("latest_version_date reads dates, ranges, and epiweeks", {
   expect_null(latest_version_date("2024-02-30"))
   expect_null(latest_version_date("202099"))
   expect_equal(latest_version_date("20241301,20230101"), as.Date("2023-01-01"))
+  expect_equal(latest_version_date("2025-10-16T13:45:00Z"), as.Date("2025-10-16"))
+  expect_equal(
+    latest_version_date("2025-10-01T00:00:00Z:2025-10-16T13:45:00Z"),
+    as.Date("2025-10-16")
+  )
 })
 
 test_that("refresh_cache only writes entries a default fetch may read (#388)", {
@@ -376,4 +381,108 @@ test_that("the cache key includes a non-default reference_week_day (#388)", {
   suppressWarnings(fetch(call, fetch_args_list(reference_week_day = 7)))
   suppressWarnings(fetch(call, fetch_args_list(reference_week_day = 7)))
   expect_equal(requests, 2)
+})
+
+test_that("V5 calls for a fixed past version are cachable (A2)", {
+  expect_message(test_set_cache(cache_dir = withr::local_tempdir()))
+  withr::defer(disable_cache())
+  dry <- fetch_args_list(dry_run = TRUE)
+  snap <- function(...) epidata_snapshot("nssp", "pct_ed_visits_influenza", "state", ..., fetch_args = dry)
+  arch <- function(...) epidata_archive("nssp", "pct_ed_visits_influenza", "state", ..., fetch_args = dry)
+  cachable <- function(call, fetch_args = fetch_args_list()) check_is_cachable(call, fetch_args)
+  two_days_ago <- format(utc_today() - 2)
+  yesterday <- format(utc_today() - 1)
+  today <- format(utc_today())
+
+  # fixed past versions
+  expect_true(cachable(snap(snapshot_date = "2025-01-01")))
+  expect_true(cachable(snap(snapshot_date = two_days_ago)))
+  expect_true(cachable(arch(report_time = epirange("2024-12-01", "2025-01-01"))))
+  expect_true(cachable(arch(report_time = "<2025-01-01")))
+  expect_true(cachable(epidata_aux("nwss", report_time = "<2026-08-01", fetch_args = dry)))
+
+  # versions that can still change
+  expect_false(cachable(snap())) # latest
+  expect_false(cachable(snap(snapshot_date = today)))
+  expect_false(cachable(snap(snapshot_date = yesterday))) # one day of margin
+  expect_false(cachable(arch())) # every version, including future ones
+  expect_false(cachable(arch(report_time = "*")))
+  expect_false(cachable(arch(report_time = ">2025-01-01")))
+  expect_false(cachable(arch(report_time = epirange("2024-12-01", today))))
+  # comma-joined conditions are OR'd, so one open-ended part makes it open
+  expect_false(cachable(arch(report_time = c("<2024-01-01", ">2025-01-01"))))
+  expect_true(cachable(arch(report_time = c("<2024-01-01", "<=2024-06-01"))))
+
+  # a row limit returns an unstable subset
+  limited <- epidata_snapshot(
+    "nssp", "pct_ed_visits_influenza", "state",
+    snapshot_date = "2025-01-01", fetch_args = fetch_args_list(dry_run = TRUE, limit = 5)
+  )
+  expect_false(cachable(limited))
+})
+
+test_that("V5 cachability edge cases", {
+  local_mocked_bindings(utc_today = function() as.Date("2026-11-08"))
+  v5 <- function(...) check_is_cachable_v5(list(...))
+  # the cutoff is the UTC date, with a day of margin for late loads
+  expect_true(v5(snapshot_date = "2026-11-06"))
+  expect_false(v5(snapshot_date = "2026-11-07"))
+  expect_false(v5(snapshot_date = "2026-11-08"))
+  expect_false(v5(snapshot_date = "2026-11-08T01:00:00Z"))
+  # every OR'd condition needs an upper bound
+  expect_false(v5(report_time_query = "<2024-01-01,>2025-01-01"))
+  expect_false(v5(report_time_query = "2024-01-01:2024-02-01,>=2025-01-01"))
+  expect_true(v5(report_time_query = "<2024-01-01,2024-03-01:2024-04-01"))
+  # a range needs both ends, and dates must be real
+  expect_false(v5(report_time_query = "2024-01-01:"))
+  expect_false(v5(report_time_query = "<2024-02-30"))
+  expect_false(v5(report_time_query = "<2024-02-30,<2023-01-01"))
+  expect_true(v5(report_time_query = "2025-10-01T00:00:00Z:2025-10-16T13:45:00Z"))
+  # fractional seconds aren't an epiweek
+  expect_true(v5(snapshot_date = "2024-01-01T00:00:00.123456Z"))
+  expect_false(v5(report_time_query = "*"))
+  expect_false(v5())
+})
+
+test_that("a repeated V5 snapshot is served from the cache", {
+  expect_message(test_set_cache(cache_dir = withr::local_tempdir()))
+  withr::defer(disable_cache())
+  csv <- data.frame(
+    signal = "pct_ed_visits_influenza", report_time = "2024-12-27T12:00:00Z",
+    geo_type = "state", geo_value = c("ca", "pa"), fill_method = "source",
+    reference_time = "2024-12-21", value = c("1.5", "2.5")
+  )
+  requests <- 0
+  local_mocked_bindings(request_epidata = function(...) {
+    requests <<- requests + 1
+    csv
+  })
+  get <- function() {
+    epidata_snapshot("nssp", "pct_ed_visits_influenza", "state", snapshot_date = "2025-01-01")
+  }
+  first <- get()
+  second <- get()
+  expect_equal(requests, 1)
+  expect_identical(first, second) # including the cast_source/cast_kind attributes
+})
+
+test_that("the stale-cache warning covers V5 versions", {
+  # the warning is rate-limited per session; show it every time here
+  withr::local_options(rlib_warning_verbosity = "verbose")
+  recent <- format(Sys.Date() - 2)
+  expect_warning(
+    check_for_cache_warnings(
+      epidata_snapshot("nssp", "pct_ed_visits_influenza", "state",
+        snapshot_date = recent, fetch_args = fetch_args_list(dry_run = TRUE)
+      ),
+      fetch_args_list()
+    ),
+    class = "cache_recent_data"
+  )
+  expect_no_warning(check_for_cache_warnings(
+    epidata_archive("nssp", "pct_ed_visits_influenza", "state",
+      report_time = epirange("2024-12-01", "2025-01-01"), fetch_args = fetch_args_list(dry_run = TRUE)
+    ),
+    fetch_args_list()
+  ))
 })

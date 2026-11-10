@@ -5,6 +5,14 @@
 - `epidata_snapshot()`, `epidata_archive()`, and `epidata()` now filter
   `geo_values` and `reference_time` server-side via the cast-API `geo_value`
   and `reference_times` parameters (cmu-delphi/cast-api#110).
+- `epidata_snapshot()`, `epidata_archive()`, and `epidata_aux()` results are now
+  cached (when the cache is enabled) for fixed past versions: a `snapshot_date`
+  at least two days ago (UTC), or a `report_time` range or `"<date"` whose end
+  is at least two days ago. "Latest" snapshots, open-ended archives
+  (including a `report_time` vector with any open-ended condition), and calls
+  with a row `limit` are not cached. Previously no V5 query was ever cached.
+- `epidata_aux(snapshot_date = "latest")` now uses today's UTC date, so it no
+  longer misses releases made after midnight UTC in time zones behind UTC.
 
 ## Documentation
 
