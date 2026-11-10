@@ -321,7 +321,9 @@ head(revisions)
 
 <a id="lag"></a>
 
-If you filtered by `lag`, fetch the archive with `epidata_archive()` and filter afterwards:
+If you filtered by `lag`, fetch the archive with `epidata_archive()` and filter afterwards.
+The `lag_days` column below always counts days. V4's `lag` counted in the signal's time unit, so for a
+weekly signal like this one, V4's `lag = 1` meant one week, not one day.
 
 
 ``` r
@@ -363,7 +365,7 @@ revisions %>%
 # with no report in that window are dropped):
 revisions %>%
   filter(lag_days <= 7) %>%
-  slice_max(report_time, n = 1, by = c(geo_value, reference_time))
+  slice_max(report_time, n = 1, by = c(signal, geo_value, reference_time))
 #> # A tibble: 7 × 8
 #>   signal report_time         geo_type geo_value fill_method reference_time value
 #>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
@@ -376,6 +378,10 @@ revisions %>%
 #> 7 pct_e… 2025-01-03 12:00:00 state    pa        source      2024-12-28     3.78 
 #> # ℹ 1 more variable: lag_days <int>
 ```
+
+Here the last two results match, because this weekly signal has at most one report within 7 days of
+each reference date. For signals that are revised more often, the `slice_max()` step keeps only the
+latest of those reports.
 
 ## Inspecting a source in the new API
 
