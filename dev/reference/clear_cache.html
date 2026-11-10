@@ -85,8 +85,11 @@ cache directory. By default, it is <code>"logfile.txt"</code>. The environmental
 variable is <code>EPIDATR_CACHE_LOGFILE</code>.</p></dd>
 
     <dt><code>confirm</code></dt>
-<dd><p>whether to confirm directory creation. default is <code>TRUE</code>;
-should only be set in non-interactive scripts</p></dd>
+<dd><p>whether to ask before creating a missing <code>cache_dir</code>. Default
+is <code>TRUE</code>. In non-interactive sessions there is no one to ask, so a missing
+directory is not created and the cache stays off; set <code>confirm = FALSE</code> to
+create it. When the cache is enabled at startup via <code>EPIDATR_USE_CACHE</code>, a
+missing directory is created without asking.</p></dd>
 
     <dt><code>startup</code></dt>
 <dd><p>indicates whether the function is being called on

@@ -45,8 +45,12 @@ clear_cache(..., disable = FALSE)
 
   `confirm`
 
-  :   whether to confirm directory creation. default is `TRUE`; should
-      only be set in non-interactive scripts
+  :   whether to ask before creating a missing `cache_dir`. Default is
+      `TRUE`. In non-interactive sessions there is no one to ask, so a
+      missing directory is not created and the cache stays off; set
+      `confirm = FALSE` to create it. When the cache is enabled at
+      startup via `EPIDATR_USE_CACHE`, a missing directory is created
+      without asking.
 
   `startup`
 

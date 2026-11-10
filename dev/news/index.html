@@ -56,7 +56,15 @@
 </ul></div>
 <div class="section level3">
 <h3 id="patches-1-4-1">Patches<a class="anchor" aria-label="anchor" href="#patches-1-4-1"></a></h3>
+<ul><li>Caching fixes:
 <ul><li>
+<code><a href="../reference/set_cache.html">set_cache()</a></code> now rejects a max age or size that isn’t a positive number. Previously <code>EPIDATR_CACHE_MAX_AGE_DAYS=3/24</code> became <code>NA</code> and made every cached fetch fail (<a href="https://github.com/cmu-delphi/epidatr/issues/396" class="external-link">#396</a>). An invalid setting at load time turns the cache off with a message rather than stopping the package from loading.</li>
+<li>Loading the package with <code>EPIDATR_USE_CACHE=TRUE</code> creates a missing cache directory instead of prompting, and <code><a href="../reference/set_cache.html">set_cache()</a></code> no longer prompts in non-interactive sessions. When the cache can’t be set, the message now says so instead of claiming the cache is in use (<a href="https://github.com/cmu-delphi/epidatr/issues/401" class="external-link">#401</a>).</li>
+<li>The warning about caching recent data versions (class <code>cache_recent_data</code>) can now fire; it previously never did (<a href="https://github.com/cmu-delphi/epidatr/issues/385" class="external-link">#385</a>).</li>
+<li>
+<code>refresh_cache = TRUE</code> no longer writes entries that a default fetch would read back with different parsing, and a non-default <code>reference_week_day</code> gets its own cache entry. An API error response that <code>return_empty = TRUE</code> turned into an empty result is no longer cached, so a later default call still raises the error (<a href="https://github.com/cmu-delphi/epidatr/issues/388" class="external-link">#388</a>).</li>
+</ul></li>
+<li>
 <code>fetch_args_list(disable_data_frame_parsing = TRUE)</code> now actually disables data frame parsing again.</li>
 <li>
 <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="../reference/cast_api_queries.html">epidata()</a></code> now trim whitespace around comma-joined <code>signals</code> and <code>geo_type</code> values, so <code>"sig1, sig2"</code> works the same as <code>"sig1,sig2"</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/407" class="external-link">#407</a>).</li>

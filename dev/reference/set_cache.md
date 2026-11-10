@@ -103,8 +103,12 @@ set_cache(
 
 - confirm:
 
-  whether to confirm directory creation. default is `TRUE`; should only
-  be set in non-interactive scripts
+  whether to ask before creating a missing `cache_dir`. Default is
+  `TRUE`. In non-interactive sessions there is no one to ask, so a
+  missing directory is not created and the cache stays off; set
+  `confirm = FALSE` to create it. When the cache is enabled at startup
+  via `EPIDATR_USE_CACHE`, a missing directory is created without
+  asking.
 
 - startup:
 
@@ -135,8 +139,8 @@ set_cache(
 )
 #> ! epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not
 #>   intended).
-#> ℹ The cache directory is /tmp/RtmpmZkXK6.
+#> ℹ The cache directory is /tmp/RtmpDni6nq.
 #> ℹ The cache will be cleared after 14 days and will be pruned if it exceeds 512
 #>   MB.
-#> ℹ The log of cache transactions is stored at /tmp/RtmpmZkXK6/logs.txt.
+#> ℹ The log of cache transactions is stored at /tmp/RtmpDni6nq/logs.txt.
 ```
