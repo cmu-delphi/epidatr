@@ -55,17 +55,18 @@ interest.
 }
 \examples{
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
-library(magrittr)
-
-call <- pub_covidcast(
-  source = "jhu-csse",
-  signals = "confirmed_7dav_incidence_prop",
-  time_type = "day",
+# Build the request without sending it
+call <- epidata_snapshot(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
   geo_type = "state",
-  time_values = epirange(20200601, 20200801),
-  geo_values = c("ca", "fl"),
+  geo_values = c("pa", "ca"),
+  reference_time = epirange("2024-12-01", "2024-12-31"),
   fetch_args = fetch_args_list(dry_run = TRUE)
 )
-call \%>\% fetch(fetch_args_list(dry_run = TRUE))
+call
+
+# Send it and get the data
+fetch(call)
 \dontshow{\}) # examplesIf}
 }
