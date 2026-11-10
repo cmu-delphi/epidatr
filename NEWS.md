@@ -14,6 +14,10 @@
 - `epidata_aux(snapshot_date = "latest")` now uses today's UTC date, so it no
   longer misses releases made after midnight UTC in time zones behind UTC.
 
+- `cache_info()` now also reports `enabled`, `n_entries` and `size_mb`, works when
+  the cache is off (inspecting the default directory), and prints a hint about
+  `clear_cache()`.
+
 ## Documentation
 
 - `?set_cache` now names the `EPIDATR_CACHE_DIR` environment variable and

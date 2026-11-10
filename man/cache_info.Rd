@@ -7,11 +7,15 @@
 cache_info()
 }
 \value{
-\code{\link{list}} containing the info result as created by cachem
+a list of class \code{epidatr_cache_info}; printing it also shows how to
+clear the cache
 }
 \description{
-Print out the information about the cache (as would be returned by cachem's
-\code{info()} method).
+Report where the cache lives and how big it is. The result includes cachem's
+\code{info()} fields (such as \code{dir}, \code{max_size} and \code{max_age}) plus \code{enabled},
+\code{n_entries} and \code{size_mb}. Entries written by older epidatr versions share
+the directory and are counted; use \code{\link{clear_cache}} to remove them. When the
+cache is off, the directory it would use is inspected instead.
 }
 \seealso{
 \code{\link{set_cache}} to start a new cache (and general caching info),
