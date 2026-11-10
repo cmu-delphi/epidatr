@@ -48,7 +48,7 @@ the cache using either this function for a given session, or environmental
 variables for a persistent cache.
 The typical recommended workflow for using the cache is to set the
 environmental variables \code{EPIDATR_USE_CACHE=TRUE} and
-\code{EPIDATR_CACHE_DIRECTORY="/your/directory/here"}in your \code{.Renviron}, for
+\code{EPIDATR_CACHE_DIR="/your/directory/here"} in your \code{.Renviron}, for
 example by calling \code{file.edit("~/.Renviron")}.
 See the parameters below for some more configurables if you're so inclined.
 
@@ -58,7 +58,8 @@ handle to the new cache using \href{https://cachem.r-lib.org/index.html}{cachem}
 that seamlessly handles caching for you.
 Say your cache is normally stored in some default directory, but for the
 current session you want to save your results in
-\verb{~/my/temporary/savedirectory}, then you would call \code{set_cache(dir = "~/my/temporary/savedirectory")}.
+\verb{~/my/temporary/savedirectory}, then you would call
+\code{set_cache(cache_dir = "~/my/temporary/savedirectory")}.
 Or if you know the data from 2 days ago is wrong, you could call
 \code{set_cache(days = 1)} to clear older data whenever the cache is referenced.
 In both cases, these changes would only last for a single session (though the

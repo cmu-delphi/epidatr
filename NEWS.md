@@ -8,13 +8,28 @@
 
 ## Documentation
 
+- `?set_cache` now names the `EPIDATR_CACHE_DIR` environment variable and
+  `cache_dir` argument correctly (#394); the `?epidata_call` example no
+  longer makes a live request (#406); help pages no longer show "See also"
+  twice.
 - `fill_method` values are `"source"`, `"ave"`, and `"zero"` (previously
   documented as `"fill_ave"` and `"fill_zero"`).
+- Vignettes: the reporting-lag example now converts `report_time` with
+  `as.Date()` before subtracting `reference_time` (since 1.4.0 the direct
+  subtraction gave a meaningless value and lag filters returned no rows);
+  metadata output is no longer truncated to 4 sources; the
+  `pub_dengue_nowcast()` example uses dates that have data; the revision-history
+  plot now shows the full series as known on each release date (the archive
+  only lists changed values); vignettes and README re-rendered with 1.4.x
+  output, each vignette in a fresh R session.
 
 ## Patches
 
 - `fetch_args_list(disable_data_frame_parsing = TRUE)` now actually disables
   data frame parsing again.
+- `epidata_snapshot()`, `epidata_archive()`, and `epidata()` now trim
+  whitespace around comma-joined `signals` and `geo_type` values, so
+  `"sig1, sig2"` works the same as `"sig1,sig2"` (#407).
 
 # epidatr 1.4.0
 
@@ -59,12 +74,6 @@
   same effect. The underlying query has no stable sort order, so `limit` does
   not guarantee the same rows (or count) across repeated calls. Use it only to
   preview or debug a query, not as a real filter.
-- `fetch_args_list()` gains a `limit` argument, capping the number of rows
-  the cast-API returns for `epidata_snapshot()`, `epidata_archive()`,
-  `epidata_aux()`, and `epidata()`. Defaults to `NULL` (no limit); `-1` has
-  the same effect. The underlying query has no stable sort order, so `limit`
-  does not guarantee the same rows (or count) across repeated calls. Use it
-  only to preview or debug a query, not as a real filter.
 
 
 # epidatr 1.3.0

@@ -25,18 +25,12 @@ reference" section of \code{vignette("migration-guide")}, and visit the \href{ht
 
 API docs: \url{https://cmu-delphi.github.io/delphi-epidata/api/meta_norostat.html}
 }
-\section{See also}{
-
-For example queries showing how to discover signals and build calls,
-see \code{vignette("signal-discovery", package = "epidatr")}.
-}
-
 \examples{
 \dontrun{
 pvt_meta_norostat(auth = Sys.getenv("DELPHI_EPIDATA_KEY"))
 }
 }
 \seealso{
-\code{\link[=pvt_norostat]{pvt_norostat()}}
+\code{\link[=pvt_norostat]{pvt_norostat()}}, \code{vignette("signal-discovery")}
 }
 \keyword{endpoint}

@@ -9,7 +9,7 @@ vignette: >
 
 ```{r, echo = FALSE, message = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
-options(tibble.print_min = 4L, tibble.print_max = 4L, max.print = 4L)
+options(tibble.print_min = 4L, tibble.print_max = 4L)
 library(epidatr)
 library(dplyr)
 ```
@@ -255,7 +255,7 @@ pub_nidss_flu(regions = "nationwide", epiweeks = epirange(201801, 201804))
 pub_nidss_dengue(locations = "nationwide", epiweeks = epirange(201801, 201804))
 
 # PAHO Dengue Nowcasts: Delphi nowcast estimates for the Americas
-pub_dengue_nowcast(locations = "ca", epiweeks = epirange(202001, 202004))
+pub_dengue_nowcast(locations = "ca", epiweeks = epirange(201801, 201804))
 ```
 
 </details>

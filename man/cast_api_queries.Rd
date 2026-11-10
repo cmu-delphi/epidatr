@@ -147,13 +147,7 @@ query came back empty. Pass \code{fetch_args_list(return_empty = TRUE)} to
 suppress these errors and warnings and get an empty tibble back instead.
 }
 
-\section{See also}{
-
-For example queries showing how to discover signals and build calls,
-see \code{vignette("signal-discovery", package = "epidatr")}.
-}
-
 \seealso{
-\code{\link[=epidata_meta]{epidata_meta()}}, \code{\link[=epirange]{epirange()}}
+\code{\link[=epidata_meta]{epidata_meta()}}, \code{\link[=epirange]{epirange()}}, \code{vignette("signal-discovery")}
 }
 \keyword{endpoint}
