@@ -48,12 +48,6 @@ used to look up facility identifiers in a variety of ways.
 Starting October 1, 2022, some facilities are only required to
 report annually.
 }
-\section{See also}{
-
-For example queries showing how to discover signals and build calls,
-see \code{vignette("signal-discovery", package = "epidatr")}.
-}
-
 \examples{
 \dontshow{if (curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != "") withAutoprint(\{ # examplesIf}
 
@@ -69,6 +63,6 @@ pub_covid_hosp_facility(
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=pub_covid_hosp_facility]{pub_covid_hosp_facility()}}, \code{\link[=epirange]{epirange()}}
+\code{\link[=pub_covid_hosp_facility]{pub_covid_hosp_facility()}}, \code{\link[=epirange]{epirange()}}, \code{vignette("signal-discovery")}
 }
 \keyword{endpoint}

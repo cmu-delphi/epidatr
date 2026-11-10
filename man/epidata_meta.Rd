@@ -23,13 +23,7 @@ If \code{source} is specified, the metadata list for that source.
 including \code{report_time} ranges, \code{reference_time} ranges, and lists of
 available signals and geo types.
 }
-\section{See also}{
-
-For example queries showing how to discover signals and build calls,
-see \code{vignette("signal-discovery", package = "epidatr")}.
-}
-
 \seealso{
-\code{\link[=epidata_snapshot]{epidata_snapshot()}}, \code{\link[=epidata_archive]{epidata_archive()}}, \code{\link[=epidata]{epidata()}}, \code{\link[=epirange]{epirange()}}
+\code{\link[=epidata_snapshot]{epidata_snapshot()}}, \code{\link[=epidata_archive]{epidata_archive()}}, \code{\link[=epidata]{epidata()}}, \code{\link[=epirange]{epirange()}}, \code{vignette("signal-discovery")}
 }
 \keyword{endpoint}

@@ -8,6 +8,10 @@
 
 ## Documentation
 
+- `?set_cache` now names the `EPIDATR_CACHE_DIR` environment variable and
+  `cache_dir` argument correctly (#394); the `?epidata_call` example no
+  longer makes a live request (#406); help pages no longer show "See also"
+  twice.
 - `fill_method` values are `"source"`, `"ave"`, and `"zero"` (previously
   documented as `"fill_ave"` and `"fill_zero"`).
 
