@@ -55,6 +55,92 @@ test_that("fetch surfaces http errors", {
   )
 })
 
+test_that("large responses stream to disk and parse identically to in-memory", {
+  csv_data <- "geo_value,value\nca,1.5\nfl,2.0"
+  call <- create_epidata_call(
+    "covidcast/",
+    list(),
+    api_version = "classic",
+    response_format = "csv"
+  )
+  raw_bytes <- charToRaw(csv_data)
+  make_stream_mock <- function() {
+    sent <- FALSE
+    function(...) {
+      if (!sent) {
+        sent <<- TRUE
+        return(raw_bytes)
+      }
+      raw(0)
+    }
+  }
+
+  local_mocked_bindings(
+    req_perform_connection = function(...) create_mock_response("", headers = list("content-type" = "text/csv")),
+    resp_stream_raw = make_stream_mock(),
+    .package = "epidatr"
+  )
+  in_mem <- request_epidata(call)
+
+  local_mocked_bindings(
+    req_perform_connection = function(...) create_mock_response("", headers = list("content-type" = "text/csv")),
+    resp_stream_raw = make_stream_mock(),
+    .package = "epidatr"
+  )
+  expect_message(
+    from_disk <- request_epidata(call, fetch_args_list(stream_threshold_bytes = 1)),
+    "Streaming response to temporary file"
+  )
+
+  expect_equal(from_disk, in_mem)
+})
+
+test_that("perform_and_read messages when streaming to a temp file", {
+  # verify cli_inform message when streaming threshold is exceeded
+  req <- httr2::request("http://perform-and-read-test.invalid")
+  local_mocked_bindings(
+    req_perform_connection = function(...) create_mock_response(""),
+    resp_stream_raw = local({
+      called <- FALSE
+      function(...) {
+        if (!called) {
+          called <<- TRUE
+          raw(100)
+        } else {
+          raw(0)
+        }
+      }
+    }),
+    .package = "epidatr"
+  )
+  expect_message(
+    perform_and_read(req, stream_threshold_bytes = 10),
+    "Streaming response to temporary file"
+  )
+})
+
+test_that("perform_and_read cleans up the connection and temp file on a mid-stream error", {
+  req <- httr2::request("http://perform-and-read-test.invalid")
+  local_mocked_bindings(
+    req_perform_connection = function(...) create_mock_response(""),
+    resp_stream_raw = local({
+      n <- 0
+      function(...) {
+        n <<- n + 1
+        if (n == 1) {
+          return(raw(20))
+        }
+        stop("simulated connection reset")
+      }
+    }),
+    .package = "epidatr"
+  )
+  expect_error(
+    perform_and_read(req, stream_threshold_bytes = 10),
+    "simulated connection reset"
+  )
+})
+
 test_that("fetch_args", {
   expect_snapshot_value(fetch_args_list(), style = "json2", cran = TRUE)
   expect_snapshot_value(

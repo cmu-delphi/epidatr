@@ -6,7 +6,7 @@
         "names": {
           "type": "character",
           "attributes": {},
-          "value": ["fields", "disable_date_parsing", "disable_data_frame_parsing", "disable_missing_meta_warning", "return_empty", "timeout_seconds", "base_url", "dry_run", "refresh_cache", "reference_week_day", "limit"]
+          "value": ["fields", "disable_date_parsing", "disable_data_frame_parsing", "disable_missing_meta_warning", "return_empty", "timeout_seconds", "stream_threshold_bytes", "download_path", "base_url", "dry_run", "refresh_cache", "reference_week_day", "limit"]
         },
         "class": {
           "type": "character",
@@ -44,6 +44,14 @@
           "value": [900]
         },
         {
+          "type": "double",
+          "attributes": {},
+          "value": [524288000]
+        },
+        {
+          "type": "NULL"
+        },
+        {
           "type": "NULL"
         },
         {
@@ -75,7 +83,7 @@
         "names": {
           "type": "character",
           "attributes": {},
-          "value": ["fields", "disable_date_parsing", "disable_data_frame_parsing", "disable_missing_meta_warning", "return_empty", "timeout_seconds", "base_url", "dry_run", "refresh_cache", "reference_week_day", "limit"]
+          "value": ["fields", "disable_date_parsing", "disable_data_frame_parsing", "disable_missing_meta_warning", "return_empty", "timeout_seconds", "stream_threshold_bytes", "download_path", "base_url", "dry_run", "refresh_cache", "reference_week_day", "limit"]
         },
         "class": {
           "type": "character",
@@ -113,6 +121,14 @@
           "type": "double",
           "attributes": {},
           "value": [10]
+        },
+        {
+          "type": "double",
+          "attributes": {},
+          "value": [524288000]
+        },
+        {
+          "type": "NULL"
         },
         {
           "type": "character",

@@ -92,12 +92,14 @@ importFrom(httr2,
   req_headers,
   req_method,
   req_perform,
+  req_perform_connection,
   req_retry,
   req_timeout,
   req_url,
   req_url_query,
   req_user_agent,
-  resp_status
+  resp_status,
+  resp_stream_raw
 )
 importFrom(jsonlite,fromJSON)
 importFrom(magrittr,"%>%")
@@ -107,6 +109,7 @@ importFrom(purrr,
   map_lgl
 )
 importFrom(rlang,
+  "%||%",
   dots_list,
   inject
 )

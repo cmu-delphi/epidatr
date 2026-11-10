@@ -121,14 +121,14 @@ test_that("epidata* and epidata_meta work as expected", {
   )
   csv_data <- "signal,geo_value,reference_time,value\nsig1,ca,2024-01-01,10.5\nsig1,fl,2024-01-01,20.0"
   local_mocked_bindings(
-    req_perform = function(req, ...) {
+    perform_and_read = function(req, ...) {
       if (grepl("metadata/", req$url)) {
         to_httr2_response(as.character(meta_json))
       } else {
         to_httr2_response(csv_data)
       }
     },
-    .package = "httr2"
+    .package = "epidatr"
   )
 
   # Test epidata_meta
@@ -360,14 +360,14 @@ test_that("epidata_archive sends EpiRange as server-side range query", {
 
   # Single-date range: server returns only the matching row
   local_mocked_bindings(
-    req_perform = function(req, ...) {
+    perform_and_read = function(req, ...) {
       seen_urls <<- c(seen_urls, req$url)
       to_httr2_response(paste0(
         "signal,geo_value,reference_time,value,report_time\n",
         "sig1,ca,2024-01-01,11.0,2024-01-02T00:00:00Z"
       ))
     },
-    .package = "httr2"
+    .package = "epidatr"
   )
   res <- epidata_archive(
     source = "nssp",
@@ -382,7 +382,7 @@ test_that("epidata_archive sends EpiRange as server-side range query", {
   # Wider range: server returns both matching rows
   seen_urls <- character()
   local_mocked_bindings(
-    req_perform = function(req, ...) {
+    perform_and_read = function(req, ...) {
       seen_urls <<- c(seen_urls, req$url)
       to_httr2_response(paste0(
         "signal,geo_value,reference_time,value,report_time\n",
@@ -390,7 +390,7 @@ test_that("epidata_archive sends EpiRange as server-side range query", {
         "sig1,ca,2024-01-01,11.0,2024-01-02T00:00:00Z"
       ))
     },
-    .package = "httr2"
+    .package = "epidatr"
   )
   res_wide <- epidata_archive(
     source = "nssp",
@@ -697,8 +697,8 @@ aux_versions_csv <- paste(
 
 test_that("epidata_aux merge is version-aware: archive per-row vs snapshot uniform", {
   local_mocked_bindings(
-    req_perform = mock_aux_connected(aux_versions_keys, aux_versions_csv),
-    .package = "httr2"
+    perform_and_read = mock_aux_connected(aux_versions_keys, aux_versions_csv),
+    .package = "epidatr"
   )
 
   # Archive: each row as-of its own report_time, never a newer version; too-early
@@ -749,7 +749,7 @@ test_that("epidata_aux infers multi-value key filters from the base (<= cap)", {
       )
     }
   }
-  local_mocked_bindings(req_perform = recorder, .package = "httr2")
+  local_mocked_bindings(perform_and_read = recorder, .package = "epidatr")
 
   base <- tibble::tibble(
     geo_value = c("ca", "ny"), # two distinct values, under the cap -> both pinned
@@ -800,11 +800,11 @@ test_that("epidata_aux connected path: validation, empty base, dry_run cap/forwa
 
   # remaining cases share one mocked schema (keys: report_time/geo_value/reference_time)
   local_mocked_bindings(
-    req_perform = mock_aux_connected(
+    perform_and_read = mock_aux_connected(
       c("report_time", "geo_value", "reference_time"),
       "report_time,geo_value,reference_time,foo\n2024-01-01,ca,2024-01-01,1"
     ),
-    .package = "httr2"
+    .package = "epidatr"
   )
   # no key shared between base and aux -> abort
   expect_error(
@@ -826,8 +826,8 @@ test_that("epidata_aux connected path: validation, empty base, dry_run cap/forwa
 
 test_that("disable_missing_meta_warning suppresses the unspecified-fields warning", {
   local_mocked_bindings(
-    req_perform = function(req, ...) to_httr2_response("report_time,geo_value,extra_col\n2024-06-01,ca,foo"),
-    .package = "httr2"
+    perform_and_read = function(req, ...) to_httr2_response("report_time,geo_value,extra_col\n2024-06-01,ca,foo"),
+    .package = "epidatr"
   )
   call <- create_epidata_call(
     "aux_data/", list(source = "nwss"),
