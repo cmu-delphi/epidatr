@@ -613,11 +613,11 @@ use <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></co
 <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> and filter afterwards:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># For an exact lag (e.g., 7 days):</span></span>
-<span><span class="va">revisions</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">revisions</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">report_time</span> <span class="op">-</span> <span class="va">reference_time</span><span class="op">)</span> <span class="op">==</span> <span class="fl">7</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Or for maximum latency (e.g., at most 7 days of delay):</span></span>
-<span><span class="va">revisions</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">revisions</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">report_time</span> <span class="op">-</span> <span class="va">reference_time</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">

@@ -724,7 +724,7 @@ auxiliary data and left-joins it onto the shared key columns:</p>
 <span><span class="co">#&gt; # ℹ 3 more variables: sample_index &lt;chr&gt;, pcr_target &lt;chr&gt;, value &lt;dbl&gt;</span></span>
 <span></span>
 <span><span class="co"># Attach auxiliary metadata</span></span>
-<span><span class="va">nwss_merged</span> <span class="op">&lt;-</span> <span class="va">nwss_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">nwss_merged</span> <span class="op">&lt;-</span> <span class="va">nwss_data</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="../reference/epidata_aux.html">epidata_aux</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">nwss_merged</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 6 × 40</span></span>
@@ -840,7 +840,7 @@ choropleths</a>:</p>
 <span>  state <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
 <span>    <span class="va">geo_value</span> <span class="op">==</span> <span class="st">"dc"</span>,</span>
 <span>    <span class="st">"district of columbia"</span>,</span>
-<span>    <span class="va">state.name</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">geo_value</span>, <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">state.abb</span><span class="op">)</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="va">state.name</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">geo_value</span>, <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">state.abb</span><span class="op">)</span><span class="op">)</span><span class="op">]</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>

@@ -34,12 +34,8 @@ list. If `source` is `NULL`, a named list of source metadata objects. If
 
 ## See also
 
-For example queries showing how to discover signals and build calls, see
-[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md).
-
-## See also
-
 [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
 [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
 [`epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
-[`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+[`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md),
+[`vignette("signal-discovery")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md)

@@ -2,8 +2,7 @@
 
 ## Query the new Epidata API (v5)
 
-The current API. Sources are moving here from the covidcast endpoint;
-see
+The current API. See
 [`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md)
 for how to update covidcast queries.
 
@@ -18,8 +17,9 @@ for how to update covidcast queries.
 
 ## Query the covidcast endpoint (v4)
 
-The previous main endpoint. Still carries the sources that have not
-moved to v5 yet.
+The previous main endpoint, frozen since September 22, 2026. It still
+serves historical data but receives no new data; use the v5 functions
+above for current data.
 
 - [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
   **\[deprecated\]** : Various COVID and flu signals via the COVIDcast

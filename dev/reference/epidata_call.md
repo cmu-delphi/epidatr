@@ -71,41 +71,33 @@ to generate an `epidata_call` for the data of interest.
 ## Examples
 
 ``` r
-library(magrittr)
-
-call <- pub_covidcast(
-  source = "jhu-csse",
-  signals = "confirmed_7dav_incidence_prop",
-  time_type = "day",
+# Build the request without sending it
+call <- epidata_snapshot(
+  source = "nssp",
+  signals = "pct_ed_visits_influenza",
   geo_type = "state",
-  time_values = epirange(20200601, 20200801),
-  geo_values = c("ca", "fl"),
+  geo_values = c("pa", "ca"),
+  reference_time = epirange("2024-12-01", "2024-12-31"),
   fetch_args = fetch_args_list(dry_run = TRUE)
 )
-#> Warning: `pub_covidcast()` uses the V4 Epidata API.
-#> ℹ As of September 22, 2026, V4 no longer receives new data. It still serves the
-#>   historical data it already has, but for current data you must use the V5
-#>   endpoints (`epidata_snapshot()`, `epidata_archive()`, `epidata_meta()`) with
-#>   an up-to-date epidatr (and epiprocess, if you use it).
-#> ℹ See `vignette("migration-guide")` (or
-#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the
-#>   endpoint, argument, and column mapping.
-#> This warning is displayed once every 8 hours.
-call %>% fetch()
-#> # A tibble: 124 × 15
-#>    geo_value signal    source geo_type time_type time_value direction issue     
-#>    <chr>     <chr>     <chr>  <fct>    <fct>     <date>         <dbl> <date>    
-#>  1 ca        confirme… jhu-c… state    day       2020-06-01        NA 2023-03-10
-#>  2 fl        confirme… jhu-c… state    day       2020-06-01        NA 2023-03-03
-#>  3 ca        confirme… jhu-c… state    day       2020-06-02        NA 2023-03-10
-#>  4 fl        confirme… jhu-c… state    day       2020-06-02        NA 2023-03-03
-#>  5 ca        confirme… jhu-c… state    day       2020-06-03        NA 2023-03-10
-#>  6 fl        confirme… jhu-c… state    day       2020-06-03        NA 2023-03-03
-#>  7 ca        confirme… jhu-c… state    day       2020-06-04        NA 2023-03-10
-#>  8 fl        confirme… jhu-c… state    day       2020-06-04        NA 2023-03-03
-#>  9 ca        confirme… jhu-c… state    day       2020-06-05        NA 2023-03-10
-#> 10 fl        confirme… jhu-c… state    day       2020-06-05        NA 2023-03-03
-#> # ℹ 114 more rows
-#> # ℹ 7 more variables: lag <dbl>, missing_value <dbl>, missing_stderr <dbl>,
-#> #   missing_sample_size <dbl>, value <dbl>, stderr <dbl>, sample_size <dbl>
+call
+#> 
+#> ── <epidata_call> object: ──────────────────────────────────────────────────────
+#> • Pipe this object into `fetch()` to actually fetch the data
+#> • Request URL:
+#>   https://delphi.cmu.edu/epidata/v5/snapshot/?source=nssp&signal=pct_ed_visits_influenza&geo_type=state&geo_value=pa%2Cca&reference_times=2024-12-01%3A2024-12-31
+
+# Send it and get the data
+fetch(call)
+#> # A tibble: 8 × 7
+#>   signal report_time         geo_type geo_value fill_method reference_time value
+#>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_e… 2025-02-03 12:00:00 state    pa        source      2024-12-28     3.93 
+#> 2 pct_e… 2025-01-17 12:00:00 state    pa        source      2024-12-07     0.570
+#> 3 pct_e… 2025-01-24 12:00:00 state    pa        source      2024-12-21     1.81 
+#> 4 pct_e… 2025-01-24 12:00:00 state    pa        source      2024-12-14     0.870
+#> 5 pct_e… 2026-07-29 12:00:00 state    ca        source      2024-12-07     1.68 
+#> 6 pct_e… 2026-08-05 12:00:00 state    ca        source      2024-12-14     2.55 
+#> 7 pct_e… 2026-08-05 12:00:00 state    ca        source      2024-12-28     6.70 
+#> 8 pct_e… 2026-08-05 12:00:00 state    ca        source      2024-12-21     4.48 
 ```

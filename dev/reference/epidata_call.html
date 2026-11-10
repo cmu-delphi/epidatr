@@ -117,43 +117,35 @@ interest.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">call</span> <span class="op">&lt;-</span> <span class="fu"><a href="pub_covidcast.html">pub_covidcast</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  source <span class="op">=</span> <span class="st">"jhu-csse"</span>,</span></span>
-<span class="r-in"><span>  signals <span class="op">=</span> <span class="st">"confirmed_7dav_incidence_prop"</span>,</span></span>
-<span class="r-in"><span>  time_type <span class="op">=</span> <span class="st">"day"</span>,</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Build the request without sending it</span></span></span>
+<span class="r-in"><span><span class="va">call</span> <span class="op">&lt;-</span> <span class="fu"><a href="cast_api_queries.html">epidata_snapshot</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  source <span class="op">=</span> <span class="st">"nssp"</span>,</span></span>
+<span class="r-in"><span>  signals <span class="op">=</span> <span class="st">"pct_ed_visits_influenza"</span>,</span></span>
 <span class="r-in"><span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span></span>
-<span class="r-in"><span>  time_values <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20200601</span>, <span class="fl">20200801</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  geo_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ca"</span>, <span class="st">"fl"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  geo_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pa"</span>, <span class="st">"ca"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  reference_time <span class="op">=</span> <span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2024-12-01"</span>, <span class="st">"2024-12-31"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  fetch_args <span class="op">=</span> <span class="fu"><a href="fetch_args_list.html">fetch_args_list</a></span><span class="op">(</span>dry_run <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`pub_covidcast()` uses the V4 Epidata API.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> As of September 22, 2026, V4 no longer receives new data. It still serves the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   historical data it already has, but for current data you must use the V5</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   endpoints (`epidata_snapshot()`, `epidata_archive()`, `epidata_meta()`) with</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   an up-to-date epidatr (and epiprocess, if you use it).</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> See `vignette("migration-guide")` (or</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB; font-style: italic;">&lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html&gt;</span>) for the</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   endpoint, argument, and column mapping.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
-<span class="r-in"><span><span class="va">call</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">fetch</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 124 × 15</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    geo_value signal    source geo_type time_type time_value direction issue     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> ca        confirme… jhu-c… state    day       2020-06-01        <span style="color: #BB0000;">NA</span> 2023-03-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> fl        confirme… jhu-c… state    day       2020-06-01        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> ca        confirme… jhu-c… state    day       2020-06-02        <span style="color: #BB0000;">NA</span> 2023-03-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> fl        confirme… jhu-c… state    day       2020-06-02        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> ca        confirme… jhu-c… state    day       2020-06-03        <span style="color: #BB0000;">NA</span> 2023-03-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> fl        confirme… jhu-c… state    day       2020-06-03        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> ca        confirme… jhu-c… state    day       2020-06-04        <span style="color: #BB0000;">NA</span> 2023-03-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> fl        confirme… jhu-c… state    day       2020-06-04        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> ca        confirme… jhu-c… state    day       2020-06-05        <span style="color: #BB0000;">NA</span> 2023-03-10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> fl        confirme… jhu-c… state    day       2020-06-05        <span style="color: #BB0000;">NA</span> 2023-03-03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 114 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7 more variables: lag &lt;dbl&gt;, missing_value &lt;dbl&gt;, missing_stderr &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   missing_sample_size &lt;dbl&gt;, value &lt;dbl&gt;, stderr &lt;dbl&gt;, sample_size &lt;dbl&gt;</span></span>
+<span class="r-in"><span><span class="va">call</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">&lt;epidata_call&gt; object:</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Pipe this object into `fetch()` to actually fetch the data</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Request URL:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   https://delphi.cmu.edu/epidata/v5/snapshot/?source=nssp&amp;signal=pct_ed_visits_influenza&amp;geo_type=state&amp;geo_value=pa%2Cca&amp;reference_times=2024-12-01%3A2024-12-31</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Send it and get the data</span></span></span>
+<span class="r-in"><span><span class="fu">fetch</span><span class="op">(</span><span class="va">call</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 8 × 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   signal report_time         geo_type geo_value fill_method reference_time value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> pct_e… 2025-02-03 <span style="color: #949494;">12:00:00</span> state    pa        source      2024-12-28     3.93 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> pct_e… 2025-01-17 <span style="color: #949494;">12:00:00</span> state    pa        source      2024-12-07     0.570</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> pct_e… 2025-01-24 <span style="color: #949494;">12:00:00</span> state    pa        source      2024-12-21     1.81 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> pct_e… 2025-01-24 <span style="color: #949494;">12:00:00</span> state    pa        source      2024-12-14     0.870</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> pct_e… 2026-07-29 <span style="color: #949494;">12:00:00</span> state    ca        source      2024-12-07     1.68 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> pct_e… 2026-08-05 <span style="color: #949494;">12:00:00</span> state    ca        source      2024-12-14     2.55 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> pct_e… 2026-08-05 <span style="color: #949494;">12:00:00</span> state    ca        source      2024-12-28     6.70 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> pct_e… 2026-08-05 <span style="color: #949494;">12:00:00</span> state    ca        source      2024-12-21     4.48 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

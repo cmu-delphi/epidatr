@@ -5,10 +5,10 @@ By default, epidatr re-requests data from the API on every call of
 can enable the cache using either this function for a given session, or
 environmental variables for a persistent cache. The typical recommended
 workflow for using the cache is to set the environmental variables
-`EPIDATR_USE_CACHE=TRUE` and
-`EPIDATR_CACHE_DIRECTORY="/your/directory/here"`in your `.Renviron`, for
-example by calling `file.edit("~/.Renviron")`. See the parameters below
-for some more configurables if you're so inclined.
+`EPIDATR_USE_CACHE=TRUE` and `EPIDATR_CACHE_DIR="/your/directory/here"`
+in your `.Renviron`, for example by calling `file.edit("~/.Renviron")`.
+See the parameters below for some more configurables if you're so
+inclined.
 
 `set_cache` (re)defines the cache to use in a particular R session. This
 does not clear existing data at any previous location, but instead
@@ -17,11 +17,11 @@ creates a handle to the new cache using
 caching for you. Say your cache is normally stored in some default
 directory, but for the current session you want to save your results in
 `~/my/temporary/savedirectory`, then you would call
-`set_cache(dir = "~/my/temporary/savedirectory")`. Or if you know the
-data from 2 days ago is wrong, you could call `set_cache(days = 1)` to
-clear older data whenever the cache is referenced. In both cases, these
-changes would only last for a single session (though the deleted data
-would be gone permanently!).
+`set_cache(cache_dir = "~/my/temporary/savedirectory")`. Or if you know
+the data from 2 days ago is wrong, you could call `set_cache(days = 1)`
+to clear older data whenever the cache is referenced. In both cases,
+these changes would only last for a single session (though the deleted
+data would be gone permanently!).
 
 An important feature of the caching in this package is that only calls
 which specify either `issues` before a certain date, or `as_of` before a
@@ -135,8 +135,8 @@ set_cache(
 )
 #> ! epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not
 #>   intended).
-#> ℹ The cache directory is /tmp/RtmpShf6Pw.
+#> ℹ The cache directory is /tmp/RtmpNYcShJ.
 #> ℹ The cache will be cleared after 14 days and will be pruned if it exceeds 512
 #>   MB.
-#> ℹ The log of cache transactions is stored at /tmp/RtmpShf6Pw/logs.txt.
+#> ℹ The log of cache transactions is stored at /tmp/RtmpNYcShJ/logs.txt.
 ```

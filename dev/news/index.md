@@ -14,6 +14,14 @@
 
 ### Documentation
 
+- [`?set_cache`](https://cmu-delphi.github.io/epidatr/dev/reference/set_cache.md)
+  now names the `EPIDATR_CACHE_DIR` environment variable and `cache_dir`
+  argument correctly
+  ([\#394](https://github.com/cmu-delphi/epidatr/issues/394)); the
+  [`?epidata_call`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_call.md)
+  example no longer makes a live request
+  ([\#406](https://github.com/cmu-delphi/epidatr/issues/406)); help
+  pages no longer show “See also” twice.
 - `fill_method` values are `"source"`, `"ave"`, and `"zero"` (previously
   documented as `"fill_ave"` and `"fill_zero"`).
 

@@ -72,13 +72,9 @@ annually.
 
 ## See also
 
-For example queries showing how to discover signals and build calls, see
-[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md).
-
-## See also
-
 `pub_covid_hosp_facility()`,
-[`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+[`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md),
+[`vignette("signal-discovery")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md)
 
 ## Examples
 

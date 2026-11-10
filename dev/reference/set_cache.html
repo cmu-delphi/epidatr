@@ -5,7 +5,7 @@ the cache using either this function for a given session, or environmental
 variables for a persistent cache.
 The typical recommended workflow for using the cache is to set the
 environmental variables EPIDATR_USE_CACHE=TRUE and
-EPIDATR_CACHE_DIRECTORY=&quot;/your/directory/here&quot;in your .Renviron, for
+EPIDATR_CACHE_DIR=&quot;/your/directory/here&quot; in your .Renviron, for
 example by calling file.edit(&quot;~/.Renviron&quot;).
 See the parameters below for some more configurables if you're so inclined.
 set_cache (re)defines the cache to use in a particular R session. This does
@@ -14,7 +14,8 @@ handle to the new cache using cachem
 that seamlessly handles caching for you.
 Say your cache is normally stored in some default directory, but for the
 current session you want to save your results in
-~/my/temporary/savedirectory, then you would call set_cache(dir = &quot;~/my/temporary/savedirectory&quot;).
+~/my/temporary/savedirectory, then you would call
+set_cache(cache_dir = &quot;~/my/temporary/savedirectory&quot;).
 Or if you know the data from 2 days ago is wrong, you could call
 set_cache(days = 1) to clear older data whenever the cache is referenced.
 In both cases, these changes would only last for a single session (though the
@@ -58,7 +59,7 @@ the cache using either this function for a given session, or environmental
 variables for a persistent cache.
 The typical recommended workflow for using the cache is to set the
 environmental variables EPIDATR_USE_CACHE=TRUE and
-EPIDATR_CACHE_DIRECTORY=&quot;/your/directory/here&quot;in your .Renviron, for
+EPIDATR_CACHE_DIR=&quot;/your/directory/here&quot; in your .Renviron, for
 example by calling file.edit(&quot;~/.Renviron&quot;).
 See the parameters below for some more configurables if you're so inclined.
 set_cache (re)defines the cache to use in a particular R session. This does
@@ -67,7 +68,8 @@ handle to the new cache using cachem
 that seamlessly handles caching for you.
 Say your cache is normally stored in some default directory, but for the
 current session you want to save your results in
-~/my/temporary/savedirectory, then you would call set_cache(dir = &quot;~/my/temporary/savedirectory&quot;).
+~/my/temporary/savedirectory, then you would call
+set_cache(cache_dir = &quot;~/my/temporary/savedirectory&quot;).
 Or if you know the data from 2 days ago is wrong, you could call
 set_cache(days = 1) to clear older data whenever the cache is referenced.
 In both cases, these changes would only last for a single session (though the
@@ -153,7 +155,7 @@ the cache using either this function for a given session, or environmental
 variables for a persistent cache.
 The typical recommended workflow for using the cache is to set the
 environmental variables <code>EPIDATR_USE_CACHE=TRUE</code> and
-<code>EPIDATR_CACHE_DIRECTORY="/your/directory/here"</code>in your <code>.Renviron</code>, for
+<code>EPIDATR_CACHE_DIR="/your/directory/here"</code> in your <code>.Renviron</code>, for
 example by calling <code>file.edit("~/.Renviron")</code>.
 See the parameters below for some more configurables if you're so inclined.</p>
 <p><code>set_cache</code> (re)defines the cache to use in a particular R session. This does
@@ -162,7 +164,8 @@ handle to the new cache using <a href="https://cachem.r-lib.org/index.html" clas
 that seamlessly handles caching for you.
 Say your cache is normally stored in some default directory, but for the
 current session you want to save your results in
-<code>~/my/temporary/savedirectory</code>, then you would call <code>set_cache(dir = "~/my/temporary/savedirectory")</code>.
+<code>~/my/temporary/savedirectory</code>, then you would call
+<code>set_cache(cache_dir = "~/my/temporary/savedirectory")</code>.
 Or if you know the data from 2 days ago is wrong, you could call
 <code>set_cache(days = 1)</code> to clear older data whenever the cache is referenced.
 In both cases, these changes would only last for a single session (though the
@@ -273,10 +276,10 @@ environment</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   intended).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache directory is /tmp/RtmpShf6Pw.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache directory is /tmp/RtmpNYcShJ.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache will be cleared after 14 days and will be pruned if it exceeds 512</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   MB.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The log of cache transactions is stored at /tmp/RtmpShf6Pw/logs.txt.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The log of cache transactions is stored at /tmp/RtmpNYcShJ/logs.txt.</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

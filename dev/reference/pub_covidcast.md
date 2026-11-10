@@ -135,14 +135,10 @@ for details and more ways to specify versioned data.
 
 ## See also
 
-For example queries showing how to discover signals and build calls, see
-[`vignette("signal-discovery", package = "epidatr")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md).
-
-## See also
-
 [`pub_covidcast_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast_meta.md),
 [`covidcast_epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/covidcast_epidata.md),
-[`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+[`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md),
+[`vignette("signal-discovery")`](https://cmu-delphi.github.io/epidatr/dev/articles/signal-discovery.md)
 
 ## Examples
 
@@ -156,6 +152,15 @@ pub_covidcast(
   geo_values = c("ca", "fl"),
   time_values = epirange(20200601, 20200801)
 )
+#> Warning: `pub_covidcast()` uses the V4 Epidata API.
+#> ℹ As of September 22, 2026, V4 no longer receives new data. It still serves the
+#>   historical data it already has, but for current data you must use the V5
+#>   endpoints (`epidata_snapshot()`, `epidata_archive()`, `epidata_meta()`) with
+#>   an up-to-date epidatr (and epiprocess, if you use it).
+#> ℹ See `vignette("migration-guide")` (or
+#>   <https://cmu-delphi.github.io/epidatr/articles/migration-guide.html>) for the
+#>   endpoint, argument, and column mapping.
+#> This warning is displayed once every 8 hours.
 #> # A tibble: 124 × 15
 #>    geo_value signal    source geo_type time_type time_value direction issue     
 #>    <chr>     <chr>     <chr>  <fct>    <fct>     <date>         <dbl> <date>    

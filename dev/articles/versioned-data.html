@@ -331,8 +331,8 @@ as of a single date.)</p>
 between <code>report_time</code> (the publication date) and
 <code>reference_time</code> (the observation date):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">archive_with_lag</span> <span class="op">&lt;-</span> <span class="va">archive_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>lag_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">report_time</span> <span class="op">-</span> <span class="va">reference_time</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">archive_with_lag</span> <span class="op">&lt;-</span> <span class="va">archive_data</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>lag_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">report_time</span> <span class="op">-</span> <span class="va">reference_time</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">signal</span>, <span class="va">reference_time</span>, <span class="va">report_time</span>, <span class="va">lag_days</span>, <span class="va">value</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">archive_with_lag</span><span class="op">)</span></span></code></pre></div>
@@ -386,7 +386,7 @@ between <code>report_time</code> (the publication date) and
 reporting lag (for example, simulating data available with at most a
 14-day delay), filter by <code>lag_days</code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">archive_with_lag</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">archive_with_lag</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">lag_days</span> <span class="op">&lt;=</span> <span class="fl">14</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 2 × 5</span></span>
 <span><span class="co">#&gt;   signal                  reference_time report_time lag_days value</span></span>
