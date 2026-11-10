@@ -20,9 +20,15 @@ Or if you know the data from 2 days ago is wrong, you could call
 set_cache(days = 1) to clear older data whenever the cache is referenced.
 In both cases, these changes would only last for a single session (though the
 deleted data would be gone permanently!).
-An important feature of the caching in this package is that only calls which
-specify either issues before a certain date, or as_of before a certain
-date will actually cache. For example the call
+An important feature of the caching in this package is that only calls for
+a fixed past version of the data will actually cache. For V5 endpoints, that
+means epidata_snapshot() with a snapshot_date at least two days ago
+(UTC), or epidata_archive() with a report_time range (or &quot;&amp;lt;date&quot;)
+ending at least two days ago; a &quot;latest&quot; snapshot or an open-ended archive
+won't cache. The extra day allows for data loaded after its nominal
+release time. For legacy
+endpoints, it means specifying either issues before a certain date, or
+as_of before a certain date. For example the call
 pub_covidcast(
   source = &quot;jhu-csse&quot;,
   signals = &quot;confirmed_7dav_incidence_prop&quot;,
@@ -74,9 +80,15 @@ Or if you know the data from 2 days ago is wrong, you could call
 set_cache(days = 1) to clear older data whenever the cache is referenced.
 In both cases, these changes would only last for a single session (though the
 deleted data would be gone permanently!).
-An important feature of the caching in this package is that only calls which
-specify either issues before a certain date, or as_of before a certain
-date will actually cache. For example the call
+An important feature of the caching in this package is that only calls for
+a fixed past version of the data will actually cache. For V5 endpoints, that
+means epidata_snapshot() with a snapshot_date at least two days ago
+(UTC), or epidata_archive() with a report_time range (or &quot;&amp;lt;date&quot;)
+ending at least two days ago; a &quot;latest&quot; snapshot or an open-ended archive
+won't cache. The extra day allows for data loaded after its nominal
+release time. For legacy
+endpoints, it means specifying either issues before a certain date, or
+as_of before a certain date. For example the call
 pub_covidcast(
   source = &quot;jhu-csse&quot;,
   signals = &quot;confirmed_7dav_incidence_prop&quot;,
@@ -170,9 +182,15 @@ Or if you know the data from 2 days ago is wrong, you could call
 <code>set_cache(days = 1)</code> to clear older data whenever the cache is referenced.
 In both cases, these changes would only last for a single session (though the
 deleted data would be gone permanently!).</p>
-<p>An important feature of the caching in this package is that only calls which
-specify either <code>issues</code> before a certain date, or <code>as_of</code> before a certain
-date will actually cache. For example the call</p>
+<p>An important feature of the caching in this package is that only calls for
+a fixed past version of the data will actually cache. For V5 endpoints, that
+means <code><a href="cast_api_queries.html">epidata_snapshot()</a></code> with a <code>snapshot_date</code> at least two days ago
+(UTC), or <code><a href="cast_api_queries.html">epidata_archive()</a></code> with a <code>report_time</code> range (or <code>"&lt;date"</code>)
+ending at least two days ago; a "latest" snapshot or an open-ended archive
+won't cache. The extra day allows for data loaded after its nominal
+release time. For legacy
+endpoints, it means specifying either <code>issues</code> before a certain date, or
+<code>as_of</code> before a certain date. For example the call</p>
 <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">pub_covidcast</span>(</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="at">source =</span> <span class="st">"jhu-csse"</span>,</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="at">signals =</span> <span class="st">"confirmed_7dav_incidence_prop"</span>,</span>
@@ -279,10 +297,10 @@ environment</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   intended).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache directory is /tmp/RtmpDni6nq.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache directory is /tmp/RtmpXDSMvG.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache will be cleared after 14 days and will be pruned if it exceeds 512</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   MB.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The log of cache transactions is stored at /tmp/RtmpDni6nq/logs.txt.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The log of cache transactions is stored at /tmp/RtmpXDSMvG/logs.txt.</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

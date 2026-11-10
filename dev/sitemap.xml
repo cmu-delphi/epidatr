@@ -24,6 +24,7 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/check_epidata_result.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/check_for_cache_warnings.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/check_is_cachable.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/check_is_cachable_v5.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/check_is_recent.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/clear_cache.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/covidcast_epidata.html</loc></url>
@@ -92,8 +93,10 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/request_url.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/set_cache.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/timeset.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/utc_today.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/validate_date_input.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/validate_timeset_input.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/version_date_tokens.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/warn_limit_unsupported.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/warn_v4_sunset.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/with_base_url.html</loc></url>

@@ -45,6 +45,10 @@
 <h3 id="changes-1-4-1">Changes<a class="anchor" aria-label="anchor" href="#changes-1-4-1"></a></h3>
 <ul><li>
 <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="../reference/cast_api_queries.html">epidata()</a></code> now filter <code>geo_values</code> and <code>reference_time</code> server-side via the cast-API <code>geo_value</code> and <code>reference_times</code> parameters (cmu-delphi/cast-api#110).</li>
+<li>
+<code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code> results are now cached (when the cache is enabled) for fixed past versions: a <code>snapshot_date</code> at least two days ago (UTC), or a <code>report_time</code> range or <code>"&lt;date"</code> whose end is at least two days ago. “Latest” snapshots, open-ended archives (including a <code>report_time</code> vector with any open-ended condition), and calls with a row <code>limit</code> are not cached. Previously no V5 query was ever cached.</li>
+<li>
+<code>epidata_aux(snapshot_date = "latest")</code> now uses today’s UTC date, so it no longer misses releases made after midnight UTC in time zones behind UTC.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-1-4-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-1-4-1"></a></h3>
