@@ -51,7 +51,7 @@ across endpoints. Refer to each endpoint's documentation for specific behavior:
 | Fetch full revision history for a signal | `pub_covidcast(issues = ...)` | Supported by some (`pub_fluview()`, `pub_flusurv()` with `issues`) | `epidata_archive()` |
 | Discover sources, signals, geo types, and date ranges | `pub_covidcast_meta()`, `covidcast_epidata()` | Shared meta for some (`pub_fluview_meta()`) | `epidata_meta()` |
 | Access source-specific auxiliary tables | none | none | `epidata_aux()` |
-| Filter by publication lag | `pub_covidcast(lag = ...)` | Supported by some (`pub_fluview()`, `pub_flusurv()`) | none (compute `as.Date(report_time) - reference_time`) |
+| Filter by publication lag | `pub_covidcast(lag = ...)` | Supported by some (`pub_fluview()`, `pub_flusurv()`) | none (compute `as.Date(report_time) - reference_time`, in days) |
 
 `epidata()` is a convenience wrapper that routes to `epidata_archive()` if you
 pass `report_time`, or to `epidata_snapshot()` if you pass `snapshot_date` (or
@@ -106,7 +106,7 @@ legacy endpoints (for example, `pub_wiki()` returns `article`, `count`, and `hou
 | `geo_value` | `region` for `pub_fluview()` | `geo_value` | Standardized location identifier across all V5 responses. |
 | `time_value` | `epiweek` for `pub_fluview()` | `reference_time` | Standardized date in `YYYY-MM-DD` format representing the observation period. |
 | `issue` | `issue` (where returned) | `report_time` | UTC timestamp (`POSIXct`) of when the data point was published. Present in both snapshot and archive output. Use `as.Date(report_time)` if you need a date. |
-| `lag` | `lag` (where returned) | dropped | Omitted in V5 responses. You can compute it yourself as `as.Date(report_time) - reference_time`. See [calculating reporting lag](https://cmu-delphi.github.io/epidatr/articles/versioned-data.html#calculating-reporting-lag). |
+| `lag` | `lag` (where returned) | dropped | Omitted in V5 responses. You can compute it yourself as `as.Date(report_time) - reference_time` (in days). See [calculating reporting lag](https://cmu-delphi.github.io/epidatr/articles/versioned-data.html#calculating-reporting-lag). |
 | `direction` | none | dropped | Deprecated in V4 and dropped in V5. |
 | `stderr`, `sample_size` | none | `ci_lower`, `ci_upper` | Expresses uncertainty as explicit confidence interval bounds on `value` when provided by the data source. See [Uncertainty columns](#uncertainty-columns) below. |
 | `missing_value`, `missing_stderr`, `missing_sample_size` | none | dropped | Replaced in V5 by `fill_method` variants and plain `NA`s in `value`. |
@@ -230,7 +230,8 @@ head(revisions)
 
 If you filtered by `lag`, fetch the archive with `epidata_archive()` and filter afterwards.
 The `lag_days` column below always counts days. V4's `lag` counted in the signal's time unit, so for a
-weekly signal like this one, V4's `lag = 1` meant one week, not one day.
+weekly signal like this one, V4's `lag = 1` meant one week, not one day. V4 also dated weekly values by
+the start of the week, while V5's `reference_time` is the end of the week, so the two lags are not directly comparable.
 
 ```{r lag}
 # report_time is a UTC timestamp and reference_time is a Date, so convert
