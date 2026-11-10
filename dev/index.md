@@ -80,20 +80,21 @@ flu <- epidata_snapshot(
   geo_type = "state"
 )
 flu
-#> # A tibble: 10,557 × 7
-#>    signal        report_time geo_type geo_value fill_method reference_time value
-#>    <chr>         <date>      <chr>    <chr>     <chr>       <date>         <dbl>
-#>  1 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-01     0.140
-#>  2 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-08     0.240
-#>  3 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-15     0.320
-#>  4 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-22     0.760
-#>  5 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-29     1.16 
-#>  6 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-05     1.94 
-#>  7 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-12     3.73 
-#>  8 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-19     6.82 
-#>  9 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-26     8.67 
-#> 10 pct_ed_visit… 2026-06-26  state    ak        source      2022-12-03     9.85 
-#> # ℹ 10,547 more rows
+#> # A tibble: 10,905 × 7
+#>    signal      report_time         geo_type geo_value fill_method reference_time
+#>    <chr>       <dttm>              <chr>    <chr>     <chr>       <date>        
+#>  1 pct_ed_vis… 2024-05-03 12:00:00 state    de        source      2024-03-02    
+#>  2 pct_ed_vis… 2024-05-03 12:00:00 state    ks        source      2024-03-23    
+#>  3 pct_ed_vis… 2024-05-03 12:00:00 state    mn        source      2022-10-29    
+#>  4 pct_ed_vis… 2024-05-03 12:00:00 state    mn        source      2024-03-30    
+#>  5 pct_ed_vis… 2024-05-03 12:00:00 state    mt        source      2022-12-10    
+#>  6 pct_ed_vis… 2024-05-03 12:00:00 state    nm        source      2024-03-02    
+#>  7 pct_ed_vis… 2024-05-03 12:00:00 state    nv        source      2024-01-27    
+#>  8 pct_ed_vis… 2024-05-03 12:00:00 state    nv        source      2024-02-03    
+#>  9 pct_ed_vis… 2024-05-03 12:00:00 state    pa        source      2024-03-23    
+#> 10 pct_ed_vis… 2024-05-03 12:00:00 state    ut        source      2024-01-06    
+#> # ℹ 10,895 more rows
+#> # ℹ 1 more variable: value <dbl>
 ```
 
 This is just a glimpse of what `epidatr` can do. See the

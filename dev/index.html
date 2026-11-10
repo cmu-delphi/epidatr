@@ -102,20 +102,21 @@
 <span>  geo_type <span class="op">=</span> <span class="st">"state"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">flu</span></span>
-<span><span class="co">#&gt; # A tibble: 10,557 × 7</span></span>
-<span><span class="co">#&gt;    signal        report_time geo_type geo_value fill_method reference_time value</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;         &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-01     0.140</span></span>
-<span><span class="co">#&gt;  2 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-08     0.240</span></span>
-<span><span class="co">#&gt;  3 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-15     0.320</span></span>
-<span><span class="co">#&gt;  4 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-22     0.760</span></span>
-<span><span class="co">#&gt;  5 pct_ed_visit… 2026-06-26  state    ak        source      2022-10-29     1.16 </span></span>
-<span><span class="co">#&gt;  6 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-05     1.94 </span></span>
-<span><span class="co">#&gt;  7 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-12     3.73 </span></span>
-<span><span class="co">#&gt;  8 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-19     6.82 </span></span>
-<span><span class="co">#&gt;  9 pct_ed_visit… 2026-06-26  state    ak        source      2022-11-26     8.67 </span></span>
-<span><span class="co">#&gt; 10 pct_ed_visit… 2026-06-26  state    ak        source      2022-12-03     9.85 </span></span>
-<span><span class="co">#&gt; # ℹ 10,547 more rows</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 10,905 × 7</span></span>
+<span><span class="co">#&gt;    signal      report_time         geo_type geo_value fill_method reference_time</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;       &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;        </span></span>
+<span><span class="co">#&gt;  1 pct_ed_vis… 2024-05-03 12:00:00 state    de        source      2024-03-02    </span></span>
+<span><span class="co">#&gt;  2 pct_ed_vis… 2024-05-03 12:00:00 state    ks        source      2024-03-23    </span></span>
+<span><span class="co">#&gt;  3 pct_ed_vis… 2024-05-03 12:00:00 state    mn        source      2022-10-29    </span></span>
+<span><span class="co">#&gt;  4 pct_ed_vis… 2024-05-03 12:00:00 state    mn        source      2024-03-30    </span></span>
+<span><span class="co">#&gt;  5 pct_ed_vis… 2024-05-03 12:00:00 state    mt        source      2022-12-10    </span></span>
+<span><span class="co">#&gt;  6 pct_ed_vis… 2024-05-03 12:00:00 state    nm        source      2024-03-02    </span></span>
+<span><span class="co">#&gt;  7 pct_ed_vis… 2024-05-03 12:00:00 state    nv        source      2024-01-27    </span></span>
+<span><span class="co">#&gt;  8 pct_ed_vis… 2024-05-03 12:00:00 state    nv        source      2024-02-03    </span></span>
+<span><span class="co">#&gt;  9 pct_ed_vis… 2024-05-03 12:00:00 state    pa        source      2024-03-23    </span></span>
+<span><span class="co">#&gt; 10 pct_ed_vis… 2024-05-03 12:00:00 state    ut        source      2024-01-06    </span></span>
+<span><span class="co">#&gt; # ℹ 10,895 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: value &lt;dbl&gt;</span></span></code></pre></div>
 <p>This is just a glimpse of what <code>epidatr</code> can do. See the <a href="https://cmu-delphi.github.io/epidatr/articles/">Articles</a> for walkthroughs of specific tasks (finding signals, understanding versioned data, migrating from <code><a href="reference/pub_covidcast.html">pub_covidcast()</a></code>), and the <a href="https://cmu-delphi.github.io/epidatr/reference/">Reference</a> for the full list of functions and their arguments.</p>
 </div>
 <div class="section level2">

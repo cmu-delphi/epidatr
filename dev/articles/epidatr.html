@@ -144,7 +144,6 @@ range of</a> emergency department visits data:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cmu-delphi.github.io/epidatr/">epidatr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: package 'dplyr' was built under R version 4.5.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
 <span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
@@ -164,12 +163,12 @@ range of</a> emergency department visits data:</p>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">epidata</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
-<col width="27%">
-<col width="13%">
+<col width="25%">
+<col width="20%">
+<col width="9%">
 <col width="10%">
-<col width="11%">
-<col width="13%">
-<col width="17%">
+<col width="12%">
+<col width="15%">
 <col width="6%">
 </colgroup>
 <thead><tr class="header">
@@ -184,7 +183,7 @@ range of</a> emergency department visits data:</p>
 <tbody>
 <tr class="odd">
 <td align="left">pct_ed_visits_influenza</td>
-<td align="left">2026-06-26</td>
+<td align="left">2024-04-18 12:00:00</td>
 <td align="left">nation</td>
 <td align="left">us</td>
 <td align="left">source</td>
@@ -193,48 +192,48 @@ range of</a> emergency department visits data:</p>
 </tr>
 <tr class="even">
 <td align="left">pct_ed_visits_influenza</td>
-<td align="left">2026-06-26</td>
-<td align="left">nation</td>
-<td align="left">us</td>
-<td align="left">source</td>
-<td align="left">2022-10-08</td>
-<td align="right">0.67</td>
-</tr>
-<tr class="odd">
-<td align="left">pct_ed_visits_influenza</td>
-<td align="left">2026-06-26</td>
+<td align="left">2024-04-18 12:00:00</td>
 <td align="left">nation</td>
 <td align="left">us</td>
 <td align="left">source</td>
 <td align="left">2022-10-15</td>
 <td align="right">0.90</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pct_ed_visits_influenza</td>
-<td align="left">2026-06-26</td>
+<td align="left">2024-04-18 12:00:00</td>
 <td align="left">nation</td>
 <td align="left">us</td>
 <td align="left">source</td>
-<td align="left">2022-10-22</td>
-<td align="right">1.29</td>
+<td align="left">2023-01-28</td>
+<td align="right">0.55</td>
+</tr>
+<tr class="even">
+<td align="left">pct_ed_visits_influenza</td>
+<td align="left">2024-04-18 12:00:00</td>
+<td align="left">nation</td>
+<td align="left">us</td>
+<td align="left">source</td>
+<td align="left">2023-02-04</td>
+<td align="right">0.47</td>
 </tr>
 <tr class="odd">
 <td align="left">pct_ed_visits_influenza</td>
-<td align="left">2026-06-26</td>
+<td align="left">2024-04-18 12:00:00</td>
 <td align="left">nation</td>
 <td align="left">us</td>
 <td align="left">source</td>
-<td align="left">2022-10-29</td>
-<td align="right">2.47</td>
+<td align="left">2023-02-18</td>
+<td align="right">0.36</td>
 </tr>
 <tr class="even">
 <td align="left">pct_ed_visits_influenza</td>
-<td align="left">2026-06-26</td>
+<td align="left">2024-04-18 12:00:00</td>
 <td align="left">nation</td>
 <td align="left">us</td>
 <td align="left">source</td>
-<td align="left">2022-11-05</td>
-<td align="right">3.67</td>
+<td align="left">2023-02-25</td>
+<td align="right">0.34</td>
 </tr>
 </tbody>
 </table>
@@ -260,14 +259,14 @@ available data for that geo type:</p>
 <span>  signals <span class="op">=</span> <span class="st">"pct_ed_visits_influenza"</span>,</span>
 <span>  geo_type <span class="op">=</span> <span class="st">"state"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 10,557 × 7</span></span>
-<span><span class="co">#&gt;   signal         report_time geo_type geo_value fill_method reference_time value</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;          &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 pct_ed_visits… 2026-06-26  state    ak        source      2022-10-01     0.140</span></span>
-<span><span class="co">#&gt; 2 pct_ed_visits… 2026-06-26  state    ak        source      2022-10-08     0.240</span></span>
-<span><span class="co">#&gt; 3 pct_ed_visits… 2026-06-26  state    ak        source      2022-10-15     0.320</span></span>
-<span><span class="co">#&gt; 4 pct_ed_visits… 2026-06-26  state    ak        source      2022-10-22     0.760</span></span>
-<span><span class="co">#&gt; # ℹ 10,553 more rows</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 10,905 × 7</span></span>
+<span><span class="co">#&gt;   signal report_time         geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_e… 2024-05-03 12:00:00 state    de        source      2024-03-02      4.82</span></span>
+<span><span class="co">#&gt; 2 pct_e… 2024-05-03 12:00:00 state    ks        source      2024-03-23      2.09</span></span>
+<span><span class="co">#&gt; 3 pct_e… 2024-05-03 12:00:00 state    mn        source      2022-10-29      1.14</span></span>
+<span><span class="co">#&gt; 4 pct_e… 2024-05-03 12:00:00 state    mn        source      2024-03-30      2.89</span></span>
+<span><span class="co">#&gt; # ℹ 10,901 more rows</span></span></code></pre></div>
 <p>You can also query multiple signals in a single request by passing a
 vector to <code>signals</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -280,12 +279,12 @@ vector to <code>signals</code>:</p>
 <span>  reference_time <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2024-12-01"</span>, <span class="st">"2024-12-15"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 4 × 7</span></span>
-<span><span class="co">#&gt;   signal         report_time geo_type geo_value fill_method reference_time value</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;          &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 pct_ed_visits… 2026-06-26  state    pa        source      2024-12-07     0.75 </span></span>
-<span><span class="co">#&gt; 2 pct_ed_visits… 2026-06-26  state    pa        source      2024-12-07     0.570</span></span>
-<span><span class="co">#&gt; 3 pct_ed_visits… 2026-06-26  state    pa        source      2024-12-14     0.820</span></span>
-<span><span class="co">#&gt; 4 pct_ed_visits… 2026-06-26  state    pa        source      2024-12-14     0.870</span></span></code></pre></div>
+<span><span class="co">#&gt;   signal report_time         geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_e… 2025-01-17 12:00:00 state    pa        source      2024-12-07     0.570</span></span>
+<span><span class="co">#&gt; 2 pct_e… 2025-01-24 12:00:00 state    pa        source      2024-12-07     0.75 </span></span>
+<span><span class="co">#&gt; 3 pct_e… 2025-01-24 12:00:00 state    pa        source      2024-12-14     0.820</span></span>
+<span><span class="co">#&gt; 4 pct_e… 2025-01-24 12:00:00 state    pa        source      2024-12-14     0.870</span></span></code></pre></div>
 <p>Alternatively, we can fetch the time series for a subset of states
 and reference dates by listing out the desired locations in the
 <code>geo_values</code> argument and using a range in the
@@ -302,12 +301,12 @@ and reference dates by listing out the desired locations in the
 <span>  reference_time <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2024-01-01"</span>, <span class="st">"2025-01-01"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 156 × 7</span></span>
-<span><span class="co">#&gt;   signal         report_time geo_type geo_value fill_method reference_time value</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;          &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 pct_ed_visits… 2026-06-26  state    ca        source      2024-02-03     1.31 </span></span>
-<span><span class="co">#&gt; 2 pct_ed_visits… 2026-06-26  state    ca        source      2024-02-17     0.990</span></span>
-<span><span class="co">#&gt; 3 pct_ed_visits… 2026-06-26  state    ca        source      2024-03-02     0.760</span></span>
-<span><span class="co">#&gt; 4 pct_ed_visits… 2026-06-26  state    ca        source      2024-03-09     0.650</span></span>
+<span><span class="co">#&gt;   signal report_time         geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_e… 2024-05-03 12:00:00 state    pa        source      2024-03-23     1.76 </span></span>
+<span><span class="co">#&gt; 2 pct_e… 2024-05-17 12:00:00 state    pa        source      2024-04-13     0.830</span></span>
+<span><span class="co">#&gt; 3 pct_e… 2024-04-18 12:00:00 state    fl        source      2024-01-06     4.83 </span></span>
+<span><span class="co">#&gt; 4 pct_e… 2024-04-18 12:00:00 state    fl        source      2024-01-13     3.69 </span></span>
 <span><span class="co">#&gt; # ℹ 152 more rows</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -330,18 +329,18 @@ known on a specific date.</p>
 <span>  snapshot_date <span class="op">=</span> <span class="st">"2025-01-01"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 117 × 7</span></span>
-<span><span class="co">#&gt;   signal         report_time geo_type geo_value fill_method reference_time value</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;          &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 pct_ed_visits… 2024-12-27  state    pa        source      2022-10-01     0.120</span></span>
-<span><span class="co">#&gt; 2 pct_ed_visits… 2024-12-27  state    pa        source      2022-10-08     0.100</span></span>
-<span><span class="co">#&gt; 3 pct_ed_visits… 2024-12-27  state    pa        source      2022-10-15     0.210</span></span>
-<span><span class="co">#&gt; 4 pct_ed_visits… 2024-12-27  state    pa        source      2022-10-22     0.330</span></span>
+<span><span class="co">#&gt;   signal report_time         geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_e… 2024-04-18 12:00:00 state    pa        source      2022-10-01     0.120</span></span>
+<span><span class="co">#&gt; 2 pct_e… 2024-04-18 12:00:00 state    pa        source      2022-10-08     0.100</span></span>
+<span><span class="co">#&gt; 3 pct_e… 2024-04-18 12:00:00 state    pa        source      2022-10-15     0.210</span></span>
+<span><span class="co">#&gt; 4 pct_e… 2024-04-18 12:00:00 state    pa        source      2022-10-22     0.330</span></span>
 <span><span class="co">#&gt; # ℹ 113 more rows</span></span></code></pre></div>
 <p>To request all versions of the data issued within a specific time
 range, we use <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> with the
 <code>report_time</code> argument. This parameter allows us to fetch
 versions using comparison operators (e.g.,
-<code>"&lt;2025-01-15&gt;"</code>) or an <code><a href="../reference/epirange.html">epirange()</a></code>.</p>
+<code>"&lt;2025-01-15"</code>) or an <code><a href="../reference/epirange.html">epirange()</a></code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># See how the estimate for a SINGLE reference date (2024-12-07) evolved</span></span>
 <span><span class="co"># by fetching all reports issued in December 2024 and early January 2025</span></span>
@@ -353,14 +352,11 @@ versions using comparison operators (e.g.,
 <span>  reference_time <span class="op">=</span> <span class="st">"2024-12-07"</span>,</span>
 <span>  report_time <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2024-12-01"</span>, <span class="st">"2025-01-15"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 5 × 7</span></span>
-<span><span class="co">#&gt;   signal         report_time geo_type geo_value fill_method reference_time value</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;          &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 pct_ed_visits… 2024-12-13  state    pa        source      2024-12-07     0.550</span></span>
-<span><span class="co">#&gt; 2 pct_ed_visits… 2024-12-20  state    pa        source      2024-12-07     0.560</span></span>
-<span><span class="co">#&gt; 3 pct_ed_visits… 2024-12-27  state    pa        source      2024-12-07     0.560</span></span>
-<span><span class="co">#&gt; 4 pct_ed_visits… 2025-01-03  state    pa        source      2024-12-07     0.560</span></span>
-<span><span class="co">#&gt; # ℹ 1 more row</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 2 × 7</span></span>
+<span><span class="co">#&gt;   signal report_time         geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_e… 2024-12-20 12:00:00 state    pa        source      2024-12-07     0.560</span></span>
+<span><span class="co">#&gt; 2 pct_e… 2024-12-13 12:00:00 state    pa        source      2024-12-07     0.550</span></span></code></pre></div>
 <p>See <code><a href="../articles/versioned-data.html">vignette("versioned-data")</a></code> for details and more ways
 to specify versioned data.</p>
 </div>
@@ -386,7 +382,7 @@ passed through <code>...</code> to limit the returned rows, and
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">aux_data</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table style="width:100%;" class="table">
 <colgroup>
-<col width="1%">
+<col width="3%">
 <col width="1%">
 <col width="2%">
 <col width="1%">
@@ -418,7 +414,7 @@ passed through <code>...</code> to limit the returned rows, and
 <col width="2%">
 <col width="3%">
 <col width="3%">
-<col width="3%">
+<col width="2%">
 <col width="2%">
 <col width="3%">
 <col width="1%">
@@ -463,7 +459,7 @@ passed through <code>...</code> to limit the returned rows, and
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">2026-06-26</td>
+<td align="left">2026-11-06 16:19:20</td>
 <td align="left">162</td>
 <td align="left">2026-01-27</td>
 <td align="left">CDC_Verily</td>
@@ -491,18 +487,57 @@ kit</td>
 <td align="left">copies/l wastewater</td>
 <td align="left">1500</td>
 <td align="left">pepper mild mottle virus</td>
+<td align="left">153424325.78461</td>
+<td align="left">copies/l wastewater</td>
+<td align="left">40.7</td>
+<td align="left">bcov vaccine</td>
+<td align="left">clarified sample</td>
+<td align="left">5</td>
+<td align="left">31694</td>
+<td align="left">2026-11-06 16:19:20</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">2026-06-26 12:00:00</td>
+<td align="left">162</td>
+<td align="left">2026-01-27</td>
+<td align="left">CDC_Verily</td>
+<td align="left">92012</td>
+<td align="left">sars-cov-2</td>
+<td align="left">2026-11-06 16:19:20</td>
+<td align="left">ca</td>
+<td align="left">06079</td>
+<td align="left">San Luis Obispo</td>
+<td align="left">14465</td>
+<td align="left">24-hr time-weighted composite</td>
+<td align="left">post grit removal</td>
+<td align="left">wwtp</td>
+<td align="left">0.45</td>
+<td align="left">ceres nanotrap</td>
+<td align="left">f</td>
+<td align="left">ddpcr</td>
+<td align="left">thermo magmax viral/pathogen nucleic acid isolation
+kit</td>
+<td align="left">2</td>
+<td align="left">f</td>
+<td align="left">f</td>
+<td align="left">f</td>
+<td align="left">n</td>
+<td align="left">copies/l wastewater</td>
+<td align="left">1500</td>
+<td align="left">pepper mild mottle virus</td>
 <td align="left">153424325.78462</td>
 <td align="left">copies/l wastewater</td>
 <td align="left">40.7</td>
 <td align="left">bcov vaccine</td>
 <td align="left">clarified sample</td>
 <td align="left">5</td>
-<td align="left">7914</td>
-<td align="left">2026-06-26 21:04:11</td>
+<td align="left">31694</td>
+<td align="left">2026-11-06 16:19:20</td>
 <td align="left">NA</td>
 </tr>
-<tr class="even">
-<td align="left">2026-06-19</td>
+<tr class="odd">
+<td align="left">2026-06-19 12:00:00</td>
 <td align="left">162</td>
 <td align="left">2026-01-27</td>
 <td align="left">CDC_Verily</td>
@@ -540,8 +575,8 @@ kit</td>
 <td align="left">2026-06-26 21:02:14</td>
 <td align="left">NA</td>
 </tr>
-<tr class="odd">
-<td align="left">2026-06-12</td>
+<tr class="even">
+<td align="left">2026-06-12 12:00:00</td>
 <td align="left">162</td>
 <td align="left">2026-01-27</td>
 <td align="left">CDC_Verily</td>
@@ -579,8 +614,8 @@ kit</td>
 <td align="left">2026-06-26 21:00:39</td>
 <td align="left">NA</td>
 </tr>
-<tr class="even">
-<td align="left">2026-06-05</td>
+<tr class="odd">
+<td align="left">2026-06-05 12:00:00</td>
 <td align="left">162</td>
 <td align="left">2026-01-27</td>
 <td align="left">CDC_Verily</td>
@@ -618,8 +653,8 @@ kit</td>
 <td align="left">2026-06-26 20:59:33</td>
 <td align="left">NA</td>
 </tr>
-<tr class="odd">
-<td align="left">2026-05-30</td>
+<tr class="even">
+<td align="left">2026-05-30 12:00:00</td>
 <td align="left">162</td>
 <td align="left">2026-01-27</td>
 <td align="left">CDC_Verily</td>
@@ -657,45 +692,6 @@ kit</td>
 <td align="left">2026-06-26 20:58:46</td>
 <td align="left">NA</td>
 </tr>
-<tr class="even">
-<td align="left">2026-05-29</td>
-<td align="left">162</td>
-<td align="left">2026-01-27</td>
-<td align="left">CDC_Verily</td>
-<td align="left">92012</td>
-<td align="left">sars-cov-2</td>
-<td align="left">2026-05-30 00:00:00</td>
-<td align="left">ca</td>
-<td align="left">06079</td>
-<td align="left">San Luis Obispo</td>
-<td align="left">14465</td>
-<td align="left">24-hr time-weighted composite</td>
-<td align="left">post grit removal</td>
-<td align="left">wwtp</td>
-<td align="left">0.45</td>
-<td align="left">ceres nanotrap</td>
-<td align="left">f</td>
-<td align="left">ddpcr</td>
-<td align="left">thermo magmax viral/pathogen nucleic acid isolation
-kit</td>
-<td align="left">2</td>
-<td align="left">f</td>
-<td align="left">f</td>
-<td align="left">f</td>
-<td align="left">n</td>
-<td align="left">copies/l wastewater</td>
-<td align="left">1500</td>
-<td align="left">pepper mild mottle virus</td>
-<td align="left">153424325.78462</td>
-<td align="left">copies/l wastewater</td>
-<td align="left">40.7</td>
-<td align="left">bcov vaccine</td>
-<td align="left">clarified sample</td>
-<td align="left">5</td>
-<td align="left">7847</td>
-<td align="left">2026-06-26 20:57:31</td>
-<td align="left">NA</td>
-</tr>
 </tbody>
 </table>
 <p>You can also attach auxiliary columns directly to a signal pull by
@@ -714,33 +710,34 @@ auxiliary data and left-joins it onto the shared key columns:</p>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">nwss_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 6 × 10</span></span>
-<span><span class="co">#&gt;   signal   report_time geo_type geo_value fill_method reference_time nwss_source</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;chr&gt;      </span></span>
-<span><span class="co">#&gt; 1 covid_a… 2026-06-26  sewersh… 128       source      2024-12-19     CDC_Verily </span></span>
-<span><span class="co">#&gt; 2 covid_a… 2026-06-26  sewersh… 128       source      2024-12-03     CDC_Verily </span></span>
-<span><span class="co">#&gt; 3 covid_a… 2026-06-26  sewersh… 128       source      2024-12-17     CDC_Verily </span></span>
-<span><span class="co">#&gt; 4 covid_a… 2026-06-26  sewersh… 128       source      2024-12-12     CDC_Verily </span></span>
+<span><span class="co">#&gt;   signal       report_time         geo_type geo_value fill_method reference_time</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;        &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;        </span></span>
+<span><span class="co">#&gt; 1 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-19    </span></span>
+<span><span class="co">#&gt; 2 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-03    </span></span>
+<span><span class="co">#&gt; 3 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-17    </span></span>
+<span><span class="co">#&gt; 4 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-12    </span></span>
 <span><span class="co">#&gt; # ℹ 2 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 3 more variables: sample_index &lt;chr&gt;, pcr_target &lt;chr&gt;, value &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; # ℹ 4 more variables: nwss_source &lt;chr&gt;, sample_index &lt;chr&gt;, pcr_target &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   value &lt;dbl&gt;</span></span>
 <span></span>
 <span><span class="co"># Attach auxiliary metadata</span></span>
 <span><span class="va">nwss_merged</span> <span class="op">&lt;-</span> <span class="va">nwss_data</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="../reference/epidata_aux.html">epidata_aux</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">nwss_merged</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 6 × 40</span></span>
-<span><span class="co">#&gt;   signal   report_time geo_type geo_value fill_method reference_time nwss_source</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;chr&gt;      </span></span>
-<span><span class="co">#&gt; 1 covid_a… 2026-06-26  sewersh… 128       source      2024-12-19     CDC_Verily </span></span>
-<span><span class="co">#&gt; 2 covid_a… 2026-06-26  sewersh… 128       source      2024-12-03     CDC_Verily </span></span>
-<span><span class="co">#&gt; 3 covid_a… 2026-06-26  sewersh… 128       source      2024-12-17     CDC_Verily </span></span>
-<span><span class="co">#&gt; 4 covid_a… 2026-06-26  sewersh… 128       source      2024-12-12     CDC_Verily </span></span>
+<span><span class="co">#&gt;   signal       report_time         geo_type geo_value fill_method reference_time</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;        &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;        </span></span>
+<span><span class="co">#&gt; 1 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-19    </span></span>
+<span><span class="co">#&gt; 2 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-03    </span></span>
+<span><span class="co">#&gt; 3 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-17    </span></span>
+<span><span class="co">#&gt; 4 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-12    </span></span>
 <span><span class="co">#&gt; # ℹ 2 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 33 more variables: sample_index &lt;chr&gt;, pcr_target &lt;chr&gt;, value &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   report_ts_nominal_end &lt;chr&gt;, state_territory &lt;chr&gt;, county_fips &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   counties_served &lt;chr&gt;, population_served &lt;chr&gt;, sample_type &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   sample_matrix &lt;chr&gt;, sample_location &lt;chr&gt;, flow_rate &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   concentration_method &lt;chr&gt;, pasteurized &lt;chr&gt;, pcr_type &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   extraction_method &lt;chr&gt;, major_lab_method &lt;chr&gt;, inhibition_detect &lt;chr&gt;, …</span></span></code></pre></div>
+<span><span class="co">#&gt; # ℹ 34 more variables: nwss_source &lt;chr&gt;, sample_index &lt;chr&gt;, pcr_target &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   value &lt;dbl&gt;, report_ts_nominal_end &lt;chr&gt;, state_territory &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   county_fips &lt;chr&gt;, counties_served &lt;chr&gt;, population_served &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   sample_type &lt;chr&gt;, sample_matrix &lt;chr&gt;, sample_location &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   flow_rate &lt;chr&gt;, concentration_method &lt;chr&gt;, pasteurized &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   pcr_type &lt;chr&gt;, extraction_method &lt;chr&gt;, major_lab_method &lt;chr&gt;, …</span></span></code></pre></div>
 <p>If you don’t pass explicit key filters, <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code>
 automatically infers them from the base dataset.</p>
 </div>
@@ -796,22 +793,19 @@ works with <code><a href="../reference/cast_api_queries.html">epidata_snapshot()
 we can easily plot it using <code>ggplot2</code>:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.5.2</span></span>
 <span></span>
 <span><span class="co"># Plot the influenza ED-visit time series fetched earlier with epidata_snapshot()</span></span>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="va">epidata</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">reference_time</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Influenza ED visits from NSSP"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"US, 2024-2025 season"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
+<span>      <span class="st">"US, "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">epidata</span><span class="op">$</span><span class="va">reference_time</span><span class="op">)</span>, <span class="st">" to "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">epidata</span><span class="op">$</span><span class="va">reference_time</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"Date"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"% of ED visits"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="img/epidatr-unnamed-chunk-12-1.png" alt="plot of chunk unnamed-chunk-12" width="700.0000032" height="65%"><p class="caption">
-plot of chunk unnamed-chunk-12
-</p>
-</div>
+<p><img src="img/epidatr-national-plot-1.png" alt="Line chart of the weekly percentage of US emergency department visits due to influenza, from NSSP." width="700.0000032" height="65%"></p>
 <p><code>ggplot2</code> can also be used with <code>epidatr</code> and
 <code>maps</code> to <a href="https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html" class="external-link">create
 choropleths</a>:</p>
@@ -857,42 +851,48 @@ choropleths</a>:</p>
 <span>    x <span class="op">=</span> <span class="st">"Longitude"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"Latitude"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="img/epidatr-unnamed-chunk-13-1.png" alt="plot of chunk unnamed-chunk-13" width="700.0000032" height="65%"><p class="caption">
-plot of chunk unnamed-chunk-13
-</p>
-</div>
+<p><img src="img/epidatr-state-map-1.png" alt="US map of confirmed influenza hospital admissions by state for the week ending 2025-01-04, from NHSN." width="700.0000032" height="65%"></p>
 <div class="section level3">
 <h3 id="plotting-revision-histories">Plotting revision histories<a class="anchor" aria-label="anchor" href="#plotting-revision-histories"></a>
 </h3>
 <p>We can also visualize revision histories from
-<code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>. Each line shows what the time series
-looked like as of a different publication date:</p>
+<code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>. The archive lists a row only when a
+value is first reported or revised, so to see the whole time series as
+it looked on each release date, keep the latest value of each reference
+date reported up to then:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Fetch revision history for Pennsylvania influenza ED visits</span></span>
+<code class="sourceCode R"><span><span class="co"># Fetch every version of Pennsylvania influenza ED visits reported before 2025</span></span>
 <span><span class="va">pa_revisions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cast_api_queries.html">epidata_archive</a></span><span class="op">(</span></span>
 <span>  source <span class="op">=</span> <span class="st">"nssp"</span>,</span>
 <span>  signals <span class="op">=</span> <span class="st">"pct_ed_visits_influenza"</span>,</span>
 <span>  geo_type <span class="op">=</span> <span class="st">"state"</span>,</span>
 <span>  geo_values <span class="op">=</span> <span class="st">"pa"</span>,</span>
 <span>  reference_time <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2024-10-01"</span>, <span class="st">"2024-12-01"</span><span class="op">)</span>,</span>
-<span>  report_time <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2024-11-01"</span>, <span class="st">"2025-01-01"</span><span class="op">)</span></span>
+<span>  report_time <span class="op">=</span> <span class="st">"&lt;2025-01-01"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">pa_revisions</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">reference_time</span>, y <span class="op">=</span> <span class="va">value</span>, group <span class="op">=</span> <span class="va">report_time</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">report_time</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="co"># Rebuild the series as known on each release date</span></span>
+<span><span class="va">release_dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">pa_revisions</span><span class="op">$</span><span class="va">report_time</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">pa_as_of</span> <span class="op">&lt;-</span> <span class="fu">bind_rows</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">release_dates</span>, <span class="kw">function</span><span class="op">(</span><span class="va">release</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">pa_revisions</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">report_time</span> <span class="op">&lt;=</span> <span class="va">release</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">group_by</span><span class="op">(</span><span class="va">reference_time</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">slice_max</span><span class="op">(</span><span class="va">report_time</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="fu">mutate</span><span class="op">(</span>as_of <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">release</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">pa_as_of</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">reference_time</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">as_of</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Revisions of NSSP influenza ED visits in Pennsylvania"</span>,</span>
-<span>    subtitle <span class="op">=</span> <span class="st">"October-December 2024 estimates as reported across November 2024 - January 2025"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"October-November 2024 estimates as known on each release date"</span>,</span>
 <span>    x <span class="op">=</span> <span class="st">"Observation Date"</span>,</span>
 <span>    y <span class="op">=</span> <span class="st">"% of ED visits"</span>,</span>
-<span>    color <span class="op">=</span> <span class="st">"Report Date"</span></span>
+<span>    color <span class="op">=</span> <span class="st">"As of"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="img/epidatr-archive-plot-1.png" alt="plot of chunk archive-plot" width="700.0000032" height="65%"><p class="caption">
-plot of chunk archive-plot
-</p>
-</div>
+<p><img src="img/epidatr-archive-plot-1.png" alt="Line chart of Pennsylvania influenza ED-visit percentages for October-November 2024, with one line per release date showing the series as it was known then; later releases extend the series and revise recent values." width="700.0000032" height="65%"></p>
 </div>
 </div>
 <div class="section level2">

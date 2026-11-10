@@ -49,7 +49,7 @@ knitr::kable(past_snapshot)
 
 | signal | report_time | geo_type | geo_value | fill_method | reference_time | value |
 |:---|:---|:---|:---|:---|:---|---:|
-| pct_ed_visits_influenza | 2024-12-13 | state | pa | source | 2024-12-07 | 0.55 |
+| pct_ed_visits_influenza | 2024-12-13 12:00:00 | state | pa | source | 2024-12-07 | 0.55 |
 
 This shows that an estimate of about 0.55% was known as of December 14.
 If we don’t specify `snapshot_date`, we get the most recent estimate
@@ -69,7 +69,7 @@ knitr::kable(latest_snapshot)
 
 | signal | report_time | geo_type | geo_value | fill_method | reference_time | value |
 |:---|:---|:---|:---|:---|:---|---:|
-| pct_ed_visits_influenza | 2026-06-26 | state | pa | source | 2024-12-07 | 0.57 |
+| pct_ed_visits_influenza | 2025-01-17 12:00:00 | state | pa | source | 2024-12-07 | 0.57 |
 
 Note the change in the estimate, from 0.55% to 0.57%, reflecting new
 data that became available after December 14 about visits *occurring on*
@@ -106,14 +106,13 @@ knitr::kable(archive_data)
 
 | signal | report_time | geo_type | geo_value | fill_method | reference_time | value |
 |:---|:---|:---|:---|:---|:---|---:|
-| pct_ed_visits_influenza | 2024-12-13 | state | pa | source | 2024-12-07 | 0.55 |
-| pct_ed_visits_influenza | 2024-12-20 | state | pa | source | 2024-12-07 | 0.56 |
-| pct_ed_visits_influenza | 2024-12-27 | state | pa | source | 2024-12-07 | 0.56 |
-| pct_ed_visits_influenza | 2025-01-03 | state | pa | source | 2024-12-07 | 0.56 |
-| pct_ed_visits_influenza | 2025-01-10 | state | pa | source | 2024-12-07 | 0.56 |
+| pct_ed_visits_influenza | 2024-12-20 12:00:00 | state | pa | source | 2024-12-07 | 0.56 |
+| pct_ed_visits_influenza | 2024-12-13 12:00:00 | state | pa | source | 2024-12-07 | 0.55 |
 
-This estimate was updated several times as new data for December 7th
-arrived.
+This estimate was first reported on December 13th and revised on
+December 20th as more data for December 7th arrived. The archive lists a
+new row only when the value changes, so releases that left it unchanged
+don’t appear.
 
 Note that these results include only data reported between (inclusive)
 2024-12-01 and 2025-01-15. If a value was first reported outside this
@@ -139,12 +138,11 @@ epidata_archive(
   reference_time = "2024-12-07",
   report_time = "<2025-01-01"
 )
-#> # A tibble: 3 × 7
-#>   signal         report_time geo_type geo_value fill_method reference_time value
-#>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
-#> 1 pct_ed_visits… 2024-12-13  state    pa        source      2024-12-07     0.550
-#> 2 pct_ed_visits… 2024-12-20  state    pa        source      2024-12-07     0.560
-#> 3 pct_ed_visits… 2024-12-27  state    pa        source      2024-12-07     0.560
+#> # A tibble: 2 × 7
+#>   signal report_time         geo_type geo_value fill_method reference_time value
+#>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_e… 2024-12-20 12:00:00 state    pa        source      2024-12-07     0.560
+#> 2 pct_e… 2024-12-13 12:00:00 state    pa        source      2024-12-07     0.550
 
 # Versions reported strictly after 2024-12-13
 epidata_archive(
@@ -155,55 +153,52 @@ epidata_archive(
   reference_time = "2024-12-07",
   report_time = ">2024-12-13"
 )
-#> # A tibble: 116 × 7
-#>   signal         report_time geo_type geo_value fill_method reference_time value
-#>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
-#> 1 pct_ed_visits… 2024-12-20  state    pa        source      2024-12-07     0.560
-#> 2 pct_ed_visits… 2024-12-27  state    pa        source      2024-12-07     0.560
-#> 3 pct_ed_visits… 2025-01-03  state    pa        source      2024-12-07     0.560
-#> 4 pct_ed_visits… 2025-01-10  state    pa        source      2024-12-07     0.560
-#> # ℹ 112 more rows
+#> # A tibble: 2 × 7
+#>   signal report_time         geo_type geo_value fill_method reference_time value
+#>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_e… 2025-01-17 12:00:00 state    pa        source      2024-12-07     0.570
+#> 2 pct_e… 2024-12-20 12:00:00 state    pa        source      2024-12-07     0.560
 ```
 
 ### Calculating reporting lag
 
-In the V5 API, reporting lag is computed directly as the difference
-between `report_time` (the publication date) and `reference_time` (the
-observation date):
+In the V5 API, the reporting lag is the difference between when a value
+was reported and the date it describes. `report_time` is a UTC timestamp
+(`POSIXct`) while `reference_time` is a `Date`, so convert `report_time`
+to a date before subtracting. (Subtracting them directly gives a warning
+and a meaningless number.)
 
 ``` r
 
 archive_with_lag <- archive_data %>%
-  mutate(lag_days = as.integer(report_time - reference_time)) %>%
+  mutate(lag_days = as.integer(as.Date(report_time) - reference_time)) %>%
   select(signal, reference_time, report_time, lag_days, value)
 
 knitr::kable(archive_with_lag)
 ```
 
-| signal                  | reference_time | report_time | lag_days | value |
-|:------------------------|:---------------|:------------|---------:|------:|
-| pct_ed_visits_influenza | 2024-12-07     | 2024-12-13  |        6 |  0.55 |
-| pct_ed_visits_influenza | 2024-12-07     | 2024-12-20  |       13 |  0.56 |
-| pct_ed_visits_influenza | 2024-12-07     | 2024-12-27  |       20 |  0.56 |
-| pct_ed_visits_influenza | 2024-12-07     | 2025-01-03  |       27 |  0.56 |
-| pct_ed_visits_influenza | 2024-12-07     | 2025-01-10  |       34 |  0.56 |
+| signal                  | reference_time | report_time         | lag_days | value |
+|:------------------------|:---------------|:--------------------|---------:|------:|
+| pct_ed_visits_influenza | 2024-12-07     | 2024-12-20 12:00:00 |       13 |  0.56 |
+| pct_ed_visits_influenza | 2024-12-07     | 2024-12-13 12:00:00 |        6 |  0.55 |
 
 If your analysis requires filtering data to a specific maximum reporting
-lag (for example, simulating data available with at most a 14-day
-delay), filter by `lag_days`:
+lag (for example, simulating data available with at most a 7-day delay),
+filter by `lag_days`:
 
 ``` r
 
 archive_with_lag %>%
-  filter(lag_days <= 14)
-#> # A tibble: 2 × 5
-#>   signal                  reference_time report_time lag_days value
-#>   <chr>                   <date>         <date>         <int> <dbl>
-#> 1 pct_ed_visits_influenza 2024-12-07     2024-12-13         6 0.550
-#> 2 pct_ed_visits_influenza 2024-12-07     2024-12-20        13 0.560
+  filter(lag_days <= 7)
+#> # A tibble: 1 × 5
+#>   signal                  reference_time report_time         lag_days value
+#>   <chr>                   <date>         <dttm>                 <int> <dbl>
+#> 1 pct_ed_visits_influenza 2024-12-07     2024-12-13 12:00:00        6 0.550
 ```
 
-For sources that have not yet transitioned from the legacy V4 API,
-versioning is specified differently. See
+If you have code that uses the legacy V4 versioning arguments (`as_of`,
+`issues`, and `lag` in
+[`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)),
+see
 [`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md)
-for the argument and column mappings between V4 and V5.
+for how they map to V5.

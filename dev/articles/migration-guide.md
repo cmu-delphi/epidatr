@@ -3,6 +3,7 @@
 ``` r
 
 library(epidatr)
+library(dplyr)
 ```
 
 The Delphi Epidata API has transitioned from its V4 endpoint
@@ -59,7 +60,7 @@ documentation for specific behavior:
 | Fetch full revision history for a signal | `pub_covidcast(issues = ...)` | Supported by some ([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md), [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md) with `issues`) | [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md) |
 | Discover sources, signals, geo types, and date ranges | [`pub_covidcast_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast_meta.md), [`covidcast_epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/covidcast_epidata.md) | Shared meta for some ([`pub_fluview_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview_meta.md)) | [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md) |
 | Access source-specific auxiliary tables | none | none | [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md) |
-| Filter by publication lag | `pub_covidcast(lag = ...)` | Supported by some ([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md), [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md)) | none (compute `report_time - reference_time`) |
+| Filter by publication lag | `pub_covidcast(lag = ...)` | Supported by some ([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md), [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md)) | none (compute `as.Date(report_time) - reference_time`, in days) |
 
 [`epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
 is a convenience wrapper that routes to
@@ -90,8 +91,8 @@ for details:
 | `time_type` | not exposed ([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) is always `epiweeks`) | none | Dropped. All V5 endpoints use standard calendar dates (`Date`). |
 | `time_values` | `epiweeks` for [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) | `reference_time` | Filtered server-side via the `reference_times` API parameter. |
 | `as_of` | none ([`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) has no `as_of`) | `snapshot_date` | In V5, used only in [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md) to fetch data known as of a past date. `NULL` returns the latest data. |
-| `issues` | `issues` (where supported) | `report_time` | In V5, used only in [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md). Accepts operators like `"<2025-10-16>"`, or [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md). (For a single date, use [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)). |
-| `lag` | `lag` (where supported) | none | Removed in V5. You can compute it yourself: fetch from [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md) and filter by `report_time - reference_time`. See [filtering by lag](#lag). |
+| `issues` | `issues` (where supported) | `report_time` | In V5, used only in [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md). Accepts operators like `"<2025-10-16"`, or [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md). (For a single date, use [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)). |
+| `lag` | `lag` (where supported) | none | Removed in V5. You can compute it yourself: fetch from [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md) and filter by `as.Date(report_time) - reference_time`. See [filtering by lag](#lag). |
 | none | none | `fill_method` | New in V5. Selects the imputation method when aggregating sub-geographies (`"source"`, `"ave"`, or `"zero"`). See [below](#fill-method). |
 | none | none | `...` | New in V5. Filters on source-specific dimensions (such as `age_group` or `nwss_source`). |
 
@@ -124,8 +125,8 @@ returns `article`, `count`, and `hour`):
 | not returned | not returned (implicit from endpoint) | `geo_type` | Explicitly included in V5 responses to identify geographic resolution. |
 | `geo_value` | `region` for [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) | `geo_value` | Standardized location identifier across all V5 responses. |
 | `time_value` | `epiweek` for [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md) | `reference_time` | Standardized date in `YYYY-MM-DD` format representing the observation period. |
-| `issue` | `issue` (where returned) | `report_time` | Standardized date in `YYYY-MM-DD` format representing when the data point was published. Present in both snapshot and archive output. |
-| `lag` | `lag` (where returned) | dropped | Omitted in V5 responses. You can compute it yourself as `report_time - reference_time`. See [calculating reporting lag](https://cmu-delphi.github.io/epidatr/articles/versioned-data.html#calculating-reporting-lag). |
+| `issue` | `issue` (where returned) | `report_time` | UTC timestamp (`POSIXct`) of when the data point was published. Present in both snapshot and archive output. Use `as.Date(report_time)` if you need a date. |
+| `lag` | `lag` (where returned) | dropped | Omitted in V5 responses. You can compute it yourself as `as.Date(report_time) - reference_time` (in days). See [calculating reporting lag](https://cmu-delphi.github.io/epidatr/articles/versioned-data.html#calculating-reporting-lag). |
 | `direction` | none | dropped | Deprecated in V4 and dropped in V5. |
 | `stderr`, `sample_size` | none | `ci_lower`, `ci_upper` | Expresses uncertainty as explicit confidence interval bounds on `value` when provided by the data source. See [Uncertainty columns](#uncertainty-columns) below. |
 | `missing_value`, `missing_stderr`, `missing_sample_size` | none | dropped | Replaced in V5 by `fill_method` variants and plain `NA`s in `value`. |
@@ -210,12 +211,12 @@ head(new)
 #> # A tibble: 6 × 7
 #>   signal report_time         geo_type geo_value fill_method reference_time value
 #>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
-#> 1 pct_e… 2024-11-08 00:00:00 state    ca        source      2024-10-05     0.140
-#> 2 pct_e… 2024-11-08 00:00:00 state    ca        source      2024-10-12     0.140
-#> 3 pct_e… 2024-11-23 00:00:00 state    ca        source      2024-10-19     0.160
-#> 4 pct_e… 2024-11-08 00:00:00 state    ca        source      2024-10-26     0.200
-#> 5 pct_e… 2024-12-03 00:00:00 state    ca        source      2024-11-02     0.25 
-#> 6 pct_e… 2024-12-13 00:00:00 state    ca        source      2024-11-09     0.310
+#> 1 pct_e… 2024-11-08 12:00:00 state    ca        source      2024-10-05     0.140
+#> 2 pct_e… 2024-11-08 12:00:00 state    ca        source      2024-10-12     0.140
+#> 3 pct_e… 2024-11-23 12:00:00 state    ca        source      2024-10-19     0.160
+#> 4 pct_e… 2024-11-08 12:00:00 state    ca        source      2024-10-26     0.200
+#> 5 pct_e… 2024-12-03 12:00:00 state    ca        source      2024-11-02     0.25 
+#> 6 pct_e… 2024-12-13 12:00:00 state    ca        source      2024-11-09     0.310
 ```
 
 Both queries return the same signal, just with renamed and reshaped
@@ -261,12 +262,12 @@ head(old_flu[, c("release_date", "region", "epiweek", "wili", "ili")])
 #> # A tibble: 6 × 5
 #>   release_date region epiweek     wili   ili
 #>   <date>       <chr>  <date>     <dbl> <dbl>
-#> 1 2026-10-02   nat    2024-09-29  1.91  1.85
-#> 2 2026-10-02   nat    2024-10-06  2.02  1.94
-#> 3 2026-10-02   nat    2024-10-13  2.07  2.01
-#> 4 2026-10-02   nat    2024-10-20  2.22  2.16
-#> 5 2026-10-02   nat    2024-10-27  2.32  2.23
-#> 6 2026-10-02   nat    2024-11-03  2.47  2.39
+#> 1 2026-10-09   nat    2024-09-29  1.91  1.85
+#> 2 2026-10-09   nat    2024-10-06  2.02  1.94
+#> 3 2026-10-09   nat    2024-10-13  2.07  2.01
+#> 4 2026-10-09   nat    2024-10-20  2.22  2.16
+#> 5 2026-10-09   nat    2024-10-27  2.32  2.23
+#> 6 2026-10-09   nat    2024-11-03  2.47  2.39
 ```
 
 ``` r
@@ -282,12 +283,12 @@ head(new_flu)
 #> # A tibble: 6 × 8
 #>   signal report_time         geo_type geo_value fill_method reference_time
 #>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>        
-#> 1 wili   2025-09-12 00:00:00 nation   us        source      2024-10-12    
-#> 2 wili   2025-09-12 00:00:00 nation   us        source      2024-10-19    
-#> 3 wili   2025-09-12 00:00:00 nation   us        source      2024-10-26    
-#> 4 wili   2025-09-12 00:00:00 nation   us        source      2024-11-02    
-#> 5 wili   2025-09-12 00:00:00 nation   us        source      2024-11-09    
-#> 6 wili   2025-11-14 00:00:00 nation   us        source      2024-10-05    
+#> 1 wili   2025-09-12 12:00:00 nation   us        source      2024-10-12    
+#> 2 wili   2025-09-12 12:00:00 nation   us        source      2024-10-19    
+#> 3 wili   2025-09-12 12:00:00 nation   us        source      2024-10-26    
+#> 4 wili   2025-09-12 12:00:00 nation   us        source      2024-11-02    
+#> 5 wili   2025-09-12 12:00:00 nation   us        source      2024-11-09    
+#> 6 wili   2025-11-14 12:00:00 nation   us        source      2024-10-05    
 #> # ℹ 2 more variables: age_group <chr>, value <dbl>
 ```
 
@@ -338,29 +339,81 @@ head(revisions)
 #> # A tibble: 6 × 7
 #>   signal       report_time         geo_type geo_value fill_method reference_time
 #>   <chr>        <dttm>              <chr>    <chr>     <chr>       <date>        
-#> 1 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-05    
-#> 2 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-12    
-#> 3 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-19    
-#> 4 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-26    
-#> 5 pct_ed_visi… 2024-11-23 00:00:00 state    pa        source      2024-11-02    
-#> 6 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-11-02    
+#> 1 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-10-05    
+#> 2 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-10-12    
+#> 3 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-10-19    
+#> 4 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-10-26    
+#> 5 pct_ed_visi… 2024-11-23 12:00:00 state    pa        source      2024-11-02    
+#> 6 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-11-02    
 #> # ℹ 1 more variable: value <dbl>
 ```
 
 If you filtered by `lag`, fetch the archive with
 [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
-and filter afterwards:
+and filter afterwards. The `lag_days` column below always counts days.
+V4’s `lag` counted in the signal’s time unit, so for a weekly signal
+like this one, V4’s `lag = 1` meant one week, not one day. V4 also dated
+weekly values by the start of the week, while V5’s `reference_time` is
+the end of the week, so the two lags are not directly comparable.
 
 ``` r
 
-# For an exact lag (e.g., 7 days):
+# report_time is a UTC timestamp and reference_time is a Date, so convert
+# report_time to a Date before subtracting
+revisions <- revisions %>%
+  mutate(lag_days = as.integer(as.Date(report_time) - reference_time))
+
+# For an exact lag (e.g., values reported 6 days after the reference date):
 revisions %>%
-  filter(as.integer(report_time - reference_time) == 7)
+  filter(lag_days == 6)
+#> # A tibble: 5 × 8
+#>   signal report_time         geo_type geo_value fill_method reference_time value
+#>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_e… 2024-11-08 12:00:00 state    pa        source      2024-11-02     0.140
+#> 2 pct_e… 2024-12-13 12:00:00 state    pa        source      2024-12-07     0.550
+#> 3 pct_e… 2024-12-20 12:00:00 state    pa        source      2024-12-14     0.850
+#> 4 pct_e… 2024-12-27 12:00:00 state    pa        source      2024-12-21     1.78 
+#> 5 pct_e… 2025-01-03 12:00:00 state    pa        source      2024-12-28     3.78 
+#> # ℹ 1 more variable: lag_days <int>
 
 # Or for maximum latency (e.g., at most 7 days of delay):
 revisions %>%
-  filter(as.integer(report_time - reference_time) <= 7)
+  filter(lag_days <= 7)
+#> # A tibble: 7 × 8
+#>   signal report_time         geo_type geo_value fill_method reference_time value
+#>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_e… 2024-11-08 12:00:00 state    pa        source      2024-11-02     0.140
+#> 2 pct_e… 2024-11-23 12:00:00 state    pa        source      2024-11-16     0.170
+#> 3 pct_e… 2024-12-07 12:00:00 state    pa        source      2024-11-30     0.350
+#> 4 pct_e… 2024-12-13 12:00:00 state    pa        source      2024-12-07     0.550
+#> 5 pct_e… 2024-12-20 12:00:00 state    pa        source      2024-12-14     0.850
+#> 6 pct_e… 2024-12-27 12:00:00 state    pa        source      2024-12-21     1.78 
+#> 7 pct_e… 2025-01-03 12:00:00 state    pa        source      2024-12-28     3.78 
+#> # ℹ 1 more variable: lag_days <int>
+
+# Or for each value as it was known 7 days after its reference date
+# (the latest version reported with a lag of at most 7 days; reference dates
+# with no report in that window are dropped):
+revisions %>%
+  filter(lag_days <= 7) %>%
+  slice_max(report_time, n = 1, by = c(signal, geo_value, reference_time))
+#> # A tibble: 7 × 8
+#>   signal report_time         geo_type geo_value fill_method reference_time value
+#>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_e… 2024-11-08 12:00:00 state    pa        source      2024-11-02     0.140
+#> 2 pct_e… 2024-11-23 12:00:00 state    pa        source      2024-11-16     0.170
+#> 3 pct_e… 2024-12-07 12:00:00 state    pa        source      2024-11-30     0.350
+#> 4 pct_e… 2024-12-13 12:00:00 state    pa        source      2024-12-07     0.550
+#> 5 pct_e… 2024-12-20 12:00:00 state    pa        source      2024-12-14     0.850
+#> 6 pct_e… 2024-12-27 12:00:00 state    pa        source      2024-12-21     1.78 
+#> 7 pct_e… 2025-01-03 12:00:00 state    pa        source      2024-12-28     3.78 
+#> # ℹ 1 more variable: lag_days <int>
 ```
+
+Here the last two results match, because this weekly signal has at most
+one report within 7 days of each reference date. For signals that are
+revised more often, the `slice_max()` step keeps only the latest of
+those reports.
 
 ## Inspecting a source in the new API
 
@@ -375,9 +428,9 @@ meta <- epidata_meta(source = "nssp")
 
 # all the fields available for this source
 names(meta)
-#> [1] "report_time_range"    "reference_time_range" "signals"             
-#> [4] "geo_types"            "key_columns"          "extra_key_columns"   
-#> [7] "value_columns"        "column_types"
+#> [1] "report_time_range"    "reference_time_range" "latest_update"       
+#> [4] "signals"              "geo_types"            "key_columns"         
+#> [7] "extra_key_columns"    "value_columns"        "column_types"
 
 meta$signals # available signal names
 #> [1] "pct_ed_visits_ari"                "pct_ed_visits_combined"          
@@ -391,16 +444,16 @@ meta$geo_types # supported geography levels
 #> [9] "state"
 meta$reference_time_range # earliest/latest reference_time available
 #> $latest
-#> [1] "2026-10-03"
+#> [1] "2026-10-31"
 #> 
 #> $first
 #> [1] "2022-10-01"
 meta$report_time_range # earliest/latest report_time (publication date) available
 #> $latest
-#> [1] "2026-10-07T00:00:00Z"
+#> [1] "2026-11-04T12:00:00Z"
 #> 
 #> $first
-#> [1] "2024-04-18T00:00:00Z"
+#> [1] "2024-04-18T12:00:00Z"
 ```
 
 All ongoing datasets are now on the V5 API. If

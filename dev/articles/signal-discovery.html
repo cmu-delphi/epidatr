@@ -105,8 +105,15 @@ range, view live preview charts, and copy query code.</p>
 <code class="sourceCode R"><span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/epidata_meta.html">epidata_meta</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">meta</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "nssp"    "nhsn"    "pophive" "nwss"   </span></span>
-<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 11 entries ]</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] "nssp"                         "nhsn"                        </span></span>
+<span><span class="co">#&gt;  [3] "pophive"                      "nwss"                        </span></span>
+<span><span class="co">#&gt;  [5] "claims_outpatient"            "claims_inpatient"            </span></span>
+<span><span class="co">#&gt;  [7] "nickel_beta"                  "vha_respiratory_cases"       </span></span>
+<span><span class="co">#&gt;  [9] "vha_respiratory_vaccinations" "sleepcycle"                  </span></span>
+<span><span class="co">#&gt; [11] "nchs_mortality"               "rvdss"                       </span></span>
+<span><span class="co">#&gt; [13] "fluview_ilinet"               "fluview_resp_lab_clinical"   </span></span>
+<span><span class="co">#&gt; [15] "fluview_resp_lab_ph"          "flusurv"                     </span></span>
+<span><span class="co">#&gt; [17] "nrevss"</span></span></code></pre></div>
 <p>Called with <code>source = ...</code>, it reports that source’s
 available signals, supported geographic levels, reference date ranges,
 and version history:</p>
@@ -115,29 +122,32 @@ and version history:</p>
 <span></span>
 <span><span class="co"># all the fields available for this source</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">nssp_meta</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "report_time_range"    "reference_time_range" "signals"             </span></span>
-<span><span class="co">#&gt; [4] "geo_types"           </span></span>
-<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 4 entries ]</span></span>
+<span><span class="co">#&gt; [1] "report_time_range"    "reference_time_range" "latest_update"       </span></span>
+<span><span class="co">#&gt; [4] "signals"              "geo_types"            "key_columns"         </span></span>
+<span><span class="co">#&gt; [7] "extra_key_columns"    "value_columns"        "column_types"</span></span>
 <span></span>
 <span><span class="va">nssp_meta</span><span class="op">$</span><span class="va">signals</span> <span class="co"># available signal names</span></span>
-<span><span class="co">#&gt; [1] "pct_ed_visits_ari"       "pct_ed_visits_combined" </span></span>
-<span><span class="co">#&gt; [3] "pct_ed_visits_covid"     "pct_ed_visits_influenza"</span></span>
-<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]</span></span>
+<span><span class="co">#&gt; [1] "pct_ed_visits_ari"                "pct_ed_visits_combined"          </span></span>
+<span><span class="co">#&gt; [3] "pct_ed_visits_covid"              "pct_ed_visits_influenza"         </span></span>
+<span><span class="co">#&gt; [5] "pct_ed_visits_rsv"                "smoothed_pct_ed_visits_combined" </span></span>
+<span><span class="co">#&gt; [7] "smoothed_pct_ed_visits_covid"     "smoothed_pct_ed_visits_influenza"</span></span>
+<span><span class="co">#&gt; [9] "smoothed_pct_ed_visits_rsv"</span></span>
 <span><span class="va">nssp_meta</span><span class="op">$</span><span class="va">geo_types</span> <span class="co"># supported geography levels</span></span>
 <span><span class="co">#&gt; [1] "census_division" "census_region"   "county"          "hhs"            </span></span>
-<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 5 entries ]</span></span>
+<span><span class="co">#&gt; [5] "hrr"             "hsa_nci"         "msa"             "nation"         </span></span>
+<span><span class="co">#&gt; [9] "state"</span></span>
 <span><span class="va">nssp_meta</span><span class="op">$</span><span class="va">reference_time_range</span> <span class="co"># earliest/latest reference_time available</span></span>
 <span><span class="co">#&gt; $latest</span></span>
-<span><span class="co">#&gt; [1] "2026-09-12"</span></span>
+<span><span class="co">#&gt; [1] "2026-10-31"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $first</span></span>
 <span><span class="co">#&gt; [1] "2022-10-01"</span></span>
 <span><span class="va">nssp_meta</span><span class="op">$</span><span class="va">report_time_range</span> <span class="co"># earliest/latest report_time (publication date) available</span></span>
 <span><span class="co">#&gt; $latest</span></span>
-<span><span class="co">#&gt; [1] "2026-09-16T00:00:00"</span></span>
+<span><span class="co">#&gt; [1] "2026-11-04T12:00:00Z"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $first</span></span>
-<span><span class="co">#&gt; [1] "2024-04-18T00:00:00"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2024-04-18T12:00:00Z"</span></span></code></pre></div>
 <p>You can also convert the metadata into a tabular summary to search
 across all sources using <code>dplyr</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -154,14 +164,14 @@ across all sources using <code>dplyr</code>:</p>
 <span><span class="co"># Search for signals related to influenza</span></span>
 <span><span class="va">signals_df</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"flu"</span>, <span class="va">signals</span>, ignore.case <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 31 × 3</span></span>
-<span><span class="co">#&gt;   source signals                             geo_types                          </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;                               &lt;chr&gt;                              </span></span>
-<span><span class="co">#&gt; 1 nssp   pct_ed_visits_influenza             census_division, census_region, co…</span></span>
-<span><span class="co">#&gt; 2 nssp   smoothed_pct_ed_visits_influenza    census_division, census_region, co…</span></span>
-<span><span class="co">#&gt; 3 nhsn   confirmed_admissions_flu_ew         census_division, census_region, hh…</span></span>
-<span><span class="co">#&gt; 4 nhsn   hosprep_confirmed_admissions_flu_ew census_division, census_region, hh…</span></span>
-<span><span class="co">#&gt; # ℹ 27 more rows</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 133 × 3</span></span>
+<span><span class="co">#&gt;   source signals                                               geo_types        </span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;                                                 &lt;chr&gt;            </span></span>
+<span><span class="co">#&gt; 1 nssp   pct_ed_visits_influenza                               census_division,…</span></span>
+<span><span class="co">#&gt; 2 nssp   smoothed_pct_ed_visits_influenza                      census_division,…</span></span>
+<span><span class="co">#&gt; 3 nhsn   abs_chg_hosprep_pct_confirmed_admissions_flu_adult_ew census_division,…</span></span>
+<span><span class="co">#&gt; 4 nhsn   abs_chg_hosprep_pct_confirmed_admissions_flu_ew       census_division,…</span></span>
+<span><span class="co">#&gt; # ℹ 129 more rows</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="example-queries-for-v5-sources">Example queries for V5 sources<a class="anchor" aria-label="anchor" href="#example-queries-for-v5-sources"></a>
@@ -182,12 +192,13 @@ for a general introduction to the package and its functions, and
 <span>  reference_time <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2024-10-01"</span>, <span class="st">"2024-10-15"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 4 × 7</span></span>
-<span><span class="co">#&gt;   signal        report_time geo_type geo_value fill_method reference_time  value</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;         &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;          &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 pct_ed_visit… 2026-06-26  state    ca        source      2024-10-05     0.140 </span></span>
-<span><span class="co">#&gt; 2 pct_ed_visit… 2026-06-26  state    ca        source      2024-10-12     0.140 </span></span>
-<span><span class="co">#&gt; 3 pct_ed_visit… 2026-06-26  state    pa        source      2024-10-05     0.0500</span></span>
-<span><span class="co">#&gt; 4 pct_ed_visit… 2026-06-26  state    pa        source      2024-10-12     0.0700</span></span>
+<span><span class="co">#&gt;   signal       report_time         geo_type geo_value fill_method reference_time</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;        &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;        </span></span>
+<span><span class="co">#&gt; 1 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-10-05    </span></span>
+<span><span class="co">#&gt; 2 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-10-12    </span></span>
+<span><span class="co">#&gt; 3 pct_ed_visi… 2024-11-08 12:00:00 state    ca        source      2024-10-05    </span></span>
+<span><span class="co">#&gt; 4 pct_ed_visi… 2025-03-21 12:00:00 state    ca        source      2024-10-12    </span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: value &lt;dbl&gt;</span></span>
 <span></span>
 <span><span class="co"># NHSN: Confirmed hospital admissions, for multiple signals at once</span></span>
 <span><span class="fu"><a href="../reference/cast_api_queries.html">epidata_snapshot</a></span><span class="op">(</span></span>
@@ -198,12 +209,12 @@ for a general introduction to the package and its functions, and
 <span>  reference_time <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="st">"2024-10-01"</span>, <span class="st">"2024-10-21"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 6 × 7</span></span>
-<span><span class="co">#&gt;   signal         report_time geo_type geo_value fill_method reference_time value</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;          &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 confirmed_adm… 2026-06-26  state    pa        source      2024-10-19        45</span></span>
-<span><span class="co">#&gt; 2 confirmed_adm… 2026-06-26  state    pa        source      2024-10-12        15</span></span>
-<span><span class="co">#&gt; 3 confirmed_adm… 2026-06-26  state    pa        source      2024-10-05       468</span></span>
-<span><span class="co">#&gt; 4 confirmed_adm… 2026-06-26  state    pa        source      2024-10-19         6</span></span>
+<span><span class="co">#&gt;   signal report_time         geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 confi… 2024-11-19 12:00:00 state    pa        source      2024-10-12        15</span></span>
+<span><span class="co">#&gt; 2 confi… 2024-11-19 12:00:00 state    pa        source      2024-10-05        61</span></span>
+<span><span class="co">#&gt; 3 confi… 2025-01-24 12:00:00 state    pa        source      2024-10-19         6</span></span>
+<span><span class="co">#&gt; 4 confi… 2025-02-05 12:00:00 state    pa        source      2024-10-19        45</span></span>
 <span><span class="co">#&gt; # ℹ 2 more rows</span></span>
 <span></span>
 <span><span class="co"># POPHIVE: Outpatient COVID-19 emergency visits, for a single exact reference date</span></span>
@@ -215,14 +226,14 @@ for a general introduction to the package and its functions, and
 <span>  reference_time <span class="op">=</span> <span class="st">"2024-10-05"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 7 × 8</span></span>
-<span><span class="co">#&gt;   signal     report_time geo_type geo_value fill_method reference_time age_group</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;      &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;chr&gt;    </span></span>
-<span><span class="co">#&gt; 1 covid_pct… 2026-08-14  state    pa        source      2024-10-05     &lt;1       </span></span>
-<span><span class="co">#&gt; 2 covid_pct… 2026-08-14  state    pa        source      2024-10-05     1-4      </span></span>
-<span><span class="co">#&gt; 3 covid_pct… 2026-08-14  state    pa        source      2024-10-05     18-49    </span></span>
-<span><span class="co">#&gt; 4 covid_pct… 2026-08-14  state    pa        source      2024-10-05     50-64    </span></span>
+<span><span class="co">#&gt;   signal       report_time         geo_type geo_value fill_method reference_time</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;        &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;        </span></span>
+<span><span class="co">#&gt; 1 covid_pct_ed 2026-10-09 12:00:00 state    pa        source      2024-10-05    </span></span>
+<span><span class="co">#&gt; 2 covid_pct_ed 2026-10-23 12:00:00 state    pa        source      2024-10-05    </span></span>
+<span><span class="co">#&gt; 3 covid_pct_ed 2026-10-23 12:00:00 state    pa        source      2024-10-05    </span></span>
+<span><span class="co">#&gt; 4 covid_pct_ed 2026-10-23 12:00:00 state    pa        source      2024-10-05    </span></span>
 <span><span class="co">#&gt; # ℹ 3 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 1 more variable: value &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; # ℹ 2 more variables: age_group &lt;chr&gt;, value &lt;dbl&gt;</span></span>
 <span></span>
 <span><span class="co"># NWSS: Wastewater SARS-CoV-2 concentrations, for a set of specific dates rather than a range</span></span>
 <span><span class="fu"><a href="../reference/cast_api_queries.html">epidata_snapshot</a></span><span class="op">(</span></span>
@@ -233,11 +244,12 @@ for a general introduction to the package and its functions, and
 <span>  reference_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2024-12-03"</span>, <span class="st">"2024-12-10"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 2 × 10</span></span>
-<span><span class="co">#&gt;   signal   report_time geo_type geo_value fill_method reference_time nwss_source</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;chr&gt;      </span></span>
-<span><span class="co">#&gt; 1 covid_a… 2026-06-26  sewersh… 128       source      2024-12-03     CDC_Verily </span></span>
-<span><span class="co">#&gt; 2 covid_a… 2026-06-26  sewersh… 128       source      2024-12-10     CDC_Verily </span></span>
-<span><span class="co">#&gt; # ℹ 3 more variables: sample_index &lt;chr&gt;, pcr_target &lt;chr&gt;, value &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;   signal       report_time         geo_type geo_value fill_method reference_time</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;        &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;        </span></span>
+<span><span class="co">#&gt; 1 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-03    </span></span>
+<span><span class="co">#&gt; 2 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-10    </span></span>
+<span><span class="co">#&gt; # ℹ 4 more variables: nwss_source &lt;chr&gt;, sample_index &lt;chr&gt;, pcr_target &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   value &lt;dbl&gt;</span></span>
 <span></span>
 <span><span class="co"># Archive: Revision history for a single reference date, using a comparison</span></span>
 <span><span class="co"># operator on report_time instead of an epirange()</span></span>
@@ -250,9 +262,9 @@ for a general introduction to the package and its functions, and
 <span>  report_time <span class="op">=</span> <span class="st">"&lt;2024-12-15"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 1 × 7</span></span>
-<span><span class="co">#&gt;   signal         report_time geo_type geo_value fill_method reference_time value</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;          &lt;date&gt;      &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 pct_ed_visits… 2024-12-13  state    pa        source      2024-12-07     0.550</span></span></code></pre></div>
+<span><span class="co">#&gt;   signal report_time         geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_e… 2024-12-13 12:00:00 state    pa        source      2024-12-07     0.550</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -309,8 +321,17 @@ popup. You will be able to browse the list of data sources. Without tab
 completion, list them directly:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">covid_sources</span><span class="op">$</span><span class="va">sources</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "chng"          "covid-act-now" "doctor-visits" "fb-survey"    </span></span>
-<span><span class="co">#&gt;  [ reached 'max' / getOption("max.print") -- omitted 18 entries ]</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] "chng"                               "covid-act-now"                     </span></span>
+<span><span class="co">#&gt;  [3] "doctor-visits"                      "fb-survey"                         </span></span>
+<span><span class="co">#&gt;  [5] "google-symptoms"                    "hhs"                               </span></span>
+<span><span class="co">#&gt;  [7] "hospital-admissions"                "indicator-combination-cases-deaths"</span></span>
+<span><span class="co">#&gt;  [9] "jhu-csse"                           "safegraph-weekly"                  </span></span>
+<span><span class="co">#&gt; [11] "usa-facts"                          "ght"                               </span></span>
+<span><span class="co">#&gt; [13] "google-survey"                      "indicator-combination-nmf"         </span></span>
+<span><span class="co">#&gt; [15] "safegraph-daily"                    "nchs-mortality"                    </span></span>
+<span><span class="co">#&gt; [17] "dsew-cpr"                           "nssp"                              </span></span>
+<span><span class="co">#&gt; [19] "nhsn"                               "beta_google_symptoms"              </span></span>
+<span><span class="co">#&gt; [21] "beta_nssp"                          "beta_nssp_github"</span></span></code></pre></div>
 <p>You can also look at all the signals available across sources:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">covid_sources</span><span class="op">$</span><span class="va">signals</span></span>
@@ -351,6 +372,15 @@ data:</p>
 <span>  time_values <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20201221</span>, <span class="fl">20201225</span><span class="op">)</span>,</span>
 <span>  geo_values <span class="op">=</span> <span class="st">"pa"</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: `pub_covidcast()` uses the V4 Epidata API.</span></span>
+<span><span class="co">#&gt; ℹ As of September 22, 2026, V4 no longer receives new data. It still serves the</span></span>
+<span><span class="co">#&gt;   historical data it already has, but for current data you must use the V5</span></span>
+<span><span class="co">#&gt;   endpoints (`epidata_snapshot()`, `epidata_archive()`, `epidata_meta()`) with</span></span>
+<span><span class="co">#&gt;   an up-to-date epidatr (and epiprocess, if you use it).</span></span>
+<span><span class="co">#&gt; ℹ See `vignette("migration-guide")` (or</span></span>
+<span><span class="co">#&gt;   &lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html&gt;) for the</span></span>
+<span><span class="co">#&gt;   endpoint, argument, and column mapping.</span></span>
+<span><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
 <span><span class="co">#&gt; # A tibble: 5 × 15</span></span>
 <span><span class="co">#&gt;   geo_value signal     source geo_type time_type time_value direction issue     </span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;date&gt;         &lt;dbl&gt; &lt;date&gt;    </span></span>
@@ -695,7 +725,7 @@ International endpoints
 <span><span class="co">#&gt; 4 nationwide 2018-01-21     0</span></span>
 <span></span>
 <span><span class="co"># PAHO Dengue Nowcasts: Delphi nowcast estimates for the Americas</span></span>
-<span><span class="fu"><a href="../reference/pub_dengue_nowcast.html">pub_dengue_nowcast</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202001</span>, <span class="fl">202004</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/pub_dengue_nowcast.html">pub_dengue_nowcast</a></span><span class="op">(</span>locations <span class="op">=</span> <span class="st">"ca"</span>, epiweeks <span class="op">=</span> <span class="fu"><a href="../reference/epirange.html">epirange</a></span><span class="op">(</span><span class="fl">201801</span>, <span class="fl">201804</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `pub_dengue_nowcast()` covers a data source that is no longer updated.</span></span>
 <span><span class="co">#&gt; ℹ Historical data remains available, but no new data is being ingested.</span></span>
 <span><span class="co">#&gt; ℹ See the "Endpoints kept for historical reference" section of</span></span>
@@ -703,8 +733,13 @@ International endpoints
 <span><span class="co">#&gt;   &lt;https://cmu-delphi.github.io/epidatr/articles/migration-guide.html#endpoints-kept-for-historical-reference&gt;)</span></span>
 <span><span class="co">#&gt;   for details.</span></span>
 <span><span class="co">#&gt; This message is displayed once per session.</span></span>
-<span><span class="co">#&gt; Warning: epidata warning: `no results`</span></span>
-<span><span class="co">#&gt; # A tibble: 0 × 0</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 4 × 4</span></span>
+<span><span class="co">#&gt;   location epiweek    value   std</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;    &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 ca       2017-12-31     0     1</span></span>
+<span><span class="co">#&gt; 2 ca       2018-01-07     0     1</span></span>
+<span><span class="co">#&gt; 3 ca       2018-01-14     0     1</span></span>
+<span><span class="co">#&gt; 4 ca       2018-01-21     0     1</span></span></code></pre></div>
 </details><p>Some private endpoints require a dedicated secret key passed via the
 <code>auth</code> argument (separate from the standard Epidata API key).
 Store these in your <code>.Renviron</code> file or environment

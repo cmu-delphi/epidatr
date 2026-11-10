@@ -85,7 +85,6 @@ emergency department visits data:
 
 library(epidatr)
 library(dplyr)
-#> Warning: package 'dplyr' was built under R version 4.5.2
 #> 
 #> Attaching package: 'dplyr'
 #> The following objects are masked from 'package:stats':
@@ -107,12 +106,12 @@ knitr::kable(head(epidata))
 
 | signal | report_time | geo_type | geo_value | fill_method | reference_time | value |
 |:---|:---|:---|:---|:---|:---|---:|
-| pct_ed_visits_influenza | 2026-06-26 | nation | us | source | 2022-10-01 | 0.48 |
-| pct_ed_visits_influenza | 2026-06-26 | nation | us | source | 2022-10-08 | 0.67 |
-| pct_ed_visits_influenza | 2026-06-26 | nation | us | source | 2022-10-15 | 0.90 |
-| pct_ed_visits_influenza | 2026-06-26 | nation | us | source | 2022-10-22 | 1.29 |
-| pct_ed_visits_influenza | 2026-06-26 | nation | us | source | 2022-10-29 | 2.47 |
-| pct_ed_visits_influenza | 2026-06-26 | nation | us | source | 2022-11-05 | 3.67 |
+| pct_ed_visits_influenza | 2024-04-18 12:00:00 | nation | us | source | 2022-10-01 | 0.48 |
+| pct_ed_visits_influenza | 2024-04-18 12:00:00 | nation | us | source | 2022-10-15 | 0.90 |
+| pct_ed_visits_influenza | 2024-04-18 12:00:00 | nation | us | source | 2023-01-28 | 0.55 |
+| pct_ed_visits_influenza | 2024-04-18 12:00:00 | nation | us | source | 2023-02-04 | 0.47 |
+| pct_ed_visits_influenza | 2024-04-18 12:00:00 | nation | us | source | 2023-02-18 | 0.36 |
+| pct_ed_visits_influenza | 2024-04-18 12:00:00 | nation | us | source | 2023-02-25 | 0.34 |
 
 [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
 returns a [`tibble`](https://tibble.tidyverse.org/) (a modern
@@ -141,14 +140,14 @@ epidata_snapshot(
   signals = "pct_ed_visits_influenza",
   geo_type = "state"
 )
-#> # A tibble: 10,557 × 7
-#>   signal         report_time geo_type geo_value fill_method reference_time value
-#>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
-#> 1 pct_ed_visits… 2026-06-26  state    ak        source      2022-10-01     0.140
-#> 2 pct_ed_visits… 2026-06-26  state    ak        source      2022-10-08     0.240
-#> 3 pct_ed_visits… 2026-06-26  state    ak        source      2022-10-15     0.320
-#> 4 pct_ed_visits… 2026-06-26  state    ak        source      2022-10-22     0.760
-#> # ℹ 10,553 more rows
+#> # A tibble: 10,905 × 7
+#>   signal report_time         geo_type geo_value fill_method reference_time value
+#>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_e… 2024-05-03 12:00:00 state    de        source      2024-03-02      4.82
+#> 2 pct_e… 2024-05-03 12:00:00 state    ks        source      2024-03-23      2.09
+#> 3 pct_e… 2024-05-03 12:00:00 state    mn        source      2022-10-29      1.14
+#> 4 pct_e… 2024-05-03 12:00:00 state    mn        source      2024-03-30      2.89
+#> # ℹ 10,901 more rows
 ```
 
 You can also query multiple signals in a single request by passing a
@@ -165,12 +164,12 @@ epidata_snapshot(
   reference_time = epirange("2024-12-01", "2024-12-15")
 )
 #> # A tibble: 4 × 7
-#>   signal         report_time geo_type geo_value fill_method reference_time value
-#>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
-#> 1 pct_ed_visits… 2026-06-26  state    pa        source      2024-12-07     0.75 
-#> 2 pct_ed_visits… 2026-06-26  state    pa        source      2024-12-07     0.570
-#> 3 pct_ed_visits… 2026-06-26  state    pa        source      2024-12-14     0.820
-#> 4 pct_ed_visits… 2026-06-26  state    pa        source      2024-12-14     0.870
+#>   signal report_time         geo_type geo_value fill_method reference_time value
+#>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_e… 2025-01-17 12:00:00 state    pa        source      2024-12-07     0.570
+#> 2 pct_e… 2025-01-24 12:00:00 state    pa        source      2024-12-07     0.75 
+#> 3 pct_e… 2025-01-24 12:00:00 state    pa        source      2024-12-14     0.820
+#> 4 pct_e… 2025-01-24 12:00:00 state    pa        source      2024-12-14     0.870
 ```
 
 Alternatively, we can fetch the time series for a subset of states and
@@ -190,12 +189,12 @@ epidata_snapshot(
   reference_time = epirange("2024-01-01", "2025-01-01")
 )
 #> # A tibble: 156 × 7
-#>   signal         report_time geo_type geo_value fill_method reference_time value
-#>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
-#> 1 pct_ed_visits… 2026-06-26  state    ca        source      2024-02-03     1.31 
-#> 2 pct_ed_visits… 2026-06-26  state    ca        source      2024-02-17     0.990
-#> 3 pct_ed_visits… 2026-06-26  state    ca        source      2024-03-02     0.760
-#> 4 pct_ed_visits… 2026-06-26  state    ca        source      2024-03-09     0.650
+#>   signal report_time         geo_type geo_value fill_method reference_time value
+#>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_e… 2024-05-03 12:00:00 state    pa        source      2024-03-23     1.76 
+#> 2 pct_e… 2024-05-17 12:00:00 state    pa        source      2024-04-13     0.830
+#> 3 pct_e… 2024-04-18 12:00:00 state    fl        source      2024-01-06     4.83 
+#> 4 pct_e… 2024-04-18 12:00:00 state    fl        source      2024-01-13     3.69 
 #> # ℹ 152 more rows
 ```
 
@@ -220,12 +219,12 @@ epidata_snapshot(
   snapshot_date = "2025-01-01"
 )
 #> # A tibble: 117 × 7
-#>   signal         report_time geo_type geo_value fill_method reference_time value
-#>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
-#> 1 pct_ed_visits… 2024-12-27  state    pa        source      2022-10-01     0.120
-#> 2 pct_ed_visits… 2024-12-27  state    pa        source      2022-10-08     0.100
-#> 3 pct_ed_visits… 2024-12-27  state    pa        source      2022-10-15     0.210
-#> 4 pct_ed_visits… 2024-12-27  state    pa        source      2022-10-22     0.330
+#>   signal report_time         geo_type geo_value fill_method reference_time value
+#>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_e… 2024-04-18 12:00:00 state    pa        source      2022-10-01     0.120
+#> 2 pct_e… 2024-04-18 12:00:00 state    pa        source      2022-10-08     0.100
+#> 3 pct_e… 2024-04-18 12:00:00 state    pa        source      2022-10-15     0.210
+#> 4 pct_e… 2024-04-18 12:00:00 state    pa        source      2022-10-22     0.330
 #> # ℹ 113 more rows
 ```
 
@@ -233,7 +232,7 @@ To request all versions of the data issued within a specific time range,
 we use
 [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
 with the `report_time` argument. This parameter allows us to fetch
-versions using comparison operators (e.g., `"<2025-01-15>"`) or an
+versions using comparison operators (e.g., `"<2025-01-15"`) or an
 [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md).
 
 ``` r
@@ -248,14 +247,11 @@ epidata_archive(
   reference_time = "2024-12-07",
   report_time = epirange("2024-12-01", "2025-01-15")
 )
-#> # A tibble: 5 × 7
-#>   signal         report_time geo_type geo_value fill_method reference_time value
-#>   <chr>          <date>      <chr>    <chr>     <chr>       <date>         <dbl>
-#> 1 pct_ed_visits… 2024-12-13  state    pa        source      2024-12-07     0.550
-#> 2 pct_ed_visits… 2024-12-20  state    pa        source      2024-12-07     0.560
-#> 3 pct_ed_visits… 2024-12-27  state    pa        source      2024-12-07     0.560
-#> 4 pct_ed_visits… 2025-01-03  state    pa        source      2024-12-07     0.560
-#> # ℹ 1 more row
+#> # A tibble: 2 × 7
+#>   signal report_time         geo_type geo_value fill_method reference_time value
+#>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_e… 2024-12-20 12:00:00 state    pa        source      2024-12-07     0.560
+#> 2 pct_e… 2024-12-13 12:00:00 state    pa        source      2024-12-07     0.550
 ```
 
 See
@@ -289,12 +285,12 @@ knitr::kable(head(aux_data))
 
 | report_time | geo_value | reference_time | nwss_source | sample_index | pcr_target | report_ts_nominal_end | state_territory | county_fips | counties_served | population_served | sample_type | sample_matrix | sample_location | flow_rate | concentration_method | pasteurized | pcr_type | extraction_method | major_lab_method | inhibition_detect | inhibition_adjust | ntc_amplify | pcr_gene_target_agg | pcr_target_units | lod_sewage | hum_frac_target_mic | hum_frac_mic_conc | hum_frac_mic_unit | rec_eff_percent | rec_eff_target_name | rec_eff_spike_matrix | rec_eff_spike_conc | pipeline_run_id | report_ts_actual | comments |
 |:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|:---|
-| 2026-06-26 | 162 | 2026-01-27 | CDC_Verily | 92012 | sars-cov-2 | NA | ca | 06079 | San Luis Obispo | 14465 | 24-hr time-weighted composite | post grit removal | wwtp | 0.45 | ceres nanotrap | f | ddpcr | thermo magmax viral/pathogen nucleic acid isolation kit | 2 | f | f | f | n | copies/l wastewater | 1500 | pepper mild mottle virus | 153424325\.78462 | copies/l wastewater | 40.7 | bcov vaccine | clarified sample | 5 | 7914 | 2026-06-26 21:04:11 | NA |
-| 2026-06-19 | 162 | 2026-01-27 | CDC_Verily | 92012 | sars-cov-2 | 2026-06-26 00:00:00 | ca | 06079 | San Luis Obispo | 14465 | 24-hr time-weighted composite | post grit removal | wwtp | 0.45 | ceres nanotrap | f | ddpcr | thermo magmax viral/pathogen nucleic acid isolation kit | 2 | f | f | f | n | copies/l wastewater | 1500 | pepper mild mottle virus | 153424325\.78462 | copies/l wastewater | 40.7 | bcov vaccine | clarified sample | 5 | 7895 | 2026-06-26 21:02:14 | NA |
-| 2026-06-12 | 162 | 2026-01-27 | CDC_Verily | 92012 | sars-cov-2 | 2026-06-19 00:00:00 | ca | 06079 | San Luis Obispo | 14465 | 24-hr time-weighted composite | post grit removal | wwtp | 0.45 | ceres nanotrap | f | ddpcr | thermo magmax viral/pathogen nucleic acid isolation kit | 2 | f | f | f | n | copies/l wastewater | 1500 | pepper mild mottle virus | 153424325\.78462 | copies/l wastewater | 40.7 | bcov vaccine | clarified sample | 5 | 7879 | 2026-06-26 21:00:39 | NA |
-| 2026-06-05 | 162 | 2026-01-27 | CDC_Verily | 92012 | sars-cov-2 | 2026-06-12 00:00:00 | ca | 06079 | San Luis Obispo | 14465 | 24-hr time-weighted composite | post grit removal | wwtp | 0.45 | ceres nanotrap | f | ddpcr | thermo magmax viral/pathogen nucleic acid isolation kit | 2 | f | f | f | n | copies/l wastewater | 1500 | pepper mild mottle virus | 153424325\.78462 | copies/l wastewater | 40.7 | bcov vaccine | clarified sample | 5 | 7868 | 2026-06-26 20:59:33 | NA |
-| 2026-05-30 | 162 | 2026-01-27 | CDC_Verily | 92012 | sars-cov-2 | 2026-06-05 00:00:00 | ca | 06079 | San Luis Obispo | 14465 | 24-hr time-weighted composite | post grit removal | wwtp | 0.45 | ceres nanotrap | f | ddpcr | thermo magmax viral/pathogen nucleic acid isolation kit | 2 | f | f | f | n | copies/l wastewater | 1500 | pepper mild mottle virus | 153424325\.78462 | copies/l wastewater | 40.7 | bcov vaccine | clarified sample | 5 | 7858 | 2026-06-26 20:58:46 | NA |
-| 2026-05-29 | 162 | 2026-01-27 | CDC_Verily | 92012 | sars-cov-2 | 2026-05-30 00:00:00 | ca | 06079 | San Luis Obispo | 14465 | 24-hr time-weighted composite | post grit removal | wwtp | 0.45 | ceres nanotrap | f | ddpcr | thermo magmax viral/pathogen nucleic acid isolation kit | 2 | f | f | f | n | copies/l wastewater | 1500 | pepper mild mottle virus | 153424325\.78462 | copies/l wastewater | 40.7 | bcov vaccine | clarified sample | 5 | 7847 | 2026-06-26 20:57:31 | NA |
+| 2026-11-06 16:19:20 | 162 | 2026-01-27 | CDC_Verily | 92012 | sars-cov-2 | NA | ca | 06079 | San Luis Obispo | 14465 | 24-hr time-weighted composite | post grit removal | wwtp | 0.45 | ceres nanotrap | f | ddpcr | thermo magmax viral/pathogen nucleic acid isolation kit | 2 | f | f | f | n | copies/l wastewater | 1500 | pepper mild mottle virus | 153424325\.78461 | copies/l wastewater | 40.7 | bcov vaccine | clarified sample | 5 | 31694 | 2026-11-06 16:19:20 | NA |
+| 2026-06-26 12:00:00 | 162 | 2026-01-27 | CDC_Verily | 92012 | sars-cov-2 | 2026-11-06 16:19:20 | ca | 06079 | San Luis Obispo | 14465 | 24-hr time-weighted composite | post grit removal | wwtp | 0.45 | ceres nanotrap | f | ddpcr | thermo magmax viral/pathogen nucleic acid isolation kit | 2 | f | f | f | n | copies/l wastewater | 1500 | pepper mild mottle virus | 153424325\.78462 | copies/l wastewater | 40.7 | bcov vaccine | clarified sample | 5 | 31694 | 2026-11-06 16:19:20 | NA |
+| 2026-06-19 12:00:00 | 162 | 2026-01-27 | CDC_Verily | 92012 | sars-cov-2 | 2026-06-26 00:00:00 | ca | 06079 | San Luis Obispo | 14465 | 24-hr time-weighted composite | post grit removal | wwtp | 0.45 | ceres nanotrap | f | ddpcr | thermo magmax viral/pathogen nucleic acid isolation kit | 2 | f | f | f | n | copies/l wastewater | 1500 | pepper mild mottle virus | 153424325\.78462 | copies/l wastewater | 40.7 | bcov vaccine | clarified sample | 5 | 7895 | 2026-06-26 21:02:14 | NA |
+| 2026-06-12 12:00:00 | 162 | 2026-01-27 | CDC_Verily | 92012 | sars-cov-2 | 2026-06-19 00:00:00 | ca | 06079 | San Luis Obispo | 14465 | 24-hr time-weighted composite | post grit removal | wwtp | 0.45 | ceres nanotrap | f | ddpcr | thermo magmax viral/pathogen nucleic acid isolation kit | 2 | f | f | f | n | copies/l wastewater | 1500 | pepper mild mottle virus | 153424325\.78462 | copies/l wastewater | 40.7 | bcov vaccine | clarified sample | 5 | 7879 | 2026-06-26 21:00:39 | NA |
+| 2026-06-05 12:00:00 | 162 | 2026-01-27 | CDC_Verily | 92012 | sars-cov-2 | 2026-06-12 00:00:00 | ca | 06079 | San Luis Obispo | 14465 | 24-hr time-weighted composite | post grit removal | wwtp | 0.45 | ceres nanotrap | f | ddpcr | thermo magmax viral/pathogen nucleic acid isolation kit | 2 | f | f | f | n | copies/l wastewater | 1500 | pepper mild mottle virus | 153424325\.78462 | copies/l wastewater | 40.7 | bcov vaccine | clarified sample | 5 | 7868 | 2026-06-26 20:59:33 | NA |
+| 2026-05-30 12:00:00 | 162 | 2026-01-27 | CDC_Verily | 92012 | sars-cov-2 | 2026-06-05 00:00:00 | ca | 06079 | San Luis Obispo | 14465 | 24-hr time-weighted composite | post grit removal | wwtp | 0.45 | ceres nanotrap | f | ddpcr | thermo magmax viral/pathogen nucleic acid isolation kit | 2 | f | f | f | n | copies/l wastewater | 1500 | pepper mild mottle virus | 153424325\.78462 | copies/l wastewater | 40.7 | bcov vaccine | clarified sample | 5 | 7858 | 2026-06-26 20:58:46 | NA |
 
 You can also attach auxiliary columns directly to a signal pull by
 passing the output of
@@ -320,33 +316,34 @@ nwss_data <- epidata_snapshot(
 )
 head(nwss_data)
 #> # A tibble: 6 × 10
-#>   signal   report_time geo_type geo_value fill_method reference_time nwss_source
-#>   <chr>    <date>      <chr>    <chr>     <chr>       <date>         <chr>      
-#> 1 covid_a… 2026-06-26  sewersh… 128       source      2024-12-19     CDC_Verily 
-#> 2 covid_a… 2026-06-26  sewersh… 128       source      2024-12-03     CDC_Verily 
-#> 3 covid_a… 2026-06-26  sewersh… 128       source      2024-12-17     CDC_Verily 
-#> 4 covid_a… 2026-06-26  sewersh… 128       source      2024-12-12     CDC_Verily 
+#>   signal       report_time         geo_type geo_value fill_method reference_time
+#>   <chr>        <dttm>              <chr>    <chr>     <chr>       <date>        
+#> 1 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-19    
+#> 2 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-03    
+#> 3 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-17    
+#> 4 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-12    
 #> # ℹ 2 more rows
-#> # ℹ 3 more variables: sample_index <chr>, pcr_target <chr>, value <dbl>
+#> # ℹ 4 more variables: nwss_source <chr>, sample_index <chr>, pcr_target <chr>,
+#> #   value <dbl>
 
 # Attach auxiliary metadata
 nwss_merged <- nwss_data %>%
   epidata_aux()
 head(nwss_merged)
 #> # A tibble: 6 × 40
-#>   signal   report_time geo_type geo_value fill_method reference_time nwss_source
-#>   <chr>    <date>      <chr>    <chr>     <chr>       <date>         <chr>      
-#> 1 covid_a… 2026-06-26  sewersh… 128       source      2024-12-19     CDC_Verily 
-#> 2 covid_a… 2026-06-26  sewersh… 128       source      2024-12-03     CDC_Verily 
-#> 3 covid_a… 2026-06-26  sewersh… 128       source      2024-12-17     CDC_Verily 
-#> 4 covid_a… 2026-06-26  sewersh… 128       source      2024-12-12     CDC_Verily 
+#>   signal       report_time         geo_type geo_value fill_method reference_time
+#>   <chr>        <dttm>              <chr>    <chr>     <chr>       <date>        
+#> 1 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-19    
+#> 2 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-03    
+#> 3 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-17    
+#> 4 covid_avg_c… 2026-06-26 12:00:00 sewersh… 128       source      2024-12-12    
 #> # ℹ 2 more rows
-#> # ℹ 33 more variables: sample_index <chr>, pcr_target <chr>, value <dbl>,
-#> #   report_ts_nominal_end <chr>, state_territory <chr>, county_fips <chr>,
-#> #   counties_served <chr>, population_served <chr>, sample_type <chr>,
-#> #   sample_matrix <chr>, sample_location <chr>, flow_rate <chr>,
-#> #   concentration_method <chr>, pasteurized <chr>, pcr_type <chr>,
-#> #   extraction_method <chr>, major_lab_method <chr>, inhibition_detect <chr>, …
+#> # ℹ 34 more variables: nwss_source <chr>, sample_index <chr>, pcr_target <chr>,
+#> #   value <dbl>, report_ts_nominal_end <chr>, state_territory <chr>,
+#> #   county_fips <chr>, counties_served <chr>, population_served <chr>,
+#> #   sample_type <chr>, sample_matrix <chr>, sample_location <chr>,
+#> #   flow_rate <chr>, concentration_method <chr>, pasteurized <chr>,
+#> #   pcr_type <chr>, extraction_method <chr>, major_lab_method <chr>, …
 ```
 
 If you don’t pass explicit key filters,
@@ -412,22 +409,22 @@ plot it using `ggplot2`:
 ``` r
 
 library(ggplot2)
-#> Warning: package 'ggplot2' was built under R version 4.5.2
 
 # Plot the influenza ED-visit time series fetched earlier with epidata_snapshot()
 ggplot(epidata, aes(x = reference_time, y = value)) +
   geom_line() +
   labs(
     title = "Influenza ED visits from NSSP",
-    subtitle = "US, 2024-2025 season",
+    subtitle = paste0(
+      "US, ", min(epidata$reference_time), " to ", max(epidata$reference_time)
+    ),
     x = "Date",
     y = "% of ED visits"
   )
 ```
 
-![plot of chunk unnamed-chunk-12](img/epidatr-unnamed-chunk-12-1.png)
-
-plot of chunk unnamed-chunk-12
+![Line chart of the weekly percentage of US emergency department visits
+due to influenza, from NSSP.](img/epidatr-national-plot-1.png)
 
 `ggplot2` can also be used with `epidatr` and `maps` to [create
 choropleths](https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html):
@@ -477,43 +474,56 @@ ggplot(nhsn_states, aes(x = long, y = lat, group = group, fill = value)) +
   )
 ```
 
-![plot of chunk unnamed-chunk-13](img/epidatr-unnamed-chunk-13-1.png)
-
-plot of chunk unnamed-chunk-13
+![US map of confirmed influenza hospital admissions by state for the
+week ending 2025-01-04, from NHSN.](img/epidatr-state-map-1.png)
 
 ### Plotting revision histories
 
 We can also visualize revision histories from
 [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md).
-Each line shows what the time series looked like as of a different
-publication date:
+The archive lists a row only when a value is first reported or revised,
+so to see the whole time series as it looked on each release date, keep
+the latest value of each reference date reported up to then:
 
 ``` r
 
-# Fetch revision history for Pennsylvania influenza ED visits
+# Fetch every version of Pennsylvania influenza ED visits reported before 2025
 pa_revisions <- epidata_archive(
   source = "nssp",
   signals = "pct_ed_visits_influenza",
   geo_type = "state",
   geo_values = "pa",
   reference_time = epirange("2024-10-01", "2024-12-01"),
-  report_time = epirange("2024-11-01", "2025-01-01")
+  report_time = "<2025-01-01"
 )
 
-ggplot(pa_revisions, aes(x = reference_time, y = value, group = report_time, color = as.factor(report_time))) +
+# Rebuild the series as known on each release date
+release_dates <- sort(unique(pa_revisions$report_time))
+pa_as_of <- bind_rows(lapply(release_dates, function(release) {
+  pa_revisions %>%
+    filter(report_time <= release) %>%
+    group_by(reference_time) %>%
+    slice_max(report_time, n = 1) %>%
+    ungroup() %>%
+    mutate(as_of = as.Date(release))
+}))
+
+ggplot(pa_as_of, aes(x = reference_time, y = value, color = as.factor(as_of))) +
   geom_line() +
+  geom_point(size = 1) +
   labs(
     title = "Revisions of NSSP influenza ED visits in Pennsylvania",
-    subtitle = "October-December 2024 estimates as reported across November 2024 - January 2025",
+    subtitle = "October-November 2024 estimates as known on each release date",
     x = "Observation Date",
     y = "% of ED visits",
-    color = "Report Date"
+    color = "As of"
   )
 ```
 
-![plot of chunk archive-plot](img/epidatr-archive-plot-1.png)
-
-plot of chunk archive-plot
+![Line chart of Pennsylvania influenza ED-visit percentages for
+October-November 2024, with one line per release date showing the series
+as it was known then; later releases extend the series and revise recent
+values.](img/epidatr-archive-plot-1.png)
 
 ## Available data sources and endpoints
 

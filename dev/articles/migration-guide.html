@@ -71,7 +71,8 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cmu-delphi.github.io/epidatr/">epidatr</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cmu-delphi.github.io/epidatr/">epidatr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
 <p>The Delphi Epidata API has transitioned from its V4 endpoint
 (<code><a href="../reference/pub_covidcast.html">pub_covidcast()</a></code>) and legacy V3 endpoints (such as
 <code><a href="../reference/pub_fluview.html">pub_fluview()</a></code>, <code><a href="../reference/pub_flusurv.html">pub_flusurv()</a></code>, and
@@ -152,7 +153,8 @@ Refer to each endpoint’s documentation for specific behavior:</p>
 <td><code>pub_covidcast(lag = ...)</code></td>
 <td>Supported by some (<code><a href="../reference/pub_fluview.html">pub_fluview()</a></code>,
 <code><a href="../reference/pub_flusurv.html">pub_flusurv()</a></code>)</td>
-<td>none (compute <code>report_time - reference_time</code>)</td>
+<td>none (compute <code>as.Date(report_time) - reference_time</code>, in
+days)</td>
 </tr>
 </tbody>
 </table>
@@ -245,7 +247,7 @@ known as of a past date. <code>NULL</code> returns the latest data.</td>
 <code>issues</code> (where supported)</td>
 <td><code>report_time</code></td>
 <td>In V5, used only in <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>. Accepts
-operators like <code>"&lt;2025-10-16&gt;"</code>, or
+operators like <code>"&lt;2025-10-16"</code>, or
 <code><a href="../reference/epirange.html">epirange()</a></code>. (For a single date, use
 <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>).</td>
 </tr>
@@ -256,8 +258,7 @@ operators like <code>"&lt;2025-10-16&gt;"</code>, or
 <td>none</td>
 <td>Removed in V5. You can compute it yourself: fetch from
 <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> and filter by
-<code>report_time - reference_time</code>. See <a href="#lag">filtering
-by lag</a>.</td>
+<code>as.Date(report_time) - reference_time</code>. See <a href="#lag">filtering by lag</a>.</td>
 </tr>
 <tr class="even">
 <td>none</td>
@@ -366,9 +367,9 @@ observation period.</td>
 <td>
 <code>issue</code> (where returned)</td>
 <td><code>report_time</code></td>
-<td>Standardized date in <code>YYYY-MM-DD</code> format representing
-when the data point was published. Present in both snapshot and archive
-output.</td>
+<td>UTC timestamp (<code>POSIXct</code>) of when the data point was
+published. Present in both snapshot and archive output. Use
+<code>as.Date(report_time)</code> if you need a date.</td>
 </tr>
 <tr class="even">
 <td><code>lag</code></td>
@@ -376,7 +377,7 @@ output.</td>
 <code>lag</code> (where returned)</td>
 <td>dropped</td>
 <td>Omitted in V5 responses. You can compute it yourself as
-<code>report_time - reference_time</code>. See <a href="https://cmu-delphi.github.io/epidatr/articles/versioned-data.html#calculating-reporting-lag">calculating
+<code>as.Date(report_time) - reference_time</code> (in days). See <a href="https://cmu-delphi.github.io/epidatr/articles/versioned-data.html#calculating-reporting-lag">calculating
 reporting lag</a>.</td>
 </tr>
 <tr class="odd">
@@ -489,12 +490,12 @@ data looked on January 1, 2025:</p>
 <span><span class="co">#&gt; # A tibble: 6 × 7</span></span>
 <span><span class="co">#&gt;   signal report_time         geo_type geo_value fill_method reference_time value</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 pct_e… 2024-11-08 00:00:00 state    ca        source      2024-10-05     0.140</span></span>
-<span><span class="co">#&gt; 2 pct_e… 2024-11-08 00:00:00 state    ca        source      2024-10-12     0.140</span></span>
-<span><span class="co">#&gt; 3 pct_e… 2024-11-23 00:00:00 state    ca        source      2024-10-19     0.160</span></span>
-<span><span class="co">#&gt; 4 pct_e… 2024-11-08 00:00:00 state    ca        source      2024-10-26     0.200</span></span>
-<span><span class="co">#&gt; 5 pct_e… 2024-12-03 00:00:00 state    ca        source      2024-11-02     0.25 </span></span>
-<span><span class="co">#&gt; 6 pct_e… 2024-12-13 00:00:00 state    ca        source      2024-11-09     0.310</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 pct_e… 2024-11-08 12:00:00 state    ca        source      2024-10-05     0.140</span></span>
+<span><span class="co">#&gt; 2 pct_e… 2024-11-08 12:00:00 state    ca        source      2024-10-12     0.140</span></span>
+<span><span class="co">#&gt; 3 pct_e… 2024-11-23 12:00:00 state    ca        source      2024-10-19     0.160</span></span>
+<span><span class="co">#&gt; 4 pct_e… 2024-11-08 12:00:00 state    ca        source      2024-10-26     0.200</span></span>
+<span><span class="co">#&gt; 5 pct_e… 2024-12-03 12:00:00 state    ca        source      2024-11-02     0.25 </span></span>
+<span><span class="co">#&gt; 6 pct_e… 2024-12-13 12:00:00 state    ca        source      2024-11-09     0.310</span></span></code></pre></div>
 <p>Both queries return the same signal, just with renamed and reshaped
 columns:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -534,12 +535,12 @@ single <code>value</code> column:</p>
 <span><span class="co">#&gt; # A tibble: 6 × 5</span></span>
 <span><span class="co">#&gt;   release_date region epiweek     wili   ili</span></span>
 <span><span class="co">#&gt;   &lt;date&gt;       &lt;chr&gt;  &lt;date&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 2026-10-02   nat    2024-09-29  1.91  1.85</span></span>
-<span><span class="co">#&gt; 2 2026-10-02   nat    2024-10-06  2.02  1.94</span></span>
-<span><span class="co">#&gt; 3 2026-10-02   nat    2024-10-13  2.07  2.01</span></span>
-<span><span class="co">#&gt; 4 2026-10-02   nat    2024-10-20  2.22  2.16</span></span>
-<span><span class="co">#&gt; 5 2026-10-02   nat    2024-10-27  2.32  2.23</span></span>
-<span><span class="co">#&gt; 6 2026-10-02   nat    2024-11-03  2.47  2.39</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 2026-10-09   nat    2024-09-29  1.91  1.85</span></span>
+<span><span class="co">#&gt; 2 2026-10-09   nat    2024-10-06  2.02  1.94</span></span>
+<span><span class="co">#&gt; 3 2026-10-09   nat    2024-10-13  2.07  2.01</span></span>
+<span><span class="co">#&gt; 4 2026-10-09   nat    2024-10-20  2.22  2.16</span></span>
+<span><span class="co">#&gt; 5 2026-10-09   nat    2024-10-27  2.32  2.23</span></span>
+<span><span class="co">#&gt; 6 2026-10-09   nat    2024-11-03  2.47  2.39</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">new_flu</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cast_api_queries.html">epidata_snapshot</a></span><span class="op">(</span></span>
 <span>  source <span class="op">=</span> <span class="st">"fluview_ilinet"</span>,</span>
@@ -552,12 +553,12 @@ single <code>value</code> column:</p>
 <span><span class="co">#&gt; # A tibble: 6 × 8</span></span>
 <span><span class="co">#&gt;   signal report_time         geo_type geo_value fill_method reference_time</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;        </span></span>
-<span><span class="co">#&gt; 1 wili   2025-09-12 00:00:00 nation   us        source      2024-10-12    </span></span>
-<span><span class="co">#&gt; 2 wili   2025-09-12 00:00:00 nation   us        source      2024-10-19    </span></span>
-<span><span class="co">#&gt; 3 wili   2025-09-12 00:00:00 nation   us        source      2024-10-26    </span></span>
-<span><span class="co">#&gt; 4 wili   2025-09-12 00:00:00 nation   us        source      2024-11-02    </span></span>
-<span><span class="co">#&gt; 5 wili   2025-09-12 00:00:00 nation   us        source      2024-11-09    </span></span>
-<span><span class="co">#&gt; 6 wili   2025-11-14 00:00:00 nation   us        source      2024-10-05    </span></span>
+<span><span class="co">#&gt; 1 wili   2025-09-12 12:00:00 nation   us        source      2024-10-12    </span></span>
+<span><span class="co">#&gt; 2 wili   2025-09-12 12:00:00 nation   us        source      2024-10-19    </span></span>
+<span><span class="co">#&gt; 3 wili   2025-09-12 12:00:00 nation   us        source      2024-10-26    </span></span>
+<span><span class="co">#&gt; 4 wili   2025-09-12 12:00:00 nation   us        source      2024-11-02    </span></span>
+<span><span class="co">#&gt; 5 wili   2025-09-12 12:00:00 nation   us        source      2024-11-09    </span></span>
+<span><span class="co">#&gt; 6 wili   2025-11-14 12:00:00 nation   us        source      2024-10-05    </span></span>
 <span><span class="co">#&gt; # ℹ 2 more variables: age_group &lt;chr&gt;, value &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 </div>
@@ -601,24 +602,77 @@ use <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></co
 <span><span class="co">#&gt; # A tibble: 6 × 7</span></span>
 <span><span class="co">#&gt;   signal       report_time         geo_type geo_value fill_method reference_time</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;        &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;        </span></span>
-<span><span class="co">#&gt; 1 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-05    </span></span>
-<span><span class="co">#&gt; 2 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-12    </span></span>
-<span><span class="co">#&gt; 3 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-19    </span></span>
-<span><span class="co">#&gt; 4 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-10-26    </span></span>
-<span><span class="co">#&gt; 5 pct_ed_visi… 2024-11-23 00:00:00 state    pa        source      2024-11-02    </span></span>
-<span><span class="co">#&gt; 6 pct_ed_visi… 2024-11-08 00:00:00 state    pa        source      2024-11-02    </span></span>
+<span><span class="co">#&gt; 1 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-10-05    </span></span>
+<span><span class="co">#&gt; 2 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-10-12    </span></span>
+<span><span class="co">#&gt; 3 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-10-19    </span></span>
+<span><span class="co">#&gt; 4 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-10-26    </span></span>
+<span><span class="co">#&gt; 5 pct_ed_visi… 2024-11-23 12:00:00 state    pa        source      2024-11-02    </span></span>
+<span><span class="co">#&gt; 6 pct_ed_visi… 2024-11-08 12:00:00 state    pa        source      2024-11-02    </span></span>
 <span><span class="co">#&gt; # ℹ 1 more variable: value &lt;dbl&gt;</span></span></code></pre></div>
 <p><a id="lag"></a></p>
 <p>If you filtered by <code>lag</code>, fetch the archive with
-<code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> and filter afterwards:</p>
+<code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code> and filter afterwards. The
+<code>lag_days</code> column below always counts days. V4’s
+<code>lag</code> counted in the signal’s time unit, so for a weekly
+signal like this one, V4’s <code>lag = 1</code> meant one week, not one
+day. V4 also dated weekly values by the start of the week, while V5’s
+<code>reference_time</code> is the end of the week, so the two lags are
+not directly comparable.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># For an exact lag (e.g., 7 days):</span></span>
+<code class="sourceCode R"><span><span class="co"># report_time is a UTC timestamp and reference_time is a Date, so convert</span></span>
+<span><span class="co"># report_time to a Date before subtracting</span></span>
+<span><span class="va">revisions</span> <span class="op">&lt;-</span> <span class="va">revisions</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>lag_days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">report_time</span><span class="op">)</span> <span class="op">-</span> <span class="va">reference_time</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># For an exact lag (e.g., values reported 6 days after the reference date):</span></span>
 <span><span class="va">revisions</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">report_time</span> <span class="op">-</span> <span class="va">reference_time</span><span class="op">)</span> <span class="op">==</span> <span class="fl">7</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">lag_days</span> <span class="op">==</span> <span class="fl">6</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 8</span></span>
+<span><span class="co">#&gt;   signal report_time         geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_e… 2024-11-08 12:00:00 state    pa        source      2024-11-02     0.140</span></span>
+<span><span class="co">#&gt; 2 pct_e… 2024-12-13 12:00:00 state    pa        source      2024-12-07     0.550</span></span>
+<span><span class="co">#&gt; 3 pct_e… 2024-12-20 12:00:00 state    pa        source      2024-12-14     0.850</span></span>
+<span><span class="co">#&gt; 4 pct_e… 2024-12-27 12:00:00 state    pa        source      2024-12-21     1.78 </span></span>
+<span><span class="co">#&gt; 5 pct_e… 2025-01-03 12:00:00 state    pa        source      2024-12-28     3.78 </span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: lag_days &lt;int&gt;</span></span>
 <span></span>
 <span><span class="co"># Or for maximum latency (e.g., at most 7 days of delay):</span></span>
 <span><span class="va">revisions</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">report_time</span> <span class="op">-</span> <span class="va">reference_time</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">lag_days</span> <span class="op">&lt;=</span> <span class="fl">7</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 7 × 8</span></span>
+<span><span class="co">#&gt;   signal report_time         geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_e… 2024-11-08 12:00:00 state    pa        source      2024-11-02     0.140</span></span>
+<span><span class="co">#&gt; 2 pct_e… 2024-11-23 12:00:00 state    pa        source      2024-11-16     0.170</span></span>
+<span><span class="co">#&gt; 3 pct_e… 2024-12-07 12:00:00 state    pa        source      2024-11-30     0.350</span></span>
+<span><span class="co">#&gt; 4 pct_e… 2024-12-13 12:00:00 state    pa        source      2024-12-07     0.550</span></span>
+<span><span class="co">#&gt; 5 pct_e… 2024-12-20 12:00:00 state    pa        source      2024-12-14     0.850</span></span>
+<span><span class="co">#&gt; 6 pct_e… 2024-12-27 12:00:00 state    pa        source      2024-12-21     1.78 </span></span>
+<span><span class="co">#&gt; 7 pct_e… 2025-01-03 12:00:00 state    pa        source      2024-12-28     3.78 </span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: lag_days &lt;int&gt;</span></span>
+<span></span>
+<span><span class="co"># Or for each value as it was known 7 days after its reference date</span></span>
+<span><span class="co"># (the latest version reported with a lag of at most 7 days; reference dates</span></span>
+<span><span class="co"># with no report in that window are dropped):</span></span>
+<span><span class="va">revisions</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">lag_days</span> <span class="op">&lt;=</span> <span class="fl">7</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">slice_max</span><span class="op">(</span><span class="va">report_time</span>, n <span class="op">=</span> <span class="fl">1</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">signal</span>, <span class="va">geo_value</span>, <span class="va">reference_time</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 7 × 8</span></span>
+<span><span class="co">#&gt;   signal report_time         geo_type geo_value fill_method reference_time value</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;  &lt;dttm&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;       &lt;date&gt;         &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 pct_e… 2024-11-08 12:00:00 state    pa        source      2024-11-02     0.140</span></span>
+<span><span class="co">#&gt; 2 pct_e… 2024-11-23 12:00:00 state    pa        source      2024-11-16     0.170</span></span>
+<span><span class="co">#&gt; 3 pct_e… 2024-12-07 12:00:00 state    pa        source      2024-11-30     0.350</span></span>
+<span><span class="co">#&gt; 4 pct_e… 2024-12-13 12:00:00 state    pa        source      2024-12-07     0.550</span></span>
+<span><span class="co">#&gt; 5 pct_e… 2024-12-20 12:00:00 state    pa        source      2024-12-14     0.850</span></span>
+<span><span class="co">#&gt; 6 pct_e… 2024-12-27 12:00:00 state    pa        source      2024-12-21     1.78 </span></span>
+<span><span class="co">#&gt; 7 pct_e… 2025-01-03 12:00:00 state    pa        source      2024-12-28     3.78 </span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: lag_days &lt;int&gt;</span></span></code></pre></div>
+<p>Here the last two results match, because this weekly signal has at
+most one report within 7 days of each reference date. For signals that
+are revised more often, the <code>slice_max()</code> step keeps only the
+latest of those reports.</p>
 </div>
 <div class="section level2">
 <h2 id="inspecting-a-source-in-the-new-api">Inspecting a source in the new API<a class="anchor" aria-label="anchor" href="#inspecting-a-source-in-the-new-api"></a>
@@ -631,9 +685,9 @@ new API. It returns signals, geo types, and the available
 <span></span>
 <span><span class="co"># all the fields available for this source</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">meta</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "report_time_range"    "reference_time_range" "signals"             </span></span>
-<span><span class="co">#&gt; [4] "geo_types"            "key_columns"          "extra_key_columns"   </span></span>
-<span><span class="co">#&gt; [7] "value_columns"        "column_types"</span></span>
+<span><span class="co">#&gt; [1] "report_time_range"    "reference_time_range" "latest_update"       </span></span>
+<span><span class="co">#&gt; [4] "signals"              "geo_types"            "key_columns"         </span></span>
+<span><span class="co">#&gt; [7] "extra_key_columns"    "value_columns"        "column_types"</span></span>
 <span></span>
 <span><span class="va">meta</span><span class="op">$</span><span class="va">signals</span> <span class="co"># available signal names</span></span>
 <span><span class="co">#&gt; [1] "pct_ed_visits_ari"                "pct_ed_visits_combined"          </span></span>
@@ -647,16 +701,16 @@ new API. It returns signals, geo types, and the available
 <span><span class="co">#&gt; [9] "state"</span></span>
 <span><span class="va">meta</span><span class="op">$</span><span class="va">reference_time_range</span> <span class="co"># earliest/latest reference_time available</span></span>
 <span><span class="co">#&gt; $latest</span></span>
-<span><span class="co">#&gt; [1] "2026-10-03"</span></span>
+<span><span class="co">#&gt; [1] "2026-10-31"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $first</span></span>
 <span><span class="co">#&gt; [1] "2022-10-01"</span></span>
 <span><span class="va">meta</span><span class="op">$</span><span class="va">report_time_range</span> <span class="co"># earliest/latest report_time (publication date) available</span></span>
 <span><span class="co">#&gt; $latest</span></span>
-<span><span class="co">#&gt; [1] "2026-10-07T00:00:00Z"</span></span>
+<span><span class="co">#&gt; [1] "2026-11-04T12:00:00Z"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $first</span></span>
-<span><span class="co">#&gt; [1] "2024-04-18T00:00:00Z"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2024-04-18T12:00:00Z"</span></span></code></pre></div>
 <p>All ongoing datasets are now on the V5 API. If
 <code><a href="../reference/epidata_meta.html">epidata_meta()</a></code> does not recognize a source name, check the
 <a href="https://cmu-delphi.github.io/delphi-epidata/api/v5_signals.html" class="external-link">V5
