@@ -33,6 +33,15 @@
 
 ## Patches
 
+- Requests no longer hang for up to two hours while the API is under
+  maintenance. The API asks clients to retry an hour later while a data table
+  is being rebuilt, and epidatr waited that long, twice, before giving up. Now
+  a request asked to wait longer than the new `epidatr.max_retry_wait` option
+  (default 60 seconds) fails right away with the API's message, and HTTP
+  errors say when the server suggests retrying. Shorter waits are still
+  honoured, and 500, 502, 503 and 504 errors are still retried. A 429 (rate
+  limit) is retried only if the API says when to come back, since the anonymous
+  rate limits are per minute or per hour and every retry counts against them.
 - Caching fixes:
   - `set_cache()` now rejects a max age or size that isn't a positive number.
     Previously `EPIDATR_CACHE_MAX_AGE_DAYS=3/24` became `NA` and made every
