@@ -9,7 +9,7 @@ retry_resp <- function(status, retry_after = NULL, date = NULL, body = NULL) {
   if (is.null(body)) {
     body <- '{"detail": "Data temporarily unavailable.", "code": "database_table_unavailable"}'
   }
-  create_mock_response(
+  create_mock_response( # nolint: object_usage_linter.
     body,
     status_code = status,
     headers = headers
@@ -99,7 +99,7 @@ test_that("the epidatr.max_retry_wait option is validated", {
 # mocked responses can't be streamed.
 local_retry_loop <- function(responses, env = parent.frame()) {
   httr2_ns <- asNamespace("httr2")
-  skip_if_not(
+  testthat::skip_if_not(
     exists("req_perform1", envir = httr2_ns, inherits = FALSE) &&
       exists("sys_sleep", envir = httr2_ns, inherits = FALSE),
     "httr2 internals used by this test are not available"
