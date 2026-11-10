@@ -91,27 +91,39 @@ test_that("the epidatr.max_retry_wait option is validated", {
 })
 
 # Drive httr2's real retry loop by mocking its internal single-attempt
-# function and its sleep, so no network or real waiting is involved.
+# functions and its sleep, so no network or real waiting is involved. Both the
+# in-memory (`req_perform()`) and streaming (`req_perform_connection()`) entry
+# points are mocked when they exist, so that if `do_request()` switches between
+# them these tests fail loudly instead of silently reaching the live API.
 local_retry_loop <- function(responses, env = parent.frame()) {
+  httr2_ns <- asNamespace("httr2")
   skip_if_not(
-    exists("req_perform1", envir = asNamespace("httr2"), inherits = FALSE) &&
-      exists("sys_sleep", envir = asNamespace("httr2"), inherits = FALSE),
+    exists("req_perform1", envir = httr2_ns, inherits = FALSE) &&
+      exists("sys_sleep", envir = httr2_ns, inherits = FALSE),
     "httr2 internals used by this test are not available"
   )
   state <- new.env(parent = emptyenv())
   state$calls <- 0L
   state$sleeps <- numeric()
-  testthat::local_mocked_bindings(
-    req_perform1 = function(req, ...) {
-      state$calls <- state$calls + 1L
-      resp <- responses[[min(state$calls, length(responses))]]
-      resp$request <- req
-      resp
-    },
+  next_response <- function(req, ...) {
+    state$calls <- state$calls + 1L
+    resp <- responses[[min(state$calls, length(responses))]]
+    resp$request <- req
+    resp
+  }
+  mocks <- list(
+    req_perform1 = next_response,
     sys_sleep = function(seconds, ...) {
       state$sleeps <- c(state$sleeps, seconds)
       invisible()
-    },
+    }
+  )
+  if (exists("req_perform_connection1", envir = httr2_ns, inherits = FALSE)) {
+    mocks$req_perform_connection1 <- next_response
+  }
+  rlang::exec(
+    testthat::local_mocked_bindings,
+    !!!mocks,
     .package = "httr2",
     .env = env
   )
