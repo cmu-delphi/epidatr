@@ -249,8 +249,10 @@ fetch_args_list <- function(
   assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
   assert_logical(refresh_cache, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  assert_numeric(
+  assert_integerish(
     reference_week_day,
+    lower = 1,
+    upper = 7,
     null.ok = FALSE,
     len = 1L,
     any.missing = FALSE
