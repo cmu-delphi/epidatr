@@ -35,9 +35,11 @@ cache_environ$cache_args <- NULL
 #'
 #' An important feature of the caching in this package is that only calls for
 #'   a fixed past version of the data will actually cache. For V5 endpoints, that
-#'   means `epidata_snapshot()` with a `snapshot_date` before today, or
-#'   `epidata_archive()` with a `report_time` range (or `"<date"`) ending before
-#'   today; a "latest" snapshot or an open-ended archive won't cache. For legacy
+#'   means `epidata_snapshot()` with a `snapshot_date` at least two days ago
+#'   (UTC), or `epidata_archive()` with a `report_time` range (or `"<date"`)
+#'   ending at least two days ago; a "latest" snapshot or an open-ended archive
+#'   won't cache. The extra day allows for data loaded after its nominal
+#'   release time. For legacy
 #'   endpoints, it means specifying either `issues` before a certain date, or
 #'   `as_of` before a certain date. For example the call
 #' ```
@@ -362,7 +364,8 @@ check_is_recent <- function(dates, max_age) {
 #' - pub_nidss_flu
 #' - pub_paho_dengue
 #'
-#' V5 endpoints, when the version is bounded by a date before today:
+#' V5 endpoints, when the version is bounded by a date at least two days ago
+#' (UTC):
 #' - `epidata_snapshot()` and `epidata_aux()` with `snapshot_date`
 #' - `epidata_archive()` and `epidata_aux()` with `report_time` given as an
 #'   `epirange()` or `"<date"` (not `">date"`, `"*"`, or omitted, which are

@@ -24,7 +24,8 @@ V3/V4 endpoints with an \code{as_of} or \code{issues} parameter (other than \cod
 \item pub_paho_dengue
 }
 
-V5 endpoints, when the version is bounded by a date before today:
+V5 endpoints, when the version is bounded by a date at least two days ago
+(UTC):
 \itemize{
 \item \code{epidata_snapshot()} and \code{epidata_aux()} with \code{snapshot_date}
 \item \code{epidata_archive()} and \code{epidata_aux()} with \code{report_time} given as an

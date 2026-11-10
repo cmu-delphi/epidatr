@@ -70,9 +70,11 @@ deleted data would be gone permanently!).
 
 An important feature of the caching in this package is that only calls for
 a fixed past version of the data will actually cache. For V5 endpoints, that
-means \code{epidata_snapshot()} with a \code{snapshot_date} before today, or
-\code{epidata_archive()} with a \code{report_time} range (or \code{"<date"}) ending before
-today; a "latest" snapshot or an open-ended archive won't cache. For legacy
+means \code{epidata_snapshot()} with a \code{snapshot_date} at least two days ago
+(UTC), or \code{epidata_archive()} with a \code{report_time} range (or \code{"<date"})
+ending at least two days ago; a "latest" snapshot or an open-ended archive
+won't cache. The extra day allows for data loaded after its nominal
+release time. For legacy
 endpoints, it means specifying either \code{issues} before a certain date, or
 \code{as_of} before a certain date. For example the call
 
