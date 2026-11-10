@@ -406,10 +406,7 @@ ggplot(epidata, aes(x = reference_time, y = value)) +
   )
 ```
 
-<div class="figure">
 <img src="img/epidatr-national-plot-1.png" alt="Line chart of the weekly percentage of US emergency department visits due to influenza, from NSSP." width="700.0000032" height="65%" />
-<p class="caption">plot of chunk national-plot</p>
-</div>
 
 `ggplot2` can also be used with `epidatr` and `maps` to [create choropleths](https://r-graphics.org/RECIPE-MISCGRAPH-CHOROPLETH.html):
 
@@ -459,10 +456,7 @@ ggplot(nhsn_states, aes(x = long, y = lat, group = group, fill = value)) +
   )
 ```
 
-<div class="figure">
 <img src="img/epidatr-state-map-1.png" alt="US map of confirmed influenza hospital admissions by state for the week ending 2025-01-04, from NHSN." width="700.0000032" height="65%" />
-<p class="caption">plot of chunk state-map</p>
-</div>
 
 ### Plotting revision histories
 
@@ -506,10 +500,7 @@ ggplot(pa_as_of, aes(x = reference_time, y = value, color = as.factor(as_of))) +
   )
 ```
 
-<div class="figure">
 <img src="img/epidatr-archive-plot-1.png" alt="Line chart of Pennsylvania influenza ED-visit percentages for October-November 2024, with one line per release date showing the series as it was known then; later releases extend the series and revise recent values." width="700.0000032" height="65%" />
-<p class="caption">plot of chunk archive-plot</p>
-</div>
 
 
 ## Available data sources and endpoints

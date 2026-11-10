@@ -243,6 +243,13 @@ revisions %>%
 # Or for maximum latency (e.g., at most 7 days of delay):
 revisions %>%
   filter(lag_days <= 7)
+
+# Or for each value as it was known 7 days after its reference date
+# (the latest version reported with a lag of at most 7 days; reference dates
+# with no report in that window are dropped):
+revisions %>%
+  filter(lag_days <= 7) %>%
+  slice_max(report_time, n = 1, by = c(geo_value, reference_time))
 ```
 
 ## Inspecting a source in the new API

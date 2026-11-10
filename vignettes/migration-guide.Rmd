@@ -357,6 +357,24 @@ revisions %>%
 #> 6 pct_e… 2024-12-27 12:00:00 state    pa        source      2024-12-21     1.78 
 #> 7 pct_e… 2025-01-03 12:00:00 state    pa        source      2024-12-28     3.78 
 #> # ℹ 1 more variable: lag_days <int>
+
+# Or for each value as it was known 7 days after its reference date
+# (the latest version reported with a lag of at most 7 days; reference dates
+# with no report in that window are dropped):
+revisions %>%
+  filter(lag_days <= 7) %>%
+  slice_max(report_time, n = 1, by = c(geo_value, reference_time))
+#> # A tibble: 7 × 8
+#>   signal report_time         geo_type geo_value fill_method reference_time value
+#>   <chr>  <dttm>              <chr>    <chr>     <chr>       <date>         <dbl>
+#> 1 pct_e… 2024-11-08 12:00:00 state    pa        source      2024-11-02     0.140
+#> 2 pct_e… 2024-11-23 12:00:00 state    pa        source      2024-11-16     0.170
+#> 3 pct_e… 2024-12-07 12:00:00 state    pa        source      2024-11-30     0.350
+#> 4 pct_e… 2024-12-13 12:00:00 state    pa        source      2024-12-07     0.550
+#> 5 pct_e… 2024-12-20 12:00:00 state    pa        source      2024-12-14     0.850
+#> 6 pct_e… 2024-12-27 12:00:00 state    pa        source      2024-12-21     1.78 
+#> 7 pct_e… 2025-01-03 12:00:00 state    pa        source      2024-12-28     3.78 
+#> # ℹ 1 more variable: lag_days <int>
 ```
 
 ## Inspecting a source in the new API

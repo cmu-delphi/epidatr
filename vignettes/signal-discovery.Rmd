@@ -35,14 +35,14 @@ Called with no arguments, it lists all active V5 sources:
 meta <- epidata_meta()
 
 names(meta)
-#>  [1] "va_respiratory_cases"        "va_respiratory_vaccinations"
-#>  [3] "nssp"                        "nhsn"                       
-#>  [5] "pophive"                     "nwss"                       
-#>  [7] "claims_outpatient"           "claims_inpatient"           
-#>  [9] "nickel_beta"                 "sleepcycle"                 
-#> [11] "nchs_mortality"              "rvdss"                      
-#> [13] "fluview_ilinet"              "fluview_resp_lab_clinical"  
-#> [15] "fluview_resp_lab_ph"         "flusurv"                    
+#>  [1] "nssp"                         "nhsn"                        
+#>  [3] "pophive"                      "nwss"                        
+#>  [5] "claims_outpatient"            "claims_inpatient"            
+#>  [7] "nickel_beta"                  "vha_respiratory_cases"       
+#>  [9] "vha_respiratory_vaccinations" "sleepcycle"                  
+#> [11] "nchs_mortality"               "rvdss"                       
+#> [13] "fluview_ilinet"               "fluview_resp_lab_clinical"   
+#> [15] "fluview_resp_lab_ph"          "flusurv"                     
 #> [17] "nrevss"
 ```
 
@@ -99,14 +99,14 @@ signals_df <- bind_rows(
 # Search for signals related to influenza
 signals_df %>%
   filter(grepl("flu", signals, ignore.case = TRUE))
-#> # A tibble: 129 × 3
-#>   source geo_types                                                       signals
-#>   <chr>  <chr>                                                           <chr>  
-#> 1 nssp   census_division, census_region, county, hhs, hrr, hsa_nci, msa… pct_ed…
-#> 2 nssp   census_division, census_region, county, hhs, hrr, hsa_nci, msa… smooth…
-#> 3 nhsn   census_division, census_region, hhs, nation, state              abs_ch…
-#> 4 nhsn   census_division, census_region, hhs, nation, state              abs_ch…
-#> # ℹ 125 more rows
+#> # A tibble: 133 × 3
+#>   source signals                                               geo_types        
+#>   <chr>  <chr>                                                 <chr>            
+#> 1 nssp   pct_ed_visits_influenza                               census_division,…
+#> 2 nssp   smoothed_pct_ed_visits_influenza                      census_division,…
+#> 3 nhsn   abs_chg_hosprep_pct_confirmed_admissions_flu_adult_ew census_division,…
+#> 4 nhsn   abs_chg_hosprep_pct_confirmed_admissions_flu_ew       census_division,…
+#> # ℹ 129 more rows
 ```
 
 ### Example queries for V5 sources
