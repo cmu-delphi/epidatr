@@ -101,7 +101,7 @@ test_that("cache saves & loads", {
   # confirmed_7dav_incidence_prop&geo_type=state&time_type=day&geo_values=ca%2Cfl&time_values=20200601-20200801
   # &as_of=20220101"
   request_hash <- paste0(
-    openssl::md5(request_url(epidata_call, format_type = "json")),
+    openssl::md5(cache_key(epidata_call, fetch_args_list())),
     ".rds"
   )
   direct_from_cache <- readRDS(file.path(new_temp_dir, request_hash))
@@ -360,9 +360,11 @@ test_that("an empty result allowed by return_empty isn't cached (#388)", {
 
 test_that("the cache key includes a non-default reference_week_day (#388)", {
   call <- covidcast_call_as_of("2022-01-01")
-  # The default keeps the plain-URL key so existing cache entries stay valid.
   default_key <- cache_key(call, fetch_args_list())
-  expect_equal(default_key, request_url(call, "json"))
+  expect_equal(
+    default_key,
+    paste0("epidatr", utils::packageVersion("epidatr"), ":", request_url(call, "json"))
+  )
   expect_false(default_key == cache_key(call, fetch_args_list(reference_week_day = 7)))
 
   # and fetch() uses it: a different reference_week_day doesn't hit the cache
