@@ -225,6 +225,9 @@ test_that("HTTP errors say when the server suggests retrying", {
   expect_identical(hint("89"), "The server suggests retrying in about 1 minute.")
   expect_identical(hint("5340"), "The server suggests retrying in about 89 minutes.")
   expect_identical(hint("7200"), "The server suggests retrying in about 2 hours.")
+  # Monotone at the minutes/hours boundary: 89.5 minutes reads as 2 hours, not 1.
+  expect_identical(hint("5370"), "The server suggests retrying in about 2 hours.")
+  expect_identical(hint("5400"), "The server suggests retrying in about 2 hours.")
   expect_identical(hint("86400"), "The server suggests retrying in about 24 hours.")
   # No hint for no, zero, unusable or absurd waits.
   expect_identical(msg(retry_resp(503)), "Data temporarily unavailable.")

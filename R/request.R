@@ -167,7 +167,7 @@ retry_hint <- function(resp) {
   } else if (minutes < 90) {
     plural(minutes, "minute")
   } else {
-    plural(round(after / 3600), "hour")
+    plural(round(minutes / 60), "hour")
   }
   paste0("The server suggests retrying in about ", wait, ".")
 }

@@ -7,9 +7,9 @@
 #' seconds, that epidatr will honour when the API asks it to retry later (via a
 #' `Retry-After` header). A request asked to wait longer fails right away with
 #' the API's message and, where possible, when the server suggests retrying;
-#' for example, the API asks for an hour while a data table is being rebuilt. This bounds each requested
-#' wait, not the total time spent retrying. Set it to 0 to never wait for a
-#' server-requested retry.
+#' for example, the API asks for an hour while a data table is being rebuilt.
+#' This bounds each requested wait, not the total time spent retrying. Set it
+#' to 0 to never wait for a server-requested retry.
 #'
 #' @keywords internal
 #' @include cache.R
