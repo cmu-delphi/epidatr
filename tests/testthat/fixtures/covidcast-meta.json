@@ -1,0 +1,83 @@
+[
+  {
+    "db_source": "fb-survey",
+    "description": "We conduct the Delphi US COVID-19 Trends and Impact Survey (CTIS) in partnership with Facebook. Every day, Delphi surveys tens of thousands of Facebook users, asking them a broad set of COVID-related questions, including whether they, or anyone in their household, are currently experiencing COVID-related symptoms.",
+    "dua": "https://cmu.box.com/s/qfxplcdrcn9retfzx4zniyugbd9h3bos",
+    "license": "CC BY",
+    "link": [
+      {
+        "alt": "API Documentation",
+        "href": "https://cmu-delphi.github.io/delphi-epidata/api/covidcast-signals/fb-survey.html"
+      }
+    ],
+    "name": "Delphi US COVID-19 Trends and Impact Survey",
+    "original_data_provider": "Delphi via Facebook",
+    "reference_signal": "smoothed_cli",
+    "signals": [
+      {
+        "active": false,
+        "category": "early",
+        "compute_from_base": false,
+        "description": "Estimated percentage of people with COVID-like illness \n\nFor this signal, we estimate the percentage of people self-reporting COVID-like symptoms, defined here as fever along with either cough, shortness of breath, or difficulty breathing. While many other conditions can cause these symptoms, comparing the rates of COVID-like symptoms across the country can suggest where COVID is most active.",
+        "format": "percent",
+        "geo_types": {
+          "county": {
+            "max": 13.0003763,
+            "mean": 1.027805,
+            "min": 0.0,
+            "stdev": 1.0362304
+          },
+          "hrr": {
+            "max": 11.2962963,
+            "mean": 1.2269157,
+            "min": 0.0,
+            "stdev": 1.0692117
+          },
+          "msa": {
+            "max": 12.5231652,
+            "mean": 1.1602289,
+            "min": 0.0,
+            "stdev": 1.0960308
+          },
+          "nation": {
+            "max": 4.382599,
+            "mean": 1.1685062,
+            "min": 0.3647163,
+            "stdev": 0.7841888
+          },
+          "state": {
+            "max": 7.4156739,
+            "mean": 1.2031664,
+            "min": 0.0,
+            "stdev": 0.9198052
+          }
+        },
+        "has_sample_size": true,
+        "has_stderr": true,
+        "high_values_are": "bad",
+        "is_cumulative": false,
+        "is_smoothed": true,
+        "is_weighted": false,
+        "link": [
+          {
+            "alt": "Survey details",
+            "href": "https://delphi.cmu.edu/covidcast/surveys/"
+          }
+        ],
+        "max_issue": 20220701,
+        "max_time": 20220627,
+        "min_time": 20200406,
+        "name": "COVID-Like Symptoms (Unweighted 7-day average)",
+        "short_description": "Estimated percentage of people with COVID-like illness ",
+        "signal": "smoothed_cli",
+        "signal_basename": "raw_wcli",
+        "source": "fb-survey",
+        "time_label": "Date",
+        "time_type": "day",
+        "typical_reporting_lag": "1 day",
+        "value_label": "Percentage"
+      }
+    ],
+    "source": "fb-survey"
+  }
+]

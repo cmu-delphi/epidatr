@@ -28,6 +28,20 @@
     cache_environ$use_cache <- FALSE
   }
   if (cache_environ$use_cache) {
-    set_cache(startup = TRUE)
+    # The user opted in via EPIDATR_USE_CACHE, so create a missing cache
+    # directory instead of prompting during library() (#401).
+    # A bad cache setting shouldn't stop the package from loading; report it
+    # and leave the cache off.
+    tryCatch(
+      set_cache(startup = TRUE, confirm = FALSE),
+      error = function(e) {
+        # rlang::inform() does not re-parse the text, so braces in the bad
+        # value print literally and each bullet stays on its own line.
+        rlang::inform(
+          c("!" = "epidatr cache is off.", "i" = e$message, e$body),
+          class = "packageStartupMessage"
+        )
+      }
+    )
   }
 }

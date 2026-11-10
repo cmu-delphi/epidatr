@@ -840,3 +840,27 @@ test_that("disable_missing_meta_warning suppresses the unspecified-fields warnin
   expect_warning(fetch(call, fetch_args_list()), class = "epidatr__missing_meta_fields")
   expect_no_warning(fetch(call, fetch_args_list(disable_missing_meta_warning = TRUE)))
 })
+
+test_that("comma-joined signals and geo_types are trimmed of whitespace (#407)", {
+  urls <- function(x) {
+    if (inherits(x, "epidata_call")) x <- list(x)
+    vapply(x, function(z) z$request$url, character(1))
+  }
+  snap <- epidata_snapshot(
+    "nssp", "sig1, sig2", "state, nation",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_equal(
+    urls(snap),
+    c(
+      "https://delphi.cmu.edu/epidata/v5/snapshot/?source=nssp&signal=sig1%2Csig2&geo_type=state",
+      "https://delphi.cmu.edu/epidata/v5/snapshot/?source=nssp&signal=sig1%2Csig2&geo_type=nation"
+    )
+  )
+  arch <- epidata_archive(
+    "nssp", " sig1 ,sig2 ", "state",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  expect_no_match(urls(arch), "%20", fixed = TRUE)
+  expect_match(urls(arch), "signal=sig1%2Csig2", fixed = TRUE)
+})

@@ -147,8 +147,7 @@ pvt_cdc <- function(
 #' @param fips_code string. A 5-digit fips county code, zero-padded.
 #' @return [`tibble::tibble`]
 #'
-#' @seealso [`pub_covid_hosp_facility()`]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [`pub_covid_hosp_facility()`], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @export
 pub_covid_hosp_facility_lookup <- function(
@@ -252,8 +251,7 @@ pub_covid_hosp_facility_lookup <- function(
 #'
 #' @importFrom checkmate test_class test_integerish test_character
 #'
-#' @seealso [`pub_covid_hosp_facility()`], [`epirange()`]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [`pub_covid_hosp_facility()`], [`epirange()`], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @export
 #
@@ -1162,8 +1160,7 @@ pub_covid_hosp_state_timeseries <- function(
 #'   geo_type = "state",
 #' )
 #'
-#' @seealso [pub_covidcast()],[covidcast_epidata()]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [pub_covidcast()],[covidcast_epidata()], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @export
 pub_covidcast_meta <- function(
@@ -1265,8 +1262,7 @@ pub_covidcast_meta <- function(
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
 #'
-#' @seealso [pub_covidcast_meta()], [covidcast_epidata()], [epirange()]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [pub_covidcast_meta()], [covidcast_epidata()], [epirange()], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @export
 pub_covidcast <- function(
@@ -1401,8 +1397,7 @@ pub_covidcast <- function(
 #' @inheritParams .epidatr_shared_params
 #' @return list. If `source` is `NULL`, a named list of source metadata objects.
 #'   If `source` is specified, the metadata list for that source.
-#' @seealso [epidata_snapshot()], [epidata_archive()], [epidata()], [epirange()]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [epidata_snapshot()], [epidata_archive()], [epidata()], [epirange()], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @export
 epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
@@ -1495,8 +1490,7 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #' query came back empty. Pass `fetch_args_list(return_empty = TRUE)` to
 #' suppress these errors and warnings and get an empty tibble back instead.
 #'
-#' @seealso [epidata_meta()], [epirange()]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [epidata_meta()], [epirange()], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @name cast_api_queries
 NULL
@@ -1550,8 +1544,8 @@ epidata_snapshot <- function(
   assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
   assert_report_time_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
   # Accept comma-joined signal/geo_type strings.
-  signals <- unique(unlist(strsplit(signals, ",", fixed = TRUE)))
-  geo_type <- unique(unlist(strsplit(geo_type, ",", fixed = TRUE)))
+  signals <- unique(trimws(unlist(strsplit(signals, ",", fixed = TRUE))))
+  geo_type <- unique(trimws(unlist(strsplit(geo_type, ",", fixed = TRUE))))
   # One request per geo_type. The cast-API accepts a single geo_type per query,
   # but signals are sent comma-joined in one request each.
   fetched <- lapply(geo_type, function(g) {
@@ -1647,8 +1641,8 @@ epidata_archive <- function(
     report_time <- issues
   }
   # Accept comma-joined signal/geo_type strings.
-  signals <- unique(unlist(strsplit(signals, ",", fixed = TRUE)))
-  geo_type <- unique(unlist(strsplit(geo_type, ",", fixed = TRUE)))
+  signals <- unique(trimws(unlist(strsplit(signals, ",", fixed = TRUE))))
+  geo_type <- unique(trimws(unlist(strsplit(geo_type, ",", fixed = TRUE))))
   # One request per geo_type: the cast-API accepts a single geo_type per query,
   # but signals are sent comma-joined in one request each.
   fetched <- lapply(geo_type, function(g) {
@@ -1808,7 +1802,8 @@ epidata_aux.default <- function(
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time, required = FALSE)
 
   if (identical(snapshot_date, "latest")) {
-    snapshot_date <- Sys.Date()
+    # the API's dates are UTC; a local date can be a day behind
+    snapshot_date <- utc_today()
   }
 
   assert_report_time_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
@@ -2401,8 +2396,7 @@ pub_fluview_clinical <- function(
 #' @inheritParams .epidatr_shared_params
 #'
 #' @return [`tibble::tibble`]
-#' @seealso [`pub_fluview()`]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [`pub_fluview()`], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @export
 pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
@@ -2674,8 +2668,7 @@ pub_kcdc_ili <- function(
 #' }
 #' @inheritParams .epidatr_shared_params
 #' @return [`list`]
-#' @seealso [`pvt_norostat()`]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [`pvt_norostat()`], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @export
 pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {

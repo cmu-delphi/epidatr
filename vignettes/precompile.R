@@ -15,29 +15,36 @@ local({
     stopifnot("no .Rmd.orig matched the given names" = length(sources) > 0)
   }
 
-  # knitr::knit() defaults to error = TRUE, which would silently bake API
-  # failures into the output; make unexpected errors abort instead. Chunks
-  # demonstrating errors on purpose set error = TRUE locally.
-  knitr::opts_chunk$set(error = FALSE)
-
-  # Match pkgdown's figure settings (see pkgdown:::fig_save_args()) so the
-  # committed PNGs look like ones the website would have generated itself.
   stopifnot("the ragg package is needed to knit figures" = requireNamespace("ragg", quietly = TRUE))
-  knitr::opts_chunk$set(
-    fig.width = 7.2916667, fig.asp = 0.618, dpi = 96,
-    fig.retina = 2, dev = "ragg_png"
-  )
+  stopifnot("the callr package is needed to knit vignettes" = requireNamespace("callr", quietly = TRUE))
 
-  # Match the other knit-time settings pkgdown::build_article() applies.
-  options(width = 80, knitr.graphics.rel_path = FALSE)
+  knit_one <- function(src, out) {
+    # knitr::knit() defaults to error = TRUE, which would silently bake API
+    # failures into the output; make unexpected errors abort instead. Chunks
+    # demonstrating errors on purpose set error = TRUE locally.
+    knitr::opts_chunk$set(error = FALSE)
+
+    # Match pkgdown's figure settings (see pkgdown:::fig_save_args()) so the
+    # committed PNGs look like ones the website would have generated itself.
+    knitr::opts_chunk$set(
+      fig.width = 7.2916667, fig.asp = 0.618, dpi = 96,
+      fig.retina = 2, dev = "ragg_png"
+    )
+
+    # Match the other knit-time settings pkgdown::build_article() applies.
+    options(width = 80, knitr.graphics.rel_path = FALSE)
+    set.seed(1014) # pkgdown::build_article() seeds each article the same way
+    knitr::knit(src, output = out, envir = globalenv(), quiet = TRUE)
+  }
 
   # Knit from vignettes/ so figure paths (e.g. img/) resolve relative to it.
+  # Each vignette gets a fresh R session, as it would on its own or in
+  # pkgdown, so attached packages and options can't leak between them.
   owd <- setwd("vignettes")
   on.exit(setwd(owd))
   for (src in sources) {
     out <- sub("\\.orig$", "", src)
     message("Knitting ", src, " -> ", out)
-    set.seed(1014) # pkgdown::build_article() seeds each article the same way
-    knitr::knit(src, output = out, envir = new.env(), quiet = TRUE)
+    callr::r(knit_one, args = list(src = src, out = out), wd = getwd(), show = TRUE)
   }
 })

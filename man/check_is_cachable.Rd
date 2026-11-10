@@ -7,7 +7,11 @@
 check_is_cachable(epidata_call, fetch_args)
 }
 \description{
-The cacheable endpoints are those with \code{as_of} or \code{issues} parameters:
+A call is cachable when it asks for data as of a fixed point in the past,
+so later reports can't change the result.
+}
+\details{
+V3/V4 endpoints with an \code{as_of} or \code{issues} parameter (other than \code{"*"}):
 \itemize{
 \item pub_covidcast
 \item pub_covid_hosp_state_timeseries
@@ -19,5 +23,17 @@ The cacheable endpoints are those with \code{as_of} or \code{issues} parameters:
 \item pub_nidss_flu
 \item pub_paho_dengue
 }
+
+V5 endpoints, when the version is bounded by a date at least two days ago
+(UTC):
+\itemize{
+\item \code{epidata_snapshot()} and \code{epidata_aux()} with \code{snapshot_date}
+\item \code{epidata_archive()} and \code{epidata_aux()} with \code{report_time} given as an
+\code{epirange()} or \code{"<date"} (not \code{">date"}, \code{"*"}, or omitted, which are
+open-ended)
+}
+
+V5 calls with a row \code{limit} are never cached, since the rows returned are
+not stable.
 }
 \keyword{internal}
