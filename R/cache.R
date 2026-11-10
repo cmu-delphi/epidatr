@@ -75,7 +75,10 @@ cache_environ$cache_args <- NULL
 #'
 #' On the backend, the cache uses cachem, with filenames generated using an md5
 #'   encoding of the call url. Each file corresponds to a unique epidata-API
-#'   call.
+#'   call. It stores the response before parsing, so `fetch_args` that only
+#'   change parsing (such as `reference_week_day` or `disable_date_parsing`)
+#'   share one cache entry. Calls with `disable_data_frame_parsing = TRUE` and
+#'   the nested-list `"json"` endpoints are never cached.
 #' @examples
 #' set_cache(
 #'   cache_dir = tempdir(),
@@ -424,11 +427,8 @@ check_is_cachable <- function(epidata_call, fetch_args) {
       !fetch_args$dry_run &&
       # Base url should be null
       is.null(fetch_args$base_url) &&
-      # Fields should be null
-      is.null(fetch_args$fields) &&
-      # Disable date parsing should be false
-      !fetch_args$disable_date_parsing &&
-      # Disable data frame parsing should be false
+      # Nested-list responses can't be cached as a data frame
+      epidata_call$response_format != "json" &&
       !fetch_args$disable_data_frame_parsing &&
       # Refresh cache should be false
       fetch_args$refresh_cache == FALSE

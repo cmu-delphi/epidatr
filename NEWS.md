@@ -27,6 +27,11 @@
   the cache is off (inspecting the default directory), and prints a hint about
   `clear_cache()`.
 
+- The cache now stores the unparsed API response and parses it on every read,
+  so `reference_week_day` and `disable_date_parsing` no longer need to be part
+  of the cache key and calls with `fields` can now be cached. Existing cache
+  entries are ignored and re-fetched.
+
 ## Documentation
 
 - `?set_cache` now names the `EPIDATR_CACHE_DIR` environment variable and
