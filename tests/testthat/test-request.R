@@ -93,8 +93,10 @@ test_that("the epidatr.max_retry_wait option is validated", {
 # Drive httr2's real retry loop by mocking its internal single-attempt
 # functions and its sleep, so no network or real waiting is involved. Both the
 # in-memory (`req_perform()`) and streaming (`req_perform_connection()`) entry
-# points are mocked when they exist, so that if `do_request()` switches between
-# them these tests fail loudly instead of silently reaching the live API.
+# points are mocked when they exist, so these tests can never reach the live
+# API. If epidatr streams responses through `perform_and_read()`, it is routed
+# through `req_perform()` here: the request carries the same retry policy, and
+# mocked responses can't be streamed.
 local_retry_loop <- function(responses, env = parent.frame()) {
   httr2_ns <- asNamespace("httr2")
   skip_if_not(
@@ -127,6 +129,13 @@ local_retry_loop <- function(responses, env = parent.frame()) {
     .package = "httr2",
     .env = env
   )
+  if (exists("perform_and_read", envir = asNamespace("epidatr"), inherits = FALSE)) {
+    testthat::local_mocked_bindings(
+      perform_and_read = function(req, ...) httr2::req_perform(req),
+      .package = "epidatr",
+      .env = env
+    )
+  }
   state
 }
 
