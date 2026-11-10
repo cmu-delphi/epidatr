@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.0</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,13 @@
 
 <p>The <code>delphi.epidata.key</code> option specifies the API key to be used when making
 requests to the Epidata API.</p>
+<p>The <code>epidatr.max_retry_wait</code> option (default 60) is the longest wait, in
+seconds, that epidatr will honour when the API asks it to retry later (via a
+<code>Retry-After</code> header). A request asked to wait longer fails right away with
+the API's message and, where possible, when the server suggests retrying;
+for example, the API asks for an hour while a data table is being rebuilt.
+This bounds each requested wait, not the total time spent retrying. Set it
+to 0 to never wait for a server-requested retry.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

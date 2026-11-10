@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.0</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="patches-1-4-1">Patches<a class="anchor" aria-label="anchor" href="#patches-1-4-1"></a></h3>
-<ul><li>Caching fixes:
+<ul><li>Requests no longer hang for up to two hours while the API is under maintenance. The API asks clients to retry an hour later while a data table is being rebuilt, and epidatr waited that long, twice, before giving up. Now a request asked to wait longer than the new <code>epidatr.max_retry_wait</code> option (default 60 seconds) fails right away with the API’s message, and HTTP errors say when the server suggests retrying. Shorter waits are still honoured, and 500, 502, 503 and 504 errors are still retried. A 429 (rate limit) is retried only if the API says when to come back, since the anonymous rate limits are per minute or per hour and every retry counts against them.</li>
+<li>Caching fixes:
 <ul><li>
 <code><a href="../reference/set_cache.html">set_cache()</a></code> now rejects a max age or size that isn’t a positive number. Previously <code>EPIDATR_CACHE_MAX_AGE_DAYS=3/24</code> became <code>NA</code> and made every cached fetch fail (<a href="https://github.com/cmu-delphi/epidatr/issues/396" class="external-link">#396</a>). An invalid setting at load time turns the cache off with a message rather than stopping the package from loading.</li>
 <li>Loading the package with <code>EPIDATR_USE_CACHE=TRUE</code> creates a missing cache directory instead of prompting, and <code><a href="../reference/set_cache.html">set_cache()</a></code> no longer prompts in non-interactive sessions. When the cache can’t be set, the message now says so instead of claiming the cache is in use (<a href="https://github.com/cmu-delphi/epidatr/issues/401" class="external-link">#401</a>).</li>
