@@ -308,20 +308,57 @@ disable_cache <- function() {
 #' Describe current cache
 #'
 #' @description
-#' Print out the information about the cache (as would be returned by cachem's
-#' `info()` method).
-#' @return [`list`] containing the info result as created by cachem
+#' Report where the cache lives and how big it is. The result includes cachem's
+#'   `info()` fields (such as `dir`, `max_size` and `max_age`) plus `enabled`,
+#'   `n_entries` and `size_mb`. Entries written by older epidatr versions share
+#'   the directory and are counted; use [`clear_cache`] to remove them. When the
+#'   cache is off, the directory it would use is inspected instead.
+#' @return a list of class `epidatr_cache_info`; printing it also shows how to
+#'   clear the cache
 #'
 #' @seealso [`set_cache`] to start a new cache (and general caching info),
 #'   [`clear_cache`] to delete the cache and set a new one, and [`disable_cache`] to
 #'   disable without deleting
 #' @export
 cache_info <- function() {
-  if (is_cache_enabled()) {
-    return(cache_environ$epidatr_cache$info())
+  enabled <- is_cache_enabled()
+  if (enabled) {
+    info <- cache_environ$epidatr_cache$info()
   } else {
-    return("there is no cache")
+    info <- list(
+      dir = Sys.getenv(
+        "EPIDATR_CACHE_DIR",
+        unset = rappdirs::user_cache_dir("R", version = "epidatr")
+      )
+    )
   }
+  files <- if (dir.exists(info$dir)) {
+    list.files(info$dir, full.names = TRUE)
+  } else {
+    character()
+  }
+  structure(
+    c(
+      list(enabled = enabled),
+      info,
+      list(
+        n_entries = sum(grepl("\\.rds$", files)),
+        size_mb = sum(file.size(files), na.rm = TRUE) / 1024^2
+      )
+    ),
+    class = c("epidatr_cache_info", "list")
+  )
+}
+
+#' @export
+print.epidatr_cache_info <- function(x, ...) {
+  cli::cli_inform(c(
+    "i" = "epidatr cache is {if (x$enabled) 'on' else 'off'}.",
+    "i" = "Directory: {x$dir}",
+    "i" = "{x$n_entries} entr{?y/ies}, {round(x$size_mb, 1)} MB (includes entries from older epidatr versions).",
+    "i" = "Run {.code clear_cache()} to delete them all."
+  ))
+  invisible(x)
 }
 
 #' Check if the cache is enabled

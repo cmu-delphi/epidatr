@@ -5,6 +5,7 @@
 ^.*\..Rcheck$
 ^\.Rproj\.user$
 ^DEVELOPMENT\.md$
+^AGENTS\.md$
 ^doc$
 ^shiny$
 ^docs$

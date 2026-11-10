@@ -249,8 +249,10 @@ fetch_args_list <- function(
   assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
   assert_logical(refresh_cache, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  assert_numeric(
+  assert_integerish(
     reference_week_day,
+    lower = 1,
+    upper = 7,
     null.ok = FALSE,
     len = 1L,
     any.missing = FALSE
@@ -383,11 +385,15 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 #'
 #' The cache stores parsed tibbles, so the key must cover every fetch setting
 #' that changes parsing, not just the URL. `reference_week_day` changes how
-#' epiweeks become dates; it is appended only when it differs from the default
-#' so existing cache entries stay valid (#388).
+#' epiweeks become dates; it is appended only when it differs from the default.
+#' The epidatr version is a prefix, so entries from another version are never
+#' read (their stored shape may differ).
 #' @keywords internal
 cache_key <- function(epidata_call, fetch_args) {
-  key <- request_url(epidata_call, "json", fetch_args$fields)
+  key <- paste0(
+    "epidatr", as.character(utils::packageVersion("epidatr")), ":",
+    request_url(epidata_call, "json", fetch_args$fields)
+  )
   if (!isTRUE(fetch_args$reference_week_day == formals(fetch_args_list)$reference_week_day)) {
     key <- paste0(key, "#reference_week_day=", fetch_args$reference_week_day)
   }
