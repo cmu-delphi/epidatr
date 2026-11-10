@@ -15,6 +15,9 @@
 
 - `fetch_args_list(disable_data_frame_parsing = TRUE)` now actually disables
   data frame parsing again.
+- `epidata_snapshot()`, `epidata_archive()`, and `epidata()` now trim
+  whitespace around comma-joined `signals` and `geo_type` values, so
+  `"sig1, sig2"` works the same as `"sig1,sig2"` (#407).
 
 # epidatr 1.4.0
 
@@ -59,12 +62,6 @@
   same effect. The underlying query has no stable sort order, so `limit` does
   not guarantee the same rows (or count) across repeated calls. Use it only to
   preview or debug a query, not as a real filter.
-- `fetch_args_list()` gains a `limit` argument, capping the number of rows
-  the cast-API returns for `epidata_snapshot()`, `epidata_archive()`,
-  `epidata_aux()`, and `epidata()`. Defaults to `NULL` (no limit); `-1` has
-  the same effect. The underlying query has no stable sort order, so `limit`
-  does not guarantee the same rows (or count) across repeated calls. Use it
-  only to preview or debug a query, not as a real filter.
 
 
 # epidatr 1.3.0
