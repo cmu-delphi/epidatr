@@ -14,6 +14,14 @@
   twice.
 - `fill_method` values are `"source"`, `"ave"`, and `"zero"` (previously
   documented as `"fill_ave"` and `"fill_zero"`).
+- Vignettes: the reporting-lag example now converts `report_time` with
+  `as.Date()` before subtracting `reference_time` (since 1.4.0 the direct
+  subtraction gave a meaningless value and lag filters returned no rows);
+  metadata output is no longer truncated to 4 sources; the
+  `pub_dengue_nowcast()` example uses dates that have data; the revision-history
+  plot now shows the full series as known on each release date (the archive
+  only lists changed values); vignettes and README re-rendered with 1.4.x
+  output, each vignette in a fresh R session.
 
 ## Patches
 
