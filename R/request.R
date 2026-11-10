@@ -159,11 +159,15 @@ retry_hint <- function(resp) {
   if (is.na(after) || after <= 0 || after > 24 * 60 * 60) {
     return(NULL)
   }
-  wait <- if (after < 60) {
-    paste(round(after), if (round(after) == 1) "second" else "seconds")
+  plural <- function(n, unit) paste(n, if (n == 1) unit else paste0(unit, "s"))
+  seconds <- max(1, round(after))
+  minutes <- round(after / 60)
+  wait <- if (seconds < 60) {
+    plural(seconds, "second")
+  } else if (minutes < 90) {
+    plural(minutes, "minute")
   } else {
-    minutes <- round(after / 60)
-    paste(minutes, if (minutes == 1) "minute" else "minutes")
+    plural(round(after / 3600), "hour")
   }
   paste0("The server suggests retrying in about ", wait, ".")
 }
