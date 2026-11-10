@@ -1,6 +1,6 @@
 # Changelog
 
-## epidatr 1.4.1
+## epidatr (development version)
 
 ### Changes
 
@@ -24,6 +24,19 @@
 - `epidata_aux(snapshot_date = "latest")` now uses today’s UTC date, so
   it no longer misses releases made after midnight UTC in time zones
   behind UTC.
+- The cache now stores the unparsed API response and parses it on every
+  read, so `reference_week_day` and `disable_date_parsing` no longer
+  need to be part of the cache key and calls with `fields` can now be
+  cached. Existing cache entries are ignored and re-fetched.
+- The epidatr version is now part of the cache key, so cache entries
+  written by a different epidatr version are never read back.
+- [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
+  now rejects a `reference_week_day` that isn’t an integer from 1 to 7.
+- [`cache_info()`](https://cmu-delphi.github.io/epidatr/dev/reference/cache_info.md)
+  now also reports `enabled`, `n_entries` and `size_mb`, works when the
+  cache is off (inspecting the default directory), and prints a hint
+  about
+  [`clear_cache()`](https://cmu-delphi.github.io/epidatr/dev/reference/clear_cache.md).
 
 ### Documentation
 

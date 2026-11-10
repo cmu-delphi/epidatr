@@ -128,7 +128,9 @@ epidata(
 
   Date, `POSIXt`, UTC timestamp string (e.g. `"2025-10-16T13:45:00Z"`),
   or `NULL`. The snapshot returns the version of the data that was
-  current then. `NULL` returns the latest available version.
+  current at the end of that UTC day. The time of day is ignored, so
+  `"2025-10-16T10:00:00Z"` and `"2025-10-16"` return the same release.
+  `NULL` returns the latest available version.
 
 - as_of:
 
@@ -151,9 +153,11 @@ epidata(
   (e.g., `"<2025-10-16"`, `">=2025-10-16"`, or
   `"<=2025-10-16T13:45:00Z"` for a UTC timestamp bound) or an
   [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
-  for an inclusive date range. Bare dates and the `"="` operator are not
-  accepted: use `snapshot_date` for point-in-time data. Internally maps
-  to the `report_time_query` API parameter.
+  for an inclusive date range. The server reads a timestamp bound as its
+  UTC date, so `"<=2025-10-16T13:45:00Z"` means `"<=2025-10-16"`. Bare
+  dates and the `"="` operator are not accepted: use `snapshot_date` for
+  point-in-time data. Internally maps to the `report_time_query` API
+  parameter.
 
 - issues:
 

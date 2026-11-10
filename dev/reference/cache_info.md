@@ -1,7 +1,12 @@
 # Describe current cache
 
-Print out the information about the cache (as would be returned by
-cachem's `info()` method).
+Report where the cache lives and how big it is. The result includes
+cachem's `info()` fields (such as `dir`, `max_size` and `max_age`) plus
+`enabled`, `n_entries` and `size_mb`. Entries written by older epidatr
+versions share the directory and are counted; use
+[`clear_cache`](https://cmu-delphi.github.io/epidatr/dev/reference/clear_cache.md)
+to remove them. When the cache is off, the directory it would use is
+inspected instead.
 
 ## Usage
 
@@ -11,8 +16,8 @@ cache_info()
 
 ## Value
 
-[`list`](https://rdrr.io/r/base/list.html) containing the info result as
-created by cachem
+a list of class `epidatr_cache_info`; printing it also shows how to
+clear the cache
 
 ## See also
 

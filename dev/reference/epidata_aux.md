@@ -75,11 +75,12 @@ epidata_aux(source, ..., columns = NULL, fetch_args = fetch_args_list())
 - snapshot_date:
 
   Date, `POSIXt`, UTC timestamp string (e.g. `"2025-10-16T13:45:00Z"`),
-  `"latest"`, or `NULL`. Return auxiliary data as it appeared at this
-  date or instant (one row per key, the most recent version active
-  then). `"latest"` uses today's date. Use `NULL` (default) to return
-  the full version history filtered by `report_time`. Mutually exclusive
-  with `report_time`. Only used when `source` is a string.
+  `"latest"`, or `NULL`. Return auxiliary data as it appeared at the end
+  of this UTC day (one row per key, the most recent version active
+  then). The time of day is ignored. `"latest"` uses today's date. Use
+  `NULL` (default) to return the full version history filtered by
+  `report_time`. Mutually exclusive with `report_time`. Only used when
+  `source` is a string.
 
 - report_time:
 
@@ -89,9 +90,11 @@ epidata_aux(source, ..., columns = NULL, fetch_args = fetch_args_list())
   comparison operators (e.g., `"<2025-10-16"`, `">=2025-10-16"`, or
   `"<=2025-10-16T13:45:00Z"` for a UTC timestamp bound) or an
   [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
-  for an inclusive date range. Bare dates and the `"="` operator are not
-  accepted: use `snapshot_date` for point-in-time data. Mutually
-  exclusive with `snapshot_date`. Only used when `source` is a string.
+  for an inclusive date range. The server reads a timestamp bound as its
+  UTC date, so `"<=2025-10-16T13:45:00Z"` means `"<=2025-10-16"`. Bare
+  dates and the `"="` operator are not accepted: use `snapshot_date` for
+  point-in-time data. Mutually exclusive with `snapshot_date`. Only used
+  when `source` is a string.
 
 - issues:
 
