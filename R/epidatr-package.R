@@ -27,8 +27,10 @@
     tryCatch(
       set_cache(startup = TRUE, confirm = FALSE),
       error = function(e) {
-        cli::cli_inform(
-          c("!" = "epidatr cache is off.", "i" = "{conditionMessage(e)}"),
+        # rlang::inform() does not re-parse the text, so braces in the bad
+        # value print literally and each bullet stays on its own line.
+        rlang::inform(
+          c("!" = "epidatr cache is off.", "i" = e$message, e$body),
           class = "packageStartupMessage"
         )
       }

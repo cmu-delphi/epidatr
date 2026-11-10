@@ -233,8 +233,10 @@ as_cache_setting <- function(value, arg, env_var) {
     cli::cli_abort(
       c(
         "Cache setting {.arg {arg}} must be a single positive number, not {.val {value}}.",
-        "i" = "Set it with the {.arg {arg}} argument or the {.envvar {env_var}}
-          environment variable.",
+        "i" = paste0(
+          "Set it with the {.arg {arg}} argument or the ",
+          "{.envvar {env_var}} environment variable."
+        ),
         "i" = if (arg == "days") "Fractions are fine (e.g. {.code 0.125} days is 3 hours)."
       ),
       class = "epidatr__invalid_cache_setting"
