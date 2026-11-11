@@ -164,7 +164,7 @@ redact_auth <- function(url) {
 #'   instead of a parsed tibble. V4 endpoints return a nested list. V5
 #'   endpoints still return a data frame, but with all columns as character.
 #' @param return_empty boolean that allows returning an empty tibble if there is
-#'   no data
+#'   no data. Truncated responses and API errors still raise an error.
 #' @param disable_missing_meta_warning if `TRUE`, suppress the warning emitted
 #'   when the response contains columns not declared as expected epidata fields.
 #'   Useful for endpoints/signals that intentionally return extra, untyped
@@ -487,7 +487,7 @@ request_epidata <- function(
   }
 
   # classic: JSON with result/message wrapper
-  check_epidata_result(response_content, allow_empty = fetch_args$return_empty)
+  check_epidata_result(response_content)
   return(response_content$epidata)
 }
 
