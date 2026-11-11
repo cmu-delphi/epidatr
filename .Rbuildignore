@@ -17,7 +17,7 @@
 ^\.bumpversion\.cfg$
 ^\.editorconfig$
 ^\.lintr$
-^Makefile$
+^Justfile$
 ^venv$
 ^.venv$
 ^env$

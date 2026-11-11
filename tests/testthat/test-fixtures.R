@@ -1,7 +1,7 @@
 # Golden parsing tests over recorded real API responses (see helper-fixtures.R).
 # Each fixture is replayed through the endpoint's full parsing pipeline with the
 # network mocked; the snapshot pins column classes and a sample of rows. A diff
-# here after refreshing fixtures (make update-fixtures) means the upstream
+# here after refreshing fixtures (just update-fixtures) means the upstream
 # contract changed; a diff without refreshing means our parsing changed.
 
 for (fixture_spec in fixture_specs()) {
@@ -10,7 +10,7 @@ for (fixture_spec in fixture_specs()) {
     test_that(paste0("fixture parses: ", spec$file), {
       skip_if_not(
         file.exists(test_path("fixtures", spec$file)),
-        "fixture missing; run make update-fixtures"
+        "fixture missing; run just update-fixtures"
       )
       result <- NULL
       expect_no_warning(result <- replay_fixture(spec))

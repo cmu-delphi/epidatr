@@ -1,5 +1,5 @@
 # Live check that V5 queries for a fixed past version are cached and that a
-# cached read matches a fresh fetch. Runs under `make test-live-cast`.
+# cached read matches a fresh fetch. Runs under `just test-live-cast`.
 # NHSN at state level is small enough to fetch without a row limit.
 
 local_live_cache <- function(env = parent.frame()) {
