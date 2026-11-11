@@ -2218,7 +2218,7 @@ pub_ecdc_ili <- function(
   epiweeks <- validate_timeset_input("epiweeks", epiweeks)
   issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  if (!missing(issues) && !missing(lag)) {
+  if (!is.null(issues) && !is.null(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
   }
   create_epidata_call(
@@ -2284,7 +2284,7 @@ pub_flusurv <- function(
   epiweeks <- validate_timeset_input("epiweeks", epiweeks)
   issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  if (!missing(issues) && !missing(lag)) {
+  if (!is.null(issues) && !is.null(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
   }
   create_epidata_call(
@@ -2374,7 +2374,7 @@ pub_fluview_clinical <- function(
   epiweeks <- validate_timeset_input("epiweeks", epiweeks)
   issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  if (!missing(issues) && !missing(lag)) {
+  if (!is.null(issues) && !is.null(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
   }
   create_epidata_call(
@@ -2652,7 +2652,7 @@ pub_kcdc_ili <- function(
   epiweeks <- validate_timeset_input("epiweeks", epiweeks)
   issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  if (!missing(issues) && !missing(lag)) {
+  if (!is.null(issues) && !is.null(lag)) {
     stop("`issues` and `lag` are mutually exclusive")
   }
   create_epidata_call(
@@ -2964,6 +2964,9 @@ pub_paho_dengue <- function(
   epiweeks <- validate_timeset_input("epiweeks", epiweeks)
   issues <- validate_timeset_input("issues", issues, required = FALSE)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
+  if (!is.null(issues) && !is.null(lag)) {
+    stop("`issues` and `lag` are mutually exclusive")
+  }
   create_epidata_call(
     "paho_dengue/",
     list(
