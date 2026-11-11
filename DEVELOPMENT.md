@@ -1,7 +1,7 @@
 ## Setting up the development environment
 
 ```r
-pak::pkg_install(c('devtools', 'pkgdown', 'styler', 'lintr')) # install dev dependencies
+pak::pkg_install(c('devtools', 'pkgdown', 'lintr')) # install dev dependencies
 devtools::install_deps(dependencies = TRUE) # install package dependencies
 pak::local_install_deps(dependencies = "Config/Needs/precompile") # vignette-knitting deps
 devtools::document() # generate package meta data and man files
@@ -11,7 +11,7 @@ devtools::build() # build package
 ## Validating the package
 
 ```r
-styler::style_pkg() # format code
+# Format code with `just format` (runs `air format .`; needs the air CLI: https://posit-dev.github.io/air/)
 lintr::lint_package() # lint code
 
 devtools::test() # test package

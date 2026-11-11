@@ -23,7 +23,7 @@ default:
 # Install the R packages these recipes and the package itself need.
 [group("develop")]
 install:
-    Rscript -e "install.packages(c('pak', 'devtools', 'pkgdown', 'webshot', 'textshaping', 'styler', 'lintr', 'urlchecker', 'foghorn'));devtools::install_deps(dependencies = TRUE);pak::local_install_deps(dependencies = 'Config/Needs/precompile')"
+    Rscript -e "install.packages(c('pak', 'devtools', 'pkgdown', 'webshot', 'textshaping', 'lintr', 'urlchecker', 'foghorn'));devtools::install_deps(dependencies = TRUE);pak::local_install_deps(dependencies = 'Config/Needs/precompile')"
 
 [group("develop")]
 lint:
@@ -31,7 +31,7 @@ lint:
 
 [group("develop")]
 format:
-    Rscript -e "styler::style_pkg()"
+    air format .
 
 [group("develop")]
 document:
