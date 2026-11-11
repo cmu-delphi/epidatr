@@ -49,6 +49,7 @@
   only lists changed values); vignettes and README re-rendered with 1.4.x
   output, each vignette in a fresh R session.
 - `?timeset` now has examples (#203).
+- `?set_cache` now has a table of the cache environment variables (#198).
 
 ## Patches
 

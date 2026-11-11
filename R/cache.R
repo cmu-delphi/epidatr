@@ -20,6 +20,17 @@ cache_environ$cache_args <- NULL
 #'   example by calling `file.edit("~/.Renviron")`.
 #' See the parameters below for some more configurables if you're so inclined.
 #'
+#' The environmental variables, and the `set_cache()` argument each one is the
+#'   default for, are:
+#'
+#' | Variable | Default | `set_cache()` argument |
+#' |---|---|---|
+#' | `EPIDATR_USE_CACHE` | unset (cache off) | none; `TRUE` enables the cache at startup |
+#' | `EPIDATR_CACHE_DIR` | `rappdirs::user_cache_dir("R", version = "epidatr")` | `cache_dir` |
+#' | `EPIDATR_CACHE_MAX_AGE_DAYS` | `1` | `days` |
+#' | `EPIDATR_CACHE_MAX_SIZE_MB` | `1024` | `max_size` |
+#' | `EPIDATR_CACHE_LOGFILE` | `"logfile.txt"` | `logfile` |
+#'
 #' `set_cache` (re)defines the cache to use in a particular R session. This does
 #'   not clear existing data at any previous location, but instead creates a
 #'   handle to the new cache using [cachem](https://cachem.r-lib.org/index.html)
