@@ -65,19 +65,30 @@ reference:
       - epidata_call
       - fetch_args_list
   - title: Configuration and utilities
-    desc: Set API keys and handle API data types
+    desc: >
+      Set the API key (`get_api_key()`, `save_api_key()`), which lifts the
+      anonymous rate limits but does not grant access to private endpoints.
+      Also the date types that endpoints accept: `epirange()` and `timeset`.
   - contents:
       - get_api_key
       - epirange
       - timeset
   - title: Control caching behavior
-    desc: Configure an optional persistent cache
+    desc: >
+      Optionally store API responses on disk so repeated calls do not hit the
+      API again. The cache is off by default, and it only stores calls for a
+      fixed past version of the data (not "latest"), since those cannot change.
+      See `set_cache()` for the environment variables that turn it on.
   - contents:
       - set_cache
       - clear_cache
       - disable_cache
       - cache_info
   - title: Make requests to private API endpoints
-    desc: These endpoints require additional authorization to use
+    desc: >
+      These endpoints serve restricted data sources. Besides an API key, they
+      need a separate `auth` token, passed as the `auth` argument. Access is
+      granted per data source by Delphi, and the token is not the same as the
+      API key. See each endpoint's page for details.
   - contents:
       - starts_with("pvt_")

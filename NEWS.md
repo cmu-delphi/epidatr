@@ -52,6 +52,8 @@
 - `?set_cache` now has a table of the cache environment variables (#198).
 - Every endpoint's `@return` now says what a row of the result represents
   (#204).
+- The reference page describes the configuration, caching and private-endpoint
+  groups in more detail (#238).
 
 ## Patches
 
