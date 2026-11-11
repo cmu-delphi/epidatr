@@ -20,7 +20,10 @@ key, requests may be subject to rate limits and other limitations.
 \details{
 We recommend you register for an API key. While most endpoints are available
 without one, there are \href{https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html}{limits on API usage for anonymous users},
-including a rate limit. If you regularly request large amounts of data,
+including a rate limit (for V5, 60 requests/hour, plus 5 requests/minute for
+\code{\link[=epidata_archive]{epidata_archive()}} and 3 requests/minute for \code{\link[=epidata_snapshot]{epidata_snapshot()}}; see the
+\href{https://cmu-delphi.github.io/delphi-epidata/api/v5.html#authentication-and-rate-limits}{V5 documentation}).
+If you regularly request large amounts of data,
 please consider \href{https://api.delphi.cmu.edu/epidata/admin/registration_form}{registering for an API key}.
 
 API keys are strings read from the environment variable \code{DELPHI_EPIDATA_KEY}.
