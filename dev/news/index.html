@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.8</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,6 +60,8 @@
 <li>
 <code>fill_method</code> values are <code>"source"</code>, <code>"ave"</code>, and <code>"zero"</code> (previously documented as <code>"fill_ave"</code> and <code>"fill_zero"</code>).</li>
 <li>Vignettes: the reporting-lag example now converts <code>report_time</code> with <code><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date()</a></code> before subtracting <code>reference_time</code> (since 1.4.0 the direct subtraction gave a meaningless value and lag filters returned no rows); metadata output is no longer truncated to 4 sources; the <code><a href="../reference/pub_dengue_nowcast.html">pub_dengue_nowcast()</a></code> example uses dates that have data; the revision-history plot now shows the full series as known on each release date (the archive only lists changed values); vignettes and README re-rendered with 1.4.x output, each vignette in a fresh R session.</li>
+<li>
+<code><a href="../reference/timeset.html">?timeset</a></code> now has examples (<a href="https://github.com/cmu-delphi/epidatr/issues/203" class="external-link">#203</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="patches-development-version">Patches<a class="anchor" aria-label="anchor" href="#patches-development-version"></a></h3>

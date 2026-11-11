@@ -75,6 +75,9 @@
   the full series as known on each release date (the archive only lists
   changed values); vignettes and README re-rendered with 1.4.x output,
   each vignette in a fresh R session.
+- [`?timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md)
+  now has examples
+  ([\#203](https://github.com/cmu-delphi/epidatr/issues/203)).
 
 ### Patches
 

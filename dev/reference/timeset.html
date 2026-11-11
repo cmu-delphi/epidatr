@@ -11,7 +11,7 @@ with wildcards."><meta name="robots" content="noindex"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.8</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,48 @@ used) endpoints may not accept the <code>"*"</code> wildcard, but this can be si
 with a large <code><a href="epirange.html">epirange()</a></code>.</p>
     </div>
 
-  </main></div>
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># A single day, as a Date, an integer, or a string (all mean 2021-03-04)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2021-03-04"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2021-03-04"</span>
+<span class="r-in"><span><span class="fl">20210304</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 20210304</span>
+<span class="r-in"><span><span class="st">"20210304"</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "20210304"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Several days: a vector of dates</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2021-03-04"</span>, <span class="st">"2021-03-06"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2021-03-04" "2021-03-06"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Every day from 2021-03-01 to 2021-03-07, inclusive</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">20210301</span>, <span class="fl">20210307</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">&lt;EpiRange&gt; object:</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Days from 2021-03-01 to 2021-03-07</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># A single epiweek (week 9 of 2021), and a vector of epiweeks</span></span></span>
+<span class="r-in"><span><span class="fl">202109</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 202109</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">202109</span>, <span class="fl">202111</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 202109 202111</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Epiweeks 9 through 12 of 2021, inclusive</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="epirange.html">epirange</a></span><span class="op">(</span><span class="fl">202109</span>, <span class="fl">202112</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">&lt;EpiRange&gt; object:</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epiweeks from 2021w09 to 2021w12</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># All available times (not accepted by every endpoint)</span></span></span>
+<span class="r-in"><span><span class="st">"*"</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "*"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Use one kind (days or weeks) per parameter; most endpoints accept only one.</span></span></span>
+<span class="r-in"><span><span class="co"># To convert dates to epiweeks, use `MMWRweek::MMWRweek()`.</span></span></span>
+</code></pre></div>
+    </div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
