@@ -2,6 +2,8 @@
 
 ## Changes
 
+- The minimum supported R version is now 4.1.0, matching the requirements of
+  our dependencies (e.g. httr2, glue, purrr, readr).
 - `epidata_snapshot()`, `epidata_archive()`, and `epidata()` now filter
   `geo_values` and `reference_time` server-side via the cast-API `geo_value`
   and `reference_times` parameters (cmu-delphi/cast-api#110).
