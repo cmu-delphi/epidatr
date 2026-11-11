@@ -16,7 +16,7 @@ accepted by epidatr to specify the time value of an epidata query:
 \item Date strings or integers: Strings or integers in the format YYYYMMDD.
 \item Epiweeks: Strings or integers in the format YYYYWW, where WW is the epiweek
 number.
-\item EpiRanges: A range returned by \code{epirange()}, or a list of multiple ranges.
+\item EpiRanges: A range returned by \code{epirange()}.
 \item Wildcard: The string \code{"*"}, which requests all available time values.
 }
 

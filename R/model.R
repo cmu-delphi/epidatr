@@ -131,7 +131,7 @@ print.EpiRange <- function(x, ...) {
 #' - Date strings or integers: Strings or integers in the format YYYYMMDD.
 #' - Epiweeks: Strings or integers in the format YYYYWW, where WW is the epiweek
 #'   number.
-#' - EpiRanges: A range returned by `epirange()`, or a list of multiple ranges.
+#' - EpiRanges: A range returned by `epirange()`.
 #' - Wildcard: The string `"*"`, which requests all available time values.
 #'
 #' Refer to the specific endpoint documentation for guidance on using dates vs
