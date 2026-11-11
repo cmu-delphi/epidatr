@@ -62,6 +62,23 @@
   vice versa); `NULL` now means “not requested” everywhere
   ([\#398](https://github.com/cmu-delphi/epidatr/issues/398)).
 
+- Timeset arguments now error when a vector mixes day (`YYYYMMDD`) and
+  week (`YYYYWW`) values, and
+  [`pvt_twitter()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_twitter.md)
+  and
+  [`pub_wiki()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_wiki.md)
+  error when `time_values` doesn’t match `time_type`
+  ([\#400](https://github.com/cmu-delphi/epidatr/issues/400)).
+
+- The 414 (URI too long) fallback to POST now works: it strips the query
+  from the URL and sends the parameters in the form body only
+  ([\#393](https://github.com/cmu-delphi/epidatr/issues/393)).
+
+- Unknown values in categorical fields now warn (class
+  `epidatr__unknown_category`) and are kept as extra factor levels
+  instead of silently becoming `NA`
+  ([\#392](https://github.com/cmu-delphi/epidatr/issues/392)).
+
 - The cache now stores the unparsed API response and parses it on every
   read, so `reference_week_day` and `disable_date_parsing` no longer
   need to be part of the cache key and calls with `fields` can now be

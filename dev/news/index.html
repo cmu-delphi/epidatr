@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.10</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,9 @@
 <li><p><code><a href="../reference/cache_info.html">cache_info()</a></code> now also reports <code>enabled</code>, <code>n_entries</code> and <code>size_mb</code>, works when the cache is off (inspecting the default directory), and prints a hint about <code><a href="../reference/clear_cache.html">clear_cache()</a></code>.</p></li>
 <li><p><code><a href="../reference/pub_paho_dengue.html">pub_paho_dengue()</a></code> now errors when both <code>issues</code> and <code>lag</code> are given, like the other endpoints that take both (<a href="https://github.com/cmu-delphi/epidatr/issues/397" class="external-link">#397</a>).</p></li>
 <li><p><code><a href="../reference/pub_ecdc_ili.html">pub_ecdc_ili()</a></code>, <code><a href="../reference/pub_flusurv.html">pub_flusurv()</a></code>, <code><a href="../reference/pub_fluview_clinical.html">pub_fluview_clinical()</a></code>, and <code><a href="../reference/pub_kcdc_ili.html">pub_kcdc_ili()</a></code> no longer error on an explicit <code>issues = NULL</code> together with <code>lag</code> (or vice versa); <code>NULL</code> now means “not requested” everywhere (<a href="https://github.com/cmu-delphi/epidatr/issues/398" class="external-link">#398</a>).</p></li>
+<li><p>Timeset arguments now error when a vector mixes day (<code>YYYYMMDD</code>) and week (<code>YYYYWW</code>) values, and <code><a href="../reference/pvt_twitter.html">pvt_twitter()</a></code> and <code><a href="../reference/pub_wiki.html">pub_wiki()</a></code> error when <code>time_values</code> doesn’t match <code>time_type</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/400" class="external-link">#400</a>).</p></li>
+<li><p>The 414 (URI too long) fallback to POST now works: it strips the query from the URL and sends the parameters in the form body only (<a href="https://github.com/cmu-delphi/epidatr/issues/393" class="external-link">#393</a>).</p></li>
+<li><p>Unknown values in categorical fields now warn (class <code>epidatr__unknown_category</code>) and are kept as extra factor levels instead of silently becoming <code>NA</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/392" class="external-link">#392</a>).</p></li>
 <li><p>The cache now stores the unparsed API response and parses it on every read, so <code>reference_week_day</code> and <code>disable_date_parsing</code> no longer need to be part of the cache key and calls with <code>fields</code> can now be cached. Existing cache entries are ignored and re-fetched.</p></li>
 </ul></div>
 <div class="section level3">
