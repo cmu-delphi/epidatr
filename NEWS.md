@@ -50,6 +50,8 @@
   output, each vignette in a fresh R session.
 - `?timeset` now has examples (#203).
 - `?set_cache` now has a table of the cache environment variables (#198).
+- Every endpoint's `@return` now says what a row of the result represents
+  (#204).
 
 ## Patches
 
