@@ -48,6 +48,7 @@
   plot now shows the full series as known on each release date (the archive
   only lists changed values); vignettes and README re-rendered with 1.4.x
   output, each vignette in a fresh R session.
+- `?timeset` now has examples (#203).
 
 ## Patches
 
