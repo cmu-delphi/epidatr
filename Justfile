@@ -55,6 +55,26 @@ vignettes *names:
     Rscript -e "devtools::install(quick = TRUE, upgrade = FALSE)"
     Rscript vignettes/precompile.R {{ names }}
 
+# Print the R version each Imports package (and its dependencies) requires on CRAN, highest first.
+[group("develop")]
+min-r:
+    #!/usr/bin/env Rscript
+    db <- tools::CRAN_package_db()
+    desc <- read.dcf("DESCRIPTION", fields = c("Depends", "Imports"))
+    split_deps <- function(x) trimws(sub("\\(.*", "", strsplit(x, ",")[[1]]))
+    imports <- setdiff(split_deps(desc[, "Imports"]), "")
+    base <- rownames(installed.packages(priority = "base"))
+    pkgs <- unique(c(imports, unlist(tools::package_dependencies(imports, db, recursive = TRUE))))
+    pkgs <- setdiff(pkgs, c("R", base))
+    min_r <- vapply(db$Depends[match(pkgs, db$Package)], function(d) {
+      m <- regmatches(d, regexpr("R \\(>= *[0-9.]+\\)", d))
+      if (length(m)) gsub("[^0-9.]", "", sub("R ", "", m)) else NA_character_
+    }, "")
+    out <- data.frame(package = pkgs, direct = pkgs %in% imports, min_r = unname(min_r))
+    out <- out[order(numeric_version(out$min_r), decreasing = TRUE, na.last = TRUE), ]
+    print(out, row.names = FALSE)
+    cat("\nDESCRIPTION declares:", trimws(desc[, "Depends"]), "\n")
+
 # ---- Test ----
 
 [group("test")]
