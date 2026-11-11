@@ -333,7 +333,7 @@ test_that("refresh_cache only writes entries a default fetch may read (#388)", {
     requests <<- requests + 1
     epidata
   })
-  fetch(call, fetch_args_list(refresh_cache = TRUE, disable_date_parsing = TRUE))
+  fetch(call, fetch_args_list(refresh_cache = TRUE, disable_date_parsing = TRUE, disable_missing_meta_warning = TRUE))
   expect_length(cache_environ$epidatr_cache$keys(), 0)
 
   # A default fetch caches, and a refresh rewrites the same entry.
