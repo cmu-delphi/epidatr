@@ -254,7 +254,17 @@ parse_value <- function(
   } else if (info$type == "float") {
     return(as.double(value))
   } else if (info$type == "categorical") {
-    return(factor(value, levels = info$categories))
+    unknown <- setdiff(unique(value[!is.na(value)]), info$categories)
+    if (length(unknown) > 0) {
+      cli::cli_warn(
+        c(
+          "Unknown categorical {cli::qty(length(unknown))}value{?s} in {.field {info$name}}: {.val {unknown}}",
+          "i" = "Keeping them as extra factor levels"
+        ),
+        class = "epidatr__unknown_category"
+      )
+    }
+    return(factor(value, levels = c(info$categories, unknown)))
   } else if (info$type == "text") {
     # An all-NA JSON column arrives as logical; keep the promised type.
     return(as.character(value))
