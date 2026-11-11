@@ -106,7 +106,7 @@ of functions and their arguments.
 The Delphi Epidata API provides access through three generations of endpoints:
 
 - **V5 sources** serve active surveillance data through `epidata_snapshot()`, `epidata_archive()`, and `epidata_meta()`.
-- **V4 endpoint** `pub_covidcast()` is deprecated and stopped receiving new data on September 22, 2026. It remains available to query historical data ingested before that date.
+- **V4 endpoint** `pub_covidcast()` (despite the name, it also held flu, wastewater, and other non-COVID signals) is deprecated and stopped receiving new data on September 22, 2026. It remains available to query historical data ingested before that date.
 - **V3 legacy endpoints** (such as `pub_fluview()`, `pub_gft()`, and `pub_wiki()`) cover specific datasets that are static or no longer updated. Some stopped receiving new data on September 22, 2026 when active sources moved to V5, while others stopped updating earlier.
 
 If you have existing `pub_covidcast()` code, see `vignette("migration-guide")` for the argument and column mapping to the V5 functions.
