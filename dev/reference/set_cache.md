@@ -163,6 +163,6 @@ set_cache(
 )
 #> ! epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not
 #>   intended).
-#> ℹ Directory: /tmp/RtmpQYzI4N; entries expire after 14 days and the cache is
-#>   pruned above 512 MB. Log: /tmp/RtmpQYzI4N/logs.txt
+#> ℹ Directory: /tmp/RtmpNHoTFI; entries expire after 14 days and the cache is
+#>   pruned above 512 MB. Log: /tmp/RtmpNHoTFI/logs.txt
 ```

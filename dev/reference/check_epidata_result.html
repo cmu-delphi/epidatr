@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.20</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.21</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +46,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_epidata_result</span><span class="op">(</span><span class="va">response_content</span>, allow_empty <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_epidata_result</span><span class="op">(</span><span class="va">response_content</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -55,10 +55,6 @@
 
 <dl><dt id="arg-response-content">response_content<a class="anchor" aria-label="anchor" href="#arg-response-content"></a></dt>
 <dd><p>parsed JSON response with <code>result</code> and <code>message</code> fields</p></dd>
-
-
-<dt id="arg-allow-empty">allow_empty<a class="anchor" aria-label="anchor" href="#arg-allow-empty"></a></dt>
-<dd><p>if TRUE, suppress errors for "no results" (result == -2)</p></dd>
 
 </dl></div>
 

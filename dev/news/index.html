@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.20</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.21</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +52,7 @@
 <li><p>The epidatr version is now part of the cache key, so cache entries written by a different epidatr version are never read back.</p></li>
 <li><p>A rate limit error (HTTP 429) on a request made without an API key now points to <code><a href="../reference/get_api_key.html">?save_api_key</a></code> for registering one (<a href="https://github.com/cmu-delphi/epidatr/issues/294" class="external-link">#294</a>).</p></li>
 <li><p><code>print.epidata_call()</code> now shows <code>auth=&lt;redacted&gt;</code> instead of the restricted endpoint key (<a href="https://github.com/cmu-delphi/epidatr/issues/386" class="external-link">#386</a>).</p></li>
+<li><p><code>fetch_args_list(return_empty = TRUE)</code> no longer turns truncated responses and generic API errors into a warning that returned (and cached) partial data. They now always raise an error (<a href="https://github.com/cmu-delphi/epidatr/issues/384" class="external-link">#384</a>).</p></li>
 <li><p><code><a href="../reference/fetch_args_list.html">fetch_args_list()</a></code> now rejects a <code>reference_week_day</code> that isn’t an integer from 1 to 7.</p></li>
 <li><p><code><a href="../reference/cache_info.html">cache_info()</a></code> now also reports <code>enabled</code>, <code>n_entries</code> and <code>size_mb</code>, works when the cache is off (inspecting the default directory), and prints a hint about <code><a href="../reference/clear_cache.html">clear_cache()</a></code>.</p></li>
 <li><p><code><a href="../reference/pub_paho_dengue.html">pub_paho_dengue()</a></code> now errors when both <code>issues</code> and <code>lag</code> are given, like the other endpoints that take both (<a href="https://github.com/cmu-delphi/epidatr/issues/397" class="external-link">#397</a>).</p></li>

@@ -57,7 +57,8 @@ fetch_args_list(
 
 - return_empty:
 
-  boolean that allows returning an empty tibble if there is no data
+  boolean that allows returning an empty tibble if there is no data.
+  Truncated responses and API errors still raise an error.
 
 - timeout_seconds:
 

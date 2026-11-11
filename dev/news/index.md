@@ -52,6 +52,11 @@
   restricted endpoint key
   ([\#386](https://github.com/cmu-delphi/epidatr/issues/386)).
 
+- `fetch_args_list(return_empty = TRUE)` no longer turns truncated
+  responses and generic API errors into a warning that returned (and
+  cached) partial data. They now always raise an error
+  ([\#384](https://github.com/cmu-delphi/epidatr/issues/384)).
+
 - [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
   now rejects a `reference_week_day` that isn’t an integer from 1 to 7.
 
