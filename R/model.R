@@ -53,13 +53,13 @@ epirange <- function(from, to) {
   }
 
   if (nchar(from) != nchar(to)) {
-    stop(paste0(
-      "EpiRange error, from (",
-      from,
-      ") and to (",
-      to,
-      ") must be the same format"
-    ))
+    cli::cli_abort(
+      c(
+        "{.arg from} and {.arg to} must be the same format.",
+        "x" = "{.arg from} is {from} and {.arg to} is {to}."
+      ),
+      class = "epidatr__epirange_format_mismatch"
+    )
   }
 
   if (to < from) {
@@ -302,7 +302,8 @@ parse_data_frame <- function(
   df,
   disable_date_parsing = FALSE,
   reference_week_day = 1,
-  warn_missing_meta = TRUE
+  warn_missing_meta = TRUE,
+  warn_dropped_meta = FALSE
 ) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   meta <- epidata_call$meta
@@ -321,6 +322,17 @@ parse_data_frame <- function(
         "i" = "Unspecified fields {missing_fields} may need to be manually converted to more appropriate classes"
       ),
       class = "epidatr__missing_meta_fields"
+    )
+  }
+
+  dropped_fields <- setdiff(meta_field_names, names(df))
+  if (warn_dropped_meta && nrow(df) > 0 && length(dropped_fields) != 0) {
+    cli::cli_warn(
+      c(
+        "Expected {cli::qty(length(dropped_fields))}field{?s} {.val {dropped_fields}} {?was/were} not in the response",
+        "i" = "The API may have changed, or `fields` may have excluded them"
+      ),
+      class = "epidatr__dropped_meta_fields"
     )
   }
 

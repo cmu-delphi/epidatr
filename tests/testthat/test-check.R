@@ -120,6 +120,68 @@ test_that("timesets reject mixed day and week values", {
   expect_error(parse_timeset_input(c(20200101, 202201)), "mixes day")
   expect_error(
     pvt_twitter("k", "CA", time_values = epirange(201501, 202001), fetch_args = fetch_args_list(dry_run = TRUE)),
-    "time_type"
+    "expects day values"
   )
+})
+
+test_that("week-only endpoint parameters reject dates", {
+  dry <- fetch_args_list(dry_run = TRUE)
+  expect_error(pub_flusurv("network_all", issues = as.Date("2020-01-01"), fetch_args = dry), "`issues` expects week")
+  expect_error(
+    pub_flusurv("network_all", epiweeks = epirange(20200101, 20200201), fetch_args = dry),
+    "`epiweeks` expects week"
+  )
+})
+
+test_that("malformed response envelopes get a clear error", {
+  bad <- list(
+    list(epidata = list(), message = "success"),
+    list(result = 1),
+    list(result = c(1L, 1L), message = "success"),
+    list(result = 1, message = "success")
+  )
+  for (b in bad) expect_error(check_epidata_result(b), class = "epidatr__malformed_envelope")
+  expect_no_error(check_epidata_result(list(epidata = list(), result = 1, message = "success")))
+  expect_no_error(check_epidata_result(list(result = -2, message = "success"), allow_empty = TRUE))
+})
+
+test_that("review fixes: scalar responses and week-type Dates are rejected", {
+  for (b in list("unavailable", 1)) {
+    expect_error(check_epidata_result(b), class = "epidatr__malformed_envelope")
+  }
+  expect_error(
+    pub_wiki(
+      "a",
+      time_type = "week", time_values = as.Date("2020-01-01"),
+      fetch_args = fetch_args_list(dry_run = TRUE)
+    ),
+    "expects week values"
+  )
+})
+
+test_that("unparseable responses error cleanly without leaking the query", {
+  err <- tryCatch(
+    with_mocked_response(
+      create_mock_response('{"epidata": }', url = "https://example.com/cdc/?auth=secretkey"),
+      pvt_cdc(auth = "secretkey", locations = "ma", epiweeks = epirange(202003, 202304))
+    ),
+    error = identity
+  )
+  expect_s3_class(err, "epidatr__unparseable_response")
+  expect_false(grepl("secretkey", conditionMessage(err), fixed = TRUE))
+})
+
+test_that("assert_exclusive allows at most one non-NULL argument", {
+  expect_no_error(assert_exclusive(issues = NULL, lag = NULL))
+  expect_no_error(assert_exclusive(issues = 1, lag = NULL, as_of = NULL))
+  expect_error(
+    assert_exclusive(issues = 1, lag = 2, as_of = NULL, class = "my_class"),
+    class = "my_class"
+  )
+  expect_error(assert_exclusive(issues = 1, lag = 2), "mutually exclusive")
+})
+
+test_that("invalid time inputs raise classed errors", {
+  expect_error(epirange(20200101, 202001), class = "epidatr__epirange_format_mismatch")
+  expect_error(parse_timeset_input(123), class = "epidatr__invalid_timeset")
 })

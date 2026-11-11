@@ -74,7 +74,13 @@ assert_report_time_param <- function(name, value, len = NULL, required = TRUE) {
     .var.name = name
   )
   if (!is.null(len) && inherits(value, "POSIXt") && length(value) != len) {
-    stop(sprintf("Assertion on '%s' failed: Must have length %d, but has length %d.", name, len, length(value)))
+    cli::cli_abort(
+      c(
+        "{.arg {name}} must have length {len}.",
+        "x" = "It has length {length(value)}."
+      ),
+      class = "epidatr__bad_length"
+    )
   }
 }
 
@@ -97,6 +103,30 @@ format_report_time_bound <- function(value) {
     return(format(as.POSIXct(value, tz = "UTC"), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"))
   }
   format(parse_api_date(value), "%Y-%m-%d")
+}
+
+#' Abort if more than one of the named arguments is non-NULL
+#'
+#' Pass the arguments by name, e.g. `assert_exclusive(issues = issues, lag = lag)`.
+#' @param ... named arguments; `NULL` means "not supplied".
+#' @param class extra condition class to add to the error.
+#' @param call the call shown in the error message.
+#' @keywords internal
+assert_exclusive <- function(..., class = NULL, call = rlang::caller_env()) {
+  args <- list(...)
+  supplied <- names(args)[!vapply(args, is.null, logical(1))]
+  if (length(supplied) > 1) {
+    all_names <- names(args) # nolint: object_usage_linter
+    cli::cli_abort(
+      c(
+        "{.arg {all_names}} are mutually exclusive.",
+        "x" = "You supplied {.arg {supplied}}."
+      ),
+      class = c(class, "epidatr__exclusive_args"),
+      call = call
+    )
+  }
+  invisible(NULL)
 }
 
 #' Allows a timeset param: a date vector, a character vector, an integer-like
@@ -134,7 +164,13 @@ parse_timeset_input <- function(value) {
       assert_uniform_granularity(value)
       return(value)
     } else {
-      stop(paste0("Invalid timeset input: ", value))
+      cli::cli_abort(
+        c(
+          "Invalid timeset input.",
+          "x" = "Got {.val {value}}; expected dates, YYYYMMDD or YYYYWW values, {.val *}, or an {.fn epirange}."
+        ),
+        class = "epidatr__invalid_timeset"
+      )
     }
   } else if (test_character(value)) {
     if (identical(value, "*")) {
@@ -146,12 +182,24 @@ parse_timeset_input <- function(value) {
       value <- as.Date(value, format = "%Y-%m-%d")
       return(format(value, format = "%Y%m%d"))
     } else {
-      stop(paste0("Invalid timeset input: ", value))
+      cli::cli_abort(
+        c(
+          "Invalid timeset input.",
+          "x" = "Got {.val {value}}; expected dates, YYYYMMDD or YYYYWW values, {.val *}, or an {.fn epirange}."
+        ),
+        class = "epidatr__invalid_timeset"
+      )
     }
   } else if (test_class(value, "EpiRange")) {
     return(value)
   } else {
-    stop(paste0("Invalid timeset input: ", value))
+    cli::cli_abort(
+      c(
+        "Invalid timeset input.",
+        "x" = "Got {.val {value}}; expected dates, YYYYMMDD or YYYYWW values, {.val *}, or an {.fn epirange}."
+      ),
+      class = "epidatr__invalid_timeset"
+    )
   }
 }
 
@@ -174,27 +222,37 @@ timeset_granularity <- function(value) {
 #' @keywords internal
 assert_uniform_granularity <- function(value) {
   if (length(unique(timeset_granularity(value))) > 1) {
-    stop("Timeset mixes day (YYYYMMDD) and week (YYYYWW) values; use one kind per parameter.")
+    cli::cli_abort(
+      "Timeset mixes day (YYYYMMDD) and week (YYYYWW) values; use one kind per parameter.",
+      class = "epidatr__mixed_timeset"
+    )
   }
 }
 
-#' Stop if timeset values are not of the kind implied by `time_type`
+#' Stop if timeset values are not of the kind (`"day"` or `"week"`) expected
 #' @keywords internal
 assert_time_type_matches <- function(name, value, time_type) {
-  expected <- if (time_type == "week") "week" else "day"
   found <- timeset_granularity(value)
-  if (any(found != expected)) {
-    stop(sprintf(
-      "`%s` holds %s values but `time_type` is \"%s\"; set `time_type` to match.",
-      name, setdiff(found, expected)[1], time_type
-    ))
+  if (any(found != time_type)) {
+    cli::cli_abort(
+      c(
+        "{.arg {name}} expects {time_type} values ({if (time_type == 'week') 'YYYYWW' else 'YYYYMMDD'}).",
+        "x" = "Got {setdiff(found, time_type)[1]} values; convert them first.",
+        "i" = if (time_type == "week") "Epiweeks can be built with {.fn MMWRweek::MMWRweek}."
+      ),
+      class = "epidatr__timeset_granularity_mismatch"
+    )
   }
 }
 
 #' Validate and parse a timeset parameter
 #' @keywords internal
-validate_timeset_input <- function(name, value, len = NULL, required = TRUE) {
+validate_timeset_input <- function(name, value, len = NULL, required = TRUE, granularity = c("any", "day", "week")) {
+  granularity <- match.arg(granularity)
   assert_timeset_param(name, value, len = len, required = required)
+  if (granularity != "any" && !is.null(value)) {
+    assert_time_type_matches(name, value, granularity)
+  }
   parse_timeset_input(value)
 }
 
@@ -310,7 +368,27 @@ get_wildcard_equivalent_dates <- function(
 #' @importFrom cli cli_abort cli_warn
 #' @keywords internal
 check_epidata_result <- function(response_content, allow_empty = FALSE) {
+  if (!is.list(response_content)) {
+    cli::cli_abort(
+      "Malformed response envelope: expected a JSON object",
+      class = "epidatr__malformed_envelope"
+    )
+  }
+  result <- response_content$result
+  message <- response_content$message
+  if (!is.numeric(result) || length(result) != 1L || !is.character(message) || length(message) != 1L) {
+    cli::cli_abort(
+      "Malformed response envelope: {.field result} and {.field message} must each be a single value",
+      class = "epidatr__malformed_envelope"
+    )
+  }
   # success is 1, no results is -2, truncated is 2, -1 is generic error
+  if (result %in% c(1, 2) && is.null(response_content$epidata)) {
+    cli::cli_abort(
+      "Malformed response envelope: {.field result} is {result} but {.field epidata} is missing",
+      class = "epidatr__malformed_envelope"
+    )
+  }
   if (response_content$result != 1) {
     if ((response_content$result != -2) && !allow_empty) {
       cli::cli_abort(
