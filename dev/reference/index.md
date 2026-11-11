@@ -89,7 +89,13 @@ Discover endpoints and control how queries are built and fetched
 
 ## Configuration and utilities
 
-Set API keys and handle API data types
+Set the API key
+([`get_api_key()`](https://cmu-delphi.github.io/epidatr/dev/reference/get_api_key.md),
+[`save_api_key()`](https://cmu-delphi.github.io/epidatr/dev/reference/get_api_key.md)),
+which lifts the anonymous rate limits but does not grant access to
+private endpoints. Also the date types that endpoints accept:
+[`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+and `timeset`.
 
 - [`get_api_key()`](https://cmu-delphi.github.io/epidatr/dev/reference/get_api_key.md)
   [`save_api_key()`](https://cmu-delphi.github.io/epidatr/dev/reference/get_api_key.md)
@@ -101,7 +107,12 @@ Set API keys and handle API data types
 
 ## Control caching behavior
 
-Configure an optional persistent cache
+Optionally store API responses on disk so repeated calls do not hit the
+API again. The cache is off by default, and it only stores calls for a
+fixed past version of the data (not “latest”), since those cannot
+change. See
+[`set_cache()`](https://cmu-delphi.github.io/epidatr/dev/reference/set_cache.md)
+for the environment variables that turn it on.
 
 - [`set_cache()`](https://cmu-delphi.github.io/epidatr/dev/reference/set_cache.md)
   : Create or renew a cache for this session
@@ -115,7 +126,10 @@ Configure an optional persistent cache
 
 ## Make requests to private API endpoints
 
-These endpoints require additional authorization to use
+These endpoints serve restricted data sources. Besides an API key, they
+need a separate `auth` token, passed as the `auth` argument. Access is
+granted per data source by Delphi, and the token is not the same as the
+API key. See each endpoint’s page for details.
 
 - [`pvt_cdc()`](https://cmu-delphi.github.io/epidatr/dev/reference/pvt_cdc.md)
   **\[deprecated\]** : CDC total and by topic webpage visits

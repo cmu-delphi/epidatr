@@ -82,6 +82,15 @@ This is a central text for parameter documentation
 
   not used for values, forces later arguments to bind by name
 
+## Value
+
+A [`tibble::tibble`](https://tibble.tidyverse.org/reference/tibble.html)
+with one row per observation: one location at one time (and, for
+versioned data, one issue). The columns are the fields the endpoint
+returns; the API documentation linked at the top of the page describes
+what each one contains. The `fetch_args` argument controls the parsing,
+e.g. `fields` restricts the columns.
+
 ## Data Versioning
 
 Several endpoints support retrieving historical versions of the data.

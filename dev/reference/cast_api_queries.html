@@ -29,7 +29,7 @@ e.g. NWSS: https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html.
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.9</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -215,7 +215,11 @@ parameter.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble::tibble</a></code></p>
+    <p>A <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble::tibble</a></code> with one row per observation: one location at
+one time (and, for versioned data, one issue). The columns are the
+fields the endpoint returns; the API documentation linked at the top of
+the page describes what each one contains. The <code>fetch_args</code> argument
+controls the parsing, e.g. <code>fields</code> restricts the columns.</p>
     </div>
     <div class="section level2">
     <h2 id="data-versioning">Data Versioning<a class="anchor" aria-label="anchor" href="#data-versioning"></a></h2>

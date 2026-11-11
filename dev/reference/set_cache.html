@@ -8,6 +8,18 @@ environmental variables EPIDATR_USE_CACHE=TRUE and
 EPIDATR_CACHE_DIR=&quot;/your/directory/here&quot; in your .Renviron, for
 example by calling file.edit(&quot;~/.Renviron&quot;).
 See the parameters below for some more configurables if you're so inclined.
+The environmental variables, and the set_cache() argument each one is the
+default for, are:
+VariableDefaultset_cache() argument
+EPIDATR_USE_CACHEunset (cache off)none; TRUE enables the cache at startup
+EPIDATR_CACHE_DIRrappdirs::user_cache_dir(&quot;R&quot;, version = &quot;epidatr&quot;)cache_dir
+EPIDATR_CACHE_MAX_AGE_DAYS1days
+EPIDATR_CACHE_MAX_SIZE_MB1024max_size
+EPIDATR_CACHE_LOGFILE&quot;logfile.txt&quot;logfile
+
+
+
+
 set_cache (re)defines the cache to use in a particular R session. This does
 not clear existing data at any previous location, but instead creates a
 handle to the new cache using cachem
@@ -71,6 +83,18 @@ environmental variables EPIDATR_USE_CACHE=TRUE and
 EPIDATR_CACHE_DIR=&quot;/your/directory/here&quot; in your .Renviron, for
 example by calling file.edit(&quot;~/.Renviron&quot;).
 See the parameters below for some more configurables if you're so inclined.
+The environmental variables, and the set_cache() argument each one is the
+default for, are:
+VariableDefaultset_cache() argument
+EPIDATR_USE_CACHEunset (cache off)none; TRUE enables the cache at startup
+EPIDATR_CACHE_DIRrappdirs::user_cache_dir(&quot;R&quot;, version = &quot;epidatr&quot;)cache_dir
+EPIDATR_CACHE_MAX_AGE_DAYS1days
+EPIDATR_CACHE_MAX_SIZE_MB1024max_size
+EPIDATR_CACHE_LOGFILE&quot;logfile.txt&quot;logfile
+
+
+
+
 set_cache (re)defines the cache to use in a particular R session. This does
 not clear existing data at any previous location, but instead creates a
 handle to the new cache using cachem
@@ -133,7 +157,7 @@ the nested-list &quot;json&quot; endpoints are never cached."><meta name="robots
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.9</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -176,7 +200,8 @@ environmental variables <code>EPIDATR_USE_CACHE=TRUE</code> and
 <code>EPIDATR_CACHE_DIR="/your/directory/here"</code> in your <code>.Renviron</code>, for
 example by calling <code>file.edit("~/.Renviron")</code>.
 See the parameters below for some more configurables if you're so inclined.</p>
-<p><code>set_cache</code> (re)defines the cache to use in a particular R session. This does
+<p>The environmental variables, and the <code>set_cache()</code> argument each one is the
+default for, are:</p><table class="table table"><tr><td>Variable</td><td>Default</td><td><code>set_cache()</code> argument</td></tr><tr><td><code>EPIDATR_USE_CACHE</code></td><td>unset (cache off)</td><td>none; <code>TRUE</code> enables the cache at startup</td></tr><tr><td><code>EPIDATR_CACHE_DIR</code></td><td><code>rappdirs::user_cache_dir("R", version = "epidatr")</code></td><td><code>cache_dir</code></td></tr><tr><td><code>EPIDATR_CACHE_MAX_AGE_DAYS</code></td><td><code>1</code></td><td><code>days</code></td></tr><tr><td><code>EPIDATR_CACHE_MAX_SIZE_MB</code></td><td><code>1024</code></td><td><code>max_size</code></td></tr><tr><td><code>EPIDATR_CACHE_LOGFILE</code></td><td><code>"logfile.txt"</code></td><td><code>logfile</code></td></tr></table><p><code>set_cache</code> (re)defines the cache to use in a particular R session. This does
 not clear existing data at any previous location, but instead creates a
 handle to the new cache using <a href="https://cachem.r-lib.org/index.html" class="external-link">cachem</a>
 that seamlessly handles caching for you.
@@ -306,10 +331,10 @@ environment</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   intended).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache directory is /tmp/RtmpqvAAfM.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache directory is /tmp/Rtmpu4QJ0f.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache will be cleared after 14 days and will be pruned if it exceeds 512</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   MB.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The log of cache transactions is stored at /tmp/RtmpqvAAfM/logs.txt.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The log of cache transactions is stored at /tmp/Rtmpu4QJ0f/logs.txt.</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.9</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -266,7 +266,7 @@
       </dl></div><div class="section level2">
       <h2 id="configuration-and-utilities">Configuration and utilities<a class="anchor" aria-label="anchor" href="#configuration-and-utilities"></a></h2>
 
-      <div class="section-desc"><p>Set API keys and handle API data types</p></div>
+      <div class="section-desc"><p>Set the API key (<code><a href="../reference/get_api_key.html">get_api_key()</a></code>, <code><a href="../reference/get_api_key.html">save_api_key()</a></code>), which lifts the anonymous rate limits but does not grant access to private endpoints. Also the date types that endpoints accept: <code><a href="../reference/epirange.html">epirange()</a></code> and <code>timeset</code>.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -296,7 +296,7 @@
       </dl></div><div class="section level2">
       <h2 id="control-caching-behavior">Control caching behavior<a class="anchor" aria-label="anchor" href="#control-caching-behavior"></a></h2>
 
-      <div class="section-desc"><p>Configure an optional persistent cache</p></div>
+      <div class="section-desc"><p>Optionally store API responses on disk so repeated calls do not hit the API again. The cache is off by default, and it only stores calls for a fixed past version of the data (not “latest”), since those cannot change. See <code><a href="../reference/set_cache.html">set_cache()</a></code> for the environment variables that turn it on.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -333,7 +333,7 @@
       </dl></div><div class="section level2">
       <h2 id="make-requests-to-private-api-endpoints">Make requests to private API endpoints<a class="anchor" aria-label="anchor" href="#make-requests-to-private-api-endpoints"></a></h2>
 
-      <div class="section-desc"><p>These endpoints require additional authorization to use</p></div>
+      <div class="section-desc"><p>These endpoints serve restricted data sources. Besides an API key, they need a separate <code>auth</code> token, passed as the <code>auth</code> argument. Access is granted per data source by Delphi, and the token is not the same as the API key. See each endpoint’s page for details.</p></div>
 
       <dl></dl></div><div class="section level2">
 

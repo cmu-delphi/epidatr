@@ -19,8 +19,7 @@ query:
   epiweek number.
 
 - EpiRanges: A range returned by
-  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md),
-  or a list of multiple ranges.
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md).
 
 - Wildcard: The string `"*"`, which requests all available time values.
 

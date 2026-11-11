@@ -48,6 +48,20 @@
   about
   [`clear_cache()`](https://cmu-delphi.github.io/epidatr/dev/reference/clear_cache.md).
 
+- [`pub_paho_dengue()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_paho_dengue.md)
+  now errors when both `issues` and `lag` are given, like the other
+  endpoints that take both
+  ([\#397](https://github.com/cmu-delphi/epidatr/issues/397)).
+
+- [`pub_ecdc_ili()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_ecdc_ili.md),
+  [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md),
+  [`pub_fluview_clinical()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview_clinical.md),
+  and
+  [`pub_kcdc_ili()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_kcdc_ili.md)
+  no longer error on an explicit `issues = NULL` together with `lag` (or
+  vice versa); `NULL` now means “not requested” everywhere
+  ([\#398](https://github.com/cmu-delphi/epidatr/issues/398)).
+
 - The cache now stores the unparsed API response and parses it on every
   read, so `reference_week_day` and `disable_date_parsing` no longer
   need to be part of the cache key and calls with `fields` can now be
@@ -78,6 +92,19 @@
 - [`?timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md)
   now has examples
   ([\#203](https://github.com/cmu-delphi/epidatr/issues/203)).
+- [`?set_cache`](https://cmu-delphi.github.io/epidatr/dev/reference/set_cache.md)
+  now has a table of the cache environment variables
+  ([\#198](https://github.com/cmu-delphi/epidatr/issues/198)).
+- Every endpoint’s `@return` now says what a row of the result
+  represents
+  ([\#204](https://github.com/cmu-delphi/epidatr/issues/204)).
+- The reference page describes the configuration, caching and
+  private-endpoint groups in more detail
+  ([\#238](https://github.com/cmu-delphi/epidatr/issues/238)).
+- [`?timeset`](https://cmu-delphi.github.io/epidatr/dev/reference/timeset.md)
+  no longer says a list of ranges is accepted; the validator never
+  accepted one
+  ([\#399](https://github.com/cmu-delphi/epidatr/issues/399)).
 
 ### Patches
 

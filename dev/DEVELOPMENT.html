@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.9</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,6 +99,7 @@
 <li><label><input type="checkbox">Update <code>cran-comments.md</code>.</label></li>
 <li><label><input type="checkbox"><code>make release-check</code>: preflight, <code>document</code>, URL check, README rebuild, and a CRAN-like <code>R CMD check</code> with incoming checks. Aim for 0 errors, 0 warnings, and 0 notes. Fix problems in PRs to <code>dev</code>.</label></li>
 <li><label><input type="checkbox"><code>make check-full-ci branch=dev</code> to run the full OS/R-version matrix.</label></li>
+<li><label><input type="checkbox">Check reverse dependencies (e.g. <code>epiprocess</code>, <code>epipredict</code>) against <code>dev</code> with <a href="https://github.com/r-devel/recheck" class="external-link"><code>r-devel/recheck</code></a> and fix any regressions. CRAN also runs this on submission.</label></li>
 <li><label><input type="checkbox">Open the release PR from <code>dev</code> into <code>main</code> and merge it.</label></li>
 </ul><p>Submit, from the tip of <code>main</code> with a clean working tree:</p>
 <ul class="task-list"><li><label><input type="checkbox"><code>make check-win</code> (and optionally <code>make check-mac</code>). The maintainer (“cre” in <code>DESCRIPTION</code>) gets the results by email.</label></li>
