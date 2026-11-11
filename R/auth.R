@@ -24,6 +24,13 @@
 #' before/while launching R, or inside an R session with [`Sys.setenv()`],
 #' but these will not persist across sessions.
 #'
+#' The key is stored as plain text, so treat the `.Renviron` file like a
+#' password: if it lives in a project directory, make sure it is excluded from
+#' version control (e.g. by listing `.Renviron` in `.gitignore`). If you would
+#' rather not keep the key in a file, you can read it from an encrypted store
+#' such as the \pkg{keyring} package and pass it to [Sys.setenv()] in your
+#' `.Rprofile`.
+#'
 #' Once an API key is set, it is automatically used for all requests made by
 #' functions in this package.
 #'
