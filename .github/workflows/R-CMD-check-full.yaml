@@ -33,7 +33,7 @@ jobs:
           - { os: ubuntu-latest, r: "oldrel-3" }
           - { os: ubuntu-latest, r: "oldrel-4" }
           # Oldest R version we claim to support
-          - { os: ubuntu-latest, r: "3.5" }
+          - { os: ubuntu-latest, r: "4.1" }
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
