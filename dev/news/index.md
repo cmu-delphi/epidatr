@@ -4,6 +4,9 @@
 
 ### Changes
 
+- The minimum supported R version is now 4.1.0, matching the
+  requirements of our dependencies (e.g. httr2, glue, purrr, readr).
+
 - [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
   [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
   and
