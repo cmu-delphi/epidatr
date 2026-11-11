@@ -23,6 +23,10 @@ and legacy V3 endpoints (such as `pub_fluview()`, `pub_flusurv()`, and `pvt_quid
 to a new set of V5 endpoints, served by `epidata_snapshot()`, `epidata_archive()`,
 `epidata_aux()`, and `epidata_meta()`.
 
+Despite its name, `pub_covidcast()` was not COVID-only: it also served influenza,
+wastewater, and other signals, so use `covidcast_epidata()` or `epidata_meta()`
+to find where a given source lives.
+
 **As of September 22, 2026, the V3 and V4 APIs are deprecated and no longer receive new data.** They still
 serve historical data ingested before that date, so existing queries will not
 break, but any `{pub/pvt}_*` call that needs current data must use the V5

@@ -119,7 +119,7 @@ endpoints:
 
 - **V5 sources** serve active surveillance data through
   `epidata_snapshot()`, `epidata_archive()`, and `epidata_meta()`.
-- **V4 endpoint** `pub_covidcast()` is deprecated and stopped receiving
+- **V4 endpoint** `pub_covidcast()` (despite the name, it also held flu, wastewater, and other non-COVID signals) is deprecated and stopped receiving
   new data on September 22, 2026. It remains available to query
   historical data ingested before that date.
 - **V3 legacy endpoints** (such as `pub_fluview()`, `pub_gft()`, and
