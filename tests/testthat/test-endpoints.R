@@ -253,7 +253,7 @@ test_that("epiweek filters reach the request as whole weeks", {
 test_that("comma-joined signals and geo_types ignore empty items", {
   fa <- fetch_args_list(dry_run = TRUE)
   url <- function(call) utils::URLdecode(call$request$url)
-  snap <- epidata_snapshot("nssp", "sig1, sig2, ", geo_type = "state,", fetch_args = fa)
+  snap <- epidata_snapshot("nssp", "sig1, sig2, ", geo_type = "state, ", fetch_args = fa)
   expect_s3_class(snap, "epidata_call")
   expect_match(url(snap), "signal=sig1,sig2&", fixed = TRUE)
   arch <- epidata_archive("nssp", c("sig1", ""), geo_type = " state ", fetch_args = fa)
