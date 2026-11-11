@@ -97,6 +97,9 @@ Prepare, on `dev`:
   and a CRAN-like `R CMD check` with incoming checks. Aim for 0 errors, 0
   warnings, and 0 notes. Fix problems in PRs to `dev`.
 - [ ] `make check-full-ci branch=dev` to run the full OS/R-version matrix.
+- [ ] Check reverse dependencies (e.g. `epiprocess`, `epipredict`) against `dev`
+  with [`r-devel/recheck`](https://github.com/r-devel/recheck) and fix any
+  regressions. CRAN also runs this on submission.
 - [ ] Open the release PR from `dev` into `main` and merge it.
 
 Submit, from the tip of `main` with a clean working tree:
