@@ -6,7 +6,10 @@
 #' We recommend you register for an API key. While most endpoints are available
 #' without one, there are [limits on API usage for anonymous
 #' users](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html),
-#' including a rate limit. If you regularly request large amounts of data,
+#' including a rate limit (for V5, 60 requests/hour, plus 5 requests/minute for
+#' [epidata_archive()] and 3 requests/minute for [epidata_snapshot()]; see the
+#' [V5 documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5.html#authentication-and-rate-limits)).
+#' If you regularly request large amounts of data,
 #' please consider [registering for an API
 #' key](https://api.delphi.cmu.edu/epidata/admin/registration_form).
 #'
@@ -42,7 +45,9 @@ get_api_key <- function() {
 
   cli::cli_warn(
     c(
-      "No API key found. You will be limited to non-complex queries and encounter rate limits if you proceed.",
+      "No API key found. Anonymous V5 access is limited to 60 requests/hour, with
+       additional limits of 5 requests/minute on archive queries and 3 requests/minute
+       on snapshot queries. Some endpoints also require a key.",
       "i" = "See {.help save_api_key} for details on obtaining and setting API keys."
     ),
     .frequency = "regularly",
