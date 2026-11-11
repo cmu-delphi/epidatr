@@ -32,7 +32,7 @@ jobs:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      DELPHI_EPIDATA_KEY: ${{ secrets.SECRET_EPIDATR_GHACTIONS_DELPHI_EPIDATA_KEY }}
+      DELPHI_EPIDATA_KEY: ${{ secrets.DELPHI_GITHUB_ACTIONS_EPIDATA_API_KEY }}
     steps:
       - uses: actions/checkout@v4
 
