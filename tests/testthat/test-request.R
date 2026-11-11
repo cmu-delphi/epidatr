@@ -268,3 +268,25 @@ test_that("the retry hint reaches the user-facing error", {
     )
   )
 })
+
+test_that("the 414 fallback POSTs with parameters in the body only", {
+  seen <- list()
+  with_mock_perform(
+    function(req) {
+      seen[[length(seen) + 1]] <<- req
+      if (length(seen) == 1) {
+        create_mock_response("{}", status_code = 414L)
+      } else {
+        '{"epidata":[],"result":-2,"message":"no results"}'
+      }
+    },
+    suppressWarnings(pvt_cdc(
+      auth = "k", locations = "ma", epiweeks = epirange(202003, 202304),
+      fetch_args = fetch_args_list(return_empty = TRUE)
+    ))
+  )
+  expect_length(seen, 2)
+  expect_identical(seen[[2]]$method, "POST")
+  expect_false(grepl("?", seen[[2]]$url, fixed = TRUE))
+  expect_named(seen[[2]]$body$data, c("auth", "locations", "epiweeks"), ignore.order = TRUE)
+})
