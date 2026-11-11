@@ -249,3 +249,16 @@ test_that("unknown categorical values warn and are kept", {
   expect_identical(as.character(res), c("msa", "hhs"))
   expect_no_warning(parse_value(info, c("msa", NA)))
 })
+
+test_that("a promised column missing from the response warns when asked", {
+  call <- create_epidata_call(
+    "x/", list(),
+    meta = list(
+      create_epidata_field_info("time_value", "int"),
+      create_epidata_field_info("value", "float")
+    )
+  )
+  df <- data.frame(time_value = 1)
+  expect_warning(parse_data_frame(call, df, warn_dropped_meta = TRUE), class = "epidatr__dropped_meta_fields")
+  expect_no_warning(parse_data_frame(call, df))
+})

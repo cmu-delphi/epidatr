@@ -43,6 +43,9 @@
   `result` 1 or 2 but no `epidata`, now raises `epidatr__malformed_envelope`;
   a non-JSON body raises `epidatr__unparseable_response` with the request URL
   (#389, #390).
+- Classic (V4) endpoints now warn (class `epidatr__dropped_meta_fields`) when
+  the response lacks a column the endpoint promises. `fields` and
+  `disable_missing_meta_warning` suppress it (#391).
 
 - The cache now stores the unparsed API response and parses it on every read,
   so `reference_week_day` and `disable_date_parsing` no longer need to be part

@@ -384,7 +384,9 @@ parse_fetched <- function(epidata_call, response_content, fetch_args) {
     response_content,
     fetch_args$disable_date_parsing,
     fetch_args$reference_week_day,
-    warn_missing_meta = !isTRUE(fetch_args$disable_missing_meta_warning)
+    warn_missing_meta = !isTRUE(fetch_args$disable_missing_meta_warning),
+    warn_dropped_meta = !isTRUE(fetch_args$disable_missing_meta_warning) && is.null(fetch_args$fields) &&
+      identical(epidata_call$response_format, "classic")
   ) %>%
     tibble::as_tibble()
 }
