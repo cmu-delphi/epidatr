@@ -12,9 +12,6 @@ group. To cite this API: David C. Farrow, Logan C. Brooks, Aaron
 
 ## Package options
 
-The `delphi.epidata.key` option specifies the API key to be used when
-making requests to the Epidata API.
-
 The `epidatr.max_retry_wait` option (default 60) is the longest wait, in
 seconds, that epidatr will honour when the API asks it to retry later
 (via a `Retry-After` header). A request asked to wait longer fails right

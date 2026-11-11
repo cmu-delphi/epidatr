@@ -11,6 +11,9 @@
   now filter `geo_values` and `reference_time` server-side via the
   cast-API `geo_value` and `reference_times` parameters
   (cmu-delphi/cast-api#110).
+- [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md)
+  now warns when some rows have no matching aux row (their aux columns
+  are `NA`), and hints that `limit` also caps the aux request.
 - [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
   [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
   and
