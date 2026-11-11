@@ -135,3 +135,25 @@ test_that("malformed response envelopes get a clear error", {
   expect_no_error(check_epidata_result(list(epidata = list(), result = 1, message = "success")))
   expect_no_error(check_epidata_result(list(result = -2, message = "success"), allow_empty = TRUE))
 })
+
+test_that("review fixes: scalar responses and week-type Dates are rejected", {
+  for (b in list("unavailable", 1)) {
+    expect_error(check_epidata_result(b), class = "epidatr__malformed_envelope")
+  }
+  expect_error(
+    pub_wiki("a", time_type = "week", time_values = as.Date("2020-01-01"), fetch_args = fetch_args_list(dry_run = TRUE)),
+    "time_type"
+  )
+})
+
+test_that("unparseable responses error cleanly without leaking the query", {
+  err <- tryCatch(
+    with_mocked_response(
+      create_mock_response('{"epidata": }', url = "https://example.com/cdc/?auth=secretkey"),
+      pvt_cdc(auth = "secretkey", locations = "ma", epiweeks = epirange(202003, 202304))
+    ),
+    error = identity
+  )
+  expect_s3_class(err, "epidatr__unparseable_response")
+  expect_false(grepl("secretkey", conditionMessage(err), fixed = TRUE))
+})

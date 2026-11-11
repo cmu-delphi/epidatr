@@ -459,11 +459,14 @@ request_epidata <- function(
       simplifyDataFrame = simplify
     ),
     error = function(e) {
+      # The query string is dropped because it can hold the auth key.
+      url <- sub("\\?.*$", "", httr2::resp_url(res))
+      msg <- conditionMessage(e)
       cli::cli_abort(
         c(
           "The API response could not be parsed as JSON",
-          "i" = "Request: {.url {httr2::resp_url(res)}}",
-          "x" = conditionMessage(e)
+          "i" = "Request: {.url {url}}",
+          "x" = "{msg}"
         ),
         class = "epidatr__unparseable_response",
         parent = e

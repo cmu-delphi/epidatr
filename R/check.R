@@ -161,7 +161,10 @@ timeset_granularity <- function(value) {
   if (inherits(value, "EpiRange")) {
     value <- value$from
   }
-  if (inherits(value, "Date") || identical(value, "*")) {
+  if (inherits(value, "Date")) {
+    return("day")
+  }
+  if (identical(value, "*")) {
     return(character(0))
   }
   ifelse(nchar(value) == 6, "week", "day")
@@ -307,6 +310,12 @@ get_wildcard_equivalent_dates <- function(
 #' @importFrom cli cli_abort cli_warn
 #' @keywords internal
 check_epidata_result <- function(response_content, allow_empty = FALSE) {
+  if (!is.list(response_content)) {
+    cli::cli_abort(
+      "Malformed response envelope: expected a JSON object",
+      class = "epidatr__malformed_envelope"
+    )
+  }
   result <- response_content$result
   message <- response_content$message
   if (!is.numeric(result) || length(result) != 1L || !is.character(message) || length(message) != 1L) {
