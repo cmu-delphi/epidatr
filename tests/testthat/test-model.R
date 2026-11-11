@@ -252,7 +252,8 @@ test_that("unknown categorical values warn and are kept", {
 
 test_that("a promised column missing from the response warns when asked", {
   call <- create_epidata_call(
-    "x/", list(),
+    "x/",
+    list(),
     meta = list(
       create_epidata_field_info("time_value", "int"),
       create_epidata_field_info("value", "float")

@@ -51,10 +51,12 @@ with_mock_perform <- function(handler, code) {
   force(code)
 }
 
-create_mock_response <- function(body,
-                                 status_code = 200L,
-                                 headers = list("content-type" = "application/json"),
-                                 url = "https://example.com/mocked") {
+create_mock_response <- function(
+  body,
+  status_code = 200L,
+  headers = list("content-type" = "application/json"),
+  url = "https://example.com/mocked"
+) {
   if (is.character(body) && length(body) == 1) {
     body <- charToRaw(body)
   }

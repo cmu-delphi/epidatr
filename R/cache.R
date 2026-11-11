@@ -508,11 +508,15 @@ check_is_cachable_v5 <- function(params) {
     # Comma-separated conditions are OR'd by the API, so every one of them
     # needs a fixed upper bound: "<date" or a "start:end" range.
     parts <- strsplit(params$report_time_query, ",", fixed = TRUE)[[1]]
-    bounded <- vapply(parts, function(part) {
-      dates <- lapply(version_date_tokens(part), parse_version_token)
-      n_dates <- sum(!is.na(do.call(c, c(list(as.Date(NA)), dates))))
-      if (startsWith(part, "<")) n_dates >= 1 else !startsWith(part, ">") && n_dates >= 2
-    }, logical(1))
+    bounded <- vapply(
+      parts,
+      function(part) {
+        dates <- lapply(version_date_tokens(part), parse_version_token)
+        n_dates <- sum(!is.na(do.call(c, c(list(as.Date(NA)), dates))))
+        if (startsWith(part, "<")) n_dates >= 1 else !startsWith(part, ">") && n_dates >= 2
+      },
+      logical(1)
+    )
     if (length(parts) == 0 || !all(bounded)) {
       return(FALSE)
     }

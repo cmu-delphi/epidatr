@@ -38,11 +38,13 @@ test_that("fetch surfaces http errors", {
   # FastAPI's own validation errors put a list of objects under "detail"
   # rather than a plain string; this must not itself crash while formatting.
   detail_body <- jsonlite::toJSON(
-    list(detail = list(list(
-      type = "literal_error",
-      loc = list("query", "source", 0),
-      msg = "Input should be 'nssp' or 'nwss'"
-    ))),
+    list(
+      detail = list(list(
+        type = "literal_error",
+        loc = list("query", "source", 0),
+        msg = "Input should be 'nssp' or 'nwss'"
+      ))
+    ),
     auto_unbox = TRUE
   )
   with_mocked_response(

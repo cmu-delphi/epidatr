@@ -81,12 +81,14 @@ replay_fixture <- function(spec, fetch_args = fetch_args_list()) {
     n = file.size(testthat::test_path("fixtures", spec$file))
   )
   result <- NULL
-  with_mocked_response( # nolint: object_usage_linter.
-    create_mock_response( # nolint: object_usage_linter.
+  # nolint start: object_usage_linter.
+  with_mocked_response(
+    create_mock_response(
       body,
       headers = list("content-type" = spec$content_type)
     ),
     result <- spec$call(fetch_args)
   )
+  # nolint end
   result
 }

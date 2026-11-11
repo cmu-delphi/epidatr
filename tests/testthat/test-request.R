@@ -4,16 +4,22 @@
 
 retry_resp <- function(status, retry_after = NULL, date = NULL, body = NULL) {
   headers <- list("content-type" = "application/json")
-  if (!is.null(retry_after)) headers[["Retry-After"]] <- retry_after
-  if (!is.null(date)) headers[["Date"]] <- date
+  if (!is.null(retry_after)) {
+    headers[["Retry-After"]] <- retry_after
+  }
+  if (!is.null(date)) {
+    headers[["Date"]] <- date
+  }
   if (is.null(body)) {
     body <- '{"detail": "Data temporarily unavailable.", "code": "database_table_unavailable"}'
   }
-  create_mock_response( # nolint: object_usage_linter.
+  # nolint start: object_usage_linter.
+  create_mock_response(
     body,
     status_code = status,
     headers = headers
   )
+  # nolint end
 }
 
 test_that("retry_after_seconds() parses Retry-After and never errors", {
@@ -29,7 +35,8 @@ test_that("retry_after_seconds() parses Retry-After and never errors", {
   # An HTTP-date is measured from the response's Date header.
   expect_equal(
     retry_after_seconds(retry_resp(
-      503, "Wed, 21 Oct 2015 07:28:00 GMT",
+      503,
+      "Wed, 21 Oct 2015 07:28:00 GMT",
       date = "Wed, 21 Oct 2015 07:27:00 GMT"
     )),
     60
@@ -37,7 +44,8 @@ test_that("retry_after_seconds() parses Retry-After and never errors", {
   # A date in the past counts as no header.
   expect_identical(
     retry_after_seconds(retry_resp(
-      503, "Wed, 21 Oct 2015 07:28:00 GMT",
+      503,
+      "Wed, 21 Oct 2015 07:28:00 GMT",
       date = "Wed, 21 Oct 2015 08:00:00 GMT"
     )),
     NA_real_
@@ -142,7 +150,9 @@ local_retry_loop <- function(responses, env = parent.frame()) {
 test_that("do_request() fails fast on a long Retry-After instead of sleeping", {
   withr::local_options(epidatr.max_retry_wait = NULL)
   call <- pvt_cdc(
-    auth = "x", epiweeks = epirange(202003, 202304), locations = "ma",
+    auth = "x",
+    epiweeks = epirange(202003, 202304),
+    locations = "ma",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   state <- local_retry_loop(list(retry_resp(503, "3600")))
@@ -158,7 +168,9 @@ test_that("do_request() fails fast on a long Retry-After instead of sleeping", {
 test_that("do_request() still retries short Retry-After waits", {
   withr::local_options(epidatr.max_retry_wait = NULL)
   call <- pvt_cdc(
-    auth = "x", epiweeks = epirange(202003, 202304), locations = "ma",
+    auth = "x",
+    epiweeks = epirange(202003, 202304),
+    locations = "ma",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   state <- local_retry_loop(list(
@@ -174,7 +186,9 @@ test_that("do_request() still retries short Retry-After waits", {
 test_that("do_request() does not retry a 429 without Retry-After", {
   withr::local_options(epidatr.max_retry_wait = NULL)
   call <- pvt_cdc(
-    auth = "x", epiweeks = epirange(202003, 202304), locations = "ma",
+    auth = "x",
+    epiweeks = epirange(202003, 202304),
+    locations = "ma",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   state <- local_retry_loop(list(retry_resp(
@@ -192,7 +206,9 @@ test_that("do_request() does not retry a 429 without Retry-After", {
 test_that("do_request() respects a larger epidatr.max_retry_wait", {
   withr::local_options(epidatr.max_retry_wait = 7200)
   call <- pvt_cdc(
-    auth = "x", epiweeks = epirange(202003, 202304), locations = "ma",
+    auth = "x",
+    epiweeks = epirange(202003, 202304),
+    locations = "ma",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   state <- local_retry_loop(list(retry_resp(503, "3600")))
@@ -256,7 +272,9 @@ test_that("HTTP errors say when the server suggests retrying", {
 
 test_that("the retry hint reaches the user-facing error", {
   call <- pvt_cdc(
-    auth = "x", epiweeks = epirange(202003, 202304), locations = "ma",
+    auth = "x",
+    epiweeks = epirange(202003, 202304),
+    locations = "ma",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   with_mocked_response(
@@ -281,7 +299,9 @@ test_that("the 414 fallback POSTs with parameters in the body only", {
       }
     },
     suppressWarnings(pvt_cdc(
-      auth = "k", locations = "ma", epiweeks = epirange(202003, 202304),
+      auth = "k",
+      locations = "ma",
+      epiweeks = epirange(202003, 202304),
       fetch_args = fetch_args_list(return_empty = TRUE)
     ))
   )

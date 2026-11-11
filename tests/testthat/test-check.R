@@ -38,7 +38,9 @@ test_that("assert_report_time_param", {
     "2020-01-01T13:45:00Z",
     as.POSIXct("2020-01-01 13:45:00", tz = "UTC")
   )
-  for (value in ok) expect_no_error(assert_report_time_param("name", value, len = 1))
+  for (value in ok) {
+    expect_no_error(assert_report_time_param("name", value, len = 1))
+  }
 
   expect_error(assert_report_time_param("name", NULL))
   expect_no_error(assert_report_time_param("name", NULL, required = FALSE))
@@ -71,7 +73,9 @@ test_that("format_report_time_bound", {
     list("2025-01-01T00:00:00+00:00", NA_character_), # offset
     list("2025-01-01T00:00:00-05:00", NA_character_) # offset
   )
-  for (case in cases) expect_equal(format_report_time_bound(case[[1]]), case[[2]])
+  for (case in cases) {
+    expect_equal(format_report_time_bound(case[[1]]), case[[2]])
+  }
 })
 
 test_that("assert_timeset_param", {
@@ -140,7 +144,9 @@ test_that("malformed response envelopes get a clear error", {
     list(result = c(1L, 1L), message = "success"),
     list(result = 1, message = "success")
   )
-  for (b in bad) expect_error(check_epidata_result(b), class = "epidatr__malformed_envelope")
+  for (b in bad) {
+    expect_error(check_epidata_result(b), class = "epidatr__malformed_envelope")
+  }
   expect_no_error(check_epidata_result(list(epidata = list(), result = 1, message = "success")))
   expect_no_error(check_epidata_result(list(result = -2, message = "success"), allow_empty = TRUE))
 })
@@ -152,7 +158,8 @@ test_that("review fixes: scalar responses and week-type Dates are rejected", {
   expect_error(
     pub_wiki(
       "a",
-      time_type = "week", time_values = as.Date("2020-01-01"),
+      time_type = "week",
+      time_values = as.Date("2020-01-01"),
       fetch_args = fetch_args_list(dry_run = TRUE)
     ),
     "expects week values"

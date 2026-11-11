@@ -27,8 +27,11 @@ local({
     # Match pkgdown's figure settings (see pkgdown:::fig_save_args()) so the
     # committed PNGs look like ones the website would have generated itself.
     knitr::opts_chunk$set(
-      fig.width = 7.2916667, fig.asp = 0.618, dpi = 96,
-      fig.retina = 2, dev = "ragg_png"
+      fig.width = 7.2916667,
+      fig.asp = 0.618,
+      dpi = 96,
+      fig.retina = 2,
+      dev = "ragg_png"
     )
 
     # Match the other knit-time settings pkgdown::build_article() applies.
