@@ -6,10 +6,8 @@
 cast_queries <- tibble::tribble(
   ~source, ~signal, ~geo_type,
   "nssp", "pct_ed_visits_influenza", "state",
-  # TODO: Ignore county until row limits are in-place server side.
-  # "nssp",     "pct_ed_visits_influenza",         "county",
-  # TODO: Nhsn is currently without data.
-  # "nhsn",     "confirmed_admissions_flu_ew",         "state",
+  "nssp", "pct_ed_visits_influenza", "county",
+  "nhsn", "confirmed_admissions_flu_ew", "state",
   "pophive", "flu_pct_ed", "state",
   "pophive", "flu_n_ed", "nation",
   "nwss", "covid_avg_conc", "sewershed",

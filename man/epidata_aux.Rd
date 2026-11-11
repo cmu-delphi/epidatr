@@ -44,8 +44,9 @@ base: each key it narrows to at most 10 distinct values is filtered to those.}
 
 \item{snapshot_date}{Date, \code{POSIXt}, UTC timestamp string (e.g.
 \code{"2025-10-16T13:45:00Z"}), \code{"latest"}, or \code{NULL}. Return auxiliary data
-as it appeared at this date or instant (one row per key, the most recent
-version active then). \code{"latest"} uses today's date. Use \code{NULL} (default)
+as it appeared at the end of this UTC day (one row per key, the most
+recent version active then). The time of day is ignored.
+\code{"latest"} uses today's date. Use \code{NULL} (default)
 to return the full version history filtered by \code{report_time}. Mutually
 exclusive with \code{report_time}. Only used when \code{source} is a string.}
 
@@ -53,6 +54,8 @@ exclusive with \code{report_time}. Only used when \code{source} is a string.}
 auxiliary data to retrieve. Accepts comparison operators (e.g.,
 \code{"<2025-10-16"}, \code{">=2025-10-16"}, or \code{"<=2025-10-16T13:45:00Z"} for a
 UTC timestamp bound) or an \code{\link[=epirange]{epirange()}} for an inclusive date range.
+The server reads a timestamp bound as its UTC date, so
+\code{"<=2025-10-16T13:45:00Z"} means \code{"<=2025-10-16"}.
 Bare dates and the \code{"="} operator are not accepted: use
 \code{snapshot_date} for point-in-time data. Mutually exclusive with
 \code{snapshot_date}. Only used when \code{source} is a string.}

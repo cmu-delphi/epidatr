@@ -45,6 +45,7 @@ do_request <- function(
   }
 
   # Prepare the request with user agent, headers, timeout, and retry logic.
+  max_wait <- max_retry_wait()
   req <- req %>%
     httr2::req_user_agent(paste0(
       "epidatr/",
@@ -54,16 +55,8 @@ do_request <- function(
     httr2::req_timeout(timeout_seconds) %>%
     httr2::req_retry(
       max_tries = 3,
-      is_transient = function(resp) {
-        httr2::resp_status(resp) %in%
-          c(
-            429, # Too Many Requests
-            500, # Internal Server Error
-            502, # Bad Gateway
-            503, # Service Unavailable
-            504 # Gateway Timeout
-          )
-      }
+      is_transient = function(resp) is_transient_response(resp, max_wait),
+      after = retry_after_seconds
     ) %>%
     # Use requested method.
     httr2::req_method(http_method) %>%
@@ -90,7 +83,112 @@ do_request <- function(
   res
 }
 
+#' Retry policy for transient HTTP errors
+#'
+#' `is_transient_response()` decides whether `httr2::req_retry()` should retry
+#' a response. Server and gateway errors (500, 502, 503, 504) are retried, and
+#' a 429 only when the server says when to come back (the API's rate limits
+#' are fixed windows, so retrying a few seconds later would fail again). Any
+#' response asking us to wait longer than `max_wait` seconds is not retried:
+#' the API answers 503 with `Retry-After: 3600` while a table is being
+#' rebuilt, and sleeping for an hour, twice, is worse than failing with the
+#' server's message.
+#'
+#' `retry_after_seconds()` parses the `Retry-After` header. It is used both as
+#' the policy's input and as `req_retry()`'s `after` callback, so the two agree.
+#' It returns `NA` (meaning: use httr2's default backoff) for a missing,
+#' malformed, negative, or non-finite value, and never errors: an error inside
+#' the retry loop could leave a streaming connection open.
+#'
+#' @param resp an `httr2_response`
+#' @param max_wait the longest server-requested wait to honour, in seconds
+#' @keywords internal
+#' @noRd
+is_transient_response <- function(resp, max_wait) {
+  after <- retry_after_seconds(resp)
+  if (isTRUE(after > max_wait)) {
+    return(FALSE)
+  }
+  status <- httr2::resp_status(resp)
+  if (status == 429) {
+    return(!is.na(after))
+  }
+  status %in%
+    c(
+      500, # Internal Server Error
+      502, # Bad Gateway
+      503, # Service Unavailable
+      504 # Gateway Timeout
+    )
+}
+
+#' @noRd
+retry_after_seconds <- function(resp) {
+  after <- tryCatch(
+    suppressWarnings(httr2::resp_retry_after(resp)),
+    error = function(e) NA_real_
+  )
+  if (!is.numeric(after) || length(after) != 1 || !is.finite(after) || after < 0) {
+    return(NA_real_)
+  }
+  as.numeric(after)
+}
+
+#' The longest server-requested retry wait to honour, from the
+#' `epidatr.max_retry_wait` option (default 60 seconds).
+#' @keywords internal
+#' @noRd
+max_retry_wait <- function() {
+  value <- getOption("epidatr.max_retry_wait", 60)
+  if (!is.numeric(value) || length(value) != 1 || !is.finite(value) || value < 0) {
+    cli::cli_abort(
+      "The {.code epidatr.max_retry_wait} option must be a single finite,
+      non-negative number of seconds.",
+      class = "epidatr__invalid_option"
+    )
+  }
+  as.numeric(value)
+}
+
+#' A sentence saying when the server suggests retrying, or NULL if it gave no
+#' usable `Retry-After` (or an implausibly long one).
+#' @keywords internal
+#' @noRd
+retry_hint <- function(resp) {
+  after <- retry_after_seconds(resp)
+  if (is.na(after) || after <= 0 || after > 24 * 60 * 60) {
+    return(NULL)
+  }
+  plural <- function(n, unit) paste(n, if (n == 1) unit else paste0(unit, "s"))
+  seconds <- max(1, round(after))
+  minutes <- round(after / 60)
+  wait <- if (seconds < 60) {
+    plural(seconds, "second")
+  } else if (minutes < 90) {
+    plural(minutes, "minute")
+  } else {
+    plural(round(minutes / 60), "hour")
+  }
+  paste0("The server suggests retrying in about ", wait, ".")
+}
+
+# Builds the detail shown under httr2's HTTP error message. httr2 shows a
+# single string as one bullet, so the server's message and any retry hint are
+# combined into one string.
 error_body_message <- function(resp) {
+  message <- error_body_detail(resp)
+  if (length(message) > 0) {
+    message <- paste(message, collapse = " ")
+  }
+  hint <- tryCatch(retry_hint(resp), error = function(e) NULL)
+  parts <- c(message, hint)
+  if (length(parts) == 0) {
+    return(NULL)
+  }
+  paste(parts, collapse = " ")
+}
+
+error_body_detail <- function(resp) {
   tryCatch(
     {
       if (!httr2::resp_has_body(resp)) {

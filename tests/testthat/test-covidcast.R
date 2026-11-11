@@ -1,5 +1,11 @@
 test_that("covidcast", {
-  covidcast_api <- epidatr::covidcast_epidata()
+  # covidcast-meta.json is the real covidcast/meta response trimmed to the
+  # fb-survey source and its smoothed_cli signal, so this runs offline.
+  meta <- readChar(
+    test_path("fixtures", "covidcast-meta.json"),
+    file.size(test_path("fixtures", "covidcast-meta.json"))
+  )
+  covidcast_api <- with_mocked_response(meta, epidatr::covidcast_epidata()) # nolint: object_usage_linter.
   expect_identical(
     covidcast_api$sources$`fb-survey`$signals$smoothed_cli$call(
       "nation",

@@ -5,6 +5,7 @@
 ^.*\..Rcheck$
 ^\.Rproj\.user$
 ^DEVELOPMENT\.md$
+^AGENTS\.md$
 ^doc$
 ^shiny$
 ^docs$
@@ -28,3 +29,6 @@
 ^vignettes/.*\.Rmd\.orig$
 ^vignettes/precompile\.R$
 ^man-roxygen$
+^\.urlignore$
+^\.agent-shell$
+^\.claude$

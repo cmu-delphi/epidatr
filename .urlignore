@@ -1,0 +1,9 @@
+# Sites that flag as broken in urlchecker::url_check() but work fine in a
+# browser. Verified by hand before ignoring; re-check periodically.
+
+# Blocks HEAD requests (curl gets 400, GET works fine).
+https://about.meta.com/*
+
+# Server doesn't send its intermediate cert, so clients without it already
+# cached (e.g. curl without AIA fetching) fail the chain; browsers work.
+https://lists.andrew.cmu.edu/*

@@ -147,8 +147,7 @@ pvt_cdc <- function(
 #' @param fips_code string. A 5-digit fips county code, zero-padded.
 #' @return [`tibble::tibble`]
 #'
-#' @seealso [`pub_covid_hosp_facility()`]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [`pub_covid_hosp_facility()`], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @export
 pub_covid_hosp_facility_lookup <- function(
@@ -252,8 +251,7 @@ pub_covid_hosp_facility_lookup <- function(
 #'
 #' @importFrom checkmate test_class test_integerish test_character
 #'
-#' @seealso [`pub_covid_hosp_facility()`], [`epirange()`]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [`pub_covid_hosp_facility()`], [`epirange()`], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @export
 #
@@ -1162,8 +1160,7 @@ pub_covid_hosp_state_timeseries <- function(
 #'   geo_type = "state",
 #' )
 #'
-#' @seealso [pub_covidcast()],[covidcast_epidata()]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [pub_covidcast()],[covidcast_epidata()], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @export
 pub_covidcast_meta <- function(
@@ -1265,8 +1262,7 @@ pub_covidcast_meta <- function(
 #'
 #' @inheritSection .epidatr_shared_params Data Versioning
 #'
-#' @seealso [pub_covidcast_meta()], [covidcast_epidata()], [epirange()]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [pub_covidcast_meta()], [covidcast_epidata()], [epirange()], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @export
 pub_covidcast <- function(
@@ -1401,8 +1397,7 @@ pub_covidcast <- function(
 #' @inheritParams .epidatr_shared_params
 #' @return list. If `source` is `NULL`, a named list of source metadata objects.
 #'   If `source` is specified, the metadata list for that source.
-#' @seealso [epidata_snapshot()], [epidata_archive()], [epidata()], [epirange()]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [epidata_snapshot()], [epidata_archive()], [epidata()], [epirange()], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @export
 epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
@@ -1460,13 +1455,16 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #'   `NULL` (default) returns all fill methods.
 #' @param snapshot_date Date, `POSIXt`, UTC timestamp string (e.g.
 #'   `"2025-10-16T13:45:00Z"`), or `NULL`. The snapshot returns the
-#'   version of the data that was current then. `NULL` returns the latest
-#'   available version.
+#'   version of the data that was current at the end of that UTC day. The
+#'   time of day is ignored, so `"2025-10-16T10:00:00Z"` and `"2025-10-16"`
+#'   return the same release. `NULL` returns the latest available version.
 #' @param as_of `r lifecycle::badge("deprecated")` Use `snapshot_date` instead.
 #' @param report_time String or [`epirange()`]. A filter on the `report_time`
 #'   column. Accepts comparison operators (e.g., `"<2025-10-16"`,
 #'   `">=2025-10-16"`, or `"<=2025-10-16T13:45:00Z"` for a UTC timestamp
-#'   bound) or an [`epirange()`] for an inclusive date range.
+#'   bound) or an [`epirange()`] for an inclusive date range. The server
+#'   reads a timestamp bound as its UTC date, so
+#'   `"<=2025-10-16T13:45:00Z"` means `"<=2025-10-16"`.
 #'   Bare dates and the `"="` operator are not accepted: use `snapshot_date`
 #'   for point-in-time data. Internally maps to the `report_time_query` API
 #'   parameter.
@@ -1495,8 +1493,7 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #' query came back empty. Pass `fetch_args_list(return_empty = TRUE)` to
 #' suppress these errors and warnings and get an empty tibble back instead.
 #'
-#' @seealso [epidata_meta()], [epirange()]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [epidata_meta()], [epirange()], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @name cast_api_queries
 NULL
@@ -1550,8 +1547,8 @@ epidata_snapshot <- function(
   assert_character_param("fill_method", fill_method, len = 1, required = FALSE)
   assert_report_time_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
   # Accept comma-joined signal/geo_type strings.
-  signals <- unique(unlist(strsplit(signals, ",", fixed = TRUE)))
-  geo_type <- unique(unlist(strsplit(geo_type, ",", fixed = TRUE)))
+  signals <- unique(trimws(unlist(strsplit(signals, ",", fixed = TRUE))))
+  geo_type <- unique(trimws(unlist(strsplit(geo_type, ",", fixed = TRUE))))
   # One request per geo_type. The cast-API accepts a single geo_type per query,
   # but signals are sent comma-joined in one request each.
   fetched <- lapply(geo_type, function(g) {
@@ -1647,8 +1644,8 @@ epidata_archive <- function(
     report_time <- issues
   }
   # Accept comma-joined signal/geo_type strings.
-  signals <- unique(unlist(strsplit(signals, ",", fixed = TRUE)))
-  geo_type <- unique(unlist(strsplit(geo_type, ",", fixed = TRUE)))
+  signals <- unique(trimws(unlist(strsplit(signals, ",", fixed = TRUE))))
+  geo_type <- unique(trimws(unlist(strsplit(geo_type, ",", fixed = TRUE))))
   # One request per geo_type: the cast-API accepts a single geo_type per query,
   # but signals are sent comma-joined in one request each.
   fetched <- lapply(geo_type, function(g) {
@@ -1731,14 +1728,17 @@ epidata_archive <- function(
 #'   `source` is a string.
 #' @param snapshot_date Date, `POSIXt`, UTC timestamp string (e.g.
 #'   `"2025-10-16T13:45:00Z"`), `"latest"`, or `NULL`. Return auxiliary data
-#'   as it appeared at this date or instant (one row per key, the most recent
-#'   version active then). `"latest"` uses today's date. Use `NULL` (default)
+#'   as it appeared at the end of this UTC day (one row per key, the most
+#'   recent version active then). The time of day is ignored.
+#'   `"latest"` uses today's date. Use `NULL` (default)
 #'   to return the full version history filtered by `report_time`. Mutually
 #'   exclusive with `report_time`. Only used when `source` is a string.
 #' @param report_time String or [`epirange()`] specifying the version of the
 #'   auxiliary data to retrieve. Accepts comparison operators (e.g.,
 #'   `"<2025-10-16"`, `">=2025-10-16"`, or `"<=2025-10-16T13:45:00Z"` for a
 #'   UTC timestamp bound) or an [`epirange()`] for an inclusive date range.
+#'   The server reads a timestamp bound as its UTC date, so
+#'   `"<=2025-10-16T13:45:00Z"` means `"<=2025-10-16"`.
 #'   Bare dates and the `"="` operator are not accepted: use
 #'   `snapshot_date` for point-in-time data. Mutually exclusive with
 #'   `snapshot_date`. Only used when `source` is a string.
@@ -1808,7 +1808,8 @@ epidata_aux.default <- function(
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time, required = FALSE)
 
   if (identical(snapshot_date, "latest")) {
-    snapshot_date <- Sys.Date()
+    # the API's dates are UTC; a local date can be a day behind
+    snapshot_date <- utc_today()
   }
 
   assert_report_time_param("snapshot_date", snapshot_date, len = 1, required = FALSE)
@@ -2401,8 +2402,7 @@ pub_fluview_clinical <- function(
 #' @inheritParams .epidatr_shared_params
 #'
 #' @return [`tibble::tibble`]
-#' @seealso [`pub_fluview()`]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [`pub_fluview()`], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @export
 pub_fluview_meta <- function(fetch_args = fetch_args_list()) {
@@ -2674,8 +2674,7 @@ pub_kcdc_ili <- function(
 #' }
 #' @inheritParams .epidatr_shared_params
 #' @return [`list`]
-#' @seealso [`pvt_norostat()`]
-#' @inheritSection .epidatr_shared_params See also
+#' @seealso [`pvt_norostat()`], `vignette("signal-discovery")`
 #' @keywords endpoint
 #' @export
 pvt_meta_norostat <- function(auth, fetch_args = fetch_args_list()) {

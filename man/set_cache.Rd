@@ -31,8 +31,11 @@ variable is \code{EPIDATR_CACHE_MAX_SIZE_MB}.}
 cache directory. By default, it is \code{"logfile.txt"}. The environmental
 variable is \code{EPIDATR_CACHE_LOGFILE}.}
 
-\item{confirm}{whether to confirm directory creation. default is \code{TRUE};
-should only be set in non-interactive scripts}
+\item{confirm}{whether to ask before creating a missing \code{cache_dir}. Default
+is \code{TRUE}. In non-interactive sessions there is no one to ask, so a missing
+directory is not created and the cache stays off; set \code{confirm = FALSE} to
+create it. When the cache is enabled at startup via \code{EPIDATR_USE_CACHE}, a
+missing directory is created without asking.}
 
 \item{startup}{indicates whether the function is being called on
 startup. Affects suppressability of the messages. Default is \code{FALSE}.}
@@ -48,7 +51,7 @@ the cache using either this function for a given session, or environmental
 variables for a persistent cache.
 The typical recommended workflow for using the cache is to set the
 environmental variables \code{EPIDATR_USE_CACHE=TRUE} and
-\code{EPIDATR_CACHE_DIRECTORY="/your/directory/here"}in your \code{.Renviron}, for
+\code{EPIDATR_CACHE_DIR="/your/directory/here"} in your \code{.Renviron}, for
 example by calling \code{file.edit("~/.Renviron")}.
 See the parameters below for some more configurables if you're so inclined.
 
@@ -58,15 +61,22 @@ handle to the new cache using \href{https://cachem.r-lib.org/index.html}{cachem}
 that seamlessly handles caching for you.
 Say your cache is normally stored in some default directory, but for the
 current session you want to save your results in
-\verb{~/my/temporary/savedirectory}, then you would call \code{set_cache(dir = "~/my/temporary/savedirectory")}.
+\verb{~/my/temporary/savedirectory}, then you would call
+\code{set_cache(cache_dir = "~/my/temporary/savedirectory")}.
 Or if you know the data from 2 days ago is wrong, you could call
 \code{set_cache(days = 1)} to clear older data whenever the cache is referenced.
 In both cases, these changes would only last for a single session (though the
 deleted data would be gone permanently!).
 
-An important feature of the caching in this package is that only calls which
-specify either \code{issues} before a certain date, or \code{as_of} before a certain
-date will actually cache. For example the call
+An important feature of the caching in this package is that only calls for
+a fixed past version of the data will actually cache. For V5 endpoints, that
+means \code{epidata_snapshot()} with a \code{snapshot_date} at least two days ago
+(UTC), or \code{epidata_archive()} with a \code{report_time} range (or \code{"<date"})
+ending at least two days ago; a "latest" snapshot or an open-ended archive
+won't cache. The extra day allows for data loaded after its nominal
+release time. For legacy
+endpoints, it means specifying either \code{issues} before a certain date, or
+\code{as_of} before a certain date. For example the call
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{pub_covidcast(
   source = "jhu-csse",

@@ -20,18 +20,19 @@
 #'   interest.
 #'
 #' @examplesIf curl::has_internet() && Sys.getenv("DELPHI_EPIDATA_KEY") != ""
-#' library(magrittr)
-#'
-#' call <- pub_covidcast(
-#'   source = "jhu-csse",
-#'   signals = "confirmed_7dav_incidence_prop",
-#'   time_type = "day",
+#' # Build the request without sending it
+#' call <- epidata_snapshot(
+#'   source = "nssp",
+#'   signals = "pct_ed_visits_influenza",
 #'   geo_type = "state",
-#'   time_values = epirange(20200601, 20200801),
-#'   geo_values = c("ca", "fl"),
+#'   geo_values = c("pa", "ca"),
+#'   reference_time = epirange("2024-12-01", "2024-12-31"),
 #'   fetch_args = fetch_args_list(dry_run = TRUE)
 #' )
-#' call %>% fetch()
+#' call
+#'
+#' # Send it and get the data
+#' fetch(call)
 #'
 #' @param endpoint the epidata endpoint to call
 #' @param params the parameters to pass to the epidata endpoint
@@ -248,8 +249,10 @@ fetch_args_list <- function(
   assert_character(base_url, null.ok = TRUE, len = 1L, any.missing = FALSE)
   assert_logical(dry_run, null.ok = FALSE, len = 1L, any.missing = TRUE)
   assert_logical(refresh_cache, null.ok = FALSE, len = 1L, any.missing = FALSE)
-  assert_numeric(
+  assert_integerish(
     reference_week_day,
+    lower = 1,
+    upper = 7,
     null.ok = FALSE,
     len = 1L,
     any.missing = FALSE
@@ -324,12 +327,14 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 
   # If cacheable and the value is in cache, return the cached value.
   is_cachable <- check_is_cachable(epidata_call, fetch_args)
-  should_write_cache <- is_cachable ||
-    (fetch_args$refresh_cache && is_cache_enabled())
+  # refresh_cache skips the read but should only write what a later default
+  # call could legitimately read back, so apply the same guards (#388).
+  fetch_args_no_refresh <- fetch_args
+  fetch_args_no_refresh$refresh_cache <- FALSE
+  should_write_cache <- check_is_cachable(epidata_call, fetch_args_no_refresh)
 
   if (should_write_cache) {
-    target <- request_url(epidata_call, "json", fetch_args$fields)
-    hashed <- openssl::md5(target)
+    hashed <- openssl::md5(cache_key(epidata_call, fetch_args))
   }
 
   if (is_cachable) {
@@ -349,7 +354,8 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
       simplify = !fetch_args$disable_data_frame_parsing
     )
 
-    if (fetch_args$return_empty && length(response_content) == 0) {
+    empty_response <- fetch_args$return_empty && length(response_content) == 0
+    if (empty_response) {
       fetched <- tibble::tibble()
     } else if (fetch_args$disable_data_frame_parsing) {
       fetched <- response_content
@@ -365,12 +371,33 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     }
   })
 
-  # Add to cache if appropriate.
-  if (should_write_cache) {
+  # Add to cache if appropriate. With return_empty, an API error response also
+  # comes back empty; don't store it, so a later default call still raises the
+  # error instead of reading back an empty result (#388).
+  if (should_write_cache && !empty_response) {
     cache_environ$epidatr_cache$set(hashed, list(fetched, Sys.time(), runtime))
   }
 
   return(fetched)
+}
+
+#' Cache key for an epidata call
+#'
+#' The cache stores parsed tibbles, so the key must cover every fetch setting
+#' that changes parsing, not just the URL. `reference_week_day` changes how
+#' epiweeks become dates; it is appended only when it differs from the default.
+#' The epidatr version is a prefix, so entries from another version are never
+#' read (their stored shape may differ).
+#' @keywords internal
+cache_key <- function(epidata_call, fetch_args) {
+  key <- paste0(
+    "epidatr", as.character(utils::packageVersion("epidatr")), ":",
+    request_url(epidata_call, "json", fetch_args$fields)
+  )
+  if (!isTRUE(fetch_args$reference_week_day == formals(fetch_args_list)$reference_week_day)) {
+    key <- paste0(key, "#reference_week_day=", fetch_args$reference_week_day)
+  }
+  key
 }
 
 #' Fetches the data.

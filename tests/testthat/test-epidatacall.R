@@ -260,3 +260,10 @@ test_that("fetch_args_list triggers deprecation warnings for debug and format_ty
     "The `format_type` argument is now managed internally"
   )
 })
+
+test_that("fetch_args_list rejects an out-of-range reference_week_day", {
+  for (bad in list(0, 8, 2.5, Inf)) {
+    expect_error(fetch_args_list(reference_week_day = bad))
+  }
+  expect_no_error(fetch_args_list(reference_week_day = 7))
+})

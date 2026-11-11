@@ -1,23 +1,82 @@
-# epidatr 1.4.1
+# epidatr (development version)
 
 ## Changes
 
 - `epidata_snapshot()`, `epidata_archive()`, and `epidata()` now filter
   `geo_values` and `reference_time` server-side via the cast-API `geo_value`
   and `reference_times` parameters (cmu-delphi/cast-api#110).
+- `epidata_snapshot()`, `epidata_archive()`, and `epidata_aux()` results are now
+  cached (when the cache is enabled) for fixed past versions: a `snapshot_date`
+  at least two days ago (UTC), or a `report_time` range or `"<date"` whose end
+  is at least two days ago. "Latest" snapshots, open-ended archives
+  (including a `report_time` vector with any open-ended condition), and calls
+  with a row `limit` are not cached. Previously no V5 query was ever cached.
+- `epidata_aux(snapshot_date = "latest")` now uses today's UTC date, so it no
+  longer misses releases made after midnight UTC in time zones behind UTC.
+- The cache now stores the unparsed API response and parses it on every read,
+  so `reference_week_day` and `disable_date_parsing` no longer need to be part
+  of the cache key and calls with `fields` can now be cached. Existing cache
+  entries are ignored and re-fetched.
+- The epidatr version is now part of the cache key, so cache entries written by
+  a different epidatr version are never read back.
+- `fetch_args_list()` now rejects a `reference_week_day` that isn't an integer
+  from 1 to 7.
+- `cache_info()` now also reports `enabled`, `n_entries` and `size_mb`, works when
+  the cache is off (inspecting the default directory), and prints a hint about
+  `clear_cache()`.
 
 ## Documentation
 
+- `?set_cache` now names the `EPIDATR_CACHE_DIR` environment variable and
+  `cache_dir` argument correctly (#394); the `?epidata_call` example no
+  longer makes a live request (#406); help pages no longer show "See also"
+  twice.
 - `fill_method` values are `"source"`, `"ave"`, and `"zero"` (previously
   documented as `"fill_ave"` and `"fill_zero"`).
+- Vignettes: the reporting-lag example now converts `report_time` with
+  `as.Date()` before subtracting `reference_time` (since 1.4.0 the direct
+  subtraction gave a meaningless value and lag filters returned no rows);
+  metadata output is no longer truncated to 4 sources; the
+  `pub_dengue_nowcast()` example uses dates that have data; the revision-history
+  plot now shows the full series as known on each release date (the archive
+  only lists changed values); vignettes and README re-rendered with 1.4.x
+  output, each vignette in a fresh R session.
 
 ## Patches
 
+- Requests no longer hang for up to two hours while the API is under
+  maintenance. The API asks clients to retry an hour later while a data table
+  is being rebuilt, and epidatr waited that long, twice, before giving up. Now
+  a request asked to wait longer than the new `epidatr.max_retry_wait` option
+  (default 60 seconds) fails right away with the API's message, and HTTP
+  errors say when the server suggests retrying. Shorter waits are still
+  honoured, and 500, 502, 503 and 504 errors are still retried. A 429 (rate
+  limit) is retried only if the API says when to come back, since the anonymous
+  rate limits are per minute or per hour and every retry counts against them.
+- Caching fixes:
+  - `set_cache()` now rejects a max age or size that isn't a positive number.
+    Previously `EPIDATR_CACHE_MAX_AGE_DAYS=3/24` became `NA` and made every
+    cached fetch fail (#396). An invalid setting at load time turns the cache
+    off with a message rather than stopping the package from loading.
+  - Loading the package with `EPIDATR_USE_CACHE=TRUE` creates a missing cache
+    directory instead of prompting, and `set_cache()` no longer prompts in
+    non-interactive sessions. When the cache can't be set, the message now says
+    so instead of claiming the cache is in use (#401).
+  - The warning about caching recent data versions (class `cache_recent_data`)
+    can now fire; it previously never did (#385).
+  - `refresh_cache = TRUE` no longer writes entries that a default fetch would
+    read back with different parsing, and a non-default `reference_week_day`
+    gets its own cache entry. An API error response that `return_empty = TRUE`
+    turned into an empty result is no longer cached, so a later default call
+    still raises the error (#388).
 - `fetch_args_list(disable_data_frame_parsing = TRUE)` now actually disables
   data frame parsing again.
 - `report_time` values the API returns as a bare date (`YYYY-MM-DD`) are now
   parsed as a `Date` instead of `NA`. UTC timestamps are still parsed as
   `POSIXct`.
+- `epidata_snapshot()`, `epidata_archive()`, and `epidata()` now trim
+  whitespace around comma-joined `signals` and `geo_type` values, so
+  `"sig1, sig2"` works the same as `"sig1,sig2"` (#407).
 
 # epidatr 1.4.0
 
@@ -62,12 +121,6 @@
   same effect. The underlying query has no stable sort order, so `limit` does
   not guarantee the same rows (or count) across repeated calls. Use it only to
   preview or debug a query, not as a real filter.
-- `fetch_args_list()` gains a `limit` argument, capping the number of rows
-  the cast-API returns for `epidata_snapshot()`, `epidata_archive()`,
-  `epidata_aux()`, and `epidata()`. Defaults to `NULL` (no limit); `-1` has
-  the same effect. The underlying query has no stable sort order, so `limit`
-  does not guarantee the same rows (or count) across repeated calls. Use it
-  only to preview or debug a query, not as a real filter.
 
 
 # epidatr 1.3.0
