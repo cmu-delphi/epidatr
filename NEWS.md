@@ -26,9 +26,19 @@
 - `cache_info()` now also reports `enabled`, `n_entries` and `size_mb`, works when
   the cache is off (inspecting the default directory), and prints a hint about
   `clear_cache()`.
+- `pub_paho_dengue()` now errors when both `issues` and `lag` are given, like
+  the other endpoints that take both (#397).
+- `pub_ecdc_ili()`, `pub_flusurv()`, `pub_fluview_clinical()`, and
+  `pub_kcdc_ili()` no longer error on an explicit `issues = NULL` together with
+  `lag` (or vice versa); `NULL` now means "not requested" everywhere (#398).
+- Timeset arguments now error when a vector mixes day (`YYYYMMDD`) and week
+  (`YYYYWW`) values, and `pvt_twitter()` and `pub_wiki()` error when
+  `time_values` doesn't match `time_type` (#400).
 
 ## Documentation
 
+- `?timeset` no longer says a list of multiple `epirange()`s is accepted; only
+  a single range is (#399).
 - `?set_cache` now names the `EPIDATR_CACHE_DIR` environment variable and
   `cache_dir` argument correctly (#394); the `?epidata_call` example no
   longer makes a live request (#406); help pages no longer show "See also"

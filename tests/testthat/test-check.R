@@ -115,3 +115,11 @@ test_that("format_time_filter() for report_time", {
 
   expect_error(rt("not-a-date"), class = "epidatr__invalid_version_query")
 })
+
+test_that("timesets reject mixed day and week values", {
+  expect_error(parse_timeset_input(c(20200101, 202201)), "mixes day")
+  expect_error(
+    pvt_twitter("k", "CA", time_values = epirange(201501, 202001), fetch_args = fetch_args_list(dry_run = TRUE)),
+    "time_type"
+  )
+})
