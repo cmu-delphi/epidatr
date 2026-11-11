@@ -112,7 +112,10 @@ versioning.
 
 On the backend, the cache uses cachem, with filenames generated using an md5
 encoding of the call url. Each file corresponds to a unique epidata-API
-call.
+call. It stores the response before parsing, so \code{fetch_args} that only
+change parsing (such as \code{reference_week_day} or \code{disable_date_parsing})
+share one cache entry. Calls with \code{disable_data_frame_parsing = TRUE} and
+the nested-list \code{"json"} endpoints are never cached.
 }
 \examples{
 set_cache(

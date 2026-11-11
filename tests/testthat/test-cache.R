@@ -96,16 +96,16 @@ test_that("cache saves & loads", {
   expect_equal(perform_count, 1)
   expect_equal(first_call, cache_call)
 
-  # and compare directly with the file saved
-  # the request url hashed here is "https://api.delphi.cmu.edu/epidata/covidcast/?data_source=jhu-csse&signals=
-  # confirmed_7dav_incidence_prop&geo_type=state&time_type=day&geo_values=ca%2Cfl&time_values=20200601-20200801
-  # &as_of=20220101"
+  # and compare directly with the file saved: it holds the unparsed response
   request_hash <- paste0(
     openssl::md5(cache_key(epidata_call, fetch_args_list())),
     ".rds"
   )
   direct_from_cache <- readRDS(file.path(new_temp_dir, request_hash))
-  expect_equal(first_call, direct_from_cache[[1]])
+  expect_equal(
+    first_call,
+    parse_fetched(epidata_call, direct_from_cache[[1]], fetch_args_list())
+  )
 
   # Test the empty return branch
   expect_message(clear_cache())
@@ -159,17 +159,19 @@ test_that("check_is_cachable", {
     expected_result = FALSE
   )
 
-  # any odd fetch args mean don't use the cache
+  # parse settings and fields don't stop caching: the cache holds the
+  # unparsed response
   check_fun(
     as_of = "2020-01-01",
     fetch_args = fetch_args_list(fields = c("time_value", "value")),
-    expected_result = FALSE
+    expected_result = TRUE
   )
   check_fun(
     as_of = "2020-01-01",
     fetch_args = fetch_args_list(disable_date_parsing = TRUE),
-    expected_result = FALSE
+    expected_result = TRUE
   )
+  # nested lists can't be cached as a data frame
   check_fun(
     as_of = "2020-01-01",
     fetch_args = fetch_args_list(disable_data_frame_parsing = TRUE),
@@ -316,13 +318,11 @@ test_that("latest_version_date reads dates, ranges, and epiweeks", {
   )
 })
 
-test_that("refresh_cache only writes entries a default fetch may read (#388)", {
+test_that("refresh_cache skips the read but rewrites the same entry (#388)", {
   expect_message(test_set_cache(cache_dir = withr::local_tempdir()))
   withr::defer(disable_cache())
   call <- covidcast_call_as_of("2022-01-01")
 
-  # refresh_cache with a parse-changing setting must not write an entry that a
-  # later default fetch would read back.
   epidata <- data.frame(
     source = "jhu-csse", signal = "confirmed_7dav_incidence_prop",
     geo_type = "state", time_type = "day", geo_value = "ca",
@@ -333,18 +333,25 @@ test_that("refresh_cache only writes entries a default fetch may read (#388)", {
     requests <<- requests + 1
     epidata
   })
-  fetch(call, fetch_args_list(refresh_cache = TRUE, disable_date_parsing = TRUE))
-  expect_length(cache_environ$epidatr_cache$keys(), 0)
-
-  # A default fetch caches, and a refresh rewrites the same entry.
   first <- suppressWarnings(fetch(call))
   expect_length(cache_environ$epidatr_cache$keys(), 1)
   suppressWarnings(fetch(call))
-  expect_equal(requests, 2)
+  expect_equal(requests, 1)
   suppressWarnings(fetch(call, fetch_args_list(refresh_cache = TRUE)))
-  expect_equal(requests, 3)
+  expect_equal(requests, 2)
   expect_length(cache_environ$epidatr_cache$keys(), 1)
   expect_s3_class(first$time_value, "Date")
+})
+
+test_that("a refresh with nested-list parsing writes nothing (#388)", {
+  expect_message(test_set_cache(cache_dir = withr::local_tempdir()))
+  withr::defer(disable_cache())
+  local_mocked_bindings(request_epidata = function(...) list(list(a = 1)))
+  fetch(
+    covidcast_call_as_of("2022-01-01"),
+    fetch_args_list(refresh_cache = TRUE, disable_data_frame_parsing = TRUE)
+  )
+  expect_length(cache_environ$epidatr_cache$keys(), 0)
 })
 
 test_that("an empty result allowed by return_empty isn't cached (#388)", {
@@ -358,31 +365,36 @@ test_that("an empty result allowed by return_empty isn't cached (#388)", {
   expect_length(cache_environ$epidatr_cache$keys(), 0)
 })
 
-test_that("the cache key includes a non-default reference_week_day (#388)", {
-  call <- covidcast_call_as_of("2022-01-01")
-  default_key <- cache_key(call, fetch_args_list())
-  expect_equal(
-    default_key,
-    paste0("epidatr", utils::packageVersion("epidatr"), ":", request_url(call, "json"))
-  )
-  expect_false(default_key == cache_key(call, fetch_args_list(reference_week_day = 7)))
-
-  # and fetch() uses it: a different reference_week_day doesn't hit the cache
+test_that("parse settings are applied to the cached response, not cached (#388)", {
   expect_message(test_set_cache(cache_dir = withr::local_tempdir()))
   withr::defer(disable_cache())
+  call <- pub_fluview(
+    regions = "nat", epiweeks = 202001, issues = 202101,
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
   requests <- 0
   local_mocked_bindings(request_epidata = function(...) {
     requests <<- requests + 1
-    data.frame(
-      source = "jhu-csse", signal = "confirmed_7dav_incidence_prop",
-      geo_type = "state", time_type = "day", geo_value = "ca",
-      time_value = 20200601L, issue = 20200602L, lag = 1L, value = 1.5
-    )
+    data.frame(region = "nat", epiweek = 202001L, issue = 202101L, lag = 52L)
   })
-  suppressWarnings(fetch(call))
-  suppressWarnings(fetch(call, fetch_args_list(reference_week_day = 7)))
-  suppressWarnings(fetch(call, fetch_args_list(reference_week_day = 7)))
-  expect_equal(requests, 2)
+  suppressWarnings({
+    monday <- fetch(call)
+    sunday <- fetch(call, fetch_args_list(reference_week_day = 7))
+    raw_weeks <- fetch(call, fetch_args_list(disable_date_parsing = TRUE))
+  })
+  expect_equal(requests, 1)
+  expect_length(cache_environ$epidatr_cache$keys(), 1)
+  expect_equal(as.numeric(sunday$epiweek - monday$epiweek), 6)
+  expect_equal(raw_weeks$epiweek, 202001L)
+})
+
+test_that("cache keys carry a version prefix and include fields", {
+  call <- covidcast_call_as_of("2022-01-01")
+  expect_match(cache_key(call, fetch_args_list()), "^epidatr[^:]+:v2:")
+  expect_false(
+    cache_key(call, fetch_args_list()) ==
+      cache_key(call, fetch_args_list(fields = "value"))
+  )
 })
 
 test_that("V5 calls for a fixed past version are cachable (A2)", {
@@ -487,4 +499,44 @@ test_that("the stale-cache warning covers V5 versions", {
     ),
     fetch_args_list()
   ))
+})
+
+test_that("V5 CSV responses are cached raw and parsed on every read", {
+  expect_message(test_set_cache(cache_dir = withr::local_tempdir()))
+  withr::defer(disable_cache())
+  requests <- 0
+  with_mock_perform(
+    function(req) {
+      requests <<- requests + 1
+      paste(
+        "signal,geo_type,geo_value,reference_time,report_time,value",
+        "sig1,state,ca,2024-12-01,2024-12-05T00:00:00Z,1.5",
+        "sig1,state,ny,2024-12-01,2024-12-05T00:00:00Z,2.5",
+        sep = "\n"
+      )
+    },
+    {
+      snap <- function(...) {
+        epidata_snapshot("nssp", "sig1", "state", snapshot_date = "2025-01-01", ...)
+      }
+      fresh <- snap()
+      cached <- snap()
+      expect_equal(requests, 1)
+      expect_length(cache_environ$epidatr_cache$keys(), 1)
+      expect_equal(cached, fresh)
+      expect_s3_class(cached$reference_time, "Date")
+      expect_type(cached$value, "double")
+      expect_equal(attr(cached, "cast_source"), "nssp")
+      expect_equal(attr(cached, "cast_kind"), "snapshot")
+
+      # the stored entry is the unparsed all-character response
+      stored <- cache_environ$epidatr_cache$get(cache_environ$epidatr_cache$keys()[[1]])[[1]]
+      expect_type(stored$value, "character")
+
+      # parse settings apply to the cached response without a new request
+      raw_dates <- snap(fetch_args = fetch_args_list(disable_date_parsing = TRUE))
+      expect_equal(requests, 1)
+      expect_false(inherits(raw_dates$reference_time, "Date"))
+    }
+  )
 })

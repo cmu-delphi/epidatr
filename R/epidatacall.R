@@ -342,7 +342,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
 
     cached <- cache_environ$epidatr_cache$get(hashed)
     if (!is.key_missing(cached)) {
-      return(cached[[1]])
+      return(parse_fetched(epidata_call, cached[[1]], fetch_args))
     }
   }
 
@@ -353,51 +353,53 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
       fetch_args,
       simplify = !fetch_args$disable_data_frame_parsing
     )
-
-    empty_response <- fetch_args$return_empty && length(response_content) == 0
-    if (empty_response) {
-      fetched <- tibble::tibble()
-    } else if (fetch_args$disable_data_frame_parsing) {
-      fetched <- response_content
-    } else {
-      fetched <- parse_data_frame(
-        epidata_call,
-        response_content,
-        fetch_args$disable_date_parsing,
-        fetch_args$reference_week_day,
-        warn_missing_meta = !isTRUE(fetch_args$disable_missing_meta_warning)
-      ) %>%
-        tibble::as_tibble()
-    }
   })
 
-  # Add to cache if appropriate. With return_empty, an API error response also
-  # comes back empty; don't store it, so a later default call still raises the
-  # error instead of reading back an empty result (#388).
+  # Add the unparsed response to the cache if appropriate. With return_empty,
+  # an API error response also comes back empty; don't store it, so a later
+  # default call still raises the error instead of reading back an empty
+  # result (#388).
+  empty_response <- fetch_args$return_empty && length(response_content) == 0
   if (should_write_cache && !empty_response) {
-    cache_environ$epidatr_cache$set(hashed, list(fetched, Sys.time(), runtime))
+    cache_environ$epidatr_cache$set(hashed, list(response_content, Sys.time(), runtime))
   }
 
-  return(fetched)
+  if (empty_response) {
+    return(tibble::tibble())
+  }
+  parse_fetched(epidata_call, response_content, fetch_args)
+}
+
+#' Turn an API response into the tibble `fetch()` returns
+#'
+#' Runs on both fresh and cached responses, so parse settings never need to be
+#' part of the cache key.
+#' @keywords internal
+parse_fetched <- function(epidata_call, response_content, fetch_args) {
+  if (fetch_args$disable_data_frame_parsing) {
+    return(response_content)
+  }
+  parse_data_frame(
+    epidata_call,
+    response_content,
+    fetch_args$disable_date_parsing,
+    fetch_args$reference_week_day,
+    warn_missing_meta = !isTRUE(fetch_args$disable_missing_meta_warning)
+  ) %>%
+    tibble::as_tibble()
 }
 
 #' Cache key for an epidata call
 #'
-#' The cache stores parsed tibbles, so the key must cover every fetch setting
-#' that changes parsing, not just the URL. `reference_week_day` changes how
-#' epiweeks become dates; it is appended only when it differs from the default.
-#' The epidatr version is a prefix, so entries from another version are never
-#' read (their stored shape may differ).
+#' The cache stores the unparsed response, so the key is the request URL
+#' (which includes `fields`). The epidatr version and a format tag are a prefix,
+#' so entries from another version, or in an older stored format, are never read.
 #' @keywords internal
 cache_key <- function(epidata_call, fetch_args) {
-  key <- paste0(
-    "epidatr", as.character(utils::packageVersion("epidatr")), ":",
+  paste0(
+    "epidatr", as.character(utils::packageVersion("epidatr")), ":v2:",
     request_url(epidata_call, "json", fetch_args$fields)
   )
-  if (!isTRUE(fetch_args$reference_week_day == formals(fetch_args_list)$reference_week_day)) {
-    key <- paste0(key, "#reference_week_day=", fetch_args$reference_week_day)
-  }
-  key
 }
 
 #' Fetches the data.
