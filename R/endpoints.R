@@ -1304,7 +1304,9 @@ pub_covidcast <- function(
     )
   }
   assert_exclusive(
-    issues = issues, lag = lag, as_of = as_of,
+    issues = issues,
+    lag = lag,
+    as_of = as_of,
     class = "epidatr__pub_covidcast__too_many_issue_params"
   )
   assert_character_param("data_source", source, len = 1)
@@ -1369,17 +1371,11 @@ pub_covidcast <- function(
       create_epidata_field_info("geo_value", "text"),
       create_epidata_field_info(
         "time_value",
-        switch(time_type,
-          day = "date",
-          week = "epiweek"
-        )
+        switch(time_type, day = "date", week = "epiweek")
       ),
       create_epidata_field_info(
         "issue",
-        switch(time_type,
-          day = "date",
-          week = "epiweek"
-        )
+        switch(time_type, day = "date", week = "epiweek")
       ),
       create_epidata_field_info("lag", "int"),
       create_epidata_field_info("value", "float"),

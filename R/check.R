@@ -334,7 +334,13 @@ format_time_filter <- function(value, name, bare_dates = TRUE) {
       )
     }
     x <- validate_timeset_input(name, value[!is_expr])
-    x <- if (inherits(x, "Date")) x else if (all(nchar(x) == 6)) parse_api_week(x) else parse_api_date(x)
+    x <- if (inherits(x, "Date")) {
+      x
+    } else if (all(nchar(x) == 6)) {
+      parse_api_week(x)
+    } else {
+      parse_api_date(x)
+    }
     out[!is_expr] <- paste0(x, ":", x)
   }
   # The API ORs the expressions.

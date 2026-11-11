@@ -16,11 +16,15 @@ test_that("endpoints reject unknown args via dots (pub_covidcast smoke)", {
 
 test_that("pub_covid_hosp_state_timeseries supports versioned queries", {
   epidata_call <- pub_covid_hosp_state_timeseries(
-    "ut", epirange(12340101, 34560101),
+    "ut",
+    epirange(12340101, 34560101),
     issues = 20220101,
     fetch_args = fetch_args_list(
       fields = c(
-        "state", "geocoded_state", "date", "issue",
+        "state",
+        "geocoded_state",
+        "date",
+        "issue",
         "previous_day_admission_influenza_confirmed",
         "previous_day_admission_influenza_confirmed_coverage"
       ),
@@ -33,11 +37,15 @@ test_that("pub_covid_hosp_state_timeseries supports versioned queries", {
   expect_no_match(epidata_call$request$url, "lag=")
 
   epidata_call <- pub_covid_hosp_state_timeseries(
-    "ut", epirange(12340101, 34560101),
+    "ut",
+    epirange(12340101, 34560101),
     as_of = 20220101,
     fetch_args = fetch_args_list(
       fields = c(
-        "state", "geocoded_state", "date", "issue",
+        "state",
+        "geocoded_state",
+        "date",
+        "issue",
         "previous_day_admission_influenza_confirmed",
         "previous_day_admission_influenza_confirmed_coverage"
       ),
@@ -51,14 +59,17 @@ test_that("pub_covid_hosp_state_timeseries supports versioned queries", {
 })
 
 test_that("nchs-mortality call fails if time_type not week", {
-  expect_error(pub_covidcast(
-    source = "nchs-mortality",
-    signals = "signal",
-    time_type = "day",
-    geo_type = "state",
-    time_values = "*",
-    geo_values = "*"
-  ), class = "epidatr__nchs_week_only")
+  expect_error(
+    pub_covidcast(
+      source = "nchs-mortality",
+      signals = "signal",
+      time_type = "day",
+      geo_type = "state",
+      time_values = "*",
+      geo_values = "*"
+    ),
+    class = "epidatr__nchs_week_only"
+  )
 })
 
 test_that("pub_covidcast catches missing args for args without defaults", {
@@ -184,8 +195,12 @@ test_that("geo_values and reference_time are sent as cast-API query params", {
   fa <- fetch_args_list(dry_run = TRUE)
   for (f in list(epidata_snapshot, epidata_archive)) {
     url <- f(
-      source = "nssp", signals = "sig1", geo_type = "state",
-      geo_values = c("ca", "fl"), reference_time = epirange(20240101, 20240131), fetch_args = fa
+      source = "nssp",
+      signals = "sig1",
+      geo_type = "state",
+      geo_values = c("ca", "fl"),
+      reference_time = epirange(20240101, 20240131),
+      fetch_args = fa
     )$request$url
     expect_match(url, "geo_value=ca%2Cfl", fixed = TRUE)
     expect_match(url, "reference_times=2024-01-01%3A2024-01-31", fixed = TRUE)
@@ -238,11 +253,15 @@ test_that("fetch_args_list(limit=) is forwarded to the cast-API request and vali
     epidata_aux("nwss", fetch_args = fa),
     epidata(source = "nssp", signals = "sig1", geo_type = "state", fetch_args = fa)
   )
-  for (call in calls) expect_match(call$request$url, "limit=100")
+  for (call in calls) {
+    expect_match(call$request$url, "limit=100")
+  }
 
   # NULL (default) omits the param entirely
   no_limit <- epidata_snapshot(
-    source = "nssp", signals = "sig1", geo_type = "state",
+    source = "nssp",
+    signals = "sig1",
+    geo_type = "state",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_no_match(no_limit$request$url, "limit=")
@@ -267,7 +286,9 @@ test_that("limit warns when set on a non-cast (V4) endpoint and is silently igno
 
   expect_no_warning(
     epidata_snapshot(
-      source = "nssp", signals = "sig1", geo_type = "state",
+      source = "nssp",
+      signals = "sig1",
+      geo_type = "state",
       fetch_args = fetch_args_list(limit = 100, dry_run = TRUE)
     )
   )
@@ -275,7 +296,9 @@ test_that("limit warns when set on a non-cast (V4) endpoint and is silently igno
 
 test_that("snapshot/archive/epidata send ... key filters server-side as extra_keys", {
   snap <- epidata_snapshot(
-    source = "nwss", signals = "sig1", geo_type = "county",
+    source = "nwss",
+    signals = "sig1",
+    geo_type = "county",
     pcr_target = c("sars-cov-2", "influenza"),
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
@@ -284,7 +307,9 @@ test_that("snapshot/archive/epidata send ... key filters server-side as extra_ke
   expect_match(snap$request$url, "pcr_target%3Ainfluenza")
 
   arch <- epidata_archive(
-    source = "nwss", signals = "sig1", geo_type = "county",
+    source = "nwss",
+    signals = "sig1",
+    geo_type = "county",
     sample_index = "92012",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
@@ -293,7 +318,9 @@ test_that("snapshot/archive/epidata send ... key filters server-side as extra_ke
 
   # dispatcher forwards ... to the routed endpoint
   disp <- epidata(
-    source = "nwss", signals = "sig1", geo_type = "county",
+    source = "nwss",
+    signals = "sig1",
+    geo_type = "county",
     pcr_target = "sars-cov-2",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
@@ -421,7 +448,9 @@ test_that("epidata_snapshot sends multiple signals comma-joined in a single requ
 test_that("epidata_snapshot/epidata_archive dry_run returns one call per geo_type, signals comma-joined", {
   # multiple signals, single geo_type: one call, signals comma-joined
   single <- epidata_snapshot(
-    source = "nssp", signals = c("sig1", "sig2"), geo_type = "state",
+    source = "nssp",
+    signals = c("sig1", "sig2"),
+    geo_type = "state",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_s3_class(single, "epidata_call")
@@ -429,7 +458,9 @@ test_that("epidata_snapshot/epidata_archive dry_run returns one call per geo_typ
 
   # multiple geo_types: one call per geo_type, each with all signals comma-joined
   calls <- epidata_snapshot(
-    source = "nssp", signals = c("sig1", "sig2"), geo_type = c("state", "nation"),
+    source = "nssp",
+    signals = c("sig1", "sig2"),
+    geo_type = c("state", "nation"),
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_type(calls, "list")
@@ -441,7 +472,9 @@ test_that("epidata_snapshot/epidata_archive dry_run returns one call per geo_typ
   expect_match(calls[[2]]$request$url, "geo_type=nation")
 
   arch_calls <- epidata_archive(
-    source = "nssp", signals = c("sig1", "sig2"), geo_type = c("state", "nation"),
+    source = "nssp",
+    signals = c("sig1", "sig2"),
+    geo_type = c("state", "nation"),
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_type(arch_calls, "list")
@@ -450,14 +483,18 @@ test_that("epidata_snapshot/epidata_archive dry_run returns one call per geo_typ
 
 test_that("epidata_snapshot splits comma-joined geo_type strings but keeps signals comma-joined", {
   calls <- epidata_snapshot(
-    source = "nssp", signals = "sig1,sig2", geo_type = "state",
+    source = "nssp",
+    signals = "sig1,sig2",
+    geo_type = "state",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_s3_class(calls, "epidata_call")
   expect_match(calls$request$url, "signal=sig1%2Csig2")
 
   arch_calls <- epidata_archive(
-    source = "nssp", signals = "sig1,sig2", geo_type = "state,nation",
+    source = "nssp",
+    signals = "sig1,sig2",
+    geo_type = "state,nation",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_length(arch_calls, 2)
@@ -523,10 +560,13 @@ test_that("epidata_snapshot errors on invalid signal via epidata_meta", {
 
 test_that("epidata_snapshot warns generically on a valid-but-empty query", {
   meta_json <- jsonlite::toJSON(
-    list(nssp = list(
-      signals = c("sig1"), geo_types = c("state"),
-      reference_time_range = list(first = "2020-01-01", latest = "2024-01-01")
-    )),
+    list(
+      nssp = list(
+        signals = c("sig1"),
+        geo_types = c("state"),
+        reference_time_range = list(first = "2020-01-01", latest = "2024-01-01")
+      )
+    ),
     auto_unbox = TRUE
   )
   handler <- function(req) {
@@ -554,7 +594,9 @@ test_that("fetch_args_list(return_empty = TRUE) suppresses cast-API empty errors
   with_mock_perform(handler, {
     expect_no_warning(
       res <- epidata_snapshot(
-        source = "nssp", signals = "sig1", geo_type = "state",
+        source = "nssp",
+        signals = "sig1",
+        geo_type = "state",
         fetch_args = fetch_args_list(return_empty = TRUE)
       )
     )
@@ -753,7 +795,8 @@ test_that("epidata_aux infers multi-value key filters from the base (<= cap)", {
 
   base <- tibble::tibble(
     geo_value = c("ca", "ny"), # two distinct values, under the cap -> both pinned
-    report_time = as.POSIXct(c("2024-03-01", "2024-03-01"), tz = "UTC"), value = 1:2
+    report_time = as.POSIXct(c("2024-03-01", "2024-03-01"), tz = "UTC"),
+    value = 1:2
   )
   attr(base, "cast_source") <- "nwss"
   attr(base, "cast_kind") <- "snapshot"
@@ -773,8 +816,10 @@ test_that("epidata_aux connected path: validation, empty base, dry_run cap/forwa
 
   # empty base returns unchanged without any fetch
   empty <- tag(tibble::tibble(
-    geo_value = character(), reference_time = as.Date(character()),
-    report_time = as.POSIXct(character(), tz = "UTC"), value = numeric()
+    geo_value = character(),
+    reference_time = as.Date(character()),
+    report_time = as.POSIXct(character(), tz = "UTC"),
+    value = numeric()
   ))
   expect_identical(epidata_aux(empty), empty)
 
@@ -783,8 +828,10 @@ test_that("epidata_aux connected path: validation, empty base, dry_run cap/forwa
   # report_time is a full timestamp and the API supports an exact "<=" bound.
   # No schema fetch here (would fail unmocked).
   base <- tag(tibble::tibble(
-    geo_value = "ca", reference_time = as.Date("2024-01-01"),
-    report_time = as.POSIXct(c("2024-01-10", "2024-05-20"), tz = "UTC"), value = c(1, 2)
+    geo_value = "ca",
+    reference_time = as.Date("2024-01-01"),
+    report_time = as.POSIXct(c("2024-01-10", "2024-05-20"), tz = "UTC"),
+    value = c(1, 2)
   ))
   call <- epidata_aux(base, pcr_target = "x", fetch_args = fetch_args_list(dry_run = TRUE))
   expect_s3_class(call, "epidata_call")
@@ -815,8 +862,10 @@ test_that("epidata_aux connected path: validation, empty base, dry_run cap/forwa
   expect_error(
     epidata_aux(
       tag(tibble::tibble(
-        geo_value = "ca", reference_time = as.Date("2024-01-01"),
-        report_time = as.Date("2024-02-01"), value = 1
+        geo_value = "ca",
+        reference_time = as.Date("2024-01-01"),
+        report_time = as.Date("2024-02-01"),
+        value = 1
       )),
       columns = "population_served" # drops the reference_time key
     ),
@@ -830,12 +879,14 @@ test_that("disable_missing_meta_warning suppresses the unspecified-fields warnin
     .package = "httr2"
   )
   call <- create_epidata_call(
-    "aux_data/", list(source = "nwss"),
+    "aux_data/",
+    list(source = "nwss"),
     meta = list(
       create_epidata_field_info("report_time", "date"),
       create_epidata_field_info("geo_value", "text")
     ),
-    api_version = "cast", response_format = "csv"
+    api_version = "cast",
+    response_format = "csv"
   )
   expect_warning(fetch(call, fetch_args_list()), class = "epidatr__missing_meta_fields")
   expect_no_warning(fetch(call, fetch_args_list(disable_missing_meta_warning = TRUE)))
@@ -843,11 +894,15 @@ test_that("disable_missing_meta_warning suppresses the unspecified-fields warnin
 
 test_that("comma-joined signals and geo_types are trimmed of whitespace (#407)", {
   urls <- function(x) {
-    if (inherits(x, "epidata_call")) x <- list(x)
+    if (inherits(x, "epidata_call")) {
+      x <- list(x)
+    }
     vapply(x, function(z) z$request$url, character(1))
   }
   snap <- epidata_snapshot(
-    "nssp", "sig1, sig2", "state, nation",
+    "nssp",
+    "sig1, sig2",
+    "state, nation",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_equal(
@@ -858,7 +913,9 @@ test_that("comma-joined signals and geo_types are trimmed of whitespace (#407)",
     )
   )
   arch <- epidata_archive(
-    "nssp", " sig1 ,sig2 ", "state",
+    "nssp",
+    " sig1 ,sig2 ",
+    "state",
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   expect_no_match(urls(arch), "%20", fixed = TRUE)

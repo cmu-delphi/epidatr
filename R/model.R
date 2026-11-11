@@ -239,9 +239,7 @@ parse_value <- function(
 
   if (is.null(value)) {
     return(value)
-  } else if (
-    info$type == "date" && !disable_date_parsing && !inherits(value, "Date")
-  ) {
+  } else if (info$type == "date" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_date(value))
   } else if (
     info$type == "timestamp" &&
@@ -255,9 +253,7 @@ parse_value <- function(
       !inherits(value, "POSIXt")
   ) {
     return(parse_date_or_datetimetz(value))
-  } else if (
-    info$type == "epiweek" && !disable_date_parsing && !inherits(value, "Date")
-  ) {
+  } else if (info$type == "epiweek" && !disable_date_parsing && !inherits(value, "Date")) {
     return(parse_api_week(value, reference_week_day = reference_week_day))
   } else if (info$type == "bool") {
     return(as.logical(value))

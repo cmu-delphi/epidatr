@@ -3,6 +3,7 @@
 # Set EPIDATR_CAST_BASE_URL to point at a non-default server, e.g.:
 #   just test-live-cast --cast-url http://localhost:8005/epidata/v5/
 
+# fmt: skip
 cast_queries <- tibble::tribble(
   ~source, ~signal, ~geo_type,
   "nssp", "pct_ed_visits_influenza", "state",

@@ -32,3 +32,4 @@
 ^\.urlignore$
 ^\.agent-shell$
 ^\.claude$
+^air\.toml$

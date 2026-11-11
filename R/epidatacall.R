@@ -385,7 +385,8 @@ parse_fetched <- function(epidata_call, response_content, fetch_args) {
     fetch_args$disable_date_parsing,
     fetch_args$reference_week_day,
     warn_missing_meta = !isTRUE(fetch_args$disable_missing_meta_warning),
-    warn_dropped_meta = !isTRUE(fetch_args$disable_missing_meta_warning) && is.null(fetch_args$fields) &&
+    warn_dropped_meta = !isTRUE(fetch_args$disable_missing_meta_warning) &&
+      is.null(fetch_args$fields) &&
       identical(epidata_call$response_format, "classic")
   ) %>%
     tibble::as_tibble()
@@ -399,7 +400,9 @@ parse_fetched <- function(epidata_call, response_content, fetch_args) {
 #' @keywords internal
 cache_key <- function(epidata_call, fetch_args) {
   paste0(
-    "epidatr", as.character(utils::packageVersion("epidatr")), ":v2:",
+    "epidatr",
+    as.character(utils::packageVersion("epidatr")),
+    ":v2:",
     request_url(epidata_call, "json", fetch_args$fields)
   )
 }

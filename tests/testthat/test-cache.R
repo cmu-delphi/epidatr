@@ -324,9 +324,15 @@ test_that("refresh_cache skips the read but rewrites the same entry (#388)", {
   call <- covidcast_call_as_of("2022-01-01")
 
   epidata <- data.frame(
-    source = "jhu-csse", signal = "confirmed_7dav_incidence_prop",
-    geo_type = "state", time_type = "day", geo_value = "ca",
-    time_value = 20200601L, issue = 20200602L, lag = 1L, value = 1.5
+    source = "jhu-csse",
+    signal = "confirmed_7dav_incidence_prop",
+    geo_type = "state",
+    time_type = "day",
+    geo_value = "ca",
+    time_value = 20200601L,
+    issue = 20200602L,
+    lag = 1L,
+    value = 1.5
   )
   requests <- 0
   local_mocked_bindings(request_epidata = function(...) {
@@ -369,7 +375,9 @@ test_that("parse settings are applied to the cached response, not cached (#388)"
   expect_message(test_set_cache(cache_dir = withr::local_tempdir()))
   withr::defer(disable_cache())
   call <- pub_fluview(
-    regions = "nat", epiweeks = 202001, issues = 202101,
+    regions = "nat",
+    epiweeks = 202001,
+    issues = 202101,
     fetch_args = fetch_args_list(dry_run = TRUE)
   )
   requests <- 0
@@ -392,8 +400,7 @@ test_that("cache keys carry a version prefix and include fields", {
   call <- covidcast_call_as_of("2022-01-01")
   expect_match(cache_key(call, fetch_args_list()), "^epidatr[^:]+:v2:")
   expect_false(
-    cache_key(call, fetch_args_list()) ==
-      cache_key(call, fetch_args_list(fields = "value"))
+    cache_key(call, fetch_args_list()) == cache_key(call, fetch_args_list(fields = "value"))
   )
 })
 
@@ -429,8 +436,11 @@ test_that("V5 calls for a fixed past version are cachable (A2)", {
 
   # a row limit returns an unstable subset
   limited <- epidata_snapshot(
-    "nssp", "pct_ed_visits_influenza", "state",
-    snapshot_date = "2025-01-01", fetch_args = fetch_args_list(dry_run = TRUE, limit = 5)
+    "nssp",
+    "pct_ed_visits_influenza",
+    "state",
+    snapshot_date = "2025-01-01",
+    fetch_args = fetch_args_list(dry_run = TRUE, limit = 5)
   )
   expect_false(cachable(limited))
 })
@@ -462,9 +472,13 @@ test_that("a repeated V5 snapshot is served from the cache", {
   expect_message(test_set_cache(cache_dir = withr::local_tempdir()))
   withr::defer(disable_cache())
   csv <- data.frame(
-    signal = "pct_ed_visits_influenza", report_time = "2024-12-27T12:00:00Z",
-    geo_type = "state", geo_value = c("ca", "pa"), fill_method = "source",
-    reference_time = "2024-12-21", value = c("1.5", "2.5")
+    signal = "pct_ed_visits_influenza",
+    report_time = "2024-12-27T12:00:00Z",
+    geo_type = "state",
+    geo_value = c("ca", "pa"),
+    fill_method = "source",
+    reference_time = "2024-12-21",
+    value = c("1.5", "2.5")
   )
   requests <- 0
   local_mocked_bindings(request_epidata = function(...) {
@@ -486,16 +500,24 @@ test_that("the stale-cache warning covers V5 versions", {
   recent <- format(Sys.Date() - 2)
   expect_warning(
     check_for_cache_warnings(
-      epidata_snapshot("nssp", "pct_ed_visits_influenza", "state",
-        snapshot_date = recent, fetch_args = fetch_args_list(dry_run = TRUE)
+      epidata_snapshot(
+        "nssp",
+        "pct_ed_visits_influenza",
+        "state",
+        snapshot_date = recent,
+        fetch_args = fetch_args_list(dry_run = TRUE)
       ),
       fetch_args_list()
     ),
     class = "cache_recent_data"
   )
   expect_no_warning(check_for_cache_warnings(
-    epidata_archive("nssp", "pct_ed_visits_influenza", "state",
-      report_time = epirange("2024-12-01", "2025-01-01"), fetch_args = fetch_args_list(dry_run = TRUE)
+    epidata_archive(
+      "nssp",
+      "pct_ed_visits_influenza",
+      "state",
+      report_time = epirange("2024-12-01", "2025-01-01"),
+      fetch_args = fetch_args_list(dry_run = TRUE)
     ),
     fetch_args_list()
   ))

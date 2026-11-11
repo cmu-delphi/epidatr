@@ -31,7 +31,9 @@ skip_unless_pvt <- function() {
 live_cast_fetch_args <- function(...) {
   url <- Sys.getenv("EPIDATR_CAST_BASE_URL", unset = NA_character_)
   args <- list(limit = 500L, ...)
-  if (!is.na(url) && nzchar(url)) args$base_url <- url
+  if (!is.na(url) && nzchar(url)) {
+    args$base_url <- url
+  }
   do.call(fetch_args_list, args)
 }
 
