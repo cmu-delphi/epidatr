@@ -14,10 +14,13 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/as_cache_setting.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_character_param.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_date_param.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_exclusive.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_integerish_param.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_limit_param.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_report_time_param.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_time_type_matches.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_timeset_param.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/assert_uniform_granularity.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/avail_endpoints.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/cache_info.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/cache_key.html</loc></url>
@@ -96,6 +99,7 @@
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/request_url.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/set_cache.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/timeset.html</loc></url>
+<url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/timeset_granularity.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/utc_today.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/validate_date_input.html</loc></url>
 <url><loc>https://cmu-delphi.github.io/epidatr/dev/reference/validate_timeset_input.html</loc></url>

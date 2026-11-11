@@ -5,5 +5,11 @@ Validate and parse a timeset parameter
 ## Usage
 
 ``` r
-validate_timeset_input(name, value, len = NULL, required = TRUE)
+validate_timeset_input(
+  name,
+  value,
+  len = NULL,
+  required = TRUE,
+  granularity = c("any", "day", "week")
+)
 ```

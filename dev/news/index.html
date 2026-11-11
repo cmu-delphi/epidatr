@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.12</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,6 +56,11 @@
 <li><p>Timeset arguments now error when a vector mixes day (<code>YYYYMMDD</code>) and week (<code>YYYYWW</code>) values, and <code><a href="../reference/pvt_twitter.html">pvt_twitter()</a></code> and <code><a href="../reference/pub_wiki.html">pub_wiki()</a></code> error when <code>time_values</code> doesn’t match <code>time_type</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/400" class="external-link">#400</a>).</p></li>
 <li><p>The 414 (URI too long) fallback to POST now works: it strips the query from the URL and sends the parameters in the form body only (<a href="https://github.com/cmu-delphi/epidatr/issues/393" class="external-link">#393</a>).</p></li>
 <li><p>Unknown values in categorical fields now warn (class <code>epidatr__unknown_category</code>) and are kept as extra factor levels instead of silently becoming <code>NA</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/392" class="external-link">#392</a>).</p></li>
+<li><p>A 200 response with a missing or non-scalar <code>result</code> or <code>message</code>, or with <code>result</code> 1 or 2 but no <code>epidata</code>, now raises <code>epidatr__malformed_envelope</code>; a non-JSON body raises <code>epidatr__unparseable_response</code> with the request URL (<a href="https://github.com/cmu-delphi/epidatr/issues/389" class="external-link">#389</a>, <a href="https://github.com/cmu-delphi/epidatr/issues/390" class="external-link">#390</a>).</p></li>
+<li><p>Classic (V4) endpoints now warn (class <code>epidatr__dropped_meta_fields</code>) when the response lacks a column the endpoint promises. <code>fields</code> and <code>disable_missing_meta_warning</code> suppress it (<a href="https://github.com/cmu-delphi/epidatr/issues/391" class="external-link">#391</a>).</p></li>
+<li><p>Endpoints whose <code>epiweeks</code> or <code>issues</code> parameter only takes weeks (e.g. <code><a href="../reference/pub_flusurv.html">pub_flusurv()</a></code>, <code><a href="../reference/pub_fluview.html">pub_fluview()</a></code>) now error when given dates, instead of returning an empty result (<a href="https://github.com/cmu-delphi/epidatr/issues/278" class="external-link">#278</a>).</p></li>
+<li><p>The <code>issues</code>/<code>lag</code>/<code>as_of</code> exclusivity check is now shared by all endpoints, and its error has class <code>epidatr__exclusive_args</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/222" class="external-link">#222</a>).</p></li>
+<li><p>Argument errors that were plain <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code> calls (timeset parsing, mismatched <code><a href="../reference/epirange.html">epirange()</a></code> ends, and others) are now <code>cli</code> errors with condition classes, e.g. <code>epidatr__invalid_timeset</code> and <code>epidatr__epirange_format_mismatch</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/206" class="external-link">#206</a>).</p></li>
 <li><p>The cache now stores the unparsed API response and parses it on every read, so <code>reference_week_day</code> and <code>disable_date_parsing</code> no longer need to be part of the cache key and calls with <code>fields</code> can now be cached. Existing cache entries are ignored and re-fetched.</p></li>
 </ul></div>
 <div class="section level3">

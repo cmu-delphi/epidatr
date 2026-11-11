@@ -79,6 +79,38 @@
   instead of silently becoming `NA`
   ([\#392](https://github.com/cmu-delphi/epidatr/issues/392)).
 
+- A 200 response with a missing or non-scalar `result` or `message`, or
+  with `result` 1 or 2 but no `epidata`, now raises
+  `epidatr__malformed_envelope`; a non-JSON body raises
+  `epidatr__unparseable_response` with the request URL
+  ([\#389](https://github.com/cmu-delphi/epidatr/issues/389),
+  [\#390](https://github.com/cmu-delphi/epidatr/issues/390)).
+
+- Classic (V4) endpoints now warn (class `epidatr__dropped_meta_fields`)
+  when the response lacks a column the endpoint promises. `fields` and
+  `disable_missing_meta_warning` suppress it
+  ([\#391](https://github.com/cmu-delphi/epidatr/issues/391)).
+
+- Endpoints whose `epiweeks` or `issues` parameter only takes weeks
+  (e.g.
+  [`pub_flusurv()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_flusurv.md),
+  [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md))
+  now error when given dates, instead of returning an empty result
+  ([\#278](https://github.com/cmu-delphi/epidatr/issues/278)).
+
+- The `issues`/`lag`/`as_of` exclusivity check is now shared by all
+  endpoints, and its error has class `epidatr__exclusive_args`
+  ([\#222](https://github.com/cmu-delphi/epidatr/issues/222)).
+
+- Argument errors that were plain
+  [`stop()`](https://rdrr.io/r/base/stop.html) calls (timeset parsing,
+  mismatched
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+  ends, and others) are now `cli` errors with condition classes,
+  e.g. `epidatr__invalid_timeset` and
+  `epidatr__epirange_format_mismatch`
+  ([\#206](https://github.com/cmu-delphi/epidatr/issues/206)).
+
 - The cache now stores the unparsed API response and parses it on every
   read, so `reference_week_day` and `disable_date_parsing` no longer
   need to be part of the cache key and calls with `fields` can now be
