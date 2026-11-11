@@ -4,9 +4,13 @@
 \alias{format_report_time_bound}
 \title{Format a report-time-family value the way the cast-API accepts it.}
 \usage{
-format_report_time_bound(value)
+format_report_time_bound(value, name = "snapshot_date")
+}
+\arguments{
+\item{name}{argument name for error messages.}
 }
 \description{
-Format a report-time-family value the way the cast-API accepts it.
+Aborts on a value that can't be formatted (such as a timestamp without a
+\code{Z}, or \code{"latest"}), rather than sending \code{NA} to the API.
 }
 \keyword{internal}

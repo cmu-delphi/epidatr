@@ -85,24 +85,38 @@ assert_report_time_param <- function(name, value, len = NULL, required = TRUE) {
 }
 
 #' Format a report-time-family value the way the cast-API accepts it.
+#'
+#' Aborts on a value that can't be formatted (such as a timestamp without a
+#' `Z`, or `"latest"`), rather than sending `NA` to the API.
+#' @param name argument name for error messages.
 #' @keywords internal
-format_report_time_bound <- function(value) {
+format_report_time_bound <- function(value, name = "snapshot_date") {
   if (is.null(value)) {
     return(NULL)
   }
   utc_timestamp <- "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d{1,6})?)?Z$"
-  if (is.character(value) && length(value) == 1) {
-    if (grepl(utc_timestamp, value)) {
-      return(value)
-    }
-    if (grepl("T", value, fixed = TRUE)) {
-      return(NA_character_)
-    }
+  if (is.character(value) && length(value) == 1 && grepl(utc_timestamp, value)) {
+    return(value)
   }
-  if (inherits(value, "POSIXt")) {
-    return(format(as.POSIXct(value, tz = "UTC"), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"))
+  out <- if (is.character(value) && any(grepl("T", value, fixed = TRUE))) {
+    # A timestamp that isn't UTC; as.Date() would silently keep only its date.
+    NA_character_
+  } else if (inherits(value, "POSIXt")) {
+    format(as.POSIXct(value, tz = "UTC"), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+  } else {
+    format(parse_api_date(value), "%Y-%m-%d")
   }
-  format(parse_api_date(value), "%Y-%m-%d")
+  if (anyNA(out)) {
+    cli::cli_abort(
+      c(
+        "{.arg {name}} must be a date or a UTC timestamp, not {.val {as.character(value)}}.",
+        "i" = "Use a date like {.val 2025-01-15} or a UTC timestamp like
+          {.val 2025-01-15T13:45:00Z}."
+      ),
+      class = "epidatr__invalid_version_query"
+    )
+  }
+  out
 }
 
 #' Abort if more than one of the named arguments is non-NULL
@@ -314,7 +328,13 @@ format_time_filter <- function(value, name, bare_dates = TRUE) {
   }
   if (inherits(value, "EpiRange")) {
     x <- c(value$from, value$to)
-    x <- if (all(nchar(x) == 6)) parse_api_week(x) else parse_api_date(x)
+    if (all(nchar(x) == 6)) {
+      # Whole epiweeks: from the first week's Sunday to the last week's
+      # Saturday. Weekly V5 data is dated by the week's end, and the API's
+      # range end is an inclusive date.
+      return(paste0(parse_api_week(x[1]), ":", parse_api_week(x[2]) + 6))
+    }
+    x <- parse_api_date(x)
     return(paste0(x[1], ":", x[2]))
   }
   # Expressions (">=2024-01-01", "2024-01-01:2024-03-31") pass through.
@@ -334,8 +354,16 @@ format_time_filter <- function(value, name, bare_dates = TRUE) {
       )
     }
     x <- validate_timeset_input(name, value[!is_expr])
-    x <- if (inherits(x, "Date")) x else if (all(nchar(x) == 6)) parse_api_week(x) else parse_api_date(x)
-    out[!is_expr] <- paste0(x, ":", x)
+    if (inherits(x, "Date")) {
+      from <- to <- x
+    } else if (all(nchar(x) == 6)) {
+      # A single epiweek is the whole week, Sunday to Saturday.
+      from <- parse_api_week(x)
+      to <- from + 6
+    } else {
+      from <- to <- parse_api_date(x)
+    }
+    out[!is_expr] <- paste0(from, ":", to)
   }
   # The API ORs the expressions.
   paste(unique(out), collapse = ",")

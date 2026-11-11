@@ -277,3 +277,15 @@ test_that("fetch_args_list rejects an out-of-range reference_week_day", {
   }
   expect_no_error(fetch_args_list(reference_week_day = 7))
 })
+
+test_that("a failed fetch prints no stray timing line", {
+  local_mocked_bindings(request_epidata = function(...) stop("boom"))
+  call <- epidata_snapshot(
+    "nssp", "sig1",
+    geo_type = "state",
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  # system.time() reports an interrupted timing as a message
+  msgs <- capture.output(expect_error(fetch(call), "boom"), type = "message")
+  expect_false(any(grepl("Timing stopped", msgs)))
+})

@@ -107,8 +107,9 @@ filter_by_timeset <- function(df, column, timeset) {
       from <- parse_api_date(from)
       to <- parse_api_date(to)
     } else if (all(nchar(from) == 6)) {
+      # Whole epiweeks, Sunday to Saturday
       from <- parse_api_week(from)
-      to <- parse_api_week(to)
+      to <- parse_api_week(to) + 6
     }
     mask <- compare_values >= from & compare_values <= to
   } else {
@@ -117,7 +118,9 @@ filter_by_timeset <- function(df, column, timeset) {
       if (all(nchar(timeset) == 8)) {
         timeset <- parse_api_date(timeset)
       } else if (all(nchar(timeset) == 6)) {
-        timeset <- parse_api_week(timeset)
+        # Each epiweek matches every day of the week, Sunday to Saturday
+        starts <- parse_api_week(timeset)
+        timeset <- rep(starts, each = 7) + rep(0:6, times = length(starts))
       }
     }
     mask <- compare_values %in% timeset
@@ -160,6 +163,24 @@ filter_by_timeset <- function(df, column, timeset) {
     USE.NAMES = FALSE
   ))
   paste(terms, collapse = ",")
+}
+
+#' Split comma-joined values (`"sig1, sig2"`) into a clean character vector.
+#'
+#' Trims whitespace, drops empty items (such as from a trailing comma) and
+#' duplicates, and aborts if nothing is left.
+#' @param name argument name for error messages.
+#' @keywords internal
+split_comma_param <- function(name, value) {
+  items <- trimws(unlist(strsplit(value, ",", fixed = TRUE)))
+  items <- unique(items[items != ""])
+  if (length(items) == 0) {
+    cli::cli_abort(
+      "{.arg {name}} must name at least one value, not {.val {value}}.",
+      class = "epidatr__empty_param"
+    )
+  }
+  items
 }
 
 #' Format `geo_values` as the cast-API `geo_value` filter.

@@ -540,3 +540,28 @@ test_that("V5 CSV responses are cached raw and parsed on every read", {
     }
   )
 })
+
+test_that("a failed set_cache() turns off the cache it would have replaced", {
+  withr::defer(disable_cache())
+  rlang::local_interactive(FALSE)
+  expect_message(set_cache(cache_dir = withr::local_tempdir(), confirm = FALSE), "being used")
+  expect_true(is_cache_enabled())
+  # A missing directory that can't be created without asking
+  missing_dir <- file.path(withr::local_tempdir(), "not-yet")
+  expect_message(
+    set_cache(cache_dir = missing_dir, confirm = TRUE),
+    "cache is off"
+  )
+  expect_false(is_cache_enabled())
+
+  # A path that is a regular file is not a usable cache directory
+  expect_message(set_cache(cache_dir = withr::local_tempdir(), confirm = FALSE), "being used")
+  not_a_dir <- withr::local_tempfile()
+  writeLines("x", not_a_dir)
+  expect_message(
+    set_cache(cache_dir = not_a_dir, confirm = FALSE),
+    "Could not set the epidatr cache"
+  )
+  expect_false(is_cache_enabled())
+  expect_false(dir.exists(not_a_dir))
+})

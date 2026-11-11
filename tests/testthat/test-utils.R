@@ -163,3 +163,20 @@ test_that("get_wildcard_equivalent_dates works in basic cases", {
   result <- get_wildcard_equivalent_dates("*", "day")
   expect_identical(result, epirange(10000101, 30000101))
 })
+
+test_that("filter_by_timeset() treats epiweeks as whole weeks", {
+  # Weekly data dated by the week's end (Saturday), plus one daily row
+  df <- tibble::tibble(
+    reference_time = as.Date(c("2025-01-04", "2025-01-11", "2025-01-18", "2025-01-25", "2025-02-01", "2025-01-15"))
+  )
+  got <- function(timeset) format(sort(filter_by_timeset(df, "reference_time", timeset)$reference_time))
+  expect_equal(
+    got(epirange(202501, 202504)),
+    c("2025-01-04", "2025-01-11", "2025-01-15", "2025-01-18", "2025-01-25")
+  )
+  expect_equal(got(202503), c("2025-01-15", "2025-01-18"))
+  expect_equal(got(c("202501", "202505")), c("2025-01-04", "2025-02-01"))
+  # Dates are unchanged
+  expect_equal(got(epirange(20250105, 20250118)), c("2025-01-11", "2025-01-15", "2025-01-18"))
+  expect_equal(got(as.Date("2025-01-15")), "2025-01-15")
+})

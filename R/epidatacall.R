@@ -346,14 +346,15 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
     }
   }
 
-  # Otherwise fetch the data from the API.
-  runtime <- system.time({
-    response_content <- request_epidata(
-      epidata_call,
-      fetch_args,
-      simplify = !fetch_args$disable_data_frame_parsing
-    )
-  })
+  # Otherwise fetch the data from the API. Time it by hand: system.time()
+  # prints "Timing stopped at" when an error passes through it.
+  start_time <- proc.time()
+  response_content <- request_epidata(
+    epidata_call,
+    fetch_args,
+    simplify = !fetch_args$disable_data_frame_parsing
+  )
+  runtime <- proc.time() - start_time
 
   # Add the unparsed response to the cache if appropriate. With return_empty,
   # an API error response also comes back empty; don't store it, so a later
