@@ -5,6 +5,8 @@
 - `epidata_snapshot()`, `epidata_archive()`, and `epidata()` now filter
   `geo_values` and `reference_time` server-side via the cast-API `geo_value`
   and `reference_times` parameters (cmu-delphi/cast-api#110).
+- `epidata_aux()` now warns when some rows have no matching aux row (their aux
+  columns are `NA`), and hints that `limit` also caps the aux request.
 - `epidata_snapshot()`, `epidata_archive()`, and `epidata_aux()` results are now
   cached (when the cache is enabled) for fixed past versions: a `snapshot_date`
   at least two days ago (UTC), or a `report_time` range or `"<date"` whose end

@@ -713,7 +713,7 @@ test_that("epidata_aux merge is version-aware: archive per-row vs snapshot unifo
   )
   attr(archive, "cast_source") <- "nwss"
   attr(archive, "cast_kind") <- "archive"
-  out <- epidata_aux(archive)
+  expect_warning(out <- epidata_aux(archive), class = "epidatr__epidata__aux_unmatched")
   # 01-15 predates aux -> NA; 03-01 -> 02-01 (not newer 05-01); 06-01 -> 300;
   # ny 03-01 -> 01-01 (not newer 04-01); tx key absent -> NA
   expect_equal(out$population_served, c(NA, "100", "300", "350", NA))
