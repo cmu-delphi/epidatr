@@ -13,12 +13,13 @@ retry_resp <- function(status, retry_after = NULL, date = NULL, body = NULL) {
   if (is.null(body)) {
     body <- '{"detail": "Data temporarily unavailable.", "code": "database_table_unavailable"}'
   }
+  # nolint start: object_usage_linter.
   create_mock_response(
-    # nolint: object_usage_linter.
     body,
     status_code = status,
     headers = headers
   )
+  # nolint end
 }
 
 test_that("retry_after_seconds() parses Retry-After and never errors", {
