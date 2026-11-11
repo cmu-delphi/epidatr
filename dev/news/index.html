@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.2</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,8 @@
 </ul></li>
 <li>
 <code>fetch_args_list(disable_data_frame_parsing = TRUE)</code> now actually disables data frame parsing again.</li>
+<li>
+<code>report_time</code> values the API returns as a bare date (<code>YYYY-MM-DD</code>) are now parsed as a <code>Date</code> instead of <code>NA</code>. UTC timestamps are still parsed as <code>POSIXct</code>.</li>
 <li>
 <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="../reference/cast_api_queries.html">epidata()</a></code> now trim whitespace around comma-joined <code>signals</code> and <code>geo_type</code> values, so <code>"sig1, sig2"</code> works the same as <code>"sig1,sig2"</code> (<a href="https://github.com/cmu-delphi/epidatr/issues/407" class="external-link">#407</a>).</li>
 </ul></div>

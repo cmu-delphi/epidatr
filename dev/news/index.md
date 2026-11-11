@@ -98,6 +98,9 @@
     ([\#388](https://github.com/cmu-delphi/epidatr/issues/388)).
 - `fetch_args_list(disable_data_frame_parsing = TRUE)` now actually
   disables data frame parsing again.
+- `report_time` values the API returns as a bare date (`YYYY-MM-DD`) are
+  now parsed as a `Date` instead of `NA`. UTC timestamps are still
+  parsed as `POSIXct`.
 - [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
   [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
   and
