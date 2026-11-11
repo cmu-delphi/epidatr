@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.6</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,20 +43,15 @@
 <h2 class="pkg-version" data-toc-text="development version" id="epidatr-development-version">epidatr (development version)<a class="anchor" aria-label="anchor" href="#epidatr-development-version"></a></h2>
 <div class="section level3">
 <h3 id="changes-development-version">Changes<a class="anchor" aria-label="anchor" href="#changes-development-version"></a></h3>
-<ul><li>
-<code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="../reference/cast_api_queries.html">epidata()</a></code> now filter <code>geo_values</code> and <code>reference_time</code> server-side via the cast-API <code>geo_value</code> and <code>reference_times</code> parameters (cmu-delphi/cast-api#110).</li>
-<li>
-<code><a href="../reference/epidata_aux.html">epidata_aux()</a></code> now warns when some rows have no matching aux row (their aux columns are <code>NA</code>), and hints that <code>limit</code> also caps the aux request.</li>
-<li>
-<code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code> results are now cached (when the cache is enabled) for fixed past versions: a <code>snapshot_date</code> at least two days ago (UTC), or a <code>report_time</code> range or <code>"&lt;date"</code> whose end is at least two days ago. “Latest” snapshots, open-ended archives (including a <code>report_time</code> vector with any open-ended condition), and calls with a row <code>limit</code> are not cached. Previously no V5 query was ever cached.</li>
-<li>
-<code>epidata_aux(snapshot_date = "latest")</code> now uses today’s UTC date, so it no longer misses releases made after midnight UTC in time zones behind UTC.</li>
-<li>The cache now stores the unparsed API response and parses it on every read, so <code>reference_week_day</code> and <code>disable_date_parsing</code> no longer need to be part of the cache key and calls with <code>fields</code> can now be cached. Existing cache entries are ignored and re-fetched.</li>
-<li>The epidatr version is now part of the cache key, so cache entries written by a different epidatr version are never read back.</li>
-<li>
-<code><a href="../reference/fetch_args_list.html">fetch_args_list()</a></code> now rejects a <code>reference_week_day</code> that isn’t an integer from 1 to 7.</li>
-<li>
-<code><a href="../reference/cache_info.html">cache_info()</a></code> now also reports <code>enabled</code>, <code>n_entries</code> and <code>size_mb</code>, works when the cache is off (inspecting the default directory), and prints a hint about <code><a href="../reference/clear_cache.html">clear_cache()</a></code>.</li>
+<ul><li><p><code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="../reference/cast_api_queries.html">epidata()</a></code> now filter <code>geo_values</code> and <code>reference_time</code> server-side via the cast-API <code>geo_value</code> and <code>reference_times</code> parameters (cmu-delphi/cast-api#110).</p></li>
+<li><p><code><a href="../reference/epidata_aux.html">epidata_aux()</a></code> now warns when some rows have no matching aux row (their aux columns are <code>NA</code>), and hints that <code>limit</code> also caps the aux request.</p></li>
+<li><p><code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>, and <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code> results are now cached (when the cache is enabled) for fixed past versions: a <code>snapshot_date</code> at least two days ago (UTC), or a <code>report_time</code> range or <code>"&lt;date"</code> whose end is at least two days ago. “Latest” snapshots, open-ended archives (including a <code>report_time</code> vector with any open-ended condition), and calls with a row <code>limit</code> are not cached. Previously no V5 query was ever cached.</p></li>
+<li><p><code>epidata_aux(snapshot_date = "latest")</code> now uses today’s UTC date, so it no longer misses releases made after midnight UTC in time zones behind UTC.</p></li>
+<li><p>The cache now stores the unparsed API response and parses it on every read, so <code>reference_week_day</code> and <code>disable_date_parsing</code> no longer need to be part of the cache key and calls with <code>fields</code> can now be cached. Existing cache entries are ignored and re-fetched.</p></li>
+<li><p>The epidatr version is now part of the cache key, so cache entries written by a different epidatr version are never read back.</p></li>
+<li><p><code><a href="../reference/fetch_args_list.html">fetch_args_list()</a></code> now rejects a <code>reference_week_day</code> that isn’t an integer from 1 to 7.</p></li>
+<li><p><code><a href="../reference/cache_info.html">cache_info()</a></code> now also reports <code>enabled</code>, <code>n_entries</code> and <code>size_mb</code>, works when the cache is off (inspecting the default directory), and prints a hint about <code><a href="../reference/clear_cache.html">clear_cache()</a></code>.</p></li>
+<li><p>The cache now stores the unparsed API response and parses it on every read, so <code>reference_week_day</code> and <code>disable_date_parsing</code> no longer need to be part of the cache key and calls with <code>fields</code> can now be cached. Existing cache entries are ignored and re-fetched.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>

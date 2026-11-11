@@ -11,9 +11,11 @@
   now filter `geo_values` and `reference_time` server-side via the
   cast-API `geo_value` and `reference_times` parameters
   (cmu-delphi/cast-api#110).
+
 - [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md)
   now warns when some rows have no matching aux row (their aux columns
   are `NA`), and hints that `limit` also caps the aux request.
+
 - [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
   [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
   and
@@ -24,22 +26,32 @@
   “Latest” snapshots, open-ended archives (including a `report_time`
   vector with any open-ended condition), and calls with a row `limit`
   are not cached. Previously no V5 query was ever cached.
+
 - `epidata_aux(snapshot_date = "latest")` now uses today’s UTC date, so
   it no longer misses releases made after midnight UTC in time zones
   behind UTC.
+
 - The cache now stores the unparsed API response and parses it on every
   read, so `reference_week_day` and `disable_date_parsing` no longer
   need to be part of the cache key and calls with `fields` can now be
   cached. Existing cache entries are ignored and re-fetched.
+
 - The epidatr version is now part of the cache key, so cache entries
   written by a different epidatr version are never read back.
+
 - [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
   now rejects a `reference_week_day` that isn’t an integer from 1 to 7.
+
 - [`cache_info()`](https://cmu-delphi.github.io/epidatr/dev/reference/cache_info.md)
   now also reports `enabled`, `n_entries` and `size_mb`, works when the
   cache is off (inspecting the default directory), and prints a hint
   about
   [`clear_cache()`](https://cmu-delphi.github.io/epidatr/dev/reference/clear_cache.md).
+
+- The cache now stores the unparsed API response and parses it on every
+  read, so `reference_week_day` and `disable_date_parsing` no longer
+  need to be part of the cache key and calls with `fields` can now be
+  cached. Existing cache entries are ignored and re-fetched.
 
 ### Documentation
 

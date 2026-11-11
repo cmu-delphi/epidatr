@@ -67,7 +67,11 @@ invalidation by normal versioning.
 
 On the backend, the cache uses cachem, with filenames generated using an
 md5 encoding of the call url. Each file corresponds to a unique
-epidata-API call.
+epidata-API call. It stores the response before parsing, so `fetch_args`
+that only change parsing (such as `reference_week_day` or
+`disable_date_parsing`) share one cache entry. Calls with
+`disable_data_frame_parsing = TRUE` and the nested-list `"json"`
+endpoints are never cached.
 
 ## Usage
 
@@ -147,8 +151,8 @@ set_cache(
 )
 #> ! epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not
 #>   intended).
-#> ℹ The cache directory is /tmp/RtmpqxPklP.
+#> ℹ The cache directory is /tmp/RtmpO5zsjo.
 #> ℹ The cache will be cleared after 14 days and will be pruned if it exceeds 512
 #>   MB.
-#> ℹ The log of cache transactions is stored at /tmp/RtmpqxPklP/logs.txt.
+#> ℹ The log of cache transactions is stored at /tmp/RtmpO5zsjo/logs.txt.
 ```

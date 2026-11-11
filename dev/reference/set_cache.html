@@ -59,7 +59,10 @@ issues=&quot;*&quot; won't cache, since its subject to cache invalidation by nor
 versioning.
 On the backend, the cache uses cachem, with filenames generated using an md5
 encoding of the call url. Each file corresponds to a unique epidata-API
-call."><meta property="og:description" content="By default, epidatr re-requests data from the API on every call of fetch.
+call. It stores the response before parsing, so fetch_args that only
+change parsing (such as reference_week_day or disable_date_parsing)
+share one cache entry. Calls with disable_data_frame_parsing = TRUE and
+the nested-list &quot;json&quot; endpoints are never cached."><meta property="og:description" content="By default, epidatr re-requests data from the API on every call of fetch.
 In case you find yourself repeatedly calling the same data, you can enable
 the cache using either this function for a given session, or environmental
 variables for a persistent cache.
@@ -119,7 +122,10 @@ issues=&quot;*&quot; won't cache, since its subject to cache invalidation by nor
 versioning.
 On the backend, the cache uses cachem, with filenames generated using an md5
 encoding of the call url. Each file corresponds to a unique epidata-API
-call."><meta name="robots" content="noindex"></head><body>
+call. It stores the response before parsing, so fetch_args that only
+change parsing (such as reference_week_day or disable_date_parsing)
+share one cache entry. Calls with disable_data_frame_parsing = TRUE and
+the nested-list &quot;json&quot; endpoints are never cached."><meta name="robots" content="noindex"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -127,7 +133,7 @@ call."><meta name="robots" content="noindex"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.6</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -219,7 +225,10 @@ updates. While specifying <code>issues</code> will usually cache, a call with
 versioning.</p>
 <p>On the backend, the cache uses cachem, with filenames generated using an md5
 encoding of the call url. Each file corresponds to a unique epidata-API
-call.</p>
+call. It stores the response before parsing, so <code>fetch_args</code> that only
+change parsing (such as <code>reference_week_day</code> or <code>disable_date_parsing</code>)
+share one cache entry. Calls with <code>disable_data_frame_parsing = TRUE</code> and
+the nested-list <code>"json"</code> endpoints are never cached.</p>
     </div>
 
     <div class="section level2">
@@ -297,10 +306,10 @@ environment</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   intended).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache directory is /tmp/RtmpqxPklP.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache directory is /tmp/RtmpO5zsjo.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The cache will be cleared after 14 days and will be pruned if it exceeds 512</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   MB.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The log of cache transactions is stored at /tmp/RtmpqxPklP/logs.txt.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The log of cache transactions is stored at /tmp/RtmpO5zsjo/logs.txt.</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
