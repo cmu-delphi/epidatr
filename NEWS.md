@@ -46,6 +46,9 @@
 - Classic (V4) endpoints now warn (class `epidatr__dropped_meta_fields`) when
   the response lacks a column the endpoint promises. `fields` and
   `disable_missing_meta_warning` suppress it (#391).
+- Endpoints whose `epiweeks` or `issues` parameter only takes weeks (e.g.
+  `pub_flusurv()`, `pub_fluview()`) now error when given dates, instead of
+  returning an empty result (#278).
 
 - The cache now stores the unparsed API response and parses it on every read,
   so `reference_week_day` and `disable_date_parsing` no longer need to be part

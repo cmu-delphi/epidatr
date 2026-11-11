@@ -178,23 +178,27 @@ assert_uniform_granularity <- function(value) {
   }
 }
 
-#' Stop if timeset values are not of the kind implied by `time_type`
+#' Stop if timeset values are not of the kind (`"day"` or `"week"`) expected
 #' @keywords internal
 assert_time_type_matches <- function(name, value, time_type) {
-  expected <- if (time_type == "week") "week" else "day"
   found <- timeset_granularity(value)
-  if (any(found != expected)) {
+  if (any(found != time_type)) {
     stop(sprintf(
-      "`%s` holds %s values but `time_type` is \"%s\"; set `time_type` to match.",
-      name, setdiff(found, expected)[1], time_type
+      "`%s` expects %s values (%s) but got %s values; convert them first.%s",
+      name, time_type, if (time_type == "week") "YYYYWW" else "YYYYMMDD", setdiff(found, time_type)[1],
+      if (time_type == "week") " Epiweeks can be built with `MMWRweek::MMWRweek()`." else ""
     ))
   }
 }
 
 #' Validate and parse a timeset parameter
 #' @keywords internal
-validate_timeset_input <- function(name, value, len = NULL, required = TRUE) {
+validate_timeset_input <- function(name, value, len = NULL, required = TRUE, granularity = c("any", "day", "week")) {
+  granularity <- match.arg(granularity)
   assert_timeset_param(name, value, len = len, required = required)
+  if (granularity != "any" && !is.null(value)) {
+    assert_time_type_matches(name, value, granularity)
+  }
   parse_timeset_input(value)
 }
 

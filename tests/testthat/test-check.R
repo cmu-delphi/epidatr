@@ -120,7 +120,16 @@ test_that("timesets reject mixed day and week values", {
   expect_error(parse_timeset_input(c(20200101, 202201)), "mixes day")
   expect_error(
     pvt_twitter("k", "CA", time_values = epirange(201501, 202001), fetch_args = fetch_args_list(dry_run = TRUE)),
-    "time_type"
+    "expects day values"
+  )
+})
+
+test_that("week-only endpoint parameters reject dates", {
+  dry <- fetch_args_list(dry_run = TRUE)
+  expect_error(pub_flusurv("network_all", issues = as.Date("2020-01-01"), fetch_args = dry), "`issues` expects week")
+  expect_error(
+    pub_flusurv("network_all", epiweeks = epirange(20200101, 20200201), fetch_args = dry),
+    "`epiweeks` expects week"
   )
 })
 
@@ -146,7 +155,7 @@ test_that("review fixes: scalar responses and week-type Dates are rejected", {
       time_type = "week", time_values = as.Date("2020-01-01"),
       fetch_args = fetch_args_list(dry_run = TRUE)
     ),
-    "time_type"
+    "expects week values"
   )
 })
 

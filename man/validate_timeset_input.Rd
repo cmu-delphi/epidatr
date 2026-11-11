@@ -4,7 +4,13 @@
 \alias{validate_timeset_input}
 \title{Validate and parse a timeset parameter}
 \usage{
-validate_timeset_input(name, value, len = NULL, required = TRUE)
+validate_timeset_input(
+  name,
+  value,
+  len = NULL,
+  required = TRUE,
+  granularity = c("any", "day", "week")
+)
 }
 \description{
 Validate and parse a timeset parameter
