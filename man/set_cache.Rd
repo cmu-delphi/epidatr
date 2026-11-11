@@ -55,6 +55,17 @@ environmental variables \code{EPIDATR_USE_CACHE=TRUE} and
 example by calling \code{file.edit("~/.Renviron")}.
 See the parameters below for some more configurables if you're so inclined.
 
+The environmental variables, and the \code{set_cache()} argument each one is the
+default for, are:\tabular{lll}{
+   Variable \tab Default \tab \code{set_cache()} argument \cr
+   \code{EPIDATR_USE_CACHE} \tab unset (cache off) \tab none; \code{TRUE} enables the cache at startup \cr
+   \code{EPIDATR_CACHE_DIR} \tab \code{rappdirs::user_cache_dir("R", version = "epidatr")} \tab \code{cache_dir} \cr
+   \code{EPIDATR_CACHE_MAX_AGE_DAYS} \tab \code{1} \tab \code{days} \cr
+   \code{EPIDATR_CACHE_MAX_SIZE_MB} \tab \code{1024} \tab \code{max_size} \cr
+   \code{EPIDATR_CACHE_LOGFILE} \tab \code{"logfile.txt"} \tab \code{logfile} \cr
+}
+
+
 \code{set_cache} (re)defines the cache to use in a particular R session. This does
 not clear existing data at any previous location, but instead creates a
 handle to the new cache using \href{https://cachem.r-lib.org/index.html}{cachem}
