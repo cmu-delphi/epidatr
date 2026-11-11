@@ -1,5 +1,5 @@
 # Gate for tests that make real network calls to the Delphi Epidata API.
-# Default `devtools::test()` does NOT run these. Use `make test-live`, which
+# Default `devtools::test()` does NOT run these. Use `just test-live`, which
 # sets EPIDATR_LIVE_TEST=TRUE, to enable.
 #
 # We use a package-specific env var (not NOT_CRAN) because testthat's
@@ -18,7 +18,7 @@ skip_unless_live <- function() {
 }
 
 # Gate for pvt_* endpoints, which need an API key with private-endpoint access.
-# Skipped by default; opt in with `make test-live pvt=TRUE` (sets
+# Skipped by default; opt in with `just test-live --pvt` (sets
 # EPIDATR_TEST_PVT=TRUE).
 skip_unless_pvt <- function() {
   if (!isTRUE(as.logical(Sys.getenv("EPIDATR_TEST_PVT", "FALSE")))) {

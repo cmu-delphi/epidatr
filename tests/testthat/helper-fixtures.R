@@ -1,6 +1,6 @@
 # Recorded-response fixtures: one per API response shape, not per endpoint.
 # The raw bytes live in tests/testthat/fixtures/ and are refreshed by
-# data-raw/update_fixtures.R (make update-fixtures), which runs the same specs
+# data-raw/update_fixtures.R (just update-fixtures), which runs the same specs
 # against the real API. test-fixtures.R replays each through the full parsing
 # pipeline and snapshots the typed result, pinning the bytes -> tibble contract.
 #

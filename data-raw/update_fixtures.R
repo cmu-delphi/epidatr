@@ -1,5 +1,5 @@
 # Refresh the recorded API responses in tests/testthat/fixtures/.
-# Run from the repo root: make update-fixtures
+# Run from the repo root: just update-fixtures
 #
 # Pulls the raw response body for each query in fixture_specs()
 # (tests/testthat/helper-fixtures.R). After refreshing, rerun

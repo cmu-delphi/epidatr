@@ -1,7 +1,7 @@
 # Live integration tests for the cast (v5) API endpoints.
-# Runs under `make test-live-cast` (sets EPIDATR_LIVE_TEST=TRUE).
+# Runs under `just test-live-cast` (sets EPIDATR_LIVE_TEST=TRUE).
 # Set EPIDATR_CAST_BASE_URL to point at a non-default server, e.g.:
-#   make test-live-cast cast_url=http://localhost:8005/epidata/v5/
+#   just test-live-cast --cast-url http://localhost:8005/epidata/v5/
 
 cast_queries <- tibble::tribble(
   ~source, ~signal, ~geo_type,

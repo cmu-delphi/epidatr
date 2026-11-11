@@ -11,7 +11,7 @@ Please:
 - [ ] Describe changes made in NEWS.md, making sure breaking changes
       (backwards-incompatible changes to the documented interface) are noted.
       Collect the changes under the heading for the next release.
-- [ ] If you changed any vignette (`vignettes/*.Rmd.orig`), re-knit with `make
+- [ ] If you changed any vignette (`vignettes/*.Rmd.orig`), re-knit with `just
       vignettes` and commit the regenerated `.Rmd` files and figures alongside
       the `.Rmd.orig` sources. See DEVELOPMENT.md.
 - [ ] Prefer regular merge over squash merge.

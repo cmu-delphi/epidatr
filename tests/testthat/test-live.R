@@ -1,5 +1,5 @@
 # Live API tests. Each test calls skip_unless_live(); the suite only runs
-# under `make test-live` (which sets EPIDATR_LIVE_TEST=TRUE).
+# under `just test-live` (which sets EPIDATR_LIVE_TEST=TRUE).
 # DELPHI_EPIDATA_KEY must be in the environment for the pvt_* endpoints.
 #
 # The classic endpoints are driven by the endpoint_calls() table in
