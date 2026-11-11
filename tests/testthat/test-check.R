@@ -180,3 +180,8 @@ test_that("assert_exclusive allows at most one non-NULL argument", {
   )
   expect_error(assert_exclusive(issues = 1, lag = 2), "mutually exclusive")
 })
+
+test_that("invalid time inputs raise classed errors", {
+  expect_error(epirange(20200101, 202001), class = "epidatr__epirange_format_mismatch")
+  expect_error(parse_timeset_input(123), class = "epidatr__invalid_timeset")
+})

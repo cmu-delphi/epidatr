@@ -74,7 +74,13 @@ assert_report_time_param <- function(name, value, len = NULL, required = TRUE) {
     .var.name = name
   )
   if (!is.null(len) && inherits(value, "POSIXt") && length(value) != len) {
-    stop(sprintf("Assertion on '%s' failed: Must have length %d, but has length %d.", name, len, length(value)))
+    cli::cli_abort(
+      c(
+        "{.arg {name}} must have length {len}.",
+        "x" = "It has length {length(value)}."
+      ),
+      class = "epidatr__bad_length"
+    )
   }
 }
 
@@ -158,7 +164,13 @@ parse_timeset_input <- function(value) {
       assert_uniform_granularity(value)
       return(value)
     } else {
-      stop(paste0("Invalid timeset input: ", value))
+      cli::cli_abort(
+        c(
+          "Invalid timeset input.",
+          "x" = "Got {.val {value}}; expected dates, YYYYMMDD or YYYYWW values, {.val *}, or an {.fn epirange}."
+        ),
+        class = "epidatr__invalid_timeset"
+      )
     }
   } else if (test_character(value)) {
     if (identical(value, "*")) {
@@ -170,12 +182,24 @@ parse_timeset_input <- function(value) {
       value <- as.Date(value, format = "%Y-%m-%d")
       return(format(value, format = "%Y%m%d"))
     } else {
-      stop(paste0("Invalid timeset input: ", value))
+      cli::cli_abort(
+        c(
+          "Invalid timeset input.",
+          "x" = "Got {.val {value}}; expected dates, YYYYMMDD or YYYYWW values, {.val *}, or an {.fn epirange}."
+        ),
+        class = "epidatr__invalid_timeset"
+      )
     }
   } else if (test_class(value, "EpiRange")) {
     return(value)
   } else {
-    stop(paste0("Invalid timeset input: ", value))
+    cli::cli_abort(
+      c(
+        "Invalid timeset input.",
+        "x" = "Got {.val {value}}; expected dates, YYYYMMDD or YYYYWW values, {.val *}, or an {.fn epirange}."
+      ),
+      class = "epidatr__invalid_timeset"
+    )
   }
 }
 
@@ -198,7 +222,10 @@ timeset_granularity <- function(value) {
 #' @keywords internal
 assert_uniform_granularity <- function(value) {
   if (length(unique(timeset_granularity(value))) > 1) {
-    stop("Timeset mixes day (YYYYMMDD) and week (YYYYWW) values; use one kind per parameter.")
+    cli::cli_abort(
+      "Timeset mixes day (YYYYMMDD) and week (YYYYWW) values; use one kind per parameter.",
+      class = "epidatr__mixed_timeset"
+    )
   }
 }
 
@@ -207,11 +234,14 @@ assert_uniform_granularity <- function(value) {
 assert_time_type_matches <- function(name, value, time_type) {
   found <- timeset_granularity(value)
   if (any(found != time_type)) {
-    stop(sprintf(
-      "`%s` expects %s values (%s) but got %s values; convert them first.%s",
-      name, time_type, if (time_type == "week") "YYYYWW" else "YYYYMMDD", setdiff(found, time_type)[1],
-      if (time_type == "week") " Epiweeks can be built with `MMWRweek::MMWRweek()`." else ""
-    ))
+    cli::cli_abort(
+      c(
+        "{.arg {name}} expects {time_type} values ({if (time_type == 'week') 'YYYYWW' else 'YYYYMMDD'}).",
+        "x" = "Got {setdiff(found, time_type)[1]} values; convert them first.",
+        "i" = if (time_type == "week") "Epiweeks can be built with {.fn MMWRweek::MMWRweek}."
+      ),
+      class = "epidatr__timeset_granularity_mismatch"
+    )
   }
 }
 

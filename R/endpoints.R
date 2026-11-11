@@ -179,7 +179,10 @@ pub_covid_hosp_facility_lookup <- function(
       missing(zip) &&
       missing(fips_code)
   ) {
-    stop("one of `state`, `ccn`, `city`, `zip`, or `fips_code` is required")
+    cli::cli_abort(
+      "One of {.arg state}, {.arg ccn}, {.arg city}, {.arg zip}, or {.arg fips_code} is required.",
+      class = "epidatr__pub_covid_hosp_facility_lookup__missing_required_args"
+    )
   }
   if (
     sum(
@@ -191,8 +194,9 @@ pub_covid_hosp_facility_lookup <- function(
     ) >
       1
   ) {
-    stop(
-      "only one of `state`, `ccn`, `city`, `zip`, or `fips_code` can be specified"
+    cli::cli_abort(
+      "Only one of {.arg state}, {.arg ccn}, {.arg city}, {.arg zip}, or {.arg fips_code} can be specified.",
+      class = "epidatr__pub_covid_hosp_facility_lookup__too_many_args"
     )
   }
   create_epidata_call(

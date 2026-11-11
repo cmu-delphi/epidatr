@@ -51,6 +51,10 @@
   returning an empty result (#278).
 - The `issues`/`lag`/`as_of` exclusivity check is now shared by all endpoints,
   and its error has class `epidatr__exclusive_args` (#222).
+- Argument errors that were plain `stop()` calls (timeset parsing, mismatched
+  `epirange()` ends, and others) are now `cli` errors with condition classes,
+  e.g. `epidatr__invalid_timeset` and `epidatr__epirange_format_mismatch`
+  (#206).
 
 - The cache now stores the unparsed API response and parses it on every read,
   so `reference_week_day` and `disable_date_parsing` no longer need to be part
