@@ -55,6 +55,16 @@ test_that("fetch surfaces http errors", {
   )
 })
 
+test_that("classic envelope errors at HTTP 200 abort, including truncated results", {
+  for (result in c(-1, 2)) {
+    body <- sprintf('{"epidata": [{"a": 1}], "message": "oops", "result": %d}', result)
+    with_mocked_response(
+      body,
+      expect_error(pub_delphi(system = "ec", epiweek = 201501), class = "epidata_error")
+    )
+  }
+})
+
 test_that("fetch_args", {
   expect_snapshot_value(fetch_args_list(), style = "json2", cran = TRUE)
   expect_snapshot_value(

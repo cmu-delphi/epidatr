@@ -290,3 +290,32 @@ test_that("the 414 fallback POSTs with parameters in the body only", {
   expect_false(grepl("?", seen[[2]]$url, fixed = TRUE))
   expect_named(seen[[2]]$body$data, c("auth", "locations", "epiweeks"), ignore.order = TRUE)
 })
+
+test_that("the API key is sent as Basic auth (classic) or a token header (cast)", {
+  hdr <- function(req) httr2::req_get_headers(req, redacted = "reveal")
+  seen <- NULL
+  capture <- function(req) {
+    seen <<- req
+    '{"epidata":[],"result":-2,"message":"no results"}'
+  }
+
+  withr::local_envvar(DELPHI_EPIDATA_KEY = "secret")
+  with_mock_perform(capture, suppressWarnings(
+    pub_delphi(system = "ec", epiweek = 201501, fetch_args = fetch_args_list(return_empty = TRUE))
+  ))
+  expect_identical(
+    hdr(seen)$Authorization,
+    paste("Basic", jsonlite::base64_enc(charToRaw("epidata:secret")))
+  )
+  expect_null(hdr(seen)$token)
+
+  seen <- NULL
+  with_mock_perform(capture, try(epidata_meta(), silent = TRUE))
+  expect_identical(hdr(seen)$token, "secret")
+  expect_null(hdr(seen)$Authorization)
+
+  withr::local_envvar(DELPHI_EPIDATA_KEY = "")
+  seen <- NULL
+  with_mock_perform(capture, suppressWarnings(try(epidata_meta(), silent = TRUE)))
+  expect_null(hdr(seen)$token)
+})
