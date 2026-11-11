@@ -450,10 +450,23 @@ request_epidata <- function(
   }
 
   # JSON parsing (both "json" and "classic")
-  response_content <- httr2::resp_body_json(
-    res,
-    simplifyVector = simplify,
-    simplifyDataFrame = simplify
+  response_content <- tryCatch(
+    httr2::resp_body_json(
+      res,
+      simplifyVector = simplify,
+      simplifyDataFrame = simplify
+    ),
+    error = function(e) {
+      cli::cli_abort(
+        c(
+          "The API response could not be parsed as JSON",
+          "i" = "Request: {.url {httr2::resp_url(res)}}",
+          "x" = conditionMessage(e)
+        ),
+        class = "epidatr__unparseable_response",
+        parent = e
+      )
+    }
   )
 
   if (epidata_call$response_format == "json") {

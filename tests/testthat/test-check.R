@@ -123,3 +123,15 @@ test_that("timesets reject mixed day and week values", {
     "time_type"
   )
 })
+
+test_that("malformed response envelopes get a clear error", {
+  bad <- list(
+    list(epidata = list(), message = "success"),
+    list(result = 1),
+    list(result = c(1L, 1L), message = "success"),
+    list(result = 1, message = "success")
+  )
+  for (b in bad) expect_error(check_epidata_result(b), class = "epidatr__malformed_envelope")
+  expect_no_error(check_epidata_result(list(epidata = list(), result = 1, message = "success")))
+  expect_no_error(check_epidata_result(list(result = -2, message = "success"), allow_empty = TRUE))
+})
