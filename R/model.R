@@ -53,13 +53,13 @@ epirange <- function(from, to) {
   }
 
   if (nchar(from) != nchar(to)) {
-    stop(paste0(
-      "EpiRange error, from (",
-      from,
-      ") and to (",
-      to,
-      ") must be the same format"
-    ))
+    cli::cli_abort(
+      c(
+        "{.arg from} and {.arg to} must be the same format.",
+        "x" = "{.arg from} is {from} and {.arg to} is {to}."
+      ),
+      class = "epidatr__epirange_format_mismatch"
+    )
   }
 
   if (to < from) {

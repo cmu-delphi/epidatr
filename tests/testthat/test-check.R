@@ -134,3 +134,8 @@ test_that("endpoints treat an explicit NULL as 'not supplied' for issues/lag", {
     class = "epidatr__exclusive_args"
   )
 })
+
+test_that("invalid time inputs raise classed errors", {
+  expect_error(epirange(20200101, 202001), class = "epidatr__epirange_format_mismatch")
+  expect_error(parse_timeset_input(123), class = "epidatr__invalid_timeset")
+})

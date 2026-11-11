@@ -74,7 +74,13 @@ assert_report_time_param <- function(name, value, len = NULL, required = TRUE) {
     .var.name = name
   )
   if (!is.null(len) && inherits(value, "POSIXt") && length(value) != len) {
-    stop(sprintf("Assertion on '%s' failed: Must have length %d, but has length %d.", name, len, length(value)))
+    cli::cli_abort(
+      c(
+        "{.arg {name}} must have length {len}.",
+        "x" = "It has length {length(value)}."
+      ),
+      class = "epidatr__bad_length"
+    )
   }
 }
 
@@ -157,7 +163,13 @@ parse_timeset_input <- function(value) {
     if (all(nchar(value) %in% c(6, 8))) {
       return(value)
     } else {
-      stop(paste0("Invalid timeset input: ", value))
+      cli::cli_abort(
+        c(
+          "Invalid timeset input.",
+          "x" = "Got {.val {value}}; expected dates, YYYYMMDD or YYYYWW values, {.val *}, or an {.fn epirange}."
+        ),
+        class = "epidatr__invalid_timeset"
+      )
     }
   } else if (test_character(value)) {
     if (identical(value, "*")) {
@@ -168,12 +180,24 @@ parse_timeset_input <- function(value) {
       value <- as.Date(value, format = "%Y-%m-%d")
       return(format(value, format = "%Y%m%d"))
     } else {
-      stop(paste0("Invalid timeset input: ", value))
+      cli::cli_abort(
+        c(
+          "Invalid timeset input.",
+          "x" = "Got {.val {value}}; expected dates, YYYYMMDD or YYYYWW values, {.val *}, or an {.fn epirange}."
+        ),
+        class = "epidatr__invalid_timeset"
+      )
     }
   } else if (test_class(value, "EpiRange")) {
     return(value)
   } else {
-    stop(paste0("Invalid timeset input: ", value))
+    cli::cli_abort(
+    c(
+      "Invalid timeset input.",
+      "x" = "Got {.val {value}}; expected dates, YYYYMMDD or YYYYWW values, {.val *}, or an {.fn epirange}."
+    ),
+    class = "epidatr__invalid_timeset"
+  )
   }
 }
 

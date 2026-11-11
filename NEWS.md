@@ -2,6 +2,11 @@
 
 ## Changes
 
+- Argument errors now use `cli` messages with condition classes (e.g.
+  `epidatr__exclusive_args`, `epidatr__invalid_timeset`,
+  `epidatr__epirange_format_mismatch`) instead of plain `stop()`, and the
+  `issues`/`lag` exclusivity check is shared across endpoints. It treats an
+  explicit `NULL` as "not supplied" (#222, #206).
 - `epidata_snapshot()`, `epidata_archive()`, and `epidata()` now filter
   `geo_values` and `reference_time` server-side via the cast-API `geo_value`
   and `reference_times` parameters (cmu-delphi/cast-api#110).
