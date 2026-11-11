@@ -1959,6 +1959,19 @@ epidata_aux.data.frame <- function(
     multiple = "any"
   )
   idx <- m$haystack[order(m$needles)]
+  n_unmatched <- sum(is.na(idx))
+  if (n_unmatched > 0L) {
+    cli::cli_warn(
+      c(
+        "{n_unmatched} of {length(idx)} row{?s} had no matching aux row, so the aux columns are `NA` there.",
+        "i" = "Each row needs an aux row with equal keys and a `report_time` at or before its own.",
+        "i" = if (!is.null(fetch_args$limit)) {
+          "`limit` also caps the aux request, which can drop aux rows. Try without it."
+        }
+      ),
+      class = "epidatr__epidata__aux_unmatched"
+    )
+  }
   value_cols <- setdiff(names(aux), c(names(base), ver))
   base[value_cols] <- vctrs::vec_slice(aux[value_cols], idx)
   base

@@ -11,9 +11,6 @@ The Delphi 'Epidata' API provides real-time access to epidemiological surveillan
 \section{Package options}{
 
 
-The \code{delphi.epidata.key} option specifies the API key to be used when making
-requests to the Epidata API.
-
 The \code{epidatr.max_retry_wait} option (default 60) is the longest wait, in
 seconds, that epidatr will honour when the API asks it to retry later (via a
 \code{Retry-After} header). A request asked to wait longer fails right away with
