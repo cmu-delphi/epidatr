@@ -25,3 +25,28 @@ weeks. Most endpoints support only one or the other. Some (less commonly
 used) endpoints may not accept the \code{"*"} wildcard, but this can be simulated
 with a large \code{epirange()}.
 }
+\examples{
+# A single day, as a Date, an integer, or a string (all mean 2021-03-04)
+as.Date("2021-03-04")
+20210304
+"20210304"
+
+# Several days: a vector of dates
+as.Date(c("2021-03-04", "2021-03-06"))
+
+# Every day from 2021-03-01 to 2021-03-07, inclusive
+epirange(20210301, 20210307)
+
+# A single epiweek (week 9 of 2021), and a vector of epiweeks
+202109
+c(202109, 202111)
+
+# Epiweeks 9 through 12 of 2021, inclusive
+epirange(202109, 202112)
+
+# All available times (not accepted by every endpoint)
+"*"
+
+# Use one kind (days or weeks) per parameter; most endpoints accept only one.
+# To convert dates to epiweeks, use `MMWRweek::MMWRweek()`.
+}
