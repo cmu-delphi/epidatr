@@ -277,3 +277,21 @@ test_that("fetch_args_list rejects an out-of-range reference_week_day", {
   }
   expect_no_error(fetch_args_list(reference_week_day = 7))
 })
+
+test_that("print.epidata_call hides the endpoint auth key (#386)", {
+  expect_identical(
+    redact_auth("https://x/cdc/?auth=SECRET&locations=fl"),
+    "https://x/cdc/?auth=<redacted>&locations=fl"
+  )
+  expect_identical(redact_auth("https://x/a/?b=1&auth=SECRET"), "https://x/a/?b=1&auth=<redacted>")
+  expect_identical(redact_auth("https://x/a/?author=me"), "https://x/a/?author=me")
+  call <- pvt_cdc(
+    auth = "SECRETKEY", locations = "fl", epiweeks = epirange(201501, 201601),
+    fetch_args = fetch_args_list(dry_run = TRUE)
+  )
+  out <- paste(cli::cli_fmt(print(call)), collapse = "\n")
+  expect_false(grepl("SECRETKEY", out, fixed = TRUE))
+  expect_match(out, "auth=<redacted>", fixed = TRUE)
+  # The request itself still carries the key.
+  expect_match(call$request$url, "auth=SECRETKEY", fixed = TRUE)
+})

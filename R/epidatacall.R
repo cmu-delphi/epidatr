@@ -138,8 +138,14 @@ print.epidata_call <- function(x, ...) {
   cli::cli_h1("<epidata_call> object:")
   cli::cli_bullets(c(
     "*" = "Pipe this object into `fetch()` to actually fetch the data",
-    "*" = paste0("Request URL: ", x$request$url)
+    "*" = paste0("Request URL: ", redact_auth(x$request$url))
   ))
+}
+
+# Endpoint `auth` keys travel in the query string. Hide them wherever the URL
+# is shown so they don't end up in pasted output or notebooks.
+redact_auth <- function(url) {
+  sub("([?&]auth=)[^&]*", "\\1<redacted>", url)
 }
 
 #' Set custom API request parameters
