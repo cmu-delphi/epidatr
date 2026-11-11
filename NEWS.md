@@ -34,6 +34,18 @@
 - Timeset arguments now error when a vector mixes day (`YYYYMMDD`) and week
   (`YYYYWW`) values, and `pvt_twitter()` and `pub_wiki()` error when
   `time_values` doesn't match `time_type` (#400).
+- The 414 (URI too long) fallback to POST now works: it strips the query from
+  the URL and sends the parameters in the form body only (#393).
+- Unknown values in categorical fields now warn (class
+  `epidatr__unknown_category`) and are kept as extra factor levels instead of
+  silently becoming `NA` (#392).
+- Classic (V4) endpoints now warn (class `epidatr__dropped_meta_fields`) when
+  the response lacks a column the endpoint promises. `fields` and
+  `disable_missing_meta_warning` suppress it (#391).
+- A 200 response with a missing or non-scalar `result` or `message`, or with
+  `result` 1 or 2 but no `epidata`, now raises `epidatr__malformed_envelope`;
+  a non-JSON body raises `epidatr__unparseable_response` with the request URL
+  (#389, #390).
 
 ## Documentation
 
