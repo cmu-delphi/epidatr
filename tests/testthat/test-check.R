@@ -115,3 +115,22 @@ test_that("format_time_filter() for report_time", {
 
   expect_error(rt("not-a-date"), class = "epidatr__invalid_version_query")
 })
+
+test_that("assert_exclusive allows at most one non-NULL argument", {
+  expect_no_error(assert_exclusive(issues = NULL, lag = NULL))
+  expect_no_error(assert_exclusive(issues = 1, lag = NULL, as_of = NULL))
+  expect_error(
+    assert_exclusive(issues = 1, lag = 2, as_of = NULL, class = "my_class"),
+    class = "my_class"
+  )
+  expect_error(assert_exclusive(issues = 1, lag = 2), "mutually exclusive")
+})
+
+test_that("endpoints treat an explicit NULL as 'not supplied' for issues/lag", {
+  dry <- fetch_args_list(dry_run = TRUE)
+  expect_no_error(pub_flusurv("network_all", epiweeks = 202001, issues = NULL, lag = 1, fetch_args = dry))
+  expect_error(
+    pub_flusurv("network_all", epiweeks = 202001, issues = 202002, lag = 1, fetch_args = dry),
+    class = "epidatr__exclusive_args"
+  )
+})

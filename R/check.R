@@ -99,6 +99,30 @@ format_report_time_bound <- function(value) {
   format(parse_api_date(value), "%Y-%m-%d")
 }
 
+#' Abort if more than one of the named arguments is non-NULL
+#'
+#' Pass the arguments by name, e.g. `assert_exclusive(issues = issues, lag = lag)`.
+#' @param ... named arguments; `NULL` means "not supplied".
+#' @param class extra condition class to add to the error.
+#' @param call the call shown in the error message.
+#' @keywords internal
+assert_exclusive <- function(..., class = NULL, call = rlang::caller_env()) {
+  args <- list(...)
+  supplied <- names(args)[!vapply(args, is.null, logical(1))]
+  if (length(supplied) > 1) {
+    all_names <- names(args)
+    cli::cli_abort(
+      c(
+        "{.arg {all_names}} are mutually exclusive.",
+        "x" = "You supplied {.arg {supplied}}."
+      ),
+      class = c(class, "epidatr__exclusive_args"),
+      call = call
+    )
+  }
+  invisible(NULL)
+}
+
 #' Allows a timeset param: a date vector, a character vector, an integer-like
 #' vector, or a single EpiRange
 #' @importFrom checkmate assert check_character check_date check_integerish check_class check_list check_names
