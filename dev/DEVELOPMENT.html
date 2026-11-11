@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.11</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@
 <div class="section level2">
 <h2 id="setting-up-the-development-environment">Setting up the development environment<a class="anchor" aria-label="anchor" href="#setting-up-the-development-environment"></a></h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'devtools'</span>, <span class="st">'pkgdown'</span>, <span class="st">'styler'</span>, <span class="st">'lintr'</span><span class="op">)</span><span class="op">)</span> <span class="co"># install dev dependencies</span></span>
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'devtools'</span>, <span class="st">'pkgdown'</span>, <span class="st">'lintr'</span><span class="op">)</span><span class="op">)</span> <span class="co"># install dev dependencies</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_deps</span><span class="op">(</span>dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># install package dependencies</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/local_install_deps.html" class="external-link">local_install_deps</a></span><span class="op">(</span>dependencies <span class="op">=</span> <span class="st">"Config/Needs/precompile"</span><span class="op">)</span> <span class="co"># vignette-knitting deps</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span> <span class="co"># generate package meta data and man files</span></span>
@@ -52,7 +52,7 @@
 <div class="section level2">
 <h2 id="validating-the-package">Validating the package<a class="anchor" aria-label="anchor" href="#validating-the-package"></a></h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">styler</span><span class="fu">::</span><span class="fu">style_pkg</span><span class="op">(</span><span class="op">)</span> <span class="co"># format code</span></span>
+<code class="sourceCode R"><span><span class="co"># Format code with `just format` (runs `air format .`; needs the air CLI: https://posit-dev.github.io/air/)</span></span>
 <span><span class="fu">lintr</span><span class="fu">::</span><span class="fu"><a href="https://lintr.r-lib.org/reference/lint.html" class="external-link">lint_package</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># lint code</span></span>
 <span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span> <span class="co"># test package</span></span>
@@ -62,8 +62,8 @@
 <h2 id="vignettes-are-precompiled">Vignettes are precompiled<a class="anchor" aria-label="anchor" href="#vignettes-are-precompiled"></a></h2>
 <p>The editable vignette sources are <code>vignettes/*.Rmd.orig</code>. They make live API calls, so they are knitted ahead of time into the static <code>vignettes/*.Rmd</code> files that <code>R CMD build</code>, CI, and CRAN render without any network access. Both files are committed.</p>
 <p>To edit a vignette, change its <code>.Rmd.orig</code> and re-knit. This requires network, the current package code installed, and the knitting-only packages listed in the <code>Config/Needs/precompile</code> field of DESCRIPTION (they are deliberately not Suggests, so CI never installs them):</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">make</span> vignettes                                <span class="co"># all vignettes</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="ex">Rscript</span> vignettes/precompile.R signal-discovery <span class="co"># just one</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">just</span> vignettes                  <span class="co"># all vignettes</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="ex">just</span> vignettes signal-discovery <span class="co"># only this one</span></span></code></pre></div>
 <p>Review the resulting <code>.Rmd</code> diff — it contains the real API output, so it also acts as a snapshot of API behavior. Re-knit whenever a <code>.Rmd.orig</code>, the package’s output formatting, or relevant API behavior changes.</p>
 <p>Because fetched output is committed and published, chunks calling private endpoints (<code>pvt_*</code>) or anything requiring restricted access must stay <code>eval = FALSE</code> in the <code>.Rmd.orig</code> sources. Prefer knitting without <code>DELPHI_EPIDATA_KEY</code> set so a private call cannot succeed by accident.</p>
 </div>
@@ -87,31 +87,31 @@
 <h2 id="versioning">Versioning<a class="anchor" aria-label="anchor" href="#versioning"></a></h2>
 <p><code>DESCRIPTION</code> versions follow <code>major.minor.patch</code>. The CRAN version is always the latest release, and <code>dev</code> is always ahead of it.</p>
 <ul><li>You don’t need to bump the patch version in your PR. After each merge into <code>dev</code>, the <code>version-bump</code> workflow commits a patch bump straight to <code>dev</code> (e.g. 1.4.1 -&gt; 1.4.2).</li>
-<li>For a minor or major bump, set the version by hand in your PR (<code>make bump level=minor</code> does the edit). If a merge changed <code>Version</code>, the workflow leaves it alone.</li>
+<li>For a minor or major bump, set the version by hand in your PR (<code>just bump minor</code> does the edit). If a merge changed <code>Version</code>, the workflow leaves it alone.</li>
 </ul><p>See also the <a href="pull_request_template.html">PR template</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="release-process">Release process<a class="anchor" aria-label="anchor" href="#release-process"></a></h2>
-<p>Most steps are Makefile targets. Run <code>make install</code> once to get the tools they use. Open a release issue and copy this checklist into it:</p>
+<p>Most steps are <a href="https://just.systems" class="external-link">just</a> recipes (run <code>just</code> to list them). Run <code>just install</code> once to get the tools they use. Open a release issue and copy this checklist into it:</p>
 <p>Prepare, on <code>dev</code>:</p>
-<ul class="task-list"><li><label><input type="checkbox"><code>make cran-status</code>: compare the <code>DESCRIPTION</code>, <code>CRAN-SUBMISSION</code>, and on-CRAN versions, and check the current CRAN check results for problems to fix.</label></li>
-<li><label><input type="checkbox">Set the release version by hand if it isn’t a patch release (<code>make bump level=minor</code> in a PR) and <a href="https://style.tidyverse.org/news.html#news-release" class="external-link">polish NEWS</a>.</label></li>
+<ul class="task-list"><li><label><input type="checkbox"><code>just cran-status</code>: compare the <code>DESCRIPTION</code>, <code>CRAN-SUBMISSION</code>, and on-CRAN versions, and check the current CRAN check results for problems to fix.</label></li>
+<li><label><input type="checkbox">Set the release version by hand if it isn’t a patch release (<code>just bump minor</code> in a PR) and <a href="https://style.tidyverse.org/news.html#news-release" class="external-link">polish NEWS</a>.</label></li>
 <li><label><input type="checkbox">Update <code>cran-comments.md</code>.</label></li>
-<li><label><input type="checkbox"><code>make release-check</code>: preflight, <code>document</code>, URL check, README rebuild, and a CRAN-like <code>R CMD check</code> with incoming checks. Aim for 0 errors, 0 warnings, and 0 notes. Fix problems in PRs to <code>dev</code>.</label></li>
-<li><label><input type="checkbox"><code>make check-full-ci branch=dev</code> to run the full OS/R-version matrix.</label></li>
+<li><label><input type="checkbox"><code>just release-check</code>: preflight, <code>document</code>, URL check, README rebuild, and a CRAN-like <code>R CMD check</code> with incoming checks. Aim for 0 errors, 0 warnings, and 0 notes. Fix problems in PRs to <code>dev</code>.</label></li>
+<li><label><input type="checkbox"><code>just check-full-ci dev</code> to run the full OS/R-version matrix.</label></li>
 <li><label><input type="checkbox">Check reverse dependencies (e.g. <code>epiprocess</code>, <code>epipredict</code>) against <code>dev</code> with <a href="https://github.com/r-devel/recheck" class="external-link"><code>r-devel/recheck</code></a> and fix any regressions. CRAN also runs this on submission.</label></li>
 <li><label><input type="checkbox">Open the release PR from <code>dev</code> into <code>main</code> and merge it.</label></li>
 </ul><p>Submit, from the tip of <code>main</code> with a clean working tree:</p>
-<ul class="task-list"><li><label><input type="checkbox"><code>make check-win</code> (and optionally <code>make check-mac</code>). The maintainer (“cre” in <code>DESCRIPTION</code>) gets the results by email.</label></li>
-<li><label><input type="checkbox"><code>make submit</code>. It reruns the preflight, refuses to run anywhere except <code>origin/main</code>, and asks confirmation questions. After a successful upload it writes the version and SHA to <code>CRAN-SUBMISSION</code> and leaves it uncommitted.</label></li>
+<ul class="task-list"><li><label><input type="checkbox"><code>just check-win</code> (and optionally <code>just check-mac</code>). The maintainer (“cre” in <code>DESCRIPTION</code>) gets the results by email.</label></li>
+<li><label><input type="checkbox"><code>just submit</code>. It reruns the preflight, refuses to run anywhere except <code>origin/main</code>, and asks confirmation questions. After a successful upload it writes the version and SHA to <code>CRAN-SUBMISSION</code> and leaves it uncommitted.</label></li>
 <li><label><input type="checkbox">The maintainer confirms the submission from the CRAN email.</label></li>
 </ul><p>Wait for CRAN. If CRAN rejects the package, discard the <code>CRAN-SUBMISSION</code> change (<code>git checkout CRAN-SUBMISSION</code>), fix the problems through <code>dev</code> and then <code>main</code>, and submit again.</p>
 <p>After acceptance:</p>
 <ul class="task-list"><li><label><input type="checkbox">Commit the updated <code>CRAN-SUBMISSION</code> on a branch off <code>main</code>, and open and merge a PR for it into <code>main</code>.</label></li>
-<li><label><input type="checkbox"><code>make backmerge</code> opens the <code>main</code> -&gt; <code>dev</code> PR. Merge it.</label></li>
-<li><label><input type="checkbox"><code>make release draft=true</code> tags the commit recorded in <code>CRAN-SUBMISSION</code>, pushes the tag, and creates a draft GitHub release. It refuses to run until that version is on CRAN.</label></li>
+<li><label><input type="checkbox"><code>just backmerge</code> opens the <code>main</code> -&gt; <code>dev</code> PR. Merge it.</label></li>
+<li><label><input type="checkbox"><code>just release --draft</code> tags the commit recorded in <code>CRAN-SUBMISSION</code>, pushes the tag, and creates a draft GitHub release. It refuses to run until that version is on CRAN.</label></li>
 <li><label><input type="checkbox">Review the release notes on GitHub and publish them.</label></li>
-</ul><p>If a submission was made without <code>make submit</code>, fix <code>CRAN-SUBMISSION</code> by hand with <code>make cran-submission version=X.Y.Z ref=&lt;submitted commit&gt;</code>. <code>make cran-status</code> shows whether it matches CRAN.</p>
+</ul><p>If a submission was made without <code>just submit</code>, fix <code>CRAN-SUBMISSION</code> by hand with <code>just cran-submission X.Y.Z &lt;submitted commit&gt;</code>. <code>just cran-status</code> shows whether it matches CRAN.</p>
 </div>
 
 

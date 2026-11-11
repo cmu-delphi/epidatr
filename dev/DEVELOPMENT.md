@@ -4,7 +4,7 @@
 
 ``` r
 
-pak::pkg_install(c('devtools', 'pkgdown', 'styler', 'lintr')) # install dev dependencies
+pak::pkg_install(c('devtools', 'pkgdown', 'lintr')) # install dev dependencies
 devtools::install_deps(dependencies = TRUE) # install package dependencies
 pak::local_install_deps(dependencies = "Config/Needs/precompile") # vignette-knitting deps
 devtools::document() # generate package meta data and man files
@@ -15,7 +15,7 @@ devtools::build() # build package
 
 ``` r
 
-styler::style_pkg() # format code
+# Format code with `just format` (runs `air format .`; needs the air CLI: https://posit-dev.github.io/air/)
 lintr::lint_package() # lint code
 
 devtools::test() # test package
@@ -35,8 +35,8 @@ packages listed in the `Config/Needs/precompile` field of DESCRIPTION
 (they are deliberately not Suggests, so CI never installs them):
 
 ``` bash
-make vignettes                                # all vignettes
-Rscript vignettes/precompile.R signal-discovery # just one
+just vignettes                  # all vignettes
+just vignettes signal-discovery # only this one
 ```
 
 Review the resulting `.Rmd` diff — it contains the real API output, so
@@ -82,34 +82,35 @@ always the latest release, and `dev` is always ahead of it.
   into `dev`, the `version-bump` workflow commits a patch bump straight
   to `dev` (e.g. 1.4.1 -\> 1.4.2).
 - For a minor or major bump, set the version by hand in your PR
-  (`make bump level=minor` does the edit). If a merge changed `Version`,
-  the workflow leaves it alone.
+  (`just bump minor` does the edit). If a merge changed `Version`, the
+  workflow leaves it alone.
 
 See also the [PR
 template](https://cmu-delphi.github.io/epidatr/dev/pull_request_template.md).
 
 ## Release process
 
-Most steps are Makefile targets. Run `make install` once to get the
-tools they use. Open a release issue and copy this checklist into it:
+Most steps are [just](https://just.systems) recipes (run `just` to list
+them). Run `just install` once to get the tools they use. Open a release
+issue and copy this checklist into it:
 
 Prepare, on `dev`:
 
-`make cran-status`: compare the `DESCRIPTION`, `CRAN-SUBMISSION`, and
+`just cran-status`: compare the `DESCRIPTION`, `CRAN-SUBMISSION`, and
 on-CRAN versions, and check the current CRAN check results for problems
 to fix.
 
 Set the release version by hand if it isn’t a patch release
-(`make bump level=minor` in a PR) and [polish
+(`just bump minor` in a PR) and [polish
 NEWS](https://style.tidyverse.org/news.html#news-release).
 
 Update `cran-comments.md`.
 
-`make release-check`: preflight, `document`, URL check, README rebuild,
+`just release-check`: preflight, `document`, URL check, README rebuild,
 and a CRAN-like `R CMD check` with incoming checks. Aim for 0 errors, 0
 warnings, and 0 notes. Fix problems in PRs to `dev`.
 
-`make check-full-ci branch=dev` to run the full OS/R-version matrix.
+`just check-full-ci dev` to run the full OS/R-version matrix.
 
 Check reverse dependencies (e.g. `epiprocess`, `epipredict`) against
 `dev` with [`r-devel/recheck`](https://github.com/r-devel/recheck) and
@@ -119,10 +120,10 @@ Open the release PR from `dev` into `main` and merge it.
 
 Submit, from the tip of `main` with a clean working tree:
 
-`make check-win` (and optionally `make check-mac`). The maintainer
+`just check-win` (and optionally `just check-mac`). The maintainer
 (“cre” in `DESCRIPTION`) gets the results by email.
 
-`make submit`. It reruns the preflight, refuses to run anywhere except
+`just submit`. It reruns the preflight, refuses to run anywhere except
 `origin/main`, and asks confirmation questions. After a successful
 upload it writes the version and SHA to `CRAN-SUBMISSION` and leaves it
 uncommitted.
@@ -138,14 +139,14 @@ After acceptance:
 Commit the updated `CRAN-SUBMISSION` on a branch off `main`, and open
 and merge a PR for it into `main`.
 
-`make backmerge` opens the `main` -\> `dev` PR. Merge it.
+`just backmerge` opens the `main` -\> `dev` PR. Merge it.
 
-`make release draft=true` tags the commit recorded in `CRAN-SUBMISSION`,
+`just release --draft` tags the commit recorded in `CRAN-SUBMISSION`,
 pushes the tag, and creates a draft GitHub release. It refuses to run
 until that version is on CRAN.
 
 Review the release notes on GitHub and publish them.
 
-If a submission was made without `make submit`, fix `CRAN-SUBMISSION` by
-hand with `make cran-submission version=X.Y.Z ref=<submitted commit>`.
-`make cran-status` shows whether it matches CRAN.
+If a submission was made without `just submit`, fix `CRAN-SUBMISSION` by
+hand with `just cran-submission X.Y.Z <submitted commit>`.
+`just cran-status` shows whether it matches CRAN.
