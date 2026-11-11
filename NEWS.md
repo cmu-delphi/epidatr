@@ -36,6 +36,9 @@
   `time_values` doesn't match `time_type` (#400).
 - The 414 (URI too long) fallback to POST now works: it strips the query from
   the URL and sends the parameters in the form body only (#393).
+- Unknown values in categorical fields now warn (class
+  `epidatr__unknown_category`) and are kept as extra factor levels instead of
+  silently becoming `NA` (#392).
 
 - The cache now stores the unparsed API response and parses it on every read,
   so `reference_week_day` and `disable_date_parsing` no longer need to be part

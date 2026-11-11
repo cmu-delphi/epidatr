@@ -242,3 +242,10 @@ test_that("reformat_epirange works in basic cases", {
   result <- reformat_epirange(epirange("20200201", "20201031"), "day")
   expect_identical(result, epirange("20200201", "20201031"))
 })
+
+test_that("unknown categorical values warn and are kept", {
+  info <- create_epidata_field_info("geo_type", "categorical", categories = c("nation", "msa"))
+  expect_warning(res <- parse_value(info, c("msa", "hhs")), class = "epidatr__unknown_category")
+  expect_identical(as.character(res), c("msa", "hhs"))
+  expect_no_warning(parse_value(info, c("msa", NA)))
+})
