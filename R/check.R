@@ -364,10 +364,9 @@ get_wildcard_equivalent_dates <- function(
 #' Check an API response for epidata-level errors and warnings.
 #'
 #' @param response_content parsed JSON response with `result` and `message` fields
-#' @param allow_empty if TRUE, suppress errors for "no results" (result == -2)
 #' @importFrom cli cli_abort cli_warn
 #' @keywords internal
-check_epidata_result <- function(response_content, allow_empty = FALSE) {
+check_epidata_result <- function(response_content) {
   if (!is.list(response_content)) {
     cli::cli_abort(
       "Malformed response envelope: expected a JSON object",
@@ -389,13 +388,14 @@ check_epidata_result <- function(response_content, allow_empty = FALSE) {
       class = "epidatr__malformed_envelope"
     )
   }
-  if (response_content$result != 1) {
-    if ((response_content$result != -2) && !allow_empty) {
-      cli::cli_abort(
-        "epidata error: {.code {response_content$message}}",
-        class = "epidata_error"
-      )
-    }
+  # Only success and no-results (which warns below) are accepted. Truncation (2)
+  # and generic errors (-1) always abort, so partial data is never returned or
+  # cached, whatever `return_empty` is.
+  if (!result %in% c(1, -2)) {
+    cli::cli_abort(
+      "epidata error: {.code {response_content$message}}",
+      class = "epidata_error"
+    )
   }
 
   if (response_content$message != "success") {
