@@ -23,6 +23,8 @@
   entries are ignored and re-fetched.
 - The epidatr version is now part of the cache key, so cache entries written by
   a different epidatr version are never read back.
+- A rate limit error (HTTP 429) on a request made without an API key now points
+  to `?save_api_key` for registering one (#294).
 - `fetch_args_list()` now rejects a `reference_week_day` that isn't an integer
   from 1 to 7.
 - `cache_info()` now also reports `enabled`, `n_entries` and `size_mb`, works when
