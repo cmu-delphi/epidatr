@@ -42,6 +42,12 @@
 - The epidatr version is now part of the cache key, so cache entries
   written by a different epidatr version are never read back.
 
+- A rate limit error (HTTP 429) on a request made without an API key now
+  points to
+  [`?save_api_key`](https://cmu-delphi.github.io/epidatr/dev/reference/get_api_key.md)
+  for registering one
+  ([\#294](https://github.com/cmu-delphi/epidatr/issues/294)).
+
 - [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
   now rejects a `reference_week_day` that isn’t an integer from 1 to 7.
 
