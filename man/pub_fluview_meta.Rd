@@ -11,7 +11,11 @@ pub_fluview_meta(fetch_args = fetch_args_list())
 to \code{fetch()}. See \code{fetch_args_list()} for details.}
 }
 \value{
-\code{\link[tibble:tibble]{tibble::tibble}}
+A \code{\link[tibble:tibble]{tibble::tibble}} with one row per observation: one location at
+one time (and, for versioned data, one issue). The columns are the
+fields the endpoint returns; the API documentation linked at the top of
+the page describes what each one contains. The \code{fetch_args} argument
+controls the parsing, e.g. \code{fields} restricts the columns.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
