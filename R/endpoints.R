@@ -1311,10 +1311,13 @@ pub_covidcast <- function(
   assert_character_param("signals", signals)
   assert_character_param("time_type", time_type, len = 1)
   assert_character_param("geo_type", geo_type, len = 1)
-  time_values <- validate_timeset_input("time_values", time_values)
+  # Check time_type first so a typo like "epiweek" gets a clear error, and so
+  # the values below can be checked against it.
+  checkmate::assert_subset(time_type, c("day", "week"))
+  time_values <- validate_timeset_input("time_values", time_values, granularity = time_type)
   assert_character_param("geo_values", geo_values)
   as_of <- validate_date_input("as_of", as_of, len = 1, required = FALSE)
-  issues <- validate_timeset_input("issues", issues, required = FALSE)
+  issues <- validate_timeset_input("issues", issues, required = FALSE, granularity = time_type)
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
   if (source == "nchs-mortality" && time_type != "week") {
     cli::cli_abort(
@@ -1328,9 +1331,6 @@ pub_covidcast <- function(
       class = "epidatr__nchs_week_only"
     )
   }
-  # TODO: This should probably be done in the create_epidata_call function. But
-  # this is a quick fix for now.
-  checkmate::assert_subset(time_type, c("day", "week"))
   create_epidata_call(
     "covidcast/",
     list(
