@@ -49,6 +49,8 @@
 - Endpoints whose `epiweeks` or `issues` parameter only takes weeks (e.g.
   `pub_flusurv()`, `pub_fluview()`) now error when given dates, instead of
   returning an empty result (#278).
+- The `issues`/`lag`/`as_of` exclusivity check is now shared by all endpoints,
+  and its error has class `epidatr__exclusive_args` (#222).
 
 - The cache now stores the unparsed API response and parses it on every read,
   so `reference_week_day` and `disable_date_parsing` no longer need to be part

@@ -170,3 +170,13 @@ test_that("unparseable responses error cleanly without leaking the query", {
   expect_s3_class(err, "epidatr__unparseable_response")
   expect_false(grepl("secretkey", conditionMessage(err), fixed = TRUE))
 })
+
+test_that("assert_exclusive allows at most one non-NULL argument", {
+  expect_no_error(assert_exclusive(issues = NULL, lag = NULL))
+  expect_no_error(assert_exclusive(issues = 1, lag = NULL, as_of = NULL))
+  expect_error(
+    assert_exclusive(issues = 1, lag = 2, as_of = NULL, class = "my_class"),
+    class = "my_class"
+  )
+  expect_error(assert_exclusive(issues = 1, lag = 2), "mutually exclusive")
+})

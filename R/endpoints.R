@@ -723,9 +723,7 @@ pub_covid_hosp_state_timeseries <- function(
       class = "epidatr__pub_covid_hosp_state_timeseries__missing_required_args"
     )
   }
-  if (sum(!is.null(issues), !is.null(as_of)) > 1) {
-    stop("`issues`and `as_of` are mutually exclusive")
-  }
+  assert_exclusive(issues = issues, as_of = as_of)
   dates <- get_wildcard_equivalent_dates(dates, "day")
   assert_character_param("states", states)
   dates <- validate_timeset_input("dates", dates)
@@ -1298,12 +1296,10 @@ pub_covidcast <- function(
       class = "epidatr__pub_covidcast__missing_required_args"
     )
   }
-  if (sum(!is.null(issues), !is.null(lag), !is.null(as_of)) > 1) {
-    cli::cli_abort(
-      "`issues`, `lag`, and `as_of` are mutually exclusive",
-      class = "epidatr__pub_covidcast__too_many_issue_params"
-    )
-  }
+  assert_exclusive(
+    issues = issues, lag = lag, as_of = as_of,
+    class = "epidatr__pub_covidcast__too_many_issue_params"
+  )
   assert_character_param("data_source", source, len = 1)
   assert_character_param("signals", signals)
   assert_character_param("time_type", time_type, len = 1)
@@ -2224,9 +2220,7 @@ pub_ecdc_ili <- function(
   epiweeks <- validate_timeset_input("epiweeks", epiweeks, granularity = "week")
   issues <- validate_timeset_input("issues", issues, required = FALSE, granularity = "week")
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  if (!is.null(issues) && !is.null(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
-  }
+  assert_exclusive(issues = issues, lag = lag)
   create_epidata_call(
     "ecdc_ili/",
     list(
@@ -2290,9 +2284,7 @@ pub_flusurv <- function(
   epiweeks <- validate_timeset_input("epiweeks", epiweeks, granularity = "week")
   issues <- validate_timeset_input("issues", issues, required = FALSE, granularity = "week")
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  if (!is.null(issues) && !is.null(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
-  }
+  assert_exclusive(issues = issues, lag = lag)
   create_epidata_call(
     "flusurv/",
     list(
@@ -2380,9 +2372,7 @@ pub_fluview_clinical <- function(
   epiweeks <- validate_timeset_input("epiweeks", epiweeks, granularity = "week")
   issues <- validate_timeset_input("issues", issues, required = FALSE, granularity = "week")
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  if (!is.null(issues) && !is.null(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
-  }
+  assert_exclusive(issues = issues, lag = lag)
   create_epidata_call(
     "fluview_clinical/",
     list(
@@ -2482,9 +2472,7 @@ pub_fluview <- function(
   issues <- validate_timeset_input("issues", issues, required = FALSE, granularity = "week")
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
   assert_character_param("auth", auth, len = 1, required = FALSE)
-  if (!is.null(issues) && !is.null(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
-  }
+  assert_exclusive(issues = issues, lag = lag)
   create_epidata_call(
     "fluview/",
     list(
@@ -2658,9 +2646,7 @@ pub_kcdc_ili <- function(
   epiweeks <- validate_timeset_input("epiweeks", epiweeks, granularity = "week")
   issues <- validate_timeset_input("issues", issues, required = FALSE, granularity = "week")
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  if (!is.null(issues) && !is.null(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
-  }
+  assert_exclusive(issues = issues, lag = lag)
   create_epidata_call(
     "kcdc_ili/",
     list(
@@ -2813,9 +2799,7 @@ pub_nidss_flu <- function(
   epiweeks <- validate_timeset_input("epiweeks", epiweeks, granularity = "week")
   issues <- validate_timeset_input("issues", issues, required = FALSE, granularity = "week")
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  if (!is.null(issues) && !is.null(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
-  }
+  assert_exclusive(issues = issues, lag = lag)
   create_epidata_call(
     "nidss_flu/",
     list(
@@ -2970,9 +2954,7 @@ pub_paho_dengue <- function(
   epiweeks <- validate_timeset_input("epiweeks", epiweeks, granularity = "week")
   issues <- validate_timeset_input("issues", issues, required = FALSE, granularity = "week")
   assert_integerish_param("lag", lag, len = 1, required = FALSE)
-  if (!is.null(issues) && !is.null(lag)) {
-    stop("`issues` and `lag` are mutually exclusive")
-  }
+  assert_exclusive(issues = issues, lag = lag)
   create_epidata_call(
     "paho_dengue/",
     list(
