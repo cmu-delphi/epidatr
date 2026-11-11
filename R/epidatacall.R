@@ -452,10 +452,26 @@ request_epidata <- function(
   }
 
   # JSON parsing (both "json" and "classic")
-  response_content <- httr2::resp_body_json(
-    res,
-    simplifyVector = simplify,
-    simplifyDataFrame = simplify
+  response_content <- tryCatch(
+    httr2::resp_body_json(
+      res,
+      simplifyVector = simplify,
+      simplifyDataFrame = simplify
+    ),
+    error = function(e) {
+      # The query string is dropped because it can hold the auth key.
+      url <- sub("\\?.*$", "", httr2::resp_url(res)) # nolint: object_usage_linter
+      msg <- conditionMessage(e) # nolint: object_usage_linter
+      cli::cli_abort(
+        c(
+          "The API response could not be parsed as JSON",
+          "i" = "Request: {.url {url}}",
+          "x" = "{msg}"
+        ),
+        class = "epidatr__unparseable_response",
+        parent = e
+      )
+    }
   )
 
   if (epidata_call$response_format == "json") {

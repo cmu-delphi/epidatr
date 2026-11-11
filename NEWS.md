@@ -39,6 +39,10 @@
 - Unknown values in categorical fields now warn (class
   `epidatr__unknown_category`) and are kept as extra factor levels instead of
   silently becoming `NA` (#392).
+- A 200 response with a missing or non-scalar `result` or `message`, or with
+  `result` 1 or 2 but no `epidata`, now raises `epidatr__malformed_envelope`;
+  a non-JSON body raises `epidatr__unparseable_response` with the request URL
+  (#389, #390).
 
 - The cache now stores the unparsed API response and parses it on every read,
   so `reference_week_day` and `disable_date_parsing` no longer need to be part

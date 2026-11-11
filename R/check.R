@@ -310,7 +310,27 @@ get_wildcard_equivalent_dates <- function(
 #' @importFrom cli cli_abort cli_warn
 #' @keywords internal
 check_epidata_result <- function(response_content, allow_empty = FALSE) {
+  if (!is.list(response_content)) {
+    cli::cli_abort(
+      "Malformed response envelope: expected a JSON object",
+      class = "epidatr__malformed_envelope"
+    )
+  }
+  result <- response_content$result
+  message <- response_content$message
+  if (!is.numeric(result) || length(result) != 1L || !is.character(message) || length(message) != 1L) {
+    cli::cli_abort(
+      "Malformed response envelope: {.field result} and {.field message} must each be a single value",
+      class = "epidatr__malformed_envelope"
+    )
+  }
   # success is 1, no results is -2, truncated is 2, -1 is generic error
+  if (result %in% c(1, 2) && is.null(response_content$epidata)) {
+    cli::cli_abort(
+      "Malformed response envelope: {.field result} is {result} but {.field epidata} is missing",
+      class = "epidatr__malformed_envelope"
+    )
+  }
   if (response_content$result != 1) {
     if ((response_content$result != -2) && !allow_empty) {
       cli::cli_abort(
