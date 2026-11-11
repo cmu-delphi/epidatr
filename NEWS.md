@@ -26,6 +26,11 @@
 - `cache_info()` now also reports `enabled`, `n_entries` and `size_mb`, works when
   the cache is off (inspecting the default directory), and prints a hint about
   `clear_cache()`.
+- `pub_paho_dengue()` now errors when both `issues` and `lag` are given, like
+  the other endpoints that take both (#397).
+- `pub_ecdc_ili()`, `pub_flusurv()`, `pub_fluview_clinical()`, and
+  `pub_kcdc_ili()` no longer error on an explicit `issues = NULL` together with
+  `lag` (or vice versa); `NULL` now means "not requested" everywhere (#398).
 
 - The cache now stores the unparsed API response and parses it on every read,
   so `reference_week_day` and `disable_date_parsing` no longer need to be part
