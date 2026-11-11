@@ -48,6 +48,10 @@
   for registering one
   ([\#294](https://github.com/cmu-delphi/epidatr/issues/294)).
 
+- `print.epidata_call()` now shows `auth=<redacted>` instead of the
+  restricted endpoint key
+  ([\#386](https://github.com/cmu-delphi/epidatr/issues/386)).
+
 - [`fetch_args_list()`](https://cmu-delphi.github.io/epidatr/dev/reference/fetch_args_list.md)
   now rejects a `reference_week_day` that isn’t an integer from 1 to 7.
 
