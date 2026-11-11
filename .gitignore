@@ -19,3 +19,4 @@ env
 renv.lock
 renv/
 .Rprofile
+.Renviron

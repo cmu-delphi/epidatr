@@ -4,12 +4,10 @@
 \alias{check_epidata_result}
 \title{Check an API response for epidata-level errors and warnings.}
 \usage{
-check_epidata_result(response_content, allow_empty = FALSE)
+check_epidata_result(response_content)
 }
 \arguments{
 \item{response_content}{parsed JSON response with \code{result} and \code{message} fields}
-
-\item{allow_empty}{if TRUE, suppress errors for "no results" (result == -2)}
 }
 \description{
 Check an API response for epidata-level errors and warnings.

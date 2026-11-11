@@ -172,6 +172,15 @@ retry_hint <- function(resp) {
   paste0("The server suggests retrying in about ", wait, ".")
 }
 
+# A pointer to key registration for a rate-limited request made without an API
+# key, or NULL otherwise.
+api_key_hint <- function(resp) {
+  if (httr2::resp_status(resp) != 429 || Sys.getenv("DELPHI_EPIDATA_KEY") != "") {
+    return(NULL)
+  }
+  "No API key is set, so the lower anonymous rate limits apply; see `?save_api_key` to register for a key."
+}
+
 # Builds the detail shown under httr2's HTTP error message. httr2 shows a
 # single string as one bullet, so the server's message and any retry hint are
 # combined into one string.
@@ -181,7 +190,7 @@ error_body_message <- function(resp) {
     message <- paste(message, collapse = " ")
   }
   hint <- tryCatch(retry_hint(resp), error = function(e) NULL)
-  parts <- c(message, hint)
+  parts <- c(message, hint, api_key_hint(resp))
   if (length(parts) == 0) {
     return(NULL)
   }

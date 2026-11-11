@@ -2,6 +2,8 @@
 
 ## Changes
 
+- The minimum supported R version is now 4.1.0, matching the requirements of
+  our dependencies (e.g. httr2, glue, purrr, readr).
 - `epidata_snapshot()`, `epidata_archive()`, and `epidata()` now filter
   `geo_values` and `reference_time` server-side via the cast-API `geo_value`
   and `reference_times` parameters (cmu-delphi/cast-api#110).
@@ -21,6 +23,13 @@
   entries are ignored and re-fetched.
 - The epidatr version is now part of the cache key, so cache entries written by
   a different epidatr version are never read back.
+- A rate limit error (HTTP 429) on a request made without an API key now points
+  to `?save_api_key` for registering one (#294).
+- `print.epidata_call()` now shows `auth=<redacted>` instead of the restricted
+  endpoint key (#386).
+- `fetch_args_list(return_empty = TRUE)` no longer turns truncated responses and
+  generic API errors into a warning that returned (and cached) partial data.
+  They now always raise an error (#384).
 - `fetch_args_list()` now rejects a `reference_week_day` that isn't an integer
   from 1 to 7.
 - `cache_info()` now also reports `enabled`, `n_entries` and `size_mb`, works when

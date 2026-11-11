@@ -319,3 +319,19 @@ test_that("the API key is sent as Basic auth (classic) or a token header (cast)"
   with_mock_perform(capture, suppressWarnings(try(epidata_meta(), silent = TRUE)))
   expect_null(hdr(seen)$token)
 })
+
+test_that("a rate-limited request without an API key points to registration", {
+  resp <- retry_resp(429, "600", body = '{"detail": "Rate limit exceeded."}')
+  withr::local_envvar(DELPHI_EPIDATA_KEY = "")
+  expect_identical(
+    error_body_message(resp),
+    paste(
+      "Rate limit exceeded. The server suggests retrying in about 10 minutes.",
+      "No API key is set, so the lower anonymous rate limits apply;",
+      "see `?save_api_key` to register for a key."
+    )
+  )
+  expect_null(api_key_hint(retry_resp(503)))
+  withr::local_envvar(DELPHI_EPIDATA_KEY = "abc")
+  expect_null(api_key_hint(resp))
+})

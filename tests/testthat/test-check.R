@@ -156,7 +156,15 @@ test_that("malformed response envelopes get a clear error", {
   )
   for (b in bad) expect_error(check_epidata_result(b), class = "epidatr__malformed_envelope")
   expect_no_error(check_epidata_result(list(epidata = list(), result = 1, message = "success")))
-  expect_no_error(check_epidata_result(list(result = -2, message = "success"), allow_empty = TRUE))
+  expect_no_error(check_epidata_result(list(result = -2, message = "success")))
+})
+
+test_that("only success and no-results pass the classic result check (#384)", {
+  resp <- function(result) list(result = result, message = "m", epidata = list(list(x = 1)))
+  expect_warning(check_epidata_result(resp(-2)), class = "epidata_warning")
+  for (code in c(2, -1)) {
+    expect_error(check_epidata_result(resp(code)), class = "epidata_error")
+  }
 })
 
 test_that("review fixes: scalar responses and week-type Dates are rejected", {

@@ -16,6 +16,9 @@ on:
 
 name: lint
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     runs-on: ubuntu-latest

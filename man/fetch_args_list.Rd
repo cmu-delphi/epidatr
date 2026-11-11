@@ -42,7 +42,7 @@ Useful for endpoints/signals that intentionally return extra, untyped
 columns.}
 
 \item{return_empty}{boolean that allows returning an empty tibble if there is
-no data}
+no data. Truncated responses and API errors still raise an error.}
 
 \item{timeout_seconds}{the maximum amount of time (in seconds) to wait for a
 response from the API server}

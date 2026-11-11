@@ -1,7 +1,7 @@
 Type: Package
 Package: epidatr
 Title: Client for Delphi's 'Epidata' API
-Version: 1.4.17
+Version: 1.4.23
 Authors@R: c(
     person("Logan", "Brooks", , "lcbrooks@andrew.cmu.edu", role = "aut"),
     person("Dmitry", "Shemetov", , "dshemeto@andrew.cmu.edu", role = "aut"),
@@ -31,7 +31,7 @@ URL: https://cmu-delphi.github.io/epidatr/,
     https://github.com/cmu-delphi/epidatr
 BugReports: https://github.com/cmu-delphi/epidatr/issues
 Depends:
-    R (>= 3.5.0)
+    R (>= 4.1.0)
 Imports:
     cachem,
     checkmate,

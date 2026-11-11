@@ -138,8 +138,14 @@ print.epidata_call <- function(x, ...) {
   cli::cli_h1("<epidata_call> object:")
   cli::cli_bullets(c(
     "*" = "Pipe this object into `fetch()` to actually fetch the data",
-    "*" = paste0("Request URL: ", x$request$url)
+    "*" = paste0("Request URL: ", redact_auth(x$request$url))
   ))
+}
+
+# Endpoint `auth` keys travel in the query string. Hide them wherever the URL
+# is shown so they don't end up in pasted output or notebooks.
+redact_auth <- function(url) {
+  sub("([?&]auth=)[^&]*", "\\1<redacted>", url)
 }
 
 #' Set custom API request parameters
@@ -158,7 +164,7 @@ print.epidata_call <- function(x, ...) {
 #'   instead of a parsed tibble. V4 endpoints return a nested list. V5
 #'   endpoints still return a data frame, but with all columns as character.
 #' @param return_empty boolean that allows returning an empty tibble if there is
-#'   no data
+#'   no data. Truncated responses and API errors still raise an error.
 #' @param disable_missing_meta_warning if `TRUE`, suppress the warning emitted
 #'   when the response contains columns not declared as expected epidata fields.
 #'   Useful for endpoints/signals that intentionally return extra, untyped
@@ -482,7 +488,7 @@ request_epidata <- function(
   }
 
   # classic: JSON with result/message wrapper
-  check_epidata_result(response_content, allow_empty = fetch_args$return_empty)
+  check_epidata_result(response_content)
   return(response_content$epidata)
 }
 
