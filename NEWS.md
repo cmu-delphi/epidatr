@@ -43,6 +43,10 @@
   plot now shows the full series as known on each release date (the archive
   only lists changed values); vignettes and README re-rendered with 1.4.x
   output, each vignette in a fresh R session.
+- `?timeset` now has examples, `?set_cache` has a table of the cache environment
+  variables, every endpoint's `@return` says what a row represents, and the
+  reference page describes the caching and private-endpoint groups in more
+  detail (#203, #198, #204, #238).
 
 ## Patches
 
