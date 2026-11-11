@@ -231,10 +231,8 @@ set_cache <- function(
   cli::cli_inform(
     c(
       "!" = "epidatr cache is being used (set env var EPIDATR_USE_CACHE=FALSE if not intended).",
-      "i" = "The cache directory is {cache_dir}.",
-      "i" = "The cache will be cleared after {days} day{ifelse(days>1,'s','')}
-           and will be pruned if it exceeds {max_size} MB.",
-      "i" = "The log of cache transactions is stored at {file.path(cache_dir, logfile)}."
+      "i" = "Directory: {cache_dir}; entries expire after {days} day{ifelse(days>1,'s','')}
+           and the cache is pruned above {max_size} MB. Log: {file.path(cache_dir, logfile)}"
     ),
     class = if (startup) "packageStartupMessage" else NULL
   )
@@ -553,9 +551,9 @@ check_for_cache_warnings <- function(epidata_call, fetch_args) {
       c(
         "Using cached results for a data version within the past week (or the
           future!). Newer reports may change these values, so the cache may be stale. Consider",
-        "i" = "disabling the cache for this session with `disable_cache()` or
+        "*" = "disabling the cache for this session with `disable_cache()` or
           permanently with the environment variable `EPIDATR_USE_CACHE=FALSE`, or",
-        "i" = "setting `EPIDATR_CACHE_MAX_AGE_DAYS` to a smaller value, e.g. `0.125`
+        "*" = "setting `EPIDATR_CACHE_MAX_AGE_DAYS` to a smaller value, e.g. `0.125`
           (3 hours)."
       ),
       .frequency = "regularly",
