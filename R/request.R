@@ -68,9 +68,9 @@ do_request <- function(
   # Fall back to POST if the request is too long for GET (414 URI Too Long).
   if (httr2::resp_status(res) == 414) {
     # 414 URI Too Long - Switch to POST
-    query <- httr2::url_parse(httr2::req_url(req))$query
+    query <- httr2::url_parse(httr2::req_get_url(req))$query
     req_post <- req %>%
-      httr2::req_url_query() %>%
+      httr2::req_url(sub("\\?.*$", "", httr2::req_get_url(req))) %>%
       httr2::req_method("POST") %>%
       httr2::req_body_form(!!!query)
 

@@ -34,6 +34,8 @@
 - Timeset arguments now error when a vector mixes day (`YYYYMMDD`) and week
   (`YYYYWW`) values, and `pvt_twitter()` and `pub_wiki()` error when
   `time_values` doesn't match `time_type` (#400).
+- The 414 (URI too long) fallback to POST now works: it strips the query from
+  the URL and sends the parameters in the form body only (#393).
 
 - The cache now stores the unparsed API response and parses it on every read,
   so `reference_week_day` and `disable_date_parsing` no longer need to be part
