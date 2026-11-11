@@ -19,11 +19,16 @@ to see which sources are currently available.
 API docs:
 <https://cmu-delphi.github.io/delphi-epidata/api/covidcast_signals.html>
 
-The primary endpoint for fetching COVID-19 data, providing access to a
-wide variety of signals from a wide variety of sources. See the API
+Despite its name, this was Delphi's primary endpoint for much more than
+COVID-19 data: it also served influenza, wastewater, hospitalization,
+survey, and other signals from a wide variety of sources. See the API
 documentation link above for more. Delphi's [COVIDcast public
 dashboard](https://delphi.cmu.edu/covidcast/) is powered by this
-endpoint.
+endpoint. Use
+[`covidcast_epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/covidcast_epidata.md)
+to list the sources and signals it holds, and
+[`vignette("migration-guide")`](https://cmu-delphi.github.io/epidatr/dev/articles/migration-guide.md)
+to find their V5 equivalents.
 
 ## Usage
 

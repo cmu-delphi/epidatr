@@ -117,8 +117,10 @@ endpoints:
   [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md).
 - **V4 endpoint**
   [`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
-  is deprecated and stopped receiving new data on September 22, 2026. It
-  remains available to query historical data ingested before that date.
+  (despite the name, it also held flu, wastewater, and other non-COVID
+  signals) is deprecated and stopped receiving new data on September
+  22, 2026. It remains available to query historical data ingested
+  before that date.
 - **V3 legacy endpoints** (such as
   [`pub_fluview()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_fluview.md),
   [`pub_gft()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_gft.md),

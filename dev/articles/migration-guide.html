@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.13</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.16</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,6 +79,10 @@
 <code><a href="../reference/pvt_quidel.html">pvt_quidel()</a></code>) to a new set of V5 endpoints, served by
 <code><a href="../reference/cast_api_queries.html">epidata_snapshot()</a></code>, <code><a href="../reference/cast_api_queries.html">epidata_archive()</a></code>,
 <code><a href="../reference/epidata_aux.html">epidata_aux()</a></code>, and <code><a href="../reference/epidata_meta.html">epidata_meta()</a></code>.</p>
+<p>Despite its name, <code><a href="../reference/pub_covidcast.html">pub_covidcast()</a></code> was not COVID-only: it
+also served influenza, wastewater, and other signals, so use
+<code><a href="../reference/covidcast_epidata.html">covidcast_epidata()</a></code> or <code><a href="../reference/epidata_meta.html">epidata_meta()</a></code> to find
+where a given source lives.</p>
 <p><strong>As of September 22, 2026, the V3 and V4 APIs are deprecated
 and no longer receive new data.</strong> They still serve historical
 data ingested before that date, so existing queries will not break, but

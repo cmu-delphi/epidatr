@@ -20,6 +20,15 @@ to a new set of V5 endpoints, served by
 and
 [`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md).
 
+Despite its name,
+[`pub_covidcast()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covidcast.md)
+was not COVID-only: it also served influenza, wastewater, and other
+signals, so use
+[`covidcast_epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/covidcast_epidata.md)
+or
+[`epidata_meta()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_meta.md)
+to find where a given source lives.
+
 **As of September 22, 2026, the V3 and V4 APIs are deprecated and no
 longer receive new data.** They still serve historical data ingested
 before that date, so existing queries will not break, but any

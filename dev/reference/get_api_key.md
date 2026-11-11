@@ -22,8 +22,15 @@ none is set.
 We recommend you register for an API key. While most endpoints are
 available without one, there are [limits on API usage for anonymous
 users](https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html),
-including a rate limit. If you regularly request large amounts of data,
-please consider [registering for an API
+including a rate limit (for V5, 60 requests/hour, plus 5 requests/minute
+for
+[`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+and 3 requests/minute for
+[`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md);
+see the [V5
+documentation](https://cmu-delphi.github.io/delphi-epidata/api/v5.html#authentication-and-rate-limits)).
+If you regularly request large amounts of data, please consider
+[registering for an API
 key](https://api.delphi.cmu.edu/epidata/admin/registration_form).
 
 API keys are strings read from the environment variable

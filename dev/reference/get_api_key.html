@@ -9,7 +9,7 @@ key, requests may be subject to rate limits and other limitations."><meta name="
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.13</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.16</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,10 @@ key, requests may be subject to rate limits and other limitations.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>We recommend you register for an API key. While most endpoints are available
 without one, there are <a href="https://cmu-delphi.github.io/delphi-epidata/api/api_keys.html" class="external-link">limits on API usage for anonymous users</a>,
-including a rate limit. If you regularly request large amounts of data,
+including a rate limit (for V5, 60 requests/hour, plus 5 requests/minute for
+<code><a href="cast_api_queries.html">epidata_archive()</a></code> and 3 requests/minute for <code><a href="cast_api_queries.html">epidata_snapshot()</a></code>; see the
+<a href="https://cmu-delphi.github.io/delphi-epidata/api/v5.html#authentication-and-rate-limits" class="external-link">V5 documentation</a>).
+If you regularly request large amounts of data,
 please consider <a href="https://api.delphi.cmu.edu/epidata/admin/registration_form" class="external-link">registering for an API key</a>.</p>
 <p>API keys are strings read from the environment variable <code>DELPHI_EPIDATA_KEY</code>.
 We recommend setting your key with <code>save_api_key()</code>, which will open your
