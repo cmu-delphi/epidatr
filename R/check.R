@@ -131,6 +131,7 @@ parse_timeset_input <- function(value) {
     return(value)
   } else if (test_integerish(value)) {
     if (all(nchar(value) %in% c(6, 8))) {
+      assert_uniform_granularity(value)
       return(value)
     } else {
       stop(paste0("Invalid timeset input: ", value))
@@ -139,6 +140,7 @@ parse_timeset_input <- function(value) {
     if (identical(value, "*")) {
       return(value)
     } else if (all(nchar(value) %in% c(6, 8))) {
+      assert_uniform_granularity(value)
       return(value)
     } else if (all(nchar(value) == 10)) {
       value <- as.Date(value, format = "%Y-%m-%d")
@@ -150,6 +152,42 @@ parse_timeset_input <- function(value) {
     return(value)
   } else {
     stop(paste0("Invalid timeset input: ", value))
+  }
+}
+
+#' Granularity ("day" or "week") of each value in a timeset, judged by digit count
+#' @keywords internal
+timeset_granularity <- function(value) {
+  if (inherits(value, "EpiRange")) {
+    value <- value$from
+  }
+  if (inherits(value, "Date")) {
+    return("day")
+  }
+  if (identical(value, "*")) {
+    return(character(0))
+  }
+  ifelse(nchar(value) == 6, "week", "day")
+}
+
+#' Stop if a timeset mixes weekly (YYYYWW) and daily (YYYYMMDD) values
+#' @keywords internal
+assert_uniform_granularity <- function(value) {
+  if (length(unique(timeset_granularity(value))) > 1) {
+    stop("Timeset mixes day (YYYYMMDD) and week (YYYYWW) values; use one kind per parameter.")
+  }
+}
+
+#' Stop if timeset values are not of the kind implied by `time_type`
+#' @keywords internal
+assert_time_type_matches <- function(name, value, time_type) {
+  expected <- if (time_type == "week") "week" else "day"
+  found <- timeset_granularity(value)
+  if (any(found != expected)) {
+    stop(sprintf(
+      "`%s` holds %s values but `time_type` is \"%s\"; set `time_type` to match.",
+      name, setdiff(found, expected)[1], time_type
+    ))
   }
 }
 

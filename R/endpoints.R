@@ -3157,6 +3157,7 @@ pvt_twitter <- function(
   rlang::check_dots_empty()
   note_frozen_endpoint("pvt_twitter")
   time_type <- match.arg(time_type)
+  assert_time_type_matches("time_values", time_values, time_type)
   if (time_type == "day") {
     dates <- time_values
     epiweeks <- NULL
@@ -3240,6 +3241,7 @@ pub_wiki <- function(
   rlang::check_dots_empty()
   note_frozen_endpoint("pub_wiki")
   time_type <- match.arg(time_type)
+  assert_time_type_matches("time_values", time_values, time_type)
   if (time_type == "day") {
     dates <- time_values
     epiweeks <- NULL
