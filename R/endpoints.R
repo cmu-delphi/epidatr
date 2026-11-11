@@ -1454,8 +1454,9 @@ epidata_meta <- function(source = NULL, fetch_args = fetch_args_list()) {
 #' @param reference_time [`timeset`]. Reference time to return (filters on the
 #'   `reference_time` column). Supports individual dates, [`epirange()`], or
 #'   filter expressions like `">=2024-01-01"`, `"2024-01-01:2024-03-31"`,
-#'   `"2024-01-01:"`, and `":2024-03-31"`. Several values match as OR.
-#'   `NULL` (default) or `"*"` returns all reference times.
+#'   `"2024-01-01:"`, and `":2024-03-31"`. Several values match as OR, up to
+#'   128 distinct values; for more, request one `epirange()` and filter the
+#'   result. `NULL` (default) or `"*"` returns all reference times.
 #' @param fill_method string. Optional filter to an imputation method.
 #'   The API provides alternatives of the same signal differing in how
 #'   nulls were handled during geographic aggregation: `"source"` means no
