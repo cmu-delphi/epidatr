@@ -59,6 +59,8 @@
   (#204).
 - The reference page describes the configuration, caching and private-endpoint
   groups in more detail (#238).
+- `?timeset` no longer says a list of ranges is accepted; the validator never
+  accepted one (#399).
 
 ## Patches
 
