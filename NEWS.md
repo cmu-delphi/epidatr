@@ -30,6 +30,12 @@
 - `fetch_args_list(return_empty = TRUE)` no longer turns truncated responses and
   generic API errors into a warning that returned (and cached) partial data.
   They now always raise an error (#384).
+- `epidata_snapshot()` and `epidata_archive()` now error when a `reference_time` or
+  `report_time` filter has more than 128 distinct terms. Use one `epirange()` and
+  filter the result locally (#291).
+- `pub_covidcast()` now errors when `time_values` or `issues` don't match
+  `time_type` (e.g. `YYYYMMDD` dates with `time_type = "week"`), which used to
+  return no data without explanation (#286).
 - `fetch_args_list()` now rejects a `reference_week_day` that isn't an integer
   from 1 to 7.
 - `cache_info()` now also reports `enabled`, `n_entries` and `size_mb`, works when

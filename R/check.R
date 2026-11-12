@@ -314,6 +314,10 @@ format_params_for_api <- function(params) {
   })
 }
 
+# The most terms one time filter may hold. Longer lists make slow requests; a
+# single range plus filtering the result locally is cheaper for everyone.
+max_time_filter_terms <- 128L
+
 #' Format a cast-API time filter (`reference_times` or `report_time_query`).
 #'
 #' Accepts `"*"` or `NULL` (no filter), an [epirange()], plain dates or
@@ -365,8 +369,18 @@ format_time_filter <- function(value, name, bare_dates = TRUE) {
     }
     out[!is_expr] <- paste0(from, ":", to)
   }
+  terms <- unique(out)
+  if (length(terms) > max_time_filter_terms) {
+    cli::cli_abort(
+      c(
+        "{.arg {name}} has {length(terms)} terms; the limit is {max_time_filter_terms}.",
+        "i" = "Request one range instead, like {.code epirange(min(x), max(x))}, and filter the result locally."
+      ),
+      class = "epidatr__too_many_time_terms"
+    )
+  }
   # The API ORs the expressions.
-  paste(unique(out), collapse = ",")
+  paste(terms, collapse = ",")
 }
 
 

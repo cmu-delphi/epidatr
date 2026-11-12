@@ -61,6 +61,31 @@ test_that("nchs-mortality call fails if time_type not week", {
   ), class = "epidatr__nchs_week_only")
 })
 
+test_that("pub_covidcast checks time_values and issues against time_type (#286)", {
+  call <- function(source = "nssp", ...) {
+    pub_covidcast(
+      source = source, signals = "pct_ed_visits_covid", geo_type = "state",
+      fetch_args = fetch_args_list(dry_run = TRUE), ...
+    )
+  }
+  # Dates with a weekly time_type used to return no data.
+  expect_error(
+    call(time_type = "week", time_values = epirange(20221001, 20240730)),
+    class = "epidatr__timeset_granularity_mismatch"
+  )
+  expect_error(
+    call(time_type = "week", time_values = epirange(202240, 202430), issues = epirange(20000101, 20240730)),
+    class = "epidatr__timeset_granularity_mismatch"
+  )
+  expect_error(
+    call("jhu-csse", time_type = "day", time_values = c(202401, 202402)),
+    class = "epidatr__timeset_granularity_mismatch"
+  )
+  expect_error(call(time_type = "epiweek", time_values = "*"), "epiweek")
+  expect_no_error(call(time_type = "week", time_values = epirange(202240, 202430), issues = "*"))
+  expect_no_error(call("jhu-csse", time_type = "day", time_values = "*"))
+})
+
 test_that("pub_covidcast catches missing args for args without defaults", {
   expect_no_error(pub_covidcast(
     source = "jhu-csse",

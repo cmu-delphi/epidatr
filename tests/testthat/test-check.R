@@ -103,6 +103,22 @@ test_that("assert_timeset_param", {
   expect_error(assert_timeset_param("name", c(from = "2020-01-01", to = "2021-01-02")))
 })
 
+test_that("format_time_filter() rejects more than 128 distinct terms (#291)", {
+  days <- as.Date("2024-01-01") + 0:127
+  expect_no_error(format_time_filter(days, "reference_time"))
+  expect_no_error(format_time_filter(c(days, days), "reference_time"))
+  expect_error(
+    format_time_filter(c(days, as.Date("2025-01-01")), "reference_time"),
+    "129 terms; the limit is 128",
+    class = "epidatr__too_many_time_terms"
+  )
+  many_exprs <- paste0(">=", format(days, "%Y-%m-%d"), collapse = NULL)
+  expect_error(
+    format_time_filter(c(many_exprs, "<2025-01-01"), "report_time", bare_dates = FALSE),
+    class = "epidatr__too_many_time_terms"
+  )
+})
+
 test_that("format_time_filter() for report_time", {
   rt <- function(x) format_time_filter(x, "report_time", bare_dates = FALSE)
   # Comparison operators are preserved

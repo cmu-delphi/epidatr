@@ -73,8 +73,9 @@ a list, or comma-joined strings (e.g., \code{"ca,fl"}). \code{NULL} (default) or
 \item{reference_time}{\code{\link{timeset}}. Reference time to return (filters on the
 \code{reference_time} column). Supports individual dates, \code{\link[=epirange]{epirange()}}, or
 filter expressions like \code{">=2024-01-01"}, \code{"2024-01-01:2024-03-31"},
-\code{"2024-01-01:"}, and \code{":2024-03-31"}. Several values match as OR.
-\code{NULL} (default) or \code{"*"} returns all reference times.}
+\code{"2024-01-01:"}, and \code{":2024-03-31"}. Several values match as OR, up to
+128 distinct values; for more, request one \code{epirange()} and filter the
+result. \code{NULL} (default) or \code{"*"} returns all reference times.}
 
 \item{time_values}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{reference_time} instead.}
 
