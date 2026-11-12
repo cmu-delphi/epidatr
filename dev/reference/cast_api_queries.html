@@ -29,7 +29,7 @@ e.g. NWSS: https://cmu-delphi.github.io/delphi-epidata/api/v5-signals/nwss.html.
 
     <a class="navbar-brand me-2" href="../index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.23</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.24</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -155,8 +155,9 @@ a list, or comma-joined strings (e.g., <code>"ca,fl"</code>). <code>NULL</code> 
 <dd><p><code><a href="timeset.html">timeset</a></code>. Reference time to return (filters on the
 <code>reference_time</code> column). Supports individual dates, <code><a href="epirange.html">epirange()</a></code>, or
 filter expressions like <code>"&gt;=2024-01-01"</code>, <code>"2024-01-01:2024-03-31"</code>,
-<code>"2024-01-01:"</code>, and <code>":2024-03-31"</code>. Several values match as OR.
-<code>NULL</code> (default) or <code>"*"</code> returns all reference times.</p></dd>
+<code>"2024-01-01:"</code>, and <code>":2024-03-31"</code>. Several values match as OR, up to
+128 distinct values; for more, request one <code><a href="epirange.html">epirange()</a></code> and filter the
+result. <code>NULL</code> (default) or <code>"*"</code> returns all reference times.</p></dd>
 
 
 <dt id="arg-time-values">time_values<a class="anchor" aria-label="anchor" href="#arg-time-values"></a></dt>

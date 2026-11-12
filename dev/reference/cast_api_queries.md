@@ -100,8 +100,11 @@ epidata(
   [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md),
   or filter expressions like `">=2024-01-01"`,
   `"2024-01-01:2024-03-31"`, `"2024-01-01:"`, and `":2024-03-31"`.
-  Several values match as OR. `NULL` (default) or `"*"` returns all
-  reference times.
+  Several values match as OR, up to 128 distinct values; for more,
+  request one
+  [`epirange()`](https://cmu-delphi.github.io/epidatr/dev/reference/epirange.md)
+  and filter the result. `NULL` (default) or `"*"` returns all reference
+  times.
 
 - time_values:
 
