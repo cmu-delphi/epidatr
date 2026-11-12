@@ -64,14 +64,25 @@ test_that("format_report_time_bound", {
     # Everything else falls back to a bare date
     list("2025-10-16", "2025-10-16"),
     list(as.Date("2025-10-16"), "2025-10-16"),
-    list(20251016, "2025-10-16"),
-    # A malformed timestamp attempt is NA, not silently truncated to its date
-    # prefix (as.Date() would otherwise ignore everything after "%Y-%m-%d")
-    list("2025-01-01T00:00:00", NA_character_), # naive, no Z
-    list("2025-01-01T00:00:00+00:00", NA_character_), # offset
-    list("2025-01-01T00:00:00-05:00", NA_character_) # offset
+    list(20251016, "2025-10-16")
   )
   for (case in cases) expect_equal(format_report_time_bound(case[[1]]), case[[2]])
+  # A malformed timestamp attempt is an error, not silently truncated to its
+  # date prefix (as.Date() would otherwise ignore everything after
+  # "%Y-%m-%d"), and anything unparseable is an error rather than sent as NA.
+  bad <- list(
+    "2025-01-01T00:00:00", # naive, no Z
+    "2025-01-01T00:00:00+00:00", # offset
+    "2025-01-01T00:00:00-05:00", # offset
+    "latest",
+    "not-a-date"
+  )
+  for (value in bad) {
+    expect_error(
+      format_report_time_bound(value, "snapshot_date"),
+      class = "epidatr__invalid_version_query"
+    )
+  }
 })
 
 test_that("assert_timeset_param", {
@@ -114,6 +125,9 @@ test_that("format_time_filter() for report_time", {
   expect_error(rt(as.Date("2024-01-01")), class = "epidatr__invalid_version_query")
 
   expect_error(rt("not-a-date"), class = "epidatr__invalid_version_query")
+
+  # Epiweek ranges run to the end (Saturday) of the last week
+  expect_equal(rt(epirange(202352, 202404)), "2023-12-24:2024-01-27")
 })
 
 test_that("timesets reject mixed day and week values", {

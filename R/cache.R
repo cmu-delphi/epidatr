@@ -165,7 +165,7 @@ set_cache <- function(
   #
   # make sure that that directory exists and drag the user into that process
   cache_exists <- file.exists(cache_dir)
-  cache_usable <- file.access(cache_dir, mode = 6) == 0
+  cache_usable <- dir.exists(cache_dir) && file.access(cache_dir, mode = 6) == 0
   if (!(cache_exists)) {
     if (confirm && !rlang::is_interactive()) {
       # readline() can't prompt here; it would return "" and silently decline
@@ -194,16 +194,18 @@ set_cache <- function(
     }
     if (valid_user_input == "yes") {
       dir.create(cache_dir, showWarnings = TRUE, recursive = TRUE)
-      cache_exists <- TRUE
-      cache_usable <- file.access(cache_dir, mode = 6) == 0
+      cache_exists <- dir.exists(cache_dir)
+      cache_usable <- cache_exists && file.access(cache_dir, mode = 6) == 0
     }
   }
 
   if (!cache_usable) {
+    # Don't leave a previously set cache running behind this message.
+    disable_cache()
     cli::cli_inform(
       c(
         "!" = "Could not set the epidatr cache: {cache_dir} does not exist or is not
-          accessible.",
+          accessible. The cache is off.",
         "i" = if (!cache_exists) {
           "Create it, or call {.code set_cache(confirm = FALSE)} to create it without asking."
         } else {

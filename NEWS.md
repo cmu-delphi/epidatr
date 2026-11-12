@@ -97,6 +97,22 @@
 
 ## Patches
 
+- An epiweek `reference_time` filter in `epidata_snapshot()`,
+  `epidata_archive()`, or `epidata_aux()`, and an epiweek `report_time` filter,
+  now covers whole weeks, Sunday to Saturday. Previously a range such as `epirange(202501, 202504)` ended on the
+  Sunday that starts its last week, so weekly data (dated by the week's
+  Saturday) lost the last week and archives lost reports made later in it, and a
+  single epiweek such as `202503` matched no weekly data at all.
+- `epidata_snapshot()` and `epidata_aux()` now error on a `snapshot_date` they
+  can't format (such as `"latest"` in `epidata_snapshot()`, or a timestamp
+  without a `Z`) instead of sending `snapshot_date=NA`.
+- Comma-joined `signals` and `geo_type` in `epidata_snapshot()` and
+  `epidata_archive()` now ignore empty items, such as from a trailing comma,
+  and error if no value is left.
+- A failed request no longer prints a stray "Timing stopped at" line.
+- A `set_cache()` call that can't use its directory now turns the cache off,
+  instead of leaving an earlier cache running while saying it couldn't set one.
+  A path that is a regular file is no longer accepted as a cache directory.
 - Requests no longer hang for up to two hours while the API is under
   maintenance. The API asks clients to retry an hour later while a data table
   is being rebuilt, and epidatr waited that long, twice, before giving up. Now

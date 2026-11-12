@@ -226,8 +226,62 @@ test_that("format_time_filter() maps timesets onto the cast-API grammar", {
   )
   expect_equal(ref(c("<2024-01-01", "2024-02-01")), "<2024-01-01,2024-02-01:2024-02-01")
   expect_error(ref("not-a-date"))
-  wk <- format(parse_api_week(c(202401, 202405)), "%Y-%m-%d")
-  expect_equal(ref(epirange(202401, 202405)), paste0(wk[1], ":", wk[2]))
+  # Epiweeks cover whole weeks, Sunday to Saturday, so a range keeps its last
+  # week and a single week matches weekly data dated by the week's end.
+  expect_equal(ref(epirange(202401, 202405)), "2023-12-31:2024-02-03")
+  expect_equal(ref(202403), "2024-01-14:2024-01-20")
+  expect_equal(ref(c(202403, 202405)), "2024-01-14:2024-01-20,2024-01-28:2024-02-03")
+  expect_equal(ref("202403"), "2024-01-14:2024-01-20")
+})
+
+test_that("epiweek filters reach the request as whole weeks", {
+  fa <- fetch_args_list(dry_run = TRUE)
+  url <- function(call) utils::URLdecode(call$request$url)
+  snap <- epidata_snapshot("nssp", "sig1", geo_type = "state", reference_time = 202503, fetch_args = fa)
+  expect_match(url(snap), "reference_times=2025-01-12:2025-01-18", fixed = TRUE)
+  arch <- epidata_archive(
+    "nssp", "sig1",
+    geo_type = "state",
+    reference_time = epirange(202501, 202504),
+    report_time = epirange(202352, 202404),
+    fetch_args = fa
+  )
+  expect_match(url(arch), "reference_times=2024-12-29:2025-01-25", fixed = TRUE)
+  expect_match(url(arch), "report_time_query=2023-12-24:2024-01-27", fixed = TRUE)
+})
+
+test_that("comma-joined signals and geo_types ignore empty items", {
+  fa <- fetch_args_list(dry_run = TRUE)
+  url <- function(call) utils::URLdecode(call$request$url)
+  snap <- epidata_snapshot("nssp", "sig1, sig2, ", geo_type = "state, ", fetch_args = fa)
+  expect_s3_class(snap, "epidata_call")
+  expect_match(url(snap), "signal=sig1,sig2&", fixed = TRUE)
+  arch <- epidata_archive("nssp", c("sig1", ""), geo_type = " state ", fetch_args = fa)
+  expect_match(url(arch), "signal=sig1&geo_type=state($|&)")
+  expect_error(
+    epidata_snapshot("nssp", " , ", geo_type = "state", fetch_args = fa),
+    class = "epidatr__empty_param"
+  )
+  expect_error(
+    epidata_archive("nssp", "sig1", geo_type = ",", fetch_args = fa),
+    class = "epidatr__empty_param"
+  )
+})
+
+test_that("an unusable snapshot_date is an error, not snapshot_date=NA", {
+  fa <- fetch_args_list(dry_run = TRUE)
+  for (bad in list("latest", "2025-01-01T00:00:00", "not-a-date")) {
+    expect_error(
+      epidata_snapshot("nssp", "sig1", geo_type = "state", snapshot_date = bad, fetch_args = fa),
+      class = "epidatr__invalid_version_query"
+    )
+  }
+  expect_error(
+    epidata_aux("nwss", snapshot_date = "2025-01-01T00:00:00", fetch_args = fa),
+    class = "epidatr__invalid_version_query"
+  )
+  # "latest" stays valid for epidata_aux()
+  expect_s3_class(epidata_aux("nwss", snapshot_date = "latest", fetch_args = fa), "epidata_call")
 })
 
 test_that("fetch_args_list(limit=) is forwarded to the cast-API request and validated", {
