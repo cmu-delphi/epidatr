@@ -1816,6 +1816,7 @@ epidata_aux.default <- function(
   }
 
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time, required = FALSE)
+  assert_valid_epiweeks("reference_time", parsed_reference_times)
 
   if (identical(snapshot_date, "latest")) {
     # the API's dates are UTC; a local date can be a day behind

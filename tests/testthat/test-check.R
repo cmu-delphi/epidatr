@@ -146,6 +146,26 @@ test_that("format_time_filter() for report_time", {
   expect_equal(rt(epirange(202352, 202404)), "2023-12-24:2024-01-27")
 })
 
+test_that("V5 time filters reject epiweeks that don't exist", {
+  ref <- function(x) format_time_filter(x, "reference_time")
+  # 2024 has 52 epiweeks, so 202453 would otherwise wrap to 2025w01
+  for (bad in list(202453L, "202453", 202400L, 202454L, epirange(202450, 202453), epirange(202400, 202402))) {
+    expect_error(ref(bad), class = "epidatr__invalid_epiweek")
+  }
+  expect_error(
+    format_time_filter(epirange(202450, 202453), "report_time", bare_dates = FALSE),
+    class = "epidatr__invalid_epiweek"
+  )
+  # 2020 has 53 epiweeks
+  expect_equal(ref(202053L), "2020-12-27:2021-01-02")
+  expect_equal(ref(epirange(202452, 202501)), "2024-12-22:2025-01-04")
+  # epidata_aux() checks before making a request
+  expect_error(
+    epidata_aux("nwss", reference_time = 202453L, fetch_args = fetch_args_list(dry_run = TRUE)),
+    class = "epidatr__invalid_epiweek"
+  )
+})
+
 test_that("timesets reject mixed day and week values", {
   expect_error(parse_timeset_input(c(20200101, 202201)), "mixes day")
   expect_error(
