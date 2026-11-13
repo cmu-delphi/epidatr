@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.24</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.25</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,7 @@
 <div class="section level2">
 <h2 id="versioning">Versioning<a class="anchor" aria-label="anchor" href="#versioning"></a></h2>
 <p><code>DESCRIPTION</code> versions follow <code>major.minor.patch</code>. The CRAN version is always the latest release, and <code>dev</code> is always ahead of it.</p>
-<ul><li>You don’t need to bump the patch version in your PR. After each merge into <code>dev</code>, the <code>version-bump</code> workflow commits a patch bump straight to <code>dev</code> (e.g. 1.4.1 -&gt; 1.4.2).</li>
+<ul><li>You don’t need to bump the patch version in your PR. After each merge into <code>dev</code> that changes <code>R/</code>, <code>man/</code>, <code>man-roxygen/</code>, <code>inst/</code>, <code>vignettes/</code>, <code>NAMESPACE</code>, or <code>DESCRIPTION</code> (other than its <code>Version</code> line), the <code>version-bump</code> workflow commits a patch bump straight to <code>dev</code> (e.g. 1.4.1 -&gt; 1.4.2). Docs, tests and CI changes don’t bump.</li>
 <li>For a minor or major bump, set the version by hand in your PR (<code>just bump minor</code> does the edit). If a merge changed <code>Version</code>, the workflow leaves it alone.</li>
 </ul><p>See also the <a href="pull_request_template.html">PR template</a>.</p>
 </div>

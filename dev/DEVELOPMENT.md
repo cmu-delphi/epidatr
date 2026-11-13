@@ -79,8 +79,10 @@ python -m http.server -d docs
 always the latest release, and `dev` is always ahead of it.
 
 - You don’t need to bump the patch version in your PR. After each merge
-  into `dev`, the `version-bump` workflow commits a patch bump straight
-  to `dev` (e.g. 1.4.1 -\> 1.4.2).
+  into `dev` that changes `R/`, `man/`, `man-roxygen/`, `inst/`,
+  `vignettes/`, `NAMESPACE`, or `DESCRIPTION` (other than its `Version`
+  line), the `version-bump` workflow commits a patch bump straight to
+  `dev` (e.g. 1.4.1 -\> 1.4.2). Docs, tests and CI changes don’t bump.
 - For a minor or major bump, set the version by hand in your PR
   (`just bump minor` does the edit). If a merge changed `Version`, the
   workflow leaves it alone.
