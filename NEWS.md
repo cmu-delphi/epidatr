@@ -105,7 +105,8 @@
 
 - `epidata_snapshot()`, `epidata_archive()` and `epidata_aux()` now reject an
   epiweek that doesn't exist in a `reference_time` or `report_time` filter
-  (class `epidatr__invalid_epiweek`). Previously a week past the end of a year,
+  (class `epidatr__invalid_epiweek`), and so does `pub_covid_hosp_facility()`
+  in `collection_weeks`, which it converts to dates. Previously a week past the end of a year,
   such as `202453` (2024 has 52 epiweeks), silently became the first week of
   the next year, and week `00` or `54` gave an internal error.
 - An epiweek `reference_time` filter in `epidata_snapshot()`,

@@ -149,19 +149,46 @@ test_that("format_time_filter() for report_time", {
 test_that("V5 time filters reject epiweeks that don't exist", {
   ref <- function(x) format_time_filter(x, "reference_time")
   # 2024 has 52 epiweeks, so 202453 would otherwise wrap to 2025w01
-  for (bad in list(202453L, "202453", 202400L, 202454L, epirange(202450, 202453), epirange(202400, 202402))) {
+  for (bad in list(202453L, "202453", c(202452L, 202453L), epirange(202450, 202453))) {
     expect_error(ref(bad), class = "epidatr__invalid_epiweek")
   }
   expect_error(
     format_time_filter(epirange(202450, 202453), "report_time", bare_dates = FALSE),
     class = "epidatr__invalid_epiweek"
   )
+})
+
+test_that("week 00 and 54 get a clear error, not MMWRweek's internal one", {
+  for (bad in list(202400L, 202454L, epirange(202400, 202402))) {
+    expect_error(format_time_filter(bad, "reference_time"), class = "epidatr__invalid_epiweek")
+  }
+})
+
+test_that("valid week 53 and year-crossing ranges still work", {
+  ref <- function(x) format_time_filter(x, "reference_time")
   # 2020 has 53 epiweeks
   expect_equal(ref(202053L), "2020-12-27:2021-01-02")
   expect_equal(ref(epirange(202452, 202501)), "2024-12-22:2025-01-04")
-  # epidata_aux() checks before making a request
+  expect_equal(
+    format_time_filter(epirange(202050, 202053), "report_time", bare_dates = FALSE),
+    "2020-12-06:2021-01-02"
+  )
+})
+
+test_that("epiweeks are checked before any request is made", {
+  dry <- fetch_args_list(dry_run = TRUE)
   expect_error(
-    epidata_aux("nwss", reference_time = 202453L, fetch_args = fetch_args_list(dry_run = TRUE)),
+    epidata_snapshot("nssp", "pct_ed_visits_covid", "state", reference_time = 202453L, fetch_args = dry),
+    class = "epidatr__invalid_epiweek"
+  )
+  # epidata_aux() filters reference_time locally, after the request
+  expect_error(
+    epidata_aux("nwss", reference_time = 202453L, fetch_args = dry),
+    class = "epidatr__invalid_epiweek"
+  )
+  # pub_covid_hosp_facility() converts collection_weeks to dates itself
+  expect_error(
+    pub_covid_hosp_facility("100075", collection_weeks = epirange(202450, 202453), fetch_args = dry),
     class = "epidatr__invalid_epiweek"
   )
 })

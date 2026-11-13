@@ -293,6 +293,7 @@ pub_covid_hosp_facility <- function(
        expects day format; dates will be converted to day format but may not
        correspond exactly to desired time range"
   )
+  assert_valid_epiweeks("collection_weeks", collection_weeks)
   if (
     test_class(collection_weeks, "EpiRange") &&
       nchar(collection_weeks$from) == 6
