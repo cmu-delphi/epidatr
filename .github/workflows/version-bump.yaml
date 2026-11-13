@@ -1,5 +1,6 @@
-# Bumps the DESCRIPTION patch version on dev after each merge, unless the merge
-# already changed it. For a minor or major bump, set the version by hand in the
+# Bumps the DESCRIPTION patch version on dev after each merge that changes the
+# shipped package files or DESCRIPTION, unless the merge already changed the
+# version. For a minor or major bump, set the version by hand in the
 # PR. See DEVELOPMENT.md "Versioning".
 on:
   push:
@@ -44,9 +45,21 @@ jobs:
           echo "Version before push: $old, after push: $new"
           if [ "$old" != "$new" ]; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
+          # Only bump when what users install changed: the shipped package
+          # directories, or DESCRIPTION apart from its Version line.
+          if [ -n "$(git diff --name-only "$before" "$after" -- R man man-roxygen inst vignettes NAMESPACE ':!vignettes/*.Rmd.orig' ':!vignettes/precompile.R')" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if ! diff -q <(git show "$before:DESCRIPTION" | grep -v '^Version: ') \
+                       <(git show "$after:DESCRIPTION" | grep -v '^Version: ') > /dev/null; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "No package or DESCRIPTION changes; skipping."
+          echo "skip=true" >> "$GITHUB_OUTPUT"
 
       - name: Bump and push to dev
         if: steps.check.outputs.skip == 'false'
