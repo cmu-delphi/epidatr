@@ -109,7 +109,7 @@
   `pub_covid_hosp_facility()` in `collection_weeks`, which it converts to
   dates. Previously a week past the end of a year, such as `202453` (2024 has
   52 epiweeks), silently became the first week of the next year, and week `00`
-  or `54` gave an internal error.
+  or `54` gave an internal error (#475).
 - An epiweek `reference_time` filter in `epidata_snapshot()`,
   `epidata_archive()`, or `epidata_aux()`, and an epiweek `report_time` filter,
   now covers whole weeks, Sunday to Saturday. Previously a range such as `epirange(202501, 202504)` ended on the
