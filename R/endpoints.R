@@ -293,6 +293,7 @@ pub_covid_hosp_facility <- function(
        expects day format; dates will be converted to day format but may not
        correspond exactly to desired time range"
   )
+  assert_valid_epiweeks("collection_weeks", collection_weeks)
   if (
     test_class(collection_weeks, "EpiRange") &&
       nchar(collection_weeks$from) == 6
@@ -1816,6 +1817,7 @@ epidata_aux.default <- function(
   }
 
   parsed_reference_times <- validate_timeset_input("reference_time", reference_time, required = FALSE)
+  assert_valid_epiweeks("reference_time", parsed_reference_times)
 
   if (identical(snapshot_date, "latest")) {
     # the API's dates are UTC; a local date can be a day behind

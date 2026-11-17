@@ -314,6 +314,37 @@ format_params_for_api <- function(params) {
   })
 }
 
+#' Abort on epiweeks that don't exist.
+#'
+#' A year has 52 or 53 MMWR weeks. `MMWRweek::MMWRweek2Date()` silently wraps
+#' a week past the end of the year into the next year (`202453` is 2025w01)
+#' and fails cryptically on week 0 or 54+. No-op for anything that isn't a
+#' YYYYWW value or an `epirange()` of them.
+#' @param name argument name for error messages.
+#' @param value a timeset.
+#' @keywords internal
+assert_valid_epiweeks <- function(name, value) {
+  x <- if (inherits(value, "EpiRange")) c(value$from, value$to) else value
+  if (length(x) == 0 || inherits(x, "Date") || !all(grepl("^[0-9]{6}$", x))) {
+    return(invisible(value))
+  }
+  x <- as.integer(x)
+  years <- x %/% 100L
+  weeks <- x %% 100L
+  last_week <- MMWRweek::MMWRweek(MMWRweek::MMWRweek2Date(years + 1L, rep(1L, length(years))) - 1L)$MMWRweek
+  bad <- weeks < 1L | weeks > last_week
+  if (any(bad)) {
+    cli::cli_abort(
+      c(
+        "{.arg {name}} has an epiweek that doesn't exist: {.val {x[bad][1]}}.",
+        "i" = "Year {years[bad][1]} has epiweeks 1 to {last_week[bad][1]}."
+      ),
+      class = "epidatr__invalid_epiweek"
+    )
+  }
+  invisible(value)
+}
+
 # The most terms one time filter may hold. Longer lists make slow requests; a
 # single range plus filtering the result locally is cheaper for everyone.
 max_time_filter_terms <- 128L
@@ -331,6 +362,7 @@ format_time_filter <- function(value, name, bare_dates = TRUE) {
     return(NULL)
   }
   if (inherits(value, "EpiRange")) {
+    assert_valid_epiweeks(name, value)
     x <- c(value$from, value$to)
     if (all(nchar(x) == 6)) {
       # Whole epiweeks: from the first week's Sunday to the last week's
@@ -358,6 +390,7 @@ format_time_filter <- function(value, name, bare_dates = TRUE) {
       )
     }
     x <- validate_timeset_input(name, value[!is_expr])
+    assert_valid_epiweeks(name, x)
     if (inherits(x, "Date")) {
       from <- to <- x
     } else if (all(nchar(x) == 6)) {
