@@ -190,6 +190,19 @@
 
 ### Patches
 
+- [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+  [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
+  [`epidata()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md)
+  and
+  [`epidata_aux()`](https://cmu-delphi.github.io/epidatr/dev/reference/epidata_aux.md)
+  now reject an epiweek that doesn’t exist in a `reference_time` or
+  `report_time` filter (class `epidatr__invalid_epiweek`), and so does
+  [`pub_covid_hosp_facility()`](https://cmu-delphi.github.io/epidatr/dev/reference/pub_covid_hosp_facility.md)
+  in `collection_weeks`, which it converts to dates. Previously a week
+  past the end of a year, such as `202453` (2024 has 52 epiweeks),
+  silently became the first week of the next year, and week `00` or `54`
+  gave an internal error
+  ([\#475](https://github.com/cmu-delphi/epidatr/issues/475)).
 - An epiweek `reference_time` filter in
   [`epidata_snapshot()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
   [`epidata_archive()`](https://cmu-delphi.github.io/epidatr/dev/reference/cast_api_queries.md),
