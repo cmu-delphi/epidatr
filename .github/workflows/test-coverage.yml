@@ -3,7 +3,7 @@
 on:
   workflow_dispatch: #get a button to trigger it by hand
   push:
-    branches: [main, dev]
+    branches: [dev]
   pull_request:
     paths:
       - '**.R'

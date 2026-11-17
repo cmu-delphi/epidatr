@@ -155,17 +155,17 @@ check-mac:
 
 # Run the full OS/R-version matrix on GitHub Actions, e.g. `just check-full-ci dev`.
 [group("release")]
-check-full-ci branch="main":
+check-full-ci branch="dev":
     gh workflow run R-CMD-check-full.yaml --ref {{ branch }}
 
-# Submit to CRAN from the tip of main. Leaves the new CRAN-SUBMISSION uncommitted.
+# Submit to CRAN from the tip of dev. Leaves the new CRAN-SUBMISSION uncommitted.
 [group("release")]
 submit: (_stashed "_submit")
 
 # submit_cran() asks confirmation questions, so R runs interactively.
 _submit: release-preflight
-    git fetch origin main
-    @test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" || { echo "HEAD is not origin/main; submit from the tip of main."; exit 1; }
+    git fetch origin dev
+    @test "$(git rev-parse HEAD)" = "$(git rev-parse origin/dev)" || { echo "HEAD is not origin/dev; submit from the tip of dev."; exit 1; }
     R --interactive --no-save --no-restore -q -e "devtools::submit_cran()"
     @echo "CRAN-SUBMISSION now records this upload. Commit it once CRAN accepts; discard it if CRAN rejects."
 
@@ -198,11 +198,6 @@ release *gh_flags:
     git tag -a v{{ submitted_version }} {{ submitted_sha }} -m "epidatr {{ submitted_version }}"
     git push origin v{{ submitted_version }}
     gh release create v{{ submitted_version }} --verify-tag --notes-file "$notes" --title "epidatr {{ submitted_version }}" {{ gh_flags }}
-
-# Open the PR that brings release fixes and CRAN-SUBMISSION from main back to dev.
-[group("release")]
-backmerge:
-    gh pr create --base dev --head main --title "chore: merge main into dev after epidatr {{ submitted_version }}" --body "Back-merge after the {{ submitted_version }} CRAN release."
 
 # Run recipes with untracked files (e.g. a local .Renviron) moved out of the way, so they
 # don't fail the preflight clean-tree check. They are put back on exit, success or failure.

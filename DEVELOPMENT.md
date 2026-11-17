@@ -46,10 +46,10 @@ endpoints (`pvt_*`) or anything requiring restricted access must stay
 
 ## Developing the documentation site
 
-Our CI builds two version of the documentation:
+Our CI builds two versions of the documentation:
 
-- https://cmu-delphi.github.io/epidatr/ from the `main` branch and
-- https://cmu-delphi.github.io/epidatr/dev from the `dev` branch.
+- https://cmu-delphi.github.io/epidatr/ when a GitHub release is published, and
+- https://cmu-delphi.github.io/epidatr/dev on every push to the `dev` branch.
 
 The documentation site can be previewed locally by running in R:
 
@@ -85,7 +85,10 @@ notes. The release PR (below) bumps the version by hand
 Most steps are [just](https://just.systems) recipes (run `just` to list them). Run `just install` once to get the tools they
 use. Open a release issue and copy this checklist into it:
 
-Prepare, on `dev`:
+`dev` is the only long-lived branch; there is no `main`. Everything below happens on
+`dev`.
+
+Prepare:
 
 - [ ] `just cran-status`: compare the `DESCRIPTION`, `CRAN-SUBMISSION`, and
   on-CRAN versions, and check the current CRAN check results for problems to fix.
@@ -106,30 +109,29 @@ Prepare, on `dev`:
 - [ ] Check reverse dependencies (e.g. `epiprocess`, `epipredict`) against `dev`
   with [`r-devel/recheck`](https://github.com/r-devel/recheck) and fix any
   regressions. CRAN also runs this on submission.
-- [ ] Open the release PR from `dev` into `main` and merge it.
+- [ ] Merge the release PR (version bump and NEWS) into `dev`.
 
-Submit, from the tip of `main` with a clean working tree:
+Submit, from the tip of `dev` with a clean working tree:
 
 - [ ] `just check-win` (and optionally `just check-mac`). The maintainer
   ("cre" in `DESCRIPTION`) gets the results by email.
 - [ ] `just submit`. It reruns the preflight, refuses to run anywhere except
-  `origin/main`, and asks confirmation questions. After a successful upload it
+  `origin/dev`, and asks confirmation questions. After a successful upload it
   writes the version and SHA to `CRAN-SUBMISSION` and leaves it uncommitted.
 - [ ] The maintainer confirms the submission from the CRAN email.
 
 Wait for CRAN. If CRAN rejects the package, discard the `CRAN-SUBMISSION`
-change (`git checkout CRAN-SUBMISSION`), fix the problems through `dev` and then
-`main`, and submit again.
+change (`git checkout CRAN-SUBMISSION`), fix the problems through `dev`, and submit again.
 
 After acceptance:
 
-- [ ] Commit the updated `CRAN-SUBMISSION` on a branch off `main`, and open and
-  merge a PR for it into `main`.
-- [ ] `just backmerge` opens the `main` -> `dev` PR. Merge it.
+- [ ] Commit the updated `CRAN-SUBMISSION` on a branch off `dev`, and open and
+  merge a PR for it into `dev`.
 - [ ] `just release --draft` tags the commit recorded in `CRAN-SUBMISSION`,
   pushes the tag, and creates a draft GitHub release whose body is that
   version's `NEWS.md` section. It refuses to run until that version is on CRAN.
-- [ ] Review the release notes on GitHub and publish them.
+- [ ] Review the release notes on GitHub and publish them. Publishing rebuilds
+  the root documentation site from the release tag.
 
 If a submission was made without `just submit`, fix `CRAN-SUBMISSION` by hand
 with `just cran-submission X.Y.Z <submitted commit>`. `just
