@@ -6,11 +6,13 @@ Please:
       PR).
 - [ ] Request a review from one of the current epidatr main reviewers:
       brookslogan, dshemetov, nmdefries, dsweber2.
-- [ ] Don't bump the patch version in `DESCRIPTION`; CI does it after merge.
-      For a minor or major bump, set the version by hand in this PR.
-- [ ] Describe changes made in NEWS.md, making sure breaking changes
-      (backwards-incompatible changes to the documented interface) are noted.
-      Collect the changes under the heading for the next release.
+- [ ] Use a conventional-commit title and describe what changed for users in
+      the description; the release notes are generated from them. Don't edit
+      `NEWS.md` or the `DESCRIPTION` version (the release PR does both).
+- [ ] Apply a label (`enhancement`, `bug`, `documentation`, ...) so the change
+      is categorized in the generated release notes. Call out breaking changes
+      (backwards-incompatible changes to the documented interface) in the
+      description.
 - [ ] If you changed any vignette (`vignettes/*.Rmd.orig`), re-knit with `just
       vignettes` and commit the regenerated `.Rmd` files and figures alongside
       the `.Rmd.orig` sources. See DEVELOPMENT.md.

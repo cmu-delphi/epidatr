@@ -175,13 +175,29 @@ cran-submission version=pkg_version ref="HEAD":
     @printf 'Version: %s\nDate: %s\nSHA: %s\n' "{{ version }}" "$(date -u '+%Y-%m-%d %H:%M:%S UTC')" "$(git rev-parse {{ ref }}^{commit})" > CRAN-SUBMISSION
     @cat CRAN-SUBMISSION
 
-# After CRAN accepts: tag the submitted commit, push the tag, and publish a GitHub release. Extra flags go to `gh release create`, e.g. `just release --draft`.
+# Print GitHub's generated release notes since the last tag, as the starting point for the NEWS.md section (see DEVELOPMENT.md). Needs the `gh` CLI.
+[group("release")]
+news since="" branch="dev":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    since="{{ since }}"
+    [ -n "$since" ] || since=$(git describe --tags --abbrev=0 "origin/{{ branch }}")
+    gh api repos/{owner}/{repo}/releases/generate-notes \
+        -f tag_name="v{{ pkg_version }}" -f target_commitish="{{ branch }}" \
+        -f previous_tag_name="$since" --jq .body
+
+# After CRAN accepts: tag the submitted commit, push the tag, and publish a GitHub release whose body is the version's NEWS.md section. Extra flags go to `gh release create`, e.g. `just release --draft`.
 [group("release")]
 release *gh_flags:
-    @test "{{ submitted_version }}" = "{{ cran_version }}" || { echo "CRAN-SUBMISSION ({{ submitted_version }}) is not the version on CRAN ({{ cran_version }}); has it been accepted?"; exit 1; }
+    #!/usr/bin/env bash
+    set -euo pipefail
+    test "{{ submitted_version }}" = "{{ cran_version }}" || { echo "CRAN-SUBMISSION ({{ submitted_version }}) is not the version on CRAN ({{ cran_version }}); has it been accepted?"; exit 1; }
+    notes=$(mktemp)
+    git show "{{ submitted_sha }}:NEWS.md" | awk -v h="# epidatr {{ submitted_version }}" '$0 == h {f = 1; next} /^# / {f = 0} f' > "$notes"
+    grep -q '[^[:space:]]' "$notes" || { echo "NEWS.md has no '# epidatr {{ submitted_version }}' section at {{ submitted_sha }}."; exit 1; }
     git tag -a v{{ submitted_version }} {{ submitted_sha }} -m "epidatr {{ submitted_version }}"
     git push origin v{{ submitted_version }}
-    gh release create v{{ submitted_version }} --verify-tag --generate-notes --title "epidatr {{ submitted_version }}" {{ gh_flags }}
+    gh release create v{{ submitted_version }} --verify-tag --notes-file "$notes" --title "epidatr {{ submitted_version }}" {{ gh_flags }}
 
 # Open the PR that brings release fixes and CRAN-SUBMISSION from main back to dev.
 [group("release")]

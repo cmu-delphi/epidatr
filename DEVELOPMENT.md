@@ -67,21 +67,17 @@ R -e 'pkgdown::build_site()'
 python -m http.server -d docs
 ```
 
-## Versioning
+## Versioning and release notes
 
 `DESCRIPTION` versions follow `major.minor.patch`. The CRAN version is always
 the latest release, and `dev` is always ahead of it.
 
-- You don't need to bump the patch version in your PR. After each merge into
-  `dev` that changes `R/`, `man/`, `man-roxygen/`, `inst/`, `vignettes/`,
-  `NAMESPACE`, or `DESCRIPTION` (other than its `Version` line), the
-  `version-bump` workflow commits a patch bump straight to `dev`
-  (e.g. 1.4.1 -> 1.4.2). Docs, tests and CI changes don't bump.
-- For a minor or major bump, set the version by hand in your PR
-  (`just bump minor` does the edit). If a merge changed `Version`, the
-  workflow leaves it alone.
-
-See also the [PR template](.github/pull_request_template.md).
+Ordinary PRs touch neither the version nor `NEWS.md`. Write a conventional-commit
+title, label the PR (see the [PR template](.github/pull_request_template.md)), and
+describe what changed for users, including breaking changes: those are the raw
+material for the release notes. The release PR (below) bumps the version by hand
+(`just bump patch|minor|major`) and writes the `# epidatr X.Y.Z` section of
+`NEWS.md`.
 
 ## Release process
 
@@ -92,8 +88,15 @@ Prepare, on `dev`:
 
 - [ ] `just cran-status`: compare the `DESCRIPTION`, `CRAN-SUBMISSION`, and
   on-CRAN versions, and check the current CRAN check results for problems to fix.
-- [ ] Set the release version by hand if it isn't a patch release
-  (`just bump minor` in a PR) and [polish NEWS](https://style.tidyverse.org/news.html#news-release).
+- [ ] In a PR to `dev`, set the release version (`just bump patch|minor|major`)
+  and write the `# epidatr X.Y.Z` section at the top of `NEWS.md`, replacing any
+  `(development version)` heading. Run `just news` to print GitHub's generated
+  notes since the last tag (categories come from `.github/release.yml`) and give
+  them to an agent, or edit them yourself, into the
+  [NEWS style](https://style.tidyverse.org/news.html#news-release): sections
+  `Breaking changes`, `Changes`, `Documentation` and `Patches`, no housekeeping,
+  and a note on what users must do about breaking changes. Review it like any
+  other PR. The heading must be exactly `# epidatr X.Y.Z`.
 - [ ] Update `cran-comments.md`.
 - [ ] `just release-check`: preflight, `document`, URL check, README rebuild,
   and a CRAN-like `R CMD check` with incoming checks. Aim for 0 errors, 0
@@ -123,8 +126,8 @@ After acceptance:
   merge a PR for it into `main`.
 - [ ] `just backmerge` opens the `main` -> `dev` PR. Merge it.
 - [ ] `just release --draft` tags the commit recorded in `CRAN-SUBMISSION`,
-  pushes the tag, and creates a draft GitHub release. It refuses to run until
-  that version is on CRAN.
+  pushes the tag, and creates a draft GitHub release whose body is that
+  version's `NEWS.md` section. It refuses to run until that version is on CRAN.
 - [ ] Review the release notes on GitHub and publish them.
 
 If a submission was made without `just submit`, fix `CRAN-SUBMISSION` by hand
