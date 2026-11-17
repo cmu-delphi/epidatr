@@ -1,5 +1,18 @@
 # Notes for agents
 
+## Commits and PRs
+
+Use [conventional-commit](https://www.conventionalcommits.org) messages for
+commits and PR titles (`feat:`, `fix:`, `docs:`, `chore:`, `ci:`, ...); the
+release notes are generated from them. PRs go against `dev`, and a regular
+merge is preferred over a squash merge.
+
+## Vignettes
+
+If you change any vignette (`vignettes/*.Rmd.orig`), re-knit with `just
+vignettes` and commit the regenerated `.Rmd` files and figures alongside the
+`.Rmd.orig` sources. See DEVELOPMENT.md.
+
 ## NEWS.md and versions
 
 Feature PRs don't touch `NEWS.md` or the `DESCRIPTION` version. Write a

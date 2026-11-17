@@ -72,10 +72,11 @@ python -m http.server -d docs
 `DESCRIPTION` versions follow `major.minor.patch`. The CRAN version is always
 the latest release, and `dev` is always ahead of it.
 
-Ordinary PRs touch neither the version nor `NEWS.md`. Write a conventional-commit
-title, label the PR (see the [PR template](.github/pull_request_template.md)), and
-describe what changed for users, including breaking changes: those are the raw
-material for the release notes. The release PR (below) bumps the version by hand
+Ordinary PRs touch neither the version nor `NEWS.md`. Write a
+conventional-commit title, label the PR (`enhancement`, `bug`, `documentation`,
+...) so it is categorized in the generated notes, and describe what changed for
+users, including breaking changes: those are the raw material for the release
+notes. The release PR (below) bumps the version by hand
 (`just bump patch|minor|major`) and writes the `# epidatr X.Y.Z` section of
 `NEWS.md`.
 
