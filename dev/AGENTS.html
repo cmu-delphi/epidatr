@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.25</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.26</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,16 +42,25 @@
 <div id="notes-for-agents" class="section level1">
 
 <div class="section level2">
-<h2 id="newsmd">NEWS.md<a class="anchor" aria-label="anchor" href="#newsmd"></a></h2>
-<p>Every user-visible change gets a <code>NEWS.md</code> bullet in the same PR. Skip tests, CI, version bumps and other housekeeping.</p>
-<ul><li>Collect all unreleased changes under the top heading, <code># epidatr (development version)</code>. Don’t add a heading per patch version: the <code>version-bump</code> workflow raises <code>DESCRIPTION</code> after every merge into <code>dev</code>, but those are development versions, not releases (the CRAN version is the latest release; see “Versioning” in <code>DEVELOPMENT.md</code>).</li>
-<li>At release time the maintainer renames that heading to the release version (the “polish NEWS” step in <code>DEVELOPMENT.md</code>). Don’t do it in a feature PR.</li>
-<li>Use the sections <code>Breaking changes</code>, <code>Changes</code>, <code>Documentation</code> and <code>Patches</code>, and cite the issue or PR number when there is one.</li>
-</ul><p>To check that NEWS is complete, compare the log since the last release tag (<code>git tag</code> / <code>jj tag list</code>) against the bullets.</p>
+<h2 id="commits-and-prs">Commits and PRs<a class="anchor" aria-label="anchor" href="#commits-and-prs"></a></h2>
+<p>Use <a href="https://www.conventionalcommits.org" class="external-link">conventional-commit</a> messages for commits and PR titles (<code>feat:</code>, <code>fix:</code>, <code>docs:</code>, <code>chore:</code>, <code>ci:</code>, …). The generated release notes (<code>just news</code>) list each PR by its title, and the prefix shows what kind of change it is. PRs go against <code>dev</code>, and a regular merge is preferred over a squash merge.</p>
+</div>
+<div class="section level2">
+<h2 id="vignettes">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes"></a></h2>
+<p>If you change any vignette (<code>vignettes/*.Rmd.orig</code>), re-knit with <code>just vignettes</code> and commit the regenerated <code>.Rmd</code> files and figures alongside the <code>.Rmd.orig</code> sources. See DEVELOPMENT.md.</p>
+</div>
+<div class="section level2">
+<h2 id="newsmd-and-versions">NEWS.md and versions<a class="anchor" aria-label="anchor" href="#newsmd-and-versions"></a></h2>
+<p>Feature PRs don’t touch <code>NEWS.md</code> or the <code>DESCRIPTION</code> version. Write a conventional-commit PR title and a description that says what changed for users (and flags breaking changes); those, plus the PR labels, are the raw material for the release notes.</p>
+<p>The release PR writes the <code># epidatr X.Y.Z</code> section at the top of <code>NEWS.md</code> (replacing any <code># epidatr (development version)</code> heading) and bumps <code>DESCRIPTION</code>. To write it:</p>
+<ol style="list-style-type: decimal"><li>Run <code>just news</code> to print GitHub’s generated notes since the last tag.</li>
+<li>Edit them into the NEWS style: use the sections <code>Breaking changes</code>, <code>Changes</code>, <code>Documentation</code> and <code>Patches</code>, drop pure housekeeping (tests, CI, version bumps), say what users must do about breaking changes, and cite the issue or PR number. Read the PR descriptions (<code>gh pr view N</code>) when a title isn’t enough.</li>
+</ol><p><code>just release</code> uses that same NEWS section as the GitHub release body, so the heading must be exactly <code># epidatr X.Y.Z</code>.</p>
 </div>
 </div>
 
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

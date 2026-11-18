@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">epidatr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.25</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.4.26</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,11 +69,11 @@
 </div>
 <div class="section level2">
 <h2 id="developing-the-documentation-site">Developing the documentation site<a class="anchor" aria-label="anchor" href="#developing-the-documentation-site"></a></h2>
-<p>Our CI builds two version of the documentation:</p>
+<p>Our CI builds two versions of the documentation:</p>
 <ul><li>
-<a href="https://cmu-delphi.github.io/epidatr/" class="uri">https://cmu-delphi.github.io/epidatr/</a> from the <code>main</code> branch and</li>
+<a href="https://cmu-delphi.github.io/epidatr/" class="uri">https://cmu-delphi.github.io/epidatr/</a> when a GitHub release is published, and</li>
 <li>
-<a href="https://cmu-delphi.github.io/epidatr/dev" class="uri">https://cmu-delphi.github.io/epidatr/dev</a> from the <code>dev</code> branch.</li>
+<a href="https://cmu-delphi.github.io/epidatr/dev" class="uri">https://cmu-delphi.github.io/epidatr/dev</a> on every push to the <code>dev</code> branch.</li>
 </ul><p>The documentation site can be previewed locally by running in R:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Should automatically open a browser</span></span>
@@ -84,33 +84,31 @@
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> http.server <span class="at">-d</span> docs</span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="versioning">Versioning<a class="anchor" aria-label="anchor" href="#versioning"></a></h2>
+<h2 id="versioning-and-release-notes">Versioning and release notes<a class="anchor" aria-label="anchor" href="#versioning-and-release-notes"></a></h2>
 <p><code>DESCRIPTION</code> versions follow <code>major.minor.patch</code>. The CRAN version is always the latest release, and <code>dev</code> is always ahead of it.</p>
-<ul><li>You don’t need to bump the patch version in your PR. After each merge into <code>dev</code> that changes <code>R/</code>, <code>man/</code>, <code>man-roxygen/</code>, <code>inst/</code>, <code>vignettes/</code>, <code>NAMESPACE</code>, or <code>DESCRIPTION</code> (other than its <code>Version</code> line), the <code>version-bump</code> workflow commits a patch bump straight to <code>dev</code> (e.g. 1.4.1 -&gt; 1.4.2). Docs, tests and CI changes don’t bump.</li>
-<li>For a minor or major bump, set the version by hand in your PR (<code>just bump minor</code> does the edit). If a merge changed <code>Version</code>, the workflow leaves it alone.</li>
-</ul><p>See also the <a href="pull_request_template.html">PR template</a>.</p>
+<p>Ordinary PRs touch neither the version nor <code>NEWS.md</code>. Write a conventional-commit title, label the PR (<code>enhancement</code>, <code>bug</code>, <code>documentation</code>, …) so it is categorized in the generated notes, and describe what changed for users, including breaking changes: those are the raw material for the release notes. The release PR (below) bumps the version by hand (<code>just bump patch|minor|major</code>) and writes the <code># epidatr X.Y.Z</code> section of <code>NEWS.md</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="release-process">Release process<a class="anchor" aria-label="anchor" href="#release-process"></a></h2>
 <p>Most steps are <a href="https://just.systems" class="external-link">just</a> recipes (run <code>just</code> to list them). Run <code>just install</code> once to get the tools they use. Open a release issue and copy this checklist into it:</p>
-<p>Prepare, on <code>dev</code>:</p>
+<p><code>dev</code> is the only long-lived branch; there is no <code>main</code>. Everything below happens on <code>dev</code>.</p>
+<p>Prepare:</p>
 <ul class="task-list"><li><label><input type="checkbox"><code>just cran-status</code>: compare the <code>DESCRIPTION</code>, <code>CRAN-SUBMISSION</code>, and on-CRAN versions, and check the current CRAN check results for problems to fix.</label></li>
-<li><label><input type="checkbox">Set the release version by hand if it isn’t a patch release (<code>just bump minor</code> in a PR) and <a href="https://style.tidyverse.org/news.html#news-release" class="external-link">polish NEWS</a>.</label></li>
+<li><label><input type="checkbox">In a PR to <code>dev</code>, set the release version (<code>just bump patch|minor|major</code>) and write the <code># epidatr X.Y.Z</code> section at the top of <code>NEWS.md</code>, replacing any <code>(development version)</code> heading. Run <code>just news</code> to print GitHub’s generated notes since the last tag (categories come from <code>.github/release.yml</code>) and give them to an agent, or edit them yourself, into the <a href="https://style.tidyverse.org/news.html#news-release" class="external-link">NEWS style</a>: sections <code>Breaking changes</code>, <code>Changes</code>, <code>Documentation</code> and <code>Patches</code>, no housekeeping, and a note on what users must do about breaking changes. Review it like any other PR. The heading must be exactly <code># epidatr X.Y.Z</code>.</label></li>
 <li><label><input type="checkbox">Update <code>cran-comments.md</code>.</label></li>
 <li><label><input type="checkbox"><code>just release-check</code>: preflight, <code>document</code>, URL check, README rebuild, and a CRAN-like <code>R CMD check</code> with incoming checks. Aim for 0 errors, 0 warnings, and 0 notes. Fix problems in PRs to <code>dev</code>.</label></li>
 <li><label><input type="checkbox"><code>just check-full-ci dev</code> to run the full OS/R-version matrix.</label></li>
 <li><label><input type="checkbox">Check reverse dependencies (e.g. <code>epiprocess</code>, <code>epipredict</code>) against <code>dev</code> with <a href="https://github.com/r-devel/recheck" class="external-link"><code>r-devel/recheck</code></a> and fix any regressions. CRAN also runs this on submission.</label></li>
-<li><label><input type="checkbox">Open the release PR from <code>dev</code> into <code>main</code> and merge it.</label></li>
-</ul><p>Submit, from the tip of <code>main</code> with a clean working tree:</p>
+<li><label><input type="checkbox">Merge the release PR (version bump and NEWS) into <code>dev</code>.</label></li>
+</ul><p>Submit, from the tip of <code>dev</code> with a clean working tree:</p>
 <ul class="task-list"><li><label><input type="checkbox"><code>just check-win</code> (and optionally <code>just check-mac</code>). The maintainer (“cre” in <code>DESCRIPTION</code>) gets the results by email.</label></li>
-<li><label><input type="checkbox"><code>just submit</code>. It reruns the preflight, refuses to run anywhere except <code>origin/main</code>, and asks confirmation questions. After a successful upload it writes the version and SHA to <code>CRAN-SUBMISSION</code> and leaves it uncommitted.</label></li>
+<li><label><input type="checkbox"><code>just submit</code>. It reruns the preflight, refuses to run anywhere except <code>origin/dev</code>, and asks confirmation questions. After a successful upload it writes the version and SHA to <code>CRAN-SUBMISSION</code> and leaves it uncommitted.</label></li>
 <li><label><input type="checkbox">The maintainer confirms the submission from the CRAN email.</label></li>
-</ul><p>Wait for CRAN. If CRAN rejects the package, discard the <code>CRAN-SUBMISSION</code> change (<code>git checkout CRAN-SUBMISSION</code>), fix the problems through <code>dev</code> and then <code>main</code>, and submit again.</p>
+</ul><p>Wait for CRAN. If CRAN rejects the package, discard the <code>CRAN-SUBMISSION</code> change (<code>git checkout CRAN-SUBMISSION</code>), fix the problems through <code>dev</code>, and submit again.</p>
 <p>After acceptance:</p>
-<ul class="task-list"><li><label><input type="checkbox">Commit the updated <code>CRAN-SUBMISSION</code> on a branch off <code>main</code>, and open and merge a PR for it into <code>main</code>.</label></li>
-<li><label><input type="checkbox"><code>just backmerge</code> opens the <code>main</code> -&gt; <code>dev</code> PR. Merge it.</label></li>
-<li><label><input type="checkbox"><code>just release --draft</code> tags the commit recorded in <code>CRAN-SUBMISSION</code>, pushes the tag, and creates a draft GitHub release. It refuses to run until that version is on CRAN.</label></li>
-<li><label><input type="checkbox">Review the release notes on GitHub and publish them.</label></li>
+<ul class="task-list"><li><label><input type="checkbox">Commit the updated <code>CRAN-SUBMISSION</code> on a branch off <code>dev</code>, and open and merge a PR for it into <code>dev</code>.</label></li>
+<li><label><input type="checkbox"><code>just release --draft</code> tags the commit recorded in <code>CRAN-SUBMISSION</code>, pushes the tag, and creates a draft GitHub release whose body is that version’s <code>NEWS.md</code> section. It refuses to run until that version is on CRAN.</label></li>
+<li><label><input type="checkbox">Review the release notes on GitHub and publish them. Publishing rebuilds the root documentation site from the release tag.</label></li>
 </ul><p>If a submission was made without <code>just submit</code>, fix <code>CRAN-SUBMISSION</code> by hand with <code>just cran-submission X.Y.Z &lt;submitted commit&gt;</code>. <code>just cran-status</code> shows whether it matches CRAN.</p>
 </div>
 
