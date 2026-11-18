@@ -463,7 +463,7 @@ request_epidata <- function(
     return(epidata_call)
   }
 
-# Access key only supported for cast api
+  # Access key only supported for cast api
   if (!is.null(fetch_args$access_key) & epidata_call$api_version == "cast") {
     http_headers[["Authorization"]] <- paste("Bearer", fetch_args$access_key)
   }

@@ -320,6 +320,71 @@ test_that("the API key is sent as Basic auth (classic) or a token header (cast)"
   expect_null(hdr(seen)$token)
 })
 
+test_that("an access_key is sent as a Bearer token on cast calls only", {
+  hdr <- function(req) httr2::req_get_headers(req, redacted = "reveal")
+  seen <- NULL
+  capture <- function(req) {
+    seen <<- req
+    '{"epidata":[],"result":-2,"message":"no results"}'
+  }
+  withr::local_envvar(DELPHI_EPIDATA_KEY = "")
+
+  # cast: Authorization header, alongside the default headers
+  with_mock_perform(capture, try(
+    epidata_meta(fetch_args = fetch_args_list(access_key = "cast_x")),
+    silent = TRUE
+  ))
+  expect_identical(hdr(seen)$Authorization, "Bearer cast_x")
+  expect_identical(hdr(seen)$`Accept-Encoding`, "gzip")
+
+  # cast without a key: default headers only
+  seen <- NULL
+  with_mock_perform(capture, try(epidata_meta(), silent = TRUE))
+  expect_false(is.null(seen))
+  expect_null(hdr(seen)$Authorization)
+  expect_identical(hdr(seen)$`Accept-Encoding`, "gzip")
+
+  # classic: the access key is not sent
+  seen <- NULL
+  with_mock_perform(capture, suppressWarnings(pub_delphi(
+    system = "ec", epiweek = 201501,
+    fetch_args = fetch_args_list(return_empty = TRUE, access_key = "cast_x")
+  )))
+  expect_false(is.null(seen))
+  expect_null(hdr(seen)$Authorization)
+  expect_identical(hdr(seen)$`Accept-Encoding`, "gzip")
+})
+
+test_that("an API key and an access_key are both sent on cast calls", {
+  hdr <- function(req) httr2::req_get_headers(req, redacted = "reveal")
+  seen <- NULL
+  capture <- function(req) {
+    seen <<- req
+    '{}'
+  }
+  withr::local_envvar(DELPHI_EPIDATA_KEY = "secret")
+  with_mock_perform(capture, try(
+    epidata_meta(fetch_args = fetch_args_list(access_key = "cast_x")),
+    silent = TRUE
+  ))
+  expect_identical(hdr(seen)$token, "secret")
+  expect_identical(hdr(seen)$Authorization, "Bearer cast_x")
+})
+
+test_that("the access key is not exposed when a request is printed", {
+  seen <- NULL
+  capture <- function(req) {
+    seen <<- req
+    '{}'
+  }
+  withr::local_envvar(DELPHI_EPIDATA_KEY = "")
+  with_mock_perform(capture, try(
+    epidata_meta(fetch_args = fetch_args_list(access_key = "cast_secret")),
+    silent = TRUE
+  ))
+  expect_false(any(grepl("cast_secret", capture.output(print(seen)), fixed = TRUE)))
+})
+
 test_that("a rate-limited request without an API key points to registration", {
   resp <- retry_resp(429, "600", body = '{"detail": "Rate limit exceeded."}')
   withr::local_envvar(DELPHI_EPIDATA_KEY = "")

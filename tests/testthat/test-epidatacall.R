@@ -77,7 +77,8 @@ test_that("fetch_args", {
       base_url = "https://example.com",
       dry_run = TRUE,
       refresh_cache = TRUE,
-      reference_week_day = 1
+      reference_week_day = 1,
+      access_key = "cast_test"
     ),
     style = "json2",
     cran = TRUE
@@ -276,6 +277,14 @@ test_that("fetch_args_list rejects an out-of-range reference_week_day", {
     expect_error(fetch_args_list(reference_week_day = bad))
   }
   expect_no_error(fetch_args_list(reference_week_day = 7))
+})
+
+test_that("fetch_args_list validates access_key", {
+  for (bad in list(1, TRUE, c("cast_a", "cast_b"), character(0))) {
+    expect_error(fetch_args_list(access_key = bad))
+  }
+  expect_null(fetch_args_list()$access_key)
+  expect_identical(fetch_args_list(access_key = "cast_x")$access_key, "cast_x")
 })
 
 test_that("a failed fetch prints no stray timing line", {
