@@ -360,7 +360,7 @@ test_that("an API key and an access_key are both sent on cast calls", {
   seen <- NULL
   capture <- function(req) {
     seen <<- req
-    '{}'
+    "{}"
   }
   withr::local_envvar(DELPHI_EPIDATA_KEY = "secret")
   with_mock_perform(capture, try(
@@ -375,7 +375,7 @@ test_that("the access key is not exposed when a request is printed", {
   seen <- NULL
   capture <- function(req) {
     seen <<- req
-    '{}'
+    "{}"
   }
   withr::local_envvar(DELPHI_EPIDATA_KEY = "")
   with_mock_perform(capture, try(
