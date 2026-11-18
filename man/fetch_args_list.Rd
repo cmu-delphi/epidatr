@@ -19,7 +19,8 @@ fetch_args_list(
   format_type = lifecycle::deprecated(),
   refresh_cache = FALSE,
   reference_week_day = 1,
-  limit = NULL
+  limit = NULL,
+  access_key = NULL
 )
 }
 \arguments{
@@ -70,6 +71,10 @@ to return. \code{NULL} (default) or \code{-1} requests no limit. The underlying
 query has no stable sort order, so \code{limit} does not guarantee the same
 rows (or even the same count) across repeated calls; use it only to
 preview or debug a query, never as a substitute for filtering.}
+
+\item{access_key}{string. cast-API only (\code{epidata_snapshot()},
+\code{epidata_archive()}, \code{epidata_aux()}, \code{epidata()}): access key of the format
+"cast_..." used to access restricted sources and indicators.}
 }
 \value{
 A \code{fetch_args} object containing all the specified options

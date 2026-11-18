@@ -9,7 +9,8 @@ do_request(
   format_type = c("json", "csv", "classic"),
   timeout_seconds,
   fields,
-  http_method = c("GET", "POST")
+  http_method = c("GET", "POST"),
+  headers = http_headers
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ do_request(
 \item{fields}{fields to include in the response, or NULL for all}
 
 \item{http_method}{HTTP method to use}
+
+\item{headers}{HTTP headers to send with the request; defaults to \code{http_headers}}
 }
 \value{
 an \code{httr2_response} object

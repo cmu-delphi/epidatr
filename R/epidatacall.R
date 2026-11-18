@@ -188,6 +188,9 @@ redact_auth <- function(url) {
 #'   query has no stable sort order, so `limit` does not guarantee the same
 #'   rows (or even the same count) across repeated calls; use it only to
 #'   preview or debug a query, never as a substitute for filtering.
+#' @param access_key string. cast-API only (`epidata_snapshot()`,
+#'   `epidata_archive()`, `epidata_aux()`, `epidata()`): access key of the format
+#'   "cast_..." used to access restricted sources and indicators.
 #' @return A `fetch_args` object containing all the specified options
 #' @export
 #' @aliases fetch_args
@@ -206,7 +209,8 @@ fetch_args_list <- function(
   format_type = lifecycle::deprecated(),
   refresh_cache = FALSE,
   reference_week_day = 1,
-  limit = NULL
+  limit = NULL,
+  access_key = NULL
 ) {
   # Deprecation warnings
   if (lifecycle::is_present(debug)) {
@@ -264,6 +268,7 @@ fetch_args_list <- function(
     any.missing = FALSE
   )
   assert_limit_param(limit)
+  assert_character(access_key, null.ok = TRUE, len = 1L)
 
   structure(
     list(
@@ -277,7 +282,8 @@ fetch_args_list <- function(
       dry_run = dry_run,
       refresh_cache = refresh_cache,
       reference_week_day = reference_week_day,
-      limit = limit
+      limit = limit,
+      access_key = access_key
     ),
     class = "fetch_args"
   )
@@ -305,6 +311,21 @@ warn_limit_unsupported <- function(epidata_call, fetch_args) {
   )
 }
 
+#' Warn that `access_key` has no effect outside the V5 cast-API endpoints
+#' @keywords internal
+warn_access_key_unsupported <- function(epidata_call, fetch_args) {
+  if (is.null(fetch_args$access_key) || identical(epidata_call$api_version, "cast")) {
+    return(invisible())
+  }
+  cli::cli_warn(
+    "{.arg access_key} is only supported by the V5 cast-API endpoints \\
+     ({.fn epidata_snapshot}, {.fn epidata_archive}, {.fn epidata_aux}, {.fn epidata}); ignored here.",
+    .frequency = "regularly",
+    .frequency_id = "epidatr.access_key_ignored",
+    class = "epidatr__access_key_ignored"
+  )
+}
+
 #' Fetches the data
 #'
 #' @rdname epidata_call
@@ -322,6 +343,7 @@ fetch <- function(epidata_call, fetch_args = fetch_args_list()) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
   warn_limit_unsupported(epidata_call, fetch_args)
+  warn_access_key_unsupported(epidata_call, fetch_args)
 
   if (!is.null(fetch_args$base_url)) {
     epidata_call <- with_base_url(epidata_call, fetch_args$base_url)
@@ -431,6 +453,7 @@ request_epidata <- function(
   stopifnot(inherits(epidata_call, "epidata_call"))
   stopifnot(inherits(fetch_args, "fetch_args"))
   warn_limit_unsupported(epidata_call, fetch_args)
+  warn_access_key_unsupported(epidata_call, fetch_args)
 
   if (!is.null(fetch_args$base_url)) {
     epidata_call <- with_base_url(epidata_call, fetch_args$base_url)
@@ -440,11 +463,17 @@ request_epidata <- function(
     return(epidata_call)
   }
 
+  # Access key only supported for cast api
+  if (!is.null(fetch_args$access_key) && epidata_call$api_version == "cast") {
+    http_headers[["Authorization"]] <- paste("Bearer", fetch_args$access_key)
+  }
+
   res <- do_request(
     epidata_call,
     format_type = epidata_call$response_format,
     timeout_seconds = fetch_args$timeout_seconds,
-    fields = fetch_args$fields
+    fields = fetch_args$fields,
+    headers = http_headers
   )
 
   if (epidata_call$response_format == "csv") {

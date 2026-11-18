@@ -6,7 +6,7 @@
         "names": {
           "type": "character",
           "attributes": {},
-          "value": ["fields", "disable_date_parsing", "disable_data_frame_parsing", "disable_missing_meta_warning", "return_empty", "timeout_seconds", "base_url", "dry_run", "refresh_cache", "reference_week_day", "limit"]
+          "value": ["fields", "disable_date_parsing", "disable_data_frame_parsing", "disable_missing_meta_warning", "return_empty", "timeout_seconds", "base_url", "dry_run", "refresh_cache", "reference_week_day", "limit", "access_key"]
         },
         "class": {
           "type": "character",
@@ -63,6 +63,9 @@
         },
         {
           "type": "NULL"
+        },
+        {
+          "type": "NULL"
         }
       ]
     }
@@ -75,7 +78,7 @@
         "names": {
           "type": "character",
           "attributes": {},
-          "value": ["fields", "disable_date_parsing", "disable_data_frame_parsing", "disable_missing_meta_warning", "return_empty", "timeout_seconds", "base_url", "dry_run", "refresh_cache", "reference_week_day", "limit"]
+          "value": ["fields", "disable_date_parsing", "disable_data_frame_parsing", "disable_missing_meta_warning", "return_empty", "timeout_seconds", "base_url", "dry_run", "refresh_cache", "reference_week_day", "limit", "access_key"]
         },
         "class": {
           "type": "character",
@@ -136,6 +139,11 @@
         },
         {
           "type": "NULL"
+        },
+        {
+          "type": "character",
+          "attributes": {},
+          "value": ["cast_test"]
         }
       ]
     }

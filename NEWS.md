@@ -70,11 +70,11 @@
   `epirange()` ends, and others) are now `cli` errors with condition classes,
   e.g. `epidatr__invalid_timeset` and `epidatr__epirange_format_mismatch`
   (#206).
-
 - The cache now stores the unparsed API response and parses it on every read,
   so `reference_week_day` and `disable_date_parsing` no longer need to be part
   of the cache key and calls with `fields` can now be cached. Existing cache
   entries are ignored and re-fetched.
+- Allow user to provide an access key to fetch restricted sources from the cast API (#477).
 
 ## Documentation
 

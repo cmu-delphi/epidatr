@@ -330,6 +330,28 @@ test_that("fetch_args_list(limit=) is forwarded to the cast-API request and vali
   expect_error(fetch_args_list(limit = -2), class = "epidatr__invalid_limit")
 })
 
+test_that("access_key warns when set on a non-cast (V4) endpoint and is ignored", {
+  expect_warning(
+    pub_covidcast(
+      source = "jhu-csse",
+      signals = "confirmed_7dav_incidence_prop",
+      time_type = "day",
+      geo_type = "state",
+      time_values = "*",
+      geo_values = "ca",
+      fetch_args = fetch_args_list(access_key = "cast_x", dry_run = TRUE)
+    ),
+    class = "epidatr__access_key_ignored"
+  )
+
+  expect_no_warning(
+    epidata_snapshot(
+      source = "nssp", signals = "sig1", geo_type = "state",
+      fetch_args = fetch_args_list(access_key = "cast_x", dry_run = TRUE)
+    )
+  )
+})
+
 test_that("limit warns when set on a non-cast (V4) endpoint and is silently ignored", {
   expect_warning(
     pub_covidcast(

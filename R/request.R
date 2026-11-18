@@ -12,6 +12,7 @@
 #' @param timeout_seconds the maximum time to wait for a response
 #' @param fields fields to include in the response, or NULL for all
 #' @param http_method HTTP method to use
+#' @param headers HTTP headers to send with the request; defaults to `http_headers`
 #' @return an `httr2_response` object
 #'
 #' @importFrom httr2 req_perform req_timeout req_headers req_user_agent req_retry
@@ -24,7 +25,8 @@ do_request <- function(
   format_type = c("json", "csv", "classic"),
   timeout_seconds,
   fields,
-  http_method = c("GET", "POST")
+  http_method = c("GET", "POST"),
+  headers = http_headers
 ) {
   stopifnot(inherits(epidata_call, "epidata_call"))
   format_type <- rlang::arg_match(format_type)
@@ -51,7 +53,7 @@ do_request <- function(
       "epidatr/",
       utils::packageVersion("epidatr")
     )) %>%
-    httr2::req_headers(!!!http_headers) %>%
+    httr2::req_headers(!!!headers) %>%
     httr2::req_timeout(timeout_seconds) %>%
     httr2::req_retry(
       max_tries = 3,
