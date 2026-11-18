@@ -3,8 +3,9 @@
 ## Commits and PRs
 
 Use [conventional-commit](https://www.conventionalcommits.org) messages for
-commits and PR titles (`feat:`, `fix:`, `docs:`, `chore:`, `ci:`, ...); the
-release notes are generated from them. PRs go against `dev`, and a regular
+commits and PR titles (`feat:`, `fix:`, `docs:`, `chore:`, `ci:`, ...). The
+generated release notes (`just news`) list each PR by its title, and the prefix
+shows what kind of change it is. PRs go against `dev`, and a regular
 merge is preferred over a squash merge.
 
 ## Vignettes
