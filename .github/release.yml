@@ -1,0 +1,21 @@
+# Configures GitHub's native release-notes generator, used by `just news`
+# (the starting point for the NEWS.md section) and by `just release`.
+changelog:
+  categories:
+    - title: 🚀 Features
+      labels:
+        - enhancement
+        - feature
+    - title: 🐛 Bug Fixes
+      labels:
+        - bug
+    - title: 📕 Documentation
+      labels:
+        - documentation
+    - title: 🧰 Maintenance
+      labels:
+        - chore
+        - dependencies
+    - title: Other Changes
+      labels:
+        - "*"

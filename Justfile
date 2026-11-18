@@ -155,17 +155,17 @@ check-mac:
 
 # Run the full OS/R-version matrix on GitHub Actions, e.g. `just check-full-ci dev`.
 [group("release")]
-check-full-ci branch="main":
+check-full-ci branch="dev":
     gh workflow run R-CMD-check-full.yaml --ref {{ branch }}
 
-# Submit to CRAN from the tip of main. Leaves the new CRAN-SUBMISSION uncommitted.
+# Submit to CRAN from the tip of dev. Leaves the new CRAN-SUBMISSION uncommitted.
 [group("release")]
 submit: (_stashed "_submit")
 
 # submit_cran() asks confirmation questions, so R runs interactively.
 _submit: release-preflight
-    git fetch origin main
-    @test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" || { echo "HEAD is not origin/main; submit from the tip of main."; exit 1; }
+    git fetch origin dev
+    @test "$(git rev-parse HEAD)" = "$(git rev-parse origin/dev)" || { echo "HEAD is not origin/dev; submit from the tip of dev."; exit 1; }
     R --interactive --no-save --no-restore -q -e "devtools::submit_cran()"
     @echo "CRAN-SUBMISSION now records this upload. Commit it once CRAN accepts; discard it if CRAN rejects."
 
@@ -175,18 +175,29 @@ cran-submission version=pkg_version ref="HEAD":
     @printf 'Version: %s\nDate: %s\nSHA: %s\n' "{{ version }}" "$(date -u '+%Y-%m-%d %H:%M:%S UTC')" "$(git rev-parse {{ ref }}^{commit})" > CRAN-SUBMISSION
     @cat CRAN-SUBMISSION
 
-# After CRAN accepts: tag the submitted commit, push the tag, and publish a GitHub release. Extra flags go to `gh release create`, e.g. `just release --draft`.
+# Print GitHub's generated release notes since the last tag, as the starting point for the NEWS.md section (see DEVELOPMENT.md). Needs the `gh` CLI.
+[group("release")]
+news since="" branch="dev":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    since="{{ since }}"
+    [ -n "$since" ] || since=$(git describe --tags --abbrev=0 "origin/{{ branch }}")
+    gh api repos/{owner}/{repo}/releases/generate-notes \
+        -f tag_name="v{{ pkg_version }}" -f target_commitish="{{ branch }}" \
+        -f previous_tag_name="$since" --jq .body
+
+# After CRAN accepts: tag the submitted commit, push the tag, and publish a GitHub release whose body is the version's NEWS.md section. Extra flags go to `gh release create`, e.g. `just release --draft`.
 [group("release")]
 release *gh_flags:
-    @test "{{ submitted_version }}" = "{{ cran_version }}" || { echo "CRAN-SUBMISSION ({{ submitted_version }}) is not the version on CRAN ({{ cran_version }}); has it been accepted?"; exit 1; }
+    #!/usr/bin/env bash
+    set -euo pipefail
+    test "{{ submitted_version }}" = "{{ cran_version }}" || { echo "CRAN-SUBMISSION ({{ submitted_version }}) is not the version on CRAN ({{ cran_version }}); has it been accepted?"; exit 1; }
+    notes=$(mktemp)
+    git show "{{ submitted_sha }}:NEWS.md" | awk -v h="# epidatr {{ submitted_version }}" '$0 == h {f = 1; next} /^# / {f = 0} f' > "$notes"
+    grep -q '[^[:space:]]' "$notes" || { echo "NEWS.md has no '# epidatr {{ submitted_version }}' section at {{ submitted_sha }}."; exit 1; }
     git tag -a v{{ submitted_version }} {{ submitted_sha }} -m "epidatr {{ submitted_version }}"
     git push origin v{{ submitted_version }}
-    gh release create v{{ submitted_version }} --verify-tag --generate-notes --title "epidatr {{ submitted_version }}" {{ gh_flags }}
-
-# Open the PR that brings release fixes and CRAN-SUBMISSION from main back to dev.
-[group("release")]
-backmerge:
-    gh pr create --base dev --head main --title "chore: merge main into dev after epidatr {{ submitted_version }}" --body "Back-merge after the {{ submitted_version }} CRAN release."
+    gh release create v{{ submitted_version }} --verify-tag --notes-file "$notes" --title "epidatr {{ submitted_version }}" {{ gh_flags }}
 
 # Run recipes with untracked files (e.g. a local .Renviron) moved out of the way, so they
 # don't fail the preflight clean-tree check. They are put back on exit, success or failure.
