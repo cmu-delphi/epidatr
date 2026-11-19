@@ -9,7 +9,7 @@
 MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/mit)
 [![Github
 Actions](https://github.com/cmu-delphi/epidatr/workflows/ci/badge.svg)](https://github.com/cmu-delphi/epidatr/actions)
-[![codecov](https://codecov.io/gh/dsweber2/epidatr/branch/dev/graph/badge.svg?token=jVHL9eHZNZ)](https://app.codecov.io/gh/dsweber2/epidatr)
+[![codecov](https://codecov.io/gh/cmu-delphi/epidatr/branch/dev/graph/badge.svg)](https://app.codecov.io/gh/cmu-delphi/epidatr)
 <!-- badges: end -->
 
 The [Delphi Epidata API](https://cmu-delphi.github.io/delphi-epidata/)
